@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {NgModule, Component, OnInit, ViewChild } from '@angular/core';
 import { APIResponse } from '../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from '../shared/mylib';
 
@@ -23,8 +23,12 @@ export class OrderListComponent {
     DetailsDataSourceStorage: any;
     popupVisible = false;
     formData: any;
+    dataSourceDBDetails: any[];
+    itemkey: number;
+    mod: string;
     constructor(private http: HttpClient) {
-        debugger;
+        this.cloneIconClick = this.cloneIconClick.bind(this);
+        this.DetailsDataSourceStorage = [];
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
@@ -60,8 +64,25 @@ export class OrderListComponent {
                 }
             }
         );
-    }
 
+    }
+    getDetails(key) {
+        let item = this.DetailsDataSourceStorage.find((i) => i.key === key);
+        if (!item) {
+            item = {
+                key,
+                dataSourceInstance: new DataSource({
+                    store: new ArrayStore({
+                        data: this.dataSourceDBDetails,
+                        key: 'Id'
+                      }),
+                      filter: ['OrderId', '=', key]
+                  })
+              };
+            this.DetailsDataSourceStorage.push(item);
+          }
+        return item.dataSourceInstance;
+      }
 
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
@@ -80,6 +101,14 @@ export class OrderListComponent {
     }
     addDetail(e) {
         this.dataGrid.instance.addRow();
+    }
+    cloneIconClick(e) {
+        debugger;
+        this.itemkey = e.row.key;
+
+        this.mod = 'clone';
+        this.popupVisible = true;
+        // e.event.preventDefault();
     }
     creatorder() {
         this.popupVisible = true;
@@ -108,9 +137,8 @@ export class OrderListComponent {
             e.component.selectRowsByIndexes(0);
         }
     }
-    cloneIconClick(e) {
-        e.event.preventDefault();
-    }
+
+
     // onEditingStart(e) {
     //     e.component.columnOption('OrderNo', 'allowEditing', false);
     //     e.component.columnOption('CustomerNo', 'allowEditing', false);
@@ -144,6 +172,9 @@ export class OrderListComponent {
             // }
         );
     }
+
+
+
     //   onEditorPreparing(e) {
     //     if (e.parentType === 'dataRow' && (e.dataField === 'Id')) {
     //       e.editorOptions.disabled = true;

@@ -39,7 +39,7 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <param name="id">id</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<OrderHead>> GetOrderHead(int id)
         {
             var orderHead = await _context.OrderHeads.FindAsync(id);
@@ -61,7 +61,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <param name="orderHead"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutOrderHead(int id, OrderHead orderHead)
         {
             orderHead.Id = id;
@@ -111,7 +111,7 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<OrderHead>> DeleteOrderHead(int id)
         {
             var orderHead = await _context.OrderHeads.FindAsync(id);

@@ -40,6 +40,13 @@ namespace HonjiMES.Models
                                         Old_Props.SetValue(Olddata, New_Props_Value);
                                     }
                                 }
+                                else  if (New_Props.PropertyType == typeof(int))
+                                {
+                                    if (((int)New_Props_Value) != 0)
+                                    {
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
+                                    }
+                                }
                                 else
                                 {
                                     if (true)

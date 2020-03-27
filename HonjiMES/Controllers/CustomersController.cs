@@ -41,7 +41,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Customers/5
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
@@ -61,7 +61,7 @@ namespace HonjiMES.Controllers
         // PUT: api/Customers/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
             if (id != customer.Id)
@@ -109,7 +109,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // DELETE: api/Customers/5
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);

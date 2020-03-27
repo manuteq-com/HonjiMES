@@ -1,6 +1,9 @@
+<span style="color: red;">
+    {{this.itemkeyval}}
+</span>
 <form action="your-action" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation"
-    [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
         <dxi-item dataField="OrderNo">
             <dxi-validation-rule type="required" message="訂單單號 必填"></dxi-validation-rule>
@@ -10,7 +13,8 @@
             <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
             <dxo-label text="客戶單號"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Customer"  dataType="number" editorType="dxSelectBox" [editorOptions]="{ items: Customerlist, displayExpr: 'Name', valueExpr: 'Id'}">
+        <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox"
+            [editorOptions]="{ items: Customerlist, displayExpr: 'Name', valueExpr: 'Id'}">
             <!-- <dx-select-box #CustomerSelect [(dataSource)]="Customerlist" valueExpr="Id"  displayExpr="Name"></dx-select-box> -->
             <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
             <dxo-label text="客戶名稱"></dxo-label>
@@ -20,45 +24,41 @@
         </dxi-item>
         <dxo-label text="代號"></dxo-label>
         <!-- <dxo-label text="{{Customer.value}}"></dxo-label> -->
-    <dxi-item itemType="group" [colSpan]="4"  caption="訂單內容">
-        <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="uid" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)">
-            <dxo-editing  mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" startEditAction="click">
-            </dxo-editing>
-            <dxo-filter-row [visible]="false"></dxo-filter-row>
-            <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation
-            [editOnKeyPress]="editOnkeyPress"
-            [enterKeyAction]="enterKeyAction"
-            [enterKeyDirection]="enterKeyDirection">
-        </dxo-keyboard-navigation>
-        <dxo-paging [enabled]="false">
-        </dxo-paging>
-        <dxi-column dataField="Serial" caption="序號"></dxi-column>
-            <dxi-column dataField="ProductId" caption="品號">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
-            </dxi-column>>
-            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
-            <dxi-column dataField="Price" caption="價格"  dataType="number">
-                <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
-            </dxi-column>
-            <dxi-column dataField="Unit" caption="單位" ></dxi-column>
-            <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
-            <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
-            <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
-            <dxi-column dataField="Remark" caption="備註"></dxi-column>
-            <dxi-column type="buttons">
-                <dxi-button name="save" text="存檔"></dxi-button>
-                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-            </dxi-column>
-        </dx-data-grid>
-    </dxi-item>
-    <dxi-item
-    itemType="button"
-    horizontalAlignment="left"
-    [buttonOptions]="buttonOptions">
-</dxi-item>
-</dx-form>
+        <dxi-item itemType="group" [colSpan]="4" caption="訂單內容">
+            <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="uid"
+                (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)">
+                <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true"
+                    startEditAction="click">
+                </dxo-editing>
+                <dxo-filter-row [visible]="false"></dxo-filter-row>
+                <dxo-header-filter [visible]="false"></dxo-header-filter>
+                <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+                    [enterKeyDirection]="enterKeyDirection">
+                </dxo-keyboard-navigation>
+                <dxo-paging [enabled]="false">
+                </dxo-paging>
+                <dxi-column dataField="Serial" caption="序號"></dxi-column>
+                <dxi-column dataField="ProductId" caption="品號">
+                    <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+                </dxi-column>>
+                <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
+                <dxi-column dataField="Price" caption="價格" dataType="number">
+                    <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="Unit" caption="單位"></dxi-column>
+                <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
+                <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
+                <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
+                <dxi-column dataField="Remark" caption="備註"></dxi-column>
+                <dxi-column type="buttons">
+                    <dxi-button name="save" text="存檔"></dxi-button>
+                    <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                    <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                    <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+                </dxi-column>
+            </dx-data-grid>
+        </dxi-item>
+        <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+        </dxi-item>
+    </dx-form>
 </form>
-

@@ -1,7 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { DxDataGridComponent } from 'devextreme-angular';
+import CustomStore from 'devextreme/data/custom_store';
+import { SendService } from '../shared/mylib';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-oerdrdetail-list',
@@ -9,22 +12,21 @@ import { DxDataGridComponent } from 'devextreme-angular';
   styleUrls: ['./oerdrdetail-list.component.css']
 })
 export class OerdrdetailListComponent implements OnInit {
-    ProductList: any;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-  DetailsDataSourceStorage: any[];
-  url: string;
-  constructor() {
-    this.url = location.origin + '/api';
-    this.DetailsDataSourceStorage = [];
-    //   this.GetData(this.url + '/Products/GetProducts').subscribe(
-    //     (s) => {
-    //         console.log(s);
-    //         this.ProductList = s.data;
-    //         if (s.success) {
-
-    //         }
-    //     }
-    // );
+    @Input() itemkey: number;
+    @Input() ProductList: any;
+    dataSourceDB: any;
+    controller: string;
+  constructor(private http: HttpClient) {
+    this.controller = '/OrderDetails';
+    this.dataSourceDB = new CustomStore({
+        key: 'Id',
+        load: () => SendService.sendRequest( http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkey),
+        byKey: () => SendService.sendRequest( http, this.controller +  '/GetOrderDetail'),
+        insert: (values) => SendService.sendRequest( http, this.controller +  '/PostOrderDetail', 'POST', { values }),
+        update: (key, values) => SendService.sendRequest( http, this.controller +  '/PutOrderDetail', 'PUT', { key, values}),
+        remove: (key) => SendService.sendRequest( http, this.controller +  '/DeleteOrderDetail', 'DELETE')
+    });
    }
   ngOnInit() {
   }
@@ -39,30 +41,4 @@ export class OerdrdetailListComponent implements OnInit {
         }
     }
 }
-        // this.GetData(this.url + '/Products/GetProducts').subscribe(
-        //     (s) => {
-        //         console.log(s);
-        //         this.ProductList = s.data;
-        //         if (s.success) {
-
-        //         }
-        //     }
-        // );
-//   getDetails(key) {
-//       let item = this.DetailsDataSourceStorage.find((i) => i.key === key);
-//       if (!item) {
-//           item = {
-//               key,
-//               dataSourceInstance: new DataSource({
-//                   store: new ArrayStore({
-//                       data: this.dataSourceDBDetails,
-//                       key: 'Id'
-//                     }),
-//                     filter: ['OrderId', '=', key]
-//                 })
-//             };
-//             this.DetailsDataSourceStorage.push(item);
-//         }
-//         return item.dataSourceInstance;
-//     }
 }

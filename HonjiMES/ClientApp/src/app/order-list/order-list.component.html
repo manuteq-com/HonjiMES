@@ -33,11 +33,11 @@
     </dxo-form>
 </dxo-editing>
     <dxi-column type="buttons">
-        <dxi-button name="save" text="存檔"></dxi-button>
+        <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button>
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-        <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button>
       </dxi-column>
     <dxi-column dataField="OrderNo" caption="訂單單號">
         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -57,6 +57,7 @@
             [onClick]="to_saleClick"></dxi-button>
         </dxi-column>
     <div *dxTemplate="let item of 'detail'">
+        <app-oerdrdetail-list [itemkey]="item.key" [ProductList]="ProductList"></app-oerdrdetail-list>
     </div>
 </dx-data-grid>
 
@@ -65,11 +66,9 @@
         title="新增訂單"
         [dragEnabled]="false"
         [closeOnOutsideClick]="false"
-        [(visible)]="popupVisible"
-
-       >
+        [(visible)]="popupVisible">
        <div *dxTemplate="let data of 'content'">
-          <app-creatorder (doSaves)="popup_result($event)"></app-creatorder>
+        <span>{{itemkey}}{{mod}}</span>
+        <app-creatorder (doSaves)="popup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creatorder>
        </div>
 </dx-popup>
-

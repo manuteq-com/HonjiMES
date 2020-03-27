@@ -23,18 +23,37 @@ namespace HonjiMES.Controllers
         {
             _context = context;
         }
+        ///// <summary>
+        ///// 查詢所有訂單名細
+        ///// </summary>
+        ///// <returns></returns>
+        //// GET: api/OrderDetails
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()
+        //{
+        //    var OrderDetails = await _context.OrderDetails.ToListAsync();
+        //    return Ok(Fun.APIResponseOK(OrderDetails));
+        //}
 
         /// <summary>
         /// 查詢訂單名細
         /// </summary>
-        /// <returns></returns>
+        /// <param name="OrderId">訂單ID 非必填</param>
+        /// <returns>訂單名細</returns>
         // GET: api/OrderDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
         {
-            var OrderDetails = await _context.OrderDetails.ToListAsync();
-            return Ok(Fun.APIResponseOK(OrderDetails));
+            var OrderDetails = _context.OrderDetails.AsQueryable();
+            if (OrderId.HasValue)
+            {
+                OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId);
+            }
+            var data = await OrderDetails.ToListAsync();
+            return Ok(Fun.APIResponseOK(data));
         }
+
+
 
         /// <summary>
         /// 使用ID查詢訂單名細
@@ -42,7 +61,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/OrderDetails/5
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<OrderDetail>> GetOrderDetail(int id)
         {
             var orderDetail = await _context.OrderDetails.FindAsync(id);
@@ -62,7 +81,7 @@ namespace HonjiMES.Controllers
         // PUT: api/OrderDetails/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutOrderDetail(int id, OrderDetail orderDetail)
         {
             orderDetail.Id = id;
@@ -109,7 +128,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // DELETE: api/OrderDetails/5
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<OrderDetail>> DeleteOrderDetail(int id)
         {
             var orderDetail = await _context.OrderDetails.FindAsync(id);

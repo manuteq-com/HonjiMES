@@ -1,6 +1,6 @@
-        <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div>
+        <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
         <dx-data-grid
-            [dataSource]="getDetails(item.key)"
+            [dataSource]="dataSourceDB"
             [showBorders]="true"
             keyExpr="Id"  (onCellClick)="cellClick($event)">
             <dxo-editing mode="row"
@@ -32,9 +32,9 @@
             <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
             <dxi-column dataField="CreateDate" caption="建立日期" dataType="date"></dxi-column>
             <dxi-column type="buttons"  caption="新增" cssClass="addmod">
-                <dxi-button name="save" text="存檔"></dxi-button>
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
               </dxi-column>
-        </dx-data-grid> -->
+        </dx-data-grid>
