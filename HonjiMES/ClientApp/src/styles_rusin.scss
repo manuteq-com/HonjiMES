@@ -1,0 +1,64 @@
+// 全域的文字大小, body 也在要複製這的
+@import "./style-var.scss";
+.rusin-text {
+    font-family: $rusin-font-family;
+    font-weight: 800;
+    font-size: $rusin-text-size;
+}
+
+.rusin-content-block {
+    background-color: white;
+    width: 100%;
+    padding: 20px 20px;
+    min-height: 200px;
+    min-width: 90%;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.rusin-content-block-gray {
+    background-color: lightgray;
+    width: 100%;
+    padding: 20px 20px;
+    min-height: 200px;
+    min-width: 90%;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+// Page Title
+.rusin-page-title {
+    font-size: 20px; // 20px;
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    height: 40px;
+    line-height: 40px;
+}
+
+// 偽類
+.rusin-page-title div:nth-child(1) {
+    background-color: #0275d8;
+    border-bottom: 4px solid #0275d8;
+    color: white;
+    padding-left: 10px; //
+    width: 15%;
+    border-radius: 8px 0 0 8px;
+}
+
+.rusin-page-title div:nth-child(2) {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 40px 40px 0 0;
+    border-color: #0275d8 #666666 transparent transparent;
+}
+.rusin-page-title div:nth-child(3) {
+    background-color: #666666;
+    border-bottom: 4px solid #666666;
+    color: white;
+    width: 85%;
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 0 8px 8px 0;
+}

@@ -1,0 +1,13 @@
+::ng-deep .dx-datagrid-rowsview .dx-row > .dx-master-detail-cell {
+    padding: 5px;
+  }
+  ::ng-deep .dx-header-row .addmod {
+    color: #fff;
+    background-color: #71c016;
+    border-color: #71c016;
+}
+::ng-deep .dx-header-row .addmod:hover {
+    color: #fff;
+    background-color: #5d9e12;
+    border-color: #569211;
+}

@@ -1,0 +1,41 @@
+::ng-deep *{
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-size: 1rem;
+}
+::ng-deep #gridContainer .dx-datagrid-headers {
+    background-color: #999;
+    border-top: 1px solid #c8c8c8;
+    border-bottom: none;
+    color: white;
+    font-family: '微軟正黑體';
+    font-size: 28px;
+    font-weight: 900;
+}
+::ng-deep #gridContainer .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row)
+    > td:not(.dx-focused) {
+    background-color: #f3f3f3 !important;
+    color: black !important;
+}
+
+
+::ng-deep #gridContainer .dx-field-item-label-text {
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-size: 1rem;
+    font-weight: 800;
+}
+::ng-deep .dx-widget input,
+.dx-widget textarea {
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-size: 1rem;
+    font-weight: 800;
+    color: black;
+}

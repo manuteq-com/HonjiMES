@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="row">
+        <span>
+            <div class="text-right">
+                <button
+                    class="btn btn-dark btn-sm"
+                    [routerLink]="['/taskview']"
+                >
+                    <i
+                        class="fa fa-reply"
+                        aria-hidden="true"
+                    ></i>
+                    回上層</button>
+            </div>
+        </span>
+    </div>
+    <div class="row">
+        <div style="height: 10px;"></div>
+    </div>
+    <div id="multiview">
+        <div>
+            總報工數 <span style="font-weight: bold;"> ( {{multiview.selectedIndex + 1}}</span> / <span
+                style="font-weight: bold;"
+            >{{MyTasks.length}} )</span> <i></i> &nbsp;&nbsp;(水平滑動)
+        </div>
+        <div>
+            <hr>
+        </div>
+        <dx-multi-view
+            #multiview
+            [height]="500"
+            [dataSource]="MyTasks"
+            [selectedIndex]="0"
+            [loop]="false"
+            [animationEnabled]="true"
+            (onSelectionChanged)="onSelectionChanged($event)"
+        >
+            <div *dxTemplate="let mytaskx of 'item'">
+                <div class="multiview-item">
+                    <div class="customer"> 客戶 : {{mytaskx.customer}}</div>
+                    <div>
+
+                        <div class="titles"> <span> 主旨 : {{mytaskx.titles}}</span></div>
+                        <div class="contentlable">內容</div>
+                        <div class="taskcontent">
+                            <div
+                                *ngIf="mytaskx.taskcontent === null"
+                                style="margin: 20px;"
+                            >
+                                (沒有內容)
+                            </div>
+                            {{mytaskx.taskcontent}}
+                        </div>
+                    </div>
+
+                    <div>
+                        <hr>
+                        <div class="staffdiv">
+                            <b>{{mytaskx.staff}}</b> |
+                            <span>{{mytaskx.reporttimes | date:'MM月dd日'}}</span>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12" *ngIf="this.currentImage !== ''">
+                            <img style="max-height:300px;width: 100%;"
+                                [src]="this.currentImage"
+                                alt="上傳的圖"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </dx-multi-view>
+    </div>

@@ -1,0 +1,43 @@
+@import './style-var.scss';
+//dx-grid
+// dx grid 的全域設定
+.dx-datagrid-headers {
+    background-color: #f4f4f4;
+    border-top: 1px solid #c8c8c8;
+    border-bottom: none;
+    color: black;
+}
+// dx-row 其實包含 .dx-datagrid-headers
+.dx-row {
+    font-family: $rusin-font-family;
+    font-weight: 800;
+    font-size: $rusin-text-size;
+    height: 28px;
+    line-height: 28px;
+}
+// .dx-data-row同.dx-state-hover 同時都有的組合
+.dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row)
+    > td:not(.dx-focused) {
+    background-color: #f3f3f3 !important;
+    color: black !important;
+}
+
+// dx item
+.dx-field-item-label-text {
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-size: $rusin-text-size;
+    font-weight: 800;
+}
+.dx-widget input,
+.dx-widget textarea {
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-size: $rusin-text-size;
+    font-weight: 800;
+    color: black;
+}

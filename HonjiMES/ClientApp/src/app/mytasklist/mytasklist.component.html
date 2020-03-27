@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="row">
+        <swal
+            #okSwal
+            title="新增資料"
+            text="任務已經新增完成"
+            icon="success"
+        >
+        </swal>
+
+    </div>
+
+    <div class="row">
+        <dx-text-box
+            width="350"
+            placeholder="主題"
+            [(value)]="newTask.titles"
+        ></dx-text-box>
+        <dx-text-box
+            width="350"
+            placeholder="工作日誌內容"
+            [(value)]="newTask.taskcontent"
+        ></dx-text-box>
+        <div
+            class="btn btn-success"
+            (click)="AddTask()"
+        > 加入任務 </div>
+
+    </div>
+    <hr>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <dx-data-grid
+                    id="gridContainer"
+                    [dataSource]="BsTask"
+                    keyExpr="sn"
+                    [showBorders]="true"
+                    (onRowUpdated)="onRowUpdated($event)"
+                    (onRowRemoved)="onRowRemoved($event)"
+                >
+
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing
+                        mode="row"
+                        [allowUpdating]="true"
+                        [allowDeleting]="true"
+                    >
+                    </dxo-editing>
+
+                    <dxi-column
+                        dataField="sn"
+                        caption="序號"
+                        [width]="70"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="customer"
+                        caption="公司"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="staff"
+                        caption="員工"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="titles"
+                        caption="工作主旨"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="taskcontent"
+                        caption="工作日誌"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="closed"
+                        caption="結案狀態"
+                    ></dxi-column>
+                    <dxi-column
+                        dataField="crtimes"
+                        caption="創建日期"
+                        dataType="date"
+                        cellTemplate="dtTemplate"
+                    >
+                    </dxi-column>
+                    <div *dxTemplate="let cellData of 'dtTemplate'">
+                        {{cellData.value | date:'yyyy-MM-dd hh:mm:ss' }}
+                    </div>
+                </dx-data-grid>
+
+            </div>
+        </div>
+
+    </div>
+</div>

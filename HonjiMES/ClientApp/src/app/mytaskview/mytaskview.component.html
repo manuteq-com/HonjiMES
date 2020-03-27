@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+        <div style="height: 40px;line-height: 40px;" class="col-12 text-center">
+            <h3>{{pagetitle}}</h3>
+        </div>
+    </div>
+    <div class="row">
+
+        <div
+            class="col-lg-6 col-mg-12"
+            *ngFor="let item of mytask"
+        >
+            <div class="card">
+                <div class="card-header">
+                    {{item.customer}}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title left"> {{item.titles}}</h5>
+                    <p class="card-text text-left">{{item.taskcontent}}</p>
+
+                </div>
+                <div class="card-footer text-muted">
+
+                    <div>
+                        <div>
+                            {{item.staff}} | {{item.reporttimes | date : 'MM-dd'}}
+                        </div>
+                        <div style="margin:10px;width: 100%;">
+                            <button
+                                class="btn btn-primary btn-sm w-100"
+                                [routerLink]="['/taskviewdx']"
+                            >
+                                <i
+                                    class="fa fa-folder-open-o"
+                                    aria-hidden="true"
+                                ></i>&nbsp;明細&nbsp;</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

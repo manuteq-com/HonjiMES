@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3248679c-b34d-4d40-9f62-408259b0f625" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/demo/view/documentation.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/demo/view/documentation.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/demo/view/sampledemo.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/demo/view/sampledemo.component.html" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/dist/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1047806196">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="25" />
+          <entry key="project.open.time.0" value="18" />
+          <entry key="project.open.time.1" value="5" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.5" value="2" />
+          <entry key="project.opened" value="26" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="browserslist" value="2" />
+          <entry key="html" value="20" />
+          <entry key="js" value="7" />
+          <entry key="json" value="37" />
+          <entry key="scss" value="42" />
+          <entry key="ts" value="37" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="HTML" value="20" />
+          <entry key="JSON" value="23" />
+          <entry key="JavaScript" value="7" />
+          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="SCSS" value="42" />
+          <entry key="TypeScript" value="37" />
+          <entry key="tsconfig" value="14" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.js.language.service.starts">
+        <counts>
+          <entry key="Angular2LanguageService" value="14" />
+          <entry key="TsLintLanguageService" value="11" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="html" value="42" />
+          <entry key="js" value="6" />
+          <entry key="json" value="67" />
+          <entry key="scss" value="95" />
+          <entry key="ts" value="104" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="CSS" value="1" />
+          <entry key="HTML" value="42" />
+          <entry key="JSON" value="67" />
+          <entry key="JavaScript" value="6" />
+          <entry key="SCSS" value="95" />
+          <entry key="TypeScript" value="103" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="avalon" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/demo/view/documentation.component.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="457">
+              <caret line="675" column="30" selection-start-line="675" selection-start-column="30" selection-end-line="675" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/demo/view/sampledemo.component.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="114" selection-start-line="7" selection-start-column="114" selection-end-line="7" selection-end-column="114" />
+              <folding>
+                <element signature="n#style#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>calenda</find>
+      <find>icon_override</find>
+      <find>@include icon_override</find>
+      <find>icon-override</find>
+      <find>@include icon-override</find>
+      <find>date</find>
+      <find>multise</find>
+      <find>contex</find>
+      <find>media</find>
+      <find>medi</find>
+      <find>va</find>
+      <find>jqu</find>
+      <find>swit</find>
+      <find>chk</find>
+      <find>multisele</find>
+      <find>flu</find>
+      <find>ui-tab</find>
+      <find>ui-t</find>
+      <find>tree</find>
+      <find>ui-flu</find>
+      <find>vir</find>
+      <find>virt</find>
+      <find>sass</find>
+      <find>mome</find>
+      <find>sass -</find>
+      <find>parentActive</find>
+      <find>fullcal</find>
+      <find>fa-</find>
+      <find>fc</find>
+      <find>autowi</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+      <replace>../</replace>
+      <replace>.pi</replace>
+      <replace>fa fa-</replace>
+      <replace>.png</replace>
+      <replace>.ui-treetable</replace>
+      <replace>ui-treetable</replace>
+      <replace>fa-fw fa-</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/app/demo/view</dir>
+      <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/src/app</dir>
+      <dir>$PROJECT_DIR$/src/assets/demo</dir>
+      <dir>$PROJECT_DIR$/src/assets/layout</dir>
+      <dir>$PROJECT_DIR$/src/assets/pages</dir>
+      <dir>$PROJECT_DIR$/src/assets/sass</dir>
+      <dir>$PROJECT_DIR$/src/assets/theme</dir>
+      <dir>$PROJECT_DIR$/src/assets</dir>
+      <dir>$PROJECT_DIR$/src</dir>
+    </dirStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/assets/sass/theme-v4/_panels.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme/_panels.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/layout/_main.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/layout-v4/_main.scss" />
+        <option value="$PROJECT_DIR$/src/tslint.json" />
+        <option value="$PROJECT_DIR$/src/tsconfig.spec.json" />
+        <option value="$PROJECT_DIR$/src/tsconfig.app.json" />
+        <option value="$PROJECT_DIR$/src/test.ts" />
+        <option value="$PROJECT_DIR$/src/main.ts" />
+        <option value="$PROJECT_DIR$/src/karma.conf.js" />
+        <option value="$PROJECT_DIR$/e2e/tsconfig.e2e.json" />
+        <option value="$PROJECT_DIR$/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/dashboard.component.html" />
+        <option value="$PROJECT_DIR$/src/assets/demo/data/filesystem.json" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme/_forms.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme-v4/_forms.scss" />
+        <option value="$PROJECT_DIR$/src/app/app.routes.ts" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme/_overlays.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme-v4/_overlays.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/layout/_layout.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/layout-v4/_layout.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme/_theme.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme-v4/_theme.scss" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/datademo.component.html" />
+        <option value="$PROJECT_DIR$/src/assets/sass/overrides/_theme_styles.scss" />
+        <option value="$PROJECT_DIR$/e2e/protractor.conf.js" />
+        <option value="$PROJECT_DIR$/e2e/tsconfig.json" />
+        <option value="$PROJECT_DIR$/browserslist" />
+        <option value="$PROJECT_DIR$/karma.conf.js" />
+        <option value="$PROJECT_DIR$/tsconfig.app.json" />
+        <option value="$PROJECT_DIR$/tsconfig.json" />
+        <option value="$PROJECT_DIR$/tsconfig.spec.json" />
+        <option value="$PROJECT_DIR$/tslint.json" />
+        <option value="$PROJECT_DIR$/src/polyfills.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/dashboarddemo.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/datademo.component.ts" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme/_data.scss" />
+        <option value="$PROJECT_DIR$/src/assets/sass/theme-v4/_data.scss" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/formsdemo.component.html" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/overlaysdemo.component.html" />
+        <option value="$PROJECT_DIR$/angular.json" />
+        <option value="$PROJECT_DIR$/e2e/src/app.po.ts" />
+        <option value="$PROJECT_DIR$/e2e/src/app.e2e-spec.ts" />
+        <option value="$PROJECT_DIR$/src/app/app.menu.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/service/eventservice.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/service/countryservice.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/formsdemo.component.ts" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/sampledemo.component.ts" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/documentation.component.html" />
+        <option value="$PROJECT_DIR$/src/app/demo/view/sampledemo.component.html" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBowerSettings">
+    <node-interpreter value="project" />
+    <exe-path />
+    <config-path />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
+    <package-json value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>false</service-enabled>
+    <exe-path />
+    <annotation-enable>false</annotation-enable>
+    <other-services-enabled>false</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="778" />
+    <option name="width" value="902" />
+    <option name="height" value="1050" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>AngularJS</id>
+          </State>
+          <State>
+            <id>TypeScript</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>TypescriptExplicitMemberType</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="avalon" type="b2602c69:ProjectViewProjectNode" />
+              <item name="avalon" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="avalon" type="b2602c69:ProjectViewProjectNode" />
+              <item name="avalon" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="avalon" type="b2602c69:ProjectViewProjectNode" />
+              <item name="avalon" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.jscs" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.path.for.package.stylelint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="" />
+    <property name="node.js.selected.package.jscs" value="" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="node.js.selected.package.stylelint" value="" />
+    <property name="node.js.selected.package.tslint" value="$PROJECT_DIR$/node_modules/tslint" />
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.web.browsers" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="typescript-compiler-editor-notification" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/e2e/src" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/e2e" />
+      <recent name="$PROJECT_DIR$/src/app/demo" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/assets/sass" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/assets/layout" />
+      <recent name="$PROJECT_DIR$/src/assets/theme" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>$USER_HOME$/.subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="$PROJECT_DIR$" />
+          <option name="myCopyRoot" value="$PROJECT_DIR$" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="$PROJECT_DIR$" />
+          <option name="myCopyRoot" value="$PROJECT_DIR$" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3248679c-b34d-4d40-9f62-408259b0f625" name="Default" comment="" />
+      <created>1505196646403</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1505196646403</updated>
+      <workItem from="1505196647647" duration="325000" />
+      <workItem from="1505299999641" duration="1259000" />
+      <workItem from="1505731974436" duration="53000" />
+      <workItem from="1505817076525" duration="4320000" />
+      <workItem from="1506598261532" duration="760000" />
+      <workItem from="1507105862463" duration="27000" />
+      <workItem from="1507532039454" duration="8666000" />
+      <workItem from="1509346455361" duration="758000" />
+      <workItem from="1509349762510" duration="70000" />
+      <workItem from="1510566972123" duration="751000" />
+      <workItem from="1510646530906" duration="723000" />
+      <workItem from="1510813324018" duration="427000" />
+      <workItem from="1510838655559" duration="258000" />
+      <workItem from="1510908374043" duration="1104000" />
+      <workItem from="1511179048938" duration="419000" />
+      <workItem from="1511334131198" duration="47000" />
+      <workItem from="1512370844712" duration="963000" />
+      <workItem from="1512563246966" duration="1864000" />
+      <workItem from="1512630931537" duration="180000" />
+      <workItem from="1513340797629" duration="887000" />
+      <workItem from="1513671674490" duration="2615000" />
+      <workItem from="1513679897113" duration="1877000" />
+      <workItem from="1513681932255" duration="115000" />
+      <workItem from="1513682504592" duration="430000" />
+      <workItem from="1513684628521" duration="284000" />
+      <workItem from="1513932681926" duration="280000" />
+      <workItem from="1514989916248" duration="350000" />
+      <workItem from="1516170074545" duration="1236000" />
+      <workItem from="1516612693515" duration="2787000" />
+      <workItem from="1516954730784" duration="635000" />
+      <workItem from="1517901346401" duration="8320000" />
+      <workItem from="1517988715951" duration="118000" />
+      <workItem from="1518173339290" duration="929000" />
+      <workItem from="1518420844866" duration="266000" />
+      <workItem from="1518422373572" duration="239000" />
+      <workItem from="1519369031533" duration="1060000" />
+      <workItem from="1520573216209" duration="56000" />
+      <workItem from="1520573871951" duration="18000" />
+      <workItem from="1520574958297" duration="86000" />
+      <workItem from="1520836558618" duration="521000" />
+      <workItem from="1521024170169" duration="816000" />
+      <workItem from="1521455024682" duration="20609000" />
+      <workItem from="1521547633793" duration="1278000" />
+      <workItem from="1521632401409" duration="4883000" />
+      <workItem from="1522049654205" duration="2919000" />
+      <workItem from="1522134786027" duration="10000" />
+      <workItem from="1522134850728" duration="2948000" />
+      <workItem from="1522141088307" duration="810000" />
+      <workItem from="1522142629098" duration="5000" />
+      <workItem from="1522216134281" duration="544000" />
+      <workItem from="1522226369640" duration="17000" />
+      <workItem from="1525935812910" duration="296000" />
+      <workItem from="1526533649725" duration="1447000" />
+      <workItem from="1527239363907" duration="145000" />
+      <workItem from="1528092643463" duration="457000" />
+      <workItem from="1528094034895" duration="3000" />
+      <workItem from="1528707149727" duration="560000" />
+      <workItem from="1528874451639" duration="663000" />
+      <workItem from="1529386413022" duration="12000" />
+      <workItem from="1529395242818" duration="10500000" />
+      <workItem from="1529471588163" duration="35000" />
+      <workItem from="1529473200395" duration="6000" />
+      <workItem from="1529475476074" duration="980000" />
+      <workItem from="1529480516991" duration="4579000" />
+      <workItem from="1529500281249" duration="6000" />
+      <workItem from="1529501113861" duration="916000" />
+      <workItem from="1529559316916" duration="18000" />
+      <workItem from="1529565935771" duration="2892000" />
+      <workItem from="1529578139677" duration="10000" />
+      <workItem from="1530256748056" duration="765000" />
+      <workItem from="1531116264362" duration="652000" />
+      <workItem from="1531722101339" duration="13000" />
+      <workItem from="1532350663203" duration="13000" />
+      <workItem from="1533037608098" duration="338000" />
+      <workItem from="1533543842715" duration="5300000" />
+      <workItem from="1534330054857" duration="586000" />
+      <workItem from="1535360464714" duration="16116000" />
+      <workItem from="1535716904229" duration="611000" />
+      <workItem from="1535911214093" duration="691000" />
+      <workItem from="1537429405118" duration="20000" />
+      <workItem from="1537429444417" duration="19000" />
+      <workItem from="1537431389138" duration="3746000" />
+      <workItem from="1537777269929" duration="32000" />
+      <workItem from="1537856172390" duration="6000" />
+      <workItem from="1539083260519" duration="845000" />
+      <workItem from="1539085681091" duration="302000" />
+      <workItem from="1539330959459" duration="3738000" />
+      <workItem from="1539859936551" duration="8000" />
+      <workItem from="1540457541879" duration="363000" />
+      <workItem from="1543821420158" duration="8000" />
+      <workItem from="1544100912846" duration="4414000" />
+      <workItem from="1544180740169" duration="1498000" />
+      <workItem from="1544424252229" duration="4434000" />
+      <workItem from="1544524758916" duration="631000" />
+      <workItem from="1546848936939" duration="515000" />
+      <workItem from="1549883147053" duration="395000" />
+      <workItem from="1549966099141" duration="16000" />
+      <workItem from="1550146664764" duration="743000" />
+      <workItem from="1550239598280" duration="9000" />
+      <workItem from="1550571365859" duration="832000" />
+      <workItem from="1551096078816" duration="386000" />
+      <workItem from="1554452248466" duration="114000" />
+      <workItem from="1561445996112" duration="2865000" />
+      <workItem from="1561463338052" duration="5764000" />
+      <workItem from="1561633317702" duration="372000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="161607000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49434572" visible="true" weight="0.11693791" />
+      <window_info id="Structure" order="1" weight="0.24947146" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" sideWeight="0.5056543" side_tool="true" weight="0.24947146" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32889965" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.327551" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TypeScript" order="7" weight="0.27040815" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3010204" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32889965" />
+      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/app/app.routes.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="73" lean-forward="true" selection-start-line="34" selection-start-column="73" selection-end-line="34" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/layout-v4/_mixins.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_panels.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4740">
+          <caret line="316" column="9" selection-start-line="316" selection-start-column="9" selection-end-line="316" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_overlays.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="46" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme-v4/_overlays.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="46" column="9" selection-start-line="46" selection-start-column="9" selection-end-line="46" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/_theme_styles.scss" />
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/layout/_layout.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="11" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/layout-v4/_layout.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_theme.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="11" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme-v4/_theme.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="36" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/pages/access.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/pages/error.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/pages/notfound.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/pages/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-146" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/pages/landing.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme-v4/_forms.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-477">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/overrides/_theme_styles.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/datademo.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="70" selection-start-line="5" selection-start-column="70" selection-end-line="5" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/primeng/components/fullcalendar/fullcalendar.metadata.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="252" selection-start-column="252" selection-end-column="252" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/dashboard.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="775">
+          <caret line="489" column="65" lean-forward="true" selection-start-line="489" selection-start-column="65" selection-end-line="489" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_common.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="15" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_forms.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="56" column="27" selection-start-line="56" selection-start-column="27" selection-end-line="58" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme/_data.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12645">
+          <caret line="843" column="5" selection-start-line="843" selection-start-column="5" selection-end-line="906" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/formsdemo.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="119" column="28" lean-forward="true" selection-start-line="119" selection-start-column="28" selection-end-line="119" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.menu.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="224" column="44" selection-start-line="224" selection-start-column="44" selection-end-line="224" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/service/carservice.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="33" lean-forward="true" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/service/eventservice.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/service/countryservice.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/service/nodeservice.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="33" lean-forward="true" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/sampledemo.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="231" column="9" selection-start-line="231" selection-start-column="9" selection-end-line="231" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/e2e/src/app.e2e-spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="7" lean-forward="true" selection-start-line="7" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/e2e/src/app.po.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="21" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/e2e/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" lean-forward="true" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/e2e/protractor.conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" lean-forward="true" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/polyfills.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="889">
+          <caret line="63" lean-forward="true" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/angular.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="559">
+          <caret line="130" column="17" lean-forward="true" selection-start-line="130" selection-start-column="17" selection-end-line="142" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/browserslist">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/karma.conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="18" column="67" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.app.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.spec.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tslint.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="865">
+          <caret line="98" lean-forward="true" selection-end-line="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/dashboarddemo.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/datademo.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="67" lean-forward="true" selection-start-column="67" selection-end-line="3" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/sass/theme-v4/_data.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12720">
+          <caret line="848" column="6" selection-start-line="848" selection-start-column="6" selection-end-line="848" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/overlaysdemo.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="42" lean-forward="true" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/formsdemo.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="102" column="35" lean-forward="true" selection-start-line="102" selection-start-column="35" selection-end-line="108" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lock.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/documentation.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="675" column="30" selection-start-line="675" selection-start-column="30" selection-end-line="675" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/demo/view/sampledemo.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="114" selection-start-line="7" selection-start-column="114" selection-end-line="7" selection-end-column="114" />
+          <folding>
+            <element signature="n#style#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

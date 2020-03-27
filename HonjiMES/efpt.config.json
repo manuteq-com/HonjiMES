@@ -1,0 +1,90 @@
+﻿{
+   "ContextClassName": "HonjiContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "DoNotCombineNamespace": false,
+   "IdReplace": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "ProjectRootNamespace": "HonjiMES",
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "billof_purchase"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "customer"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "material"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "order"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "order_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "order_head"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "permission"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "process"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "product"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "purchase"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "sale"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "sale_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "supplier"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "system"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "user_logs"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "users"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "web_sessions"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": true,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseSpatial": false
+}
