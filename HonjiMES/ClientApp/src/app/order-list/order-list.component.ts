@@ -26,9 +26,20 @@ export class OrderListComponent {
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
+    uploadUrl: string;
     constructor(private http: HttpClient) {
+        this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.DetailsDataSourceStorage = [];
+        // this.dataSourceDB = new CustomStore({
+        //     key: 'Id',
+        //     load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
+        //     byKey: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
+        //     insert: (values) => SendService.sendRequest( http, '/OrderHeads/PostOrderHead', 'POST', { values }),
+        //     update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
+        //     remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
+        // });
+
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
@@ -37,6 +48,7 @@ export class OrderListComponent {
             update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
         });
+
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 console.log(s);

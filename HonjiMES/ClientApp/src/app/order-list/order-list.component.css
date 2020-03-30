@@ -12,3 +12,18 @@
     background-color: #5d9e12;
     border-color: #569211;
 }
+::ng-deep #fileuploader-container{
+    border: 1px solid #d3d3d3;
+}
+::ng-deep.dx-fileuploader, .dx-fileuploader * {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+}
+::ng-deep.dx-fileuploader-input-container {
+    display: none;
+}
+::ng-deep.dx-fileuploader-wrapper, .dx-fileuploader-input-wrapper{
+    padding: 0;
+    border: none;
+}

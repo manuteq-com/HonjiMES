@@ -74,6 +74,35 @@ export class DateTimeTool {
   }
 }
 
+// export class SendService {
+//     constructor( ) { }
+//     public  static sendRequest(http: HttpClient , url: string, method: string = 'GET', data: any = {}): Observable<APIResponse> {
+//         debugger;
+
+//         const apiurl = location.origin + '/api';
+//         const body = JSON.stringify(data.values);
+//         const keyurl = '/' + data.key;
+//         const httpOptions = { withCredentials: true, body, headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+//         let result;
+//         switch (method) {
+//           case 'GET':
+//             result = http.get<APIResponse>(apiurl + url, httpOptions);
+//             break;
+//           case 'PUT':
+//             result = http.put<APIResponse>(apiurl + url + keyurl, body, httpOptions);
+//             break;
+//           case 'POST':
+//             result = http.post<APIResponse>(apiurl + url + keyurl, body, httpOptions);
+//             break;
+//           case 'DELETE':
+//             result = http.delete<APIResponse>(apiurl + url + keyurl, httpOptions);
+//             break;
+//         }
+//         return result;
+//       }
+//     }
+
+
 export class SendService {
     constructor( ) { }
     public  static sendRequest(http: HttpClient , url: string, method: string = 'GET', data: any = {}): any {

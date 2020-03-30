@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+
 
 namespace HonjiMES.Controllers
 {
@@ -31,6 +31,22 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
             var OrderHeads = await _context.OrderHeads.ToListAsync();
+            // object[] parameters = new object[] { };
+            // var query = "select id,create_date,order_no from order_head";
+            // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
+            // var id = 1;
+            // FormattableString myCommand = $"select * from order_head where id={id}";
+            // var ndata = await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
+            // var conn = _context.Database.GetDbConnection();
+            // await conn.OpenAsync();
+            // var command = conn.CreateCommand();
+            // command.CommandText = query;
+            // var reader = await command.ExecuteReaderAsync();
+            // var nOrderHead = new List<OrderHead>();
+            // while (await reader.ReadAsync())
+            // {
+            //     nOrderHead.Add(DBHelper.DataReaderMapping<OrderHead>(reader));
+            // }
             return Ok(Fun.APIResponseOK(OrderHeads));
         }
 
@@ -144,6 +160,19 @@ namespace HonjiMES.Controllers
             //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
             //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
         }
+        /// <summary>
+        /// 匯入訂單
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<OrderHead>> PostOrdeByExcel()
+        {
+            var myFile = Request.Form;
+            return Ok(Fun.APIResponseOK(myFile));
+        }
+
+
         private bool OrderHeadExists(int id)
         {
             return _context.OrderHeads.Any(e => e.Id == id);

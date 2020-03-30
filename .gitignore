@@ -2,3 +2,4 @@
 /.vs
 /HonjiMES/.vscode
 /.vscode
+*.editorconfig

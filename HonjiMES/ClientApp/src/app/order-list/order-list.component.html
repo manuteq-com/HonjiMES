@@ -1,9 +1,18 @@
 <!-- <p>所有訂單</p> -->
-<div  align="right">
-    <dx-button  text="新增訂單" type="default"  (onClick)="creatorder()"></dx-button>
-    <span></span>
-    <!-- <dx-button  text="匯入訂單" type="default"  (onClick)="creatorder()"></dx-button> -->
-</div>
+    <div class="row">
+        <div class="col-md-10 col-sm-10">
+
+            <dx-file-uploader #fileUploader selectButtonText="匯入訂單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+                uploadMode="useButtons" onUploaded></dx-file-uploader>
+        </div>
+        <div class="col-md-1 col-sm-1">
+        </div>
+        <div class="col-md-1 col-sm-1">
+            <dx-button text="新增訂單" type="default" (onClick)="creatorder()"></dx-button>
+        </div>
+    </div>
+
 
 <dx-data-grid  [dataSource]="dataSourceDB" showBorders="true"
                [masterDetail]="{ enabled: false, template: 'detail' }" keyExpr="Id"
