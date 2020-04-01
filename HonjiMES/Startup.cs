@@ -43,6 +43,17 @@ namespace HonjiMES
             });
             services.AddMvc().AddXmlSerializerFormatters();
             services.AddSwaggerDocument();
+            services.AddCors(options =>
+            {
+                // CorsPolicy 是自訂的 Policy 名稱
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.WithOrigins("http://localhost")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +100,7 @@ namespace HonjiMES
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+            app.UseCors("CorsPolicy");
         }
     }
 }

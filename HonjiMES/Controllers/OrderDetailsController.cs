@@ -50,7 +50,7 @@ namespace HonjiMES.Controllers
                 OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId);
             }
             var data = await OrderDetails.ToListAsync();
-            return Ok(Fun.APIResponseOK(data));
+            return Ok(MyFun.APIResponseOK(data));
         }
 
 
@@ -70,7 +70,7 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            return Ok(Fun.APIResponseOK(orderDetail));
+            return Ok(MyFun.APIResponseOK(orderDetail));
         }
         /// <summary>
         /// 修改訂單名細
@@ -86,7 +86,7 @@ namespace HonjiMES.Controllers
         {
             orderDetail.Id = id;
             var OrderDetails = _context.OrderDetails.Find(id);
-            var Msg = myfun.MappingData(ref OrderDetails, orderDetail);
+            var Msg = MyFun.MappingData(ref OrderDetails, orderDetail);
 
             try
             {
@@ -103,7 +103,7 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-            return Ok(Fun.APIResponseOK(orderDetail));
+            return Ok(MyFun.APIResponseOK(orderDetail));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace HonjiMES.Controllers
         {
             _context.OrderDetails.Add(orderDetail);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(orderDetail));
+            return Ok(MyFun.APIResponseOK(orderDetail));
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace HonjiMES.Controllers
 
             _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(orderDetail));
+            return Ok(MyFun.APIResponseOK(orderDetail));
         }
 
         private bool OrderDetailExists(int id)

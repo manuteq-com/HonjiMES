@@ -17,8 +17,9 @@ import Swal from 'sweetalert2';
 })
 export class CreatorderComponent implements OnInit ,OnChanges {
 
-    @Input() itemkeyval: any;
     @Output() event = new EventEmitter();
+    @Input() itemkeyval: any;
+    @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -67,10 +68,14 @@ export class CreatorderComponent implements OnInit ,OnChanges {
                 update: (key, values) => SendService.sendRequest( this.http, this.controller +  '/PutOrderDetail', 'PUT', { key, values}),
                 remove: (key) => SendService.sendRequest( this.http, this.controller +  '/DeleteOrderDetail', 'DELETE')
             });
+      } else if (this.modval === 'excel') {
+          debugger;
+          this.formData = this.exceldata;
+          this.dataSourceDB = this.exceldata.OrderDetails;
       }
     }
     constructor(private http: HttpClient) {
-        debugger;
+        // debugger;
         this.formData = null;
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';

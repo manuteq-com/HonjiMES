@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var Products = await _context.Products.ToListAsync();
-            return Ok(Fun.APIResponseOK(Products));
+            return Ok(MyFun.APIResponseOK(Products));
             //return Ok(new { data = Products, success = true, timestamp = DateTime.Now, message = "" });
         }
 
@@ -52,7 +52,7 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            return Ok(Fun.APIResponseOK(product));
+            return Ok(MyFun.APIResponseOK(product));
             //return Ok(new { data = product, success = true, timestamp = DateTime.Now, message = "" });
         }
 
@@ -90,7 +90,7 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-            return Ok(Fun.APIResponseOK(product));
+            return Ok(MyFun.APIResponseOK(product));
             //return Ok(new { success = true, timestamp = DateTime.Now, message = "" });
         }
 
@@ -107,7 +107,7 @@ namespace HonjiMES.Controllers
         {
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(product));
+            return Ok(MyFun.APIResponseOK(product));
             //return Ok(new { data = CreatedAtAction("GetProduct", new { id = product.Id }, product), success = true });
         }
 
@@ -128,7 +128,7 @@ namespace HonjiMES.Controllers
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(product));
+            return Ok(MyFun.APIResponseOK(product));
             //return Ok(new { data = product, success = true, timestamp = DateTime.Now, message = "" });
         }
 

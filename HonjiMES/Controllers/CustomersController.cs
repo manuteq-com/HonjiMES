@@ -32,7 +32,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
             var Customers = await _context.Customers.ToListAsync();
-            return Ok(Fun.APIResponseOK(Customers));
+            return Ok(MyFun.APIResponseOK(Customers));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            return Ok(Fun.APIResponseOK(customer));
+            return Ok(MyFun.APIResponseOK(customer));
         }
         /// <summary>
         /// 修改顧客列表
@@ -86,7 +86,7 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-            return Ok(Fun.APIResponseOK(customer));
+            return Ok(MyFun.APIResponseOK(customer));
         }
         /// <summary>
         /// 新增顧客列表
@@ -101,7 +101,7 @@ namespace HonjiMES.Controllers
         {
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(customer));
+            return Ok(MyFun.APIResponseOK(customer));
         }
         /// <summary>
         /// 刪除顧客列表
@@ -120,7 +120,7 @@ namespace HonjiMES.Controllers
 
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
-            return Ok(Fun.APIResponseOK(customer));
+            return Ok(MyFun.APIResponseOK(customer));
         }
 
         private bool CustomerExists(int id)

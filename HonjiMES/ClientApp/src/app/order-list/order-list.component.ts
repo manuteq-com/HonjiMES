@@ -27,6 +27,7 @@ export class OrderListComponent {
     itemkey: number;
     mod: string;
     uploadUrl: string;
+    exceldata: any;
     constructor(private http: HttpClient) {
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
@@ -115,7 +116,7 @@ export class OrderListComponent {
         this.dataGrid.instance.addRow();
     }
     cloneIconClick(e) {
-        debugger;
+        // debugger;
         this.itemkey = e.row.key;
 
         this.mod = 'clone';
@@ -138,7 +139,7 @@ export class OrderListComponent {
     }
 
     selectionChanged(e) {
-        debugger;
+        // debugger;
         // 只開一筆Detail資料
         e.component.collapseAll(-1);
         e.component.expandRow(e.currentSelectedRowKeys[0]);
@@ -170,7 +171,6 @@ export class OrderListComponent {
             if (!isNaN(e.row.key)) {
                 e.editorOptions.disabled = true;
             }
-
         }
     }
     to_saleClick(e) {
@@ -184,7 +184,24 @@ export class OrderListComponent {
             // }
         );
     }
+    onUploaded(e) {
+       debugger;
+       const response = JSON.parse(e.request.response) as APIResponse;
+       if  (response.success) {
+        this.mod = 'excel';
+        this.popupVisible = true;
+        this.exceldata = response.data;
+      } else {
+        notify({
+            message: 'Excel 檔案讀取失敗:' + response.message,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
+      }
 
+    }
 
 
     //   onEditorPreparing(e) {

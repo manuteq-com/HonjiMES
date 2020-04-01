@@ -25,7 +25,7 @@
         <dxo-label text="代號"></dxo-label>
         <!-- <dxo-label text="{{Customer.value}}"></dxo-label> -->
         <dxi-item itemType="group" [colSpan]="4" caption="訂單內容">
-            <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="uid"
+            <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Serial" height="500"
                 (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)">
                 <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true"
                     startEditAction="click">

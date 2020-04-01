@@ -4,7 +4,7 @@
 
             <dx-file-uploader #fileUploader selectButtonText="匯入訂單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-                uploadMode="useButtons" onUploaded></dx-file-uploader>
+                uploadMode="useButtons" (onUploaded)="onUploaded($event)"></dx-file-uploader>
         </div>
         <div class="col-md-1 col-sm-1">
         </div>
@@ -78,6 +78,6 @@
         [(visible)]="popupVisible">
        <div *dxTemplate="let data of 'content'">
         <span>{{itemkey}}{{mod}}</span>
-        <app-creatorder (doSaves)="popup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creatorder>
+        <app-creatorder (doSaves)="popup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatorder>
        </div>
 </dx-popup>
