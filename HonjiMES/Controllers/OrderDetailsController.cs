@@ -47,7 +47,7 @@ namespace HonjiMES.Controllers
             var OrderDetails = _context.OrderDetails.AsQueryable();
             if (OrderId.HasValue)
             {
-                OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId);
+                OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x=>x.Serial);
             }
             var data = await OrderDetails.ToListAsync();
             return Ok(MyFun.APIResponseOK(data));

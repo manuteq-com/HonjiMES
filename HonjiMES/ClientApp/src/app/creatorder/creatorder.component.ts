@@ -15,14 +15,15 @@ import Swal from 'sweetalert2';
     templateUrl: './creatorder.component.html',
     styleUrls: ['./creatorder.component.css']
 })
-export class CreatorderComponent implements OnInit ,OnChanges {
+export class CreatorderComponent implements OnInit, OnChanges {
 
-    @Output() event = new EventEmitter();
+    @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    buttondisabled: false;
     formData: OrderHead;
     SerialNo = 0;
     dataSourceDB: any;
@@ -38,20 +39,22 @@ export class CreatorderComponent implements OnInit ,OnChanges {
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
+    Customerlist: any;
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
         useSubmitBehavior: true,
         icon: 'save'
     };
-    Customerlist: any;
+    selectBoxOptions: any;
     controller: string;
+    CustomerVal: string;
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnInit() {
     }
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
-     if (this.modval === 'clone') {
+        if (this.modval === 'clone') {
             this.GetData(this.url + '/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
@@ -62,20 +65,23 @@ export class CreatorderComponent implements OnInit ,OnChanges {
             );
             this.dataSourceDB = new CustomStore({
                 key: 'Id',
-                load: () => SendService.sendRequest( this.http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkeyval),
-                byKey: () => SendService.sendRequest( this.http, this.controller +  '/GetOrderDetail'),
-                insert: (values) => SendService.sendRequest( this.http, this.controller +  '/PostOrderDetail', 'POST', { values }),
-                update: (key, values) => SendService.sendRequest( this.http, this.controller +  '/PutOrderDetail', 'PUT', { key, values}),
-                remove: (key) => SendService.sendRequest( this.http, this.controller +  '/DeleteOrderDetail', 'DELETE')
+                load: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkeyval),
+                byKey: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetail'),
+                insert: (values) => SendService.sendRequest(this.http, this.controller + '/PostOrderDetail', 'POST', { values }),
+                update: (key, values) => SendService.sendRequest(this.http, this.controller + '/PutOrderDetail', 'PUT', { key, values }),
+                remove: (key) => SendService.sendRequest(this.http, this.controller + '/DeleteOrderDetail', 'DELETE')
             });
-      } else if (this.modval === 'excel') {
-          debugger;
-          this.formData = this.exceldata;
-          this.dataSourceDB = this.exceldata.OrderDetails;
-      }
+        } else if (this.modval === 'excel') {
+            if (this.exceldata.Customer === 0) {
+                this.exceldata.Customer = null;
+            }
+            this.formData = this.exceldata;
+            this.dataSourceDB = this.exceldata.OrderDetails;
+        }
     }
     constructor(private http: HttpClient) {
         // debugger;
+        this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
@@ -84,10 +90,11 @@ export class CreatorderComponent implements OnInit ,OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 3;
         this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
+
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
         this.GetData(this.url + '/Products/GetProducts').subscribe(
             (s) => {
@@ -102,9 +109,16 @@ export class CreatorderComponent implements OnInit ,OnChanges {
                 console.log(s);
                 if (s.success) {
                     this.Customerlist = s.data;
+                    this.selectBoxOptions = {
+                        items: this.Customerlist,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        onValueChanged: this.onCustomerSelectionChanged.bind(this)
+                    };
                 }
             }
         );
+
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
@@ -116,9 +130,37 @@ export class CreatorderComponent implements OnInit ,OnChanges {
     onFocusedCellChanging(e) {
         e.isHighlighted = true;
     }
-
-    onFormSubmit = async function(e) {
-
+    onCustomerSelectionChanged(e) {
+        if (e.value !== null && e.value !== 0) {
+            const Customerobj = this.Customerlist.filter(x => x.Id === e.value)[0];
+            this.CustomerVal = '代號：' + Customerobj.Code
+                + '   電話：' + Customerobj.Phone
+                + '   傳真：' + Customerobj.Fax
+                + '   E-mail：' + Customerobj.Email
+                + '   地址：' + Customerobj.Address;
+        }
+    }
+    validate_before(): boolean {
+        // 表單驗證
+        if (this.myform.instance.validate().isValid === false) {
+            notify({
+                message: '請注意訂單內容必填的欄位',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            return false;
+        }
+        return true;
+    }
+    onFormSubmit = async function (e) {
+        debugger;
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
         if (this.SerialNo > 0 && this.dataSourceDB.length < 1) {
@@ -131,20 +173,22 @@ export class CreatorderComponent implements OnInit ,OnChanges {
             }, 'error', 3000);
             return false;
         } else {
+            debugger;
             this.postval = new PostOrderMaster_Detail();
             this.postval.OrderHead = this.formData as OrderHead;
             this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await this.sr.sendRequest(this.http, this.url + '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
+            const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
             if (sendRequest) {
                 this.SerialNo = 0;
                 this.dataSourceDB = [];
                 this.dataGrid.instance.refresh();
-                this.form.instance.resetValues();
+                this.myform.instance.resetValues();
                 e.preventDefault();
-                this.event.emit(true);
+                this.childOuter.emit(true);
             }
+            this.buttondisabled = false;
         }
     };
 }

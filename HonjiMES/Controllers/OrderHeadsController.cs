@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
-            var OrderHeads = await _context.OrderHeads.ToListAsync();
+            var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateDate).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
             // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
@@ -146,22 +146,35 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderHead>> PostOrderMaster_Detail(PostOrderMaster_Detail PostOrderMaster_Detail)
         {
-            var dt = DateTime.Now;
-            var orderHead = PostOrderMaster_Detail.OrderHead;
-            var OrderDetail = PostOrderMaster_Detail.OrderDetail;
-            orderHead.CreateDate = dt;
-            orderHead.CreateUser = 1;
-            foreach (var item in OrderDetail)
+            try
             {
-                item.CreateDate = dt;
-                item.CreateUser = 1;
-                orderHead.OrderDetails.Add(item);
+               var dt = DateTime.Now;
+                var OrderNo = dt.ToString("yyyyMMdd");
+                var NoCount = _context.OrderHeads.Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
+                var orderHead = PostOrderMaster_Detail.OrderHead;
+                var OrderDetail = PostOrderMaster_Detail.OrderDetail;
+                orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
+                orderHead.CreateDate = dt;
+                orderHead.CreateUser = 1;
+                var OrderDetails = new List<OrderDetail>();
+                foreach (var item in OrderDetail)
+                {
+                    item.CreateDate = dt;
+                    item.CreateUser = 1;
+                    OrderDetails.Add(item);
+                }
+                orderHead.OrderDetails = OrderDetails.OrderBy(x=>x.Serial).ToList();
+                _context.OrderHeads.Add(orderHead);
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK(orderHead.OrderNo));
+                //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
+                //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
             }
-            _context.OrderHeads.Add(orderHead);
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(orderHead));
-            //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
-            //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
+            catch (Exception ex)
+            {
+
+                return Ok(MyFun.APIResponseError(null,ex.Message));
+            }
         }
         /// <summary>
         /// 匯入訂單
@@ -205,8 +218,7 @@ namespace HonjiMES.Controllers
                                 }
                                 catch (Exception ex)
                                 {
-                                    var Err = ex.ToString();
-                                    return Ok(MyFun.APIResponseError(null, Err));
+                                    return Ok(MyFun.APIResponseError(null, ex.Message + " 請檢查檔案格式"));
                                 }
                             }
                             formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
@@ -222,7 +234,11 @@ namespace HonjiMES.Controllers
                             var nOrderHead = new OrderHead();
                             #region 表頭資料處理
                             //處理客戶代號
-                            nOrderHead.Customer = _context.Customers.Where(x => item.FileName.Contains(x.Name)).FirstOrDefault()?.Id ?? 0;
+                            var CustomerName = _context.Customers.Where(x => item.FileName.Contains(x.Name)).FirstOrDefault();
+                            if (CustomerName != null)
+                            {
+                                nOrderHead.Customer = CustomerName.Id;
+                            }           
                             #endregion
 
                             OrderHeadlist.Add(nOrderHead);
@@ -292,7 +308,7 @@ namespace HonjiMES.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return Ok(MyFun.APIResponseError(null, ex.Message));
+                        return Ok(MyFun.APIResponseError(null, ex.Message + " 請檢查資料格式"));
                     }
 
                 }

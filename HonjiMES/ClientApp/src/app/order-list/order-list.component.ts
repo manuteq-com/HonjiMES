@@ -185,7 +185,7 @@ export class OrderListComponent {
         );
     }
     onUploaded(e) {
-       debugger;
+    //    debugger;
        const response = JSON.parse(e.request.response) as APIResponse;
        if  (response.success) {
         this.mod = 'excel';
