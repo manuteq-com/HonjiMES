@@ -26,18 +26,23 @@ import {
 
 import { HomepageComponent } from './globalpage/homepage.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MytasklistComponent } from './mytasklist/mytasklist.component';
-import { MytaskformComponent } from './mytaskform/mytaskform.component';
-import { MytaskviewComponent } from './mytaskview/mytaskview.component';
-import { MytaskviewDxComponent } from './mytaskview-dx/mytaskview-dx.component';
+// import { MytasklistComponent } from './mytasklist/mytasklist.component';
+// import { MytaskformComponent } from './mytaskform/mytaskform.component';
+// import { MytaskviewComponent } from './mytaskview/mytaskview.component';
+// import { MytaskviewDxComponent } from './mytaskview-dx/mytaskview-dx.component';
 // 多國語系
 import { locale, loadMessages } from 'devextreme/localization';
 import zhTW from '../assets/lang/zh-TW.json';
-import { Test1Component } from './test1/test1.component';
+// import { Test1Component } from './test1/test1.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { CreatorderComponent } from './creatorder/creatorder.component';
 import { BreadcrumbModule } from 'primeng';
 import { OerdrdetailListComponent } from './oerdrdetail-list/oerdrdetail-list.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { MaterialListComponent } from './material-list/material-list.component';
+import { CreatproductComponent } from './creatproduct/creatproduct.component';
+import { CreatmaterialComponent } from './creatmaterial/creatmaterial.component';
+import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -74,14 +79,19 @@ import { OerdrdetailListComponent } from './oerdrdetail-list/oerdrdetail-list.co
         AppFooterComponent,
         AppProfileComponent,
         HomepageComponent,
-        MytasklistComponent,
-        MytaskformComponent,
-        MytaskviewComponent,
-        MytaskviewDxComponent,
-        Test1Component,
+        // MytasklistComponent,
+        // MytaskformComponent,
+        // MytaskviewComponent,
+        // MytaskviewDxComponent,
+        // Test1Component,
         OrderListComponent,
         CreatorderComponent,
-        OerdrdetailListComponent
+        OerdrdetailListComponent,
+        ProductListComponent,
+        MaterialListComponent,
+        CreatproductComponent,
+        CreatmaterialComponent,
+        InventoryChangeComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }

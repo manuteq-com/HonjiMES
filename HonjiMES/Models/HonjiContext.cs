@@ -29,12 +29,12 @@ namespace HonjiMES.Models
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -257,13 +257,40 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
 
+                entity.Property(e => e.Delivered).HasComment("已交");
+
+                entity.Property(e => e.Discount).HasComment("折扣率");
+
+                entity.Property(e => e.DiscountPrice).HasComment("折後單價");
+
+                entity.Property(e => e.Drawing)
+                    .HasComment("圖檔")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.DueDate)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasComment("預交日");
+
+                entity.Property(e => e.Ink)
+                    .HasComment("噴墨")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Label)
+                    .HasComment("標籤")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
                 entity.Property(e => e.MachineNo).HasComment("機號");
 
                 entity.Property(e => e.OrderId).HasComment("訂單id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價");
 
-                entity.Property(e => e.Price).HasComment("價格");
+                entity.Property(e => e.Package).HasComment("包裝數");
+
+                entity.Property(e => e.Price).HasComment("折後價格");
 
                 entity.Property(e => e.ProductId).HasComment("產品id");
 
@@ -273,6 +300,8 @@ namespace HonjiMES.Models
                     .HasComment("備註")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Reply).HasComment("回覆量");
 
                 entity.Property(e => e.ReplyDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -329,9 +358,16 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.OrderType)
+                    .HasComment("訂單類型")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
                 entity.Property(e => e.StartDate)
                     .HasDefaultValueSql("'0000-00-00 00:00:00'")
                     .HasComment("開始日期");
+
+                entity.Property(e => e.Status).HasComment("訂單狀態");
             });
 
             modelBuilder.Entity<Permission>(entity =>
@@ -405,10 +441,17 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.ProductNumber)
+                    .HasComment("廠內成品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
                 entity.Property(e => e.Property)
                     .HasComment("屬性")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Quantity).HasComment("庫存量");
 
                 entity.Property(e => e.QuantityLimit).HasComment("庫存極限");
 

@@ -21,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
     <PackageReference Include="EntityFramework.zh-Hant" Version="6.2.0" />
+    <PackageReference Include="Microsoft.AspNet.Mvc.zh-Hant" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.Razor.zh-Hant" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost.zh-Hant" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.3" />

@@ -23,28 +23,28 @@ namespace HonjiMES.Models
             //var item = default(List<T>);
             #region Excel比對檔
             var ExcelOrderModellist = new List<ExcelOrderModel>();
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "CustomerNo", ExcelName = "訂單單號", TableName = "OrderHead" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Serial", ExcelName = "序號", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ProductId", ExcelName = "品號", TableName = "OrderDetail", Change = "Product" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "品名", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "規格", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Quantity", ExcelName = "數量", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "已交", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Unit", ExcelName = "單位", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "OriginPrice", ExcelName = "原單價", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "折扣率", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "折後單價", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Price", ExcelName = "金額", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "OrderDate", ExcelName = "預交日", TableName = "OrderHead" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Remark", ExcelName = "備註", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "回覆量", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ReplyDate", ExcelName = "回覆交期", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ReplyRemark", ExcelName = "回覆備註", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "MachineNo", ExcelName = "機號", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "圖檔", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "噴墨", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "標籤", TableName = "OrderDetail" });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "包裝數", TableName = "OrderDetail" });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "CustomerNo", ExcelName = "訂單單號", TableName = "OrderHead", ExcelOrder = 1 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Serial", ExcelName = "序號", TableName = "OrderDetail", ExcelOrder = 2 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ProductId", ExcelName = "品號", TableName = "OrderDetail", Change = "Product", ExcelOrder = 3 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "品名", TableName = "OrderDetail", ExcelOrder = 4 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "規格", TableName = "OrderDetail", ExcelOrder = 5 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Quantity", ExcelName = "數量", TableName = "OrderDetail", ExcelOrder = 6 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Delivered", ExcelName = "已交", TableName = "OrderDetail", ExcelOrder = 7 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Unit", ExcelName = "單位", TableName = "OrderDetail", ExcelOrder = 8 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "OriginPrice", ExcelName = "原單價", TableName = "OrderDetail", ExcelOrder = 9 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Discount", ExcelName = "折扣率", TableName = "OrderDetail", ExcelOrder = 10 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "DiscountPrice", ExcelName = "折後單價", TableName = "OrderDetail", ExcelOrder = 11 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Price", ExcelName = "金額", TableName = "OrderDetail", ExcelOrder = 12 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "DueDate", ExcelName = "預交日", TableName = "OrderDetail", ExcelOrder = 13 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Remark", ExcelName = "備註", TableName = "OrderDetail", ExcelOrder = 14 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Reply", ExcelName = "回覆量", TableName = "OrderDetail", ExcelOrder = 15 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ReplyDate", ExcelName = "回覆交期", TableName = "OrderDetail", ExcelOrder = 16 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ReplyRemark", ExcelName = "回覆備註", TableName = "OrderDetail", ExcelOrder = 17 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "MachineNo", ExcelName = "機號", TableName = "OrderDetail", ExcelOrder = 18 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Drawing", ExcelName = "圖檔", TableName = "OrderDetail", ExcelOrder = 19 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Ink", ExcelName = "噴墨", TableName = "OrderDetail", ExcelOrder = 20 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Label", ExcelName = "標籤", TableName = "OrderDetail", ExcelOrder = 21 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Package", ExcelName = "包裝數", TableName = "OrderDetail", ExcelOrder = 22 });
             #endregion
 
             //foreach (var excel in Allexcel)

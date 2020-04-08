@@ -16,6 +16,9 @@ namespace HonjiMES.Models
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
         [Required]
+        [Column("product_number", TypeName = "varchar(50)")]
+        public string ProductNumber { get; set; }
+        [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         [Column("quantity")]

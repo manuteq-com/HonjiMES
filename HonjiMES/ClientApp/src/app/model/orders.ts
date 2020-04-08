@@ -1,21 +1,3 @@
-export class Orders {
-    id: number;
-    project_no: string;
-    customer_order_no: string | null;
-    product_no: number;
-    name: string;
-    specification: string;
-    quantity: number;
-    price: number;
-    machine_id: string;
-    order_delivery_date: Date | null;
-    status: string | null;
-    customer: number;
-    create_user: number;
-    create_time: Date;
-    update_time: Date;
-}
-
 export class OrderHead {
     id: number;
     orderNo: string;
@@ -27,7 +9,6 @@ export class OrderHead {
     createDate: Date;
     createUser: number;
 }
-
 export class OrderDetail {
     id: number;
     orderId: number;

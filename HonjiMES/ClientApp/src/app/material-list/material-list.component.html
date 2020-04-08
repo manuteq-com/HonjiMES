@@ -1,0 +1,70 @@
+<!-- <p>所有訂單</p> -->
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+        <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+            uploadMode="instantly" (onUploaded)="onUploaded($event)"></dx-file-uploader> -->
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+        <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
+    </div>
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id"
+[(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)">
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <dxi-item  dataField="MaterialNo"></dxi-item>
+            <dxi-item  dataField="Name"></dxi-item>
+            <dxi-item  dataField="Specification"></dxi-item>
+            <dxi-item  dataField="Property"></dxi-item>
+            <dxi-item  dataField="Supplier"></dxi-item>
+            <dxi-item  dataField="SubInventory"></dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+    <dxi-column dataField="MaterialNo" caption="元件品號"></dxi-column>
+    <dxi-column dataField="Name" caption="元件品名"></dxi-column>
+    <dxi-column dataField="Quantity" caption="庫存量"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格"></dxi-column>
+    <dxi-column dataField="Property" caption="屬性"></dxi-column>
+    <dxi-column dataField="Supplier" caption="供應商">
+        <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
+    </dxi-column>
+</dx-data-grid>
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        [exceldata]="exceldata"></app-creatmaterial>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="修改原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="400" [height]="350"
+    [(visible)]="editpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        [exceldata]="exceldata"></app-inventory-change>
+    </div>
+</dx-popup>
+

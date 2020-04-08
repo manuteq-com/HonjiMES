@@ -30,7 +30,7 @@ namespace HonjiMES
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddDbContext<HonjiContext>(options => options.UseMySql(ConnectionStringMyDB, x => x.ServerVersion("8.0.19-mysql"))); //±N­ì¥»ConnectString²¾¨ìappsettings.json
+            services.AddDbContext<HonjiContext>(options => options.UseMySql(ConnectionStringMyDB, x => x.ServerVersion("8.0.19-mysql"))); //å°‡åŽŸæœ¬ConnectStringç§»åˆ°appsettings.json
             services.AddMvc().AddJsonOptions(o =>
             {
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -38,14 +38,14 @@ namespace HonjiMES
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).ConfigureApiBehaviorOptions(options =>
             {
-                // Ãö³¬ÅçÃÒ¥¢±Ñ®É¦Û°Ê HTTP 400 ¦^À³
+                // é—œé–‰é©—è­‰å¤±æ•—æ™‚è‡ªå‹• HTTP 400 å›žæ‡‰
                 options.SuppressModelStateInvalidFilter = true;
             });
             services.AddMvc().AddXmlSerializerFormatters();
             services.AddSwaggerDocument();
             services.AddCors(options =>
             {
-                // CorsPolicy ¬O¦Û­qªº Policy ¦WºÙ
+                // CorsPolicy æ˜¯è‡ªè¨‚çš„ Policy åç¨±
                 options.AddPolicy("CorsPolicy", policy =>
                 {
                     policy.WithOrigins("http://localhost")

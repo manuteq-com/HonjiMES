@@ -20,6 +20,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("order_no", TypeName = "varchar(50)")]
         public string OrderNo { get; set; }
+        [Column("order_type", TypeName = "varchar(50)")]
+        public string OrderType { get; set; }
         [Required]
         [Column("customer_no", TypeName = "varchar(50)")]
         public string CustomerNo { get; set; }
@@ -33,6 +35,8 @@ namespace HonjiMES.Models
         public int Customer { get; set; }
         [Column("create_date", TypeName = "timestamp")]
         public DateTime CreateDate { get; set; }
+        [Column("status")]
+        public sbyte Status { get; set; }
         [Column("create_user")]
         public int CreateUser { get; set; }
 

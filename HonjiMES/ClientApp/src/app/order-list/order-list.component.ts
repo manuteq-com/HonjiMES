@@ -21,13 +21,14 @@ export class OrderListComponent {
     Customerlist: any;
     ProductList: any;
     DetailsDataSourceStorage: any;
-    popupVisible = false;
+    creatpopupVisible = false;
     formData: any;
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
     uploadUrl: string;
     exceldata: any;
+    Controller = '/OrderHeads';
     constructor(private http: HttpClient) {
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
@@ -40,14 +41,13 @@ export class OrderListComponent {
         //     update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
         //     remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
         // });
-
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-            byKey: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-            insert: (values) => SendService.sendRequest( http, '/OrderHeads/PostOrderHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetOrderHeads'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetOrderHead', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostOrderHead', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead', 'DELETE')
         });
 
         this.GetData('/Customers/GetCustomers').subscribe(
@@ -120,14 +120,14 @@ export class OrderListComponent {
         this.itemkey = e.row.key;
 
         this.mod = 'clone';
-        this.popupVisible = true;
+        this.creatpopupVisible = true;
         // e.event.preventDefault();
     }
-    creatorder() {
-        this.popupVisible = true;
+    creatdata() {
+        this.creatpopupVisible = true;
     }
-    popup_result(e) {
-        this.popupVisible = false;
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
         notify({
             message: '存檔完成',
@@ -189,7 +189,7 @@ export class OrderListComponent {
        const response = JSON.parse(e.request.response) as APIResponse;
        if  (response.success) {
         this.mod = 'excel';
-        this.popupVisible = true;
+        this.creatpopupVisible = true;
         this.exceldata = response.data;
       } else {
         notify({

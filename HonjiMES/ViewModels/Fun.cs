@@ -1,7 +1,12 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -173,6 +178,147 @@ namespace HonjiMES.Models
             htmlstring = htmlstring.Replace(">", "");
             htmlstring = htmlstring.Replace("\r\n", "");
             return htmlstring;
+        }
+
+        /// <summary>
+        /// 資料轉成Excel
+        /// </summary>
+        /// <param name="_context">讀資料用</param>
+        /// <param name="orderHead">訂單資料</param>
+        /// <returns></returns>
+        internal static MemoryStream DataToExcel(HonjiContext _context, OrderHead orderHead)
+        {
+            var Mappinglist = DBHelper.MappingExtelToModelData();
+
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet ws = wb.CreateSheet(orderHead.OrderNo);
+            ws.CreateRow(0);//第一行為欄位名稱
+            var i = 0;
+            var j = 0;
+            foreach (var item in Mappinglist.OrderBy(x=>x.ExcelOrder).ToList())
+            {
+                ws.GetRow(0).CreateCell(j).SetCellValue(item.ExcelName);//建立表頭
+                j++;
+            }
+            foreach (var Detailitem in orderHead.OrderDetails)
+            {
+                i++;
+                ws.CreateRow(i);
+                ws.GetRow(i).CreateCell(0).SetCellValue(orderHead.CustomerNo);//訂單單號
+                ws.GetRow(i).CreateCell(1).SetCellValue(Detailitem.Serial);//序號
+
+                var Product = _context.Products.Find(Detailitem.ProductId);
+                if (Product != null)
+                {
+                    ws.GetRow(i).CreateCell(2).SetCellValue(Product.ProductNo);//品號
+                    ws.GetRow(i).CreateCell(3).SetCellValue(Product.Name);//品名
+                    ws.GetRow(i).CreateCell(4).SetCellValue(Product.Specification);//規格
+                }
+                ws.GetRow(i).CreateCell(5).SetCellValue(Detailitem.Quantity);//數量
+                ws.GetRow(i).CreateCell(6).SetCellValue(Detailitem.Delivered ?? 0);//已交
+                ws.GetRow(i).CreateCell(7).SetCellValue(Detailitem.Unit);//單位
+                ws.GetRow(i).CreateCell(8).SetCellValue(Detailitem.OriginPrice);//原單價
+                ws.GetRow(i).CreateCell(9).SetCellValue(Detailitem.Discount ?? 0);//折扣率
+                ws.GetRow(i).CreateCell(10).SetCellValue(Detailitem.DiscountPrice ?? 0);//折後單價
+                ws.GetRow(i).CreateCell(11).SetCellValue(Detailitem.Price);//金額
+                ws.GetRow(i).CreateCell(12).SetCellValue(Detailitem.DueDate);//預交日
+                ws.GetRow(i).CreateCell(13).SetCellValue(Detailitem.Remark);//備註
+                ws.GetRow(i).CreateCell(14).SetCellValue(Detailitem.Reply ?? 0);//回覆量
+                ws.GetRow(i).CreateCell(15).SetCellValue(Detailitem.ReplyDate);//回覆交期
+                ws.GetRow(i).CreateCell(16).SetCellValue(Detailitem.ReplyRemark);//回覆備註
+                ws.GetRow(i).CreateCell(17).SetCellValue(Detailitem.MachineNo);//機號
+                ws.GetRow(i).CreateCell(18).SetCellValue(Detailitem.Drawing);//圖檔
+                ws.GetRow(i).CreateCell(19).SetCellValue(Detailitem.Ink);//噴墨
+                ws.GetRow(i).CreateCell(20).SetCellValue(Detailitem.Label);//標籤
+                ws.GetRow(i).CreateCell(21).SetCellValue(Detailitem.Package ?? 0);//包裝數
+                ws.GetRow(i).CreateCell(22).SetCellValue("v");//
+            }
+            var excelDatas = new MemoryStream();
+            wb.Write(excelDatas);
+            return excelDatas;
+        }
+
+        /// <summary>
+        /// Excel檔案暫存檔處理
+        /// </summary>
+        /// <param name="model">存檔類型</param>
+        /// <param name="dir">存檔路徑</param>
+        /// <param name="dirName">資料夾名稱</param>
+        /// <param name="item">檔案資料串流</param>
+        /// <returns></returns>
+        internal static async Task<string> ProcessSaveTempExcelAsync(string dir, string dirName, IFormFile item)
+        {
+            try
+            {
+                var sPath = $"{dir}\\TempFile\\{dirName}\\";
+                // 要存放的位置
+                if (!Directory.Exists(sPath))
+                {
+                    //新增資料夾
+                    Directory.CreateDirectory(sPath);
+                }
+                var savePath = $"{sPath}{ Path.GetFileName(item.FileName)}";
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await item.CopyToAsync(stream);
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+        }
+        /// <summary>
+        /// Excel檔案暫存檔處理
+        /// </summary>
+        /// <param name="dir">存檔路徑</param>
+        /// <param name="dirName">資料夾名稱</param>
+        /// <param name="OrderNo">訂單號</param>
+        /// <returns></returns>
+        internal static async Task<string> ProcessSaveExcelAsync(string dir, string dirName, string OrderNo, byte[] excelDatas)
+        {
+            try
+            {
+                var sTempPath = $"{dir}\\TempFile\\{dirName}\\";//暫存路徑
+                var sUpdatePath = $"{dir}\\UpdateFile\\{OrderNo}\\";//存檔路徑
+                var sSavePath = $"{dir}\\SaveFile\\{OrderNo}\\";//存檔路徑
+                if (!Directory.Exists(sUpdatePath))
+                {
+                    //新增資料夾
+                    Directory.CreateDirectory(sUpdatePath);
+                }
+                if (!Directory.Exists(sSavePath))
+                {
+                    //新增資料夾
+                    Directory.CreateDirectory(sSavePath);
+                }
+                //Excel存檔
+                var savePath = $"{sSavePath}{ OrderNo}.xlsx";
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    Stream ms = new MemoryStream(excelDatas);
+                    await ms.CopyToAsync(stream);
+                }
+                //移動Excel暫存檔
+                var fdir = new DirectoryInfo(sTempPath);
+                var filelist = fdir.GetFiles();
+                foreach (var item in filelist)
+                {
+                    File.Move(item.FullName, sUpdatePath + Path.GetFileName(item.FullName));
+                }
+                Directory.Delete(sTempPath);
+                return "";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
         }
     }
 }

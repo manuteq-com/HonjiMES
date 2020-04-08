@@ -9,7 +9,8 @@ using HonjiMES.Models;
 
 namespace HonjiMES.Controllers
 {
-    [Route("api/[controller]")]
+    [Consumes("application/json")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MaterialsController : ControllerBase
     {
@@ -24,7 +25,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Material>>> GetMaterials()
         {
-            return await _context.Materials.ToListAsync();
+            var Materials = await _context.Materials.ToListAsync();
+            return Ok(MyFun.APIResponseOK(Materials));
         }
 
         // GET: api/Materials/5
@@ -37,8 +39,7 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            return material;
+            return Ok(MyFun.APIResponseOK(material));
         }
 
         // PUT: api/Materials/5
@@ -47,12 +48,9 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMaterial(int id, Material material)
         {
-            if (id != material.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(material).State = EntityState.Modified;
+            material.Id = id;
+            var Oldmaterial = _context.Materials.Find(id);
+            var Msg = MyFun.MappingData(ref Oldmaterial, material);
 
             try
             {
@@ -70,7 +68,7 @@ namespace HonjiMES.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(MyFun.APIResponseOK(Oldmaterial));
         }
 
         // POST: api/Materials

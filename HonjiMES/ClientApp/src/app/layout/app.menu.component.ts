@@ -47,15 +47,42 @@ export class AppMenuComponent implements OnInit {
                 label: '訂單管理', icon: 'fa fa-fw fa-bars',
                 items: [
                     { label: '訂單總覽', icon: 'fa fa-fw fa-bars', routerLink: ['/orderlist'] },
-                    { label: '成品管理', icon: 'fa fa-fw fa-bars' },
-                    { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
+                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
+                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
                 ]
 
             },
-            //{ label: '報工表單', icon: 'fa fa-fw fa-bars', routerLink: ['/taskform'] },
-            //{ label: '報工歷史', icon: 'fa fa-fw fa-bars', routerLink: ['/taskview'] },
-            //{ label: '報工歷史', icon: 'fa fa-exchange', routerLink: ['/taskviewdx'] },
-            //{ label: '測試區1', icon: 'fa fa-warning', routerLink: ['/test1'] },
+            {
+                label: '原料管理', icon: 'fa fa-fw fa-bars',
+                items: [
+                    { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
+                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
+                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
+                ]
+
+            },
+            {
+                label: '成品管理', icon: 'fa fa-fw fa-bars',
+                items: [
+                    { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
+                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
+                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
+                ]
+
+            },
+            {
+                label: '半成品管理', icon: 'fa fa-fw fa-bars',
+                items: [
+                    { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
+                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
+                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
+                ]
+
+            },
+            // { label: '報工表單', icon: 'fa fa-fw fa-bars', routerLink: ['/taskform'] },
+            // { label: '報工歷史', icon: 'fa fa-fw fa-bars', routerLink: ['/taskview'] },
+            // { label: '報工歷史', icon: 'fa fa-exchange', routerLink: ['/taskviewdx'] },
+            // { label: '測試區1', icon: 'fa fa-warning', routerLink: ['/test1'] },
         ];
 
 

@@ -1,4 +1,4 @@
-<form action="your-action" (submit)="onFormSubmit($event)">
+<form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
@@ -50,18 +50,31 @@
                 </dxo-keyboard-navigation>
                 <dxo-paging [enabled]="false">
                 </dxo-paging>
-                <dxi-column dataField="Serial" caption="序號"></dxi-column>
+                <dxi-column dataField="Serial" caption="序號">
+                    <dxi-validation-rule type="required" message="序號 必填"></dxi-validation-rule>
+                </dxi-column>
                 <dxi-column dataField="ProductId" caption="品號">
+                    <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
                 </dxi-column>>
-                <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
+                <dxi-column dataField="OriginPrice" caption="原單價" dataType="number">
+                    <dxi-validation-rule type="required" message="原單價 必填"></dxi-validation-rule>
+                </dxi-column>
                 <dxi-column dataField="Price" caption="價格" dataType="number">
                     <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="Unit" caption="單位"></dxi-column>
-                <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
-                <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
-                <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
+                <dxi-column dataField="Unit" caption="單位">
+                    <dxi-validation-rule type="required" message="單位 必填"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="Quantity" caption="數量" dataType="number">
+                    <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date">
+                    <dxi-validation-rule type="required" message="回復交期 必填"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="MachineNo" caption="機號" dataType="number">
+                    <dxi-validation-rule type="required" message="機號 必填"></dxi-validation-rule>
+                </dxi-column>
                 <dxi-column dataField="Remark" caption="備註"></dxi-column>
                 <dxi-column type="buttons">
                     <dxi-button name="save" text="存檔"></dxi-button>

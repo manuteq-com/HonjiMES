@@ -75,6 +75,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
             if (this.exceldata.Customer === 0) {
                 this.exceldata.Customer = null;
             }
+            this.exceldata.OrderDetails.forEach(item => {
+                this.SerialNo++;
+                if (item.ProductId === 0) {
+                    item.ProductId = null;
+                }
+            });
             this.formData = this.exceldata;
             this.dataSourceDB = this.exceldata.OrderDetails;
         }
@@ -182,9 +188,10 @@ export class CreatorderComponent implements OnInit, OnChanges {
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
             if (sendRequest) {
                 this.SerialNo = 0;
-                this.dataSourceDB = [];
+                this.dataSourceDB = null;
                 this.dataGrid.instance.refresh();
                 this.myform.instance.resetValues();
+                this.CustomerVal = null;
                 e.preventDefault();
                 this.childOuter.emit(true);
             }

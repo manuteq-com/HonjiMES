@@ -23,5 +23,9 @@ namespace HonjiMES.Models
         /// 資料轉換
         /// </summary>
         public string Change { get; set; }
-    }
+        /// <summary>
+        /// Excel資料順序
+        /// </summary>
+        public int ExcelOrder{ get; set; }
+}
 }

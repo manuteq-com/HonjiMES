@@ -9,9 +9,11 @@ using NPOI.SS.UserModel;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HonjiMES.Controllers
 {
+
     /// <summary>
     /// 訂單主檔
     /// </summary>
@@ -20,10 +22,12 @@ namespace HonjiMES.Controllers
     [ApiController]
     public class OrderHeadsController : ControllerBase
     {
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
         private readonly HonjiContext _context;
-        public OrderHeadsController(HonjiContext context)
+        public OrderHeadsController(HonjiContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _IWebHostEnvironment = environment;
         }
 
         /// <summary>
@@ -153,6 +157,7 @@ namespace HonjiMES.Controllers
                 var NoCount = _context.OrderHeads.Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
                 var orderHead = PostOrderMaster_Detail.OrderHead;
                 var OrderDetail = PostOrderMaster_Detail.OrderDetail;
+                var DirName = orderHead.OrderNo;
                 orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
                 orderHead.CreateDate = dt;
                 orderHead.CreateUser = 1;
@@ -166,6 +171,11 @@ namespace HonjiMES.Controllers
                 orderHead.OrderDetails = OrderDetails.OrderBy(x=>x.Serial).ToList();
                 _context.OrderHeads.Add(orderHead);
                 await _context.SaveChangesAsync();
+                MemoryStream excelDatas = MyFun.DataToExcel(_context,orderHead);
+                //Excel存檔
+                var webRootPath = _IWebHostEnvironment.WebRootPath;
+                var Dir = $"{webRootPath}";
+                var bsave = MyFun.ProcessSaveExcelAsync(Dir, DirName, orderHead.OrderNo, excelDatas.ToArray());
                 return Ok(MyFun.APIResponseOK(orderHead.OrderNo));
                 //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
                 //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
@@ -184,7 +194,7 @@ namespace HonjiMES.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<OrderHead>> PostOrdeByExcel()
         {
-
+            var DirName = DateTime.Now.ToString("yyyyMMddHHmmss");
             var OrderHeadlist = new List<OrderHead>();//所有檔案
             var myFile = Request.Form.Files;
             if (myFile.Any())
@@ -192,6 +202,7 @@ namespace HonjiMES.Controllers
                 var MappingList = DBHelper.MappingExtelToModelData();
                 foreach (var item in myFile)
                 {
+                    //
                     var ms = new MemoryStream();
                     IWorkbook workBook;
                     IFormulaEvaluator formulaEvaluator;
@@ -211,7 +222,7 @@ namespace HonjiMES.Controllers
                                 //讀取錯誤，使用HTML方式讀取
                                 try
                                 {
-                                    var htmlms = new MemoryStream( ms.ToArray());
+                                    var htmlms = new MemoryStream(ms.ToArray());
                                     StreamReader sr = new StreamReader(htmlms);
                                     string MyHtml = sr.ReadToEnd();
                                     workBook = MyFun.ExportHtmlTableToObj(MyHtml);
@@ -238,7 +249,7 @@ namespace HonjiMES.Controllers
                             if (CustomerName != null)
                             {
                                 nOrderHead.Customer = CustomerName.Id;
-                            }           
+                            }
                             #endregion
 
                             OrderHeadlist.Add(nOrderHead);
@@ -310,12 +321,16 @@ namespace HonjiMES.Controllers
                     {
                         return Ok(MyFun.APIResponseError(null, ex.Message + " 請檢查資料格式"));
                     }
-
+                    //暫存Excel檔案
+                    var webRootPath = _IWebHostEnvironment.WebRootPath;
+                    var Dir = $"{webRootPath}";
+                    var bsave = MyFun.ProcessSaveTempExcelAsync(Dir, DirName, item);       
                 }
             }
             foreach (var Headitem in OrderHeadlist.ToList())
             {
                 var len = ("000-000000000").Length;
+                Headitem.OrderNo = DirName;
                 if (!string.IsNullOrWhiteSpace(Headitem.CustomerNo) && Headitem.CustomerNo.Length > len)
                     Headitem.CustomerNo = Headitem.CustomerNo.Substring(0, len);
                 foreach (var Detailitem in Headitem.OrderDetails.ToList())
@@ -325,6 +340,7 @@ namespace HonjiMES.Controllers
                         Headitem.OrderDetails.Remove(Detailitem);
                     }
                 }
+                Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
             }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault()));
         }

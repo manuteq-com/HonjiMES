@@ -107,7 +107,10 @@ export class SendService {
     public  static sendRequest(http: HttpClient , url: string, method: string = 'GET', data: any = {}): any {
         const apiurl = location.origin + '/api';
         const body = JSON.stringify(data.values);
-        const keyurl = '/' + data.key;
+        let keyurl = '' ;
+        if (data.key) {
+            keyurl = '/' + data.key;
+        }
         const httpOptions = { withCredentials: true, body, headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
         let result;
         switch (method) {
@@ -128,6 +131,15 @@ export class SendService {
         .then((data: any) => {
           if (data.success) {
                   return (data.data);
+          } else {
+            notify({
+                message: data.message,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            return (null);
           }
         })
         .catch(e => {

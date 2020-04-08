@@ -8,7 +8,7 @@
     <div class="col-md-1 col-sm-1">
     </div>
     <div class="col-md-1 col-sm-1">
-        <dx-button text="新增訂單" type="default" (onClick)="creatorder()"></dx-button>
+        <dx-button text="新增訂單" type="default" (onClick)="creatdata()"></dx-button>
     </div>
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" [masterDetail]="{ enabled: false, template: 'detail' }"
@@ -54,11 +54,10 @@
         <app-oerdrdetail-list [itemkey]="item.key" [ProductList]="ProductList"></app-oerdrdetail-list>
     </div>
 </dx-data-grid>
-
 <dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="popupVisible">
+    [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatorder (childOuter)="popup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatorder>
     </div>
 </dx-popup>
