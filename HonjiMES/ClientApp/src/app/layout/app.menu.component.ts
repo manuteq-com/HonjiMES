@@ -47,35 +47,30 @@ export class AppMenuComponent implements OnInit {
                 label: '訂單管理', icon: 'fa fa-fw fa-bars',
                 items: [
                     { label: '訂單總覽', icon: 'fa fa-fw fa-bars', routerLink: ['/orderlist'] },
-                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
-                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
                 ]
 
             },
             {
-                label: '原料管理', icon: 'fa fa-fw fa-bars',
+                label: '庫存管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
-                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
-                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
-                ]
-
-            },
-            {
-                label: '成品管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
-                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
-                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
-                ]
-
-            },
-            {
-                label: '半成品管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
-                    // { label: '成品管理', icon: 'fa fa-fw fa-bars' },
-                    // { label: '客戶管理', icon: 'fa fa-fw fa-bars' }
+                    {
+                        label: '原料管理', icon: 'fa fa-fw fa-bars',
+                        items: [
+                            { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
+                        ]
+                    },
+                    {
+                        label: '成品管理', icon: 'fa fa-fw fa-bars',
+                        items: [
+                            { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
+                        ]
+                    },
+                    {
+                        label: '半成品管理', icon: 'fa fa-fw fa-bars',
+                        items: [
+                            { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
+                        ]
+                    },
                 ]
 
             },

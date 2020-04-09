@@ -10,12 +10,14 @@ namespace HonjiMES.Models
         public virtual DbSet<BillofPurchase> BillofPurchases { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
+        public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderHead> OrderHeads { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Process> Processes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductLog> ProductLogs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
@@ -29,12 +31,12 @@ namespace HonjiMES.Models
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //    }
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -194,6 +196,37 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Supplier).HasComment("供應商");
+            });
+
+            modelBuilder.Entity<MaterialLog>(entity =>
+            {
+                entity.HasIndex(e => e.MaterialId)
+                    .HasName("fk_material_log_material1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateDate)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasComment("建立日期");
+
+                entity.Property(e => e.CreateUser).HasComment("使用者id");
+
+                entity.Property(e => e.MaterialId).HasComment("原料ID");
+
+                entity.Property(e => e.Message)
+                    .HasComment("修改原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Original).HasComment("原始數量");
+
+                entity.Property(e => e.Quantity).HasComment("增減數量");
+
+                entity.HasOne(d => d.Material)
+                    .WithMany(p => p.MaterialLogs)
+                    .HasForeignKey(d => d.MaterialId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_material_log_material1");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -469,6 +502,37 @@ namespace HonjiMES.Models
                     .HasComment("存放庫別")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
+            });
+
+            modelBuilder.Entity<ProductLog>(entity =>
+            {
+                entity.HasIndex(e => e.ProductId)
+                    .HasName("fk_product_log_product1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateDate)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasComment("建立日期");
+
+                entity.Property(e => e.CreateUser).HasComment("使用者id");
+
+                entity.Property(e => e.Message)
+                    .HasComment("修改原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Original).HasComment("原始數量");
+
+                entity.Property(e => e.ProductId).HasComment("成品ID");
+
+                entity.Property(e => e.Quantity).HasComment("增減數量");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductLogs)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_product_log_product1");
             });
 
             modelBuilder.Entity<Purchase>(entity =>

@@ -11,9 +11,9 @@
         <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)"
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
     (onSelectionChanged)="selectionChanged($event)">
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -23,7 +23,7 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <dxi-item dataField="ProductNo"></dxi-item>
             <dxi-item dataField="Name"></dxi-item>
@@ -36,6 +36,12 @@
             <dxi-item dataField="SubInventory"></dxi-item>
             <dxi-item dataField="ProductNumber"></dxi-item>
         </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
     </dxo-editing>
     <dxi-column type="buttons">
         <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->

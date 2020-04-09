@@ -48,8 +48,18 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMaterial(int id, Material material)
         {
+            //修改時檢查名稱重複
+            if (!string.IsNullOrWhiteSpace(material.MaterialNo))
+            {
+                if (_context.Materials.Where(x => x.MaterialNo == material.MaterialNo && x.Id != id).Any())
+                {
+                    return BadRequest("元件品號：" + material.MaterialNo + "重複");    
+                    //return Ok(MyFun.APIResponseError("元件品號：" + material.MaterialNo + "重複"));
+                }
+            }
             material.Id = id;
             var Oldmaterial = _context.Materials.Find(id);
+
             var Msg = MyFun.MappingData(ref Oldmaterial, material);
 
             try
@@ -77,10 +87,17 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Material>> PostMaterial(Material material)
         {
+            //新增時檢查元件品號是否重複
+            if (_context.Materials.Where(x => x.MaterialNo == material.MaterialNo).Any())
+            {
+                return BadRequest("元件品號：" + material.MaterialNo + "重複");
+                //return NotFound("元件品號：" + material.MaterialNo + "重複");
+                //return Ok(MyFun.APIResponseError("元件品號：" + material.MaterialNo + "重複"));
+            }
             _context.Materials.Add(material);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMaterial", new { id = material.Id }, material);
+             return Ok(MyFun.APIResponseOK(material));
         }
 
         // DELETE: api/Materials/5

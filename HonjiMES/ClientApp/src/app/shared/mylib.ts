@@ -132,6 +132,7 @@ export class SendService {
           if (data.success) {
                   return (data.data);
           } else {
+              debugger;
             notify({
                 message: data.message,
                 position: {
@@ -139,11 +140,18 @@ export class SendService {
                     at: 'center top'
                 }
             }, 'error', 3000);
-            return (null);
+            throw data.message;
           }
         })
         .catch(e => {
-          throw e && e.error && e.error.Message;
+            notify({
+                message: e.error,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            throw e.error;
         });
       }
     }

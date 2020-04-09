@@ -1,1 +1,47 @@
-<p>creatproduct works!</p>
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="ProductNo">
+            <dxi-validation-rule type="required" message="主件品號 必填"></dxi-validation-rule>
+            <dxo-label text="主件品號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="主件品名 必填"></dxi-validation-rule>
+            <dxo-label text="主件品名"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Quantity"  dataType="number" editorType="dxNumberBox">
+            <dxi-validation-rule type="required" message="庫存量 必填"></dxi-validation-rule>
+            <dxo-label text="庫存量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="QuantityLimit"  dataType="number" editorType="dxNumberBox">
+            <dxi-validation-rule type="required" message="庫存警示 必填"></dxi-validation-rule>
+            <dxo-label text="庫存警示"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Specification" >
+            <dxi-validation-rule type="required" message="規格 必填"></dxi-validation-rule>
+            <dxo-label text="規格"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Property" >
+            <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule>
+            <dxo-label text="屬性"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price"  dataType="number" editorType="dxNumberBox">
+            <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
+            <dxo-label text="單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="MaterialId" editorType="dxSelectBox"  [editorOptions]="selectBoxOptions">
+            <dxi-validation-rule type="required" message="元件品號 必填"></dxi-validation-rule>
+            <dxo-label text="元件品號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="SubInventory">
+            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <dxo-label text="存放庫別"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ProductNumber">
+            <dxi-validation-rule type="required" message="廠內品號 必填"></dxi-validation-rule>
+            <dxo-label text="廠內品號"></dxo-label>
+        </dxi-item>
+    </dx-form>
+    <dx-button  horizontalAlignment="left" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+</form>

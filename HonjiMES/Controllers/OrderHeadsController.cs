@@ -183,7 +183,7 @@ namespace HonjiMES.Controllers
             catch (Exception ex)
             {
 
-                return Ok(MyFun.APIResponseError(null,ex.Message));
+                return Ok(MyFun.APIResponseError(ex.Message));
             }
         }
         /// <summary>
@@ -229,7 +229,7 @@ namespace HonjiMES.Controllers
                                 }
                                 catch (Exception ex)
                                 {
-                                    return Ok(MyFun.APIResponseError(null, ex.Message + " 請檢查檔案格式"));
+                                    return Ok(MyFun.APIResponseError(ex.Message + " 請檢查檔案格式"));
                                 }
                             }
                             formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到

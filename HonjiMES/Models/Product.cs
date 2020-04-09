@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("product")]
     public partial class Product
     {
+        public Product()
+        {
+            ProductLogs = new HashSet<ProductLog>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -49,5 +54,8 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+
+        [InverseProperty("Product")]
+        public virtual ICollection<ProductLog> ProductLogs { get; set; }
     }
 }

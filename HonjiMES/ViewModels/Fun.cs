@@ -20,7 +20,7 @@ namespace HonjiMES.Models
             var APIResponse = new APIResponse { data = data, success = true, message = message };
             return APIResponse;
         }
-        internal static APIResponse APIResponseError(Object data, string message)
+        internal static APIResponse APIResponseError( string message,Object data=null)
         {
             var APIResponse = new APIResponse { data = data, success = false, message = message };
             return APIResponse;

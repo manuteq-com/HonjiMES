@@ -6,7 +6,7 @@ import { SendService } from '../shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
-import { InventoryChange } from '../model/inventorychange';
+import { InventoryChange } from '../model/viewmodels';
 
 @Component({
     selector: 'app-inventory-change',
@@ -128,7 +128,6 @@ export class InventoryChangeComponent implements OnInit {
         return true;
     }
     onFormSubmit = async function(e) {
-        debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

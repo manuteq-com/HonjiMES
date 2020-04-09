@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
 import { DxFormComponent, DxDataGridComponent, DxPopupComponent } from 'devextreme-angular';
 import { SendService } from '../shared/mylib';
-import { OrderHead, OrderDetail, PostOrderMaster_Detail } from '../model/orders';
+import { OrderHead, OrderDetail, PostOrderMaster_Detail } from '../model/viewmodels';
 import CustomStore from 'devextreme/data/custom_store';
 import { NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';

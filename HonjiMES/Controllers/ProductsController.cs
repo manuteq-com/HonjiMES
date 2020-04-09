@@ -68,6 +68,15 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
+            //修改時檢查名稱重複
+            if (!string.IsNullOrWhiteSpace(product.ProductNo))
+            {
+                if (_context.Products.Where(x => x.ProductNo == product.ProductNo && x.Id != id).Any())
+                {
+                    //return Ok(MyFun.APIResponseError("主件品號：" + product.ProductNo + "重複"));
+                    return BadRequest("主件品號：" + product.ProductNo + "重複");
+                }
+            }
             product.Id = id;
             var Oldproduct = _context.Products.Find(id);
             var Msg = MyFun.MappingData(ref Oldproduct, product);
@@ -102,6 +111,12 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
+            //新增時檢查主件品號是否重複
+            if (_context.Products.Where(x => x.ProductNo == product.ProductNo).Any())
+            {
+                //return Ok(MyFun.APIResponseError("主件品號：" + product.ProductNo + "重複"));
+                return BadRequest("主件品號：" + product.ProductNo + "重複");
+            }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(product));

@@ -34,6 +34,8 @@ export class ProductListComponent implements OnInit {
     constructor(private http: HttpClient) {
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
+        this.cancelClickHandler = this.cancelClickHandler.bind(this);
+        this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetProducts'),
@@ -108,16 +110,41 @@ export class ProductListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
         }
+    }
+    onRowPrepared(e) {
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
+                e.rowElement.style.backgroundColor = 'red';
+            }
+        }
+    }
+    cancelClickHandler(e) {
+        this.dataGrid.instance.cancelEditData();
+    }
+    saveClickHandler(e) {
+        this.dataGrid.instance.saveEditData();
+    }
+    onDataErrorOccurred(e) {
+        notify({
+            message: e.error.message,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
+    }
+    onEditingStart(e) {
+
     }
     onFocusedRowChanged(e) {
     }

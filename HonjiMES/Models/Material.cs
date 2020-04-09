@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("material")]
     public partial class Material
     {
+        public Material()
+        {
+            MaterialLogs = new HashSet<MaterialLog>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -36,5 +41,8 @@ namespace HonjiMES.Models
         public string SubInventory { get; set; }
         [Column("create_user")]
         public int CreateUser { get; set; }
+
+        [InverseProperty("Material")]
+        public virtual ICollection<MaterialLog> MaterialLogs { get; set; }
     }
 }
