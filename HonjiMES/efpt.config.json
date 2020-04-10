@@ -62,6 +62,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "purchase_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "purchase_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "sale"
       },
       {

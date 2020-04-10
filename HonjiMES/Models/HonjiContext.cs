@@ -19,6 +19,8 @@ namespace HonjiMES.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductLog> ProductLogs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
+        public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
+        public virtual DbSet<PurchaseHead> PurchaseHeads { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
@@ -31,12 +33,12 @@ namespace HonjiMES.Models
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -579,6 +581,81 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .HasComment("更新時間")
+                    .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<PurchaseDetail>(entity =>
+            {
+                entity.HasIndex(e => e.PurchaseId)
+                    .HasName("fk_purchase_detail_purchase_head_idx");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.DataId).HasComment("採購內容ID");
+
+                entity.Property(e => e.DataName)
+                    .HasComment("採購內容名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.DataNo)
+                    .HasComment("採購內容編號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.OrderId).HasComment("訂單單號id");
+
+                entity.Property(e => e.OriginPrice).HasComment("原單價	");
+
+                entity.Property(e => e.Price).HasComment("價格");
+
+                entity.Property(e => e.PurchaseId).HasComment("採購單號");
+
+                entity.Property(e => e.PurchaseType).HasComment("採購種類");
+
+                entity.Property(e => e.Quantity).HasComment("數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.SupplierId).HasComment("供應商id");
+
+                entity.HasOne(d => d.Purchase)
+                    .WithMany(p => p.PurchaseDetails)
+                    .HasForeignKey(d => d.PurchaseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_purchase_detail_purchase_head");
+            });
+
+            modelBuilder.Entity<PurchaseHead>(entity =>
+            {
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
+                entity.Property(e => e.PurchaseDate).HasComment("採購日期");
+
+                entity.Property(e => e.PurchaseNo)
+                    .HasComment("採購單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Status).HasComment("採購狀態");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .ValueGeneratedOnAddOrUpdate();
             });
 

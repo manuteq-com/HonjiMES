@@ -7,6 +7,13 @@
     border-bottom: none;
     color: black;
 }
+.dx-button{
+    border-radius: 2px;
+    width: 130px;
+}
+.dx-data-grid{
+    border-radius: 2px;
+}
 // dx-row 其實包含 .dx-datagrid-headers
 .dx-row {
     font-family: $rusin-font-family;
@@ -15,12 +22,38 @@
     height: 28px;
     line-height: 28px;
 }
+
 // .dx-data-row同.dx-state-hover 同時都有的組合
 .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row)
     > td:not(.dx-focused) {
     background-color: #f3f3f3 !important;
     color: black !important;
 }
+.dx-datagrid-rowsview .dx-selection.dx-row > td, .dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
+    background-color: #f3f3f3 !important;
+    color: black !important;
+}
+// dx grid sorting icon
+.dx-datagrid .dx-sort-up:before {
+    font-family: "FontAwesome" !important;
+    font-size: 1.2rem;
+    content: " \f0de"!important; //icon unicode is specified here
+    color:red;
+}
+.dx-datagrid .dx-sort-down:before {
+    font-family: "FontAwesome" !important;
+    font-size: 1.2rem;
+    content: "\f0dd"!important;
+    color:red;
+}
+tr.dx-header-row>td.dx-datagrid-action {
+    text-align: left !important;
+}
+tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
+    float: left !important;
+}
+// dx grid sorting icon
+
 
 // dx item
 .dx-field-item-label-text {
@@ -41,3 +74,20 @@
     font-weight: 800;
     color: black;
 }
+.dx-field-label {
+
+    font-size: 14px !important;;
+  }
+  .dx-field-item
+  {
+    font-size: 14px !important;;
+  }
+  .dx-field-item-required-mark
+  {
+      color: red !important;;
+  }
+  .dx-data-row.dx-state-hover > td {
+    cursor: pointer;
+    color: red !important;
+    background-color: orange !important;
+  }

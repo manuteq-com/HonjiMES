@@ -38,12 +38,13 @@
 
 // 偽類
 .rusin-page-title div:nth-child(1) {
-    background-color: #0275d8;
-    border-bottom: 4px solid #0275d8;
+    background-color: rgb(235, 99, 0);
+    border-bottom: 4px solid rgb(235, 99, 0);
     color: white;
+    margin-left: -15px;
     padding-left: 10px; //
-    width: 15%;
-    border-radius: 8px 0 0 8px;
+    width: 20%;
+    border-radius: 2px 0 0 2px;
 }
 
 .rusin-page-title div:nth-child(2) {
@@ -51,14 +52,15 @@
     height: 0;
     border-style: solid;
     border-width: 40px 40px 0 0;
-    border-color: #0275d8 #666666 transparent transparent;
+    border-color: rgb(235, 99, 0) #666666 transparent transparent;
 }
 .rusin-page-title div:nth-child(3) {
     background-color: #666666;
     border-bottom: 4px solid #666666;
     color: white;
-    width: 85%;
+    width: 80%;
+    margin-right: -15px;
     padding-left: 10px;
     height: 40px;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 2px 2px 0;
 }

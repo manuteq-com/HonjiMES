@@ -139,11 +139,11 @@ export class CreatorderComponent implements OnInit, OnChanges {
     onCustomerSelectionChanged(e) {
         if (e.value !== null && e.value !== 0) {
             const Customerobj = this.Customerlist.filter(x => x.Id === e.value)[0];
-            this.CustomerVal = '代號：' + Customerobj.Code
-                + '   電話：' + Customerobj.Phone
-                + '   傳真：' + Customerobj.Fax
-                + '   E-mail：' + Customerobj.Email
-                + '   地址：' + Customerobj.Address;
+            this.CustomerVal = '代號：\u00A0\u00A0\u00A0' + Customerobj.Code
+                + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0   電話：\u00A0' + Customerobj.Phone
+                + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0   傳真：\u00A0' + Customerobj.Fax
+                + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0   E-mail：\u00A0' + Customerobj.Email
+                + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0   地址：\u00A0' + Customerobj.Address;
         }
     }
     validate_before(): boolean {
@@ -161,7 +161,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         return true;
     }
     onFormSubmit = async function (e) {
-        debugger;
+        // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
@@ -169,7 +169,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
         }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
-        if (this.SerialNo > 0 && this.dataSourceDB.length < 1) {
+        const hnull =  this.dataSourceDB.find(item => item.ProductId == null);
+        if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
             notify({
                 message: '請注意訂單內容必填的欄位',
                 position: {
@@ -179,7 +180,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }, 'error', 3000);
             return false;
         } else {
-            debugger;
             this.postval = new PostOrderMaster_Detail();
             this.postval.OrderHead = this.formData as OrderHead;
             this.postval.orderDetail = this.dataSourceDB as OrderDetail[];

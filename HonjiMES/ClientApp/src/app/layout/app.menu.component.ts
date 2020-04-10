@@ -26,7 +26,7 @@ export class AppMenuComponent implements OnInit {
         this.changeLayout('joomla', true);
         this.changeVersion('v4');
         console.log(route.snapshot.paramMap.get('name'));
-        route.params.subscribe(params => console.log("side menu id parameter", params['id']));
+        route.params.subscribe(params => console.log('side menu id parameter', params.id));
     }
 
     ngOnInit() {
@@ -53,24 +53,23 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '庫存管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    {
-                        label: '原料管理', icon: 'fa fa-fw fa-bars',
-                        items: [
-                            { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
-                        ]
-                    },
-                    {
-                        label: '成品管理', icon: 'fa fa-fw fa-bars',
-                        items: [
-                            { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
-                        ]
-                    },
-                    {
-                        label: '半成品管理', icon: 'fa fa-fw fa-bars',
-                        items: [
-                            { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
-                        ]
-                    },
+                    { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
+                    { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
+                    { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
+                ]
+
+            },
+            {
+                label: '採購管理', icon: 'fa fa-fw fa-bars',
+                items: [
+                    { label: '採購資料', icon: 'fa fa-fw fa-cart-plus'},
+                ]
+
+            },
+            {
+                label: '銷貨管理', icon: 'fa fa-fw fa-bars',
+                items: [
+                    { label: '銷貨資料', icon: 'fa fa-fw fa-truck'},
                 ]
 
             },

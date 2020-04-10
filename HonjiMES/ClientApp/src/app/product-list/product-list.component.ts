@@ -124,7 +124,8 @@ export class ProductListComponent implements OnInit {
     onRowPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-                e.rowElement.style.backgroundColor = 'red';
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
         }
     }
@@ -149,7 +150,13 @@ export class ProductListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
 
+                e.cellElement.style.backgroundColor = '#d9534f';
+                e.cellElement.style.color = '#fff';
+            }
+        }
     }
     onEditorPreparing(e) {
     }
