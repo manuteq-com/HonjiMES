@@ -53,10 +53,14 @@ namespace HonjiMES.Models
         public string Label { get; set; }
         [Column("package")]
         public int? Package { get; set; }
-        [Column("create_date", TypeName = "timestamp")]
-        public DateTime CreateDate { get; set; }
         [Column("create_user")]
         public int CreateUser { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime? UpdateTime { get; set; }
 
         [ForeignKey("OrderId")]
         [InverseProperty("OrderDetails")]

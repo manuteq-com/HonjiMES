@@ -44,5 +44,9 @@ namespace HonjiMES.Models
         public string Status { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        [Column("create_user")]
+        public int? CreateUser { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
     }
 }

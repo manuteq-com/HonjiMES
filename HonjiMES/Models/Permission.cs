@@ -28,5 +28,13 @@ namespace HonjiMES.Models
         public int Export { get; set; }
         [Column("copy_add")]
         public int CopyAdd { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime? UpdateTime { get; set; }
     }
 }

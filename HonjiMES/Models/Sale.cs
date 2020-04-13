@@ -37,14 +37,18 @@ namespace HonjiMES.Models
         [Required]
         [Column("customer_no", TypeName = "varchar(50)")]
         public string CustomerNo { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("create_time", TypeName = "timestamp")]
-        public DateTime CreateTime { get; set; }
         [Required]
         [Column("status", TypeName = "varchar(50)")]
         public string Status { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
     }
 }

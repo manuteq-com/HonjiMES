@@ -54,6 +54,8 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime? UpdateTime { get; set; }
 
         [InverseProperty("Product")]
         public virtual ICollection<ProductLog> ProductLogs { get; set; }

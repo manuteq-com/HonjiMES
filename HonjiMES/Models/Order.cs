@@ -38,5 +38,7 @@ namespace HonjiMES.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
     }
 }
