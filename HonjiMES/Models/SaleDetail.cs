@@ -12,9 +12,12 @@ namespace HonjiMES.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Required]
-        [Column("sale_no", TypeName = "varchar(50)")]
-        public string SaleNo { get; set; }
+        [Column("sale_id")]
+        public int SaleId { get; set; }
+        [Column("order_id")]
+        public int OrderId { get; set; }
+        [Column("product_id")]
+        public int ProductId { get; set; }
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
@@ -25,17 +28,19 @@ namespace HonjiMES.Models
         public string Specification { get; set; }
         [Column("quantity")]
         public int Quantity { get; set; }
+        [Column("originPrice")]
+        public int OriginPrice { get; set; }
         [Column("price")]
         public int Price { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
     }
 }

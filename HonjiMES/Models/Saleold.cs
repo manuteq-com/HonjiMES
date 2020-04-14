@@ -6,17 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("purchase")]
-    public partial class Purchase
+[Table("saleold")]
+    public partial class Saleold
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
         [Required]
-        [Column("purchase_no", TypeName = "varchar(50)")]
-        public string PurchaseNo { get; set; }
-        [Column("material_no")]
-        public int MaterialNo { get; set; }
+        [Column("sale_no", TypeName = "varchar(50)")]
+        public string SaleNo { get; set; }
+        [Column("project_no")]
+        public int ProjectNo { get; set; }
+        [Column("product_no")]
+        public int ProductNo { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
@@ -27,16 +29,23 @@ namespace HonjiMES.Models
         [Required]
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
-        [Column("supplier")]
-        public int Supplier { get; set; }
-        [Column("purchase_date", TypeName = "date")]
-        public DateTime PurchaseDate { get; set; }
+        [Column("sale_date", TypeName = "date")]
+        public DateTime SaleDate { get; set; }
+        [Required]
+        [Column("customer", TypeName = "varchar(50)")]
+        public string Customer { get; set; }
+        [Required]
+        [Column("customer_no", TypeName = "varchar(50)")]
+        public string CustomerNo { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user")]
         public int CreateUser { get; set; }
+        [Required]
+        [Column("status", TypeName = "varchar(50)")]
+        public string Status { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("update_user")]

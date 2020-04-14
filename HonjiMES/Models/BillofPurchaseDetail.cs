@@ -6,16 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("purchase_detail")]
-    public partial class PurchaseDetail
+[Table("billof_purchase_detail")]
+    public partial class BillofPurchaseDetail
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        [Column("billof_purchase_id")]
+        public int BillofPurchaseId { get; set; }
+        [Column("billof_purchase_type")]
+        public int BillofPurchaseType { get; set; }
         [Column("purchase_id")]
         public int PurchaseId { get; set; }
-        [Column("purchase_type")]
-        public int PurchaseType { get; set; }
         [Column("supplier_id")]
         public int SupplierId { get; set; }
         [Column("order_id")]
@@ -36,8 +38,16 @@ namespace HonjiMES.Models
         public int OriginPrice { get; set; }
         [Column("price")]
         public int Price { get; set; }
-        [Column("purchase_count")]
-        public int PurchaseCount { get; set; }
+        [Column("check_status")]
+        public int CheckStatus { get; set; }
+        [Column("check_count_in")]
+        public int CheckCountIn { get; set; }
+        [Column("check_count_out")]
+        public int CheckCountOut { get; set; }
+        [Column("check_price_in")]
+        public int CheckPriceIn { get; set; }
+        [Column("check_price_out")]
+        public int CheckPriceOut { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -47,10 +57,6 @@ namespace HonjiMES.Models
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
-        public int? UpdateUser { get; set; }
-
-        [ForeignKey("PurchaseId")]
-        [InverseProperty("PurchaseDetails")]
-        public virtual PurchaseHead Purchase { get; set; }
+        public int UpdateUser { get; set; }
     }
 }

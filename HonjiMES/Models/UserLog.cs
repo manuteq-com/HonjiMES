@@ -19,12 +19,12 @@ namespace HonjiMES.Models
         [Column("logout_time", TypeName = "timestamp")]
         public DateTime? LogoutTime { get; set; }
         [Column("create_user")]
-        public int CreateUser { get; set; }
+        public int? CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace HonjiMES.Models
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user")]
-        public int? CreateUser { get; set; }
+        public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]

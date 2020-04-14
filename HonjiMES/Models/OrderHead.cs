@@ -33,16 +33,16 @@ namespace HonjiMES.Models
         public DateTime FinishDate { get; set; }
         [Column("customer")]
         public int Customer { get; set; }
-        [Column("update_user")]
-        public int? UpdateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
         [Column("status")]
         public sbyte Status { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
 
         [InverseProperty("Order")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

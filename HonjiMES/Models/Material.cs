@@ -39,14 +39,14 @@ namespace HonjiMES.Models
         [Required]
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
 
         [InverseProperty("Material")]
         public virtual ICollection<MaterialLog> MaterialLogs { get; set; }

@@ -22,14 +22,14 @@ namespace HonjiMES.Models
         public string Reason { get; set; }
         [Column("message", TypeName = "varchar(50)")]
         public string Message { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         [ForeignKey("ProductId")]
         [InverseProperty("ProductLogs")]

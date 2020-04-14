@@ -18,6 +18,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "billof_purchase_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "billof_purchase_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "customer"
       },
       {
@@ -27,6 +35,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "material_log"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "message"
       },
       {
          "HasPrimaryKey": true,
@@ -58,6 +70,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "product_sn"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "purchase"
       },
       {
@@ -75,6 +91,18 @@
       {
          "HasPrimaryKey": true,
          "Name": "sale_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "sale_head"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "sale_log"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "saleold"
       },
       {
          "HasPrimaryKey": true,

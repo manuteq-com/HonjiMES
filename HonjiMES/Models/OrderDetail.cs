@@ -37,14 +37,13 @@ namespace HonjiMES.Models
         public DateTime DueDate { get; set; }
         [Column("remark", TypeName = "varchar(50)")]
         public string Remark { get; set; }
-        [Column("reply")]
-        public int? Reply { get; set; }
         [Column("reply_date", TypeName = "timestamp")]
         public DateTime ReplyDate { get; set; }
         [Column("replyRemark", TypeName = "varchar(50)")]
         public string ReplyRemark { get; set; }
-        [Column("machine_no")]
-        public int MachineNo { get; set; }
+        [Required]
+        [Column("machine_no", TypeName = "varchar(100)")]
+        public string MachineNo { get; set; }
         [Column("drawing", TypeName = "varchar(50)")]
         public string Drawing { get; set; }
         [Column("ink", TypeName = "varchar(50)")]
@@ -53,14 +52,18 @@ namespace HonjiMES.Models
         public string Label { get; set; }
         [Column("package")]
         public int? Package { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
+        [Column("reply")]
+        public int? Reply { get; set; }
+        [Column("sale_count")]
+        public int SaleCount { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
 
         [ForeignKey("OrderId")]
         [InverseProperty("OrderDetails")]

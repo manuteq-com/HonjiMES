@@ -6,21 +6,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("system")]
-    public partial class System
+[Table("sale_log")]
+    public partial class SaleLog
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Required]
-        [Column("name", TypeName = "varchar(50)")]
-        public string Name { get; set; }
-        [Column("value", TypeName = "varchar(50)")]
-        public string Value { get; set; }
-        [Column("create_user")]
-        public int? CreateUser { get; set; }
+        [Column("sale_id")]
+        public int SaleId { get; set; }
+        [Column("type")]
+        public int Type { get; set; }
+        [Column("message", TypeName = "varchar(200)")]
+        public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]

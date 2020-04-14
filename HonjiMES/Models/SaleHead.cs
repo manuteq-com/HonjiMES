@@ -6,28 +6,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("purchase_head")]
-    public partial class PurchaseHead
+[Table("sale_head")]
+    public partial class SaleHead
     {
-        public PurchaseHead()
-        {
-            PurchaseDetails = new HashSet<PurchaseDetail>();
-        }
-
         [Key]
         [Column("id")]
         public int Id { get; set; }
         [Required]
-        [Column("purchase_no", TypeName = "varchar(100)")]
-        public string PurchaseNo { get; set; }
-        [Column("type")]
-        public int? Type { get; set; }
+        [Column("sale_no", TypeName = "varchar(100)")]
+        public string SaleNo { get; set; }
+        [Column("temp")]
+        public int? Temp { get; set; }
         [Column("status")]
         public int Status { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
-        [Column("purchase_date", TypeName = "timestamp")]
-        public DateTime? PurchaseDate { get; set; }
+        [Column("sale_date", TypeName = "timestamp")]
+        public DateTime? SaleDate { get; set; }
         [Column("price_all")]
         public int PriceAll { get; set; }
         [Column("delete_flag")]
@@ -40,8 +35,5 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
-
-        [InverseProperty("Purchase")]
-        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

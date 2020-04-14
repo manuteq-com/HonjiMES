@@ -22,11 +22,11 @@ namespace HonjiMES.Models
         public byte[] Data { get; set; }
         [Column("create_user")]
         public int? CreateUser { get; set; }
-        [Column("create_date")]
-        public int? CreateDate { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
-        [Column("update_date")]
-        public int? UpdateDate { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
     }
 }

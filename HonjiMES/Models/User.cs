@@ -24,18 +24,18 @@ namespace HonjiMES.Models
         [Required]
         [Column("permission", TypeName = "varchar(50)")]
         public string Permission { get; set; }
-        [Column("update_user")]
-        public int? UpdateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime? UpdateTime { get; set; }
         [Required]
         [Column("department", TypeName = "varchar(50)")]
         public string Department { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("create_user")]
-        public int CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        [Column("create_user")]
+        public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
+        [Column("update_user")]
+        public int? UpdateUser { get; set; }
     }
 }
