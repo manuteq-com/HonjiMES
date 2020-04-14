@@ -152,7 +152,7 @@ namespace HonjiMES.Controllers
         {
             try
             {
-               var dt = DateTime.Now;
+                var dt = DateTime.Now;
                 var OrderNo = dt.ToString("yyyyMMdd");
                 var NoCount = _context.OrderHeads.Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
                 var orderHead = PostOrderMaster_Detail.OrderHead;
@@ -168,10 +168,10 @@ namespace HonjiMES.Controllers
                     item.CreateUser = 1;
                     OrderDetails.Add(item);
                 }
-                orderHead.OrderDetails = OrderDetails.OrderBy(x=>x.Serial).ToList();
+                orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
                 _context.OrderHeads.Add(orderHead);
                 await _context.SaveChangesAsync();
-                MemoryStream excelDatas = MyFun.DataToExcel(_context,orderHead);
+                MemoryStream excelDatas = MyFun.DataToExcel(_context, orderHead);
                 //Excel存檔
                 var webRootPath = _IWebHostEnvironment.WebRootPath;
                 var Dir = $"{webRootPath}";
@@ -192,8 +192,10 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<OrderHead>> PostOrdeByExcel()
+        public ActionResult<OrderHead> PostOrdeByExcel()
         {
+
+            string sLostProduct = null;
             var DirName = DateTime.Now.ToString("yyyyMMddHHmmss");
             var OrderHeadlist = new List<OrderHead>();//所有檔案
             var myFile = Request.Form.Files;
@@ -202,129 +204,34 @@ namespace HonjiMES.Controllers
                 var MappingList = DBHelper.MappingExtelToModelData();
                 foreach (var item in myFile)
                 {
-                    //
-                    var ms = new MemoryStream();
-                    IWorkbook workBook;
-                    IFormulaEvaluator formulaEvaluator;
-                    item.CopyTo(ms);
-                    ms.Position = 0; // <-- Add this, to make it work
-                    var bytes = ms.ToArray();
                     try
                     {
-                        if (Path.GetExtension(item.FileName).ToLower() == ".xls")
+                        //暫存Excel檔案
+                        var webRootPath = _IWebHostEnvironment.WebRootPath;
+                        var Dir = $"{webRootPath}";
+                        var bsave = MyFun.ProcessSaveTempExcelAsync(Dir, DirName, item);
+                        if (string.IsNullOrWhiteSpace(bsave.Result))
                         {
-                            try
+                            var Files = MyFun.ProcessGetTempExcelAsync(Dir, DirName);
+                            foreach (var Fileitem in Files)
                             {
-                                workBook = new HSSFWorkbook(ms);//xls格式
+
+                                OrderHeadlist.AddRange(DBHelper.GetExcelData(Fileitem, _context, ref sLostProduct));
                             }
-                            catch
-                            {
-                                //讀取錯誤，使用HTML方式讀取
-                                try
-                                {
-                                    var htmlms = new MemoryStream(ms.ToArray());
-                                    StreamReader sr = new StreamReader(htmlms);
-                                    string MyHtml = sr.ReadToEnd();
-                                    workBook = MyFun.ExportHtmlTableToObj(MyHtml);
-                                }
-                                catch (Exception ex)
-                                {
-                                    return Ok(MyFun.APIResponseError(ex.Message + " 請檢查檔案格式"));
-                                }
-                            }
-                            formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
+
                         }
                         else
                         {
-                            workBook = new XSSFWorkbook(ms);//xlsx格式
-                            formulaEvaluator = new XSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
-                        }
-                        foreach (ISheet sheet in workBook)
-                        {
-                            var MappingExtelToModel = new List<ExcelOrderModel>();//所有檔案
-                            var nOrderHead = new OrderHead();
-                            #region 表頭資料處理
-                            //處理客戶代號
-                            var CustomerName = _context.Customers.Where(x => item.FileName.Contains(x.Name)).FirstOrDefault();
-                            if (CustomerName != null)
-                            {
-                                nOrderHead.Customer = CustomerName.Id;
-                            }
-                            #endregion
-
-                            OrderHeadlist.Add(nOrderHead);
-                            for (var i = 0; i < sheet.LastRowNum; i++)//筆數
-                            {
-                                var nOrderDetail = new OrderDetail();
-                                nOrderHead.OrderDetails.Add(nOrderDetail);
-                                var CellNum = sheet.GetRow(i).LastCellNum;
-                                for (var j = 0; j < CellNum; j++)
-                                {
-                                    //抓出表頭及順序
-                                    if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
-                                    {
-                                        var val = sheet.GetRow(i).GetCell(j);
-                                        if (val != null)
-                                        {
-                                            var ExcelName = DBHelper.MappingExtelToModelData().Where(x => x.ExcelName == val.ToString()).FirstOrDefault();
-                                            if (ExcelName != null)
-                                            {
-                                                MappingExtelToModel.Add(ExcelName);
-                                            }
-                                            else
-                                            {
-                                                MappingExtelToModel.Add(new ExcelOrderModel { });//使數量一樣
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var Mappingitem = MappingExtelToModel[j];
-                                        var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
-
-                                        if (Mappingitem.TableName == "OrderHead")
-                                        {
-                                            DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
-                                            //foreach (var Props in nOrderHead.GetType().GetProperties())
-                                            //{
-                                            //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                            //    {
-                                            //        Props.SetValue(nOrderHead, Cellval);
-                                            //    }
-                                            //}
-                                        }
-                                        else if (Mappingitem.TableName == "OrderDetail")
-                                        {
-                                            switch (Mappingitem.Change)
-                                            {
-                                                case "Product":
-                                                    Cellval = _context.Products.Where(x => x.ProductNo == Cellval).FirstOrDefault()?.Id.ToString() ?? null;
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                            DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
-                                            //foreach (var Props in nOrderDetail.GetType().GetProperties())
-                                            //{
-                                            //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                            //    {
-                                            //        Props.SetValue(nOrderDetail, Cellval);
-                                            //    }
-                                            //}
-                                        }
-                                    }
-                                }
-                            }
+                            return Ok(MyFun.APIResponseError("Excel存檔失敗：" + bsave.Result));
                         }
                     }
                     catch (Exception ex)
                     {
-                        return Ok(MyFun.APIResponseError(null, ex.Message + " 請檢查資料格式"));
+                        return Ok(MyFun.APIResponseError(ex.Message));
                     }
-                    //暫存Excel檔案
-                    var webRootPath = _IWebHostEnvironment.WebRootPath;
-                    var Dir = $"{webRootPath}";
-                    var bsave = MyFun.ProcessSaveTempExcelAsync(Dir, DirName, item);       
+                    //
+
+
                 }
             }
             foreach (var Headitem in OrderHeadlist.ToList())
@@ -342,7 +249,92 @@ namespace HonjiMES.Controllers
                 }
                 Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
             }
+            return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault(), sLostProduct));
+        }
+
+        /// <summary>
+        /// 由Excel自動產生產品
+        /// </summary>
+        /// <param name="ProductByExcel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<OrderHead>> PostCreatProductByExcelAsync(ProductByExcel ProductByExcel)
+        {
+            //
+            var dt = DateTime.Now;
+            var nProductlist = new List<Product>();
+            foreach (var Productitem in ProductByExcel.Products.Split("<br/>"))
+            {
+                var Productitemlist = Productitem.Split(";");
+                if (Productitemlist.Length == 3)
+                {
+                    //再檢查一次
+                    if (!_context.Products.Where(x => x.ProductNo == Productitemlist[0]).Any())
+                    {
+                        nProductlist.Add(new Product
+                        {
+                            ProductNo = Productitemlist[0].Trim(),
+                            ProductNumber = Productitemlist[0].Trim(),
+                            Name = Productitemlist[1].Trim(),
+                            Specification = Productitemlist[2].Trim(),
+                            Property = "",
+                            SubInventory = "",
+                            CreateTime = dt,
+                            CreateUser = 1,
+                        });
+                    }
+                }
+            }
+            try
+            {
+                _context.AddRange(nProductlist);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return Ok(MyFun.APIResponseError(ex.InnerException.Message));
+
+            }
+
+            //取暫存Excel檔案
+            var webRootPath = _IWebHostEnvironment.WebRootPath;
+            var Dir = $"{webRootPath}";
+            var Files = MyFun.ProcessGetTempExcelAsync(Dir, ProductByExcel.OrderNo);
+            var OrderHeadlist = new List<OrderHead>();
+            var ErrPrice = "";//價格不同顯示目，目前沒用到
+            foreach (var Fileitem in Files)
+            {
+                string sLostProduct = "";
+                OrderHeadlist.AddRange(DBHelper.GetExcelData(Fileitem, _context, ref sLostProduct));
+            }
+            foreach (var Headitem in OrderHeadlist.ToList())
+            {
+                var len = ("000-000000000").Length;
+                Headitem.OrderNo = ProductByExcel.OrderNo;
+                if (!string.IsNullOrWhiteSpace(Headitem.CustomerNo) && Headitem.CustomerNo.Length > len)
+                    Headitem.CustomerNo = Headitem.CustomerNo.Substring(0, len);
+                foreach (var Detailitem in Headitem.OrderDetails.ToList())
+                {
+                    if (Detailitem.Serial < 1)
+                    {
+                        Headitem.OrderDetails.Remove(Detailitem);
+                    }
+                    var oProduct = _context.Products.Find(Detailitem.ProductId);
+                    if (oProduct != null)
+                        if (oProduct.Price == 0)
+                        {
+                            oProduct.Price = Detailitem.OriginPrice;
+                            await _context.SaveChangesAsync();
+                        }
+                    //else if (oProduct.Price != Detailitem.Price)//價格不同
+                    //{
+                    //    ErrPrice += oProduct.ProductNo;
+                    //}
+                }
+                Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
+            }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault()));
+
         }
         private bool OrderHeadExists(int id)
         {

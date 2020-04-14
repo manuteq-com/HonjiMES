@@ -238,10 +238,15 @@ namespace HonjiMES.Models
             return excelDatas;
         }
 
+        internal static string[] ProcessGetTempExcelAsync(string dir, string orderNo)
+        {
+            var sPath = $"{dir}\\TempFile\\" + orderNo;
+            return Directory.GetFiles(sPath);
+        }
+
         /// <summary>
         /// Excel檔案暫存檔處理
         /// </summary>
-        /// <param name="model">存檔類型</param>
         /// <param name="dir">存檔路徑</param>
         /// <param name="dirName">資料夾名稱</param>
         /// <param name="item">檔案資料串流</param>

@@ -26,6 +26,20 @@ namespace HonjiMES.Models
         /// <summary>
         /// Excel資料順序
         /// </summary>
-        public int ExcelOrder{ get; set; }
-}
+        public int ExcelOrder { get; set; }
+    }
+    /// <summary>
+    /// 從匯入的Excel產生Product
+    /// </summary>
+    public class ProductByExcel
+    {
+        /// <summary>
+        /// 訂單號
+        /// </summary>
+        public string OrderNo { get; set; }
+        /// <summary>
+        /// 少的Product
+        /// </summary>
+        public string Products { get; set; }
+    }
 }

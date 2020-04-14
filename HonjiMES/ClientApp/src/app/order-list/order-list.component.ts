@@ -5,9 +5,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent, DxPopupComponent, DxFileUploaderComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from '../shared/mylib';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-order-list',
@@ -17,6 +18,7 @@ import { SendService } from '../shared/mylib';
 export class OrderListComponent {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+    @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     Customerlist: any;
@@ -164,9 +166,6 @@ export class OrderListComponent {
     //     e.component.columnOption('CustomerNo', 'allowEditing', true);
     //     e.component.columnOption('OrderDate', 'allowEditing', true);
     // }
-    swalert(e) {
-        alert('test');
-    }
     onEditorPreparing(e) {
         if (e.parentType === 'dataRow' && (e.dataField === 'OrderNo' || e.dataField === 'CustomerNo' || e.dataField === 'OrderDate')) {
             if (!isNaN(e.row.key)) {
@@ -186,21 +185,52 @@ export class OrderListComponent {
         );
     }
     onUploaded(e) {
-    //    debugger;
-       const response = JSON.parse(e.request.response) as APIResponse;
-       if  (response.success) {
-        this.mod = 'excel';
-        this.creatpopupVisible = true;
-        this.exceldata = response.data;
-      } else {
-        notify({
-            message: 'Excel 檔案讀取失敗:' + response.message,
-            position: {
-                my: 'center top',
-                at: 'center top'
+        const response = JSON.parse(e.request.response) as APIResponse;
+        if (response.success) {
+            if (response.message) {
+                const shtml = '品號 / 品名 不存在，請先新增成品資訊!<br/>';
+                Swal.fire({
+                    width: 600,
+                    title: '是否新增品號 ?',
+                    html: shtml + response.message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    // confirmButtonColor: '#3085d6',
+                    // cancelButtonColor: '#d33',
+                    cancelButtonText: '取消匯入',
+                    confirmButtonText: '確認新增'
+                }).then(async (result) => {
+                    if (result.value) {
+                        debugger;
+                        // tslint:disable-next-line: new-parens
+                        const postval =  {OrderNo : response.data.OrderNo, Products : response.message};
+                        // tslint:disable-next-line: max-line-length
+                        const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
+                        // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                        if (sendRequest) {
+                            this.mod = 'excel';
+                            this.creatpopupVisible = true;
+                            this.exceldata = sendRequest;
+                        }
+                    } else {
+                        this.uploader.instance.reset();
+                    }
+                });
+            } else {
+                this.mod = 'excel';
+                this.creatpopupVisible = true;
+                this.exceldata = response.data;
             }
-        }, 'error', 3000);
-      }
+
+        } else {
+            notify({
+                message: 'Excel 檔案讀取失敗:' + response.message,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+        }
 
     }
     onDataErrorOccurred(e) {
@@ -222,12 +252,12 @@ export class OrderListComponent {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function () {
+                e.component.pageIndex(pageIndex + 1).done(function() {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function () {
+                e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
