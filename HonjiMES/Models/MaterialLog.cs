@@ -18,6 +18,8 @@ namespace HonjiMES.Models
         public int Original { get; set; }
         [Column("quantity")]
         public int Quantity { get; set; }
+        [Column("reason", TypeName = "varchar(50)")]
+        public string Reason { get; set; }
         [Column("message", TypeName = "varchar(50)")]
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]

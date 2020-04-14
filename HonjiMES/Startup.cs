@@ -1,7 +1,6 @@
 using HonjiMES.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,13 +23,23 @@ namespace HonjiMES
         public void ConfigureServices(IServiceCollection services)
         {
             var ConnectionStringMyDB = Configuration.GetConnectionString("MyDB");
-            services.AddControllersWithViews();
-            // In production, the Angular files will be served from this directory
+            //services.AddMvc().AddNewtonsoftJson(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
+            services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                o.JsonSerializerOptions.DictionaryKeyPolicy = null;
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() { NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy() };
+            });
+            services.AddControllersWithViews() ;//.AddNewtonsoftJson();
+            // In production, the Angular files will be served from this directory  
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddDbContext<HonjiContext>(options => options.UseMySql(ConnectionStringMyDB, x => x.ServerVersion("8.0.19-mysql"))); //將原本ConnectString移到appsettings.json
+            services.AddDbContext<HonjiContext>(options => options.UseLazyLoadingProxies().UseMySql(ConnectionStringMyDB, x => x.ServerVersion("8.0.19-mysql"))); //將原本ConnectString移到appsettings.json
             services.AddMvc().AddJsonOptions(o =>
             {
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -54,6 +63,7 @@ namespace HonjiMES
                           .AllowCredentials();
                 });
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

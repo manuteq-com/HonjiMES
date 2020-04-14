@@ -34,24 +34,24 @@ namespace HonjiMES.Controllers
             if (inventorychange.mod == "material")
             {
                 var Material = _context.Materials.Find(inventorychange.id);
-                if (!Material.MaterialLogs.Any())//同步資料用，建立原始庫存數
+                if (!(Material.MaterialLogs.Any()))//同步資料用，建立原始庫存數
                 {
-                    Material.MaterialLogs.Add(new MaterialLog { Quantity = Material.Quantity, Message = "原始數量", CreateDate = dt, CreateUser = UserID });
+                    Material.MaterialLogs.Add(new MaterialLog { Quantity = Material.Quantity, Message = "原始數量", CreateTime = dt, CreateUser = UserID });
                 }
+                Material.MaterialLogs.Add(new MaterialLog { Quantity = inventorychange.quantity, Original= Material.Quantity, Message = inventorychange.Message, Reason = inventorychange.Reason, CreateTime = dt, CreateUser = UserID });
                 Material.Quantity += inventorychange.quantity;
-                Material.MaterialLogs.Add(new MaterialLog { Quantity = inventorychange.quantity, Message = inventorychange.msg, CreateDate = dt, CreateUser = UserID });
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK(Material));
             }
             else if (inventorychange.mod == "product")
             {
                 var Products = _context.Products.Find(inventorychange.id);
-                if (!Products.ProductLogs.Any())//同步資料用，建立原始庫存數
+                if (!(Products.ProductLogs.Any()))//同步資料用，建立原始庫存數
                 {
-                    Products.ProductLogs.Add(new ProductLog { Quantity = Products.Quantity, Message = "原始數量", CreateDate = dt, CreateUser = UserID });
+                    Products.ProductLogs.Add(new ProductLog { Quantity = Products.Quantity, Message = "原始數量", CreateTime = dt, CreateUser = UserID });
                 }
+                Products.ProductLogs.Add(new ProductLog { Quantity = inventorychange.quantity, Original = Products.Quantity, Message = inventorychange.Message, Reason = inventorychange.Reason, CreateTime = dt, CreateUser = UserID });
                 Products.Quantity += inventorychange.quantity;
-                Products.ProductLogs.Add(new ProductLog { Quantity = inventorychange.quantity, Message = inventorychange.msg, CreateDate = dt, CreateUser = UserID });
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK(Products));
             }

@@ -34,7 +34,8 @@ export class InventoryChange {
     id: number;
     mod: string;
     quantity: number;
-    msg: string;
+    reason: string;
+    message: string;
 }
 
 export class Material {

@@ -11,7 +11,7 @@
         <dx-button text="新增訂單" type="default" (onClick)="creatdata()"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true"   keyExpr="Id" [masterDetail]="{ enabled: true, template: 'detail' }"
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true"   keyExpr="id" [masterDetail]="{ enabled: true, template: 'detail' }"
   (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
   [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)"
   (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
@@ -19,7 +19,7 @@
   [showColumnLines]="true" [showRowLines]="false"  [rowAlternationEnabled]="true" [focusedRowEnabled]="true" >
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>

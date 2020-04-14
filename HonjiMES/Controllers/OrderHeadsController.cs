@@ -37,7 +37,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
-            var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateDate).ToListAsync();
+            var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
             // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
@@ -159,12 +159,12 @@ namespace HonjiMES.Controllers
                 var OrderDetail = PostOrderMaster_Detail.OrderDetail;
                 var DirName = orderHead.OrderNo;
                 orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
-                orderHead.CreateDate = dt;
+                orderHead.CreateTime = dt;
                 orderHead.CreateUser = 1;
                 var OrderDetails = new List<OrderDetail>();
                 foreach (var item in OrderDetail)
                 {
-                    item.CreateDate = dt;
+                    item.CreateTime = dt;
                     item.CreateUser = 1;
                     OrderDetails.Add(item);
                 }

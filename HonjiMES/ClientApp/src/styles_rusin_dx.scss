@@ -9,7 +9,7 @@
 }
 .dx-button{
     border-radius: 2px;
-    width: 130px;
+    //width: 130px;
 }
 .dx-data-grid{
     border-radius: 2px;
@@ -17,7 +17,7 @@
 // dx-row 其實包含 .dx-datagrid-headers
 .dx-row {
     font-family: $rusin-font-family;
-    font-weight: 800;
+    // font-weight: 800;
     font-size: $rusin-text-size;
     height: 28px;
     line-height: 28px;
@@ -26,11 +26,11 @@
 // .dx-data-row同.dx-state-hover 同時都有的組合
 .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row)
     > td:not(.dx-focused) {
-    background-color: #f3f3f3 !important;
+    background-color: orange !important;
     color: black !important;
 }
 .dx-datagrid-rowsview .dx-selection.dx-row > td, .dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
-    background-color: #f3f3f3 !important;
+    background-color: orange !important;
     color: black !important;
 }
 // dx grid sorting icon
@@ -62,7 +62,7 @@ tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
         "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
         "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
     font-size: $rusin-text-size;
-    font-weight: 800;
+    //font-weight: 800;
 }
 .dx-widget input,
 .dx-widget textarea {
@@ -71,7 +71,7 @@ tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
         "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
         "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
     font-size: $rusin-text-size;
-    font-weight: 800;
+    //font-weight: 800;
     color: black;
 }
 .dx-field-label {
@@ -85,9 +85,4 @@ tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
   .dx-field-item-required-mark
   {
       color: red !important;;
-  }
-  .dx-data-row.dx-state-hover > td {
-    cursor: pointer;
-    color: red !important;
-    background-color: orange !important;
   }

@@ -25,6 +25,10 @@ namespace HonjiMES.Models
         /// <summary>
         /// 修改原因
         /// </summary>
-        public string msg { get; set; }
+        public string Reason { get; internal set; }
+        /// <summary>
+        /// 修改原因說明
+        /// </summary>
+        public string Message { get; internal set; }
     }
 }
