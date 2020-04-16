@@ -31,4 +31,27 @@ namespace HonjiMES.Models
         /// </summary>
         public string Message { get; internal set; }
     }
+    /// <summary>
+    /// 轉銷貨
+    /// </summary>
+    public class ToSales
+    {
+        /// <summary>
+        /// 要轉的訂單項目
+        /// </summary>
+        public List<int> Orderlist { get; set; }
+        /// <summary>
+        /// 要合併的訂單ID
+        /// </summary>
+        public int? SaleID { get; set; }
+        /// <summary>
+        /// 訂單銷貨日期
+        /// </summary>
+        public DateTime? SaleDate { get; set; }
+        /// <summary>
+        /// 訂單銷貨備註
+        /// </summary>
+        public string Remarks { get; set; }
+
+    }
 }

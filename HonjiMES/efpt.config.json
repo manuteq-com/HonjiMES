@@ -94,6 +94,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "sale_detail_new"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "sale_head"
       },
       {

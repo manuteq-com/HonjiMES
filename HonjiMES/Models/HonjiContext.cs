@@ -27,6 +27,7 @@ namespace HonjiMES.Models
         public virtual DbSet<PurchaseHead> PurchaseHeads { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
+        public virtual DbSet<SaleDetailNew> SaleDetailNews { get; set; }
         public virtual DbSet<SaleHead> SaleHeads { get; set; }
         public virtual DbSet<SaleLog> SaleLogs { get; set; }
         public virtual DbSet<Saleold> Saleolds { get; set; }
@@ -408,6 +409,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_order_order_detail");
 
+                entity.HasIndex(e => e.ProductId)
+                    .HasName("fk_order_detail_product1_idx");
+
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .HasComment("建立日期");
@@ -490,6 +494,12 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_order_detail_order_head");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_order_detail_product");
             });
 
             modelBuilder.Entity<OrderHead>(entity =>
@@ -945,6 +955,87 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<SaleDetailNew>(entity =>
+            {
+                entity.HasIndex(e => e.OrderDetailId)
+                    .HasName("fk_sale_detail_new_order_detail1_idx");
+
+                entity.HasIndex(e => e.OrderId)
+                    .HasName("fk_sale_detail_new_order_head1_idx");
+
+                entity.HasIndex(e => e.ProductId)
+                    .HasName("fk_sale_detail_new_product1_idx");
+
+                entity.HasIndex(e => e.SaleId)
+                    .HasName("fk_sale_detail_new_sale_head1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.Name)
+                    .HasComment("主件品名")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.OrderDetailId).HasComment("訂單內容唯一碼");
+
+                entity.Property(e => e.OrderId).HasComment("訂單單號id");
+
+                entity.Property(e => e.OriginPrice).HasComment("原單價	");
+
+                entity.Property(e => e.Price).HasComment("價格");
+
+                entity.Property(e => e.ProductId).HasComment("主件品號ID");
+
+                entity.Property(e => e.ProductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Quantity).HasComment("數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.SaleId).HasComment("銷貨單號");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.OrderDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_order_detail");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_order_head");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_product");
+
+                entity.HasOne(d => d.Sale)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.SaleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_sale_head");
             });
 
             modelBuilder.Entity<SaleHead>(entity =>

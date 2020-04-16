@@ -51,9 +51,9 @@
         </dxo-lookup>
     </dxi-column>
     <dxi-column dataField="OrderDate" caption="預交日" dataType="date"></dxi-column>
-    <dxi-column type="buttons">
+    <!-- <dxi-column type="buttons">
         <dxi-button hint="to_sale" text="轉鎖貨" [onClick]="to_saleClick"></dxi-button>
-    </dxi-column>
+    </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
         <app-oerdrdetail-list [itemkey]="item.key" [ProductList]="ProductList"></app-oerdrdetail-list>
     </div>

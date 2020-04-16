@@ -44,6 +44,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
         {
+           _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var OrderDetails = _context.OrderDetails.AsQueryable();
             if (OrderId.HasValue)
             {
@@ -87,7 +88,8 @@ namespace HonjiMES.Controllers
             orderDetail.Id = id;
             var OrderDetails = _context.OrderDetails.Find(id);
             var Msg = MyFun.MappingData(ref OrderDetails, orderDetail);
-
+            OrderDetails.UpdateTime = DateTime.Now;
+            OrderDetails.UpdateUser = 1;
             try
             {
                 await _context.SaveChangesAsync();
@@ -117,6 +119,8 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderDetail>> PostOrderDetail(OrderDetail orderDetail)
         {
+            orderDetail.CreateTime = DateTime.Now;
+            orderDetail.CreateUser = 1;
             _context.OrderDetails.Add(orderDetail);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderDetail));
@@ -138,7 +142,7 @@ namespace HonjiMES.Controllers
             }
 
             _context.OrderDetails.Remove(orderDetail);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderDetail));
         }
 

@@ -1,40 +1,56 @@
-        <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
-        <dx-data-grid
-            [dataSource]="dataSourceDB"
-            [showBorders]="true"
-            keyExpr="Id"  (onCellClick)="cellClick($event)">
-            <dxo-editing mode="row"
-            [allowAdding]="false"
-            [allowUpdating]="true"
-            [allowDeleting]="true">
-        </dxo-editing>
-            <dxo-filter-row [visible]="false"></dxo-filter-row>
-            <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxi-column dataField="Serial" caption="序號">
+<!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+        <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
+    </div>
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+    <dxi-column dataField="Serial" caption="序號"></dxi-column>
+    <dxi-column dataField="ProductId" caption="品號">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProductId" caption="品名">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProductId" caption="規格">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number"></dxi-column>
+    <dxi-column dataField="Unit" caption="單位"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
+    <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
+    <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
+    <dxi-column dataField="Remark" caption="備註"></dxi-column>
+    <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
+    <dxi-column  dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"></dxi-column>
+    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
 
-            </dxi-column>
-            <dxi-column dataField="ProductId" caption="品號">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
-            </dxi-column>
-            <dxi-column dataField="ProductId" caption="品名">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-            </dxi-column>
-            <dxi-column dataField="ProductId" caption="規格">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-            </dxi-column>
-            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
-            <dxi-column dataField="Price" caption="價格" dataType="number"></dxi-column>
-            <dxi-column dataField="Unit" caption="單位"></dxi-column>
-            <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
-            <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
-            <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
-            <dxi-column dataField="Remark" caption="備註"></dxi-column>
-            <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
-            <dxi-column dataField="CreateDate" caption="建立日期" dataType="date"></dxi-column>
-            <dxi-column type="buttons"  caption="新增" cssClass="addmod">
-                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-              </dxi-column>
-        </dx-data-grid>
+    <div *dxTemplate="let d of 'diffCellTemplate'" >
+        <span *ngFor ="let item of  distinct(d.value)">
+            {{item.Id}} {{item.SaleNo}}
+        </span>
+     <!-- test {{d.SaleDetailNews[0].SaleId}} -->
+    </div>
+</dx-data-grid>
+
+<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false" height="20%"
+    [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosealkey" [modval]="mod"></app-ordertosale>
+    </div>
+</dx-popup>

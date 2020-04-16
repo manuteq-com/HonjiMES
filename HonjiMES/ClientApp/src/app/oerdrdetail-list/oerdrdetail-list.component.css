@@ -1,0 +1,4 @@
+::ng-deep app-oerdrdetail-list .dx-datagrid-rowsview .dx-selection.dx-row > td, .dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
+    background-color:  rgb(91, 166, 236) !important;
+    color: black !important;
+}

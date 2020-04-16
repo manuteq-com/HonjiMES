@@ -190,6 +190,8 @@ export class OrderListComponent {
             if (response.message) {
                 const shtml = '品號 / 品名 不存在，請先新增成品資訊!<br/>';
                 Swal.fire({
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
                     width: 600,
                     title: '是否新增品號 ?',
                     html: shtml + response.message,
@@ -201,7 +203,6 @@ export class OrderListComponent {
                     confirmButtonText: '確認新增'
                 }).then(async (result) => {
                     if (result.value) {
-                        debugger;
                         // tslint:disable-next-line: new-parens
                         const postval =  {OrderNo : response.data.OrderNo, Products : response.message};
                         // tslint:disable-next-line: max-line-length

@@ -53,7 +53,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     // tslint:disable-next-line: use-lifecycle-interface
-    ngOnChanges() {
+    async ngOnChanges() {
+        this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
         if (this.modval === 'clone') {
             this.GetData(this.url + '/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {
@@ -72,6 +73,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 remove: (key) => SendService.sendRequest(this.http, this.controller + '/DeleteOrderDetail', 'DELETE')
             });
         } else if (this.modval === 'excel') {
+            // debugger;
+            let ProductPricrErr = '';
             if (this.exceldata.Customer === 0) {
                 this.exceldata.Customer = null;
             }
@@ -79,10 +82,25 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 this.SerialNo++;
                 if (item.ProductId === 0) {
                     item.ProductId = null;
+                } else {
+                    const Product = this.ProductList.filter(x => x.Id === item.ProductId)[0];
+                    if (Product.Price !== item.OriginPrice) {
+                        ProductPricrErr += Product.ProductNo + '：' + Product.Price + '=>' + item.OriginPrice + '<br/>';
+                    }
                 }
             });
             this.formData = this.exceldata;
             this.dataSourceDB = this.exceldata.OrderDetails;
+            if (ProductPricrErr) {
+                Swal.fire({
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                    title: '金額不同',
+                    icon: 'info',
+                    html: '品項=>訂單<br/>' + ProductPricrErr,
+                    confirmButtonText: '確認'
+                });
+            }
         }
     }
     constructor(private http: HttpClient) {
@@ -102,14 +120,15 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.controller = '/OrderDetails';
 
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
-        this.GetData(this.url + '/Products/GetProducts').subscribe(
-            (s) => {
-                console.log(s);
-                if (s.success) {
-                    this.ProductList = s.data;
-                }
-            }
-        );
+        // this.GetData(this.url + '/Products/GetProducts').subscribe(
+        //     (s) => {
+        //         console.log(s);
+        //         debugger;
+        //         if (s.success) {
+        //             this.ProductList = s.data;
+        //         }
+        //     }
+        // );
         this.GetData(this.url + '/Customers/GetCustomers').subscribe(
             (s) => {
                 console.log(s);
@@ -124,7 +143,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 }
             }
         );
-
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
@@ -134,7 +152,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
         e.data.Serial = this.SerialNo;
     }
     onFocusedCellChanging(e) {
-        e.isHighlighted = true;
     }
     onCustomerSelectionChanged(e) {
         if (e.value !== null && e.value !== 0) {
@@ -169,7 +186,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
-        const hnull =  this.dataSourceDB.find(item => item.ProductId == null);
+        const hnull = this.dataSourceDB.find(item => item.ProductId == null);
         if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
             notify({
                 message: '請注意訂單內容必填的欄位',

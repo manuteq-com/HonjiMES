@@ -37,6 +37,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
@@ -91,8 +92,8 @@ namespace HonjiMES.Controllers
             var OldorderHead = _context.OrderHeads.Find(id);
             var Msg = MyFun.MappingData(ref OldorderHead, orderHead);
 
-            // _context.Entry(orderHead).State = EntityState.Modified;
-
+            OldorderHead.UpdateTime = DateTime.Now;
+            OldorderHead.UpdateUser = 1;
             try
             {
                 await _context.SaveChangesAsync();
@@ -124,6 +125,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<OrderHead>> PostOrderHead(OrderHead orderHead)
         {
             _context.OrderHeads.Add(orderHead);
+            orderHead.CreateTime = DateTime.Now;
+            orderHead.CreateUser = 1;
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
@@ -144,7 +147,7 @@ namespace HonjiMES.Controllers
             }
 
             _context.OrderHeads.Remove(orderHead);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
         [HttpPost]
@@ -301,7 +304,6 @@ namespace HonjiMES.Controllers
             var Dir = $"{webRootPath}";
             var Files = MyFun.ProcessGetTempExcelAsync(Dir, ProductByExcel.OrderNo);
             var OrderHeadlist = new List<OrderHead>();
-            var ErrPrice = "";//價格不同顯示目，目前沒用到
             foreach (var Fileitem in Files)
             {
                 string sLostProduct = "";
@@ -319,17 +321,13 @@ namespace HonjiMES.Controllers
                     {
                         Headitem.OrderDetails.Remove(Detailitem);
                     }
-                    var oProduct = _context.Products.Find(Detailitem.ProductId);
-                    if (oProduct != null)
-                        if (oProduct.Price == 0)
-                        {
-                            oProduct.Price = Detailitem.OriginPrice;
-                            await _context.SaveChangesAsync();
-                        }
-                    //else if (oProduct.Price != Detailitem.Price)//價格不同
-                    //{
-                    //    ErrPrice += oProduct.ProductNo;
-                    //}
+                    //var oProduct = _context.Products.Find(Detailitem.ProductId); 補金額的功能先停掉，客戶要求金額不同只顯示不修改
+                    //if (oProduct != null)
+                    //    if (oProduct.Price == 0)
+                    //    {
+                    //        oProduct.Price = Detailitem.OriginPrice;
+                    //        await _context.SaveChangesAsync();
+                    //    }
                 }
                 Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
             }

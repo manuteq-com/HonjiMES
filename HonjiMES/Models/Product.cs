@@ -11,7 +11,9 @@ namespace HonjiMES.Models
     {
         public Product()
         {
+            OrderDetails = new HashSet<OrderDetail>();
             ProductLogs = new HashSet<ProductLog>();
+            SaleDetailNews = new HashSet<SaleDetailNew>();
         }
 
         [Key]
@@ -58,6 +60,10 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
 
         [InverseProperty("Product")]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [InverseProperty("Product")]
         public virtual ICollection<ProductLog> ProductLogs { get; set; }
+        [InverseProperty("Product")]
+        public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

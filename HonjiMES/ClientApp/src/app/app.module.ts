@@ -43,6 +43,7 @@ import { MaterialListComponent } from './material-list/material-list.component';
 import { CreatproductComponent } from './creatproduct/creatproduct.component';
 import { CreatmaterialComponent } from './creatmaterial/creatmaterial.component';
 import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
+import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -92,6 +93,7 @@ import { InventoryChangeComponent } from './inventory-change/inventory-change.co
         CreatproductComponent,
         CreatmaterialComponent,
         InventoryChangeComponent,
+        OrdertosaleComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
