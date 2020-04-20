@@ -164,5 +164,7 @@ export class ProductListComponent implements OnInit {
     }
     ngOnInit() {
     }
-
+    QuantityAdvValue(rowData)  {
+        return rowData.Quantity - rowData.QuantityAdv;
+    }
 }

@@ -69,7 +69,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '銷貨管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '銷貨資料', icon: 'fa fa-fw fa-truck'},
+                    { label: '銷貨資料', icon: 'fa fa-fw fa-truck', routerLink: ['/salelist']},
                 ]
 
             },

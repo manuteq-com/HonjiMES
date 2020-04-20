@@ -1,0 +1,6 @@
+::ng-deep .dx-toast-message {
+    white-space: pre-line;
+  }
+  ::ng-deep .dx-error-message{
+    white-space: pre-line;
+  }

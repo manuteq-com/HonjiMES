@@ -9,7 +9,7 @@ import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { APIResponse } from '../app.module';
 import { Observable } from 'rxjs';
-
+import CheckBox from 'devextreme/ui/check_box';
 @Component({
     selector: 'app-oerdrdetail-list',
     templateUrl: './oerdrdetail-list.component.html',
@@ -27,15 +27,19 @@ export class OerdrdetailListComponent implements OnInit {
     controller: string;
     allMode: string;
     checkBoxesMode: string;
+    disabledValues: number[];
     constructor(private http: HttpClient) {
+        this.disabledValues = [];
+        this.onCellPrepared = this.onCellPrepared.bind(this);
+        this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.allMode = 'allPages';
-        this.checkBoxesMode = 'onClick'
+        this.checkBoxesMode = 'always'; // 'onClick';
         this.controller = '/OrderDetails';
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkey),
             byKey: () => SendService.sendRequest(http, this.controller + '/GetOrderDetail'),
-            insert: (values) => SendService.sendRequest(http, this.controller + '/PostOrderDetail', 'POST', { values }),
+            insert: (values) => SendService.sendRequest(http, this.controller + '/PostOrderDetail?PID=' + this.itemkey, 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.controller + '/PutOrderDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.controller + '/DeleteOrderDetail', 'DELETE')
         });
@@ -91,11 +95,19 @@ export class OerdrdetailListComponent implements OnInit {
     }
     onCellPrepared(e: any) {
         if (e.rowType === 'data' && e.column.command === 'select') {
-            const instance = e.cellElement.find('.dx-select-checkbox').dxCheckBox('instance');
-            instance.option('disabled', true);
-            e.cellElement.off();
+            if (e.data.Quantity === e.data.SaleCount) {
+                const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
+                instance.option('disabled', true);
+                this.disabledValues.push(e.data.Id);
+            }
         }
     }
+    onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
+        const disabledKeys = e.currentSelectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
+        if (disabledKeys.length > 0) {
+          e.component.deselectRows(disabledKeys);
+        }
+      }
     popup_result(e) {
         this.popupVisible = false;
         this.dataGrid.instance.refresh();
@@ -108,15 +120,10 @@ export class OerdrdetailListComponent implements OnInit {
         }, 'success', 3000);
     }
     distinct(value) {
-        debugger;
-        const Saleslist = [];
         const list = value.filter(
             (v, i, arr) => arr.findIndex(t => t.SaleId === v.SaleId) === i
         );
-        list.forEach(element => {
-            Saleslist.push(SendService.sendRequest(this.http, '/Sales/GetSaleNo/' + element.SaleId));
-        });
-        return Saleslist;
+        return list;
     }
     // getid(value) {
     //     debugger;

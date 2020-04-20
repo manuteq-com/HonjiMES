@@ -23,6 +23,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
+        [Column("status")]
+        public int Status { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }

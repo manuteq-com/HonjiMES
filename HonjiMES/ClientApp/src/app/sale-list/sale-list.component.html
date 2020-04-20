@@ -1,0 +1,79 @@
+<!-- <p>所有訂單</p> -->
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+        <dx-button text="新增銷貨單" type="default" (onClick)="creatdata()"></dx-button>
+    </div>
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true"
+    [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true">
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+    </dxo-pager>
+    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <dxi-item dataField="SaleNo"></dxi-item>
+            <dxi-item dataField="Status"></dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxi-column type="buttons">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號"></dxi-column>
+    <dxi-column dataField="Status" caption="狀態"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
+    <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
+    <dxi-column type="buttons"><dxi-button hint="to_sale" text="整批銷貨" [onClick]="to_saleClick"></dxi-button></dxi-column>
+    <div *dxTemplate="let item of 'detail'">
+        <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)">
+            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+            <dxi-column type="buttons"><dxi-button hint="to_sale" text="銷貨" [onClick]="to_saleClick"></dxi-button></dxi-column>
+            <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Order.CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ProductId" caption="品名" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
+            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
+            <dxi-column type="buttons">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
+        </dx-data-grid>
+    </div>
+</dx-data-grid>
+<dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-creatorder>
+    </div>
+</dx-popup>

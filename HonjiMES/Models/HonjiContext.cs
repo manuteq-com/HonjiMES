@@ -637,6 +637,10 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.Quantity).HasComment("實際庫存數");
+
+                entity.Property(e => e.QuantityAdv).HasComment("預先扣庫數量");
+
                 entity.Property(e => e.QuantityLimit).HasComment("庫存極限");
 
                 entity.Property(e => e.Remarks)
@@ -1008,6 +1012,8 @@ namespace HonjiMES.Models
                     .HasComment("規格")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Status).HasComment("銷貨狀態");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")

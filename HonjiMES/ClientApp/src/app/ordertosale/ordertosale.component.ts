@@ -88,7 +88,6 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         return true;
     }
     onFormSubmit = async function(e) {
-        debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

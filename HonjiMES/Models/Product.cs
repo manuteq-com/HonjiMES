@@ -32,6 +32,8 @@ namespace HonjiMES.Models
         public int Quantity { get; set; }
         [Column("quantity_limit")]
         public int? QuantityLimit { get; set; }
+        [Column("quantity_adv")]
+        public int QuantityAdv { get; set; }
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
         [Required]

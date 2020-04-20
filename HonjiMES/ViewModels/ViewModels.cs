@@ -54,4 +54,18 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
 
     }
+    /// <summary>
+    /// 銷貨單銷貨
+    /// </summary>
+    public class OrderSale
+    {
+        /// <summary>
+        /// 銷貨單ID，整批銷貨
+        /// </summary>
+        public int? SaleID { get; set; }
+        /// <summary>
+        /// 銷貨單內容ID，分批銷貨
+        /// </summary>
+        public int? SaleDID { get; set; }
+    }
 }

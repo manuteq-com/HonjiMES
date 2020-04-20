@@ -1,21 +1,22 @@
-import {NgModule, Component, OnInit, ViewChild } from '@angular/core';
-import { APIResponse } from '../app.module';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DxDataGridComponent, DxFormComponent, DxFileUploaderComponent } from 'devextreme-angular';
+import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
+import { SendService } from '../shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-import { DxDataGridComponent, DxFormComponent, DxPopupComponent, DxFileUploaderComponent } from 'devextreme-angular';
+import { Observable } from 'rxjs';
+import { APIResponse } from '../app.module';
 import notify from 'devextreme/ui/notify';
-import { SendService } from '../shared/mylib';
 import Swal from 'sweetalert2';
 
 @Component({
-    selector: 'app-order-list',
-    templateUrl: './order-list.component.html',
-    styleUrls: ['./order-list.component.css']
+  selector: 'app-sale-list',
+  templateUrl: './sale-list.component.html',
+  styleUrls: ['./sale-list.component.css']
 })
-export class OrderListComponent {
+export class SaleListComponent implements OnInit {
+
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
@@ -31,27 +32,17 @@ export class OrderListComponent {
     mod: string;
     uploadUrl: string;
     exceldata: any;
-    Controller = '/OrderHeads';
+    Controller = '/Sales';
     constructor(private http: HttpClient) {
-
-        this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.DetailsDataSourceStorage = [];
-        // this.dataSourceDB = new CustomStore({
-        //     key: 'Id',
-        //     load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-        //     byKey: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-        //     insert: (values) => SendService.sendRequest( http, '/OrderHeads/PostOrderHead', 'POST', { values }),
-        //     update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
-        //     remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
-        // });
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetOrderHeads'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetOrderHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostOrderHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead', 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetSales'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetSale', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostSale', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutSale', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteSale', 'DELETE')
         });
 
         this.GetData('/Customers/GetCustomers').subscribe(
@@ -61,15 +52,6 @@ export class OrderListComponent {
                 }
             }
         );
-        // this.GetData(this.url + '/OrderDetails/GetOrderDetails').subscribe(
-        //     (s) => {
-        //         console.log(s);
-        //         this.dataSourceDBDetails = s.data;
-        //         if (s.success) {
-
-        //         }
-        //     }
-        // );
         this.GetData('/Products/GetProducts').subscribe(
             (s) => {
                 this.ProductList = s.data;
@@ -79,24 +61,26 @@ export class OrderListComponent {
         );
 
     }
-    getDetails(key) {
-        let item = this.DetailsDataSourceStorage.find((i) => i.key === key);
+    getDetails(SaleId) {
+        const DController = '/SaleDetailNews';
+        let item = this.DetailsDataSourceStorage.find((i) => i.key === SaleId);
         if (!item) {
             item = {
-                key,
-                dataSourceInstance: new DataSource({
-                    store: new ArrayStore({
-                        data: this.dataSourceDBDetails,
-                        key: 'Id'
-                      }),
-                      filter: ['OrderId', '=', key]
-                  })
+                key: SaleId,
+                DetaildataSource:  new CustomStore({
+                    key: 'Id',
+                    load: () => SendService.sendRequest(this.http, DController + '/GetSaleDetailsBySaleId?SaleId=' + SaleId),
+                    byKey: (key) => SendService.sendRequest(this.http, DController + '/GetSaleDetailNew', 'GET', { key }),
+                    insert: (values) => SendService.sendRequest(this.http, DController + '/PostSaleDetailNew', 'POST', { values }),
+                    // tslint:disable-next-line: max-line-length
+                    update: (key, values) => SendService.sendRequest(this.http, DController + '/PutSaleDetailNewQty', 'PUT', { key, values }),
+                    remove: (key) => SendService.sendRequest(this.http, DController + '/DeleteSaleDetailNew', 'DELETE')
+                })
               };
             this.DetailsDataSourceStorage.push(item);
           }
-        return item.dataSourceInstance;
-      }
-
+        return item.DetaildataSource;
+    }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
@@ -232,6 +216,7 @@ export class OrderListComponent {
 
     }
     onDataErrorOccurred(e) {
+        debugger;
         notify({
             message: e.error.message,
             position: {
@@ -240,7 +225,16 @@ export class OrderListComponent {
             }
         }, 'error', 3000);
     }
-
+    onDetailsDataErrorOccurred(e) {
+        // debugger;
+        // notify({
+        //     message: e.error.message,
+        //     position: {
+        //         my: 'center top',
+        //         at: 'center top'
+        //     }
+        // }, 'error', 3000);
+    }
     onFocusedRowChanging(e) {
         // debugger;
         const rowsCount = e.component.getVisibleRows().length;
@@ -271,41 +265,8 @@ export class OrderListComponent {
     }
     onFocusedRowChanged(e) {
     }
-    //   onEditorPreparing(e) {
-    //     if (e.parentType === 'dataRow' && (e.dataField === 'Id')) {
-    //       e.editorOptions.disabled = true;
-    //     }
-    //   }
-    //   sendRequest(url: string, method: string = 'GET', data: any = {}): any {
 
-    //     const body = JSON.stringify(data.values);
-    //     const keyurl = '/' + data.key;
-    //     const httpOptions = { withCredentials: true, body, headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    //     let result;
-
-    //     switch (method) {
-    //       case 'GET':
-    //         result = this.http.get(url, httpOptions);
-    //         break;
-    //       case 'PUT':
-    //         result = this.http.put(url + keyurl, body, httpOptions);
-    //         break;
-    //       case 'POST':
-    //         result = this.http.post(url, body, httpOptions);
-    //         break;
-    //       case 'DELETE':
-    //         result = this.http.delete(url + keyurl, httpOptions);
-    //         break;
-    //     }
-    //     return result
-    //       .toPromise()
-    //       // tslint:disable-next-line: no-shadowed-variable
-    //       .then((data: any) => {
-    //         return method === 'GET' ? data.data : data;
-    //       })
-    //       .catch(e => {
-    //         throw e && e.error && e.error.Message;
-    //       });
-    //   }
+  ngOnInit() {
+  }
 
 }

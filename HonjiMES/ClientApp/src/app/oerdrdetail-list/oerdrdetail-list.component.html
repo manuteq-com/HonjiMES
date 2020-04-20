@@ -8,12 +8,39 @@
         <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)">
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
+(onSelectionChanged)="onSelectionChanged($event)">
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form colCount=4>
+            <dxi-item dataField="ProductId">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="OriginPrice">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Price">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Unit">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Quantity">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="ReplyDate">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="MachineNo">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Remark"></dxi-item>
+            <dxi-item dataField="ReplyRemark"></dxi-item>
+        </dxo-form>
+    </dxo-editing>
     <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
-    <dxi-column dataField="Serial" caption="序號"></dxi-column>
+    <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
     <dxi-column dataField="ProductId" caption="品號">
         <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -23,16 +50,17 @@
     <dxi-column dataField="ProductId" caption="規格">
         <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number"></dxi-column>
-    <dxi-column dataField="Price" caption="價格" dataType="number"></dxi-column>
-    <dxi-column dataField="Unit" caption="單位"></dxi-column>
-    <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" width="80"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number" width="80"></dxi-column>
+    <dxi-column dataField="Unit" caption="單位" width="50"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" dataType="number"  width="100"></dxi-column>
+    <dxi-column dataField="SaleCount" caption="已銷貨數量" dataType="number"  width="100"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
-    <dxi-column dataField="MachineNo" caption="機號" dataType="number"></dxi-column>
+    <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
-    <dxi-column  dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"></dxi-column>
+    <dxi-column  dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"  width="180"></dxi-column>
     <dxi-column type="buttons" caption="新增" cssClass="addmod">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -41,10 +69,9 @@
     </dxi-column>
 
     <div *dxTemplate="let d of 'diffCellTemplate'" >
-        <span *ngFor ="let item of  distinct(d.value)">
-            {{item.Id}} {{item.SaleNo}}
-        </span>
-     <!-- test {{d.SaleDetailNews[0].SaleId}} -->
+        <ul style="list-style-type:none">
+            <li *ngFor ="let item of  distinct(d.value)"> {{item.Sale.SaleNo}}</li>
+        </ul>
     </div>
 </dx-data-grid>
 

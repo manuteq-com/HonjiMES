@@ -64,13 +64,11 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            if (id != customer.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(customer).State = EntityState.Modified;
-
+            customer.Id = id;
+            var Ocustomer = _context.Customers.Find(id);
+            var Msg = MyFun.MappingData(ref Ocustomer, customer);
+            Ocustomer.UpdateTime = DateTime.Now;
+            Ocustomer.UpdateUser = 1;
             try
             {
                 await _context.SaveChangesAsync();

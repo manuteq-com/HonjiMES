@@ -119,6 +119,7 @@ export class SendService {
             result = http.get(apiurl + url, httpOptions);
             break;
           case 'PUT':
+            debugger;
             result = http.put(apiurl + url + keyurl, body, httpOptions);
             break;
           case 'POST':
@@ -133,26 +134,38 @@ export class SendService {
           if (data.success) {
                   return (data.data);
           } else {
-            //   debugger;
-            notify({
-                message: data.message,
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
+            // notify({
+            //     message: data.message,
+            //     position: {
+            //         my: 'center top',
+            //         at: 'center top'
+            //     }
+            // }, 'error', 3000);
             throw data.message;
           }
         })
         .catch(e => {
-            notify({
-                message: e.error,
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-            throw e.error;
+            debugger;
+            if(e.error) {
+                notify({
+                    message: e.error,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                throw e.error;
+            } else {
+                notify({
+                    message: e,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                throw e;
+            }
+
         });
       }
     }

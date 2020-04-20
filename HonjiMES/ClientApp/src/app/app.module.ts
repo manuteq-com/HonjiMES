@@ -44,6 +44,7 @@ import { CreatproductComponent } from './creatproduct/creatproduct.component';
 import { CreatmaterialComponent } from './creatmaterial/creatmaterial.component';
 import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
 import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
+import { SaleListComponent } from './sale-list/sale-list.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -94,6 +95,7 @@ import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
         CreatmaterialComponent,
         InventoryChangeComponent,
         OrdertosaleComponent,
+        SaleListComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
