@@ -6,22 +6,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material_log")]
-    public partial class MaterialLog
+[Table("return_sale")]
+    public partial class ReturnSale
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Column("material_id")]
-        public int MaterialId { get; set; }
-        [Column("original")]
-        public int Original { get; set; }
+        [Column("warehouse_id")]
+        public int WarehouseId { get; set; }
         [Column("quantity")]
         public int Quantity { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
-        [Column("message", TypeName = "varchar(500)")]
-        public string Message { get; set; }
+        [Column("remarks", TypeName = "varchar(500)")]
+        public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user")]
@@ -30,9 +28,14 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
+        [Column("sale_detail_new_id")]
+        public int SaleDetailNewId { get; set; }
 
-        [ForeignKey("MaterialId")]
-        [InverseProperty("MaterialLogs")]
-        public virtual Material Material { get; set; }
+        [ForeignKey("SaleDetailNewId")]
+        [InverseProperty("ReturnSales")]
+        public virtual SaleDetailNew SaleDetailNew { get; set; }
+        [ForeignKey("WarehouseId")]
+        [InverseProperty("ReturnSales")]
+        public virtual Warehouse Warehouse { get; set; }
     }
 }

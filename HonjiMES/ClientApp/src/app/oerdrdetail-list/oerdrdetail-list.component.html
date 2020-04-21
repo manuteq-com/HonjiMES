@@ -75,7 +75,7 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false" height="20%"
+<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosealkey" [modval]="mod"></app-ordertosale>

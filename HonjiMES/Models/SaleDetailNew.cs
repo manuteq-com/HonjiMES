@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("sale_detail_new")]
     public partial class SaleDetailNew
     {
+        public SaleDetailNew()
+        {
+            ReturnSales = new HashSet<ReturnSale>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -61,5 +66,7 @@ namespace HonjiMES.Models
         [ForeignKey("SaleId")]
         [InverseProperty("SaleDetailNews")]
         public virtual SaleHead Sale { get; set; }
+        [InverseProperty("SaleDetailNew")]
+        public virtual ICollection<ReturnSale> ReturnSales { get; set; }
     }
 }

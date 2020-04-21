@@ -86,6 +86,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "return_sale"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "sale"
       },
       {
@@ -123,6 +127,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "users"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "warehouse"
       },
       {
          "HasPrimaryKey": true,

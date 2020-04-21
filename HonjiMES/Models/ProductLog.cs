@@ -20,7 +20,7 @@ namespace HonjiMES.Models
         public int Quantity { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
-        [Column("message", TypeName = "varchar(50)")]
+        [Column("message", TypeName = "varchar(500)")]
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }

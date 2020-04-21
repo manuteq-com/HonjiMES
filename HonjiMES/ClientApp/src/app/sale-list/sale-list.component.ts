@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
-
+import { POrderSale } from '../model/viewmodels';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -26,15 +26,21 @@ export class SaleListComponent implements OnInit {
     ProductList: any;
     DetailsDataSourceStorage: any;
     creatpopupVisible = false;
+    resalepopupVisible = false;
     formData: any;
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
+    resaleitemkey: number;
+    resalemod: string;
     uploadUrl: string;
     exceldata: any;
     Controller = '/Sales';
+    postval: POrderSale;
     constructor(private http: HttpClient) {
         this.cloneIconClick = this.cloneIconClick.bind(this);
+        this.to_hsaleClick = this.to_hsaleClick.bind(this);
+        this.to_dsaleClick = this.to_dsaleClick.bind(this);
         this.DetailsDataSourceStorage = [];
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -121,7 +127,17 @@ export class SaleListComponent implements OnInit {
             }
         }, 'success', 3000);
     }
-
+    resalepopup_result(e) {
+        this.resalepopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
     selectionChanged(e) {
         // debugger;
         // 只開一筆Detail資料
@@ -154,16 +170,72 @@ export class SaleListComponent implements OnInit {
             }
         }
     }
-    to_saleClick(e) {
-        this.GetData('/Customers/GetCustomers').subscribe(
-            // (s) => {
-            //   console.log(s);
-            //   this.Customerlist = s.data;
-            //   if (s.success) {
+    async to_hsaleClick(e) {
+        this.postval = new POrderSale();
+        this.postval.SaleID = e.row.key;
+        const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderSale', 'POST', { values: this.postval });
+        if (sendRequest) {
+            notify({
+                message: '銷貨完成',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
+            this.dataGrid.instance.refresh();
+        }
+    }
+    async to_dsaleClick(e, item) {
+        this.postval = new POrderSale();
+        this.postval.SaleDID = item.key;
+        const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderSale', 'POST', { values: this.postval });
+        if (sendRequest) {
+            notify({
+                message: '銷貨完成',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
+            this.dataGrid.instance.refresh();
+        }
+    }
+    async to_redsaleClick(e, item) {
+        this.resalepopupVisible = true;
+        this.resaleitemkey = item.key;
+        // Swal.fire({
+        //     allowEnterKey: false,
+        //     allowOutsideClick: false,
+        //     width: 600,
+        //     title: '銷貨退回',
+        //     html: shtml + response.message,
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     // confirmButtonColor: '#3085d6',
+        //     // cancelButtonColor: '#d33',
+        //     cancelButtonText: '取消退回',
+        //     confirmButtonText: '確認退貨'
+        // }).then(async (result) => {
+        //     if (result.value) {
 
-            //   }
-            // }
-        );
+        //     } else {
+
+        //     }
+        // });
+
+        // this.postval = new POrderSale();
+        // this.postval.SaleDID = e.row.key;
+        // const sendRequest = await SendService.sendRequest(this.http, '/ToSale/ReOrderSale', 'POST', { values: this.postval });
+        // if (sendRequest) {
+        //     notify({
+        //         message: '銷退完成',
+        //         position: {
+        //             my: 'center top',
+        //             at: 'center top'
+        //         }
+        //     }, 'success', 3000);
+        //     this.dataGrid.instance.refresh();
+        // }
     }
     onUploaded(e) {
         const response = JSON.parse(e.request.response) as APIResponse;

@@ -60,7 +60,12 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
+        [Column("warehouse_id")]
+        public int WarehouseId { get; set; }
 
+        [ForeignKey("WarehouseId")]
+        [InverseProperty("Products")]
+        public virtual Warehouse Warehouse { get; set; }
         [InverseProperty("Product")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         [InverseProperty("Product")]

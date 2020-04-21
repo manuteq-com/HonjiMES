@@ -119,9 +119,8 @@ export class SendService {
             result = http.get(apiurl + url, httpOptions);
             break;
           case 'PUT':
-            debugger;
-            result = http.put(apiurl + url + keyurl, body, httpOptions);
-            break;
+              result = http.put(apiurl + url + keyurl, body, httpOptions);
+              break;
           case 'POST':
             result = http.post(apiurl + url , body, httpOptions);
             break;
@@ -145,8 +144,7 @@ export class SendService {
           }
         })
         .catch(e => {
-            debugger;
-            if(e.error) {
+            if (e.error) {
                 notify({
                     message: e.error,
                     position: {

@@ -16,4 +16,21 @@
         <dxi-item itemType="button" alignment="left" [buttonOptions]="buttonOptions" [disabled]="buttondisabled"></dxi-item>
     </dx-form>
     <!-- <dx-button  text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button> -->
+    <br/>
+        <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+        (onEditorPreparing)="onEditorPreparing($event)" (onCellPrepared)="onCellPrepared($event)">
+            <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+            <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ProductId" caption="品名" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
+                <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox"></dxi-column>
+            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
+        </dx-data-grid>
 </form>

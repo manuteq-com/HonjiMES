@@ -1,0 +1,20 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="WarehouseId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
+            <dxi-validation-rule type="required" message="退貨倉 必填"></dxi-validation-rule>
+            <dxo-label text="退貨倉"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Quantity" dataType="number" >
+            <dxi-validation-rule type="required" message="退貨數量 必填"></dxi-validation-rule>
+            <dxo-label text="退貨數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Reason">
+            <dxi-validation-rule type="required" message="退貨原因 必填"></dxi-validation-rule>
+            <dxo-label text="退貨原因"></dxo-label>
+        </dxi-item>
+        <dxi-item itemType="button" alignment="left" [buttonOptions]="buttonOptions" [disabled]="buttondisabled"></dxi-item>
+    </dx-form>
+</form>
+

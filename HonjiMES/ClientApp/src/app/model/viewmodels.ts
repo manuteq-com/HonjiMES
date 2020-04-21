@@ -48,7 +48,7 @@ export class Material {
     supplier: number;
     subInventory: string;
 }
-export interface Product {
+export class Product {
     id: number;
     productNo: string;
     productNumber: string;
@@ -67,3 +67,7 @@ export interface Product {
     updateUser: number;
     remarks: string;
 }
+export class POrderSale {
+    SaleID: number;
+    SaleDID: number;
+  }

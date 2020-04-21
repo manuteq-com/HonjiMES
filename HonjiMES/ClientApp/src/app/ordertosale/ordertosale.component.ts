@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, OnChanges } from '@angular/core';
-import { DxFormComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { SendService } from '../shared/mylib';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
@@ -16,6 +16,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     url = location.origin + '/api';
     buttondisabled: boolean;
     formData: any;
@@ -30,7 +31,14 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     Seallist: any;
     selectBoxOptions: any;
     buttonOptions: any =  {text: '存檔', type: 'success', useSubmitBehavior: true};
-    ngOnChanges() {
+    ProductList: any;
+    dataSourceDB: any;
+    async ngOnChanges() {
+        this.itemkeyval.forEach(x => {
+           x.Quantity  = x.Quantity - x.SaleCount;
+        });
+        this.dataSourceDB = this.itemkeyval;
+        this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
         if (this.modval === 'add') {
             this.showdisabled = false;
         } else {
@@ -60,7 +68,6 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 3;
-
         this.startTimeInput = {
             min: new Date().toDateString(),
             value: new Date().toDateString()
@@ -72,6 +79,24 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     onCustomerSelectionChanged(e) {
+    }
+    onDataErrorOccurred(e) {
+        notify({
+            message: e.error.message,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
+    }
+    onCellPrepared(e) {
+        if (e.rowType === 'data' && e.column.dataField === 'Quantity') {
+        }
+    }
+    onEditorPreparing(e) {
+        if (e.parentType === 'dataRow' && e.dataField === 'Quantity') {
+            e.editorOptions.max  = e.row.data.Quantity - e.row.data.SaleCount;
+        }
     }
     validate_before(): boolean {
         // 表單驗證
@@ -93,8 +118,9 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         }
+        this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
-        this.formData.Orderlist = this.itemkeyval;
+        this.formData.Orderlist = this.dataSourceDB;
         const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSale', 'POST', { values: this.formData });
         if (sendRequest) {
             this.myform.instance.resetValues();

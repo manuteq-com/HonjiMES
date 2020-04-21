@@ -37,12 +37,14 @@ namespace HonjiMES.Controllers
                 {
                     var dt = DateTime.Now;
                     var nlist = new List<SaleDetailNew>();
-                    var OrderDetails = _context.OrderDetails.Where(x => ToSales.Orderlist.Contains(x.Id)).ToList();
-                    foreach (var Detailitem in OrderDetails)
+                    //var OrderDetails = _context.OrderDetails.Where(x => ToSales.Orderlist.Contains(x.Id)).ToList();
+                    foreach (var PDetailitem in ToSales.Orderlist)
                     {
-                        if (Detailitem.Quantity > Detailitem.SaleCount)//未銷貨完的可以開
+                        var Detailitem = _context.OrderDetails.Find(PDetailitem.Id);//取目前的資料來使用
+                        if (Detailitem.Quantity >= Detailitem.SaleCount + PDetailitem.Quantity)//原有數量+目前數量不超過未銷貨完的可以開
                         {
-                            var Qty = Detailitem.Quantity - Detailitem.SaleCount;//剩下可開的銷貨數量
+                            //var Qty = PDetailitem.Quantity - Detailitem.SaleCount;//剩下可開的銷貨數量
+                            var Qty = PDetailitem.Quantity;
                             Detailitem.SaleCount += Qty;
                             Detailitem.Product.QuantityAdv += Qty;
                             nlist.Add(new SaleDetailNew
@@ -60,6 +62,10 @@ namespace HonjiMES.Controllers
                                 CreateUser = 1,
                                 DeleteFlag = 0
                             });
+                        }
+                        else
+                        {
+                            return Ok(MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量"));
                         }
                     }
                     if (ToSales.SaleID.HasValue)//有訂單ID，合併銷貨單
@@ -112,46 +118,121 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 銷貨單銷貨
         /// </summary>
-        /// <param name="id">銷貨單ID</param>
+        /// <param name="OrderSale"></param>
         /// <returns></returns>
-        [HttpPost("{id}")]
-        public async Task<ActionResult<SaleHead>> OrderSale(int id)
+        [HttpPost]
+        public async Task<ActionResult<SaleHead>> OrderSale(OrderSale OrderSale)
         {
-            var oversale = "";
-            var SaleHead = _context.SaleHeads.Find(id);
-            if (SaleHead == null)
+            var dt = DateTime.Now;
+            var SaleDetailNewList = new List<SaleDetailNew>();
+            if (OrderSale.SaleID.HasValue)
+            {
+                var SaleHead = _context.SaleHeads.Find(OrderSale.SaleID);
+                SaleDetailNewList.AddRange(SaleHead.SaleDetailNews);
+            }
+            else if (OrderSale.SaleDID.HasValue)
+            {
+                var SaleDetail = _context.SaleDetailNews.Find(OrderSale.SaleDID);
+                SaleDetailNewList.Add(SaleDetail);
+            }
+            else
             {
                 return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
             }
-
-            foreach (var GDetailitem in SaleHead.SaleDetailNews.GroupBy(x => x.ProductId))
+            var oversale = new List<string>();
+            foreach (var item in SaleDetailNewList.Where(x => x.Status == 0))
             {
-                var sQuantity = GDetailitem.Sum(x => x.Quantity);//品項的總銷貨數
-                var Products = _context.Products.Find(GDetailitem.Key);//目前庫存數
-                if (sQuantity > Products.Quantity)//超過庫存
+                if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
-                    oversale += Products.ProductNo + ":" + Products.Quantity + "=>" + sQuantity;
-                }
-                else
-                {
-                    foreach (var item in GDetailitem)
+                    //銷貨扣庫
+                    item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = -item.Quantity, Reason = item.Sale.SaleNo + "銷貨", CreateTime = dt, CreateUser = 1 });
+                    item.Product.Quantity -= item.Quantity;
+                    item.Product.QuantityAdv -= item.Quantity;
+                    item.Status = 1;//1已銷貨
+                    item.UpdateTime = dt;
+                    item.UpdateUser = 1;
+                    item.Product.UpdateTime = dt;
+                    item.Product.UpdateUser= 1;
+                    if (item.Product.Quantity < 0)
                     {
-                        //檢查訂單
-                        if (item.OrderDetail.SaleCount == 0)//都沒銷過貨
-                        {
-                            //if (item.Quantity)
-                            //{
-
-                            //}
-                        }
-
+                        oversale.Add(item.Product.ProductNo);
                     }
                 }
             }
-            if (string.IsNullOrWhiteSpace(oversale))
+            if (oversale.Any())
             {
-                return Ok(MyFun.APIResponseError(oversale));
+                var ErrMsg = string.Join(';', oversale) + "\r\n" + "庫存不足，銷貨失敗";
+                return Ok(MyFun.APIResponseError(ErrMsg));
             }
+            else
+            {
+                await _context.SaveChangesAsync();
+            }
+            //foreach (var GDetailitem in SaleHead.SaleDetailNews.GroupBy(x => x.ProductId))
+            //{
+            //    var sQuantity = GDetailitem.Sum(x => x.Quantity);//品項的總銷貨數
+            //    var Products = _context.Products.Find(GDetailitem.Key);//目前庫存數
+            //    if (sQuantity > Products.Quantity)//超過庫存
+            //    {
+            //        oversale += Products.ProductNo + ":" + Products.Quantity + "=>" + sQuantity;
+            //    }
+            //    else
+            //    {
+            //        foreach (var item in GDetailitem)
+            //        {
+            //            //檢查訂單
+            //            if (item.OrderDetail.SaleCount == 0)//都沒銷過貨
+            //            {
+            //                //if (item.Quantity)
+            //                //{
+
+            //                //}
+            //            }
+
+            //        }
+            //    }
+            //}
+            //if (string.IsNullOrWhiteSpace(oversale))
+            //{
+            //    return Ok(MyFun.APIResponseError(oversale));
+            //}
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+        [HttpPost]
+        public async Task<ActionResult<SaleHead>> ReOrderSale(ReOrderSale ReOrderSale)
+        {
+            var dt = DateTime.Now;
+            var SaleDetailNewList = new List<SaleDetailNew>();
+            if (ReOrderSale.SaleID.HasValue)
+            {
+                var SaleHead = _context.SaleHeads.Find(ReOrderSale.SaleID);
+                SaleDetailNewList.AddRange(SaleHead.SaleDetailNews);
+            }
+            else if (ReOrderSale.SaleDID.HasValue)
+            {
+                var SaleDetail = _context.SaleDetailNews.Find(ReOrderSale.SaleDID);
+                SaleDetailNewList.Add(SaleDetail);
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
+            }
+            foreach (var item in SaleDetailNewList.Where(x => x.Status == 1))//抓已銷貨的
+            {
+                var Warehouses = _context.Warehouses.Find(ReOrderSale.WarehouseId);
+                if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
+                {
+                    item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = item.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    item.Product.Quantity += ReOrderSale.Quantity;
+                    item.Product.UpdateTime = dt;
+                    item.Product.UpdateUser = 1;
+                }
+                else
+                {
+                    item.ReturnSales.Add(new ReturnSale { WarehouseId = ReOrderSale.WarehouseId, Reason = ReOrderSale.Reason, Quantity = ReOrderSale.Quantity, CreateTime = dt, CreateUser = 1 });
+                }
+            }
+            await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK("OK"));
         }
     }

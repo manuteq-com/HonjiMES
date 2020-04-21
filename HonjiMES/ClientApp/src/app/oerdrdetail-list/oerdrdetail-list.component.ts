@@ -48,7 +48,7 @@ export class OerdrdetailListComponent implements OnInit {
     }
     to_saleClick(e) {
         this.tosealkey = null;
-        this.tosealkey = this.dataGrid.instance.getSelectedRowKeys();
+        this.tosealkey = this.dataGrid.instance.getSelectedRowsData();
         if (this.tosealkey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
@@ -74,13 +74,15 @@ export class OerdrdetailListComponent implements OnInit {
             }).then(async (result) => {
                 if (result.value) {
                     this.mod = 'add';
-                } else {
+                    this.popupVisible = true;
+                } else if (result.dismiss === Swal.DismissReason.cancel)  {
                     this.mod = 'merge';
+                    this.popupVisible = true;
+                } else if (result.dismiss === Swal.DismissReason.close)  {
+                    this.popupVisible = false;
                 }
-                this.popupVisible = true;
             });
         }
-
     }
     cellClick(e) {
         if (e.rowType === 'header') {
@@ -111,6 +113,7 @@ export class OerdrdetailListComponent implements OnInit {
     popup_result(e) {
         this.popupVisible = false;
         this.dataGrid.instance.refresh();
+        this.dataGrid.instance.clearSelection();
         notify({
             message: '存檔完成',
             position: {

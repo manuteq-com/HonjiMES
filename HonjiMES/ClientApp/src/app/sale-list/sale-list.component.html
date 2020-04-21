@@ -5,7 +5,7 @@
     <div class="col-md-1 col-sm-1">
     </div>
     <div class="col-md-1 col-sm-1">
-        <dx-button text="新增銷貨單" type="default" (onClick)="creatdata()"></dx-button>
+        <!-- <dx-button text="新增銷貨單" type="default" (onClick)="creatdata()"></dx-button> -->
     </div>
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
@@ -41,11 +41,16 @@
     <dxi-column dataField="Status" caption="狀態"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
-    <dxi-column type="buttons"><dxi-button hint="to_sale" text="整批銷貨" [onClick]="to_saleClick"></dxi-button></dxi-column>
+    <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column>
     <div *dxTemplate="let item of 'detail'">
-        <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)">
+        <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)" keyExpr="id">
             <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
-            <dxi-column type="buttons"><dxi-button hint="to_sale" text="銷貨" [onClick]="to_saleClick"></dxi-button></dxi-column>
+            <dxi-column type="buttons">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
             <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Order.CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
@@ -61,19 +66,32 @@
             <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
             <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
-            <dxi-column type="buttons">
-                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-            </dxi-column>
+            <!-- <dxi-column type="buttons">
+                <dxi-button hint="單筆銷貨" text="銷貨" [onClick]="to_dsaleClick"></dxi-button>
+                <dxi-button hint="單筆銷貨退回" text="銷貨退回" [onClick]="to_dsaleClick"></dxi-button>
+            </dxi-column> -->
+            <dxi-column  dataField='Status' caption="" cellTemplate="cellTemplate" width="100"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <ng-template [ngIf]="data.value === 0">
+                    <dx-button text="銷貨" type="default" (onClick)="to_dsaleClick($event,data)"></dx-button>
+                </ng-template>
+                <ng-template [ngIf]="data.value === 1">
+                    <dx-button text="銷退" type="danger" (onClick)="to_redsaleClick($event,data)"></dx-button>
+                </ng-template>
+            </div>
         </dx-data-grid>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-            [exceldata]="exceldata"></app-creatorder>
+        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatorder>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="銷貨退回" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="resalepopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-re-order-sale (childOuter)="resalepopup_result($event)" [itemkeyval]="resaleitemkey"></app-re-order-sale>
     </div>
 </dx-popup>

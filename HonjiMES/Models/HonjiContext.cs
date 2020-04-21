@@ -25,6 +25,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
         public virtual DbSet<PurchaseHead> PurchaseHeads { get; set; }
+        public virtual DbSet<ReturnSale> ReturnSales { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
         public virtual DbSet<SaleDetailNew> SaleDetailNews { get; set; }
@@ -35,6 +36,7 @@ namespace HonjiMES.Models
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
+        public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<WebSession> WebSessions { get; set; }
 
         public HonjiContext(DbContextOptions<HonjiContext> options) : base(options)
@@ -257,6 +259,9 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Material>(entity =>
             {
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("fk_material_warehouse1_idx");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.BaseQuantity).HasComment("底數");
@@ -297,6 +302,12 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Materials)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_material_warehouse1");
             });
 
             modelBuilder.Entity<MaterialLog>(entity =>
@@ -605,6 +616,9 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("fk_product_warehouse1_idx");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -661,6 +675,12 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_product_warehouse1");
             });
 
             modelBuilder.Entity<ProductLog>(entity =>
@@ -854,6 +874,51 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
             });
 
+            modelBuilder.Entity<ReturnSale>(entity =>
+            {
+                entity.HasComment("退貨記錄");
+
+                entity.HasIndex(e => e.SaleDetailNewId)
+                    .HasName("fk_return_sale_sale_detail_new1_idx");
+
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("fk_return_sale_warehouse1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.Quantity).HasComment("退貨數量");
+
+                entity.Property(e => e.Reason)
+                    .HasComment("原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WarehouseId).HasComment("退貨倉庫ID");
+
+                entity.HasOne(d => d.SaleDetailNew)
+                    .WithMany(p => p.ReturnSales)
+                    .HasForeignKey(d => d.SaleDetailNewId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_return_sale_sale_detail_new1");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.ReturnSales)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_return_sale_warehouse1");
+            });
+
             modelBuilder.Entity<Sale>(entity =>
             {
                 entity.HasIndex(e => e.SaleNo)
@@ -963,6 +1028,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleDetailNew>(entity =>
             {
+                entity.HasComment("銷貨名細");
+
                 entity.HasIndex(e => e.OrderDetailId)
                     .HasName("fk_sale_detail_new_order_detail1_idx");
 
@@ -1319,6 +1386,59 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
 
                 entity.Property(e => e.UserId).HasComment("使用者ID");
+            });
+
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+                entity.HasComment("倉庫");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.Address)
+                    .HasComment("地址")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Code)
+                    .HasComment("內部代碼")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Contact)
+                    .HasComment("連絡人")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Email)
+                    .HasComment("電子郵件")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Fax)
+                    .HasComment("傳真")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Name)
+                    .HasComment("倉庫名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Phone)
+                    .HasComment("電話")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Recheck).HasComment("是否要產品檢查,不檢查直接回存倉庫");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
             });
 
             modelBuilder.Entity<WebSession>(entity =>

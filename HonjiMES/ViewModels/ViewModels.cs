@@ -39,7 +39,7 @@ namespace HonjiMES.Models
         /// <summary>
         /// 要轉的訂單項目
         /// </summary>
-        public List<int> Orderlist { get; set; }
+        public List<OrderDetail> Orderlist { get; set; }
         /// <summary>
         /// 要合併的訂單ID
         /// </summary>
@@ -67,5 +67,20 @@ namespace HonjiMES.Models
         /// 銷貨單內容ID，分批銷貨
         /// </summary>
         public int? SaleDID { get; set; }
+    }
+    public class ReOrderSale :OrderSale
+    {
+        /// <summary>
+        /// 退貨原因
+        /// </summary>
+        public string Reason { get; set; }
+        /// <summary>
+        /// 退貨數量
+        /// </summary>
+        public int Quantity { get;  set; }
+        /// <summary>
+        /// 倉庫
+        /// </summary>
+        public int WarehouseId { get; set; }
     }
 }
