@@ -138,6 +138,7 @@
       }
    ],
    "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
    "UseFluentApiOnly": false,
    "UseHandleBars": true,
    "UseInflector": true,

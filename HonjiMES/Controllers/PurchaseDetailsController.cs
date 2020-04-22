@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using HonjiMES.Models;
+
+namespace HonjiMES.Controllers
+{
+    [Consumes("application/json")]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class PurchaseDetailsController : ControllerBase
+    {
+        private readonly HonjiContext _context;
+
+        public PurchaseDetailsController(HonjiContext context)
+        {
+            _context = context;
+        }
+        /// <summary>
+        /// 採購名細
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/PurchaseDetails
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetails()
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = await _context.PurchaseDetails.ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
+        /// <summary>
+        /// 用ID取採購名細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/PurchaseDetails/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseDetail>> GetPurchaseDetail(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var purchaseDetail = await _context.PurchaseDetails.FindAsync(id);
+
+            if (purchaseDetail == null)
+            {
+                return NotFound();
+            }
+
+            //return purchaseDetail;
+            return Ok(MyFun.APIResponseOK(purchaseDetail));
+        }
+        /// <summary>
+        /// 修改採購名細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="purchaseDetail"></param>
+        /// <returns></returns>
+        // PUT: api/PurchaseDetails/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPurchaseDetail(int id, PurchaseDetail purchaseDetail)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            purchaseDetail.Id = id;
+            var OldPurchaseDetail = _context.PurchaseDetails.Find(id);
+            var Msg = MyFun.MappingData(ref OldPurchaseDetail, purchaseDetail);
+
+            OldPurchaseDetail.UpdateTime = DateTime.Now;
+            OldPurchaseDetail.UpdateUser = 1;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PurchaseDetailExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            //return NoContent();
+            return Ok(MyFun.APIResponseOK(purchaseDetail));
+
+        }
+        /// <summary>
+        /// 新增採購名細
+        /// </summary>
+        /// <param name="purchaseDetail"></param>
+        /// <returns></returns>
+        // POST: api/PurchaseDetails
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<PurchaseDetail>> PostPurchaseDetail(PurchaseDetail purchaseDetail)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            _context.PurchaseDetails.Add(purchaseDetail);
+            purchaseDetail.CreateTime = DateTime.Now;
+            purchaseDetail.CreateUser = 1;
+            await _context.SaveChangesAsync();
+
+            return Ok(MyFun.APIResponseOK(purchaseDetail));
+        }
+        /// <summary>
+        /// 刪除採購名細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // DELETE: api/PurchaseDetails/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<PurchaseDetail>> DeletePurchaseDetail(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var purchaseDetail = await _context.PurchaseDetails.FindAsync(id);
+            if (purchaseDetail == null)
+            {
+                return NotFound();
+            }
+
+            _context.PurchaseDetails.Remove(purchaseDetail);
+            await _context.SaveChangesAsync();
+
+            return Ok(MyFun.APIResponseOK(purchaseDetail));
+        }
+
+        private bool PurchaseDetailExists(int id)
+        {
+            return _context.PurchaseDetails.Any(e => e.Id == id);
+        }
+    }
+}

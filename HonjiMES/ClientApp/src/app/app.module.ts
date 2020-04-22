@@ -46,6 +46,10 @@ import { InventoryChangeComponent } from './inventory-change/inventory-change.co
 import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
 import { SaleListComponent } from './sale-list/sale-list.component';
 import { ReOrderSaleComponent } from './re-order-sale/re-order-sale.component';
+import { BillPurchaseComponent } from './bill-purchase/bill-purchase.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { CreatBillPurchaseComponent } from './creat-bill-purchase/creat-bill-purchase.component';
+import { BillPurchaseDetailComponent } from './bill-purchase-detail/bill-purchase-detail.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -98,6 +102,10 @@ import { ReOrderSaleComponent } from './re-order-sale/re-order-sale.component';
         OrdertosaleComponent,
         SaleListComponent,
         ReOrderSaleComponent,
+        BillPurchaseComponent,
+        PurchaseOrderComponent,
+        CreatBillPurchaseComponent,
+        BillPurchaseDetailComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }

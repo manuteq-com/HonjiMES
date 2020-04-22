@@ -5,6 +5,8 @@ import {OrderListComponent} from './order-list/order-list.component';
 import { MaterialListComponent } from './material-list/material-list.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { SaleListComponent } from './sale-list/sale-list.component';
+import { BillPurchaseComponent } from './bill-purchase/bill-purchase.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 
 
 export const routes: Routes = [
@@ -13,6 +15,8 @@ export const routes: Routes = [
     { path: 'materiallist', component: MaterialListComponent },
     { path: 'productlist', component: ProductListComponent },
     { path: 'salelist', component: SaleListComponent },
+    { path: 'billpurchase', component: BillPurchaseComponent },
+    { path: 'purchaseorder', component: PurchaseOrderComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

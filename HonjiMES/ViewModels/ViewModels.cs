@@ -68,6 +68,9 @@ namespace HonjiMES.Models
         /// </summary>
         public int? SaleDID { get; set; }
     }
+    /// <summary>
+    /// 銷貨單退貨
+    /// </summary>
     public class ReOrderSale :OrderSale
     {
         /// <summary>
@@ -82,5 +85,29 @@ namespace HonjiMES.Models
         /// 倉庫
         /// </summary>
         public int WarehouseId { get; set; }
+    }
+
+    /// <summary>
+    /// 採購轉進貨單
+    /// </summary>
+    public class ToPurchase
+    {
+        /// <summary>
+        /// 要轉的進貨單項目
+        /// </summary>
+        public List<BillofPurchaseDetail> BillofPurchaseDetail { get; set; }
+        /// <summary>
+        /// 要合併的進貨單ID
+        /// </summary>
+        public int? PurchaseID { get; set; }
+        /// <summary>
+        /// 進貨日期
+        /// </summary>
+        public DateTime? PurchaseDate { get; set; }
+        /// <summary>
+        /// 進貨單備註
+        /// </summary>
+        public string Remarks { get; set; }
+
     }
 }

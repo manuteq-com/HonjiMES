@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
-import { POrderSale } from '../model/viewmodels';
+import { POrderSale, ReorderSale } from '../model/viewmodels';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -31,7 +31,7 @@ export class SaleListComponent implements OnInit {
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
-    resaleitemkey: number;
+    resaleitemkey: any;
     resalemod: string;
     uploadUrl: string;
     exceldata: any;
@@ -201,8 +201,11 @@ export class SaleListComponent implements OnInit {
         }
     }
     async to_redsaleClick(e, item) {
+        debugger;
         this.resalepopupVisible = true;
-        this.resaleitemkey = item.key;
+        this.resaleitemkey = new ReorderSale();
+        this.resaleitemkey.key = item.key;
+        this.resaleitemkey.qty = item.data.Quantity;
         // Swal.fire({
         //     allowEnterKey: false,
         //     allowOutsideClick: false,

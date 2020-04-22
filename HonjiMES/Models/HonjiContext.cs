@@ -111,6 +111,9 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<BillofPurchaseDetail>(entity =>
             {
+                entity.HasIndex(e => e.BillofPurchaseId)
+                    .HasName("fk_billof_purchase_detail_billof_purchase_head_idx");
+
                 entity.Property(e => e.BillofPurchaseId).HasComment("進貨單號");
 
                 entity.Property(e => e.BillofPurchaseType).HasComment("進貨種類");
@@ -164,6 +167,12 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.BillofPurchase)
+                    .WithMany(p => p.BillofPurchaseDetails)
+                    .HasForeignKey(d => d.BillofPurchaseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_billof_purchase_detail_billof_purchase_head");
             });
 
             modelBuilder.Entity<BillofPurchaseHead>(entity =>

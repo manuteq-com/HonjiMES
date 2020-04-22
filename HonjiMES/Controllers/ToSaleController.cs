@@ -152,7 +152,7 @@ namespace HonjiMES.Controllers
                     item.UpdateTime = dt;
                     item.UpdateUser = 1;
                     item.Product.UpdateTime = dt;
-                    item.Product.UpdateUser= 1;
+                    item.Product.UpdateUser = 1;
                     if (item.Product.Quantity < 0)
                     {
                         oversale.Add(item.Product.ProductNo);
@@ -202,38 +202,30 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<SaleHead>> ReOrderSale(ReOrderSale ReOrderSale)
         {
             var dt = DateTime.Now;
-            var SaleDetailNewList = new List<SaleDetailNew>();
-            if (ReOrderSale.SaleID.HasValue)
-            {
-                var SaleHead = _context.SaleHeads.Find(ReOrderSale.SaleID);
-                SaleDetailNewList.AddRange(SaleHead.SaleDetailNews);
-            }
-            else if (ReOrderSale.SaleDID.HasValue)
-            {
-                var SaleDetail = _context.SaleDetailNews.Find(ReOrderSale.SaleDID);
-                SaleDetailNewList.Add(SaleDetail);
-            }
-            else
+            var SaleDetail = _context.SaleDetailNews.Find(ReOrderSale.SaleDID);
+            if (SaleDetail == null)
             {
                 return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
             }
-            foreach (var item in SaleDetailNewList.Where(x => x.Status == 1))//抓已銷貨的
+            if (SaleDetail.Status == 1)//抓已銷貨的
             {
                 var Warehouses = _context.Warehouses.Find(ReOrderSale.WarehouseId);
                 if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
-                    item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = item.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
-                    item.Product.Quantity += ReOrderSale.Quantity;
-                    item.Product.UpdateTime = dt;
-                    item.Product.UpdateUser = 1;
+                    SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    SaleDetail.Product.Quantity += ReOrderSale.Quantity;
+                    SaleDetail.Product.UpdateTime = dt;
+                    SaleDetail.Product.UpdateUser = 1;
                 }
                 else
                 {
-                    item.ReturnSales.Add(new ReturnSale { WarehouseId = ReOrderSale.WarehouseId, Reason = ReOrderSale.Reason, Quantity = ReOrderSale.Quantity, CreateTime = dt, CreateUser = 1 });
+                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReOrderSale.WarehouseId, Reason = ReOrderSale.Reason, Quantity = ReOrderSale.Quantity, CreateTime = dt, CreateUser = 1 });
                 }
+
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK("OK"));
             }
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK("OK"));
+            return Ok(MyFun.APIResponseError("無已銷貨資料"));
         }
     }
 }

@@ -71,3 +71,7 @@ export class POrderSale {
     SaleID: number;
     SaleDID: number;
   }
+export class ReorderSale {
+    key: number;
+    qty: number;
+  }

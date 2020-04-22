@@ -62,7 +62,8 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '採購管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '採購資料', icon: 'fa fa-fw fa-cart-plus'},
+                    { label: '採購資料', icon: 'fa fa-fw fa-cart-plus', routerLink: ['/billpurchase']},
+                    { label: '進貨資料', icon: 'fa fa-fw fa-cart-plus', routerLink: ['/purchaseorder']},
                 ]
 
             },

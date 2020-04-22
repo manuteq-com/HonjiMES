@@ -58,5 +58,9 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int UpdateUser { get; set; }
+
+        [ForeignKey("BillofPurchaseId")]
+        [InverseProperty("BillofPurchaseDetails")]
+        public virtual BillofPurchaseHead BillofPurchase { get; set; }
     }
 }

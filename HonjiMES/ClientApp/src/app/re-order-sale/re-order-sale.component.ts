@@ -26,6 +26,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     width: any;
     buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     selectBoxOptions: any;
+    NumberBoxOptions: any;
     constructor(private http: HttpClient) {
         this.formData = null;
         this.labelLocation = 'left';
@@ -38,9 +39,9 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         return this.http.get<APIResponse>(apiUrl);
     }
     ngOnChanges() {
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty};
         this.GetData(this.url + '/Warehouses/GetWarehouses').subscribe(
             (s) => {
-                console.log(s);
                 if (s.success) {
                     this.selectBoxOptions = {
                         items: s.data,
@@ -75,7 +76,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
             return;
         }
         this.formData = this.myform.instance.option('formData');
-        this.formData.SaleDID = this.stitemkeyval;
+        this.formData.SaleDID = this.itemkeyval.key;
         const sendRequest = await SendService.sendRequest(this.http, '/ToSale/ReOrderSale', 'POST', { values: this.formData });
         if (sendRequest) {
             this.myform.instance.resetValues();
