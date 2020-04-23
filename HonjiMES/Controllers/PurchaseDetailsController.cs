@@ -21,7 +21,7 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         /// <summary>
-        /// 採購名細
+        /// 採購明細
         /// </summary>
         /// <returns></returns>
         // GET: api/PurchaseDetails
@@ -34,7 +34,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID取採購名細
+        /// 用ID取採購明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -54,14 +54,27 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(purchaseDetail));
         }
         /// <summary>
-        /// 修改採購名細
+        /// 用父ID查採購單明細
+        /// </summary>
+        /// <param name="Pid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetailByPId(int Pid)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = await _context.PurchaseDetails.Where(x => x.PurchaseId == Pid).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
+        /// <summary>
+        /// 修改採購明細
         /// </summary>
         /// <param name="id"></param>
         /// <param name="purchaseDetail"></param>
         /// <returns></returns>
-        // PUT: api/PurchaseDetails/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+            // PUT: api/PurchaseDetails/5
+            // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+            // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseDetail(int id, PurchaseDetail purchaseDetail)
         {
@@ -94,7 +107,7 @@ namespace HonjiMES.Controllers
 
         }
         /// <summary>
-        /// 新增採購名細
+        /// 新增採購明細
         /// </summary>
         /// <param name="purchaseDetail"></param>
         /// <returns></returns>
@@ -113,7 +126,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(purchaseDetail));
         }
         /// <summary>
-        /// 刪除採購名細
+        /// 刪除採購明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

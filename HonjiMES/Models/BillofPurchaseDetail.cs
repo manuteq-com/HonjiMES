@@ -14,10 +14,12 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("billof_purchase_id")]
         public int BillofPurchaseId { get; set; }
-        [Column("billof_purchase_type")]
-        public int BillofPurchaseType { get; set; }
+        [Column("purchase_detail_id")]
+        public int PurchaseDetailId { get; set; }
         [Column("purchase_id")]
         public int PurchaseId { get; set; }
+        [Column("billof_purchase_type")]
+        public int BillofPurchaseType { get; set; }
         [Column("supplier_id")]
         public int SupplierId { get; set; }
         [Column("order_id")]
@@ -58,9 +60,16 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int UpdateUser { get; set; }
+        [Column("delivered")]
+        public int? Delivered { get; set; }
+        [Column("purchase_count")]
+        public int PurchaseCount { get; set; }
 
         [ForeignKey("BillofPurchaseId")]
         [InverseProperty("BillofPurchaseDetails")]
         public virtual BillofPurchaseHead BillofPurchase { get; set; }
+        [ForeignKey("SupplierId")]
+        [InverseProperty("BillofPurchaseDetails")]
+        public virtual Supplier Supplier { get; set; }
     }
 }

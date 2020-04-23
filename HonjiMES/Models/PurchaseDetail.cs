@@ -20,6 +20,8 @@ namespace HonjiMES.Models
         public int SupplierId { get; set; }
         [Column("order_id")]
         public int? OrderId { get; set; }
+        [Column("delivery_time", TypeName = "timestamp")]
+        public DateTime DeliveryTime { get; set; }
         [Column("data_id")]
         public int DataId { get; set; }
         [Required]

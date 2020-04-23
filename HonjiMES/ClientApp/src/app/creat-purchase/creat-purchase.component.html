@@ -1,45 +1,24 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-
-        <!-- <dxi-item dataField="OrderNo">
-            <dxi-validation-rule type="required" message="訂單單號 必填"></dxi-validation-rule>
-            <dxo-label text="訂單單號"></dxo-label>
-        </dxi-item> -->
         <dxi-item dataField="CustomerNo">
-            <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
-            <dxo-label text="客戶單號"></dxo-label>
+            <dxi-validation-rule type="required" message="採購類別 必填"></dxi-validation-rule>
+            <dxo-label text="採購類別"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
-            <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
-            <dxo-label text="客戶名稱"></dxo-label>
+            <dxi-validation-rule type="required" message="供應商 必填"></dxi-validation-rule>
+            <dxo-label text="供應商"></dxo-label>
         </dxi-item>
-        <!-- <div class="widget-container">
-            <div>客戶名稱</div>
-            <dx-select-box #Customer
-                displayExpr="Name"
-                valueExpr= 'Id'
-                [(dataSource)]="Customerlist"></dx-select-box>
-        </div> -->
         <dxi-item dataField="OrderDate" editorType="dxDateBox">
-            <dxo-label text="預交日"></dxo-label>
+            <dxo-label text="採購日期"></dxo-label>
         </dxi-item>
-        <!-- <dxi-item [label]="{text: CustomerVal1}">
+        <dxi-item dataField="Remarks" [colSpan]="colCount">
+            <dxo-label text="備註"></dxo-label>
         </dxi-item>
-        <dxi-item [label]="{text: CustomerVal2}">
-        </dxi-item>
-        <dxi-item [label]="{text: CustomerVal3}">
-        </dxi-item> -->
     </dx-form>
-    <div class="long-title">
-        <br>
-        <span style="font-size:12px;padding:10px;">
-            {{CustomerVal}}
-        </span>
-    </div>
     <br>
     <div class="long-title">
-        <h5>訂單內容</h5>
+        <h5>採購內容</h5>
     </div>
     <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Serial" height="500"
         (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)">
@@ -58,8 +37,8 @@
         </dxi-column>
         <dxi-column dataField="ProductId" caption="品號">
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
-            <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
-        </dxi-column>>
+            <!-- <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup> -->
+        </dxi-column>
         <dxi-column dataField="OriginPrice" caption="原單價" dataType="number">
             <dxi-validation-rule type="required" message="原單價 必填"></dxi-validation-rule>
         </dxi-column>
@@ -87,8 +66,10 @@
         </dxi-column>
     </dx-data-grid>
     <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-        [disabled]="buttondisabled" ></dx-button>
+        [disabled]="buttondisabled"></dx-button>
     <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
         </dxi-item> -->
 
 </form>
+
+

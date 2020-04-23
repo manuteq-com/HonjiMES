@@ -10,7 +10,7 @@ using HonjiMES.Models;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 訂單名細
+    /// 訂單明細
     /// </summary>
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
@@ -24,7 +24,7 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         ///// <summary>
-        ///// 查詢所有訂單名細
+        ///// 查詢所有訂單明細
         ///// </summary>
         ///// <returns></returns>
         //// GET: api/OrderDetails
@@ -36,10 +36,10 @@ namespace HonjiMES.Controllers
         //}
 
         /// <summary>
-        /// 查詢訂單名細
+        /// 查詢訂單明細
         /// </summary>
         /// <param name="OrderId">訂單ID 非必填</param>
-        /// <returns>訂單名細</returns>
+        /// <returns>訂單明細</returns>
         // GET: api/OrderDetails
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
@@ -64,7 +64,7 @@ namespace HonjiMES.Controllers
 
 
         /// <summary>
-        /// 使用ID查詢訂單名細
+        /// 使用ID查詢訂單明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -81,7 +81,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(orderDetail));
         }
         /// <summary>
-        /// 修改訂單名細
+        /// 修改訂單明細
         /// </summary>
         /// <param name="id"></param>
         /// <param name="orderDetail"></param>
@@ -116,7 +116,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 新增訂單名細
+        /// 新增訂單明細
         /// </summary>
         /// <param name="PID">訂單ID</param>
         /// <param name="orderDetail"></param>
@@ -143,7 +143,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 刪除訂單名細
+        /// 刪除訂單明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

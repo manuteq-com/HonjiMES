@@ -21,7 +21,7 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         /// <summary>
-        /// 進貨單名細
+        /// 進貨單明細
         /// </summary>
         /// <returns></returns>
         // GET: api/BillofPurchaseDetails
@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(data));
         }
         /// <summary>
-        /// 用ID查進貨單名細
+        /// 用ID查進貨單明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -52,7 +52,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(billofPurchaseDetail));
         }
         /// <summary>
-        /// 用父ID查進貨單名細
+        /// 用父ID查進貨單明細
         /// </summary>
         /// <param name="Pid">父ID</param>
         /// <returns></returns>
@@ -64,7 +64,7 @@ namespace HonjiMES.Controllers
         }
 
        /// <summary>
-       /// 修改進貨單名細
+       /// 修改進貨單明細
        /// </summary>
        /// <param name="id"></param>
        /// <param name="billofPurchaseDetail"></param>
@@ -103,7 +103,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(billofPurchaseDetail));
         }
         /// <summary>
-        /// 新增進貨單名細
+        /// 新增進貨單明細
         /// </summary>
         /// <param name="billofPurchaseDetail"></param>
         /// <returns></returns>
@@ -122,7 +122,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(billofPurchaseDetail));
         }
         /// <summary>
-        /// 刪除進貨單名細
+        /// 刪除進貨單明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

@@ -38,8 +38,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<PurchaseHead>> GetCanPurchase(int Id)
         {
-            _context.BillofPurchaseDetails.Where(x => x.SupplierId == Id);
-            return Ok(MyFun.APIResponseOK("OK"));
+            var BillofPurchaseDetails = await _context.BillofPurchaseDetails.Where(x => x.SupplierId == Id && x.Quantity > x.PurchaseCount).ToListAsync();
+            return Ok(MyFun.APIResponseOK(BillofPurchaseDetails));
         }
 
     }

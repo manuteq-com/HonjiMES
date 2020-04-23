@@ -114,6 +114,15 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.BillofPurchaseId)
                     .HasName("fk_billof_purchase_detail_billof_purchase_head_idx");
 
+                entity.HasIndex(e => e.PurchaseDetailId)
+                    .HasName("fk_billof_purchase_detail_purchase_detail1_idx");
+
+                entity.HasIndex(e => e.PurchaseId)
+                    .HasName("fk_billof_purchase_detail_purchase_head1_idx");
+
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("fk_billof_purchase_detail_supplier1_idx");
+
                 entity.Property(e => e.BillofPurchaseId).HasComment("進貨單號");
 
                 entity.Property(e => e.BillofPurchaseType).HasComment("進貨種類");
@@ -142,11 +151,15 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.Delivered).HasComment("實際交貨數");
+
                 entity.Property(e => e.OrderId).HasComment("訂單單號id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
 
                 entity.Property(e => e.Price).HasComment("價格");
+
+                entity.Property(e => e.PurchaseCount).HasComment("已開採購數量");
 
                 entity.Property(e => e.PurchaseId).HasComment("採購單id");
 
@@ -173,6 +186,12 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.BillofPurchaseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_billof_purchase_detail_billof_purchase_head");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.BillofPurchaseDetails)
+                    .HasForeignKey(d => d.SupplierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_billof_purchase_detail_supplier");
             });
 
             modelBuilder.Entity<BillofPurchaseHead>(entity =>
@@ -436,7 +455,7 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .HasComment("建立日期");
 
-                entity.Property(e => e.Delivered).HasComment("已交");
+                entity.Property(e => e.Delivered).HasComment("實際交貨數");
 
                 entity.Property(e => e.Discount).HasComment("折扣率");
 
@@ -496,7 +515,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.SaleCount).HasComment("剩餘銷貨量");
+                entity.Property(e => e.SaleCount).HasComment("已銷貨數");
 
                 entity.Property(e => e.Serial).HasComment("序號");
 
@@ -821,6 +840,10 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.DeliveryTime)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasComment("預計交期");
+
                 entity.Property(e => e.OrderId).HasComment("訂單單號id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
@@ -877,6 +900,8 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Status).HasComment("採購狀態");
+
+                entity.Property(e => e.SupplierId).HasComment("供應商id");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -1037,7 +1062,7 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleDetailNew>(entity =>
             {
-                entity.HasComment("銷貨名細");
+                entity.HasComment("銷貨明細");
 
                 entity.HasIndex(e => e.OrderDetailId)
                     .HasName("fk_sale_detail_new_order_detail1_idx");
@@ -1255,6 +1280,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Code)
                     .HasComment("代號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.ContactName)
+                    .HasComment("聯絡人")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 

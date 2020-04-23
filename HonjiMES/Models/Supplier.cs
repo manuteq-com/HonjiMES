@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("supplier")]
     public partial class Supplier
     {
+        public Supplier()
+        {
+            BillofPurchaseDetails = new HashSet<BillofPurchaseDetail>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -18,6 +23,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("code", TypeName = "varchar(50)")]
         public string Code { get; set; }
+        [Column("contact_name", TypeName = "varchar(100)")]
+        public string ContactName { get; set; }
         [Required]
         [Column("phone", TypeName = "varchar(50)")]
         public string Phone { get; set; }
@@ -52,5 +59,8 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user")]
         public int? UpdateUser { get; set; }
+
+        [InverseProperty("Supplier")]
+        public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }
 }

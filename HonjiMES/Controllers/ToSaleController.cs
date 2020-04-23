@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using HonjiMES.Models;
 using Microsoft.AspNetCore.Mvc;
-using Namotion.Reflection;
 
 namespace HonjiMES.Controllers
 {

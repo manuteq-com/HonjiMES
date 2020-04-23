@@ -20,6 +20,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("purchase_no", TypeName = "varchar(100)")]
         public string PurchaseNo { get; set; }
+        [Column("supplier_id")]
+        public int SupplierId { get; set; }
         [Column("type")]
         public int? Type { get; set; }
         [Column("status")]

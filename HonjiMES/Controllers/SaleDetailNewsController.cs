@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 銷貨單名細
+    /// 銷貨單明細
     /// </summary>
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
@@ -25,7 +25,7 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         /// <summary>
-        /// 查詢所有銷貨名細
+        /// 查詢所有銷貨明細
         /// </summary>
         /// <returns></returns>
         // GET: api/SaleDetailNews
@@ -37,7 +37,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(SaleDetailNews));
         }
         /// <summary>
-        /// 用ID查詢銷貨名細
+        /// 用ID查詢銷貨明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -57,10 +57,10 @@ namespace HonjiMES.Controllers
  
         }
         /// <summary>
-        /// 查詢銷貨單名細
+        /// 查詢銷貨單明細
         /// </summary>
         /// <param name="SaleId">銷貨單ID 非必填</param>
-        /// <returns>訂單名細</returns>
+        /// <returns>訂單明細</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleDetailsBySaleId(int? SaleId)
         {
@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(data));
         }
         /// <summary>
-        /// 修改銷貨名細
+        /// 修改銷貨明細
         /// </summary>
         /// <param name="id"></param>
         /// <param name="saleDetailNew"></param>
@@ -110,7 +110,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(OsaleDetailNew));
         }
         /// <summary>
-        /// 修改銷貨名細數量
+        /// 修改銷貨明細數量
         /// </summary>
         /// <param name="id"></param>
         /// <param name="saleDetailNew"></param>
@@ -127,7 +127,7 @@ namespace HonjiMES.Controllers
             var OsaleDetailNew = _context.SaleDetailNews.Find(id);
             dQty = saleDetailNew.Quantity - OsaleDetailNew.Quantity; //差異數量
             var ProductId = OsaleDetailNew.ProductId; //產品ID
-            var OrderDetailId = OsaleDetailNew.OrderDetailId; //訂單名細ID
+            var OrderDetailId = OsaleDetailNew.OrderDetailId; //訂單明細ID
 
             //修改銷貨數量
             OsaleDetailNew.Quantity += dQty;
@@ -179,7 +179,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(OsaleDetailNew));
         }
         /// <summary>
-        /// 新增銷貨名細
+        /// 新增銷貨明細
         /// </summary>
         /// <param name="saleDetailNew"></param>
         /// <returns></returns>
@@ -194,7 +194,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(saleDetailNew));
         }
         /// <summary>
-        /// 刪除銷貨名細
+        /// 刪除銷貨明細
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
