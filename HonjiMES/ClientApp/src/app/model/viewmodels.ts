@@ -75,3 +75,7 @@ export class ReorderSale {
     key: number;
     qty: number;
   }
+export class Selectitem {
+    Id: number;
+    Name: string;
+}
