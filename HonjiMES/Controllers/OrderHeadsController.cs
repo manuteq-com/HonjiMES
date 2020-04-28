@@ -28,6 +28,7 @@ namespace HonjiMES.Controllers
         {
             _context = context;
             _IWebHostEnvironment = environment;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
@@ -197,7 +198,7 @@ namespace HonjiMES.Controllers
         [Consumes("multipart/form-data")]
         public ActionResult<OrderHead> PostOrdeByExcel()
         {
-
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             string sLostProduct = null;
             var DirName = DateTime.Now.ToString("yyyyMMddHHmmss");
             var OrderHeadlist = new List<OrderHead>();//所有檔案
@@ -263,6 +264,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderHead>> PostCreatProductByExcelAsync(ProductByExcel ProductByExcel)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             //
             var dt = DateTime.Now;
             var nProductlist = new List<Product>();

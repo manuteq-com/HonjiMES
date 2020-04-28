@@ -4,7 +4,7 @@ import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from '../shared/mylib';
-
+import $ from "jquery";
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',
@@ -20,7 +20,13 @@ export class BillPurchaseDetailComponent implements OnInit {
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     dataSourceDB: CustomStore;
     Controller = '/BillofPurchaseDetails';
+    Quantityval: number;
+    OriginPriceval: number;
+    Priceval: number;
+    Quantityvalmax: number;
+    changeMode: boolean;
     constructor(private http: HttpClient) {
+        this.onContentReady = this.onContentReady.bind(this);
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.dataSourceDB = new CustomStore({
@@ -36,9 +42,72 @@ export class BillPurchaseDetailComponent implements OnInit {
 
     ngOnInit() {
     }
+    cellClick(e) {
+        if (e.rowType === 'header') {
+            if (e.column.type === 'buttons') {
+                if (e.column.cssClass === 'addmod') {
+                    // tslint:disable-next-line: deprecation
+                    this.dataGrid.instance.insertRow();
+
+                }
+
+            }
+        }
+    }
+    onContentReady(e) {
+        debugger;
+        let _dataGrid = e.element;
+        let dataGrid = e.component;
+        if (this.changeMode && ! $(_dataGrid).filter('.dx-row-inserted').length) {
+            dataGrid.beginUpdate();
+            e.component.option('editing.mode', 'row');
+            this.changeMode = false;
+            dataGrid.columnOption('SupplierId', { allowEditing: false });
+            dataGrid.columnOption('DataId', { allowEditing: false });
+            dataGrid.endUpdate();
+        }
+    }
+    onInitNewRow(e) {
+        const dataGrid = e.component;
+        dataGrid.beginUpdate();
+        dataGrid.option('editing.mode', 'form');
+        dataGrid.columnOption('SupplierId', { allowEditing: true });
+        dataGrid.columnOption('DataId', { allowEditing: true });
+        dataGrid.endUpdate();
+        this.changeMode = true;
+    }
+    onRowInserting(e) {
+
+    }
+    onRowInserted(e) {
+
+    }
     to_purchaseClick(e) {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
+    }
+    selectvalueChanged(e, data) {
+        debugger;
+        data.setValue(e.value);
+        const today = new Date();
+        this.MaterialList.forEach(x => {
+            if (x.Id === e.value) {
+                this.Quantityvalmax = x.Quantity;
+                this.Quantityval = x.Quantity;
+                this.OriginPriceval = x.OriginPrice;
+                this.Priceval = x.Quantity * x.OriginPrice;
+            }
+        });
+    }
+    QuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Quantityval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    OriginValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OriginPriceval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onDataErrorOccurred(e) {
         notify({

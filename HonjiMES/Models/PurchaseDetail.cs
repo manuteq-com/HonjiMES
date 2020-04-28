@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("purchase_detail")]
     public partial class PurchaseDetail
     {
+        public PurchaseDetail()
+        {
+            BillofPurchaseDetails = new HashSet<BillofPurchaseDetail>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -54,5 +59,7 @@ namespace HonjiMES.Models
         [ForeignKey("PurchaseId")]
         [InverseProperty("PurchaseDetails")]
         public virtual PurchaseHead Purchase { get; set; }
+        [InverseProperty("PurchaseDetail")]
+        public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }
 }

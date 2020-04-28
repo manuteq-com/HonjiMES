@@ -19,6 +19,7 @@ namespace HonjiMES.Controllers
         public PurchaseHeadsController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 採購單列表
@@ -28,7 +29,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeads()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.PurchaseHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -41,7 +42,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseHead>> GetPurchaseHead(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var purchaseHead = await _context.PurchaseHeads.FindAsync(id);
 
             if (purchaseHead == null)
@@ -64,7 +65,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseHead(int id, PurchaseHead purchaseHead)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             purchaseHead.Id = id;
             var OldPurchaseHead = _context.PurchaseHeads.Find(id);
             var Msg = MyFun.MappingData(ref OldPurchaseHead, purchaseHead);
@@ -102,7 +103,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseHead>> PostPurchaseHead(PurchaseHead purchaseHead)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseHeads.Add(purchaseHead);
             purchaseHead.CreateTime = DateTime.Now;
             purchaseHead.CreateUser = 1;
@@ -119,7 +120,7 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<PurchaseHead>> DeletePurchaseHead(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var purchaseHead = await _context.PurchaseHeads.FindAsync(id);
             if (purchaseHead == null)
             {

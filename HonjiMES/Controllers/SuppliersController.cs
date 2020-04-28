@@ -22,6 +22,7 @@ namespace HonjiMES.Controllers
         public SuppliersController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
 
         // GET: api/Suppliers
@@ -32,7 +33,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var Suppliers = await _context.Suppliers.ToListAsync();
             return Ok(MyFun.APIResponseOK(Suppliers));
         }
@@ -46,7 +47,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Supplier>> GetSupplier(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var supplier = await _context.Suppliers.FindAsync(id);
 
             if (supplier == null)
@@ -68,7 +69,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSupplier(int id, Supplier supplier)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             supplier.Id = id;
             var Oldsupplier = _context.Suppliers.Find(id);
             var Msg = MyFun.MappingData(ref Oldsupplier, supplier);
@@ -103,7 +104,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(supplier));
@@ -118,7 +119,7 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Supplier>> DeleteSupplier(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var supplier = await _context.Suppliers.FindAsync(id);
             if (supplier == null)
             {

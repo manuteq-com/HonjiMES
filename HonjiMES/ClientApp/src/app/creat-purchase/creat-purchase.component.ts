@@ -46,7 +46,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Priceval: number;
     addRow = true;
     eformData: any;
-    Quantityvalmax: any;
+    Quantityvalmax: number;
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
         this.formData = null;

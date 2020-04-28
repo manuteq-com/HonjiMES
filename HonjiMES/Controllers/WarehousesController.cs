@@ -22,6 +22,7 @@ namespace HonjiMES.Controllers
         public WarehousesController(HonjiContext context)
         {
             _context = context;
+            ////_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         ///  倉庫列表
@@ -31,7 +32,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehouses()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var Warehouses = await _context.Warehouses.ToListAsync();
             return Ok(MyFun.APIResponseOK(Warehouses));
         }
@@ -45,7 +46,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouse(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var warehouse = await _context.Warehouses.FindAsync(id);
 
             if (warehouse == null)
@@ -67,7 +68,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWarehouse(int id, Warehouse warehouse)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             warehouse.Id = id;
             var OldWarehouse = _context.Warehouses.Find(id);
             var Msg = MyFun.MappingData(ref OldWarehouse, warehouse);
@@ -104,7 +105,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.Warehouses.Add(warehouse);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(warehouse));
@@ -118,7 +119,7 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Warehouse>> DeleteWarehouse(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var warehouse = await _context.Warehouses.FindAsync(id);
             if (warehouse == null)
             {

@@ -19,6 +19,7 @@ namespace HonjiMES.Controllers
         public BillofPurchaseHeadsController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 進貨單列表
@@ -28,7 +29,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseHeads()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.BillofPurchaseHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -41,7 +42,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BillofPurchaseHead>> GetBillofPurchaseHead(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var billofPurchaseHead = await _context.BillofPurchaseHeads.FindAsync(id);
 
             if (billofPurchaseHead == null)
@@ -64,7 +65,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBillofPurchaseHead(int id, BillofPurchaseHead billofPurchaseHead)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             billofPurchaseHead.Id = id;
             var OldBillofPurchaseHead = _context.BillofPurchaseHeads.Find(id);
             var Msg = MyFun.MappingData(ref OldBillofPurchaseHead, billofPurchaseHead);
@@ -102,7 +103,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BillofPurchaseHead>> PostBillofPurchaseHead(BillofPurchaseHead billofPurchaseHead)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseHeads.Add(billofPurchaseHead);
             billofPurchaseHead.CreateTime = DateTime.Now;
             billofPurchaseHead.CreateUser = 1;
@@ -119,7 +120,7 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<BillofPurchaseHead>> DeleteBillofPurchaseHead(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var billofPurchaseHead = await _context.BillofPurchaseHeads.FindAsync(id);
             if (billofPurchaseHead == null)
             {

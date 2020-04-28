@@ -19,6 +19,7 @@ namespace HonjiMES.Controllers
         public BillofPurchaseDetailsController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 進貨單明細
@@ -28,7 +29,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillofPurchaseDetail>>> GetBillofPurchaseDetails()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.BillofPurchaseDetails.ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -41,7 +42,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BillofPurchaseDetail>> GetBillofPurchaseDetail(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var billofPurchaseDetail = await _context.BillofPurchaseDetails.FindAsync(id);
 
             if (billofPurchaseDetail == null)
@@ -58,7 +59,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         public async Task<ActionResult<BillofPurchaseDetail>> GetBillofPurchaseDetailByPId(int Pid)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.BillofPurchaseDetails.Where(x => x.BillofPurchaseId == Pid).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -75,7 +76,7 @@ namespace HonjiMES.Controllers
        [HttpPut("{id}")]
         public async Task<IActionResult> PutBillofPurchaseDetail(int id, BillofPurchaseDetail billofPurchaseDetail)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             billofPurchaseDetail.Id = id;
             var OldBillofPurchaseDetail = _context.BillofPurchaseDetails.Find(id);
             var Msg = MyFun.MappingData(ref OldBillofPurchaseDetail, billofPurchaseDetail);
@@ -113,7 +114,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BillofPurchaseDetail>> PostBillofPurchaseDetail(BillofPurchaseDetail billofPurchaseDetail)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseDetails.Add(billofPurchaseDetail);
             billofPurchaseDetail.CreateTime = DateTime.Now;
             billofPurchaseDetail.CreateUser = 1;

@@ -19,6 +19,7 @@ namespace HonjiMES.Controllers
         public PurchaseDetailsController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 採購明細
@@ -28,7 +29,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetails()
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.PurchaseDetails.ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -42,7 +43,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseDetail>> GetPurchaseDetail(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var purchaseDetail = await _context.PurchaseDetails.FindAsync(id);
 
             if (purchaseDetail == null)
@@ -61,7 +62,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetailByPId(int Pid)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.PurchaseDetails.Where(x => x.PurchaseId == Pid).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
@@ -78,7 +79,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseDetail(int id, PurchaseDetail purchaseDetail)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             purchaseDetail.Id = id;
             var OldPurchaseDetail = _context.PurchaseDetails.Find(id);
             var Msg = MyFun.MappingData(ref OldPurchaseDetail, purchaseDetail);
@@ -117,7 +118,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseDetail>> PostPurchaseDetail(PurchaseDetail purchaseDetail)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseDetails.Add(purchaseDetail);
             purchaseDetail.CreateTime = DateTime.Now;
             purchaseDetail.CreateUser = 1;
@@ -134,7 +135,7 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<PurchaseDetail>> DeletePurchaseDetail(int id)
         {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var purchaseDetail = await _context.PurchaseDetails.FindAsync(id);
             if (purchaseDetail == null)
             {

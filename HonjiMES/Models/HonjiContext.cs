@@ -115,13 +115,13 @@ namespace HonjiMES.Models
                     .HasName("fk_billof_purchase_detail_billof_purchase_head_idx");
 
                 entity.HasIndex(e => e.PurchaseDetailId)
-                    .HasName("fk_billof_purchase_detail_purchase_detail1_idx");
+                    .HasName("fk_billof_purchase_detail_purchase_detail_idx");
 
                 entity.HasIndex(e => e.PurchaseId)
-                    .HasName("fk_billof_purchase_detail_purchase_head1_idx");
+                    .HasName("fk_billof_purchase_detail_purchase_head_idx");
 
                 entity.HasIndex(e => e.SupplierId)
-                    .HasName("fk_billof_purchase_detail_supplier1_idx");
+                    .HasName("fk_billof_purchase_detail_supplier_idx");
 
                 entity.Property(e => e.BillofPurchaseId).HasComment("進貨單號");
 
@@ -186,6 +186,16 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.BillofPurchaseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_billof_purchase_detail_billof_purchase_head");
+
+                entity.HasOne(d => d.PurchaseDetail)
+                    .WithMany(p => p.BillofPurchaseDetails)
+                    .HasForeignKey(d => d.PurchaseDetailId)
+                    .HasConstraintName("fk_billof_purchase_detail_purchase_detail");
+
+                entity.HasOne(d => d.Purchase)
+                    .WithMany(p => p.BillofPurchaseDetails)
+                    .HasForeignKey(d => d.PurchaseId)
+                    .HasConstraintName("fk_billof_purchase_detail_purchase_head");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.BillofPurchaseDetails)

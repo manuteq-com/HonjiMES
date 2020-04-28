@@ -11,6 +11,7 @@ namespace HonjiMES.Models
     {
         public PurchaseHead()
         {
+            BillofPurchaseDetails = new HashSet<BillofPurchaseDetail>();
             PurchaseDetails = new HashSet<PurchaseDetail>();
         }
 
@@ -43,6 +44,8 @@ namespace HonjiMES.Models
         [Column("update_user")]
         public int? UpdateUser { get; set; }
 
+        [InverseProperty("Purchase")]
+        public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         [InverseProperty("Purchase")]
         public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
     }
