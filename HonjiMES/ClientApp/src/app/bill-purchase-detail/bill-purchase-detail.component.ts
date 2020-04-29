@@ -4,7 +4,7 @@ import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from '../shared/mylib';
-import $ from "jquery";
+import $ from 'jquery';
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',
@@ -55,10 +55,10 @@ export class BillPurchaseDetailComponent implements OnInit {
         }
     }
     onContentReady(e) {
-        debugger;
-        let _dataGrid = e.element;
+        let _dataGrid = $(e.element);
         let dataGrid = e.component;
-        if (this.changeMode && ! $(_dataGrid).filter('.dx-row-inserted').length) {
+        if (this.changeMode && ! _dataGrid.find('.dx-row-inserted').length) {
+            debugger;
             dataGrid.beginUpdate();
             e.component.option('editing.mode', 'row');
             this.changeMode = false;

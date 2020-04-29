@@ -96,6 +96,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "scripts": [
+              "node_modules/jquery/dist/jquery.js",
               "node_modules/chart.js/dist/Chart.js",
               "node_modules/@fullcalendar/core/main.js",
               "node_modules/@fullcalendar/daygrid/main.js",
