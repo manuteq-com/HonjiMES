@@ -336,7 +336,7 @@ namespace HonjiMES.Models
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }
