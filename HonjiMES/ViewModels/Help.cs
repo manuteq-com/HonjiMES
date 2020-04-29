@@ -207,7 +207,6 @@ namespace HonjiMES.Models
                             {
                                 throw new Exception(ex.Message + " 請檢查檔案格式");
                             }
-
                         }
                         formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
                     }
