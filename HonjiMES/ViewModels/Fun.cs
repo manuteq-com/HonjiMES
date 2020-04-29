@@ -20,7 +20,7 @@ namespace HonjiMES.Models
             var APIResponse = new APIResponse { data = data, success = true, message = message };
             return APIResponse;
         }
-        internal static APIResponse APIResponseError( string message,Object data=null)
+        internal static APIResponse APIResponseError(string message, Object data = null)
         {
             var APIResponse = new APIResponse { data = data, success = false, message = message };
             return APIResponse;
@@ -41,45 +41,47 @@ namespace HonjiMES.Models
             foreach (var New_Props in Newdata_Type.GetProperties())
             {
                 var New_Props_Name = New_Props.Name;
-                var New_Props_Value = New_Props.GetValue(Newdata);
-                foreach (var Old_Props in Olddata_Type.GetProperties())
+                if (!New_Props.PropertyType.Name.Contains("ICollection")&&!New_Props.PropertyType.Name.Contains("ILazyLoader"))
                 {
-                    var Old_Props_Name = Old_Props.Name;
-                    var Old_Props_Value = Old_Props.GetValue(Olddata);
-
-                    if (New_Props_Name == Old_Props_Name)
+                    var New_Props_Value = New_Props.GetValue(Newdata);
+                    foreach (var Old_Props in Olddata_Type.GetProperties())
                     {
-                        if (New_Props_Value != Old_Props_Value)
-                        {
-                            if (New_Props_Value != null)
-                            {
-                                if (New_Props.PropertyType == typeof(DateTime))
-                                {
-                                    if (((DateTime)New_Props_Value).Year != 1)
-                                    {
-                                        Old_Props.SetValue(Olddata, New_Props_Value);
-                                    }
-                                }
-                                else if (New_Props.PropertyType == typeof(int))
-                                {
-                                    if (((int)New_Props_Value) != 0)
-                                    {
-                                        Old_Props.SetValue(Olddata, New_Props_Value);
-                                    }
-                                }
-                                else
-                                {
-                                    if (true)
-                                    {
-                                        Old_Props.SetValue(Olddata, New_Props_Value);
-                                    }
-                                }
+                        var Old_Props_Name = Old_Props.Name;
+                        var Old_Props_Value = Old_Props.GetValue(Olddata);
 
+                        if (New_Props_Name == Old_Props_Name)
+                        {
+                            if (New_Props_Value != Old_Props_Value)
+                            {
+                                if (New_Props_Value != null)
+                                {
+                                    if (New_Props.PropertyType == typeof(DateTime))
+                                    {
+                                        if (((DateTime)New_Props_Value).Year != 1)
+                                        {
+                                            Old_Props.SetValue(Olddata, New_Props_Value);
+                                        }
+                                    }
+                                    else if (New_Props.PropertyType == typeof(int))
+                                    {
+                                        if (((int)New_Props_Value) != 0)
+                                        {
+                                            Old_Props.SetValue(Olddata, New_Props_Value);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (true)
+                                        {
+                                            Old_Props.SetValue(Olddata, New_Props_Value);
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
                 }
-
 
             }
             return "";
@@ -195,7 +197,7 @@ namespace HonjiMES.Models
             ws.CreateRow(0);//第一行為欄位名稱
             var i = 0;
             var j = 0;
-            foreach (var item in Mappinglist.OrderBy(x=>x.ExcelOrder).ToList())
+            foreach (var item in Mappinglist.OrderBy(x => x.ExcelOrder).ToList())
             {
                 ws.GetRow(0).CreateCell(j).SetCellValue(item.ExcelName);//建立表頭
                 j++;
