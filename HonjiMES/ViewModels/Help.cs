@@ -167,135 +167,143 @@ namespace HonjiMES.Models
             }
             return null;
         }
-
+        /// <summary>
+        /// 取EXCEL資料
+        /// </summary>
+        /// <param name="Fileitem"></param>
+        /// <param name="_context"></param>
+        /// <param name="sLostProduct"></param>
+        /// <returns></returns>
         internal static List<OrderHead> GetExcelData(string Fileitem, HonjiContext _context, ref string sLostProduct)
         {
-            var item = File.OpenRead(Fileitem);
             var OrderHeadlist = new List<OrderHead>();//所有檔案
-            var ms = new MemoryStream();
-            IWorkbook workBook;
-            IFormulaEvaluator formulaEvaluator;
-            item.CopyTo(ms);
-            ms.Position = 0; // <-- Add this, to make it work
-            var bytes = ms.ToArray();
-            try
+            using (FileStream item = File.OpenRead(Fileitem))
             {
-                if (Path.GetExtension(Fileitem).ToLower() == ".xls")
+                IWorkbook workBook;
+                IFormulaEvaluator formulaEvaluator;
+                var ms = new MemoryStream();
+                item.CopyTo(ms);
+                ms.Position = 0; // <-- Add this, to make it work
+                var bytes = ms.ToArray();
+                try
                 {
-                    try
+                    if (Path.GetExtension(Fileitem).ToLower() == ".xls")
                     {
-                        workBook = new HSSFWorkbook(ms);//xls格式
-                    }
-                    catch
-                    {
-                        //讀取錯誤，使用HTML方式讀取
                         try
                         {
-                            var htmlms = new MemoryStream(ms.ToArray());
-                            StreamReader sr = new StreamReader(htmlms);
-                            string MyHtml = sr.ReadToEnd();
-                            workBook = MyFun.ExportHtmlTableToObj(MyHtml);
+                            workBook = new HSSFWorkbook(ms);//xls格式
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            throw new Exception(ex.Message + " 請檢查檔案格式");
-                        }
-
-                    }
-                    formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
-                }
-                else
-                {
-                    workBook = new XSSFWorkbook(ms);//xlsx格式
-                    formulaEvaluator = new XSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
-                }
-                foreach (ISheet sheet in workBook)
-                {
-                    var MappingExtelToModel = new List<ExcelOrderModel>();//所有檔案
-                    var nOrderHead = new OrderHead();
-                    #region 表頭資料處理
-                    //處理客戶代號
-                    var CustomerName = _context.Customers.Where(x => Path.GetExtension(Fileitem).Contains(x.Name)).FirstOrDefault();
-                    if (CustomerName != null)
-                    {
-                        nOrderHead.Customer = CustomerName.Id;
-                    }
-                    #endregion
-
-                    OrderHeadlist.Add(nOrderHead);
-                    for (var i = 0; i < sheet.LastRowNum; i++)//筆數
-                    {
-                        var nOrderDetail = new OrderDetail();
-                        nOrderHead.OrderDetails.Add(nOrderDetail);
-                        var CellNum = sheet.GetRow(i).LastCellNum;
-                        for (var j = 0; j < CellNum; j++)
-                        {
-                            //抓出表頭及順序
-                            if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
+                            //讀取錯誤，使用HTML方式讀取
+                            try
                             {
-                                var val = sheet.GetRow(i).GetCell(j);
-                                if (val != null)
+                                var htmlms = new MemoryStream(ms.ToArray());
+                                StreamReader sr = new StreamReader(htmlms);
+                                string MyHtml = sr.ReadToEnd();
+                                workBook = MyFun.ExportHtmlTableToObj(MyHtml);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception(ex.Message + " 請檢查檔案格式");
+                            }
+
+                        }
+                        formulaEvaluator = new HSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
+                    }
+                    else
+                    {
+                        workBook = new XSSFWorkbook(ms);//xlsx格式
+                        formulaEvaluator = new XSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
+                    }
+                    foreach (ISheet sheet in workBook)
+                    {
+                        var MappingExtelToModel = new List<ExcelOrderModel>();//所有檔案
+                        var nOrderHead = new OrderHead();
+                        #region 表頭資料處理
+                        //處理客戶代號
+                        var CustomerName = _context.Customers.Where(x => Path.GetExtension(Fileitem).Contains(x.Name)).FirstOrDefault();
+                        if (CustomerName != null)
+                        {
+                            nOrderHead.Customer = CustomerName.Id;
+                        }
+                        #endregion
+
+                        OrderHeadlist.Add(nOrderHead);
+                        for (var i = 0; i < sheet.LastRowNum; i++)//筆數
+                        {
+                            var nOrderDetail = new OrderDetail();
+                            nOrderHead.OrderDetails.Add(nOrderDetail);
+                            var CellNum = sheet.GetRow(i).LastCellNum;
+                            for (var j = 0; j < CellNum; j++)
+                            {
+                                //抓出表頭及順序
+                                if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
                                 {
-                                    var ExcelName = DBHelper.MappingExtelToModelData().Where(x => x.ExcelName == val.ToString()).FirstOrDefault();
-                                    if (ExcelName != null)
+                                    var val = sheet.GetRow(i).GetCell(j);
+                                    if (val != null)
                                     {
-                                        MappingExtelToModel.Add(ExcelName);
+                                        var ExcelName = DBHelper.MappingExtelToModelData().Where(x => x.ExcelName == val.ToString()).FirstOrDefault();
+                                        if (ExcelName != null)
+                                        {
+                                            MappingExtelToModel.Add(ExcelName);
+                                        }
+                                        else
+                                        {
+                                            MappingExtelToModel.Add(new ExcelOrderModel { });//使數量一樣
+                                        }
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    var Mappingitem = MappingExtelToModel[j];
+                                    var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
+
+                                    if (Mappingitem.TableName == "OrderHead")
                                     {
-                                        MappingExtelToModel.Add(new ExcelOrderModel { });//使數量一樣
+                                        DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
+                                        //foreach (var Props in nOrderHead.GetType().GetProperties())
+                                        //{
+                                        //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
+                                        //    {
+                                        //        Props.SetValue(nOrderHead, Cellval);
+                                        //    }
+                                        //}
+                                    }
+                                    else if (Mappingitem.TableName == "OrderDetail")
+                                    {
+                                        switch (Mappingitem.Change)
+                                        {
+                                            case "Product":
+                                                Cellval = _context.Products.Where(x => x.ProductNo == Cellval).FirstOrDefault()?.Id.ToString() ?? null;
+                                                if (string.IsNullOrWhiteSpace(Cellval))
+                                                {
+                                                    sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
+                                                        + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
+                                                        + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
+                                        //foreach (var Props in nOrderDetail.GetType().GetProperties())
+                                        //{
+                                        //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
+                                        //    {
+                                        //        Props.SetValue(nOrderDetail, Cellval);
+                                        //    }
+                                        //}
                                     }
                                 }
                             }
-                            else
-                            {
-                                var Mappingitem = MappingExtelToModel[j];
-                                var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
-
-                                if (Mappingitem.TableName == "OrderHead")
-                                {
-                                    DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
-                                    //foreach (var Props in nOrderHead.GetType().GetProperties())
-                                    //{
-                                    //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                    //    {
-                                    //        Props.SetValue(nOrderHead, Cellval);
-                                    //    }
-                                    //}
-                                }
-                                else if (Mappingitem.TableName == "OrderDetail")
-                                {
-                                    switch (Mappingitem.Change)
-                                    {
-                                        case "Product":
-                                            Cellval = _context.Products.Where(x => x.ProductNo == Cellval).FirstOrDefault()?.Id.ToString() ?? null;
-                                            if (string.IsNullOrWhiteSpace(Cellval))
-                                            {
-                                                sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
-                                                    + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
-                                                    + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
-                                            }
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
-                                    //foreach (var Props in nOrderDetail.GetType().GetProperties())
-                                    //{
-                                    //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                    //    {
-                                    //        Props.SetValue(nOrderDetail, Cellval);
-                                    //    }
-                                    //}
-                                }
-                            }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception( ex.Message + " 請檢查資料格式");
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message + " 請檢查資料格式");
+                }
             }
             return OrderHeadlist;
         }
@@ -305,34 +313,41 @@ namespace HonjiMES.Models
             string cellval = string.Empty;
             try
             {
-                if (cell.CellType != CellType.Blank)
+                if (cell != null)
                 {
-                    switch (cell.CellType)
+                    if (cell.CellType != CellType.Blank)
                     {
-                        case CellType.Numeric:  // 數值格式
-                            if (DateUtil.IsCellDateFormatted(cell))
-                            {   // 日期格式
-                                cellval = cell.DateCellValue.ToString();
-                            }
-                            else
-                            {   // 數值格式
-                                cellval = cell.NumericCellValue.ToString();
-                            }
-                            break;
-                        case CellType.String:   // 字串格式
-                            cellval = cell.StringCellValue;
-                            break;
-                        case CellType.Boolean:
-                            // Boolean type
-                            cellval = cell.BooleanCellValue.ToString();
-                            break;
-                        case CellType.Formula:  // 公式格式
-                            var formulaValue = formulaEvaluator.Evaluate(cell);
-                            if (formulaValue.CellType == CellType.String) cellval = formulaValue.StringValue.ToString();          // 執行公式後的值為字串型態
-                            else if (formulaValue.CellType == CellType.Numeric) cellval = formulaValue.NumberValue.ToString();    // 執行公式後的值為數字型態
-                            break;
-                        default:
-                            break;
+                        switch (cell.CellType)
+                        {
+                            case CellType.Numeric:  // 數值格式
+                                if (HSSFDateUtil.IsCellDateFormatted(cell))
+                                {   // 日期格式
+                                    cellval = cell.DateCellValue.ToString();
+                                }
+                                if (DateUtil.IsCellDateFormatted(cell))
+                                {   // 日期格式
+                                    cellval = cell.DateCellValue.ToString();
+                                }
+                                else
+                                {   // 數值格式
+                                    cellval = cell.NumericCellValue.ToString();
+                                }
+                                break;
+                            case CellType.String:   // 字串格式
+                                cellval = cell.StringCellValue;
+                                break;
+                            case CellType.Boolean:
+                                // Boolean type
+                                cellval = cell.BooleanCellValue.ToString();
+                                break;
+                            case CellType.Formula:  // 公式格式
+                                var formulaValue = formulaEvaluator.Evaluate(cell);
+                                if (formulaValue.CellType == CellType.String) cellval = formulaValue.StringValue.ToString();          // 執行公式後的值為字串型態
+                                else if (formulaValue.CellType == CellType.Numeric) cellval = formulaValue.NumberValue.ToString();    // 執行公式後的值為數字型態
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
