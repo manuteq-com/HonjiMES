@@ -24,11 +24,11 @@
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
-        <dxo-form>
-            <dxi-item dataField="OrderNo"></dxi-item>
-            <dxi-item dataField="CustomerNo"></dxi-item>
-            <dxi-item dataField="Customer"></dxi-item>
-            <dxi-item dataField="OrderDate"></dxi-item>
+        <dxo-form [colCount]=3>
+            <dxi-item dataField="BillofPurchaseNo"></dxi-item>
+            <dxi-item dataField="Status"></dxi-item>
+            <dxi-item dataField="BillofPurchaseDate"></dxi-item>
+            <dxi-item dataField="Remarks" [colSpan]=3></dxi-item>
         </dxo-form>
     </dxo-editing>
     <dxi-column type="buttons">
@@ -38,7 +38,7 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="BillofPurchaseNo" caption="進貨單號">
+    <dxi-column dataField="BillofPurchaseNo" caption="進貨單號" [allowEditing]="false">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Status" caption="狀態"></dxi-column>

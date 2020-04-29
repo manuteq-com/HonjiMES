@@ -79,6 +79,13 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             billofPurchaseDetail.Id = id;
             var OldBillofPurchaseDetail = _context.BillofPurchaseDetails.Find(id);
+            if (billofPurchaseDetail.DataId != 0 && billofPurchaseDetail.DataId != OldBillofPurchaseDetail.DataId)
+            {
+                var Material = _context.Materials.Find(billofPurchaseDetail.DataId);
+                billofPurchaseDetail.DataName = Material.Name;
+                billofPurchaseDetail.DataNo = Material.MaterialNo;
+                billofPurchaseDetail.Specification = Material.Specification;
+            }
             var Msg = MyFun.MappingData(ref OldBillofPurchaseDetail, billofPurchaseDetail);
 
             OldBillofPurchaseDetail.UpdateTime = DateTime.Now;
@@ -106,19 +113,40 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 新增進貨單明細
         /// </summary>
+        /// <param name="Pid">進貨單ID</param>
         /// <param name="billofPurchaseDetail"></param>
         /// <returns></returns>
         // POST: api/BillofPurchaseDetails
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<BillofPurchaseDetail>> PostBillofPurchaseDetail(BillofPurchaseDetail billofPurchaseDetail)
+        public async Task<ActionResult<BillofPurchaseDetail>> PostBillofPurchaseDetail(int Pid ,BillofPurchaseDetail billofPurchaseDetail)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseDetails.Add(billofPurchaseDetail);
+            var Material = _context.Materials.Find(billofPurchaseDetail.DataId);
+            billofPurchaseDetail.DataName = Material.Name;
+            billofPurchaseDetail.DataNo = Material.MaterialNo;
+            billofPurchaseDetail.Specification = Material.Specification;
             billofPurchaseDetail.CreateTime = DateTime.Now;
             billofPurchaseDetail.CreateUser = 1;
-            await _context.SaveChangesAsync();
+            var BillofPurchaseHead = _context.BillofPurchaseHeads.Find(Pid);
+            if (BillofPurchaseHead == null)
+            {
+                return Ok(MyFun.APIResponseError("進貨主檔有錯誤"));
+            }
+            else
+            {
+                BillofPurchaseHead.BillofPurchaseDetails.Add(billofPurchaseDetail);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return Ok(MyFun.APIResponseError(ex.InnerException.Message));
+            }
 
             return Ok(MyFun.APIResponseOK(billofPurchaseDetail));
         }

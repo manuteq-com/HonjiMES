@@ -48,7 +48,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 3;
+        this.colCount = 2;
         this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
@@ -117,9 +117,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             }, 'error', 3000);
             return false;
         } else {
-            // this.postval = new PostOrderMaster_Detail();
-            // this.postval.OrderHead = this.formData as OrderHead;
-            // this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
+            this.dataGrid.instance.saveEditData();
+            this.formData = this.myform.instance.option('formData');
+            this.postval = {
+                PurchaseHead: this.formData,
+                PurchaseDetails: this.dataSourceDB
+            };
+            this.buttondisabled = false;
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();

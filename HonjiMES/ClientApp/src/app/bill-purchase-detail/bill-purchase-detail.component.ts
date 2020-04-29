@@ -33,7 +33,8 @@ export class BillPurchaseDetailComponent implements OnInit {
             key: 'Id',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetailByPId?PId=' + this.itemkey),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
+            // tslint:disable-next-line: max-line-length
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail?PId=' + this.itemkey, 'POST', { values }),
             // tslint:disable-next-line: max-line-length
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
@@ -55,12 +56,12 @@ export class BillPurchaseDetailComponent implements OnInit {
         }
     }
     onContentReady(e) {
-        let _dataGrid = $(e.element);
-        let dataGrid = e.component;
+        const _dataGrid = $(e.element);
+        const dataGrid = e.component;
         if (this.changeMode && ! _dataGrid.find('.dx-row-inserted').length) {
             debugger;
             dataGrid.beginUpdate();
-            e.component.option('editing.mode', 'row');
+            e.component.option('editing.mode', 'form');
             this.changeMode = false;
             dataGrid.columnOption('SupplierId', { allowEditing: false });
             dataGrid.columnOption('DataId', { allowEditing: false });
@@ -87,11 +88,11 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
     selectvalueChanged(e, data) {
-        debugger;
         data.setValue(e.value);
         const today = new Date();
         this.MaterialList.forEach(x => {
             if (x.Id === e.value) {
+                debugger;
                 this.Quantityvalmax = x.Quantity;
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;
@@ -108,6 +109,13 @@ export class BillPurchaseDetailComponent implements OnInit {
         data.setValue(e.value);
         this.OriginPriceval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    onEditingStart(e){
+        debugger;
+        this.Quantityvalmax = e.data.Quantity;
+        this.Quantityval = e.data.Quantity;
+        this.OriginPriceval = e.data.OriginPrice;
+        this.Priceval = e.data.Price;
     }
     onDataErrorOccurred(e) {
         notify({

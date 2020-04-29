@@ -105,7 +105,7 @@ export class DateTimeTool {
 export class SendService {
     constructor( ) { }
     public  static sendRequest(http: HttpClient , url: string, method: string = 'GET', data: any = {}): any {
-        // debugger;
+        debugger;
         const apiurl = location.origin + '/api';
         const body = JSON.stringify(data.values);
         let keyurl = '' ;

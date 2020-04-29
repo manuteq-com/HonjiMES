@@ -36,53 +36,73 @@ namespace HonjiMES.Models
         /// <returns>回傳訊息</returns>
         internal static string MappingData<T>(ref T Olddata, T Newdata)
         {
+            var CanGetYype = new List<Type> {
+                typeof(string),            
+                typeof(int),
+                typeof(int?),
+                typeof(DateTime),
+                typeof(DateTime?),
+                typeof(decimal),
+                typeof(decimal?),
+                typeof(float),
+                typeof(float?),
+                typeof(bool),
+                typeof(bool?),
+                typeof(sbyte),
+                typeof(sbyte?),
+            };
+           
             var Olddata_Type = Olddata.GetType();
             var Newdata_Type = Olddata.GetType();
             foreach (var New_Props in Newdata_Type.GetProperties())
             {
-                var New_Props_Name = New_Props.Name;
-                if (!New_Props.PropertyType.Name.Contains("ICollection")&&!New_Props.PropertyType.Name.Contains("ILazyLoader"))
+                if (!CanGetYype.Contains(New_Props.PropertyType))
                 {
-                    var New_Props_Value = New_Props.GetValue(Newdata);
-                    foreach (var Old_Props in Olddata_Type.GetProperties())
+                    continue;
+                }
+                var New_Props_Value = New_Props.GetValue(Newdata);
+                if (New_Props_Value == null)
+                {
+                    continue;
+                }
+                var New_Props_Name = New_Props.Name;
+                foreach (var Old_Props in Olddata_Type.GetProperties())
+                {
+                    var Old_Props_Name = Old_Props.Name;
+                    var Old_Props_Value = Old_Props.GetValue(Olddata);
+
+                    if (New_Props_Name == Old_Props_Name)
                     {
-                        var Old_Props_Name = Old_Props.Name;
-                        var Old_Props_Value = Old_Props.GetValue(Olddata);
-
-                        if (New_Props_Name == Old_Props_Name)
+                        if (New_Props_Value != Old_Props_Value)
                         {
-                            if (New_Props_Value != Old_Props_Value)
+                            if (New_Props_Value != null)
                             {
-                                if (New_Props_Value != null)
+                                if (New_Props.PropertyType == typeof(DateTime))
                                 {
-                                    if (New_Props.PropertyType == typeof(DateTime))
+                                    if (((DateTime)New_Props_Value).Year != 1)
                                     {
-                                        if (((DateTime)New_Props_Value).Year != 1)
-                                        {
-                                            Old_Props.SetValue(Olddata, New_Props_Value);
-                                        }
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
                                     }
-                                    else if (New_Props.PropertyType == typeof(int))
-                                    {
-                                        if (((int)New_Props_Value) != 0)
-                                        {
-                                            Old_Props.SetValue(Olddata, New_Props_Value);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (true)
-                                        {
-                                            Old_Props.SetValue(Olddata, New_Props_Value);
-                                        }
-                                    }
-
                                 }
+                                else if (New_Props.PropertyType == typeof(int))
+                                {
+                                    if (((int)New_Props_Value) != 0)
+                                    {
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
+                                    }
+                                }
+                                else
+                                {
+                                    if (true)
+                                    {
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
+                                    }
+                                }
+
                             }
                         }
                     }
                 }
-
             }
             return "";
         }
