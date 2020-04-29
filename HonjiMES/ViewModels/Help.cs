@@ -213,7 +213,7 @@ namespace HonjiMES.Models
                     }
                     else
                     {
-                        workBook = new XSSFWorkbook(Fileitem);//xlsx格式
+                        workBook = new XSSFWorkbook(ms);//xlsx格式
                         formulaEvaluator = new XSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
                     }
                     foreach (ISheet sheet in workBook)
