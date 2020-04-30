@@ -12,11 +12,11 @@ namespace HonjiMES.Models
         [Required]
         [Column("project_no", TypeName = "varchar(50)")]
         public string ProjectNo { get; set; }
-        [Column("product_no")]
+        [Column("product_no", TypeName = "int(11)")]
         public int ProductNo { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
         [Required]
         [Column("machine_id", TypeName = "varchar(50)")]
@@ -27,7 +27,7 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("status", TypeName = "varchar(50)")]
         public string Status { get; set; }
@@ -36,9 +36,9 @@ namespace HonjiMES.Models
         [Column("finish", TypeName = "varchar(50)")]
         public string Finish { get; set; }
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
     }
 }

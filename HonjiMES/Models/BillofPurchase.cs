@@ -10,17 +10,17 @@ namespace HonjiMES.Models
     public partial class BillofPurchase
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Required]
         [Column("billof_purchase_no", TypeName = "varchar(50)")]
         public string BillofPurchaseNo { get; set; }
-        [Column("supplier")]
+        [Column("supplier", TypeName = "int(11)")]
         public int Supplier { get; set; }
         [Required]
         [Column("date", TypeName = "varchar(50)")]
         public string Date { get; set; }
-        [Column("material_no")]
+        [Column("material_no", TypeName = "int(11)")]
         public int MaterialNo { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
@@ -28,9 +28,9 @@ namespace HonjiMES.Models
         [Required]
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
         [Required]
         [Column("purchase_no", TypeName = "varchar(50)")]
@@ -42,11 +42,11 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int? CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
     }
 }

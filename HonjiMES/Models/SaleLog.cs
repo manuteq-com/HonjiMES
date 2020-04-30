@@ -10,19 +10,19 @@ namespace HonjiMES.Models
     public partial class SaleLog
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("sale_id")]
+        [Column("sale_id", TypeName = "int(11)")]
         public int SaleId { get; set; }
-        [Column("type")]
+        [Column("type", TypeName = "int(11)")]
         public int Type { get; set; }
         [Column("message", TypeName = "varchar(200)")]
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }

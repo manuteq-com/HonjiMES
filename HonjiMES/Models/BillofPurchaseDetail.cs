@@ -9,22 +9,27 @@ namespace HonjiMES.Models
 [Table("billof_purchase_detail")]
     public partial class BillofPurchaseDetail
     {
+        public BillofPurchaseDetail()
+        {
+            BillofPurchaseCheckins = new HashSet<BillofPurchaseCheckin>();
+        }
+
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("billof_purchase_id")]
+        [Column("billof_purchase_id", TypeName = "int(11)")]
         public int BillofPurchaseId { get; set; }
-        [Column("purchase_detail_id")]
+        [Column("purchase_detail_id", TypeName = "int(11)")]
         public int? PurchaseDetailId { get; set; }
-        [Column("purchase_id")]
+        [Column("purchase_id", TypeName = "int(11)")]
         public int? PurchaseId { get; set; }
-        [Column("billof_purchase_type")]
+        [Column("billof_purchase_type", TypeName = "int(11)")]
         public int BillofPurchaseType { get; set; }
-        [Column("supplier_id")]
+        [Column("supplier_id", TypeName = "int(11)")]
         public int SupplierId { get; set; }
-        [Column("order_id")]
+        [Column("order_id", TypeName = "int(11)")]
         public int? OrderId { get; set; }
-        [Column("data_id")]
+        [Column("data_id", TypeName = "int(11)")]
         public int DataId { get; set; }
         [Required]
         [Column("data_no", TypeName = "varchar(50)")]
@@ -34,35 +39,35 @@ namespace HonjiMES.Models
         public string DataName { get; set; }
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("originPrice")]
+        [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
-        [Column("check_status")]
+        [Column("check_status", TypeName = "int(11)")]
         public int CheckStatus { get; set; }
-        [Column("check_count_in")]
+        [Column("check_count_in", TypeName = "int(11)")]
         public int CheckCountIn { get; set; }
-        [Column("check_count_out")]
+        [Column("check_count_out", TypeName = "int(11)")]
         public int CheckCountOut { get; set; }
-        [Column("check_price_in")]
+        [Column("check_price_in", TypeName = "int(11)")]
         public int CheckPriceIn { get; set; }
-        [Column("check_price_out")]
+        [Column("check_price_out", TypeName = "int(11)")]
         public int CheckPriceOut { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int UpdateUser { get; set; }
-        [Column("delivered")]
+        [Column("delivered", TypeName = "int(11)")]
         public int? Delivered { get; set; }
-        [Column("purchase_count")]
+        [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
 
         [ForeignKey("BillofPurchaseId")]
@@ -77,5 +82,7 @@ namespace HonjiMES.Models
         [ForeignKey("SupplierId")]
         [InverseProperty("BillofPurchaseDetails")]
         public virtual Supplier Supplier { get; set; }
+        [InverseProperty("BillofPurchaseDetail")]
+        public virtual ICollection<BillofPurchaseCheckin> BillofPurchaseCheckins { get; set; }
     }
 }

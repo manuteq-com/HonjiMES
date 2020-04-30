@@ -10,19 +10,19 @@ namespace HonjiMES.Models
     public partial class UserLog
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("user_id")]
+        [Column("user_id", TypeName = "int(11)")]
         public int UserId { get; set; }
         [Column("login_time", TypeName = "timestamp")]
         public DateTime LoginTime { get; set; }
         [Column("logout_time", TypeName = "timestamp")]
         public DateTime? LogoutTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int? CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }

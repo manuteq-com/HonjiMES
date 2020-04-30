@@ -15,43 +15,43 @@ namespace HonjiMES.Models
         }
 
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("sale_id")]
+        [Column("sale_id", TypeName = "int(11)")]
         public int SaleId { get; set; }
-        [Column("order_id")]
+        [Column("order_id", TypeName = "int(11)")]
         public int OrderId { get; set; }
-        [Column("order_detail_id")]
+        [Column("order_detail_id", TypeName = "int(11)")]
         public int OrderDetailId { get; set; }
-        [Column("product_id")]
+        [Column("product_id", TypeName = "int(11)")]
         public int ProductId { get; set; }
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
-        [Column("status")]
+        [Column("status", TypeName = "int(11)")]
         public int Status { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("originPrice")]
+        [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("delete_flag")]
+        [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
         [ForeignKey("OrderId")]

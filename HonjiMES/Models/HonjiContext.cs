@@ -8,6 +8,7 @@ namespace HonjiMES.Models
     public partial class HonjiContext : DbContext
     {
         public virtual DbSet<BillofPurchase> BillofPurchases { get; set; }
+        public virtual DbSet<BillofPurchaseCheckin> BillofPurchaseCheckins { get; set; }
         public virtual DbSet<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         public virtual DbSet<BillofPurchaseHead> BillofPurchaseHeads { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
@@ -58,7 +59,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
@@ -102,11 +103,38 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Supplier).HasComment("供應商");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
+            });
+
+            modelBuilder.Entity<BillofPurchaseCheckin>(entity =>
+            {
+                entity.HasIndex(e => e.BillofPurchaseDetailId)
+                    .HasName("fk_billof_purchase_checkin_billof_purchase_detail1_idx");
+
+                entity.Property(e => e.CheckinType).HasComment("驗收類型");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Quantity).HasComment("驗收數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.BillofPurchaseDetail)
+                    .WithMany(p => p.BillofPurchaseCheckins)
+                    .HasForeignKey(d => d.BillofPurchaseDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_billof_purchase_checkin_billof_purchase_detail1");
             });
 
             modelBuilder.Entity<BillofPurchaseDetail>(entity =>
@@ -137,7 +165,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CheckStatus).HasComment("驗收狀態");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DataId).HasComment("進貨內容ID");
 
@@ -178,7 +206,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.SupplierId).HasComment("供應商id");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.BillofPurchase)
@@ -213,7 +241,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.PriceAll).HasComment("總金額");
 
@@ -225,7 +253,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Status).HasComment("進貨狀態");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -258,7 +286,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Email)
                     .HasComment("電子郵件")
@@ -291,7 +319,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -306,7 +334,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Composition).HasComment("組成用量");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.MaterialNo)
                     .HasComment("元件品號")
@@ -338,7 +366,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Supplier).HasComment("供應商");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.Warehouse)
@@ -356,7 +384,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
@@ -378,7 +406,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.Material)
@@ -390,14 +418,14 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Data)
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -407,7 +435,7 @@ namespace HonjiMES.Models
                     .HasName("project_no");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("建立人員");
@@ -446,7 +474,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -462,7 +490,7 @@ namespace HonjiMES.Models
                     .HasName("fk_order_detail_product1_idx");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");
 
                 entity.Property(e => e.Delivered).HasComment("實際交貨數");
@@ -477,7 +505,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.DueDate)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("預交日")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -516,7 +544,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Reply).HasComment("回覆量");
 
                 entity.Property(e => e.ReplyDate)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("回復交期")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -535,7 +563,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.Order)
@@ -556,7 +584,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("訂單id");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
@@ -568,12 +596,10 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.FinishDate)
-                    .HasDefaultValueSql("'0000-00-00 00:00:00'")
-                    .HasComment("完成日期");
+                entity.Property(e => e.FinishDate).HasComment("完成日期");
 
                 entity.Property(e => e.OrderDate)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("訂單日期")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -586,12 +612,10 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.StartDate)
-                    .HasDefaultValueSql("'0000-00-00 00:00:00'")
-                    .HasComment("開始日期");
+                entity.Property(e => e.StartDate).HasComment("開始日期");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -601,7 +625,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CopyAdd).HasComment("複製新增");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Del).HasComment("刪除");
 
@@ -618,7 +642,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Sort).HasComment("排序");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -632,7 +656,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立時間");
 
                 entity.Property(e => e.CreateUser).HasComment("建立人員");
@@ -648,7 +672,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -660,7 +684,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.MaterialId).HasComment("元件品號");
@@ -711,7 +735,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.Warehouse)
@@ -729,7 +753,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
@@ -751,7 +775,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -766,7 +790,7 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<ProductSn>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.CustomerId).HasComment("廠商");
 
@@ -778,7 +802,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -790,7 +814,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.MaterialNo).HasComment("元件品號");
@@ -824,7 +848,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Supplier).HasComment("供應商");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -836,7 +860,7 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("fk_purchase_detail_purchase_head");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DataId).HasComment("採購內容ID");
 
@@ -851,7 +875,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.DeliveryTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("預計交期");
 
                 entity.Property(e => e.OrderId).HasComment("訂單單號id");
@@ -881,7 +905,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.SupplierId).HasComment("供應商id");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.Purchase)
@@ -893,7 +917,7 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<PurchaseHead>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.PriceAll).HasComment("總金額");
 
@@ -914,7 +938,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.SupplierId).HasComment("供應商id");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -930,7 +954,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Quantity).HasComment("退貨數量");
 
@@ -945,7 +969,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.WarehouseId).HasComment("退貨倉庫ID");
@@ -971,7 +995,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.Customer)
@@ -1020,7 +1044,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -1031,7 +1055,7 @@ namespace HonjiMES.Models
             {
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -1066,7 +1090,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -1088,7 +1112,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -1127,7 +1151,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Status).HasComment("銷貨狀態");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.OrderDetail)
@@ -1157,7 +1181,7 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleHead>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.PriceAll).HasComment("總金額");
 
@@ -1176,13 +1200,13 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Status).HasComment("銷貨狀態");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
             modelBuilder.Entity<SaleLog>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Message)
                     .HasCharSet("utf8mb4")
@@ -1193,7 +1217,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Type).HasComment("log種類");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -1208,7 +1232,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.Customer)
@@ -1257,7 +1281,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -1298,7 +1322,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Email)
                     .HasComment("電子郵件")
@@ -1331,7 +1355,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
             });
 
@@ -1342,7 +1366,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
@@ -1353,7 +1377,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -1370,7 +1394,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.Department)
@@ -1399,7 +1423,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.Username)
@@ -1416,19 +1440,19 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
 
                 entity.Property(e => e.LoginTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("登入時間");
 
                 entity.Property(e => e.LogoutTime).HasComment("登出時間");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 
@@ -1458,7 +1482,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
@@ -1500,7 +1524,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
@@ -1510,7 +1534,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("更新時間")
                     .ValueGeneratedOnAddOrUpdate();
 

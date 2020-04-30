@@ -16,7 +16,7 @@ namespace HonjiMES.Models
         }
 
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Required]
         [Column("order_no", TypeName = "varchar(50)")]
@@ -29,20 +29,20 @@ namespace HonjiMES.Models
         [Column("order_date", TypeName = "timestamp")]
         public DateTime OrderDate { get; set; }
         [Column("start_date", TypeName = "timestamp")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [Column("finish_date", TypeName = "timestamp")]
-        public DateTime FinishDate { get; set; }
-        [Column("customer")]
+        public DateTime? FinishDate { get; set; }
+        [Column("customer", TypeName = "int(11)")]
         public int Customer { get; set; }
-        [Column("status")]
+        [Column("status", TypeName = "tinyint(4)")]
         public sbyte Status { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
         [InverseProperty("Order")]

@@ -17,7 +17,7 @@ namespace HonjiMES.Models
         }
 
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Column("code", TypeName = "varchar(50)")]
         public string Code { get; set; }
@@ -35,17 +35,17 @@ namespace HonjiMES.Models
         public string Address { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("delete_flag")]
+        [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
-        [Column("recheck")]
+        [Column("recheck", TypeName = "tinyint(4)")]
         public sbyte? Recheck { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime? UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
         [InverseProperty("Warehouse")]

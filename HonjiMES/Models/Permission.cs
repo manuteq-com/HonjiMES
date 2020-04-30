@@ -10,31 +10,31 @@ namespace HonjiMES.Models
     public partial class Permission
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("new")]
+        [Column("new", TypeName = "int(11)")]
         public int New { get; set; }
-        [Column("edit")]
+        [Column("edit", TypeName = "int(11)")]
         public int Edit { get; set; }
-        [Column("del")]
+        [Column("del", TypeName = "int(11)")]
         public int Del { get; set; }
-        [Column("search")]
+        [Column("search", TypeName = "int(11)")]
         public int Search { get; set; }
-        [Column("sort")]
+        [Column("sort", TypeName = "int(11)")]
         public int Sort { get; set; }
-        [Column("import")]
+        [Column("import", TypeName = "int(11)")]
         public int Import { get; set; }
-        [Column("export")]
+        [Column("export", TypeName = "int(11)")]
         public int Export { get; set; }
-        [Column("copy_add")]
+        [Column("copy_add", TypeName = "int(11)")]
         public int CopyAdd { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
     }
 }

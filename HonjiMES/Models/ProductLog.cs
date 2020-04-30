@@ -10,13 +10,13 @@ namespace HonjiMES.Models
     public partial class ProductLog
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("product_id")]
+        [Column("product_id", TypeName = "int(11)")]
         public int ProductId { get; set; }
-        [Column("original")]
+        [Column("original", TypeName = "int(11)")]
         public int Original { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
@@ -24,9 +24,9 @@ namespace HonjiMES.Models
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }

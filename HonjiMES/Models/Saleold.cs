@@ -10,21 +10,21 @@ namespace HonjiMES.Models
     public partial class Saleold
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Required]
         [Column("sale_no", TypeName = "varchar(50)")]
         public string SaleNo { get; set; }
-        [Column("project_no")]
+        [Column("project_no", TypeName = "int(11)")]
         public int ProjectNo { get; set; }
-        [Column("product_no")]
+        [Column("product_no", TypeName = "int(11)")]
         public int ProductNo { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
         [Required]
         [Column("specification", TypeName = "varchar(50)")]
@@ -41,14 +41,14 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Required]
         [Column("status", TypeName = "varchar(50)")]
         public string Status { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
     }
 }

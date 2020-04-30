@@ -15,25 +15,25 @@ namespace HonjiMES.Models
         }
 
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("order_id")]
+        [Column("order_id", TypeName = "int(11)")]
         public int OrderId { get; set; }
-        [Column("serial")]
+        [Column("serial", TypeName = "int(11)")]
         public int Serial { get; set; }
-        [Column("product_id")]
+        [Column("product_id", TypeName = "int(11)")]
         public int ProductId { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
-        [Column("originPrice")]
+        [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
-        [Column("discount")]
+        [Column("discount", TypeName = "int(11)")]
         public int? Discount { get; set; }
-        [Column("discount_price")]
+        [Column("discount_price", TypeName = "int(11)")]
         public int? DiscountPrice { get; set; }
-        [Column("price")]
+        [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
-        [Column("delivered")]
+        [Column("delivered", TypeName = "int(11)")]
         public int? Delivered { get; set; }
         [Required]
         [Column("unit", TypeName = "varchar(50)")]
@@ -55,19 +55,19 @@ namespace HonjiMES.Models
         public string Ink { get; set; }
         [Column("label", TypeName = "varchar(50)")]
         public string Label { get; set; }
-        [Column("package")]
+        [Column("package", TypeName = "int(11)")]
         public int? Package { get; set; }
-        [Column("reply")]
+        [Column("reply", TypeName = "int(11)")]
         public int? Reply { get; set; }
-        [Column("sale_count")]
+        [Column("sale_count", TypeName = "int(11)")]
         public int SaleCount { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
         [ForeignKey("OrderId")]

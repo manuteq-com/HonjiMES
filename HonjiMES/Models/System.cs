@@ -10,18 +10,18 @@ namespace HonjiMES.Models
     public partial class System
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         [Column("value", TypeName = "varchar(50)")]
         public string Value { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int? CreateUser { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }

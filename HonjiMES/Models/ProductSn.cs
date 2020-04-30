@@ -10,22 +10,22 @@ namespace HonjiMES.Models
     public partial class ProductSn
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Required]
         [Column("product_number", TypeName = "varchar(100)")]
         public string ProductNumber { get; set; }
-        [Column("product_id")]
+        [Column("product_id", TypeName = "int(11)")]
         public int? ProductId { get; set; }
-        [Column("customer_id")]
+        [Column("customer_id", TypeName = "int(11)")]
         public int? CustomerId { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
     }
 }

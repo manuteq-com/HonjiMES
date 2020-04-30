@@ -10,11 +10,11 @@ namespace HonjiMES.Models
     public partial class ReturnSale
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("warehouse_id")]
+        [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
-        [Column("quantity")]
+        [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
@@ -22,13 +22,13 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user")]
+        [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
-        [Column("update_user")]
+        [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("sale_detail_new_id")]
+        [Column("sale_detail_new_id", TypeName = "int(11)")]
         public int SaleDetailNewId { get; set; }
 
         [ForeignKey("SaleDetailNewId")]
