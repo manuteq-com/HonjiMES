@@ -34,24 +34,24 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { locale, loadMessages } from 'devextreme/localization';
 import zhTW from '../assets/lang/zh-TW.json';
 // import { Test1Component } from './test1/test1.component';
-import { OrderListComponent } from './order-list/order-list.component';
-import { CreatorderComponent } from './creatorder/creatorder.component';
+import { OrderListComponent } from './order/order-list/order-list.component';
+import { CreatorderComponent } from './order/creatorder/creatorder.component';
 import { BreadcrumbModule } from 'primeng';
-import { OerdrdetailListComponent } from './oerdrdetail-list/oerdrdetail-list.component';
-import { ProductListComponent } from './product-list/product-list.component';
+import { OerdrdetailListComponent } from './order/oerdrdetail-list/oerdrdetail-list.component';
+import { ProductListComponent } from './product/product-list/product-list.component';
 import { MaterialListComponent } from './material-list/material-list.component';
-import { CreatproductComponent } from './creatproduct/creatproduct.component';
+import { CreatproductComponent } from './product/creatproduct/creatproduct.component';
 import { CreatmaterialComponent } from './creatmaterial/creatmaterial.component';
 import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
 import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
 import { SaleListComponent } from './sale-list/sale-list.component';
 import { ReOrderSaleComponent } from './re-order-sale/re-order-sale.component';
-import { BillPurchaseComponent } from './bill-purchase/bill-purchase.component';
-import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
-import { CreatBillPurchaseComponent } from './creat-bill-purchase/creat-bill-purchase.component';
-import { BillPurchaseDetailComponent } from './bill-purchase-detail/bill-purchase-detail.component';
-import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.component';
-import { CreatPurchaseComponent } from './creat-purchase/creat-purchase.component';
+import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchase.component';
+import { PurchaseOrderComponent } from './purchase/purchase-order/purchase-order.component';
+import { CreatBillPurchaseComponent } from './billpurchase/creat-bill-purchase/creat-bill-purchase.component';
+import { BillPurchaseDetailComponent } from './billpurchase/bill-purchase-detail/bill-purchase-detail.component';
+import { PurchaseDetailComponent } from './purchase/purchase-detail/purchase-detail.component';
+import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase.component';
 @NgModule({
     imports: [
         BrowserModule,

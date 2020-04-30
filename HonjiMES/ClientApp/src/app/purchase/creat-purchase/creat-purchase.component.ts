@@ -1,11 +1,11 @@
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
-import { APIResponse } from '../app.module';
+import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import notify from 'devextreme/ui/notify';
-import { SendService } from '../shared/mylib';
-import { Myservice } from '../service/myservice';
+import { SendService } from '../../shared/mylib';
+import { Myservice } from '../../service/myservice';
 
 @Component({
     selector: 'app-creat-purchase',

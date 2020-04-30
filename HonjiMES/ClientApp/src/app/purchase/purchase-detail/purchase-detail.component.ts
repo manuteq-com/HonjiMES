@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 import { HttpClient } from '@angular/common/http';
-import { SendService } from '../shared/mylib';
+import { SendService } from '../../shared/mylib';
 import notify from 'devextreme/ui/notify';
 
 @Component({

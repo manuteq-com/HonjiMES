@@ -3,8 +3,8 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from '../shared/mylib';
 import $ from 'jquery';
+import { SendService } from 'src/app/shared/mylib';
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',

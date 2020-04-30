@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from '../shared/mylib';
-import { APIResponse } from '../app.module';
+import { SendService } from '../../shared/mylib';
+import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
+import notify from 'devextreme/ui/notify';
 
 @Component({
-    selector: 'app-bill-purchase',
-    templateUrl: './bill-purchase.component.html',
-    styleUrls: ['./bill-purchase.component.css']
+  selector: 'app-purchase-order',
+  templateUrl: './purchase-order.component.html',
+  styleUrls: ['./purchase-order.component.css']
 })
-export class BillPurchaseComponent implements OnInit {
+export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
@@ -22,17 +22,17 @@ export class BillPurchaseComponent implements OnInit {
     MaterialList: any;
     itemkey: number;
     mod: string;
-    Controller = '/BillofPurchaseHeads';
+    Controller = '/PurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     constructor(private http: HttpClient) {
 
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHeads'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostBillofPurchaseHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteBillofPurchaseHead', 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetPurchaseHeads'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetPurchaseHead', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostPurchaseHead', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeletePurchaseHead', 'DELETE')
         });
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {

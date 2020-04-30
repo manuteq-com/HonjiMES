@@ -3,9 +3,9 @@ import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { APIResponse } from '../app.module';
-import { SendService } from '../shared/mylib';
-import { Product } from '../model/viewmodels';
+import { APIResponse } from '../../app.module';
+import { SendService } from '../../shared/mylib';
+import { Product } from '../../model/viewmodels';
 
 @Component({
   selector: 'app-creatproduct',

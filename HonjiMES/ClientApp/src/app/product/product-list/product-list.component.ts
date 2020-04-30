@@ -1,5 +1,5 @@
 import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
-import { APIResponse } from '../app.module';
+import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -7,7 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { SendService } from '../shared/mylib';
+import { SendService } from '../../shared/mylib';
 
 @Component({
     selector: 'app-product-list',

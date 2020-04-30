@@ -3,11 +3,11 @@ import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from '../shared/mylib';
+import { SendService } from '../../shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
-import { APIResponse } from '../app.module';
+import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import CheckBox from 'devextreme/ui/check_box';
 @Component({

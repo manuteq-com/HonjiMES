@@ -2,9 +2,9 @@ import { Component, OnInit, OnChanges, EventEmitter, Output, Input, ViewChild } 
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
-import { SendService } from '../shared/mylib';
-import { APIResponse } from '../app.module';
 import { Observable } from 'rxjs';
+import { APIResponse } from 'src/app/app.module';
+import { SendService } from 'src/app/shared/mylib';
 
 @Component({
     selector: 'app-creat-bill-purchase',
