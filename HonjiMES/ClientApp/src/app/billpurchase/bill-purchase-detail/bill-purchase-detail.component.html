@@ -21,6 +21,9 @@
         </dxo-form>
     </dxo-editing>
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+    <dxi-column type="buttons">
+        <dxi-button hint="驗收" text="驗收" [onClick]="checkinonClick"></dxi-button>
+    </dxi-column>
     <dxi-column dataField="SupplierId" caption="供應商名稱" [allowEditing]="false">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -55,11 +58,12 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
+
     <div *dxTemplate="let data of 'MaterialEditCellTemplate'">
         <dx-select-box [value]="data.value"  (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialList" valueExpr="Id" displayExpr="MaterialNo"></dx-select-box>
       </div>
       <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-          <dx-number-box [value]='Quantityval'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [max]="Quantityvalmax" [showSpinButtons]="true"></dx-number-box>
+          <dx-number-box [value]='Quantityval'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [showSpinButtons]="true"></dx-number-box>
       </div>
       <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
@@ -68,3 +72,9 @@
         <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
     </div>
 </dx-data-grid>
+<dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod"></app-bill-purchase-checkin>
+    </div>
+</dx-popup>

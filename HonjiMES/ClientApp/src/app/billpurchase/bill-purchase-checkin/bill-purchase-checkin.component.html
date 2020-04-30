@@ -1,0 +1,23 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dxi-item dataField="Quantity" editorType="dxNumberBox" dataType="number" [editorOptions]="editorOptions">
+            <dxi-validation-rule type="required" message="修改數量 必填"></dxi-validation-rule>
+            <dxo-label text="驗收數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remarks">
+            <dxo-label text="備註"></dxo-label>
+        </dxi-item>
+    </dx-form>
+    <br>
+    <div class="long-title">
+        <h5>訂單內容</h5>
+    </div>
+    <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        [disabled]="buttondisabled"></dx-button>
+    <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+        </dxi-item> -->
+
+</form>
+
+

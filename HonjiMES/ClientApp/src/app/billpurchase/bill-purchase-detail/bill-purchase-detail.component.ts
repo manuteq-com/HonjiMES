@@ -23,10 +23,12 @@ export class BillPurchaseDetailComponent implements OnInit {
     Quantityval: number;
     OriginPriceval: number;
     Priceval: number;
-    Quantityvalmax: number;
     changeMode: boolean;
+    popupVisible: boolean;
+    mod: string;
+    keyID: any;
     constructor(private http: HttpClient) {
-        this.onContentReady = this.onContentReady.bind(this);
+        this.checkinonClick = this.checkinonClick.bind(this);
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.dataSourceDB = new CustomStore({
@@ -59,7 +61,6 @@ export class BillPurchaseDetailComponent implements OnInit {
         const _dataGrid = $(e.element);
         const dataGrid = e.component;
         if (this.changeMode && ! _dataGrid.find('.dx-row-inserted').length) {
-            debugger;
             dataGrid.beginUpdate();
             e.component.option('editing.mode', 'form');
             this.changeMode = false;
@@ -76,6 +77,9 @@ export class BillPurchaseDetailComponent implements OnInit {
         dataGrid.columnOption('DataId', { allowEditing: true });
         dataGrid.endUpdate();
         this.changeMode = true;
+        this.Quantityval = null;
+        this.OriginPriceval = null;
+        this.Priceval = null;
     }
     onRowInserting(e) {
 
@@ -84,7 +88,6 @@ export class BillPurchaseDetailComponent implements OnInit {
 
     }
     to_purchaseClick(e) {
-        debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
     selectvalueChanged(e, data) {
@@ -92,8 +95,6 @@ export class BillPurchaseDetailComponent implements OnInit {
         const today = new Date();
         this.MaterialList.forEach(x => {
             if (x.Id === e.value) {
-                debugger;
-                this.Quantityvalmax = x.Quantity;
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;
                 this.Priceval = x.Quantity * x.OriginPrice;
@@ -111,8 +112,6 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onEditingStart(e){
-        debugger;
-        this.Quantityvalmax = e.data.Quantity;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -125,5 +124,22 @@ export class BillPurchaseDetailComponent implements OnInit {
                 at: 'center top'
             }
         }, 'error', 3000);
+    }
+    checkinonClick(e){
+        debugger;
+        this.keyID = e.row.key;
+        this.popupVisible = true;
+    }
+
+    popup_result(e) {
+        this.popupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 }

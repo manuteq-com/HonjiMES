@@ -112,6 +112,47 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(billofPurchaseHead));
         }
         /// <summary>
+        /// 新增進貨單同時新明細
+        /// </summary>
+        /// <param name="PostBillofPurchaseHead_Detail"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BillofPurchaseHead>> PostBillofPurchaseHead_Detail(PostBillofPurchaseHead_Detail PostBillofPurchaseHead_Detail)
+        {
+            try
+            {
+                var dt = DateTime.Now;
+                var No = dt.ToString("yyMMdd");
+                var NoCount = _context.BillofPurchaseHeads.Where(x => x.BillofPurchaseNo.StartsWith(No)).Count() + 1;
+                var Head = PostBillofPurchaseHead_Detail.BillofPurchaseHead;
+                var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
+                Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
+                Head.CreateTime = dt;
+                Head.CreateUser = 1;
+                var Details = new List<BillofPurchaseDetail>();
+                foreach (var item in Detail)
+                {
+                    var Material = _context.Materials.Find(item.DataId);
+                    item.DataName = Material.Name;
+                    item.DataNo = Material.MaterialNo;
+                    item.Specification = Material.Specification;
+                    item.CreateTime = dt;
+                    item.CreateUser = 1;
+                    Details.Add(item);
+                }
+                Head.BillofPurchaseDetails = Details;
+                _context.BillofPurchaseHeads.Add(Head);
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK(Head));
+            }
+            catch (Exception ex)
+            {
+                return Ok(MyFun.APIResponseError(ex.Message));
+            }
+        }
+
+
+        /// <summary>
         /// 刪除進貨單
         /// </summary>
         /// <param name="id"></param>

@@ -151,6 +151,11 @@ namespace HonjiMES.Controllers
             //await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
+        /// <summary>
+        /// 新增訂單主檔同時新明細
+        /// </summary>
+        /// <param name="PostOrderMaster_Detail"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<OrderHead>> PostOrderMaster_Detail(PostOrderMaster_Detail PostOrderMaster_Detail)
         {

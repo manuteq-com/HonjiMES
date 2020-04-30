@@ -79,3 +79,12 @@ export class Selectitem {
     Id: number;
     Name: string;
 }
+
+export class BillofPurchaseDetail {
+    Id: number;
+    SupplierId: number;
+    DataId: number;
+    Quantity: number;
+    OriginPrice: number;
+    Price: number;
+}

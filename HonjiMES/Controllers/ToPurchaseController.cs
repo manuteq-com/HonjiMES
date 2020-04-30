@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HonjiMES.Controllers
 {
+    /// <summary>
+    /// 採購API
+    /// </summary>
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -18,6 +21,7 @@ namespace HonjiMES.Controllers
         public ToPurchaseController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 採購單轉進貨
@@ -41,6 +45,11 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetails = await _context.BillofPurchaseDetails.Where(x => x.SupplierId == Id && x.Quantity > x.PurchaseCount).ToListAsync();
             return Ok(MyFun.APIResponseOK(BillofPurchaseDetails));
         }
+        /// <summary>
+        /// 新增採購單，同時新增明細
+        /// </summary>
+        /// <param name="PostPurchaseMaster_Detail"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<OrderHead>> PostPurchaseMaster_Detail(PostPurchaseMaster_Detail PostPurchaseMaster_Detail)
         {
@@ -79,6 +88,54 @@ namespace HonjiMES.Controllers
 
                 return Ok(MyFun.APIResponseError(ex.Message));
             }
+        }
+        /// <summary>
+        /// 進貨單驗收
+        /// </summary>
+        /// <param name="BillofPurchaseCheckin"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BillofPurchaseCheckin>> PostPurchaseCheckIn(BillofPurchaseCheckin BillofPurchaseCheckin)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
+            if (BillofPurchaseDetails == null)
+            {
+                return Ok(MyFun.APIResponseError("進貨單資料有誤"));
+            }
+            BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
+            if (BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
+            {
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量"));
+            }
+            var dt = DateTime.Now;
+            BillofPurchaseCheckin.CreateTime = dt;
+            BillofPurchaseCheckin.CreateUser = 1;
+            BillofPurchaseDetails.UpdateTime = dt;
+            BillofPurchaseDetails.UpdateUser = 1;
+            BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
+            BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
+            //入庫
+            var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
+            if (Material == null)
+            {
+                return Ok(MyFun.APIResponseError("原料心庫存資料有誤"));
+            }
+            Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
+            Material.Quantity += BillofPurchaseCheckin.Quantity;
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
+        }
+        /// <summary>
+        /// 進貨單可驗收的數量
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillofPurchaseDetail>> CanCheckIn(int Id)
+        {
+            var BillofPurchaseDetail = await _context.BillofPurchaseDetails.FindAsync(Id);
+            return Ok(MyFun.APIResponseOK(BillofPurchaseDetail));
         }
     }
 }

@@ -52,6 +52,7 @@ import { CreatBillPurchaseComponent } from './billpurchase/creat-bill-purchase/c
 import { BillPurchaseDetailComponent } from './billpurchase/bill-purchase-detail/bill-purchase-detail.component';
 import { PurchaseDetailComponent } from './purchase/purchase-detail/purchase-detail.component';
 import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase.component';
+import { BillPurchaseCheckinComponent } from './billpurchase/bill-purchase-checkin/bill-purchase-checkin.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -110,6 +111,7 @@ import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase
         BillPurchaseDetailComponent,
         PurchaseDetailComponent,
         CreatPurchaseComponent,
+        BillPurchaseCheckinComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
