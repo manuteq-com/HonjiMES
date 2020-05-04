@@ -323,7 +323,7 @@ namespace HonjiMES.Models
                                 {   // 日期格式
                                     cellval = cell.DateCellValue.ToString();
                                 }
-                                if (DateUtil.IsCellDateFormatted(cell))
+                                else if (DateUtil.IsCellDateFormatted(cell))
                                 {   // 日期格式
                                     cellval = cell.DateCellValue.ToString();
                                 }

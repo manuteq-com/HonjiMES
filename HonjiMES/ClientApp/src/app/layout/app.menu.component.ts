@@ -2,7 +2,7 @@ import { Component, Input, OnInit, EventEmitter, ViewChild } from '@angular/core
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MenuItem } from 'primeng/primeng';
 import { AppComponent } from '../app.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -20,26 +20,30 @@ export class AppMenuComponent implements OnInit {
     layout = 'brown';
 
     version = 'v4';
-
-    constructor(public app: AppComponent, route: ActivatedRoute) {
+    breadcrumbs: string[] = [];
+    constructor(public app: AppComponent, route: ActivatedRoute, router: Router) {
         //  this.changeLayout('cyan');
+
         this.changeLayout('joomla', true);
         this.changeVersion('v4');
         console.log(route.snapshot.paramMap.get('name'));
         route.params.subscribe(params => console.log('side menu id parameter', params.id));
+        const bc = this.breadcrumbs;
+        router.events.subscribe((evt) => {
+            if (evt instanceof NavigationEnd) {
+                const url = evt.url;
+                if (url === '' || url === '/') {
+                    bc.length = 0;
+                } else {
+                    debugger;
+                    bc.push(evt.url.substr(1));
+                    this.breadcrumbitem.push( {label: evt.url.substr(1)});
+                }
+            }
+        });
     }
-
     ngOnInit() {
-        this.breadcrumbitem = [
-            { label: 'Categories' },
-            { label: 'Sports' },
-            { label: 'Football' },
-            { label: 'Countries' },
-            { label: 'Spain' },
-            { label: 'F.C. Barcelona' },
-            { label: 'Squad' },
-            { label: 'Lionel Messi', url: 'https://en.wikipedia.org/wiki/Lionel_Messi' }
-        ];
+        this.breadcrumbitem = [];
         this.model = [
 
             { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
