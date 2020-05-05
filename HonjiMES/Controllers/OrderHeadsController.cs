@@ -10,6 +10,7 @@ using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace HonjiMES.Controllers
 {
@@ -342,6 +343,28 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault()));
 
+        }
+        [HttpPut("{id}")]
+        //public async Task<ActionResult<OrderHead>> Test1Async([FromBody] JsonPatchDocument<OrderHead> OrderHead)
+        //public ActionResult<OrderHead> Test1([FromBody] OrderHead OrderHead)
+        public async Task<ActionResult<OrderHead>> Test1Async(int id,dynamic val)
+        {
+            var OldOrderHead = _context.OrderHeads.Find(id);
+            Stream req = Request.Body;
+            req.Seek(0, System.IO.SeekOrigin.Begin);
+            using (StreamReader stream = new StreamReader(req))
+            {
+                string body = await stream.ReadToEndAsync();
+                Newtonsoft.Json.JsonConvert.PopulateObject(body, OldOrderHead);
+                // body = "param=somevalue&param2=someothervalue"
+            }
+            return Ok(MyFun.APIResponseOK(OldOrderHead));
+        }
+                
+        [HttpPatch]
+        public ActionResult<OrderHead> Test2(OrderHead OrderHead)
+        {
+            return Ok(MyFun.APIResponseOK(OrderHead));
         }
         private bool OrderHeadExists(int id)
         {
