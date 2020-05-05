@@ -39,7 +39,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-            var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
+            var data = _context.OrderHeads.Where(x => x.DeleteFlag == 0);
+            var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
             // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
@@ -146,9 +147,9 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.OrderHeads.Remove(orderHead);
-            //await _context.SaveChangesAsync();
+            orderHead.DeleteFlag = 1;
+            // _context.OrderHeads.Remove(orderHead);
+            await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
         /// <summary>

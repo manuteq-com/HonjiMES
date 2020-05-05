@@ -40,6 +40,8 @@ namespace HonjiMES.Models
         public sbyte Status { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
+        [Column("delete_flag", TypeName = "int(11)")]
+        public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]

@@ -45,8 +45,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
         {
-           _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var OrderDetails = _context.OrderDetails.Include(x=>x.SaleDetailNews).AsQueryable();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).AsQueryable();
             if (OrderId.HasValue)
             {
                 OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x => x.Serial);
@@ -126,13 +126,13 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<OrderDetail>> PostOrderDetail(int PID ,OrderDetail orderDetail)
+        public async Task<ActionResult<OrderDetail>> PostOrderDetail(int PID, OrderDetail orderDetail)
         {
             var Serial = 0;
             if (_context.OrderHeads.Find(PID).OrderDetails.Any())
             {
                 Serial = _context.OrderHeads.Find(PID).OrderDetails.Max(x => x.Serial);
-            } 
+            }
             orderDetail.Serial = Serial + 1;
             orderDetail.OrderId = PID;
             orderDetail.CreateTime = DateTime.Now;

@@ -148,6 +148,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         return this.http.get<APIResponse>(apiUrl);
     }
     onInitNewRow(e) {
+        // debugger;
         this.SerialNo++;
         e.data.Serial = this.SerialNo;
     }
@@ -205,7 +206,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
             if (sendRequest) {
                 this.SerialNo = 0;
-                this.dataSourceDB = null;
+                this.dataSourceDB = new Array();
                 this.dataGrid.instance.refresh();
                 this.myform.instance.resetValues();
                 this.CustomerVal = null;
