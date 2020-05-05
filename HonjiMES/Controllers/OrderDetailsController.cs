@@ -51,7 +51,7 @@ namespace HonjiMES.Controllers
             {
                 OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x => x.Serial);
             }
-            var data = await OrderDetails.Where(x => x.Delete_flag == 0).ToListAsync();
+            var data = await OrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
             foreach (var Detailitem in data)
             {
                 foreach (var SaleDetailitem in Detailitem.SaleDetailNews)
@@ -157,7 +157,7 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            orderDetail.Delete_flag = 1;
+            orderDetail.DeleteFlag = 1;
             // _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderDetail));

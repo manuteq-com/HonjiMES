@@ -62,7 +62,7 @@ namespace HonjiMES.Models
         [Column("sale_count", TypeName = "int(11)")]
         public int SaleCount { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
-        public int Delete_flag { get; set; }
+        public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
