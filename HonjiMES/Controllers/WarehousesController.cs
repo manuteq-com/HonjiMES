@@ -22,7 +22,7 @@ namespace HonjiMES.Controllers
         public WarehousesController(HonjiContext context)
         {
             _context = context;
-            ////_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         ///  倉庫列表

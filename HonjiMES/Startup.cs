@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System;
+using System.Text.Json;
+using System.Diagnostics;
 
 namespace HonjiMES
 {
@@ -29,6 +33,7 @@ namespace HonjiMES
             //services.AddMvc().AddNewtonsoftJson(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
             services.AddControllers().AddJsonOptions(o =>
             {
+                //o.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;
                 o.JsonSerializerOptions.DictionaryKeyPolicy = null;
             }).AddNewtonsoftJson(options =>
@@ -138,6 +143,22 @@ namespace HonjiMES
                 .InputFormatters
                 .OfType<NewtonsoftJsonPatchInputFormatter>()
                 .First();
+        }
+        /// <summary>
+        /// 接收UTC TIME 
+        /// </summary>
+        public class DateTimeConverter : JsonConverter<DateTime>
+        {
+            public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                Debug.Assert(typeToConvert == typeof(DateTime));
+                return DateTime.Parse(reader.GetString());
+            }
+
+            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+            {
+                writer.WriteStringValue(value.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"));
+            }
         }
     }
 }
