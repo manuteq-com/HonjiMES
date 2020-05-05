@@ -2326,6 +2326,7 @@ TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey=
 <Link Source = "OrderHead" Target="OrderHead.OrderDate" Category="Contains" />
 <Link Source = "OrderHead" Target="OrderHead.OrderNo" Category="Contains" />
 <Link Source = "OrderHead" Target="OrderHead.OrderType" Category="Contains" />
+<Link Source = "OrderHead" Target="OrderHead.ReplyDate" Category="Contains" />
 <Link Source = "OrderHead" Target="OrderHead.StartDate" Category="Contains" />
 <Link Source = "OrderHead" Target="OrderHead.Status" Category="Contains" />
 <Link Source = "OrderHead" Target="OrderHead.UpdateTime" Category="Contains" />

@@ -3,6 +3,7 @@ export class OrderHead {
     orderNo: string;
     customerNo: string;
     orderDate: Date;
+    replyDate: Date;
     startDate: Date;
     finishDate: Date;
     customer: number;
@@ -18,6 +19,7 @@ export class OrderDetail {
     price: number;
     unit: string;
     quantity: number;
+    dueDate: Date;
     replyDate: Date;
     machineNo: number;
     remark: string;

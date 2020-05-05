@@ -609,6 +609,13 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ReplyDate).HasComment("回覆交期");
+
                 entity.Property(e => e.StartDate).HasComment("開始日期");
 
                 entity.Property(e => e.UpdateTime)

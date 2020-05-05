@@ -257,6 +257,7 @@ namespace HonjiMES.Controllers
                     }
                 }
                 Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
+                Headitem.ReplyDate = Headitem.OrderDetails.OrderBy(x => x.ReplyDate).FirstOrDefault()?.ReplyDate ?? DateTime.Now;
             }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault(), sLostProduct));
         }

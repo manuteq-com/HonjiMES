@@ -164,7 +164,8 @@ export class OrderListComponent {
     //     e.component.columnOption('OrderDate', 'allowEditing', true);
     // }
     onEditorPreparing(e) {
-        if (e.parentType === 'dataRow' && (e.dataField === 'OrderNo' || e.dataField === 'CustomerNo' || e.dataField === 'OrderDate')) {
+        if (e.parentType === 'dataRow' && (e.dataField === 'OrderNo' || e.dataField === 'CustomerNo' || e.dataField === 'OrderDate'
+         || e.dataField === 'ReplyDate')) {
             if (!isNaN(e.row.key)) {
                 e.editorOptions.disabled = true;
             }
