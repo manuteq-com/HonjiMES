@@ -23,7 +23,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    buttondisabled: false;
+    buttondisabled = false;
     formData: OrderHead;
     SerialNo = 0;
     dataSourceDB: any;
@@ -181,7 +181,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
-            // this.buttondisabled = false;
+            this.buttondisabled = false;
             return;
         }
         this.dataGrid.instance.saveEditData();
@@ -212,7 +212,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 e.preventDefault();
                 this.childOuter.emit(true);
             }
-            // this.buttondisabled = false;
+            this.buttondisabled = false;
         }
     };
 }
