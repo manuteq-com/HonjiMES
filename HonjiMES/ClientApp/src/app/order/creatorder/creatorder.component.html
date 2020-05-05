@@ -21,7 +21,7 @@
                 valueExpr= 'Id'
                 [(dataSource)]="Customerlist"></dx-select-box>
         </div> -->
-        <dxi-item dataField="OrderDate" editorType="dxDateBox">
+        <dxi-item dataField="OrderDate" editorType="dxDateBox" [editorOptions]="{displayFormat:'yyy/MM/dd'}">
             <dxo-label text="預交日"></dxo-label>
         </dxi-item>
         <!-- <dxi-item [label]="{text: CustomerVal1}">

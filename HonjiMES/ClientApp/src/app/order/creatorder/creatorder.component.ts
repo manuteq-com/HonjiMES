@@ -23,7 +23,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    buttondisabled: false;
+    buttondisabled = false;
     formData: OrderHead;
     SerialNo = 0;
     dataSourceDB: any;
@@ -177,42 +177,46 @@ export class CreatorderComponent implements OnInit, OnChanges {
         }
         return true;
     }
-    onFormSubmit = async function (e) {
-        // debugger;
-        this.buttondisabled = true;
-        if (this.validate_before() === false) {
-            // this.buttondisabled = false;
-            return;
-        }
-        this.dataGrid.instance.saveEditData();
-        this.formData = this.myform.instance.option('formData');
-        const hnull = this.dataSourceDB.find(item => item.ProductId == null);
-        if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
-            notify({
-                message: '請注意訂單內容必填的欄位',
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-            return false;
-        } else {
-            this.postval = new PostOrderMaster_Detail();
-            this.postval.OrderHead = this.formData as OrderHead;
-            this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
-            // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
-            // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-            if (sendRequest) {
-                this.SerialNo = 0;
-                this.dataSourceDB = null;
-                this.dataGrid.instance.refresh();
-                this.myform.instance.resetValues();
-                this.CustomerVal = null;
-                e.preventDefault();
-                this.childOuter.emit(true);
+    async onFormSubmit(e) {
+        debugger;
+        try {
+            this.buttondisabled = true;
+            if (this.validate_before() === false) {
+                // this.buttondisabled = false;
+                return;
             }
-            // this.buttondisabled = false;
+            this.dataGrid.instance.saveEditData();
+            this.formData = this.myform.instance.option('formData');
+            const hnull = this.dataSourceDB.find(item => item.ProductId == null);
+            if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
+                notify({
+                    message: '請注意訂單內容必填的欄位',
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                return false;
+            } else {
+                this.postval = new PostOrderMaster_Detail();
+                this.postval.OrderHead = this.formData as OrderHead;
+                this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
+                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                if (sendRequest) {
+                    this.SerialNo = 0;
+                    this.dataSourceDB = null;
+                    this.dataGrid.instance.refresh();
+                    this.myform.instance.resetValues();
+                    this.CustomerVal = null;
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                }
+
+            }
+        } catch (error) {
         }
-    };
+        this.buttondisabled = false;
+    }
 }
