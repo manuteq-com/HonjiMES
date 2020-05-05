@@ -10,9 +10,19 @@
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
 (onSelectionChanged)="onSelectionChanged($event)">
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
-        <dxo-form colCount=4>
+    <dxo-editing mode="form"
+        [allowAdding]="false"
+        [allowUpdating]="true"
+        [allowDeleting]="true">
+
+        <dxo-form colCount=5>
             <dxi-item dataField="ProductId">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Quantity">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Unit">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="OriginPrice">
@@ -21,10 +31,7 @@
             <dxi-item dataField="Price">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="Unit">
-                <dxi-validation-rule type="required"></dxi-validation-rule>
-            </dxi-item>
-            <dxi-item dataField="Quantity">
+            <dxi-item dataField="DueDate">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="ReplyDate">
@@ -41,8 +48,8 @@
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
     <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
-    <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
-    <dxi-column dataField="ProductId" caption="品號">
+    <dxi-column dataField="MachineNo" caption="機號" width="200"></dxi-column>
+    <dxi-column dataField="ProductId" caption="品號" width="200">
         <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="ProductId" caption="品名">
@@ -56,7 +63,7 @@
     <dxi-column dataField="Unit" caption="單位" width="50"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" width="80"></dxi-column>
     <dxi-column dataField="Price" caption="價格" dataType="number" width="80"></dxi-column>
-    <dxi-column dataField="DueDate" caption="預日期" dataType="date"></dxi-column>
+    <dxi-column dataField="DueDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
