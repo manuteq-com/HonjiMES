@@ -33,7 +33,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehouses()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var Warehouses = await _context.Warehouses.ToListAsync();
+            var data = _context.Warehouses.Where(x => x.DeleteFlag == 0);
+            var Warehouses = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Warehouses));
         }
 

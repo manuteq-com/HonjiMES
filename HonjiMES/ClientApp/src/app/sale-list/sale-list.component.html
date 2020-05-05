@@ -9,13 +9,24 @@
     </div>
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
-    [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
-    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true"
-    [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true">
+    [masterDetail]="{ enabled: true, template: 'detail' }"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    hoverStateEnabled="true"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    [rowAlternationEnabled]="true"
+    [focusedRowEnabled]="true">
+
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
@@ -38,7 +49,7 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
     <dxi-column dataField="SaleNo" caption="銷貨單號"></dxi-column>
-    <dxi-column dataField="Status" caption="狀態"></dxi-column>
+    <dxi-column dataField="Status" caption="狀態" width="200"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
     <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column>
@@ -51,9 +62,9 @@
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
-            <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Order.CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
             <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
@@ -89,7 +100,7 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="銷貨退回" [dragEnabled]="false" [closeOnOutsideClick]="false" 
+<dx-popup [showTitle]="true" title="銷貨退回" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="300"
     [(visible)]="resalepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-re-order-sale (childOuter)="resalepopup_result($event)" [itemkeyval]="resaleitemkey"></app-re-order-sale>

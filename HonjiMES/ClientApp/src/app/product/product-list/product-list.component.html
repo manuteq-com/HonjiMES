@@ -11,18 +11,32 @@
         <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
-    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)"
-    [showColumnLines]="true" [showRowLines]="false"   hoverStateEnabled="true" [rowAlternationEnabled]="true">
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true">
+
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true" visible="true">
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true" visible="true">
     </dxo-pager>
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
@@ -63,7 +77,11 @@
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column>
+    <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
+    <dxi-column dataField="WarehouseId" caption="存放庫別">
+        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
     <dxi-column type="buttons">
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>

@@ -33,7 +33,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
-        this.colCount = 4;
+        this.colCount = 1;
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);

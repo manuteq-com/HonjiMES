@@ -22,6 +22,7 @@ export class ProductListComponent implements OnInit {
     formData: any;
     Controller = '/Products';
     MaterialList: any;
+    WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: string;
@@ -48,6 +49,15 @@ export class ProductListComponent implements OnInit {
             (s) => {
                 console.log(s);
                 this.MaterialList = s.data;
+                if (s.success) {
+
+                }
+            }
+        );
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                console.log(s);
+                this.WarehouseList = s.data;
                 if (s.success) {
 
                 }
