@@ -34,7 +34,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var Products = await _context.Products.ToListAsync();
+            var data = _context.Products.Where(x => x.DeleteFlag == 0);
+            var Products = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Products));
             //return Ok(new { data = Products, success = true, timestamp = DateTime.Now, message = "" });
         }

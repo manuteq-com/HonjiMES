@@ -51,7 +51,7 @@ export class OrderListComponent {
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetOrderHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostOrderHead', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
         });
 
         this.GetData('/Customers/GetCustomers').subscribe(
@@ -164,7 +164,8 @@ export class OrderListComponent {
     //     e.component.columnOption('OrderDate', 'allowEditing', true);
     // }
     onEditorPreparing(e) {
-        if (e.parentType === 'dataRow' && (e.dataField === 'OrderNo' || e.dataField === 'CustomerNo' || e.dataField === 'OrderDate')) {
+        if (e.parentType === 'dataRow' && (e.dataField === 'OrderNo' || e.dataField === 'CustomerNo' || e.dataField === 'OrderDate'
+         || e.dataField === 'ReplyDate')) {
             if (!isNaN(e.row.key)) {
                 e.editorOptions.disabled = true;
             }

@@ -114,7 +114,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 3;
+        this.colCount = 4;
         this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
@@ -148,6 +148,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         return this.http.get<APIResponse>(apiUrl);
     }
     onInitNewRow(e) {
+        // debugger;
         this.SerialNo++;
         e.data.Serial = this.SerialNo;
     }

@@ -506,8 +506,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DueDate)
                     .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("預交日")
-                    .ValueGeneratedOnAddOrUpdate();
+                    .HasComment("預交日");
 
                 entity.Property(e => e.Ink)
                     .HasComment("噴墨")
@@ -545,8 +544,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ReplyDate)
                     .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("回復交期")
-                    .ValueGeneratedOnAddOrUpdate();
+                    .HasComment("回復交期");
 
                 entity.Property(e => e.ReplyRemark)
                     .HasComment("回覆備註")
@@ -600,8 +598,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.OrderDate)
                     .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("訂單日期")
-                    .ValueGeneratedOnAddOrUpdate();
+                    .HasComment("訂單日期");
 
                 entity.Property(e => e.OrderNo)
                     .HasComment("訂單單號")
@@ -611,6 +608,13 @@ namespace HonjiMES.Models
                 entity.Property(e => e.OrderType)
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ReplyDate).HasComment("回覆交期");
 
                 entity.Property(e => e.StartDate).HasComment("開始日期");
 

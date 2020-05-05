@@ -39,8 +39,9 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var OrderHeads = await _context.OrderHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
+            //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
+            var data = _context.OrderHeads.Where(x => x.DeleteFlag == 0);
+            var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
             // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
@@ -147,9 +148,9 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.OrderHeads.Remove(orderHead);
-            //await _context.SaveChangesAsync();
+            orderHead.DeleteFlag = 1;
+            // _context.OrderHeads.Remove(orderHead);
+            await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
         /// <summary>
@@ -258,6 +259,7 @@ namespace HonjiMES.Controllers
                     }
                 }
                 Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
+                Headitem.ReplyDate = Headitem.OrderDetails.OrderBy(x => x.ReplyDate).FirstOrDefault()?.ReplyDate ?? DateTime.Now;
             }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault(), sLostProduct));
         }
