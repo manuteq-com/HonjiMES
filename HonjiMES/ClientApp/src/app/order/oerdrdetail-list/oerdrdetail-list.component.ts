@@ -41,7 +41,7 @@ export class OerdrdetailListComponent implements OnInit {
             byKey: () => SendService.sendRequest(http, this.controller + '/GetOrderDetail'),
             insert: (values) => SendService.sendRequest(http, this.controller + '/PostOrderDetail?PID=' + this.itemkey, 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.controller + '/PutOrderDetail', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.controller + '/DeleteOrderDetail', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.controller + '/DeleteOrderDetail/' + key, 'DELETE')
         });
     }
     ngOnInit() {

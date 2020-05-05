@@ -22,6 +22,7 @@ namespace HonjiMES.Controllers
         public OrderDetailsController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         ///// <summary>
         ///// 查詢所有訂單明細
@@ -48,9 +49,9 @@ namespace HonjiMES.Controllers
             var OrderDetails = _context.OrderDetails.Include(x=>x.SaleDetailNews).AsQueryable();
             if (OrderId.HasValue)
             {
-                OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x=>x.Serial);
+                OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x => x.Serial);
             }
-            var data = await OrderDetails.ToListAsync();
+            var data = await OrderDetails.Where(x => x.Delete_flag == 0).ToListAsync();
             foreach (var Detailitem in data)
             {
                 foreach (var SaleDetailitem in Detailitem.SaleDetailNews)
@@ -156,9 +157,9 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.OrderDetails.Remove(orderDetail);
-            //await _context.SaveChangesAsync();
+            orderDetail.Delete_flag = 1;
+            // _context.OrderDetails.Remove(orderDetail);
+            await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderDetail));
         }
 
