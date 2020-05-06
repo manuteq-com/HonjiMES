@@ -57,6 +57,43 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(warehouse));
         }
+
+        /// <summary>
+        /// 用ID最倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseByProduct(int id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
+
+            var products = _context.Products.Find(id);
+            /////// typeA
+            // var productsList = _context.Products.Where(x=>x.ProductNo==products.ProductNo);
+            // foreach(var item in productsList) {
+            //     item.UpdateTime=DateTime.Now;
+            // }
+            /////// typeB
+            // Product products = _context.Products.Find(id);
+            // IEnumerable<Product> productsList = _context.Products.Where(x=>x.ProductNo==products.ProductNo);
+            // foreach(Product item in productsList) {
+            //     item.UpdateTime=DateTime.Now;
+            // }
+            // _context.SaveChanges();
+            
+            var WarehouseData = await _context.Products.Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            // var WarehouseData = await _context.Products.Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x =>new{x.Warehouse.Id,x.Warehouse.Name} ).OrderBy(x=> x.Name).ThenBy(x=>x.Id).ToListAsync();
+
+            if (WarehouseData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
         /// <summary>
         /// 新增倉庫
         /// </summary>

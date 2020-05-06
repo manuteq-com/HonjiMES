@@ -201,11 +201,13 @@ export class SaleListComponent implements OnInit {
         }
     }
     async to_redsaleClick(e, item) {
-        debugger;
+        // debugger;
         this.resalepopupVisible = true;
         this.resaleitemkey = new ReorderSale();
         this.resaleitemkey.key = item.key;
         this.resaleitemkey.qty = item.data.Quantity;
+        this.resaleitemkey.ProductId = item.data.ProductId;
+        this.resaleitemkey.ProductNo = item.data.ProductNo;
         // Swal.fire({
         //     allowEnterKey: false,
         //     allowOutsideClick: false,
