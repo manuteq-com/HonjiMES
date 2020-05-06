@@ -62,7 +62,12 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
 
+        [ForeignKey("ProductBasicId")]
+        [InverseProperty("Products")]
+        public virtual ProductBasic ProductBasic { get; set; }
         [ForeignKey("WarehouseId")]
         [InverseProperty("Products")]
         public virtual Warehouse Warehouse { get; set; }

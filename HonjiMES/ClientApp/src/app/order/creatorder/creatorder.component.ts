@@ -207,7 +207,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
                 if (sendRequest) {
                     this.SerialNo = 0;
-                    this.dataSourceDB = null;
+                    this.dataSourceDB = [];
                     this.dataGrid.instance.refresh();
                     this.myform.instance.resetValues();
                     this.CustomerVal = null;

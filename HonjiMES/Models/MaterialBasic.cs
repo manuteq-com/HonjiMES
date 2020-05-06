@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material")]
-    public partial class Material
+[Table("material_basic")]
+    public partial class MaterialBasic
     {
-        public Material()
+        public MaterialBasic()
         {
-            MaterialLogs = new HashSet<MaterialLog>();
+            Materials = new HashSet<Material>();
         }
 
         [Key]
@@ -23,22 +23,13 @@ namespace HonjiMES.Models
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
-        [Column("quantity", TypeName = "int(11)")]
-        public int Quantity { get; set; }
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
         [Required]
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
-        [Column("composition", TypeName = "int(11)")]
-        public int Composition { get; set; }
-        [Column("base_quantity", TypeName = "int(11)")]
-        public int BaseQuantity { get; set; }
         [Column("supplier", TypeName = "int(11)")]
         public int Supplier { get; set; }
-        [Required]
-        [Column("sub_inventory", TypeName = "varchar(50)")]
-        public string SubInventory { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -47,18 +38,8 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("warehouse_id", TypeName = "int(11)")]
-        public int WarehouseId { get; set; }
-        [Column("material_basic_id", TypeName = "int(11)")]
-        public int MaterialBasicId { get; set; }
 
-        [ForeignKey("MaterialBasicId")]
-        [InverseProperty("Materials")]
-        public virtual MaterialBasic MaterialBasic { get; set; }
-        [ForeignKey("WarehouseId")]
-        [InverseProperty("Materials")]
-        public virtual Warehouse Warehouse { get; set; }
-        [InverseProperty("Material")]
-        public virtual ICollection<MaterialLog> MaterialLogs { get; set; }
+        [InverseProperty("MaterialBasic")]
+        public virtual ICollection<Material> Materials { get; set; }
     }
 }
