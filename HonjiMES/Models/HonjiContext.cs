@@ -13,6 +13,7 @@ namespace HonjiMES.Models
         public virtual DbSet<BillofPurchaseHead> BillofPurchaseHeads { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
+        public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
@@ -21,6 +22,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Process> Processes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductBasic> ProductBasics { get; set; }
         public virtual DbSet<ProductLog> ProductLogs { get; set; }
         public virtual DbSet<ProductSn> ProductSns { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
@@ -325,6 +327,9 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Material>(entity =>
             {
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("fk_material_material_basic1_idx");
+
                 entity.HasIndex(e => e.WarehouseId)
                     .HasName("fk_material_warehouse1_idx");
 
@@ -369,11 +374,50 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.Materials)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_material_material_basic1");
+
                 entity.HasOne(d => d.Warehouse)
                     .WithMany(p => p.Materials)
                     .HasForeignKey(d => d.WarehouseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_material_warehouse1");
+            });
+
+            modelBuilder.Entity<MaterialBasic>(entity =>
+            {
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.MaterialNo)
+                    .HasComment("元件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Name)
+                    .HasComment("元件品名")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Property)
+                    .HasComment("屬性")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Supplier).HasComment("供應商");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
             });
 
             modelBuilder.Entity<MaterialLog>(entity =>
@@ -682,6 +726,9 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_product_product_basic1_idx");
+
                 entity.HasIndex(e => e.WarehouseId)
                     .HasName("fk_product_warehouse1_idx");
 
@@ -742,11 +789,67 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_product_product_basic1");
+
                 entity.HasOne(d => d.Warehouse)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.WarehouseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_warehouse1");
+            });
+
+            modelBuilder.Entity<ProductBasic>(entity =>
+            {
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("新增時間");
+
+                entity.Property(e => e.Name)
+                    .HasComment("主件品名")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Price).HasComment("原價格");
+
+                entity.Property(e => e.ProductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProductNumber)
+                    .HasComment("廠內成品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Property)
+                    .HasComment("屬性")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SubInventory)
+                    .HasComment("存放庫別")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
             });
 
             modelBuilder.Entity<ProductLog>(entity =>

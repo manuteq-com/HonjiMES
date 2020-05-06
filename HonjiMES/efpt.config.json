@@ -38,6 +38,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "material_basic"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "material_log"
       },
       {
@@ -67,6 +71,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "product"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "product_basic"
       },
       {
          "HasPrimaryKey": true,
