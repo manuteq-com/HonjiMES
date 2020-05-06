@@ -210,10 +210,15 @@ namespace HonjiMES.Controllers
                 var Warehouses = _context.Warehouses.Find(ReOrderSale.WarehouseId);
                 if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
-                    SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
-                    SaleDetail.Product.Quantity += ReOrderSale.Quantity;
-                    SaleDetail.Product.UpdateTime = dt;
-                    SaleDetail.Product.UpdateUser = 1;
+                    var ProductsData = _context.Products.Where(x => x.WarehouseId == ReOrderSale.WarehouseId && x.DeleteFlag == 0 && x.ProductNo == SaleDetail.Product.ProductNo).FirstOrDefault();
+                    ProductsData.ProductLogs.Add(new ProductLog { Original = ProductsData.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    ProductsData.Quantity += ReOrderSale.Quantity;
+                    ProductsData.UpdateTime = dt;
+                    ProductsData.UpdateUser = 1;
+                    // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    // SaleDetail.Product.Quantity += ReOrderSale.Quantity;
+                    // SaleDetail.Product.UpdateTime = dt;
+                    // SaleDetail.Product.UpdateUser = 1;
                 }
                 else
                 {

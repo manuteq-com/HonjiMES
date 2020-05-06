@@ -41,7 +41,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     ngOnChanges() {
         debugger;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty};
-        this.GetData(this.url + '/Warehouses/GetWarehouses').subscribe(
+        this.GetData(this.url + '/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
             (s) => {
                 debugger;
                 if (s.success) {
