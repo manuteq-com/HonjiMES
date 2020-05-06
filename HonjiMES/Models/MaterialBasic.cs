@@ -11,6 +11,7 @@ namespace HonjiMES.Models
     {
         public MaterialBasic()
         {
+            BillOfMaterials = new HashSet<BillOfMaterial>();
             Materials = new HashSet<Material>();
         }
 
@@ -38,7 +39,11 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
 
+        [InverseProperty("MaterialBasic")]
+        public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
         [InverseProperty("MaterialBasic")]
         public virtual ICollection<Material> Materials { get; set; }
     }

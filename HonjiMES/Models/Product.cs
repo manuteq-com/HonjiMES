@@ -45,7 +45,6 @@ namespace HonjiMES.Models
         public int MaterialId { get; set; }
         [Column("material_require", TypeName = "int(11)")]
         public int MaterialRequire { get; set; }
-        [Required]
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]

@@ -14,6 +14,10 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
+         "Name": "bill_of_material"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "billof_purchase"
       },
       {

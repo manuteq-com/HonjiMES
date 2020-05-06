@@ -40,5 +40,7 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
     }
 }

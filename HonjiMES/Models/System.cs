@@ -25,5 +25,7 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
     }
 }
