@@ -11,6 +11,7 @@ namespace HonjiMES.Models
     {
         public ProductBasic()
         {
+            BillOfMaterials = new HashSet<BillOfMaterial>();
             Products = new HashSet<Product>();
         }
 
@@ -49,6 +50,8 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [InverseProperty("ProductBasic")]
+        public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
         [InverseProperty("ProductBasic")]
         public virtual ICollection<Product> Products { get; set; }
     }

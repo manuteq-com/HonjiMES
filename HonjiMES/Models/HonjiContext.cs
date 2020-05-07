@@ -7,6 +7,7 @@ namespace HonjiMES.Models
 {
     public partial class HonjiContext : DbContext
     {
+        public virtual DbSet<BillOfMaterial> BillOfMaterials { get; set; }
         public virtual DbSet<BillofPurchase> BillofPurchases { get; set; }
         public virtual DbSet<BillofPurchaseCheckin> BillofPurchaseCheckins { get; set; }
         public virtual DbSet<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
@@ -48,8 +49,79 @@ namespace HonjiMES.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BillOfMaterial>(entity =>
+            {
+                entity.HasComment("產品組成表");
+
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("fk_bill_of_material_material_basic1_idx");
+
+                entity.HasIndex(e => e.Pid)
+                    .HasName("fk_bill_of_material_bill_of_material1_idx");
+
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_bill_of_material_product_basic1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Group)
+                    .HasDefaultValueSql("'1'")
+                    .HasComment("組成表群組");
+
+                entity.Property(e => e.Lv)
+                    .HasDefaultValueSql("'1'")
+                    .HasComment("層數");
+
+                entity.Property(e => e.Name)
+                    .HasComment("原物料名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Pid).HasComment("父ID");
+
+                entity.Property(e => e.Quantity).HasComment("數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Type).HasComment("BOM的類型");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.BillOfMaterials)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .HasConstraintName("fk_bill_of_material_material_basic1");
+
+                entity.HasOne(d => d.P)
+                    .WithMany(p => p.InverseP)
+                    .HasForeignKey(d => d.Pid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_bill_of_material_bill_of_material1");
+
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.BillOfMaterials)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .HasConstraintName("fk_bill_of_material_product_basic1");
+            });
+
             modelBuilder.Entity<BillofPurchase>(entity =>
             {
+                entity.HasComment("進貨單");
+
                 entity.HasIndex(e => e.BillofPurchaseNo)
                     .HasName("billof_purchase_no");
 
@@ -70,6 +142,8 @@ namespace HonjiMES.Models
                     .HasComment("進貨日期")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo).HasComment("品號");
 
@@ -114,12 +188,16 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<BillofPurchaseCheckin>(entity =>
             {
+                entity.HasComment("進貨檢驗");
+
                 entity.HasIndex(e => e.BillofPurchaseDetailId)
                     .HasName("fk_billof_purchase_checkin_billof_purchase_detail1_idx");
 
                 entity.Property(e => e.CheckinType).HasComment("驗收類型");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Quantity).HasComment("驗收數量");
 
@@ -141,6 +219,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<BillofPurchaseDetail>(entity =>
             {
+                entity.HasComment("進貨單明細");
+
                 entity.HasIndex(e => e.BillofPurchaseId)
                     .HasName("fk_billof_purchase_detail_billof_purchase_head_idx");
 
@@ -180,6 +260,8 @@ namespace HonjiMES.Models
                     .HasComment("進貨內容編號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Delivered).HasComment("實際交貨數");
 
@@ -236,6 +318,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<BillofPurchaseHead>(entity =>
             {
+                entity.HasComment("進貨單");
+
                 entity.Property(e => e.BillofPurchaseDate).HasComment("進貨日期");
 
                 entity.Property(e => e.BillofPurchaseNo)
@@ -261,6 +345,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.HasComment("客戶");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.Account)
@@ -289,6 +375,8 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Email)
                     .HasComment("電子郵件")
@@ -327,6 +415,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Material>(entity =>
             {
+                entity.HasComment("原料庫存");
+
                 entity.HasIndex(e => e.MaterialBasicId)
                     .HasName("fk_material_material_basic1_idx");
 
@@ -340,6 +430,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Composition).HasComment("組成用量");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo)
                     .HasComment("元件品號")
@@ -389,9 +481,13 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<MaterialBasic>(entity =>
             {
+                entity.HasComment("原料基本檔");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo)
                     .HasComment("元件品號")
@@ -422,6 +518,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<MaterialLog>(entity =>
             {
+                entity.HasComment("原料LOG");
+
                 entity.HasIndex(e => e.MaterialId)
                     .HasName("fk_material_log_material1_idx");
 
@@ -432,6 +530,8 @@ namespace HonjiMES.Models
                     .HasComment("建立日期");
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialId).HasComment("原料ID");
 
@@ -468,6 +568,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
@@ -475,6 +577,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
+                entity.HasComment("訂單");
+
                 entity.HasIndex(e => e.ProjectNo)
                     .HasName("project_no");
 
@@ -488,6 +592,8 @@ namespace HonjiMES.Models
                     .HasComment("客戶單號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Finish)
                     .HasComment("結案否")
@@ -527,6 +633,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
+                entity.HasComment("訂單明細");
+
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_order_order_detail");
 
@@ -623,6 +731,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<OrderHead>(entity =>
             {
+                entity.HasComment("訂單");
+
                 entity.Property(e => e.Id).HasComment("訂單id");
 
                 entity.Property(e => e.CreateTime)
@@ -677,6 +787,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Del).HasComment("刪除");
 
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
                 entity.Property(e => e.Edit).HasComment("修改");
 
                 entity.Property(e => e.Export).HasComment("匯出");
@@ -709,6 +821,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CreateUser).HasComment("建立人員");
 
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
                 entity.Property(e => e.Name)
                     .HasComment("名稱")
                     .HasCharSet("utf8mb4")
@@ -726,6 +840,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasComment("成品庫存");
+
                 entity.HasIndex(e => e.ProductBasicId)
                     .HasName("fk_product_product_basic1_idx");
 
@@ -804,6 +920,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<ProductBasic>(entity =>
             {
+                entity.HasComment("成品基本檔");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -854,6 +972,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<ProductLog>(entity =>
             {
+                entity.HasComment("成品LOG");
+
                 entity.HasIndex(e => e.ProductId)
                     .HasName("fk_product_log_product1_idx");
 
@@ -864,6 +984,8 @@ namespace HonjiMES.Models
                     .HasComment("建立日期");
 
                 entity.Property(e => e.CreateUser).HasComment("使用者id");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Message)
                     .HasComment("補充說明")
@@ -897,9 +1019,13 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<ProductSn>(entity =>
             {
+                entity.HasComment("品號");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.CustomerId).HasComment("廠商");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.ProductId).HasComment("品號(內部)");
 
@@ -915,6 +1041,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Purchase>(entity =>
             {
+                entity.HasComment("採購單");
+
                 entity.HasIndex(e => e.PurchaseNo)
                     .HasName("purchase_no");
 
@@ -923,6 +1051,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo).HasComment("元件品號");
 
@@ -964,6 +1094,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<PurchaseDetail>(entity =>
             {
+                entity.HasComment("採購單明細");
+
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("fk_purchase_detail_purchase_head");
 
@@ -980,6 +1112,8 @@ namespace HonjiMES.Models
                     .HasComment("採購內容編號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.DeliveryTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -1024,6 +1158,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<PurchaseHead>(entity =>
             {
+                entity.HasComment("採購單");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.PriceAll).HasComment("總金額");
@@ -1063,6 +1199,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
                 entity.Property(e => e.Quantity).HasComment("退貨數量");
 
                 entity.Property(e => e.Reason)
@@ -1096,6 +1234,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Sale>(entity =>
             {
+                entity.HasComment("銷貨單");
+
                 entity.HasIndex(e => e.SaleNo)
                     .HasName("sale_no");
 
@@ -1114,6 +1254,8 @@ namespace HonjiMES.Models
                     .HasComment("客戶單號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -1160,9 +1302,13 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleDetail>(entity =>
             {
+                entity.HasComment("銷貨明細");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -1288,6 +1434,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleHead>(entity =>
             {
+                entity.HasComment("銷貨單");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.PriceAll).HasComment("總金額");
@@ -1313,7 +1461,11 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<SaleLog>(entity =>
             {
+                entity.HasComment("銷貨LOG");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Message)
                     .HasCharSet("utf8mb4")
@@ -1333,6 +1485,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Saleold>(entity =>
             {
+                entity.HasComment("銷貨單");
+
                 entity.HasIndex(e => e.SaleNo)
                     .HasName("sale_no");
 
@@ -1351,6 +1505,8 @@ namespace HonjiMES.Models
                     .HasComment("客戶單號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -1397,6 +1553,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<Supplier>(entity =>
             {
+                entity.HasComment("供應商");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.Account)
@@ -1430,6 +1588,8 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Email)
                     .HasComment("電子郵件")
@@ -1478,6 +1638,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
 
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
                 entity.Property(e => e.Name)
                     .HasComment("功能名")
                     .HasCharSet("utf8mb4")
@@ -1498,11 +1660,15 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasComment("使用者");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("新增時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Department)
                     .HasComment("部門")
@@ -1541,6 +1707,8 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<UserLog>(entity =>
             {
+                entity.HasComment("使用者LOG");
+
                 entity.HasIndex(e => e.UserId)
                     .HasName("user_logs_ibfk_1");
 
@@ -1551,6 +1719,8 @@ namespace HonjiMES.Models
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.LoginTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -1635,6 +1805,8 @@ namespace HonjiMES.Models
                     .HasComment("新增時間");
 
                 entity.Property(e => e.CreateUser).HasComment("新增者id");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.IpAddress)
                     .HasCharSet("utf8mb4")

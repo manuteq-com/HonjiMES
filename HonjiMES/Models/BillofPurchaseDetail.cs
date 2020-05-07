@@ -69,6 +69,8 @@ namespace HonjiMES.Models
         public int? Delivered { get; set; }
         [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
 
         [ForeignKey("BillofPurchaseId")]
         [InverseProperty("BillofPurchaseDetails")]
