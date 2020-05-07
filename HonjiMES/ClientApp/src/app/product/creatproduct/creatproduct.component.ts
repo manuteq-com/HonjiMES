@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent} from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,9 +8,9 @@ import { SendService } from '../../shared/mylib';
 import { Product } from '../../model/viewmodels';
 
 @Component({
-  selector: 'app-creatproduct',
-  templateUrl: './creatproduct.component.html',
-  styleUrls: ['./creatproduct.component.css']
+    selector: 'app-creatproduct',
+    templateUrl: './creatproduct.component.html',
+    styleUrls: ['./creatproduct.component.css']
 })
 export class CreatproductComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
@@ -19,7 +19,7 @@ export class CreatproductComponent implements OnInit {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    buttondisabled: false;
+    buttondisabled = false;
     formData: any;
     labelLocation: string;
     readOnly: boolean;
@@ -28,6 +28,9 @@ export class CreatproductComponent implements OnInit {
     colCount: number;
     width: any;
     selectBoxOptions: any;
+    warehousesOptions: any;
+    NumberBoxOptions: any;
+    gridBoxValue: number[] = [2];
     url: string;
     constructor(private http: HttpClient) {
         this.formData = null;
@@ -52,10 +55,28 @@ export class CreatproductComponent implements OnInit {
                 }
             }
         );
+        this.GetData(this.url + '/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                console.log(s);
+                if (s.success) {
+                    // debugger;
+                    this.warehousesOptions = s.data;
+                    // this.warehousesOptions = {
+                    //     items: s.data,
+                    //     displayExpr: 'Name',
+                    //     valueExpr: 'Id',
+                    // };
+                }
+            }
+        );
 
-     }
-     public GetData(apiUrl: string): Observable<APIResponse> {
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
+    }
+    ngOnChanges() {
+        // debugger;
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     ngOnInit() {
     }
@@ -73,15 +94,18 @@ export class CreatproductComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
-        this.buttondisabled = true;
+    onFormSubmit = async function (e) {
+        // debugger;
+        // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
         }
         this.formData = this.myform.instance.option('formData');
+        this.formData.wid = this.gridBoxValue;
+        this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Products/PostProduct', 'POST', { values: this.formData as Product });
+        const sendRequest = await SendService.sendRequest(this.http, '/Products/PostProduct', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

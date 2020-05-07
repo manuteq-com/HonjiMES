@@ -274,7 +274,7 @@ namespace HonjiMES.Models
                                         switch (Mappingitem.Change)
                                         {
                                             case "Product":
-                                                Cellval = _context.Products.Where(x => x.ProductNo == Cellval).Where(x => x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                Cellval = _context.Products.Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
                                                 if (string.IsNullOrWhiteSpace(Cellval))
                                                 {
                                                     sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "

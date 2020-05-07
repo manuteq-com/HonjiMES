@@ -8,9 +8,10 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="onRowInserting($event)"
-    (onEditingStart)="onEditingStart($event)">
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
+    (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onInitNewRow)="onInitNewRow($event)"
+    (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)">
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <dxi-item dataField="SupplierId"></dxi-item>
@@ -60,21 +61,26 @@
     </dxi-column>
 
     <div *dxTemplate="let data of 'MaterialEditCellTemplate'">
-        <dx-select-box [value]="data.value"  (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialList" valueExpr="Id" displayExpr="MaterialNo"></dx-select-box>
-      </div>
-      <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-          <dx-number-box [value]='Quantityval'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [showSpinButtons]="true"></dx-number-box>
-      </div>
-      <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
-        <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
+        <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+            [dataSource]="MaterialList" valueExpr="Id" displayExpr="MaterialNo"></dx-select-box>
+    </div>
+    <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
+        <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
+            [showSpinButtons]="true"></dx-number-box>
+    </div>
+    <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
+        <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)"
+            [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'PriceEditCellTemplate'">
-        <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
+        </dx-number-box>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod"></app-bill-purchase-checkin>
+        <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">
+        </app-bill-purchase-checkin>
     </div>
 </dx-popup>

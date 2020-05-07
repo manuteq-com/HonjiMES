@@ -110,4 +110,9 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
 
     }
+    public class ProductW : Product
+    {
+        public List<int> wid { get; set; }
+        public List<Warehouse> warehouseData { get; set; }
+    }
 }
