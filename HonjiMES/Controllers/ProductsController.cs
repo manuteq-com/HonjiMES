@@ -112,17 +112,73 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> PostProduct(ProductW product)
         {
-            //新增時檢查主件品號是否重複
-            if (_context.Products.Where(x => x.ProductNo == product.ProductNo).Any())
-            {
-                //return Ok(MyFun.APIResponseError("主件品號：" + product.ProductNo + "重複"));
-                return BadRequest("主件品號：" + product.ProductNo + "重複");
+            if (product.wid == null) {
+                return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", product));
             }
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(product));
+
+            //優先確認Basic是否存在
+            var ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
+            if (ProductsBasicData == null)
+            {
+                var ProductBasics = new List<ProductBasic>();
+                _context.ProductBasics.Add(new ProductBasic
+                {
+                    ProductNo = product.ProductNo,
+                    ProductNumber = product.ProductNumber,
+                    Name = product.Name,
+                    Specification = product.Specification,
+                    Property = product.Property,
+                    Price = product.Price,
+                    SubInventory = product.SubInventory
+                });
+                _context.SaveChanges();
+                ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
+            }
+            product.ProductBasicId = ProductsBasicData.Id;
+
+            string sRepeatProduct = null;
+            var nProductlist = new List<Product>();
+            foreach (var warehouseId in product.wid)
+            {
+                //新增時檢查主件品號是否重複
+                if (_context.Products.Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId).Any())
+                {
+                    sRepeatProduct += "主件品號：[" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                }
+                else
+                {
+                    nProductlist.Add(new Product
+                    {
+                        ProductNo = product.ProductNo,
+                        ProductNumber = product.ProductNumber,
+                        Name = product.Name,
+                        Quantity = product.Quantity,
+                        QuantityLimit = product.QuantityLimit,
+                        Specification = product.Specification,
+                        Property = product.Property,
+                        Price = product.Price,
+                        MaterialId = product.MaterialId,
+                        SubInventory = product.SubInventory,
+                        WarehouseId = warehouseId,
+                        ProductBasicId = product.ProductBasicId,
+                        CreateUser = 1
+                    });
+                }
+            }
+
+            if (sRepeatProduct == null)
+            {
+                _context.AddRange(nProductlist);
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK(product));
+            }
+            else
+            {
+                // return BadRequest("主件品號：" + product.ProductNo + "重複");
+                return Ok(MyFun.APIResponseError(sRepeatProduct, product));
+            }
             //return Ok(new { data = CreatedAtAction("GetProduct", new { id = product.Id }, product), success = true });
         }
 

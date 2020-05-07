@@ -65,20 +65,20 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="ProductNo" caption="主件品號"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="主件品號" [width]="250"></dxi-column>
     <dxi-column dataField="Name" caption="主件品名"></dxi-column>
-    <dxi-column dataField="Quantity" caption="實際庫存量"></dxi-column>
-    <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
-    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue'></dxi-column>
+    <dxi-column dataField="Quantity" caption="實際庫存量" [width]="100"></dxi-column>
+    <dxi-column dataField="QuantityLimit" caption="庫存警示" [width]="100"></dxi-column>
+    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue' [width]="100"></dxi-column>
     <dxi-column dataField="Specification" caption="規格"></dxi-column>
     <dxi-column dataField="Property" caption="屬性"></dxi-column>
-    <dxi-column dataField="Price" caption="單價"></dxi-column>
-    <dxi-column dataField="MaterialId" caption="元件品號">
+    <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column>
+    <dxi-column dataField="MaterialId" caption="元件品號" [width]="200">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
     <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
-    <dxi-column dataField="WarehouseId" caption="存放庫別">
+    <dxi-column dataField="WarehouseId" caption="存放庫別" [width]="100">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
@@ -87,7 +87,7 @@
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增成品" [dragEnabled]="false" [closeOnOutsideClick]="false"
+<dx-popup [showTitle]="true" title="新增成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="400"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatproduct (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

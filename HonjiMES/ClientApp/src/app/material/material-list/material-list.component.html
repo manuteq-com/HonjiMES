@@ -51,16 +51,16 @@
     <dxi-column dataField="Quantity" caption="庫存量"></dxi-column>
     <dxi-column dataField="Specification" caption="規格"></dxi-column>
     <dxi-column dataField="Property" caption="屬性"></dxi-column>
-    <dxi-column dataField="Supplier" caption="供應商">
+    <!-- <dxi-column dataField="Supplier" caption="供應商">
         <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
-    </dxi-column>
+    </dxi-column> -->
     <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column>
     <dxi-column type="buttons">
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false"
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="400"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
