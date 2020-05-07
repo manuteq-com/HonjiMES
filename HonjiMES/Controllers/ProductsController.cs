@@ -114,6 +114,10 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(ProductW product)
         {
+            if (product.wid == null) {
+                return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", product));
+            }
+
             //優先確認Basic是否存在
             var ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
             if (ProductsBasicData == null)
@@ -130,6 +134,7 @@ namespace HonjiMES.Controllers
                     SubInventory = product.SubInventory
                 });
                 _context.SaveChanges();
+                ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
             }
             product.ProductBasicId = ProductsBasicData.Id;
 

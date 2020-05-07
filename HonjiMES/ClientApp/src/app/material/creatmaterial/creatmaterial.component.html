@@ -9,7 +9,8 @@
             <dxi-validation-rule type="required" message="元件品名 必填"></dxi-validation-rule>
             <dxo-label text="元件品名"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Quantity"  dataType="number" editorType="dxNumberBox">
+        <dxi-item dataField="Quantity"  dataType="number" editorType="dxNumberBox"
+        [editorOptions]="NumberBoxOptions">
             <dxi-validation-rule type="required" message="庫存量 必填"></dxi-validation-rule>
             <dxo-label text="庫存量"></dxo-label>
         </dxi-item>
@@ -21,15 +22,43 @@
             <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule>
             <dxo-label text="屬性"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Supplier" dataType="number" editorType="dxSelectBox"  [editorOptions]="selectBoxOptions">
+        <!-- <dxi-item dataField="Supplier" dataType="number" editorType="dxSelectBox"  [editorOptions]="selectBoxOptions">
             <dxi-validation-rule type="required" message="供應商 必填"></dxi-validation-rule>
             <dxo-label text="供應商"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="SubInventory">
+        </dxi-item> -->
+        <!-- <dxi-item dataField="SubInventory">
             <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
             <dxo-label text="存放庫別"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="wid">
+            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <dxo-label text="存放庫別"></dxo-label>
+            <dx-drop-down-box
+                [(value)]="gridBoxValue"
+                valueExpr="Id"
+                displayExpr="Name"
+                [showClearButton]="true"
+                [dataSource]="warehousesOptions">
+                <div *dxTemplate="let data of 'content'">
+                    <dx-data-grid
+                        keyExpr="Id"
+                        [dataSource]="warehousesOptions"
+                        [columns]="['Name']"
+                        [selection]="{ mode: 'multiple' }"
+                        [hoverStateEnabled]="true"
+                        [paging]="{ enabled: true, pageSize: 10 }"
+                        [filterRow]="{ visible: false }"
+                        [scrolling]="{ mode: 'infinite' }"
+                        [height]="245"
+                        [(selectedRowKeys)]="gridBoxValue">
+                    </dx-data-grid>
+                </div>
+            </dx-drop-down-box>
         </dxi-item>
+
     </dx-form>
-    <dx-button  horizontalAlignment="left" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+    <div class="col-auto-12 mt-4">
+        <dx-button  horizontalAlignment="right" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+    </div>
 </form>
 
