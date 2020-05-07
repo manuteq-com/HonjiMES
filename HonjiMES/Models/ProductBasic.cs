@@ -34,7 +34,6 @@ namespace HonjiMES.Models
         public string Property { get; set; }
         [Column("price")]
         public float Price { get; set; }
-        [Required]
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]

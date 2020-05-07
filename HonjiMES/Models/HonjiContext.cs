@@ -77,9 +77,11 @@ namespace HonjiMES.Models
                     .HasComment("層數");
 
                 entity.Property(e => e.Name)
-                    .HasComment("原物料名稱")
+                    .HasComment("名稱")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Outsource).HasComment("外包註記");
 
                 entity.Property(e => e.Pid).HasComment("父ID");
 
@@ -109,7 +111,7 @@ namespace HonjiMES.Models
                 entity.HasOne(d => d.P)
                     .WithMany(p => p.InverseP)
                     .HasForeignKey(d => d.Pid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("fk_bill_of_material_bill_of_material1");
 
                 entity.HasOne(d => d.ProductBasic)

@@ -18,12 +18,11 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         [Column("pid", TypeName = "int(11)")]
-        public int Pid { get; set; }
+        public int? Pid { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]
         public int? ProductBasicId { get; set; }
         [Column("material_basic_id", TypeName = "int(11)")]
         public int? MaterialBasicId { get; set; }
-        [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         [Column("quantity", TypeName = "int(11)")]
@@ -32,6 +31,8 @@ namespace HonjiMES.Models
         public string Unit { get; set; }
         [Column("lv", TypeName = "int(11)")]
         public int Lv { get; set; }
+        [Column("outsource", TypeName = "tinyint(4)")]
+        public sbyte? Outsource { get; set; }
         [Column("group", TypeName = "int(11)")]
         public int Group { get; set; }
         [Column("type", TypeName = "tinyint(4)")]

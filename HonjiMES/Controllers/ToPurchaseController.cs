@@ -119,7 +119,7 @@ namespace HonjiMES.Controllers
             var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
             if (Material == null)
             {
-                return Ok(MyFun.APIResponseError("原料心庫存資料有誤"));
+                return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
             }
             Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
@@ -137,5 +137,5 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetail = await _context.BillofPurchaseDetails.FindAsync(Id);
             return Ok(MyFun.APIResponseOK(BillofPurchaseDetail));
         }
-    }
+     }
 }

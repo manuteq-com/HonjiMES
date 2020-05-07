@@ -30,7 +30,7 @@ namespace HonjiMES.Models
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
         [Column("supplier", TypeName = "int(11)")]
-        public int Supplier { get; set; }
+        public int? Supplier { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]

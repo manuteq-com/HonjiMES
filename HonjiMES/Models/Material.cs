@@ -35,8 +35,7 @@ namespace HonjiMES.Models
         [Column("base_quantity", TypeName = "int(11)")]
         public int BaseQuantity { get; set; }
         [Column("supplier", TypeName = "int(11)")]
-        public int Supplier { get; set; }
-        [Required]
+        public int? Supplier { get; set; }
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
         [Column("create_time", TypeName = "timestamp")]
