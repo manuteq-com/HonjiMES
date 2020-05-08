@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProduct', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProduct', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProduct', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProduct', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProduct/' + key, 'DELETE')
         });
         this.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
@@ -63,6 +63,8 @@ export class ProductListComponent implements OnInit {
                 }
             }
         );
+    }
+    ngOnInit() {
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -171,8 +173,6 @@ export class ProductListComponent implements OnInit {
     onEditorPreparing(e) {
     }
     selectionChanged(e) {
-    }
-    ngOnInit() {
     }
     QuantityAdvValue(rowData)  {
         return rowData.Quantity - rowData.QuantityAdv;

@@ -40,18 +40,18 @@
     </dxo-pager>
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item dataField="ProductNo"></dxi-item>
+            <dxi-item dataField="ProductNo" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Name"></dxi-item>
-            <dxi-item dataField="Quantity"></dxi-item>
+            <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="QuantityLimit"></dxi-item>
             <dxi-item dataField="Specification"></dxi-item>
             <dxi-item dataField="Property"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
             <dxi-item dataField="MaterialId"></dxi-item>
-            <dxi-item dataField="SubInventory"></dxi-item>
+            <dxi-item dataField="WarehouseId"></dxi-item>
             <dxi-item dataField="ProductNumber"></dxi-item>
         </dxo-form>
-        <dxo-popup>
+        <dxo-popup [width]="800" [height]="400">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
