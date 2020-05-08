@@ -90,11 +90,6 @@ namespace HonjiMES.Controllers
             Osupplier.UpdateTime = DateTime.Now;
             Osupplier.UpdateUser = 1;
 
-            // //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            // supplier.Id = id;
-            // var Oldsupplier = _context.Suppliers.Find(id);
-            // var Msg = MyFun.MappingData(ref Oldsupplier, supplier);
-
             try
             {
                 await _context.SaveChangesAsync();

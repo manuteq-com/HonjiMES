@@ -58,6 +58,8 @@ import { CreatcustomerComponent } from './customer/creatcustomer/creatcustomer.c
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
 import { SupplierListComponent } from './supplier/supplier-list/supplier-list.component';
 import { CreatsupplierComponent } from './supplier/creatsupplier/creatsupplier.component';
+import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
+import { CreatwarehouseComponent } from './warehouse/creatwarehouse/creatwarehouse.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -122,6 +124,8 @@ import { CreatsupplierComponent } from './supplier/creatsupplier/creatsupplier.c
         BillofmateriallistComponent,
         SupplierListComponent,
         CreatsupplierComponent,
+        WarehouseListComponent,
+        CreatwarehouseComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
