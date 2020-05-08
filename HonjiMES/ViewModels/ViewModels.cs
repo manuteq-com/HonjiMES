@@ -120,7 +120,6 @@ namespace HonjiMES.Models
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
-}
     public class BOM
     {
         public string A { get; set; }

@@ -115,12 +115,9 @@ import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist
         PurchaseDetailComponent,
         CreatPurchaseComponent,
         BillPurchaseCheckinComponent,
-<<<<<<< HEAD
         CustomerListComponent,
         CreatcustomerComponent,
-=======
         BillofmateriallistComponent,
->>>>>>> e3a988efefe6632291cd85541b7a0ed58c0ce2d3
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
