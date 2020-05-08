@@ -79,6 +79,7 @@ export class CreatmaterialComponent implements OnInit {
      }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
+    // tslint:disable-next-line: use-lifecycle-interface
     }ngOnChanges() {
         // debugger;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };

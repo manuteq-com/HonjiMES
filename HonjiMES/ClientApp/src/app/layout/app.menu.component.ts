@@ -50,45 +50,45 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '訂單管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '訂單總覽', icon: 'fa fa-fw fa-bars', routerLink: ['/orderlist'] },
+                    { label: '訂單總覽', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
                 ]
 
             },
             {
                 label: '庫存管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '原料庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/materiallist'] },
-                    { label: '成品庫存', icon: 'fa fa-fw fa-bars', routerLink: ['/productlist'] },
-                    { label: '半成品庫存', icon: 'fa fa-fw fa-bars' },
+                    { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materiallist'] },
+                    { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productlist'] },
+                    { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
                 ]
 
             },
             {
                 label: '採購管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '進貨資料', icon: 'fa fa-fw fa-cart-plus', routerLink: ['/billpurchase'] },
-                    { label: '採購資料', icon: 'fa fa-fw fa-cart-plus', routerLink: ['/purchaseorder'] },
+                    { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+                    { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
                 ]
 
             },
             {
                 label: '銷貨管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '銷貨資料', icon: 'fa fa-fw fa-truck', routerLink: ['/salelist'] },
+                    { label: '銷貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
                 ]
 
             },
             {
                 label: '組成管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '組成資料', icon: 'fa fa-fw fa-bars', routerLink: ['/Billofmateriallist'] },
+                    { label: '組成資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/Billofmateriallist'] },
                 ]
 
             },
             {
                 label: '基本資訊管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '客戶資料', icon: 'fa fa-fw fa-circle', routerLink: ['/customerlist']},
+                    { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist']},
                 ]
 
             },

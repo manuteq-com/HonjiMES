@@ -121,12 +121,12 @@ export class MaterialListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function () {
+                e.component.pageIndex(pageIndex + 1).done(function() {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function () {
+                e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
