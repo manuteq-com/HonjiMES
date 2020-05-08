@@ -18,16 +18,12 @@ namespace HonjiMES.Models
         [Required]
         [Column("code", TypeName = "varchar(50)")]
         public string Code { get; set; }
-        [Required]
         [Column("phone", TypeName = "varchar(50)")]
         public string Phone { get; set; }
-        [Required]
         [Column("fax", TypeName = "varchar(50)")]
         public string Fax { get; set; }
-        [Required]
         [Column("email", TypeName = "varchar(50)")]
         public string Email { get; set; }
-        [Required]
         [Column("address", TypeName = "varchar(50)")]
         public string Address { get; set; }
         [Column("bank", TypeName = "varchar(50)")]

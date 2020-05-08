@@ -1,0 +1,37 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dxi-item dataField="Code">
+            <dxi-validation-rule type="required" message="客戶代號 必填"></dxi-validation-rule>
+            <dxo-label text="客戶代號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
+            <dxo-label text="客戶名稱"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Phone">
+            <!-- <dxi-validation-rule type="required" message="聯絡電話 必填"></dxi-validation-rule> -->
+            <dxo-label text="聯絡電話"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Fax">
+            <!-- <dxi-validation-rule type="required" message="傳真 必填"></dxi-validation-rule> -->
+            <dxo-label text="傳真"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Address">
+            <!-- <dxi-validation-rule type="required" message="地址 必填"></dxi-validation-rule> -->
+            <dxo-label text="地址"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Email">
+            <!-- <dxi-validation-rule type="required" message="電子郵件 必填"></dxi-validation-rule> -->
+            <dxo-label text="電子郵件"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remarks">
+            <!-- <dxi-validation-rule type="required" message="備註 必填"></dxi-validation-rule> -->
+            <dxo-label text="備註"></dxo-label>
+        </dxi-item>
+    </dx-form>
+    <div class="col-auto-12 mt-4">
+        <dx-button  horizontalAlignment="right" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+    </div>
+</form>
+
