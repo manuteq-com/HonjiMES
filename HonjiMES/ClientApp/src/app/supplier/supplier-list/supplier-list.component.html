@@ -37,10 +37,12 @@
         <dxo-form>
             <dxi-item  dataField="Code"></dxi-item>
             <dxi-item  dataField="Name"></dxi-item>
+            <dxi-item  dataField="ContactName"></dxi-item>
             <dxi-item  dataField="Phone"></dxi-item>
             <dxi-item  dataField="Fax"></dxi-item>
             <dxi-item  dataField="Address"></dxi-item>
             <dxi-item  dataField="Email"></dxi-item>
+            <dxi-item  dataField="UniformNo"></dxi-item>
             <dxi-item  dataField="Remarks"></dxi-item>
         </dxo-form>
         <dxo-popup>
@@ -57,19 +59,21 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="Code" caption="客戶代號"></dxi-column>
-    <dxi-column dataField="Name" caption="客戶名稱"></dxi-column>
-    <dxi-column dataField="Phone" caption="聯絡電話"></dxi-column>
-    <dxi-column dataField="Fax" caption="傳真"></dxi-column>
+    <dxi-column dataField="Code" caption="供應商代號" [width]="100"></dxi-column>
+    <dxi-column dataField="Name" caption="供應商名稱" [width]="300"></dxi-column>
+    <dxi-column dataField="ContactName" caption="聯絡人" [width]="100"></dxi-column>
+    <dxi-column dataField="Phone" caption="聯絡電話" [width]="160"></dxi-column>
+    <dxi-column dataField="Fax" caption="傳真" [width]="160"></dxi-column>
     <dxi-column dataField="Address" caption="地址"></dxi-column>
     <dxi-column dataField="Email" caption="電子郵件"></dxi-column>
+    <dxi-column dataField="UniformNo" caption="統一編號" [width]="160"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增客戶" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="500"
+<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="520"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatcustomer (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-        [exceldata]="exceldata"></app-creatcustomer>
+        <app-creatsupplier (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        [exceldata]="exceldata"></app-creatsupplier>
     </div>
 </dx-popup>
 

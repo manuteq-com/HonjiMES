@@ -45,15 +45,6 @@ export class CustomerListComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutCustomer', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteCustomer/' + key, 'DELETE')
         });
-        // this.GetData('/Suppliers/GetSuppliers').subscribe(
-        //     (s) => {
-        //         console.log(s);
-        //         this.Supplierlist = s.data;
-        //         if (s.success) {
-
-        //         }
-        //     }
-        // );
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -63,17 +54,6 @@ export class CustomerListComponent implements OnInit {
         this.dataGrid.instance.refresh();
         notify({
             message: '客戶新增完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
-    }
-    editpopup_result(e) {
-        this.editpopupVisible = false;
-        this.dataGrid.instance.refresh();
-        notify({
-            message: '庫存數量修改完成',
             position: {
                 my: 'center top',
                 at: 'center top'
@@ -122,6 +102,8 @@ export class CustomerListComponent implements OnInit {
             }
         }
     }
+    ngOnInit() {
+    }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();
     }
@@ -145,8 +127,6 @@ export class CustomerListComponent implements OnInit {
     onEditorPreparing(e) {
     }
     selectionChanged(e) {
-    }
-    ngOnInit() {
     }
 
 }

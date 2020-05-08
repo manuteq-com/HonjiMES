@@ -3,16 +3,16 @@ import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Customer } from 'src/app/model/viewmodels';
+import { Supplier } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 
 @Component({
-    selector: 'app-creatcustomer',
-    templateUrl: './creatcustomer.component.html',
-    styleUrls: ['./creatcustomer.component.css']
+  selector: 'app-creatsupplier',
+  templateUrl: './creatsupplier.component.html',
+  styleUrls: ['./creatsupplier.component.css']
 })
-export class CreatcustomerComponent implements OnInit {
+export class CreatsupplierComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -21,7 +21,7 @@ export class CreatcustomerComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
     formData: any;
-    postval: Customer;
+    postval: Supplier;
     labelLocation: string;
     readOnly: boolean;
     showColon: boolean;
@@ -78,10 +78,10 @@ export class CreatcustomerComponent implements OnInit {
             return;
         }
         this.formData = this.myform.instance.option('formData');
-        // this.postval = new Customer();
-        // this.postval = this.formData as Customer;
+        // this.postval = new Supplier();
+        // this.postval = this.formData as Supplier;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Customers/PostCustomer', 'POST', { values:  this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/Suppliers/PostSupplier', 'POST', { values:  this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

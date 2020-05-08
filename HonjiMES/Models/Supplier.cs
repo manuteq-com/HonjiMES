@@ -25,28 +25,20 @@ namespace HonjiMES.Models
         public string Code { get; set; }
         [Column("contact_name", TypeName = "varchar(100)")]
         public string ContactName { get; set; }
-        [Required]
         [Column("phone", TypeName = "varchar(50)")]
         public string Phone { get; set; }
-        [Required]
         [Column("fax", TypeName = "varchar(50)")]
         public string Fax { get; set; }
-        [Required]
         [Column("email", TypeName = "varchar(50)")]
         public string Email { get; set; }
-        [Required]
         [Column("address", TypeName = "varchar(50)")]
         public string Address { get; set; }
-        [Required]
         [Column("bank", TypeName = "varchar(50)")]
         public string Bank { get; set; }
-        [Required]
         [Column("branch", TypeName = "varchar(50)")]
         public string Branch { get; set; }
-        [Required]
         [Column("uniform_no", TypeName = "varchar(50)")]
         public string UniformNo { get; set; }
-        [Required]
         [Column("account", TypeName = "varchar(50)")]
         public string Account { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]

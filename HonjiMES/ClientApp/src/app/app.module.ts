@@ -56,6 +56,8 @@ import { BillPurchaseCheckinComponent } from './billpurchase/bill-purchase-check
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { CreatcustomerComponent } from './customer/creatcustomer/creatcustomer.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { SupplierListComponent } from './supplier/supplier-list/supplier-list.component';
+import { CreatsupplierComponent } from './supplier/creatsupplier/creatsupplier.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -118,6 +120,8 @@ import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist
         CustomerListComponent,
         CreatcustomerComponent,
         BillofmateriallistComponent,
+        SupplierListComponent,
+        CreatsupplierComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }

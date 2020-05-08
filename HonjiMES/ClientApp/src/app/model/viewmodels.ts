@@ -84,6 +84,22 @@ export class Customer {
     updateTime: Date;
     updateUser: number;
 }
+export class Supplier {
+    id: number;
+    name: string;
+    code: string;
+    phone: string;
+    fax: string;
+    email: string;
+    address: string;
+    uniformNo: string;
+    remarks: string;
+    deleteFlag: number;
+    createTime: Date;
+    createUser: number;
+    updateTime: Date;
+    updateUser: number;
+}
 export class POrderSale {
     SaleID: number;
     SaleDID: number;

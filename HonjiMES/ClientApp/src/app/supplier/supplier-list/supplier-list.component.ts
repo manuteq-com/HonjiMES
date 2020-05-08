@@ -10,19 +10,18 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 
 @Component({
-    selector: 'app-material-list',
-    templateUrl: './material-list.component.html',
-    styleUrls: ['./material-list.component.css']
+  selector: 'app-supplier-list',
+  templateUrl: './supplier-list.component.html',
+  styleUrls: ['./supplier-list.component.css']
 })
-export class MaterialListComponent implements OnInit {
+export class SupplierListComponent implements OnInit {
 
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/Materials';
-    WarehouseList: any;
+    Controller = '/Suppliers';
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
@@ -34,38 +33,18 @@ export class MaterialListComponent implements OnInit {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
-        this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
+        // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetMaterials'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterial', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterial', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetSuppliers'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetSupplier', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostSupplier', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutSupplier', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteSupplier/' + key, 'DELETE')
         });
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
-            (s) => {
-                console.log(s);
-                this.Supplierlist = s.data;
-                if (s.success) {
-
-                }
-            }
-        );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
-            (s) => {
-                console.log(s);
-                this.WarehouseList = s.data;
-                if (s.success) {
-
-                }
-            }
-        );
-    }
-    ngOnInit() {
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -74,18 +53,7 @@ export class MaterialListComponent implements OnInit {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
         notify({
-            message: '原料新增完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
-    }
-    editpopup_result(e) {
-        this.editpopupVisible = false;
-        this.dataGrid.instance.refresh();
-        notify({
-            message: '庫存數量修改完成',
+            message: '供應商新增完成',
             position: {
                 my: 'center top',
                 at: 'center top'
@@ -111,7 +79,7 @@ export class MaterialListComponent implements OnInit {
     }
     Inventory_Change_Click(e) {
         this.itemkey = e.row.key;
-        this.mod = 'material';
+        this.mod = 'customer';
         this.editpopupVisible = true;
     }
     onFocusedRowChanging(e) {
@@ -133,6 +101,8 @@ export class MaterialListComponent implements OnInit {
                 });
             }
         }
+    }
+    ngOnInit() {
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();
