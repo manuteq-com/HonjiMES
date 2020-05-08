@@ -55,6 +55,7 @@ import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase
 import { BillPurchaseCheckinComponent } from './billpurchase/bill-purchase-checkin/bill-purchase-checkin.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { CreatcustomerComponent } from './customer/creatcustomer/creatcustomer.component';
+import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -114,8 +115,12 @@ import { CreatcustomerComponent } from './customer/creatcustomer/creatcustomer.c
         PurchaseDetailComponent,
         CreatPurchaseComponent,
         BillPurchaseCheckinComponent,
+<<<<<<< HEAD
         CustomerListComponent,
         CreatcustomerComponent,
+=======
+        BillofmateriallistComponent,
+>>>>>>> e3a988efefe6632291cd85541b7a0ed58c0ce2d3
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
@@ -139,4 +144,4 @@ export class APIResponse {
     message: any;
 
     data: any;
-  }
+}

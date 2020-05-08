@@ -71,7 +71,7 @@ namespace HonjiMES.Models
     /// <summary>
     /// 銷貨單退貨
     /// </summary>
-    public class ReOrderSale :OrderSale
+    public class ReOrderSale : OrderSale
     {
         /// <summary>
         /// 退貨原因
@@ -80,7 +80,7 @@ namespace HonjiMES.Models
         /// <summary>
         /// 退貨數量
         /// </summary>
-        public int Quantity { get;  set; }
+        public int Quantity { get; set; }
         /// <summary>
         /// 倉庫
         /// </summary>
@@ -119,5 +119,20 @@ namespace HonjiMES.Models
     {
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
+    }
+}
+    public class BOM
+    {
+        public string A { get; set; }
+        public string B { get; set; }
+        public string C { get; set; }
+        public string D { get; set; }
+        public string E { get; set; }
+        public string F { get; set; }
+        public string G { get; set; }
+        public string H { get; set; }
+        public string I { get; set; }
+        public string J { get; set; }
+        public string K { get; set; }
     }
 }
