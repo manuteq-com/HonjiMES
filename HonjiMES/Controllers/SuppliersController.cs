@@ -123,7 +123,7 @@ namespace HonjiMES.Controllers
             //新增時檢查[代號][名稱]是否重複
             if (_context.Suppliers.Where(x => (x.Name == supplier.Name || x.Code == supplier.Code) && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("供應商 [代號] 或 [名稱] 已存在!", supplier));
+                return Ok(MyFun.APIResponseError("供應商的 [代號] 或 [名稱] 已存在!", supplier));
             }
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();

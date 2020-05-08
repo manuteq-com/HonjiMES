@@ -77,9 +77,9 @@ namespace HonjiMES.Controllers
                 Ccustomer.Name = customer.Name;
             }
             //修改時檢查[代號][名稱]是否重複
-            if (_context.Customers.Where(x => x.Id != id && x.Name == Ccustomer.Name && x.Code == Ccustomer.Code && x.DeleteFlag == 0).Any())
+            if (_context.Customers.Where(x => x.Id != id && (x.Name == Ccustomer.Name || x.Code == Ccustomer.Code) && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("客戶的代號 [" + Ccustomer.Code + "] 與名稱 [" + Ccustomer.Name + "] 重複!", Ccustomer));
+                return Ok(MyFun.APIResponseError("客戶的的 [代號] 或 [名稱] 重複!", Ccustomer));
             }
             
             var Msg = MyFun.MappingData(ref Ocustomer, customer);
@@ -114,9 +114,9 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Customers.Where(x => x.Name == customer.Name && x.Code == customer.Code && x.DeleteFlag == 0).Any())
+            if (_context.Customers.Where(x => (x.Name == customer.Name || x.Code == customer.Code) && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("客戶資訊已存在!", customer));
+                return Ok(MyFun.APIResponseError("客戶的 [代號] 或 [名稱] 已存在!", customer));
             }
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
