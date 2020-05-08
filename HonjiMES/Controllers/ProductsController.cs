@@ -82,7 +82,7 @@ namespace HonjiMES.Controllers
             {
                 Cproduct.WarehouseId = product.WarehouseId;
             }
-            //修改時檢查[代號][名稱]是否重複
+            //修改時檢查[品號][倉庫]是否重複
             if (_context.Products.Where(x => x.Id != id && x.ProductNo == Cproduct.ProductNo  && x.WarehouseId == Cproduct.WarehouseId && x.DeleteFlag == 0).Any())
             {
                 var warehouse = _context.Warehouses.Find(Cproduct.WarehouseId);
@@ -154,7 +154,7 @@ namespace HonjiMES.Controllers
                 //新增時檢查主件品號是否重複
                 if (_context.Products.Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                 {
-                    sRepeatProduct += "主件品號：[" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                    sRepeatProduct += "主件品號 [" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
                 }
                 else
                 {

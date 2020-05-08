@@ -22,6 +22,7 @@ export class MaterialListComponent implements OnInit {
     dataSourceDB: any;
     formData: any;
     Controller = '/Materials';
+    WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
@@ -43,12 +44,21 @@ export class MaterialListComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterial', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterial', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
         });
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 console.log(s);
                 this.Supplierlist = s.data;
+                if (s.success) {
+
+                }
+            }
+        );
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                console.log(s);
+                this.WarehouseList = s.data;
                 if (s.success) {
 
                 }

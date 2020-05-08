@@ -23,16 +23,15 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item  dataField="MaterialNo"></dxi-item>
+            <dxi-item  dataField="MaterialNo" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item  dataField="Name"></dxi-item>
             <dxi-item  dataField="Specification"></dxi-item>
             <dxi-item  dataField="Property"></dxi-item>
-            <dxi-item  dataField="Supplier"></dxi-item>
-            <dxi-item  dataField="SubInventory"></dxi-item>
+            <dxi-item  dataField="WarehouseId"></dxi-item>
         </dxo-form>
-        <dxo-popup>
+        <dxo-popup [width]="800" [height]="300">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
@@ -55,12 +54,16 @@
         <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column> -->
-    <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column>
+    <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
+    <dxi-column dataField="WarehouseId" caption="存放庫別" [width]="100">
+        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
     <dxi-column type="buttons">
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="400"
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="300"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

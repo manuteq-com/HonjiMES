@@ -79,7 +79,7 @@ namespace HonjiMES.Controllers
             //修改時檢查[代號][名稱]是否重複
             if (_context.Customers.Where(x => x.Id != id && x.Name == Ccustomer.Name && x.Code == Ccustomer.Code && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("客戶的代號[" + Ccustomer.Code + "]與名稱[" + Ccustomer.Name + "] 重複!", Ccustomer));
+                return Ok(MyFun.APIResponseError("客戶的代號 [" + Ccustomer.Code + "] 與名稱 [" + Ccustomer.Name + "] 重複!", Ccustomer));
             }
             
             var Msg = MyFun.MappingData(ref Ocustomer, customer);
