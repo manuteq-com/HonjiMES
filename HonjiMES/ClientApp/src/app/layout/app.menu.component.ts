@@ -67,8 +67,8 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '採購管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
                     { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+                    { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
                 ]
 
             },

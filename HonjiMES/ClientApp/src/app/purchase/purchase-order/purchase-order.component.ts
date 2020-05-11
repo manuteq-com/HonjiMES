@@ -32,7 +32,7 @@ export class PurchaseOrderComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetPurchaseHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostPurchaseHead', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeletePurchaseHead', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeletePurchaseHead/' + key, 'DELETE')
         });
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
@@ -69,6 +69,11 @@ export class PurchaseOrderComponent implements OnInit {
         }, 'success', 3000);
     }
     onEditorPreparing(e) {
+        if (e.parentType === 'dataRow' && (e.dataField === 'PurchaseNo')) {
+            if (!isNaN(e.row.key)) {
+                e.editorOptions.disabled = true;
+            }
+        }
     }
     selectionChanged(e) {
         // debugger;
