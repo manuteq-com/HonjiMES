@@ -35,7 +35,7 @@ export class AppMenuComponent implements OnInit {
                 if (url === '' || url === '/') {
                     bc.length = 0;
                 } else {
-                    debugger;
+                    // debugger;
                     bc.push(evt.url.substr(1));
                     this.breadcrumbitem.push({ label: evt.url.substr(1) });
                 }
@@ -59,7 +59,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materiallist'] },
                     { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productlist'] },
-                    { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
+                    // { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
                     { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
                 ]
 
@@ -91,6 +91,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist']},
                     { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist']},
+                    { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist']},
                 ]
 
             },

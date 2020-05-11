@@ -8,43 +8,58 @@ import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextre
 import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
-  selector: 'app-warehouse-list',
-  templateUrl: './warehouse-list.component.html',
-  styleUrls: ['./warehouse-list.component.css']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class WarehouseListComponent implements OnInit {
-
+export class UserListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/Warehouses';
+    Controller = '/Users';
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
     mod: string;
     uploadUrl: string;
     exceldata: any;
-    warehouselist: any;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+    userlist: any;
+    PermissionList: any;
+    DepartmentList: any;
+    UserList: any;
+    constructor(private http: HttpClient, myservice: Myservice) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.PermissionList = myservice.getPermission();
+        this.DepartmentList = myservice.getDepartment();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetWarehouses'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetWarehouse', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostWarehouse', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutWarehouse', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteWarehouse/' + key, 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetUsers'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetUser', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostUser', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutUser', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteUser/' + key, 'DELETE')
         });
+        this.GetUserList();
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
+    public GetUserList() {
+        this.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.UserList = s.data;
+                }
+            }
+        );
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -52,8 +67,9 @@ export class WarehouseListComponent implements OnInit {
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
+        this.GetUserList();
         notify({
-            message: '倉庫新增完成',
+            message: '帳戶新增完成',
             position: {
                 my: 'center top',
                 at: 'center top'
@@ -128,5 +144,4 @@ export class WarehouseListComponent implements OnInit {
     }
     selectionChanged(e) {
     }
-
 }

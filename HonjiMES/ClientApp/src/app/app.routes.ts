@@ -10,6 +10,7 @@ import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchas
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { SupplierListComponent } from './supplier/supplier-list/supplier-list.component';
 import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
+import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
 
 
@@ -24,6 +25,7 @@ export const routes: Routes = [
     { path: 'customerlist', component: CustomerListComponent },
     { path: 'supplierlist', component: SupplierListComponent },
     { path: 'warehouselist', component: WarehouseListComponent },
+    { path: 'userlist', component: UserListComponent },
     { path: 'Billofmateriallist', component: BillofmateriallistComponent }
 ];
 
