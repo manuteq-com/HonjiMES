@@ -181,9 +181,9 @@ export class CreatorderComponent implements OnInit, OnChanges {
     async onFormSubmit(e) {
         debugger;
         try {
-            this.buttondisabled = true;
+            // this.buttondisabled = true;
             if (this.validate_before() === false) {
-                // this.buttondisabled = false;
+                this.buttondisabled = false;
                 return;
             }
             this.dataGrid.instance.saveEditData();

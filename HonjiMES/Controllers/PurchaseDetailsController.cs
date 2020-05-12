@@ -63,7 +63,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetailByPId(int Pid)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.PurchaseDetails.Where(x => x.PurchaseId == Pid).ToListAsync();
+            var data = await _context.PurchaseDetails.Where(x => x.PurchaseId == Pid && x.DeleteFlag == 0).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 
@@ -86,6 +86,7 @@ namespace HonjiMES.Controllers
 
             OldPurchaseDetail.UpdateTime = DateTime.Now;
             OldPurchaseDetail.UpdateUser = 1;
+            OldPurchaseDetail.Price = OldPurchaseDetail.Quantity * OldPurchaseDetail.OriginPrice;
 
             try
             {
@@ -141,8 +142,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.PurchaseDetails.Remove(purchaseDetail);
+            purchaseDetail.DeleteFlag = 1;
+            // _context.PurchaseDetails.Remove(purchaseDetail);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseDetail));

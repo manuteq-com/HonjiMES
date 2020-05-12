@@ -21,10 +21,16 @@
         <dxo-lookup [dataSource]="MaterialList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
-    <dxi-column dataField="PurchaseCount" caption="已交貨數量" dataType="number"></dxi-column>
-    <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="PurchaseCount" caption="已交貨數量" dataType="number" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
+    <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
+        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [showSpinButtons]="true"></dx-number-box>
+    </div>
+    <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
+        <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
+    </div>
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>

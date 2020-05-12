@@ -20,6 +20,9 @@ export class PurchaseDetailComponent implements OnInit {
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     dataSourceDB: CustomStore;
     Controller = '/PurchaseDetails';
+    Quantityval: number;
+    OriginPriceval: number;
+    Priceval: number;
     constructor(private http: HttpClient) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
@@ -29,7 +32,7 @@ export class PurchaseDetailComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseDetail', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostPurchaseDetail', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutPurchaseDetail', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseDetail', 'DELETE')
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseDetail/' + key, 'DELETE')
         });
      }
 
@@ -38,6 +41,16 @@ export class PurchaseDetailComponent implements OnInit {
     to_purchaseClick(e) {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
+    }
+    QuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        // this.Quantityval = e.value;
+        // this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    OriginValueChanged(e, data) {
+        data.setValue(e.value);
+        // this.OriginPriceval = e.value;
+        // this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onDataErrorOccurred(e) {
         notify({
