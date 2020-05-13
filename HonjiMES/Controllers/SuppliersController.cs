@@ -81,7 +81,7 @@ namespace HonjiMES.Controllers
                 Csupplier.Name = supplier.Name;
             }
             //修改時檢查[代號][名稱]是否重複
-            if (_context.Suppliers.Where(x => x.Id != id && (x.Name == Csupplier.Name || x.Code == Csupplier.Code) && x.DeleteFlag == 0).Any())
+            if (_context.Suppliers.AsQueryable().Where(x => x.Id != id && (x.Name == Csupplier.Name || x.Code == Csupplier.Code) && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("供應商的 [代號] 或 [名稱] 重複!", Csupplier));
             }
@@ -121,7 +121,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Suppliers.Where(x => (x.Name == supplier.Name || x.Code == supplier.Code) && x.DeleteFlag == 0).Any())
+            if (_context.Suppliers.AsQueryable().Where(x => (x.Name == supplier.Name || x.Code == supplier.Code) && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("供應商的 [代號] 或 [名稱] 已存在!", supplier));
             }

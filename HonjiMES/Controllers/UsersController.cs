@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = _context.Users.Where(x => x.DeleteFlag == 0);
+            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0);
             var Users = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Users));
         }
@@ -82,7 +82,7 @@ namespace HonjiMES.Controllers
                 Csupplier.Username = user.Username;
             }
             //修改時檢查[代號][名稱]是否重複
-            if (_context.Users.Where(x => x.Id != id && x.Username == Csupplier.Username && x.DeleteFlag == 0).Any())
+            if (_context.Users.AsQueryable().Where(x => x.Id != id && x.Username == Csupplier.Username && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("帳戶的名稱 [" + Csupplier.Username + "] 重複!", Csupplier));
             }
@@ -121,7 +121,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<User>> PostUser(User user)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Users.Where(x => x.Username == user.Username && x.DeleteFlag == 0).Any())
+            if (_context.Users.AsQueryable().Where(x => x.Username == user.Username && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("帳戶名稱已存在!", user));
             }

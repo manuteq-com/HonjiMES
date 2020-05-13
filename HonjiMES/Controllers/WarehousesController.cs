@@ -118,7 +118,7 @@ namespace HonjiMES.Controllers
                 Csupplier.Name = warehouse.Name;
             }
             //修改時檢查[代號][名稱]是否重複
-            if (_context.Warehouses.Where(x => x.Id != id && x.Name == Csupplier.Name && x.DeleteFlag == 0).Any())
+            if (_context.Warehouses.AsQueryable().Where(x => x.Id != id && x.Name == Csupplier.Name && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("倉庫的名稱 [" + Csupplier.Name + "] 重複!", Csupplier));
             }
@@ -157,7 +157,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Warehouses.Where(x => x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
+            if (_context.Warehouses.AsQueryable().Where(x => x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("倉庫名稱已存在!", warehouse));
             }
