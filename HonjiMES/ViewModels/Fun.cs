@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DevExtreme.AspNet.Mvc;
+using LinqKit;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -37,7 +44,7 @@ namespace HonjiMES.Models
         internal static string MappingData<T>(ref T Olddata, T Newdata)
         {
             var CanGetYype = new List<Type> {
-                typeof(string),            
+                typeof(string),
                 typeof(int),
                 typeof(int?),
                 typeof(DateTime),
@@ -51,7 +58,7 @@ namespace HonjiMES.Models
                 typeof(sbyte),
                 typeof(sbyte?),
             };
-           
+
             var Olddata_Type = Olddata.GetType();
             var Newdata_Type = Olddata.GetType();
             foreach (var New_Props in Newdata_Type.GetProperties())
@@ -299,12 +306,167 @@ namespace HonjiMES.Models
             }
 
         }
+
+        internal static List<QueryList> GetFilterToList(IList filter)
+        {
+            var QueryList = new List<QueryList>();
+            var filterarray = JArray.Parse(JsonConvert.SerializeObject(filter));
+            if (filterarray.Any())
+            {
+                if (!filterarray.FirstOrDefault().Any())
+                {
+                    QueryList.Add(new QueryList { key = filterarray[0].ToString(), where = filterarray[1].ToString(), val = filterarray[2].ToString() });
+                }
+                else
+                {
+
+                    foreach (var item in filterarray)
+                    {
+                        if (item.Count() == 3)
+                        {
+                            QueryList.Add(new QueryList { key = item[0].ToString(), where = item[1].ToString(), val = item[2].ToString() });
+                        }
+                    }
+                }
+            }
+            return QueryList;
+        }
+
+        internal static async Task<FromQueryResult> FromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
+        {
+            var dbQuery = db.AsAsyncEnumerable();
+            var FromQueryResult = new FromQueryResult();
+            if (fromQuery.Filter != null)
+            {
+                var FilterToList = GetFilterToList(fromQuery.Filter);
+                foreach (var item in FilterToList)
+                {
+                    if (item.where == "contains")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "notcontains")
+                    {
+                        dbQuery = dbQuery.Where(x => !x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "startswith")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().StartsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "endswith")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().EndsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "=")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() == item.val.ToLower());
+                    }
+                    else if (item.where == "<>")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() != item.val.ToLower());
+                    }
+                }
+            }
+            if (fromQuery.Sort != null)
+            {
+                var firstSort = true;
+                foreach (var Sortitem in fromQuery.Sort)
+                {
+                    if (firstSort)
+                    {
+                        if (Sortitem.Desc)
+                        {
+                            dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                        }
+                        else
+                        {
+                            dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                        }
+                    }
+                    // else
+                    // {
+                    //     if (Sortitem.Desc)
+                    //     {
+                    //         dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                    //     }
+                    //     else
+                    //     {
+                    //         dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(item.Selector).GetValue(x));
+                    //     }
+                    // }
+                    firstSort = false;
+                }
+            }
+            FromQueryResult.totalCount = await dbQuery.CountAsync();
+            if (fromQuery.Skip != 0)
+            {
+                dbQuery = dbQuery.Skip(fromQuery.Skip);
+            }
+            if (fromQuery.Take != 0)
+            {
+                dbQuery = dbQuery.Take(fromQuery.Take);
+            }
+            FromQueryResult.data = await dbQuery.ToListAsync();
+            return FromQueryResult;
+        }
+
+        /// <summary>
+        /// 把字串轉為查詢陣列
+        /// </summary>
+        /// <param name="filter">差詢字串</param>
+        /// <returns></returns>
+        internal static List<QueryList> GetFilterToList(string filter)
+        {
+
+            var QueryList = new List<QueryList>();
+            var filterarray = JArray.Parse(filter);
+            if (filterarray.Any())
+            {
+                if (!filterarray.FirstOrDefault().Any())
+                {
+                    QueryList.Add(new QueryList { key = filterarray[0].ToString(), where = filterarray[1].ToString(), val = filterarray[2].ToString() });
+                }
+                else
+                {
+
+                    foreach (var item in filterarray)
+                    {
+                        if (item.Count() == 3)
+                        {
+                            QueryList.Add(new QueryList { key = item[0].ToString(), where = item[1].ToString(), val = item[2].ToString() });
+                        }
+                    }
+                }
+                // if (filterarray.First().Count() > 0)
+                // {
+                //     foreach (var filteritem in filterarray)
+                //     {
+                //         if (filteritem.FirstOrDefault().Count() > 0)
+                //         {
+
+                //         }
+                //         else if (filteritem.Count() == 3)
+                //         {
+                //             QueryList.Add(new QueryList { key = filteritem[0].ToString(), where = filteritem[1].ToString(), val = filteritem[2].ToString() });
+                //         }
+                //     }
+                // }
+                // else if (filterarray.Count() == 3)
+                // {
+                //     QueryList.Add(new QueryList { key = filterarray[0].ToString(), where = filterarray[1].ToString(), val = filterarray[2].ToString() });
+                // }
+            }
+            return QueryList;
+        }
+
+
         /// <summary>
         /// Excel檔案暫存檔處理
         /// </summary>
         /// <param name="dir">存檔路徑</param>
         /// <param name="dirName">資料夾名稱</param>
         /// <param name="OrderNo">訂單號</param>
+        /// <param name="excelDatas">Excel內容</param>
         /// <returns></returns>
         internal static async Task<string> ProcessSaveExcelAsync(string dir, string dirName, string OrderNo, byte[] excelDatas)
         {

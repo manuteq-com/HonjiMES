@@ -120,7 +120,37 @@ namespace HonjiMES.Models
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
-}
+    /// <summary>
+    /// 回傳From的查詢條件
+    /// </summary>
+    public class FromQuery
+    {
+        public int skip { get; set; }
+        public int take { get; set; }
+        public int? requireTotalCount { get; set; }
+        public int? requireGroupCount { get; set; }
+        public string sort { get; set; }
+        public string filter { get; set; }
+        public int? totalSummary { get; set; }
+        public string group { get; set; }
+        public int? groupSummary { get; set; }
+    }
+    public class FromQueryResult
+    {
+        public object data { get; set; }
+        public int totalCount { get; set; }
+        public decimal? summary { get; set; }
+        public decimal? groupCount { get; set; }
+    }
+    public class QueryList
+    {
+        public string key { get; set; }
+        public string where { get; set; }
+        public string val { get; set; }
+    }
+    /// <summary>
+    /// 對應EXCL
+    /// </summary>
     public class BOM
     {
         public string A { get; set; }

@@ -221,7 +221,7 @@ namespace HonjiMES.Models
                         var nOrderHead = new OrderHead();
                         #region 表頭資料處理
                         //處理客戶代號
-                        var CustomerName = _context.Customers.Where(x => Path.GetExtension(Fileitem).Contains(x.Name)).FirstOrDefault();
+                        var CustomerName = _context.Customers.AsQueryable().Where(x => Path.GetExtension(Fileitem).Contains(x.Name)).FirstOrDefault();
                         if (CustomerName != null)
                         {
                             nOrderHead.Customer = CustomerName.Id;
@@ -274,7 +274,7 @@ namespace HonjiMES.Models
                                         switch (Mappingitem.Change)
                                         {
                                             case "Product":
-                                                Cellval = _context.Products.Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                Cellval = _context.Products.AsQueryable().Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
                                                 if (string.IsNullOrWhiteSpace(Cellval))
                                                 {
                                                     sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
