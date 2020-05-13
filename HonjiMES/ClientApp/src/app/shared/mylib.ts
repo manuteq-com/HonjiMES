@@ -1,8 +1,9 @@
 import notify from 'devextreme/ui/notify';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
 import { environment } from 'src/environments/environment';
+import { LoadOptions } from 'devextreme/data/load_options';
 
 export class Guid {
     static newGuid() {
@@ -104,21 +105,49 @@ export class DateTimeTool {
 
 export class SendService {
     constructor() { }
+
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
-        // debugger;
-        Date.prototype.toJSON = function() {
+        Date.prototype.toJSON = function () {
             return this.toLocaleDateString(); // 轉本地時間
         };
+        function isNotEmpty(value: any): boolean {
+            return value !== undefined && value !== null && value !== '';
+        }
         const apiurl = location.origin + '/api';
         const body = JSON.stringify(data.values);
         let keyurl = '';
         if (data.key) {
             keyurl = '/' + data.key;
         }
-        const httpOptions = { withCredentials: true, body, headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+        const httpOptions = {
+            withCredentials: true, body,
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            params: null
+        };
         let result;
         switch (method) {
             case 'GET':
+                if (data.remote) {
+                    debugger;
+                    let params: HttpParams = new HttpParams();
+                    [
+                        'skip',
+                        'take',
+                        'requireTotalCount',
+                        'requireGroupCount',
+                        'sort',
+                        'filter',
+                        'totalSummary',
+                        'group',
+                        'groupSummary'
+                        // tslint:disable-next-line: only-arrow-functions
+                    ].forEach(i => {
+                        if (i in data.loadOptions && isNotEmpty(data.loadOptions[i])) {
+                            params = params.set(i, JSON.stringify(data.loadOptions[i]));
+                        }
+                    });
+                    httpOptions.params = params;
+                }
                 result = http.get(apiurl + url, httpOptions);
                 break;
             case 'PUT':
@@ -132,9 +161,19 @@ export class SendService {
                 break;
         }
         return result.toPromise()
-            .then((data: any) => {
-                if (data.success) {
-                    return (data.data);
+            .then((ReturnData: any) => {
+                if (ReturnData.success) {
+                    if (data.remote) {
+                        return {
+                            data: ReturnData.data.data,
+                            totalCount: ReturnData.data.totalCount,
+                            summary: ReturnData.data.summary,
+                            groupCount: ReturnData.data.groupCount
+                        };
+                    } else {
+                        return (ReturnData.data);
+                    }
+
                 } else {
                     // notify({
                     //     message: data.message,
@@ -143,7 +182,7 @@ export class SendService {
                     //         at: 'center top'
                     //     }
                     // }, 'error', 3000);
-                    throw data.message;
+                    throw ReturnData.message;
                 }
             })
             .catch(e => {

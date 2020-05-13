@@ -21,7 +21,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
-    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule
+    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -54,6 +54,7 @@ import { PurchaseDetailComponent } from './purchase/purchase-detail/purchase-det
 import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase.component';
 import { BillPurchaseCheckinComponent } from './billpurchase/bill-purchase-checkin/bill-purchase-checkin.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -66,6 +67,7 @@ import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist
         ScrollPanelModule,
         DxButtonModule,
         DxTreeViewModule,
+        DxTreeListModule,
         DxDropDownBoxModule,
         DxDataGridModule,
         DxSelectBoxModule,
@@ -114,6 +116,7 @@ import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist
         CreatPurchaseComponent,
         BillPurchaseCheckinComponent,
         BillofmateriallistComponent,
+        BomlistComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }

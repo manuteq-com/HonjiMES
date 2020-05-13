@@ -9,6 +9,11 @@ using HonjiMES.Models;
 using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using LinqKit;
+using DevExtreme.AspNet.Mvc;
+using DevExtreme.AspNet.Data;
 
 namespace HonjiMES.Controllers
 {
@@ -32,7 +37,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillOfMaterial>>> GetBillOfMaterials()
         {
-            return await _context.BillOfMaterials.ToListAsync();
+            return await _context.BillOfMaterials.AsQueryable().ToListAsync();
         }
 
         // GET: api/BillOfMaterials/5
@@ -166,8 +171,8 @@ namespace HonjiMES.Controllers
                             {
                                 TempBOM.H = CellvalH;
                             }
-                            var ProductBasic = _context.ProductBasics.Where(x => x.ProductNo == TempBOM.A).ToList();
-                            var MaterialBasic = _context.MaterialBasics.Where(x => x.MaterialNo == TempBOM.H).ToList();
+                            var ProductBasic = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == TempBOM.A).ToList();
+                            var MaterialBasic = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == TempBOM.H).ToList();
                             if (ProductBasic.Any())//有成品NO
                             {
                                 if (MaterialBasic.Any())
@@ -260,6 +265,34 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(null, MaterialBasiclist.Count + ";" + excelcount));
 
+        }
+        [HttpGet]
+        //public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] FromQuery FromQuery)
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] DataSourceLoadOptions FromQuery)
+        {
+
+            //var ProductBasict = _context.ProductBasics.AsEnumerable();
+            //var ProductBasic = _context.ProductBasics.AsQueryable();
+            //var ProductBasic = await DataSourceLoader.LoadAsync(_context.ProductBasics.AsQueryable(), FromQuery);
+
+            var FromQueryResult = new FromQueryResult();
+            FromQueryResult = await MyFun.FromQueryResultAsync(_context.ProductBasics, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> PutProduct(int id, ProductBasic ProductBasic)
+        {
+            //var Products = await _context.ProductBasics.ToListAsync();
+            Stream req = Request.Body;
+            //req.Seek(0, System.IO.SeekOrigin.Begin);
+            using (StreamReader stream = new StreamReader(req))
+            {
+                string body = await stream.ReadToEndAsync();
+                // Newtonsoft.Json.JsonConvert.PopulateObject(body, OldOrderHead);
+                // body = "param=somevalue&param2=someothervalue"
+                return Ok(MyFun.APIResponseOK(body));
+            }
         }
         private bool BillOfMaterialExists(int id)
         {

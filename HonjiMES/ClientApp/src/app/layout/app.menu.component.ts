@@ -35,7 +35,7 @@ export class AppMenuComponent implements OnInit {
                 if (url === '' || url === '/') {
                     bc.length = 0;
                 } else {
-                    debugger;
+                    // debugger;
                     bc.push(evt.url.substr(1));
                     this.breadcrumbitem.push({ label: evt.url.substr(1) });
                 }
