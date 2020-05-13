@@ -1,0 +1,78 @@
+<!-- <p>所有訂單</p> -->
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+        <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+            uploadMode="instantly" (onUploaded)="onUploaded($event)"></dx-file-uploader> -->
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+        <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
+    </div>
+</div>
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true">
+
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <!-- <dxi-item  dataField="Code"></dxi-item> -->
+            <dxi-item  dataField="Name"></dxi-item>
+            <dxi-item  dataField="Contact"></dxi-item>
+            <dxi-item  dataField="Phone"></dxi-item>
+            <dxi-item  dataField="Fax"></dxi-item>
+            <dxi-item  dataField="Address"></dxi-item>
+            <dxi-item  dataField="Email"></dxi-item>
+            <dxi-item  dataField="Remarks"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+    <!-- <dxi-column dataField="Code" caption="代號" [width]="100"></dxi-column> -->
+    <dxi-column dataField="Name" caption="倉庫名稱" [width]="300"></dxi-column>
+    <dxi-column dataField="Contact" caption="聯絡人" [width]="100"></dxi-column>
+    <dxi-column dataField="Phone" caption="聯絡電話" [width]="160"></dxi-column>
+    <dxi-column dataField="Fax" caption="傳真" [width]="160"></dxi-column>
+    <dxi-column dataField="Address" caption="地址"></dxi-column>
+    <dxi-column dataField="Email" caption="電子郵件"></dxi-column>
+    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+</dx-data-grid>
+<dx-popup [showTitle]="true" title="新增倉庫" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="420"
+    [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatwarehouse (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        [exceldata]="exceldata"></app-creatwarehouse>
+    </div>
+</dx-popup>
+
+

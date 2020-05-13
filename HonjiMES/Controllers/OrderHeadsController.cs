@@ -164,7 +164,7 @@ namespace HonjiMES.Controllers
             try
             {
                 var dt = DateTime.Now;
-                var OrderNo = dt.ToString("yyyyMMdd");
+                var OrderNo = dt.ToString("yyMMdd");
                 var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
                 var orderHead = PostOrderMaster_Detail.OrderHead;
                 var OrderDetail = PostOrderMaster_Detail.OrderDetail;

@@ -33,8 +33,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var Suppliers = await _context.Suppliers.AsQueryable().ToListAsync();
+            var data = _context.Suppliers.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var Suppliers = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Suppliers));
         }
 
@@ -69,10 +69,26 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSupplier(int id, Supplier supplier)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             supplier.Id = id;
-            var Oldsupplier = _context.Suppliers.Find(id);
-            var Msg = MyFun.MappingData(ref Oldsupplier, supplier);
+            var Osupplier = _context.Suppliers.Find(id);
+            var Csupplier = Osupplier;
+            if (!string.IsNullOrWhiteSpace(supplier.Code))
+            {
+                Csupplier.Code = supplier.Code;
+            }
+            if (!string.IsNullOrWhiteSpace(supplier.Name))
+            {
+                Csupplier.Name = supplier.Name;
+            }
+            //修改時檢查[代號][名稱]是否重複
+            if (_context.Suppliers.Where(x => x.Id != id && (x.Name == Csupplier.Name || x.Code == Csupplier.Code) && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("供應商的 [代號] 或 [名稱] 重複!", Csupplier));
+            }
+            
+            var Msg = MyFun.MappingData(ref Osupplier, supplier);
+            Osupplier.UpdateTime = DateTime.Now;
+            Osupplier.UpdateUser = 1;
 
             try
             {
@@ -90,7 +106,7 @@ namespace HonjiMES.Controllers
                 }
             }
 
-            return Ok(MyFun.APIResponseOK(Oldsupplier));
+            return Ok(MyFun.APIResponseOK(Osupplier));
         }
 
         // POST: api/Suppliers
@@ -104,7 +120,11 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //新增時檢查[代號][名稱]是否重複
+            if (_context.Suppliers.Where(x => (x.Name == supplier.Name || x.Code == supplier.Code) && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("供應商的 [代號] 或 [名稱] 已存在!", supplier));
+            }
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(supplier));
@@ -125,11 +145,10 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.Suppliers.Remove(supplier);
+            supplier.DeleteFlag = 1;
+            // _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();
-
-            return supplier;
+            return Ok(MyFun.APIResponseOK(supplier));
         }
 
         private bool SupplierExists(int id)

@@ -1672,20 +1672,14 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
-                entity.Property(e => e.Department)
-                    .HasComment("部門")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.Department).HasComment("部門");
 
                 entity.Property(e => e.Password)
                     .HasComment("密碼")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.Permission)
-                    .HasComment("身分別")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.Permission).HasComment("身分別");
 
                 entity.Property(e => e.Realname)
                     .HasComment("姓名")

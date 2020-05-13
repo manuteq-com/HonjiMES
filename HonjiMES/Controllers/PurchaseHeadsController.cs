@@ -30,8 +30,9 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeads()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.PurchaseHeads.AsQueryable().OrderByDescending(x=>x.CreateTime).ToListAsync();
-            return Ok(MyFun.APIResponseOK(data));
+            var data = _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
+            return Ok(MyFun.APIResponseOK(PurchaseHeads));
         }
         /// <summary>
         /// 用ID取採購單
@@ -126,8 +127,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.PurchaseHeads.Remove(purchaseHead);
+            purchaseHead.DeleteFlag = 1;
+            // _context.PurchaseHeads.Remove(purchaseHead);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseHead));

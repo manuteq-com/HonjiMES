@@ -69,6 +69,65 @@ export class Product {
     updateUser: number;
     remarks: string;
 }
+export class Customer {
+    id: number;
+    name: string;
+    code: string;
+    phone: string;
+    fax: string;
+    email: string;
+    address: string;
+    remarks: string;
+    deleteFlag: number;
+    createTime: Date;
+    createUser: number;
+    updateTime: Date;
+    updateUser: number;
+}
+export class Supplier {
+    id: number;
+    name: string;
+    code: string;
+    phone: string;
+    fax: string;
+    email: string;
+    address: string;
+    uniformNo: string;
+    remarks: string;
+    deleteFlag: number;
+    createTime: Date;
+    createUser: number;
+    updateTime: Date;
+    updateUser: number;
+}
+export class Warehouse {
+    id: number;
+    name: string;
+    code: string;
+    phone: string;
+    fax: string;
+    email: string;
+    address: string;
+    remarks: string;
+    deleteFlag: number;
+    createTime: Date;
+    createUser: number;
+    updateTime: Date;
+    updateUser: number;
+}
+export class User {
+    id: number;
+    username: string;
+    realname: string;
+    permission: number;
+    department: number;
+    remarks: string;
+    deleteFlag: number;
+    createTime: Date;
+    createUser: number;
+    updateTime: Date;
+    updateUser: number;
+}
 export class POrderSale {
     SaleID: number;
     SaleDID: number;

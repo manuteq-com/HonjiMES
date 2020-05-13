@@ -10,6 +10,7 @@
             <dxo-label text="供應商"></dxo-label>
         </dxi-item>
         <dxi-item dataField="PurchaseDate" editorType="dxDateBox">
+            <dxi-validation-rule type="required" message="採購日期 必填"></dxi-validation-rule>
             <dxo-label text="採購日期"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks" [colSpan]="colCount">
@@ -40,8 +41,10 @@
         </dxo-keyboard-navigation>
         <dxo-paging [enabled]="false">
         </dxo-paging>
-        <dxi-column dataField="DataId" caption="品號" editCellTemplate="DataEditCellTemplate">
-            <dxo-lookup [dataSource]="MaterialList" displayExpr="DataName" valueExpr="Id"></dxo-lookup>
+        <!-- <dxi-column dataField="DataId" caption="品號" editCellTemplate="DataEditCellTemplate"> -->
+        <dxi-column dataField="DataId" caption="品號">
+            <!-- <dxo-lookup [dataSource]="MaterialList" displayExpr="DataName" valueExpr="Id"></dxo-lookup> -->
+            <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate">
@@ -64,22 +67,26 @@
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column>
         <div *dxTemplate="let data of 'DataEditCellTemplate'">
-            <dx-select-box [value]="data.value"  (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialList" valueExpr="Id" displayExpr="DataName"></dx-select-box>
-          </div>
-          <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-              <dx-number-box [value]='Quantityval'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [max]="Quantityvalmax" [showSpinButtons]="true"></dx-number-box>
-          </div>
-          <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
+            <!-- <dx-select-box [value]="data.value"  (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialList" valueExpr="Id" displayExpr="DataName"></dx-select-box> -->
+            <!-- <dx-select-box [value]="data.value"  (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialList" valueExpr="Id" displayExpr="Name"></dx-select-box> -->
+        </div>
+        <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
+            <dx-number-box [value]='Quantityval'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [max]="Quantityvalmax" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
             <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceEditCellTemplate'">
             <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
         </div>
     </dx-data-grid>
-    <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-        [disabled]="buttondisabled"></dx-button>
-    <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
-        </dxi-item> -->
+
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+        <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+            </dxi-item> -->
+    </div>
 
 </form>
 

@@ -71,18 +71,27 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
-            //修改時檢查名稱重複
+            product.Id = id;
+            var Oproduct = _context.Products.Find(id);
+            var Cproduct = Oproduct;
             if (!string.IsNullOrWhiteSpace(product.ProductNo))
             {
-                if (_context.Products.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.Id != id).Any())
-                {
-                    //return Ok(MyFun.APIResponseError("主件品號：" + product.ProductNo + "重複"));
-                    return BadRequest("主件品號：" + product.ProductNo + "重複");
-                }
+                Cproduct.ProductNo = product.ProductNo;
             }
-            product.Id = id;
-            var Oldproduct = _context.Products.Find(id);
-            var Msg = MyFun.MappingData(ref Oldproduct, product);
+            if (product.WarehouseId != 0)
+            {
+                Cproduct.WarehouseId = product.WarehouseId;
+            }
+            //修改時檢查[品號][倉庫]是否重複
+            if (_context.Products.AsQueryable().Where(x => x.Id != id && x.ProductNo == Cproduct.ProductNo  && x.WarehouseId == Cproduct.WarehouseId && x.DeleteFlag == 0).Any())
+            {
+                var warehouse = _context.Warehouses.Find(Cproduct.WarehouseId);
+                return Ok(MyFun.APIResponseError("成品的品號 [" + Cproduct.ProductNo + "] 與存放褲別 [" + warehouse.Name + "] 重複!", Cproduct));
+            }
+            
+            var Msg = MyFun.MappingData(ref Oproduct, product);
+            Oproduct.UpdateTime = DateTime.Now;
+            Oproduct.UpdateUser = 1;
 
             try
             {
@@ -99,7 +108,7 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-            return Ok(MyFun.APIResponseOK(Oldproduct));
+            return Ok(MyFun.APIResponseOK(Oproduct));
             //return Ok(new { success = true, timestamp = DateTime.Now, message = "" });
         }
 
@@ -143,9 +152,9 @@ namespace HonjiMES.Controllers
             foreach (var warehouseId in product.wid)
             {
                 //新增時檢查主件品號是否重複
-                if (_context.Products.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId).Any())
+                if (_context.Products.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                 {
-                    sRepeatProduct += "主件品號：[" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                    sRepeatProduct += "主件品號 [" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
                 }
                 else
                 {
@@ -196,8 +205,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.Products.Remove(product);
+            product.DeleteFlag = 1;
+            // _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(product));
             //return Ok(new { data = product, success = true, timestamp = DateTime.Now, message = "" });

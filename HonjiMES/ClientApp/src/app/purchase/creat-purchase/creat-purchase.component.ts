@@ -78,6 +78,13 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.GetData('/Materials/GetMaterials').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MaterialList = s.data;
+                }
+            }
+        );
         this.PurchasetypeList = myservice.getpurchasetypes();
         this.TypeselectBoxOptions = {
             items: this.PurchasetypeList,
@@ -94,28 +101,29 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
+
     }
     onInitNewRow(e) {
 
     }
     onFocusedCellChanging(e) {
     }
-    onSupplierSelectionChanged(e) {
-        this.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialList = s.data;
-                    this.Quantityvalmax = null;
-                    this.Quantityval = null;
-                    this.OriginPriceval = null;
-                    this.Priceval = null;
-                    if (this.addRow) {
-                        this.dataGrid.instance.addRow();
-                        this.addRow = false;
-                    }
-                }
-            }
-        );
+    onSupplierSelectionChanged(e) {//依照供應商ID去進貨單查詢，可進貨的原料項目。
+        // this.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialList = s.data;
+        //             this.Quantityvalmax = null;
+        //             this.Quantityval = null;
+        //             this.OriginPriceval = null;
+        //             this.Priceval = null;
+        //             if (this.addRow) {
+        //                 this.dataGrid.instance.addRow();
+        //                 this.addRow = false;
+        //             }
+        //         }
+        //     }
+        // );
     }
     selectvalueChanged(e, data) {
         debugger;
@@ -172,7 +180,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseMaster_Detail', 'POST', { values: this.postval });
             if (sendRequest) {
-                this.dataSourceDB = null;
+                this.dataSourceDB = [];
                 this.dataGrid.instance.refresh();
                 this.myform.instance.resetValues();
                 e.preventDefault();

@@ -22,6 +22,7 @@ export class MaterialListComponent implements OnInit {
     dataSourceDB: any;
     formData: any;
     Controller = '/Materials';
+    WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
@@ -43,7 +44,7 @@ export class MaterialListComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterial', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterial', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
         });
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
@@ -54,6 +55,17 @@ export class MaterialListComponent implements OnInit {
                 }
             }
         );
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                console.log(s);
+                this.WarehouseList = s.data;
+                if (s.success) {
+
+                }
+            }
+        );
+    }
+    ngOnInit() {
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -111,12 +123,12 @@ export class MaterialListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function () {
+                e.component.pageIndex(pageIndex + 1).done(function() {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function () {
+                e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
@@ -145,8 +157,6 @@ export class MaterialListComponent implements OnInit {
     onEditorPreparing(e) {
     }
     selectionChanged(e) {
-    }
-    ngOnInit() {
     }
 
 }

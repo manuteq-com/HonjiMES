@@ -51,13 +51,13 @@ namespace HonjiMES.Controllers
         /// <param name="PostPurchaseMaster_Detail"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<OrderHead>> PostPurchaseMaster_Detail(PostPurchaseMaster_Detail PostPurchaseMaster_Detail)
+        public async Task<ActionResult<PurchaseHead>> PostPurchaseMaster_Detail(PostPurchaseMaster_Detail PostPurchaseMaster_Detail)
         {
             try
             {
                 var dt = DateTime.Now;
                 var PurchaseNo = dt.ToString("yyMMdd");
-                var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(PurchaseNo)).Count() + 1;
+                var NoCount = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(PurchaseNo)).Count() + 1;
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
@@ -69,11 +69,20 @@ namespace HonjiMES.Controllers
                 foreach (var item in purchaseDetail)
                 {
                     var BillP = _context.BillofPurchaseDetails.Find(item.DataId);
-                    item.DataNo = BillP.DataNo;
-                    item.DataName = BillP.DataName;
-                    item.Specification = BillP.Specification;
-                    item.CreateTime = dt;
-                    item.CreateUser = 1;
+                    if (BillP != null) {
+                        item.DataNo = BillP.DataNo;
+                        item.DataName = BillP.DataName;
+                        item.Specification = BillP.Specification;
+                        item.CreateTime = dt;
+                        item.CreateUser = 1;
+                    } else {
+                        var MaterialData = _context.Materials.Find(item.DataId);
+                        item.DataNo = MaterialData.MaterialNo;
+                        item.DataName = MaterialData.Name;
+                        item.Specification = MaterialData.Specification;
+                        item.CreateTime = dt;
+                        item.CreateUser = 1;
+                    }
                     PurchaseDetail.Add(item);
                 }
                 purchaseHead.PurchaseDetails = PurchaseDetail.ToList();

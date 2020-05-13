@@ -31,7 +31,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            var Customers = await _context.Customers.AsQueryable().ToListAsync();
+            var data = _context.Customers.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var Customers = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Customers));
         }
 
@@ -66,6 +67,21 @@ namespace HonjiMES.Controllers
         {
             customer.Id = id;
             var Ocustomer = _context.Customers.Find(id);
+            var Ccustomer = Ocustomer;
+            if (!string.IsNullOrWhiteSpace(customer.Code))
+            {
+                Ccustomer.Code = customer.Code;
+            }
+            if (!string.IsNullOrWhiteSpace(customer.Name))
+            {
+                Ccustomer.Name = customer.Name;
+            }
+            //修改時檢查[代號][名稱]是否重複
+            if (_context.Customers.Where(x => x.Id != id && (x.Name == Ccustomer.Name || x.Code == Ccustomer.Code) && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("客戶的的 [代號] 或 [名稱] 重複!", Ccustomer));
+            }
+            
             var Msg = MyFun.MappingData(ref Ocustomer, customer);
             Ocustomer.UpdateTime = DateTime.Now;
             Ocustomer.UpdateUser = 1;
@@ -97,6 +113,11 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            //新增時檢查[代號][名稱]是否重複
+            if (_context.Customers.Where(x => (x.Name == customer.Name || x.Code == customer.Code) && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("客戶的 [代號] 或 [名稱] 已存在!", customer));
+            }
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(customer));
@@ -115,8 +136,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.Customers.Remove(customer);
+            customer.DeleteFlag = 1;
+            // _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(customer));
         }

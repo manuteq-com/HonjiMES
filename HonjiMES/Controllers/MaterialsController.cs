@@ -50,19 +50,27 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMaterial(int id, Material material)
         {
-            //修改時檢查名稱重複
+            material.Id = id;
+            var Omaterial = _context.Materials.Find(id);
+            var Cmaterial = Omaterial;
             if (!string.IsNullOrWhiteSpace(material.MaterialNo))
             {
-                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.Id != id).Any())
-                {
-                    return BadRequest("元件品號：" + material.MaterialNo + "重複");    
-                    //return Ok(MyFun.APIResponseError("元件品號：" + material.MaterialNo + "重複"));
-                }
+                Cmaterial.MaterialNo = material.MaterialNo;
             }
-            material.Id = id;
-            var Oldmaterial = _context.Materials.Find(id);
-
-            var Msg = MyFun.MappingData(ref Oldmaterial, material);
+            if (material.WarehouseId != 0)
+            {
+                Cmaterial.WarehouseId = material.WarehouseId;
+            }
+            //修改時檢查[品號][倉庫]是否重複
+            if (_context.Materials.AsQueryable().Where(x => x.Id != id && x.MaterialNo == Cmaterial.MaterialNo  && x.WarehouseId == Cmaterial.WarehouseId && x.DeleteFlag == 0).Any())
+            {
+                var warehouse = _context.Warehouses.Find(Cmaterial.WarehouseId);
+                return Ok(MyFun.APIResponseError("原料的品號 [" + Cmaterial.MaterialNo + "] 與存放褲別 [" + warehouse.Name + "] 重複!", Cmaterial));
+            }
+            
+            var Msg = MyFun.MappingData(ref Omaterial, material);
+            Omaterial.UpdateTime = DateTime.Now;
+            Omaterial.UpdateUser = 1;
 
             try
             {
@@ -80,7 +88,7 @@ namespace HonjiMES.Controllers
                 }
             }
 
-            return Ok(MyFun.APIResponseOK(Oldmaterial));
+            return Ok(MyFun.APIResponseOK(Omaterial));
         }
 
         // POST: api/Materials
@@ -115,9 +123,9 @@ namespace HonjiMES.Controllers
             foreach (var warehouseId in material.wid)
             {
                 //新增時檢查主件品號是否重複
-                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId).Any())
+                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                 {
-                    sRepeatMaterial += "元件品號：[" + material.MaterialNo + "] 已經存在 [" + material.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                    sRepeatMaterial += "元件品號 [" + material.MaterialNo + "] 已經存在 [" + material.warehouseData[warehouseId - 1].Name + "] !<br/>";
                 }
                 else
                 {
@@ -169,11 +177,10 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.Materials.Remove(material);
+            material.DeleteFlag = 1;
+            // _context.Materials.Remove(material);
             await _context.SaveChangesAsync();
-
-            return material;
+            return Ok(MyFun.APIResponseOK(material));
         }
 
         private bool MaterialExists(int id)

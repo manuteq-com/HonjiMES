@@ -53,7 +53,15 @@ import { BillPurchaseDetailComponent } from './billpurchase/bill-purchase-detail
 import { PurchaseDetailComponent } from './purchase/purchase-detail/purchase-detail.component';
 import { CreatPurchaseComponent } from './purchase/creat-purchase/creat-purchase.component';
 import { BillPurchaseCheckinComponent } from './billpurchase/bill-purchase-checkin/bill-purchase-checkin.component';
+import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+import { CreatcustomerComponent } from './customer/creatcustomer/creatcustomer.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { SupplierListComponent } from './supplier/supplier-list/supplier-list.component';
+import { CreatsupplierComponent } from './supplier/creatsupplier/creatsupplier.component';
+import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
+import { CreatwarehouseComponent } from './warehouse/creatwarehouse/creatwarehouse.component';
+import { UserListComponent } from './setting/user-list/user-list.component';
+import { CreatuserComponent } from './setting/creatuser/creatuser.component';
 import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
 @NgModule({
     imports: [
@@ -115,7 +123,15 @@ import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
         PurchaseDetailComponent,
         CreatPurchaseComponent,
         BillPurchaseCheckinComponent,
+        CustomerListComponent,
+        CreatcustomerComponent,
         BillofmateriallistComponent,
+        SupplierListComponent,
+        CreatsupplierComponent,
+        WarehouseListComponent,
+        CreatwarehouseComponent,
+        UserListComponent,
+        CreatuserComponent,
         BomlistComponent,
     ],
     providers: [

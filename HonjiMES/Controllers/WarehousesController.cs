@@ -106,13 +106,26 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWarehouse(int id, Warehouse warehouse)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             warehouse.Id = id;
-            var OldWarehouse = _context.Warehouses.Find(id);
-            var Msg = MyFun.MappingData(ref OldWarehouse, warehouse);
-
-            OldWarehouse.UpdateTime = DateTime.Now;
-            OldWarehouse.UpdateUser = 1;
+            var Osupplier = _context.Warehouses.Find(id);
+            var Csupplier = Osupplier;
+            // if (!string.IsNullOrWhiteSpace(warehouse.Code))
+            // {
+            //     Csupplier.Code = warehouse.Code;
+            // }
+            if (!string.IsNullOrWhiteSpace(warehouse.Name))
+            {
+                Csupplier.Name = warehouse.Name;
+            }
+            //修改時檢查[代號][名稱]是否重複
+            if (_context.Warehouses.Where(x => x.Id != id && x.Name == Csupplier.Name && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("倉庫的名稱 [" + Csupplier.Name + "] 重複!", Csupplier));
+            }
+            
+            var Msg = MyFun.MappingData(ref Osupplier, warehouse);
+            Osupplier.UpdateTime = DateTime.Now;
+            Osupplier.UpdateUser = 1;
 
             try
             {
@@ -143,7 +156,11 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            //新增時檢查[代號][名稱]是否重複
+            if (_context.Warehouses.Where(x => x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("倉庫名稱已存在!", warehouse));
+            }
             _context.Warehouses.Add(warehouse);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(warehouse));
@@ -163,10 +180,9 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.Warehouses.Remove(warehouse);
+            warehouse.DeleteFlag = 1;
+            // _context.Warehouses.Remove(warehouse);
             await _context.SaveChangesAsync();
-
             return Ok(MyFun.APIResponseOK(warehouse));
         }
 

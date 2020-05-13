@@ -21,12 +21,10 @@ namespace HonjiMES.Models
         [Required]
         [Column("password", TypeName = "tinytext")]
         public string Password { get; set; }
-        [Required]
-        [Column("permission", TypeName = "varchar(50)")]
-        public string Permission { get; set; }
-        [Required]
-        [Column("department", TypeName = "varchar(50)")]
-        public string Department { get; set; }
+        [Column("permission", TypeName = "int(11)")]
+        public int Permission { get; set; }
+        [Column("department", TypeName = "int(11)")]
+        public int Department { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
