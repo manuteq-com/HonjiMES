@@ -229,12 +229,12 @@ namespace HonjiMES.Models
                         #endregion
 
                         OrderHeadlist.Add(nOrderHead);
-                        for (var i = 0; i <= sheet.LastRowNum; i++)//筆數
+                        for (var i = 0; i < sheet.LastRowNum; i++)//筆數
                         {
                             var nOrderDetail = new OrderDetail();
                             nOrderHead.OrderDetails.Add(nOrderDetail);
                             var CellNum = sheet.GetRow(i).LastCellNum;
-                            for (var j = 0; j <= CellNum; j++)
+                            for (var j = 0; j < CellNum; j++)
                             {
                                 //抓出表頭及順序
                                 if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
