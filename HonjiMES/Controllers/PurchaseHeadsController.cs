@@ -30,7 +30,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeads()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.PurchaseHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
+            var data = await _context.PurchaseHeads.AsQueryable().OrderByDescending(x=>x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
         /// <summary>

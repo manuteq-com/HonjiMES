@@ -40,7 +40,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-            var data = _context.OrderHeads.Where(x => x.DeleteFlag == 0);
+            var data = _context.OrderHeads.AsQueryable().Where(x => x.DeleteFlag == 0);
             var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
@@ -165,7 +165,7 @@ namespace HonjiMES.Controllers
             {
                 var dt = DateTime.Now;
                 var OrderNo = dt.ToString("yyyyMMdd");
-                var NoCount = _context.OrderHeads.Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
+                var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
                 var orderHead = PostOrderMaster_Detail.OrderHead;
                 var OrderDetail = PostOrderMaster_Detail.OrderDetail;
                 var DirName = orderHead.OrderNo;
@@ -282,7 +282,7 @@ namespace HonjiMES.Controllers
                 if (Productitemlist.Length == 3)
                 {
                     //再檢查一次
-                    if (!_context.Products.Where(x => x.ProductNo == Productitemlist[0]).Any())
+                    if (!_context.Products.AsQueryable().Where(x => x.ProductNo == Productitemlist[0]).Any())
                     {
                         nProductlist.Add(new Product
                         {

@@ -34,7 +34,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = _context.Products.Where(x => x.DeleteFlag == 0);
+            var data = _context.Products.AsQueryable().Where(x => x.DeleteFlag == 0);
             var Products = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Products));
             //return Ok(new { data = Products, success = true, timestamp = DateTime.Now, message = "" });
@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
             //修改時檢查名稱重複
             if (!string.IsNullOrWhiteSpace(product.ProductNo))
             {
-                if (_context.Products.Where(x => x.ProductNo == product.ProductNo && x.Id != id).Any())
+                if (_context.Products.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.Id != id).Any())
                 {
                     //return Ok(MyFun.APIResponseError("主件品號：" + product.ProductNo + "重複"));
                     return BadRequest("主件品號：" + product.ProductNo + "重複");
@@ -119,7 +119,7 @@ namespace HonjiMES.Controllers
             }
 
             //優先確認Basic是否存在
-            var ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
+            var ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
             if (ProductsBasicData == null)
             {
                 var ProductBasics = new List<ProductBasic>();
@@ -134,7 +134,7 @@ namespace HonjiMES.Controllers
                     SubInventory = product.SubInventory
                 });
                 _context.SaveChanges();
-                ProductsBasicData = _context.ProductBasics.Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
+                ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
             }
             product.ProductBasicId = ProductsBasicData.Id;
 
@@ -143,7 +143,7 @@ namespace HonjiMES.Controllers
             foreach (var warehouseId in product.wid)
             {
                 //新增時檢查主件品號是否重複
-                if (_context.Products.Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId).Any())
+                if (_context.Products.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.WarehouseId == warehouseId).Any())
                 {
                     sRepeatProduct += "主件品號：[" + product.ProductNo + "] 已經存在 [" + product.warehouseData[warehouseId - 1].Name + "] !<br/>";
                 }

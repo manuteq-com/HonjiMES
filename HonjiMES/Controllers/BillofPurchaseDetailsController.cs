@@ -30,7 +30,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<BillofPurchaseDetail>>> GetBillofPurchaseDetails()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.BillofPurchaseDetails.ToListAsync();
+            var data = await _context.BillofPurchaseDetails.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<BillofPurchaseDetail>> GetBillofPurchaseDetailByPId(int Pid)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.BillofPurchaseDetails.Where(x => x.BillofPurchaseId == Pid).ToListAsync();
+            var data = await _context.BillofPurchaseDetails.AsQueryable().Where(x => x.BillofPurchaseId == Pid).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 

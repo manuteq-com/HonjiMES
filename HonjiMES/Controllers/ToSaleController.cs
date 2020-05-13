@@ -79,7 +79,7 @@ namespace HonjiMES.Controllers
                     else if (ToSales.SaleDate.HasValue)//有銷貨日期，新增銷貨單
                     {
                         var SaleNo = dt.ToString("yyyyMMdd");
-                        var NoCount = _context.SaleHeads.Where(x => x.SaleNo.StartsWith("S" + SaleNo)).Count() + 1;
+                        var NoCount = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.StartsWith("S" + SaleNo)).Count() + 1;
                         //S  20200415  001
                         var nsale = new SaleHead
                         {
@@ -210,7 +210,7 @@ namespace HonjiMES.Controllers
                 var Warehouses = _context.Warehouses.Find(ReOrderSale.WarehouseId);
                 if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
-                    var ProductsData = _context.Products.Where(x => x.WarehouseId == ReOrderSale.WarehouseId && x.DeleteFlag == 0 && x.ProductNo == SaleDetail.Product.ProductNo).FirstOrDefault();
+                    var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReOrderSale.WarehouseId && x.DeleteFlag == 0 && x.ProductNo == SaleDetail.Product.ProductNo).FirstOrDefault();
                     ProductsData.ProductLogs.Add(new ProductLog { Original = ProductsData.Quantity, Quantity = ReOrderSale.Quantity, Reason = ReOrderSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
                     ProductsData.Quantity += ReOrderSale.Quantity;
                     ProductsData.UpdateTime = dt;

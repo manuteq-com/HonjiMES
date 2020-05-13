@@ -34,7 +34,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var Suppliers = await _context.Suppliers.ToListAsync();
+            var Suppliers = await _context.Suppliers.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(Suppliers));
         }
 

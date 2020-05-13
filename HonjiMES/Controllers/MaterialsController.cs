@@ -26,7 +26,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Material>>> GetMaterials()
         {
-            var data = _context.Materials.Where(x => x.DeleteFlag == 0);
+            var data = _context.Materials.AsQueryable().Where(x => x.DeleteFlag == 0);
             var Materials = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Materials));
         }
@@ -53,7 +53,7 @@ namespace HonjiMES.Controllers
             //修改時檢查名稱重複
             if (!string.IsNullOrWhiteSpace(material.MaterialNo))
             {
-                if (_context.Materials.Where(x => x.MaterialNo == material.MaterialNo && x.Id != id).Any())
+                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.Id != id).Any())
                 {
                     return BadRequest("元件品號：" + material.MaterialNo + "重複");    
                     //return Ok(MyFun.APIResponseError("元件品號：" + material.MaterialNo + "重複"));
@@ -94,7 +94,7 @@ namespace HonjiMES.Controllers
             }
             
             //優先確認Basic是否存在
-            var MaterialBasicData = _context.MaterialBasics.Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
+            var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             if (MaterialBasicData == null)
             {
                 var MaterialBasics = new List<MaterialBasic>();
@@ -106,7 +106,7 @@ namespace HonjiMES.Controllers
                     Property = material.Property
                 });
                 _context.SaveChanges();
-                MaterialBasicData = _context.MaterialBasics.Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
+                MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             }
             material.MaterialBasicId = MaterialBasicData.Id;
 
@@ -115,7 +115,7 @@ namespace HonjiMES.Controllers
             foreach (var warehouseId in material.wid)
             {
                 //新增時檢查主件品號是否重複
-                if (_context.Materials.Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId).Any())
+                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId).Any())
                 {
                     sRepeatMaterial += "元件品號：[" + material.MaterialNo + "] 已經存在 [" + material.warehouseData[warehouseId - 1].Name + "] !<br/>";
                 }

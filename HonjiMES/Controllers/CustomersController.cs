@@ -31,7 +31,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            var Customers = await _context.Customers.ToListAsync();
+            var Customers = await _context.Customers.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(Customers));
         }
 

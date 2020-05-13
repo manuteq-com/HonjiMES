@@ -31,7 +31,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseHead>> BillToPurchase(ToPurchase ToPurchase)
         {
-            var BillofPurchaseDetails = await _context.BillofPurchaseDetails.Where(x => ToPurchase.BillofPurchaseDetail.Select(y => y.Id).Contains(x.Id)).ToListAsync();
+            var BillofPurchaseDetails = await _context.BillofPurchaseDetails.AsQueryable().Where(x => ToPurchase.BillofPurchaseDetail.Select(y => y.Id).Contains(x.Id)).ToListAsync();
             return Ok(MyFun.APIResponseOK("OK"));
         }
         /// <summary>
@@ -42,7 +42,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseHead>> GetCanPurchase(int Id)
         {
-            var BillofPurchaseDetails = await _context.BillofPurchaseDetails.Where(x => x.SupplierId == Id && x.Quantity > x.PurchaseCount).ToListAsync();
+            var BillofPurchaseDetails = await _context.BillofPurchaseDetails.AsQueryable().Where(x => x.SupplierId == Id && x.Quantity > x.PurchaseCount).ToListAsync();
             return Ok(MyFun.APIResponseOK(BillofPurchaseDetails));
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace HonjiMES.Controllers
             {
                 var dt = DateTime.Now;
                 var PurchaseNo = dt.ToString("yyMMdd");
-                var NoCount = _context.OrderHeads.Where(x => x.OrderNo.StartsWith(PurchaseNo)).Count() + 1;
+                var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(PurchaseNo)).Count() + 1;
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;

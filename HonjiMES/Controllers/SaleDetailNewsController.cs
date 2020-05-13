@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleDetailNews()
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var SaleDetailNews = await _context.SaleDetailNews.ToListAsync();
+            var SaleDetailNews = await _context.SaleDetailNews.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(SaleDetailNews));
         }
         /// <summary>
@@ -138,7 +138,7 @@ namespace HonjiMES.Controllers
             else
             {
                 //檢查多次轉銷貨的數量
-                var SaleDetailNewslist = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.OrderDetailId == OrderDetailId && x.ProductId == ProductId);
+                var SaleDetailNewslist = _context.SaleDetailNews.AsQueryable().Where(x => x.DeleteFlag == 0 && x.OrderDetailId == OrderDetailId && x.ProductId == ProductId);
                 var AllQty = SaleDetailNewslist.Sum(x => x.Quantity);//轉銷貨的總數量
                 if (AllQty + dQty <= OsaleDetailNew.OrderDetail.Quantity)//不超過總採購數
                 {

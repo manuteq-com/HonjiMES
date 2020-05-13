@@ -30,7 +30,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseHeads()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.BillofPurchaseHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
+            var data = await _context.BillofPurchaseHeads.AsQueryable().OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
         /// <summary>
@@ -123,7 +123,7 @@ namespace HonjiMES.Controllers
             {
                 var dt = DateTime.Now;
                 var No = dt.ToString("yyMMdd");
-                var NoCount = _context.BillofPurchaseHeads.Where(x => x.BillofPurchaseNo.StartsWith(No)).Count() + 1;
+                var NoCount = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.StartsWith(No)).Count() + 1;
                 var Head = PostBillofPurchaseHead_Detail.BillofPurchaseHead;
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
                 Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
