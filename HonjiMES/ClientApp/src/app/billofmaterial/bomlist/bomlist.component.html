@@ -1,1 +1,23 @@
-<p>bomlist works!</p>
+<dx-tree-list [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+    parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true"
+    expandAllEnabled="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true">
+    <!-- <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-paging [enabled]="true" [pageSize]="10">
+    </dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
+        [showNavigationButtons]="true" visible="true">
+    </dxo-pager> -->
+    <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+    </dxo-remote-operations> -->
+    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false"></dxo-editing>
+    <dxi-column dataField="MaterialNo" caption="元件品號" dataType="string"></dxi-column>
+    <dxi-column dataField="Name" caption="元件品名" dataType="string"></dxi-column>
+    <dxi-column dataField="Quantity" caption="組成數量" dataType="number"></dxi-column>
+    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+</dx-tree-list>

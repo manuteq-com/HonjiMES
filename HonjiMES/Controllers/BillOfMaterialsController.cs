@@ -37,7 +37,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillOfMaterial>>> GetBillOfMaterials()
         {
-            return await _context.BillOfMaterials.AsQueryable().ToListAsync();
+            var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().ToListAsync();
+            return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
 
         // GET: api/BillOfMaterials/5
@@ -51,7 +52,7 @@ namespace HonjiMES.Controllers
                 return NotFound();
             }
 
-            return billOfMaterial;
+            return Ok(MyFun.APIResponseOK(billOfMaterial));
         }
 
         // PUT: api/BillOfMaterials/5
@@ -279,7 +280,48 @@ namespace HonjiMES.Controllers
             FromQueryResult = await MyFun.FromQueryResultAsync(_context.ProductBasics, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+        [HttpGet("{id}")]
 
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetBomlist(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var bomlist = new List<BomList>();
+            var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).ToListAsync();
+            foreach (var item1 in BillOfMaterials)
+            {
+                bomlist.Add(new BomList
+                {
+                    Id = item1.Id,
+                    Pid = item1.Pid,
+                    Name = item1.MaterialBasic.Name,
+                    MaterialNo = item1.MaterialBasic.MaterialNo,
+                    Quantity= item1.Quantity
+                });
+                foreach (var item2 in item1.InverseP)
+                {
+                    bomlist.Add(new BomList
+                    {
+                        Id = item2.Id,
+                        Pid = item2.Pid,
+                        Name = item2.MaterialBasic.Name,
+                        MaterialNo = item2.MaterialBasic.MaterialNo,
+                        Quantity = item2.Quantity
+                    });
+                    foreach (var item3 in item2.InverseP)
+                    {
+                        bomlist.Add(new BomList
+                        {
+                            Id = item3.Id,
+                            Pid = item3.Pid,
+                            Name = item3.MaterialBasic.Name,
+                            MaterialNo = item3.MaterialBasic.MaterialNo,
+                            Quantity = item3.Quantity
+                        });
+                    }
+                }
+            }
+            return Ok(MyFun.APIResponseOK(bomlist));
+        }
         [HttpPut("{id}")]
         public async Task<ActionResult<IEnumerable<ProductBasic>>> PutProduct(int id, ProductBasic ProductBasic)
         {
