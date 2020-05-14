@@ -33,17 +33,17 @@
     <dxo-paging [pageSize]="15"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <!-- <dxi-item  dataField="Code"></dxi-item> -->
             <dxi-item  dataField="Username"></dxi-item>
             <dxi-item  dataField="Realname"></dxi-item>
+            <!-- <dxi-item  dataField="Password"></dxi-item>
+            <dxi-item  dataField="PasswordConfirm"></dxi-item> -->
             <dxi-item  dataField="Permission"></dxi-item>
             <dxi-item  dataField="Department"></dxi-item>
-            <dxi-item  dataField="CreateTime"></dxi-item>
-            <dxi-item  dataField="CreateUser"></dxi-item>
         </dxo-form>
-        <dxo-popup>
+        <dxo-popup [width]="800" [height]="300">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
