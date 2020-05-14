@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using System.Security.Cryptography;
 
 namespace HonjiMES.Controllers
 {
@@ -124,6 +125,17 @@ namespace HonjiMES.Controllers
             if (_context.Users.AsQueryable().Where(x => x.Username == user.Username && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("帳戶名稱已存在!", user));
+            }
+            
+            var key = "60246598";
+            var message = user.Password;
+            var encoding = new System.Text.UTF8Encoding();
+            byte[] keyByte = encoding.GetBytes(key);
+            byte[] messageBytes = encoding.GetBytes(message);
+            using (var hmacSHA256 = new HMACSHA256(keyByte))
+            {
+                byte[] hashMessage = hmacSHA256.ComputeHash(messageBytes);
+                user.Password = BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
             }
             user.CreateUser = 1;
             _context.Users.Add(user);
