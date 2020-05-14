@@ -55,6 +55,26 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(purchaseHead));
         }
         /// <summary>
+        /// 用ID取採購單
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/PurchaseHeads/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseHead>> GetPurchasesBySupplier(int id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id).Any()).ToListAsync();
+
+            if (purchaseHead == null)
+            {
+                return NotFound();
+            }
+
+            //return purchaseHead;
+            return Ok(MyFun.APIResponseOK(purchaseHead));
+        }
+        /// <summary>
         /// 修改採購單
         /// </summary>
         /// <param name="id"></param>

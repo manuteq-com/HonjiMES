@@ -37,7 +37,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     controller: string;
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
+    PurchaseList: any;
     MaterialList: any;
+    PurchaseselectBoxOptions: any;
     changeMode: boolean;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     Quantityval: any;
@@ -75,16 +77,19 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
+                    this.SupplierList.forEach(x => {
+                        x.Name = x.Code + '_' + x.Name;
+                    });
                 }
             }
         );
-        this.GetData('/Materials/GetMaterials').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialList = s.data;
-                }
-            }
-        );
+        // this.GetData('/Materials/GetMaterials').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialList = s.data;
+        //         }
+        //     }
+        // );
     }
     cellClick(e) {
         if (e.rowType === 'header') {
@@ -130,12 +135,33 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
-    selectvalueChanged(e, data) {
+    selectSupplierValueChanged(e, data) {
+        // debugger;
         data.setValue(e.value);
-        const today = new Date();
+        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseList = s.data;
+                }
+            }
+        );
+    }
+    selectPurchaseValueChanged(e, data) {
+        // debugger;
+        data.setValue(e.value);
+        this.GetData('/PurchaseDetails/GetMaterialsByPurchase/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MaterialList = s.data;
+                }
+            }
+        );
+    }
+    selectMateriaValueChanged(e, data) {
+        // debugger;
+        data.setValue(e.value);
         this.MaterialList.find(x => {
             if (x.Id === e.value) {
-                debugger;
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;
                 this.Priceval = x.Quantity * x.OriginPrice;

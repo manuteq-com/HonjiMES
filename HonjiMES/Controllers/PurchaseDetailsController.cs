@@ -33,7 +33,6 @@ namespace HonjiMES.Controllers
             var data = await _context.PurchaseDetails.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
-
         /// <summary>
         /// 用ID取採購明細
         /// </summary>
@@ -65,6 +64,31 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == Pid && x.DeleteFlag == 0).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
+        }
+
+        // GET: api/Materials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Material>> GetMaterialsByPurchase(int id)
+        {
+            // Material material = new Material();
+            var material = await _context.PurchaseDetails.AsQueryable()
+            .Where(x => x.DeleteFlag == 0 && x.PurchaseId == id)
+            .Join(_context.Materials, x => x.DataId, material => material.Id, (x, material) => new {
+                Id = material.Id,
+                MaterialNo = material.MaterialNo,
+                MaterialName = x.DataName,
+                Specification = x.Specification,
+                Quantity = x.Quantity - x.PurchaseCount,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price
+            })
+            .ToListAsync();
+
+            if (material == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(material));
         }
 
         /// <summary>
