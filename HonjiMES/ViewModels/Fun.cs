@@ -331,10 +331,89 @@ namespace HonjiMES.Models
             }
             return QueryList;
         }
-
+        internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
+        {
+            var dbQuery = db.AsAsyncEnumerable();
+            object? DeleteFlag = 0;
+            dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x) == DeleteFlag);
+            var FromQueryResult = new FromQueryResult();
+            if (fromQuery.Filter != null)
+            {
+                var FilterToList = GetFilterToList(fromQuery.Filter);
+                foreach (var item in FilterToList)
+                {
+                    if (item.where == "contains")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "notcontains")
+                    {
+                        dbQuery = dbQuery.Where(x => !x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "startswith")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().StartsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "endswith")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().EndsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (item.where == "=")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() == item.val.ToLower());
+                    }
+                    else if (item.where == "<>")
+                    {
+                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() != item.val.ToLower());
+                    }
+                }
+            }
+            if (fromQuery.Sort != null)
+            {
+                var firstSort = true;
+                foreach (var Sortitem in fromQuery.Sort)
+                {
+                    if (firstSort)
+                    {
+                        if (Sortitem.Desc)
+                        {
+                            dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                        }
+                        else
+                        {
+                            dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                        }
+                    }
+                    // else
+                    // {
+                    //     if (Sortitem.Desc)
+                    //     {
+                    //         dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                    //     }
+                    //     else
+                    //     {
+                    //         dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(item.Selector).GetValue(x));
+                    //     }
+                    // }
+                    firstSort = false;
+                }
+            }
+            FromQueryResult.totalCount = await dbQuery.CountAsync();
+            if (fromQuery.Skip != 0)
+            {
+                dbQuery = dbQuery.Skip(fromQuery.Skip);
+            }
+            if (fromQuery.Take != 0)
+            {
+                dbQuery = dbQuery.Take(fromQuery.Take);
+            }
+            FromQueryResult.data = await dbQuery.ToListAsync();
+            return FromQueryResult;
+        }
         internal static async Task<FromQueryResult> FromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             var dbQuery = db.AsAsyncEnumerable();
+            dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x).ToString() == "0");
             var FromQueryResult = new FromQueryResult();
             if (fromQuery.Filter != null)
             {

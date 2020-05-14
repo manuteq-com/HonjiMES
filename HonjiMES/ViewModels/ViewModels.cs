@@ -148,6 +148,16 @@ namespace HonjiMES.Models
         public string where { get; set; }
         public string val { get; set; }
     }
+
+    public class BomList
+    {
+        public int Id { get; set; }
+        public int? Pid { get; set; }
+        public string Name { get; set; }
+        public string MaterialNo { get; internal set; }
+        public int Quantity { get; internal set; }
+    }
+
     /// <summary>
     /// 對應EXCL
     /// </summary>
