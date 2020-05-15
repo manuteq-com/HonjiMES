@@ -82,7 +82,9 @@ namespace HonjiMES.Controllers
                         item.Specification = MaterialData.Specification;
                         item.CreateTime = dt;
                         item.CreateUser = 1;
-                    }
+                    }                    
+                    item.PurchaseType = purchaseHead.Type;
+                    item.SupplierId = purchaseHead.SupplierId;
                     PurchaseDetail.Add(item);
                 }
                 purchaseHead.PurchaseDetails = PurchaseDetail.ToList();

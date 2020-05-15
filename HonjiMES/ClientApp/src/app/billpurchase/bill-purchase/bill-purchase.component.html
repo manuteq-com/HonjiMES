@@ -52,7 +52,7 @@
         <app-bill-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialList]="MaterialList"></app-bill-purchase-detail>
     </div>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false"
+<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creat-bill-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creat-bill-purchase>

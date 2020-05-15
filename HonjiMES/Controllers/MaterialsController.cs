@@ -62,12 +62,12 @@ namespace HonjiMES.Controllers
                 Cmaterial.WarehouseId = material.WarehouseId;
             }
             //修改時檢查[品號][倉庫]是否重複
-            if (_context.Materials.AsQueryable().Where(x => x.Id != id && x.MaterialNo == Cmaterial.MaterialNo  && x.WarehouseId == Cmaterial.WarehouseId && x.DeleteFlag == 0).Any())
+            if (_context.Materials.AsQueryable().Where(x => x.Id != id && x.MaterialNo == Cmaterial.MaterialNo && x.WarehouseId == Cmaterial.WarehouseId && x.DeleteFlag == 0).Any())
             {
                 var warehouse = _context.Warehouses.Find(Cmaterial.WarehouseId);
                 return Ok(MyFun.APIResponseError("原料的品號 [" + Cmaterial.MaterialNo + "] 與存放褲別 [" + warehouse.Name + "] 重複!", Cmaterial));
             }
-            
+
             var Msg = MyFun.MappingData(ref Omaterial, material);
             Omaterial.UpdateTime = DateTime.Now;
             Omaterial.UpdateUser = 1;
@@ -97,10 +97,11 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Material>> PostMaterial(MaterialW material)
         {
-            if (material.wid == null) {
+            if (material.wid == null)
+            {
                 return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", material));
             }
-            
+
             //優先確認Basic是否存在
             var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             if (MaterialBasicData == null)

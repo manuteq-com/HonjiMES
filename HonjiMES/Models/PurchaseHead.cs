@@ -24,7 +24,7 @@ namespace HonjiMES.Models
         [Column("supplier_id", TypeName = "int(11)")]
         public int SupplierId { get; set; }
         [Column("type", TypeName = "int(11)")]
-        public int? Type { get; set; }
+        public int Type { get; set; }
         [Column("status", TypeName = "int(11)")]
         public int Status { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
