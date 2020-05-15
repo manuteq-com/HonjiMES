@@ -20,7 +20,6 @@ export class BillofmateriallistComponent implements OnInit {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
-        debugger;
         const remote = this.remoteOperations;
         // this.dataSourceDB = createStore({
         //     key: 'Id',
