@@ -80,7 +80,7 @@ namespace HonjiMES.Controllers
                 Specification = x.Specification,
                 Quantity = x.Quantity - x.PurchaseCount,
                 OriginPrice = x.OriginPrice,
-                Price = x.Price
+                Price = x.OriginPrice * (x.Quantity - x.PurchaseCount)
             })
             .ToListAsync();
 

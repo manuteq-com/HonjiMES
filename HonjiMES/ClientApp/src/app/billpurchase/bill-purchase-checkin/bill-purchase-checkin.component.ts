@@ -32,7 +32,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 2;
+        this.colCount = 1;
         this.labelLocation = 'left';
     }
     public GetData(apiUrl: string): Observable<APIResponse> {

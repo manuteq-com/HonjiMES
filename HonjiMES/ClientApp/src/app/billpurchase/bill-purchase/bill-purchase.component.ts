@@ -25,14 +25,13 @@ export class BillPurchaseComponent implements OnInit {
     Controller = '/BillofPurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     constructor(private http: HttpClient) {
-
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHeads'),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostBillofPurchaseHead', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteBillofPurchaseHead', 'DELETE')
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteBillofPurchaseHead/' + key, 'DELETE')
         });
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {

@@ -33,7 +33,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     url: string;
-    dataSourceDB: { Id: number, SupplierId: number, DataId: number, Quantity: number, OriginPrice: number, Price: number }[] = [];
+    dataSourceDB: { Id: number, SupplierId: number, PurchaseId: number, DataId: number, Quantity: number, OriginPrice: number, Price: number }[] = [];
     controller: string;
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
@@ -104,39 +104,57 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         }
     }
     onContentReady(e) {
-        const _dataGrid = $(e.element);
-        const dataGrid = e.component;
-        if (this.changeMode && !_dataGrid.find('.dx-row-inserted').length) {
-            debugger;
-            dataGrid.beginUpdate();
-            e.component.option('editing.mode', 'form');
-            this.changeMode = false;
-            dataGrid.columnOption('SupplierId', { allowEditing: false });
-            dataGrid.columnOption('DataId', { allowEditing: false });
-            dataGrid.endUpdate();
-        }
+        debugger;
+        // const _dataGrid = $(e.element);
+        // const dataGrid = e.component;
+        // if (this.changeMode && !_dataGrid.find('.dx-row-inserted').length) {
+        //     // debugger;
+        //     dataGrid.beginUpdate();
+        //     e.component.option('editing.mode', 'form');
+        //     this.changeMode = false;
+        //     dataGrid.columnOption('SupplierId', { allowEditing: false });
+        //     dataGrid.columnOption('DataId', { allowEditing: false });
+        //     dataGrid.endUpdate();
+        // }
     }
     onInitNewRow(e) {
-        const dataGrid = e.component;
-        dataGrid.beginUpdate();
-        dataGrid.option('editing.mode', 'form');
-        dataGrid.columnOption('SupplierId', { allowEditing: true });
-        dataGrid.columnOption('DataId', { allowEditing: true });
-        dataGrid.endUpdate();
-        this.changeMode = true;
+        debugger;
+        // const dataGrid = e.component;
+        // dataGrid.beginUpdate();
+        // dataGrid.option('editing.mode', 'form');
+        // dataGrid.columnOption('SupplierId', { allowEditing: true });
+        // dataGrid.columnOption('DataId', { allowEditing: true });
+        // dataGrid.endUpdate();
+        // this.changeMode = true;
     }
     onRowInserting(e) {
-
+        debugger;
+        const SupplierId = e.data.SupplierId;
+        const PurchaseId = e.data.PurchaseId;
+        const DataId = e.data.DataId;
+        const datas = this.dataSourceDB;
+        datas.forEach(element => {//阻擋重複新增
+            if (element.SupplierId === SupplierId &&
+                element.PurchaseId === PurchaseId &&
+                element.DataId === DataId) {
+                    this.showMessage('新增項目已存在!!');
+                    e.cancel = true;
+            }
+        });
+        if (e.cancel === false) {
+            this.Quantityval = 0;
+            this.OriginPriceval = 0;
+            this.Priceval = 0;
+        }
     }
     onRowInserted(e) {
-
+        debugger;
     }
     to_purchaseClick(e) {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
     selectSupplierValueChanged(e, data) {
-        // debugger;
         data.setValue(e.value);
         this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + e.value).subscribe(
             (s) => {
@@ -147,7 +165,6 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         );
     }
     selectPurchaseValueChanged(e, data) {
-        // debugger;
         data.setValue(e.value);
         this.GetData('/PurchaseDetails/GetMaterialsByPurchase/' + e.value).subscribe(
             (s) => {
@@ -158,7 +175,6 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         );
     }
     selectMateriaValueChanged(e, data) {
-        // debugger;
         data.setValue(e.value);
         this.MaterialList.find(x => {
             if (x.Id === e.value) {
@@ -206,6 +222,15 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             return false;
         }
         return true;
+    }
+    showMessage(data) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
     }
     async onFormSubmit(e) {
         debugger;

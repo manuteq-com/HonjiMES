@@ -10,13 +10,16 @@
         </dxi-item>
     </dx-form>
     <br>
-    <div class="long-title">
+    <!-- <div class="long-title">
         <h5>訂單內容</h5>
+    </div> -->
+
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+        <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+            </dxi-item> -->
     </div>
-    <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-        [disabled]="buttondisabled"></dx-button>
-    <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
-        </dxi-item> -->
 
 </form>
 
