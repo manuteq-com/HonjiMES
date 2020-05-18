@@ -282,7 +282,7 @@ namespace HonjiMES.Controllers
         }
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetBomlist(int id)
+        public async Task<ActionResult<IEnumerable<BomList>>> GetBomlist(int id)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
@@ -295,7 +295,7 @@ namespace HonjiMES.Controllers
                     Pid = item1.Pid,
                     Name = item1.MaterialBasic.Name,
                     MaterialNo = item1.MaterialBasic.MaterialNo,
-                    Quantity= item1.Quantity
+                    Quantity = item1.Quantity
                 });
                 foreach (var item2 in item1.InverseP)
                 {
@@ -323,18 +323,12 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(bomlist));
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<IEnumerable<ProductBasic>>> PutProduct(int id, ProductBasic ProductBasic)
+        public async Task<ActionResult<IEnumerable<BomList>>> PutBomlist(int id, BomList PutBomlist)
         {
-            //var Products = await _context.ProductBasics.ToListAsync();
-            Stream req = Request.Body;
-            //req.Seek(0, System.IO.SeekOrigin.Begin);
-            using (StreamReader stream = new StreamReader(req))
-            {
-                string body = await stream.ReadToEndAsync();
-                // Newtonsoft.Json.JsonConvert.PopulateObject(body, OldOrderHead);
-                // body = "param=somevalue&param2=someothervalue"
-                return Ok(MyFun.APIResponseOK(body));
-            }
+            var BillOfMaterial = _context.BillOfMaterials.Find(id);
+            BillOfMaterial.Pid = PutBomlist.Pid;
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(PutBomlist));
         }
         private bool BillOfMaterialExists(int id)
         {

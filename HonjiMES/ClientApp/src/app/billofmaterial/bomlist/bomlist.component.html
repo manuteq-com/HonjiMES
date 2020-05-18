@@ -1,15 +1,8 @@
 <dx-tree-list [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-    parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true"
-    expandAllEnabled="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true">
-    <!-- <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-header-filter [visible]="false"></dxo-header-filter>
-    <dxo-paging [enabled]="true" [pageSize]="10">
-    </dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
-        [showNavigationButtons]="true" visible="true">
-    </dxo-pager> -->
-    <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
-    </dxo-remote-operations> -->
+    [autoExpandAll]="true" parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true"
+    [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true">
+    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="true"
+        [allowReordering]="false" [showDragIcons]="false"></dxo-row-dragging>
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false"></dxo-editing>
     <dxi-column dataField="MaterialNo" caption="元件品號" dataType="string"></dxi-column>
     <dxi-column dataField="Name" caption="元件品名" dataType="string"></dxi-column>
