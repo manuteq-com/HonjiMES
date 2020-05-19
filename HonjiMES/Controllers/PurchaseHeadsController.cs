@@ -64,7 +64,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<PurchaseHead>> GetPurchasesBySupplier(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id).Any()).ToListAsync();
+            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0 && x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id).Any()).ToListAsync();
 
             if (purchaseHead == null)
             {
@@ -80,6 +80,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <param name="purchaseHead"></param>
         /// <returns></returns>
+
         // PUT: api/PurchaseHeads/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

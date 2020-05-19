@@ -20,7 +20,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    buttondisabled: false;
+    buttondisabled = false;
     CustomerVal: any;
     formData: any;
     editOnkeyPress: boolean;
