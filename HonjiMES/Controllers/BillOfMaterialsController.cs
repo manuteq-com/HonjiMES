@@ -286,47 +286,24 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
-            var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).ToListAsync();
-            foreach (var item1 in BillOfMaterials)
-            {
-                bomlist.Add(new BomList
-                {
-                    Id = item1.Id,
-                    Pid = item1.Pid,
-                    Name = item1.MaterialBasic.Name,
-                    MaterialNo = item1.MaterialBasic.MaterialNo,
-                    Quantity = item1.Quantity
-                });
-                foreach (var item2 in item1.InverseP)
-                {
-                    bomlist.Add(new BomList
-                    {
-                        Id = item2.Id,
-                        Pid = item2.Pid,
-                        Name = item2.MaterialBasic.Name,
-                        MaterialNo = item2.MaterialBasic.MaterialNo,
-                        Quantity = item2.Quantity
-                    });
-                    foreach (var item3 in item2.InverseP)
-                    {
-                        bomlist.Add(new BomList
-                        {
-                            Id = item3.Id,
-                            Pid = item3.Pid,
-                            Name = item3.MaterialBasic.Name,
-                            MaterialNo = item3.MaterialBasic.MaterialNo,
-                            Quantity = item3.Quantity
-                        });
-                    }
-                }
-            }
+            var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+            bomlist.AddRange(MyFun.GetBomListList(BillOfMaterials));
             return Ok(MyFun.APIResponseOK(bomlist));
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<IEnumerable<BomList>>> PutBomlist(int id, BomList PutBomlist)
         {
             var BillOfMaterial = _context.BillOfMaterials.Find(id);
-            BillOfMaterial.Pid = PutBomlist.Pid;
+            if (PutBomlist.ProductBasicId.HasValue)
+            {
+                BillOfMaterial.ProductBasicId = PutBomlist.ProductBasicId;
+                BillOfMaterial.Pid = null;
+            }
+            else
+            {
+                BillOfMaterial.Pid = PutBomlist.Pid;
+            }
+
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(PutBomlist));
         }
