@@ -10,6 +10,7 @@ import { APIResponse } from '../app.module';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { POrderSale, ReorderSale } from '../model/viewmodels';
+import Select from 'devextreme/ui/check_box';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -101,6 +102,13 @@ export class SaleListComponent implements OnInit {
         //     if (e.rowType === 'header' && e.column.command === 'select') {
         //         alert('testheader');
         //  }
+    }
+    allowEdit(e) {
+        if (e.row.data.Status === 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
     addDetail(e) {
         this.dataGrid.instance.addRow();

@@ -55,7 +55,7 @@
     <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column>
     <div *dxTemplate="let item of 'detail'">
         <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)" keyExpr="id">
-            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
             <dxi-column type="buttons">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
