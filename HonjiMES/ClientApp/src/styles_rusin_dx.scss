@@ -1,4 +1,4 @@
-@import './style-var.scss';
+@import "./style-var.scss";
 //dx-grid
 // dx grid 的全域設定
 .dx-datagrid-headers {
@@ -7,11 +7,11 @@
     border-bottom: none;
     color: black;
 }
-.dx-button{
+.dx-button {
     border-radius: 2px;
     //width: 130px;
 }
-.dx-data-grid{
+.dx-data-grid {
     border-radius: 2px;
 }
 // dx-row 其實包含 .dx-datagrid-headers
@@ -29,7 +29,8 @@
     background-color: orange !important;
     color: black !important;
 }
-.dx-datagrid-rowsview .dx-selection.dx-row > td, .dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
+.dx-datagrid-rowsview .dx-selection.dx-row > td,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
     background-color: orange !important;
     color: black !important;
 }
@@ -37,23 +38,22 @@
 .dx-datagrid .dx-sort-up:before {
     font-family: "FontAwesome" !important;
     font-size: 1.2rem;
-    content: " \f0de"!important; //icon unicode is specified here
-    color:red;
+    content: " \f0de" !important; //icon unicode is specified here
+    color: red;
 }
 .dx-datagrid .dx-sort-down:before {
     font-family: "FontAwesome" !important;
     font-size: 1.2rem;
-    content: "\f0dd"!important;
-    color:red;
+    content: "\f0dd" !important;
+    color: red;
 }
-tr.dx-header-row>td.dx-datagrid-action {
+tr.dx-header-row > td.dx-datagrid-action {
     text-align: left !important;
 }
-tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
+tr.dx-header-row > td.dx-datagrid-action > div.dx-column-indicators {
     float: left !important;
 }
 // dx grid sorting icon
-
 
 // dx item
 .dx-field-item-label-text {
@@ -75,17 +75,14 @@ tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
     color: black;
 }
 .dx-field-label {
-
-    font-size: 14px !important;;
-  }
-  .dx-field-item
-  {
-    font-size: 14px !important;;
-  }
-  .dx-field-item-required-mark
-  {
-      color: red !important;;
-  }
+    font-size: 14px !important;
+}
+.dx-field-item {
+    font-size: 14px !important;
+}
+.dx-field-item-required-mark {
+    color: red !important;
+}
 .dx-header-row .addmod {
     color: #fff;
     background-color: #71c016;
@@ -95,4 +92,13 @@ tr.dx-header-row>td.dx-datagrid-action>div.dx-column-indicators {
     color: #fff;
     background-color: #5d9e12;
     border-color: #569211;
+}
+.dx-datagrid-rowsview
+    .dx-row-focused.dx-data-row
+    .dx-command-edit:not(.dx-focused)
+    .dx-link,
+.dx-datagrid-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused),
+.dx-datagrid-rowsview .dx-row-focused.dx-data-row > tr > td:not(.dx-focused) {
+    background-color: orange !important;
+    color: black !important;
 }

@@ -19,14 +19,12 @@ export class BomlistComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetBomlist/' + this.itemkeyval),
-            byKey: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
+                SendService.sendRequest(this.http, this.Controller + '/PostBomlist', 'POST', { values }),
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutBomlist', 'PUT', { key, values }),
             remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
 
     }
@@ -53,31 +51,20 @@ export class BomlistComponent implements OnInit {
         const sourceData = e.itemData;
         const targetData = visibleRows[e.toIndex].data;
         if (e.dropInsideItem) {
-            this.dataSourceDB.update(e.itemData.Id, { Pid: targetData.Pid }).then(() => {
+            this.dataSourceDB.update(e.itemData.Id, { Pid: targetData.Id }).then(() => {
                 e.component.refresh();
             });
-        } else { }
+        } else {
+            if (targetData.Pid) {
+                this.dataSourceDB.update(e.itemData.Id, { Pid: targetData.Pid }).then(() => {
+                    e.component.refresh();
+                });
+            } else {
+                this.dataSourceDB.update(e.itemData.Id, { ProductBasicId: targetData.ProductBasicId }).then(() => {
+                    e.component.refresh();
+                });
+            }
 
-        // const visibleRows = e.component.getVisibleRows();
-        // const sourceData = e.itemData;
-        // const targetData = visibleRows[e.toIndex].data;
-
-        // if (e.dropInsideItem) {
-        //     e.itemData.Head_ID = targetData.ID;
-        //     e.component.refresh();
-        // } else {
-        //     const sourceIndex = this.dataSourceDB.indexOf(sourceData);
-        //     let targetIndex = this.dataSourceDB.indexOf(targetData);
-
-        //     if (sourceData.Head_ID !== targetData.Head_ID) {
-        //         sourceData.Head_ID = targetData.Head_ID;
-        //         if (e.toIndex > e.fromIndex) {
-        //             targetIndex++;
-        //         }
-        //     }
-
-        //     this.dataSourceDB.splice(sourceIndex, 1);
-        //     this.dataSourceDB.splice(targetIndex, 0, sourceData);
-        // }
+        }
     }
 }

@@ -154,8 +154,14 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public int? Pid { get; set; }
         public string Name { get; set; }
-        public string MaterialNo { get; internal set; }
         public int Quantity { get; internal set; }
+        public int? MaterialBasicId { get; set; }
+        public string MaterialName { get; internal set; }
+        public string MaterialNo { get; internal set; }
+        public int? ProductBasicId { get; set; }
+        public string ProductName { get; internal set; }
+        public string ProductNo { get; internal set; }
+        public int Lv { get; internal set; }
     }
 
     /// <summary>

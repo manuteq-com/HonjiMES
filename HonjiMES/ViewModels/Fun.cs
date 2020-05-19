@@ -331,6 +331,42 @@ namespace HonjiMES.Models
             }
             return QueryList;
         }
+        /// <summary>
+        /// 用遞迴的方式取所有的BOM層
+        /// </summary>
+        /// <param name="billOfMaterials"></param>
+        /// <param name="Lv"></param>
+        /// <returns></returns>
+        internal static List<BomList> GetBomListList(IEnumerable<BillOfMaterial> billOfMaterials, int Lv = 0)
+        {
+            var bomlist = new List<BomList>();
+            if (Lv < 3)//目前限定3階
+            {
+                foreach (var item in billOfMaterials)
+                {
+                    bomlist.Add(new BomList
+                    {
+                        Lv = Lv + 1,
+                        Id = item.Id,
+                        Pid = Lv == 0 ? 0 : item.Pid,
+                        Name = item.Name,
+                        MaterialName = item.MaterialBasic.Name,
+                        MaterialNo = item.MaterialBasic.MaterialNo,
+                        Quantity = item.Quantity,
+                        ProductName = item.InverseP.Any() ? item.ProductBasic.Name : "",
+                        ProductNo = item.InverseP.Any() ? item.ProductBasic.ProductNo : "",
+                        MaterialBasicId = item.MaterialBasicId,
+                        ProductBasicId = item.ProductBasicId
+                    });
+                    if (item.InverseP.Any())
+                    {
+                        bomlist.AddRange(MyFun.GetBomListList(item.InverseP, Lv + 1));
+                    }
+                }
+            }
+            return bomlist;
+        }
+
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             var dbQuery = db.AsAsyncEnumerable();

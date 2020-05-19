@@ -77,6 +77,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200518061853_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200518061853_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200518063846_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200518063846_InitialCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 

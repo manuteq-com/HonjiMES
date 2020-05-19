@@ -128,7 +128,6 @@ export class SendService {
         switch (method) {
             case 'GET':
                 if (data.remote) {
-                    debugger;
                     let params: HttpParams = new HttpParams();
                     [
                         'skip',
