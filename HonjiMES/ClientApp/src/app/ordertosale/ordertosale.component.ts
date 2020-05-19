@@ -31,19 +31,24 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     Seallist: any;
     selectBoxOptions: any;
     buttonOptions: any =  {text: '存檔', type: 'success', useSubmitBehavior: true};
+    editorOptions: any;
     ProductList: any;
     dataSourceDB: any;
     async ngOnChanges() {
-        this.itemkeyval.forEach(x => {
-           x.Quantity  = x.Quantity - x.SaleCount;
+        debugger;
+        this.dataSourceDB = [];
+        this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
+        this.dataSourceDB.forEach(x => {
+            x.Quantity  = x.Quantity - x.SaleCount;
         });
-        this.dataSourceDB = this.itemkeyval;
+
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
         if (this.modval === 'add') {
             this.showdisabled = false;
         } else {
             this.showdisabled = true;
         }
+        this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1};
         this.GetData(this.url + '/Sales/GetSales?status=0').subscribe(
             (s) => {
                 console.log(s);
@@ -95,7 +100,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     }
     onEditorPreparing(e) {
         if (e.parentType === 'dataRow' && e.dataField === 'Quantity') {
-            e.editorOptions.max  = e.row.data.Quantity - e.row.data.SaleCount;
+            e.editorOptions.max  = e.row.data.Quantity - e.row.data.SaleCount;//待修正，每次點選都會重設max。
         }
     }
     validate_before(): boolean {

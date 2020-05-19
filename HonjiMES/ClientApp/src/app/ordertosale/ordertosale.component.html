@@ -29,7 +29,7 @@
             <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox"></dxi-column>
+            <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions"></dxi-column>
             <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
         </dx-data-grid>
