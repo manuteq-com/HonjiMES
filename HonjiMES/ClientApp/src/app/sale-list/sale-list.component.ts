@@ -11,6 +11,7 @@ import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { POrderSale, ReorderSale } from '../model/viewmodels';
 import Select from 'devextreme/ui/check_box';
+import { Myservice } from 'src/app/service/myservice';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -37,8 +38,10 @@ export class SaleListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     Controller = '/Sales';
+    listSaleOrderStatus: any;
     postval: POrderSale;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, myservice: Myservice) {
+        this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
@@ -66,6 +69,10 @@ export class SaleListComponent implements OnInit {
                 }
             }
         );
+
+    }
+    // tslint:disable-next-line: use-lifecycle-interface
+    ngOnChanges() {
 
     }
     getDetails(SaleId) {

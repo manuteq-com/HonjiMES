@@ -13,6 +13,9 @@ export class Myservice {
     getDepartment(): Selectitem[] {
         return departmenttypes;
     }
+    getSaleOrderStatus(): Selectitem[] {
+        return saleOrderStatus;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -28,5 +31,9 @@ const permissiontypes: Selectitem[] = [
 ];
 const departmenttypes: Selectitem[] = [
     { Id: 1, Name: '預設' }
+];
+const saleOrderStatus: Selectitem[] = [
+    { Id: 0, Name: '未完成' },
+    { Id: 1, Name: '結案' }
 ];
 

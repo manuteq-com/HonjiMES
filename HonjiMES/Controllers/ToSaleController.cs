@@ -123,6 +123,7 @@ namespace HonjiMES.Controllers
         {
             var dt = DateTime.Now;
             var SaleDetailNewList = new List<SaleDetailNew>();
+            var saleId = 0;
             if (OrderSale.SaleID.HasValue)
             {
                 var SaleHead = _context.SaleHeads.Find(OrderSale.SaleID);
@@ -140,6 +141,7 @@ namespace HonjiMES.Controllers
             var oversale = new List<string>();
             foreach (var item in SaleDetailNewList.Where(x => x.Status == 0))
             {
+                saleId = item.SaleId;
                 if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
@@ -157,6 +159,19 @@ namespace HonjiMES.Controllers
                     }
                 }
             }
+
+            // 檢查該銷貨單各個明細狀態，更新銷貨單(head)狀態。
+            var checkStatus = true;
+            var SaleHeadData = _context.SaleHeads.Find(saleId);
+            foreach (var SaleDetail in SaleHeadData.SaleDetailNews) {
+                if (SaleDetail.Status == 0) {
+                    checkStatus = false;
+                }
+            }
+            if (checkStatus == true) {
+                SaleHeadData.Status = 1;
+            }
+
             if (oversale.Any())
             {
                 var ErrMsg = string.Join(';', oversale) + "\r\n" + "庫存不足，銷貨失敗";
@@ -166,6 +181,7 @@ namespace HonjiMES.Controllers
             {
                 await _context.SaveChangesAsync();
             }
+
             //foreach (var GDetailitem in SaleHead.SaleDetailNews.GroupBy(x => x.ProductId))
             //{
             //    var sQuantity = GDetailitem.Sum(x => x.Quantity);//品項的總銷貨數
