@@ -34,6 +34,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     editorOptions: any;
     ProductList: any;
     dataSourceDB: any;
+    ProductBasicList: any;
     async ngOnChanges() {
         this.dataSourceDB = [];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
@@ -42,6 +43,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         });
 
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
+        this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'add') {
             this.showdisabled = false;
         } else {

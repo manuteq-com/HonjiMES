@@ -49,12 +49,14 @@ export class CreatorderComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     controller: string;
     CustomerVal: string;
+    ProductBasicList: any;
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnInit() {
     }
     // tslint:disable-next-line: use-lifecycle-interface
     async ngOnChanges() {
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
+        this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'clone') {
             this.GetData(this.url + '/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {

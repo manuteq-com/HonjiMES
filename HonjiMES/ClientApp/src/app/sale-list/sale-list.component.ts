@@ -40,6 +40,7 @@ export class SaleListComponent implements OnInit {
     Controller = '/Sales';
     listSaleOrderStatus: any;
     postval: POrderSale;
+    ProductBasicList: any;
     constructor(private http: HttpClient, myservice: Myservice) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
@@ -69,7 +70,13 @@ export class SaleListComponent implements OnInit {
                 }
             }
         );
-
+        this.GetData('/Products/GetProductBasics').subscribe(
+            (s) => {
+                this.ProductBasicList = s.data;
+                if (s.success) {
+                }
+            }
+        );
     }
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
