@@ -154,16 +154,22 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public int? Pid { get; set; }
         public string Name { get; set; }
-        public int Quantity { get; internal set; }
+        public int Quantity { get; set; }
         public int? MaterialBasicId { get; set; }
-        public string MaterialName { get; internal set; }
-        public string MaterialNo { get; internal set; }
+        public string MaterialName { get; set; }
+        public string MaterialNo { get; set; }
         public int? ProductBasicId { get; set; }
-        public string ProductName { get; internal set; }
-        public string ProductNo { get; internal set; }
-        public int Lv { get; internal set; }
+        public string ProductName { get; set; }
+        public string ProductNo { get; set; }
+        public int Lv { get; set; }
     }
-
+    public class PostBom
+    {
+        public string Name { get; set; }
+        public int? BasicType { get; set; }
+        public int? BasicId { get; set; }
+        public int Quantity { get; set; }
+    }
     /// <summary>
     /// 對應EXCL
     /// </summary>

@@ -63,6 +63,7 @@ import { CreatwarehouseComponent } from './warehouse/creatwarehouse/creatwarehou
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { CreatuserComponent } from './setting/creatuser/creatuser.component';
 import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
+import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -133,6 +134,7 @@ import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
         UserListComponent,
         CreatuserComponent,
         BomlistComponent,
+        EditbomComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }

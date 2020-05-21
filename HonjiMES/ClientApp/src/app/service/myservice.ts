@@ -13,6 +13,9 @@ export class Myservice {
     getDepartment(): Selectitem[] {
         return departmenttypes;
     }
+    getComponent(): Selectitem[] {
+        return componenttypes;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -29,4 +32,7 @@ const permissiontypes: Selectitem[] = [
 const departmenttypes: Selectitem[] = [
     { Id: 1, Name: '預設' }
 ];
-
+const componenttypes: Selectitem[] = [
+    { Id: 1, Name: '原料' },
+    { Id: 2, Name: '成品' },
+];

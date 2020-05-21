@@ -33,7 +33,10 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     url: string;
-    dataSourceDB: { Id: number, SupplierId: number, PurchaseId: number, DataId: number, Quantity: number, OriginPrice: number, Price: number }[] = [];
+    dataSourceDB: {
+        Id: number, SupplierId: number, PurchaseId: number,
+        DataId: number, Quantity: number, OriginPrice: number, Price: number
+    }[] = [];
     controller: string;
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
@@ -61,7 +64,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 2;
+        this.colCount = 3;
         this.url = location.origin + '/api';
         this.controller = '/OrderDetails';
         this.dataSourceDB = [];
@@ -133,12 +136,12 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         const PurchaseId = e.data.PurchaseId;
         const DataId = e.data.DataId;
         const datas = this.dataSourceDB;
-        datas.forEach(element => {//阻擋重複新增
+        datas.forEach(element => {// 阻擋重複新增
             if (element.SupplierId === SupplierId &&
                 element.PurchaseId === PurchaseId &&
                 element.DataId === DataId) {
-                    this.showMessage('新增項目已存在!!');
-                    e.cancel = true;
+                this.showMessage('新增項目已存在!!');
+                e.cancel = true;
             }
         });
         if (e.cancel === false) {

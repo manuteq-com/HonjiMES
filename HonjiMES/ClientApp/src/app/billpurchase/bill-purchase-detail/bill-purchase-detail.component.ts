@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
@@ -41,7 +41,7 @@ export class BillPurchaseDetailComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
-     }
+    }
 
     ngOnInit() {
     }
@@ -60,7 +60,7 @@ export class BillPurchaseDetailComponent implements OnInit {
     onContentReady(e) {
         const _dataGrid = $(e.element);
         const dataGrid = e.component;
-        if (this.changeMode && ! _dataGrid.find('.dx-row-inserted').length) {
+        if (this.changeMode && !_dataGrid.find('.dx-row-inserted').length) {
             dataGrid.beginUpdate();
             e.component.option('editing.mode', 'form');
             this.changeMode = false;
@@ -111,7 +111,7 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.OriginPriceval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
     }
-    onEditingStart(e){
+    onEditingStart(e) {
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -125,7 +125,7 @@ export class BillPurchaseDetailComponent implements OnInit {
             }
         }, 'error', 3000);
     }
-    checkinonClick(e){
+    checkinonClick(e) {
         debugger;
         this.keyID = e.row.key;
         this.popupVisible = true;

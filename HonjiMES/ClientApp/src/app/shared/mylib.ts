@@ -25,9 +25,7 @@ export class MyMsg {
             maxWidth: '600px',
             position: { at: 'center center', of: 'window', offset: '5 5' }
         };
-        // notify(options,"success",2000);
         notify(options, 'success', 2000);
-        // The message's type: "info", "warning", "error" or "success"
     }
     public static showErr(msg: string) {// 吐司訊息區
         const options = {
@@ -37,9 +35,7 @@ export class MyMsg {
             maxWidth: '600px',
             position: { at: 'center center', of: 'window', offset: '5 5' }
         };
-        // notify(options,"success",2000);
         notify(options, 'error', 2000);
-        // The message's type: "info", "warning", "error" or "success"
     }
 
     public static showToast(msg: string, MessageType: string, delaytime: number) {// 吐司訊息區
@@ -174,13 +170,6 @@ export class SendService {
                     }
 
                 } else {
-                    // notify({
-                    //     message: data.message,
-                    //     position: {
-                    //         my: 'center top',
-                    //         at: 'center top'
-                    //     }
-                    // }, 'error', 3000);
                     throw ReturnData.message;
                 }
             })

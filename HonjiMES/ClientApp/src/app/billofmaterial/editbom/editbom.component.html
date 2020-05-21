@@ -1,0 +1,23 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dxi-item dataField="Name">
+            <dxo-label text="名稱"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="BasicType" dataType="number" editorType="dxSelectBox" [editorOptions]="ComponentList">
+            <dxo-label text="組件類型"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="BasicId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions">
+            <dxo-label text="品號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox">
+            <dxi-validation-rule type="required" message="組成數量 必填"></dxi-validation-rule>
+            <dxi-validation-rule type="range" [min]="1" message="組成數量 必須大於1"></dxi-validation-rule>
+            <dxo-label text="組成數量"></dxo-label>
+        </dxi-item>
+    </dx-form>
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+    </div>
+</form>

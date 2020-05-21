@@ -294,18 +294,111 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<BomList>>> PutBomlist(int id, BomList PutBomlist)
         {
             var BillOfMaterial = _context.BillOfMaterials.Find(id);
-            if (PutBomlist.ProductBasicId.HasValue)
+            if (!string.IsNullOrWhiteSpace(PutBomlist.Name))
             {
-                BillOfMaterial.ProductBasicId = PutBomlist.ProductBasicId;
-                BillOfMaterial.Pid = null;
+                BillOfMaterial.Name = PutBomlist.Name;
             }
-            else
+            if (PutBomlist.Quantity != 0)
             {
-                BillOfMaterial.Pid = PutBomlist.Pid;
+                BillOfMaterial.Quantity = PutBomlist.Quantity;
             }
-
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(PutBomlist));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="PostBom"></param>
+        /// <returns></returns>
+        [HttpPost("{id}")]
+        public async Task<ActionResult<BomList>> PostBomlist(int id, [FromBody] PostBom PostBom)
+        {
+            if (string.IsNullOrWhiteSpace(PostBom.Name) && PostBom.BasicId == null)
+            {
+                return Ok(MyFun.APIResponseError("請輸入名稱或品號"));
+            }
+            var nBillOfMaterials = new BillOfMaterial
+            {
+                ProductBasicId = id,
+                Name = PostBom.Name,
+                Quantity = PostBom.Quantity,
+            };
+            if (PostBom.BasicType == 1)//原料直接加入
+            {
+                nBillOfMaterials.MaterialBasicId = PostBom.BasicId;
+            }
+            else if (PostBom.BasicType == 2 && PostBom.BasicId.HasValue)//成品連同組成加入
+            {
+                //複製BOM內容
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                int BasicId = PostBom.BasicId.Value;
+                var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
+                foreach (var item1 in BillOfMaterials)
+                {
+                    var nbom1 = new BillOfMaterial
+                    {
+                        ProductBasicId = item1.ProductBasicId,
+                        MaterialBasicId = item1.MaterialBasicId,
+                        Quantity = item1.Quantity
+                    };
+                    foreach (var item2 in item1.InverseP)
+                    {
+                        var nbom2 = new BillOfMaterial
+                        {
+                            ProductBasicId = item2.ProductBasicId,
+                            MaterialBasicId = item2.MaterialBasicId,
+                            Quantity = item2.Quantity
+                        };
+                        foreach (var item3 in item2.InverseP)
+                        {
+                            var nbom3 = new BillOfMaterial
+                            {
+                                ProductBasicId = item3.ProductBasicId,
+                                MaterialBasicId = item3.MaterialBasicId,
+                                Quantity = item3.Quantity
+                            };
+                            nbom2.InverseP.Add(nbom3);
+                        }
+                        nbom1.InverseP.Add(nbom2);
+                    }
+                    nBillOfMaterials.InverseP.Add(nbom1);
+                }
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+            }
+            _context.BillOfMaterials.Add(nBillOfMaterials);
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(PostBom));
+        }
+        /// <summary>
+        /// 取可用的原料下拉列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasicsDrowDown()
+        {
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Select(x => new
+            {
+                x.Id,
+                Name = x.MaterialNo
+            }).OrderBy(x => x.Name).ToListAsync();
+            return Ok(MyFun.APIResponseOK(materialBasic));
+        }
+        /// <summary>
+        /// 取可用的成品下拉列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProductBasicsDrowDown()
+        {
+            var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Select(x => new
+            {
+                x.Id,
+                Name = x.Name + "_" + x.ProductNo,
+                Group = x.Name
+            }).OrderBy(x => x.Name).ToListAsync();
+            return Ok(MyFun.APIResponseOK(productBasic));
         }
         private bool BillOfMaterialExists(int id)
         {

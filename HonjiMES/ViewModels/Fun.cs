@@ -348,13 +348,13 @@ namespace HonjiMES.Models
                     {
                         Lv = Lv + 1,
                         Id = item.Id,
-                        Pid = Lv == 0 ? 0 : item.Pid,
+                        Pid = Lv == 0 ? 0 : item.Pid ?? 0,
                         Name = item.Name,
-                        MaterialName = item.MaterialBasic.Name,
-                        MaterialNo = item.MaterialBasic.MaterialNo,
+                        MaterialName = item.MaterialBasic?.Name,
+                        MaterialNo = item.MaterialBasic?.MaterialNo,
                         Quantity = item.Quantity,
-                        ProductName = item.InverseP.Any() ? item.ProductBasic.Name : "",
-                        ProductNo = item.InverseP.Any() ? item.ProductBasic.ProductNo : "",
+                        ProductName = item.InverseP.Any() ? item.ProductBasic?.Name : "",
+                        ProductNo = item.InverseP.Any() ? item.ProductBasic?.ProductNo : "",
                         MaterialBasicId = item.MaterialBasicId,
                         ProductBasicId = item.ProductBasicId
                     });

@@ -20,17 +20,17 @@
     </dxo-pager>
     <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
     </dxo-remote-operations> -->
-    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false"></dxo-editing>
+    <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="false"></dxo-editing>
     <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false" [filterValue]="" dataType="string">
     </dxi-column>
     <dxi-column dataField="Name" caption="品名" dataType="string"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
-    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+    <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+    </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
         <app-bomlist [itemkeyval]="item.key"></app-bomlist>
     </div>
