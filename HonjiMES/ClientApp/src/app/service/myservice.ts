@@ -16,7 +16,6 @@ export class Myservice {
     getSaleOrderStatus(): Selectitem[] {
         return saleOrderStatus;
     }
-}
     getComponent(): Selectitem[] {
         return componenttypes;
     }
