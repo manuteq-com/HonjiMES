@@ -34,8 +34,8 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     editorOptions: any;
     ProductList: any;
     dataSourceDB: any;
+    ProductBasicList: any;
     async ngOnChanges() {
-        debugger;
         this.dataSourceDB = [];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
         this.dataSourceDB.forEach(x => {
@@ -43,6 +43,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         });
 
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
+        this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'add') {
             this.showdisabled = false;
         } else {
@@ -95,12 +96,12 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         }, 'error', 3000);
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data' && e.column.dataField === 'Quantity') {
-        }
     }
     onEditorPreparing(e) {
         if (e.parentType === 'dataRow' && e.dataField === 'Quantity') {
-            e.editorOptions.max  = e.row.data.Quantity - e.row.data.SaleCount;//待修正，每次點選都會重設max。
+            const rowIndex = e.row.rowIndex;
+            const originData = this.itemkeyval[rowIndex];
+            e.editorOptions.max  = originData.Quantity - originData.SaleCount;
         }
     }
     validate_before(): boolean {

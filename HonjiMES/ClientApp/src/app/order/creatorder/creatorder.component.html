@@ -79,10 +79,10 @@
         </dxi-column>
         <dxi-column dataField="ProductId" caption="品號">
             <dxi-validation-rule type="required" message="品號 必填" width="200"></dxi-validation-rule>
-            <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="ProductId" caption="規格">
-            <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="數量" dataType="number" width="50">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>

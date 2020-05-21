@@ -41,6 +41,21 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢產品列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Products
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProductBasics()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var ProductBasics = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(ProductBasics));
+            //return Ok(new { data = Products, success = true, timestamp = DateTime.Now, message = "" });
+        }
+
+        /// <summary>
         /// 使用ID查詢產品列表
         /// </summary>
         /// <param name="id"></param>

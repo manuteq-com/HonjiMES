@@ -49,13 +49,16 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
     <dxi-column dataField="SaleNo" caption="銷貨單號"></dxi-column>
-    <dxi-column dataField="Status" caption="狀態" width="200"></dxi-column>
+    <dxi-column dataField="Status" caption="狀態" width="200">
+        <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
     <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column>
     <div *dxTemplate="let item of 'detail'">
         <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)" keyExpr="id">
-            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
             <dxi-column type="buttons">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -66,13 +69,13 @@
             <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
             <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="ProductId" caption="品名" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
             <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>

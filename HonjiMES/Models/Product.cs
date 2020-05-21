@@ -19,6 +19,8 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
@@ -61,8 +63,6 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int ProductBasicId { get; set; }
 
         [ForeignKey("ProductBasicId")]
         [InverseProperty("Products")]

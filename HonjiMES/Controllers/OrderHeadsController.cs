@@ -226,10 +226,8 @@ namespace HonjiMES.Controllers
                             var Files = MyFun.ProcessGetTempExcelAsync(Dir, DirName);
                             foreach (var Fileitem in Files)
                             {
-
                                 OrderHeadlist.AddRange(DBHelper.GetExcelData(Fileitem, _context, ref sLostProduct));
                             }
-
                         }
                         else
                         {
@@ -240,9 +238,6 @@ namespace HonjiMES.Controllers
                     {
                         return Ok(MyFun.APIResponseError(ex.Message));
                     }
-                    //
-
-
                 }
             }
             foreach (var Headitem in OrderHeadlist.ToList())
@@ -273,34 +268,51 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<OrderHead>> PostCreatProductByExcelAsync(ProductByExcel ProductByExcel)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            //
+
             var dt = DateTime.Now;
-            var nProductlist = new List<Product>();
+             var nProductBasicslist = new List<ProductBasic>();
             foreach (var Productitem in ProductByExcel.Products.Split("<br/>"))
             {
-                var Productitemlist = Productitem.Split(";");
+                var Productitemlist = Productitem.Split(" ; ");
                 if (Productitemlist.Length == 3)
                 {
                     //再檢查一次
-                    if (!_context.Products.AsQueryable().Where(x => x.ProductNo == Productitemlist[0]).Any())
-                    {
-                        nProductlist.Add(new Product
-                        {
+                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0]).Any()) {
+                        var nProductBasics = new ProductBasic{
                             ProductNo = Productitemlist[0].Trim(),
                             ProductNumber = Productitemlist[0].Trim(),
                             Name = Productitemlist[1].Trim(),
                             Specification = Productitemlist[2].Trim(),
                             Property = "",
-                            SubInventory = "",
                             CreateTime = dt,
                             CreateUser = 1,
-                        });
+                        };
+                        var  nProduct = new Product
+                        {
+                            ProductNo = Productitemlist[0].Trim(),
+                            ProductNumber = Productitemlist[0].Trim(),
+                            Name = Productitemlist[1].Trim(),
+                            Quantity = 0,
+                            Specification = Productitemlist[2].Trim(),
+                            Property = "",
+                            MaterialId = 0,
+                            MaterialRequire = 1,
+                            CreateTime = dt,
+                            CreateUser = 1,
+                            WarehouseId  = 2
+                        };
+                        // nProduct.ProductLogs.Add(new ProductLog{
+
+                        // })
+                        // if(nProductBasics.where())
+                        nProductBasics.Products.Add(nProduct);
+                        nProductBasicslist.Add(nProductBasics);
                     }
                 }
             }
             try
             {
-                _context.AddRange(nProductlist);
+                _context.AddRange(nProductBasicslist);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

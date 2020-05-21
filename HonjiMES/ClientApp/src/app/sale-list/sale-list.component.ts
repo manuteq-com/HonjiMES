@@ -10,6 +10,8 @@ import { APIResponse } from '../app.module';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { POrderSale, ReorderSale } from '../model/viewmodels';
+import Select from 'devextreme/ui/check_box';
+import { Myservice } from 'src/app/service/myservice';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -36,8 +38,11 @@ export class SaleListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     Controller = '/Sales';
+    listSaleOrderStatus: any;
     postval: POrderSale;
-    constructor(private http: HttpClient) {
+    ProductBasicList: any;
+    constructor(private http: HttpClient, myservice: Myservice) {
+        this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
@@ -65,6 +70,16 @@ export class SaleListComponent implements OnInit {
                 }
             }
         );
+        this.GetData('/Products/GetProductBasics').subscribe(
+            (s) => {
+                this.ProductBasicList = s.data;
+                if (s.success) {
+                }
+            }
+        );
+    }
+    // tslint:disable-next-line: use-lifecycle-interface
+    ngOnChanges() {
 
     }
     getDetails(SaleId) {
@@ -101,6 +116,13 @@ export class SaleListComponent implements OnInit {
         //     if (e.rowType === 'header' && e.column.command === 'select') {
         //         alert('testheader');
         //  }
+    }
+    allowEdit(e) {
+        if (e.row.data.Status === 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
     addDetail(e) {
         this.dataGrid.instance.addRow();

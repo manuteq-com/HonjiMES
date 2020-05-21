@@ -32,6 +32,7 @@ export class OrderListComponent {
     uploadUrl: string;
     exceldata: any;
     Controller = '/OrderHeads';
+    ProductBasicList: any;
     constructor(private http: HttpClient) {
 
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
@@ -77,7 +78,13 @@ export class OrderListComponent {
                 }
             }
         );
-
+        this.GetData('/Products/GetProductBasics').subscribe(
+            (s) => {
+                this.ProductBasicList = s.data;
+                if (s.success) {
+                }
+            }
+        );
     }
     getDetails(key) {
         let item = this.DetailsDataSourceStorage.find((i) => i.key === key);

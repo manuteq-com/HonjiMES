@@ -64,7 +64,7 @@
         <dxi-button hint="to_sale" text="轉鎖貨" [onClick]="to_saleClick"></dxi-button>
     </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
-        <app-oerdrdetail-list [itemkey]="item.key" [ProductList]="ProductList"></app-oerdrdetail-list>
+        <app-oerdrdetail-list [itemkey]="item.key" [ProductBasicList]="ProductBasicList"></app-oerdrdetail-list>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false"

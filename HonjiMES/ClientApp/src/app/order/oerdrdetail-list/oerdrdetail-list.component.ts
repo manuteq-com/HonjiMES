@@ -18,7 +18,7 @@ import CheckBox from 'devextreme/ui/check_box';
 export class OerdrdetailListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkey: number;
-    @Input() ProductList: any;
+    @Input() ProductBasicList: any;
     url = location.origin + '/api';
     popupVisible = false;
     tosealkey: any;
