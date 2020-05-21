@@ -2,16 +2,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent, DxFileUploaderComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from '../shared/mylib';
+import { SendService } from '../../shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { Observable } from 'rxjs';
-import { APIResponse } from '../app.module';
+import { APIResponse } from '../../app.module';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
-import { POrderSale, ReorderSale } from '../model/viewmodels';
+import { POrderSale, ReorderSale, ToorderSale } from '../../model/viewmodels';
 import Select from 'devextreme/ui/check_box';
-import { Myservice } from 'src/app/service/myservice';
+import { Myservice } from '../../service/myservice';
 @Component({
   selector: 'app-sale-list',
   templateUrl: './sale-list.component.html',
@@ -29,11 +29,13 @@ export class SaleListComponent implements OnInit {
     DetailsDataSourceStorage: any;
     creatpopupVisible = false;
     resalepopupVisible = false;
+    tosalepopupVisible = false;
     formData: any;
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
     resaleitemkey: any;
+    tosaleitemkey: any;
     resalemod: string;
     uploadUrl: string;
     exceldata: any;
@@ -160,6 +162,17 @@ export class SaleListComponent implements OnInit {
             }
         }, 'success', 3000);
     }
+    tosalepopup_result(e) {
+        this.tosalepopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
     selectionChanged(e) {
         // debugger;
         // 只開一筆Detail資料
@@ -208,19 +221,28 @@ export class SaleListComponent implements OnInit {
         }
     }
     async to_dsaleClick(e, item) {
-        this.postval = new POrderSale();
-        this.postval.SaleDID = item.key;
-        const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderSale', 'POST', { values: this.postval });
-        if (sendRequest) {
-            notify({
-                message: '銷貨完成',
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'success', 3000);
-            this.dataGrid.instance.refresh();
-        }
+        // debugger;
+        this.tosalepopupVisible = true;
+        this.tosaleitemkey = new ToorderSale();
+        this.tosaleitemkey.key = item.key;
+        this.tosaleitemkey.qty = item.data.Quantity;
+        this.tosaleitemkey.ProductBasicId = item.data.ProductBasicId;
+        this.tosaleitemkey.ProductNo = item.data.ProductNo;
+
+        // vvv以下舊的方法停用
+        // this.postval = new POrderSale();
+        // this.postval.SaleDID = item.key;
+        // const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderSale', 'POST', { values: this.postval });
+        // if (sendRequest) {
+        //     notify({
+        //         message: '銷貨完成',
+        //         position: {
+        //             my: 'center top',
+        //             at: 'center top'
+        //         }
+        //     }, 'success', 3000);
+        //     this.dataGrid.instance.refresh();
+        // }
     }
     async to_redsaleClick(e, item) {
         // debugger;

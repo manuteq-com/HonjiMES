@@ -69,6 +69,17 @@ namespace HonjiMES.Models
         public int? SaleDID { get; set; }
     }
     /// <summary>
+    /// 銷貨單銷貨
+    /// </summary>
+    public class ToOrderSale : OrderSale
+    {
+        public int Quantity { get; set; }
+        /// <summary>
+        /// 倉庫
+        /// </summary>
+        public int WarehouseId { get; set; }
+    }
+    /// <summary>
     /// 銷貨單退貨
     /// </summary>
     public class ReOrderSale : OrderSale

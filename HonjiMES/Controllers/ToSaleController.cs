@@ -44,7 +44,7 @@ namespace HonjiMES.Controllers
                             //var Qty = PDetailitem.Quantity - Detailitem.SaleCount;//剩下可開的銷貨數量
                             var Qty = PDetailitem.Quantity;
                             Detailitem.SaleCount += Qty;
-                            Detailitem.Product.QuantityAdv += Qty;
+                            // Detailitem.Product.QuantityAdv += Qty;//暫時停用，等待更新做法
                             nlist.Add(new SaleDetailNew
                             {
                                 OrderId = Detailitem.OrderId,
@@ -52,10 +52,10 @@ namespace HonjiMES.Controllers
                                 Quantity = Qty,
                                 OriginPrice = Detailitem.OriginPrice,
                                 Price = Detailitem.Price,
-                                ProductId = Detailitem.ProductId,
-                                ProductNo = Detailitem.Product.ProductNo,
-                                Name = Detailitem.Product.Name,
-                                Specification = Detailitem.Product.Specification,
+                                ProductBasicId = Detailitem.ProductBasicId,
+                                ProductNo = Detailitem.ProductBasic.ProductNo,
+                                Name = Detailitem.ProductBasic.Name,
+                                Specification = Detailitem.ProductBasic.Specification,
                                 CreateTime = dt,
                                 CreateUser = 1,
                                 DeleteFlag = 0
@@ -119,7 +119,7 @@ namespace HonjiMES.Controllers
         /// <param name="OrderSale"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<SaleHead>> OrderSale(OrderSale OrderSale)
+        public async Task<ActionResult<SaleHead>> OrderSale(ToOrderSale OrderSale)
         {
             var dt = DateTime.Now;
             var SaleDetailNewList = new List<SaleDetailNew>();
@@ -132,6 +132,16 @@ namespace HonjiMES.Controllers
             else if (OrderSale.SaleDID.HasValue)
             {
                 var SaleDetail = _context.SaleDetailNews.Find(OrderSale.SaleDID);
+                // var ProductId = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
+                // SaleDetail.ProductId = ProductId;
+                             
+                var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+                SaleDetail.Product = Product;
+                // foreach (var item in ProductData)
+                // {
+                //     var ProductsId =_context.Products.AsQueryable().Where(x => x.ProductBasicId == item.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
+                //     item.p
+                // }
                 SaleDetailNewList.Add(SaleDetail);
             }
             else
@@ -142,10 +152,13 @@ namespace HonjiMES.Controllers
             foreach (var item in SaleDetailNewList.Where(x => x.Status == 0))
             {
                 saleId = item.SaleId;
+
                 if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
-                    item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = -item.Quantity, Reason = item.Sale.SaleNo + "銷貨", CreateTime = dt, CreateUser = 1 });
+                    
+                    // 暫時停用
+                    // item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = -item.Quantity, Reason = item.Sale.SaleNo + "銷貨", CreateTime = dt, CreateUser = 1 });
                     item.Product.Quantity -= item.Quantity;
                     item.Product.QuantityAdv -= item.Quantity;
                     item.Status = 1;//1已銷貨

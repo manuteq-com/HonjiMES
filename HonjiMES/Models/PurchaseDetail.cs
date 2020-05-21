@@ -20,7 +20,7 @@ namespace HonjiMES.Models
         [Column("purchase_id", TypeName = "int(11)")]
         public int PurchaseId { get; set; }
         [Column("purchase_type", TypeName = "int(11)")]
-        public int PurchaseType { get; set; }
+        public int? PurchaseType { get; set; }
         [Column("supplier_id", TypeName = "int(11)")]
         public int SupplierId { get; set; }
         [Column("order_id", TypeName = "int(11)")]

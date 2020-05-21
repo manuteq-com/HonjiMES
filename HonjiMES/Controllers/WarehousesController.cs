@@ -65,6 +65,26 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseByProductBasic(int id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
+            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+
+            if (WarehouseData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
+        /// <summary>
+        /// 用ID最倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouseByProduct(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
