@@ -46,11 +46,14 @@ export class AppMenuComponent implements OnInit {
         this.breadcrumbitem = [];
         this.model = [
 
-            { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+            // { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
             {
-                label: '訂單管理', icon: 'fa fa-fw fa-bars',
+                label: '訂單總覽', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '訂單總覽', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
+                    { label: '客戶訂單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
+                    { label: '採購單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+                    { label: '進貨單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+                    { label: '銷貨單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
                 ]
 
             },
@@ -60,25 +63,25 @@ export class AppMenuComponent implements OnInit {
                     { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materiallist'] },
                     { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productlist'] },
                     // { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
-                    { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
+                    // { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
                 ]
 
             },
-            {
-                label: '採購管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
-                    { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
-                ]
+            // {
+            //     label: '採購管理', icon: 'fa fa-fw fa-bars',
+            //     items: [
+            //         { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+            //         { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+            //     ]
 
-            },
-            {
-                label: '銷貨管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '銷貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
-                ]
+            // },
+            // {
+            //     label: '銷貨管理', icon: 'fa fa-fw fa-bars',
+            //     items: [
+            //         { label: '銷貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
+            //     ]
 
-            },
+            // },
             {
                 label: '組成管理', icon: 'fa fa-fw fa-bars',
                 items: [
@@ -91,6 +94,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist']},
                     { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist']},
+                    { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
                     { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist']},
                 ]
 
