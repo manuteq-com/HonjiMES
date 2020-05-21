@@ -640,6 +640,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_order_order_detail");
 
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_order_detail_product_basic1");
+
                 entity.HasIndex(e => e.ProductId)
                     .HasName("fk_order_detail_product1_idx");
 
@@ -685,6 +688,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Price).HasComment("折後價格");
 
+                entity.Property(e => e.ProductBasicId).HasComment("成品基本資訊id");
+
                 entity.Property(e => e.ProductId).HasComment("產品id");
 
                 entity.Property(e => e.Quantity).HasComment("數量");
@@ -724,10 +729,15 @@ namespace HonjiMES.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_order_detail_order_head1");
 
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_order_detail_product_basic1");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_order_detail_product1");
             });
 
@@ -1359,6 +1369,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_sale_detail_new_order_head1_idx");
 
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_sale_detail_new_product_basic1");
+
                 entity.HasIndex(e => e.ProductId)
                     .HasName("fk_sale_detail_new_product1_idx");
 
@@ -1381,6 +1394,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
 
                 entity.Property(e => e.Price).HasComment("價格");
+
+                entity.Property(e => e.ProductBasicId).HasComment("產品基本資訊id");
 
                 entity.Property(e => e.ProductId).HasComment("主件品號ID");
 
@@ -1421,10 +1436,15 @@ namespace HonjiMES.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_sale_detail_new_order_head1");
 
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_product_basic1");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SaleDetailNews)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_sale_detail_new_product1");
 
                 entity.HasOne(d => d.Sale)

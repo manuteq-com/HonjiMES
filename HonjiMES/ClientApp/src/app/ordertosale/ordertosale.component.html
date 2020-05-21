@@ -20,13 +20,13 @@
         <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
         (onEditorPreparing)="onEditorPreparing($event)" (onCellPrepared)="onCellPrepared($event)">
             <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
-            <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="品號" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductId" caption="品名" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions"></dxi-column>

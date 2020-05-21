@@ -4,7 +4,7 @@ import { HomepageComponent } from './globalpage/homepage.component';
 import { MaterialListComponent } from './material/material-list/material-list.component';
 import { OrderListComponent } from './order/order-list/order-list.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
-import { SaleListComponent } from './sale-list/sale-list.component';
+import { SaleListComponent } from './sale/sale-list/sale-list.component';
 import { PurchaseOrderComponent } from './purchase/purchase-order/purchase-order.component';
 import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchase.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';

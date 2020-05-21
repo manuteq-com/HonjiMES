@@ -28,7 +28,7 @@ namespace HonjiMES.Models
             var ExcelOrderModellist = new List<ExcelOrderModel>();
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "CustomerNo", ExcelName = "訂單單號", TableName = "OrderHead", ExcelOrder = 1 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Serial", ExcelName = "序號", TableName = "OrderDetail", ExcelOrder = 2 });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ProductId", ExcelName = "品號", TableName = "OrderDetail", Change = "Product", ExcelOrder = 3 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ProductBasicId", ExcelName = "品號", TableName = "OrderDetail", Change = "ProductBasic", ExcelOrder = 3 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "品名", TableName = "OrderDetail", ExcelOrder = 4 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "規格", TableName = "OrderDetail", ExcelOrder = 5 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Quantity", ExcelName = "數量", TableName = "OrderDetail", ExcelOrder = 6 });
@@ -273,7 +273,7 @@ namespace HonjiMES.Models
                                     {
                                         switch (Mappingitem.Change)
                                         {
-                                            case "Product":
+                                            case "ProductBasic":
                                                 Cellval = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
                                                 if (string.IsNullOrWhiteSpace(Cellval))
                                                 {

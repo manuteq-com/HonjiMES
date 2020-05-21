@@ -16,7 +16,7 @@
         [allowDeleting]="true">
 
         <dxo-form colCount=5>
-            <dxi-item dataField="ProductId">
+            <dxi-item dataField="ProductBasicId">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="Quantity">
@@ -49,13 +49,13 @@
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
     <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" width="200"></dxi-column>
-    <dxi-column dataField="ProductId" caption="品號" width="200">
+    <dxi-column dataField="ProductBasicId" caption="品號" width="200">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductId" caption="品名">
+    <dxi-column dataField="ProductBasicId" caption="品名">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductId" caption="規格">
+    <dxi-column dataField="ProductBasicId" caption="規格">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="SaleCount" caption="已銷貨數量" dataType="number"  width="100"></dxi-column>

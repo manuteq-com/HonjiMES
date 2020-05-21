@@ -12,7 +12,9 @@ namespace HonjiMES.Models
         public ProductBasic()
         {
             BillOfMaterials = new HashSet<BillOfMaterial>();
+            OrderDetails = new HashSet<OrderDetail>();
             Products = new HashSet<Product>();
+            SaleDetailNews = new HashSet<SaleDetailNew>();
         }
 
         [Key]
@@ -52,6 +54,10 @@ namespace HonjiMES.Models
         [InverseProperty("ProductBasic")]
         public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
         [InverseProperty("ProductBasic")]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [InverseProperty("ProductBasic")]
         public virtual ICollection<Product> Products { get; set; }
+        [InverseProperty("ProductBasic")]
+        public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

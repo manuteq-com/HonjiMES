@@ -82,10 +82,10 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
             this.exceldata.OrderDetails.forEach(item => {
                 this.SerialNo++;
-                if (item.ProductId === 0) {
-                    item.ProductId = null;
+                if (item.ProductBasicId === 0) {
+                    item.ProductBasicId = null;
                 } else {
-                    const Product = this.ProductList.filter(x => x.Id === item.ProductId)[0];
+                    const Product = this.ProductBasicList.filter(x => x.Id === item.ProductBasicId)[0];
                     if (Product.Price !== item.OriginPrice) {
                         ProductPricrErr += Product.ProductNo + '：' + Product.Price + '=>' + item.OriginPrice + '<br/>';
                     }
@@ -190,7 +190,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
             this.dataGrid.instance.saveEditData();
             this.formData = this.myform.instance.option('formData');
-            const hnull = this.dataSourceDB.find(item => item.ProductId == null);
+            const hnull = this.dataSourceDB.find(item => item.ProductBasicId == null);
             if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
                 notify({
                     message: '請注意訂單內容必填的欄位',

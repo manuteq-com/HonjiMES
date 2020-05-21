@@ -131,11 +131,15 @@ export class User {
 export class POrderSale {
     SaleID: number;
     SaleDID: number;
-  }
+}
 export class ReorderSale {
     key: number;
     qty: number;
-  }
+}
+export class ToorderSale {
+    key: number;
+    qty: number;
+}
 export class Selectitem {
     Id: number;
     Name: string;

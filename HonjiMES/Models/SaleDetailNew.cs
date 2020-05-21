@@ -23,8 +23,10 @@ namespace HonjiMES.Models
         public int OrderId { get; set; }
         [Column("order_detail_id", TypeName = "int(11)")]
         public int OrderDetailId { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
         [Column("product_id", TypeName = "int(11)")]
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
@@ -63,6 +65,9 @@ namespace HonjiMES.Models
         [ForeignKey("ProductId")]
         [InverseProperty("SaleDetailNews")]
         public virtual Product Product { get; set; }
+        [ForeignKey("ProductBasicId")]
+        [InverseProperty("SaleDetailNews")]
+        public virtual ProductBasic ProductBasic { get; set; }
         [ForeignKey("SaleId")]
         [InverseProperty("SaleDetailNews")]
         public virtual SaleHead Sale { get; set; }

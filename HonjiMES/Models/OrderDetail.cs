@@ -21,8 +21,10 @@ namespace HonjiMES.Models
         public int OrderId { get; set; }
         [Column("serial", TypeName = "int(11)")]
         public int Serial { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
         [Column("product_id", TypeName = "int(11)")]
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         [Column("originPrice", TypeName = "int(11)")]
@@ -78,6 +80,9 @@ namespace HonjiMES.Models
         [ForeignKey("ProductId")]
         [InverseProperty("OrderDetails")]
         public virtual Product Product { get; set; }
+        [ForeignKey("ProductBasicId")]
+        [InverseProperty("OrderDetails")]
+        public virtual ProductBasic ProductBasic { get; set; }
         [InverseProperty("OrderDetail")]
         public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }

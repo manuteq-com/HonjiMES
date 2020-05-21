@@ -55,7 +55,7 @@
     </dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
-    <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column>
+    <!-- <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
         <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)" keyExpr="id">
             <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
@@ -68,13 +68,13 @@
             <dxi-column dataField="Order.CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
-            <dxi-column dataField="ProductId" caption="品號" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="品號" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductId" caption="品名" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductId" caption="規格" [allowEditing]="false">
+            <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
@@ -100,6 +100,13 @@
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatorder>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="請選擇銷貨倉別" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="170"
+    [(visible)]="tosalepopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-to-order-sale (childOuter)="tosalepopup_result($event)" [itemkeyval]="tosaleitemkey"></app-to-order-sale>
     </div>
 </dx-popup>
 

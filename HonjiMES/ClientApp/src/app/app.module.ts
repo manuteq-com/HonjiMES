@@ -44,8 +44,8 @@ import { CreatproductComponent } from './product/creatproduct/creatproduct.compo
 import { CreatmaterialComponent } from './material/creatmaterial/creatmaterial.component';
 import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
 import { OrdertosaleComponent } from './ordertosale/ordertosale.component';
-import { SaleListComponent } from './sale-list/sale-list.component';
-import { ReOrderSaleComponent } from './re-order-sale/re-order-sale.component';
+import { SaleListComponent } from './sale/sale-list/sale-list.component';
+import { ReOrderSaleComponent } from './sale/re-order-sale/re-order-sale.component';
 import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchase.component';
 import { PurchaseOrderComponent } from './purchase/purchase-order/purchase-order.component';
 import { CreatBillPurchaseComponent } from './billpurchase/creat-bill-purchase/creat-bill-purchase.component';
@@ -63,6 +63,7 @@ import { CreatwarehouseComponent } from './warehouse/creatwarehouse/creatwarehou
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { CreatuserComponent } from './setting/creatuser/creatuser.component';
 import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
+import { ToOrderSaleComponent } from './sale/to-order-sale/to-order-sale.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -133,6 +134,7 @@ import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
         UserListComponent,
         CreatuserComponent,
         BomlistComponent,
+        ToOrderSaleComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy }
