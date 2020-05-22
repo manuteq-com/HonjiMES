@@ -48,12 +48,12 @@ export class AppMenuComponent implements OnInit {
 
             // { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
             {
-                label: '訂單總覽', icon: 'fa fa-fw fa-bars',
+                label: '訂單管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '客戶訂單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
-                    { label: '採購單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
-                    { label: '進貨單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
-                    { label: '銷貨單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
+                    { label: '客戶訂單', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
+                    { label: '採購單', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+                    { label: '進貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+                    { label: '銷貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
                 ]
 
             },
