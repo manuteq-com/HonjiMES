@@ -30,6 +30,7 @@ export class AppMenuComponent implements OnInit {
         route.params.subscribe(params => console.log('side menu id parameter', params.id));
         const bc = this.breadcrumbs;
         router.events.subscribe((evt) => {
+            debugger;
             if (evt instanceof NavigationEnd) {
                 const url = evt.url;
                 if (url === '' || url === '/') {
@@ -89,9 +90,9 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '基本資訊管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist']},
-                    { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist']},
-                    { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist']},
+                    { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist'] },
+                    { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist'] },
+                    { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist'] },
                 ]
 
             },

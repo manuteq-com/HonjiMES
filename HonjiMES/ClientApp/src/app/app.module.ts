@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routes';
 
 import { MenuModule } from 'primeng/menu';
@@ -139,7 +139,8 @@ import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
         EditbomComponent,
     ],
     providers: [
-        { provide: LocationStrategy, useClass: HashLocationStrategy }
+        // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
+        { provide: LocationStrategy, useClass: PathLocationStrategy }
     ],
     bootstrap: [AppComponent]
 })
