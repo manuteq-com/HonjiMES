@@ -105,3 +105,12 @@ tr.dx-header-row > td.dx-datagrid-action > div.dx-column-indicators {
 .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form) .dx-master-detail-cell, .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form) > .dx-datagrid-group-space {
     background-color: #add8e6 !important;
 }
+.dx-fileuploader-input-wrapper:before {
+    padding-top: 0.6em;
+    margin-top: -1em;
+}
+.dx-button-mode-contained {
+    background-color: #1e90ff;
+    border-color: transparent;
+    color: #fff;
+}
