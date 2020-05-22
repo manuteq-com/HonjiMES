@@ -12,12 +12,12 @@
     </div>
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)"
-    (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true" [showRowLines]="false" hoverStateEnabled="true"
-    [rowAlternationEnabled]="true">
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -25,7 +25,7 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="15"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true" [visible]="visible">
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true" visible="true">
     </dxo-pager>
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
@@ -56,28 +56,24 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="ProductNo" caption="主件品號" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Name" caption="主件品名" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Quantity" caption="實際庫存量"></dxi-column>
-    <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
-    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue'>
-    </dxi-column>
-    <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Property" caption="屬性" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Price" caption="單價"></dxi-column>
-    <dxi-column dataField="MaterialId" caption="元件品號" [visible]="visible">
+    <dxi-column dataField="ProductNo" caption="主件品號" [width]="250"></dxi-column>
+    <dxi-column dataField="Name" caption="主件品名"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格"></dxi-column>
+    <dxi-column dataField="Property" caption="屬性"></dxi-column>
+    <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column>
+    <dxi-column dataField="MaterialId" caption="元件品號" [width]="200">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
     <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
-    <dxi-column dataField="WarehouseId" caption="存放庫別">
+    <dxi-column dataField="WarehouseId" caption="存放庫別" [width]="100">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductNumber" caption="廠內品號" [visible]="visible"></dxi-column>
-    <dxi-column type="buttons">
-        <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
-    </dxi-column>
+    <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
+    <div *dxTemplate="let item of 'detail'">
+        <app-product-list [masterkey]="item.key"></app-product-list>
+    </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
     [height]="400" [(visible)]="creatpopupVisible">

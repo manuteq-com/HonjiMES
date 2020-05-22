@@ -50,12 +50,18 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductBasic(int id, ProductBasic productBasic)
         {
-            if (id != productBasic.Id)
+            productBasic.Id = id;
+            var OproductBasic = _context.ProductBasics.Find(id);
+            var Cproduct = OproductBasic;
+            if (!string.IsNullOrWhiteSpace(productBasic.ProductNo))
             {
-                return BadRequest();
+                Cproduct.ProductNo = productBasic.ProductNo;
             }
 
-            _context.Entry(productBasic).State = EntityState.Modified;
+
+            var Msg = MyFun.MappingData(ref OproductBasic, productBasic);
+            OproductBasic.UpdateTime = DateTime.Now;
+            OproductBasic.UpdateUser = 1;
 
             try
             {
@@ -72,8 +78,8 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-
-            return Ok(MyFun.APIResponseOK(productBasic));
+            return Ok(MyFun.APIResponseOK(OproductBasic));
+            //return Ok(new { success = true, timestamp = DateTime.Now, message = "" });
         }
 
         // POST: api/ProductBasics

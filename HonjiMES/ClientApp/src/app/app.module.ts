@@ -65,6 +65,7 @@ import { CreatuserComponent } from './setting/creatuser/creatuser.component';
 import { BomlistComponent } from './billofmaterial/bomlist/bomlist.component';
 import { ToOrderSaleComponent } from './sale/to-order-sale/to-order-sale.component';
 import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
+import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -137,6 +138,7 @@ import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
         BomlistComponent,
         ToOrderSaleComponent,
         EditbomComponent,
+        ProductBasicListComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

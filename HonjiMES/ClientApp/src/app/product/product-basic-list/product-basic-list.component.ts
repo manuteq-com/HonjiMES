@@ -1,27 +1,24 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
-import { APIResponse } from '../../app.module';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
-import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
+import { SendService } from 'src/app/shared/mylib';
+import { Observable } from 'rxjs';
+import { APIResponse } from 'src/app/app.module';
 import notify from 'devextreme/ui/notify';
-import { SendService } from '../../shared/mylib';
 
 @Component({
-    selector: 'app-product-list',
-    templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.css']
+    selector: 'app-product-basic-list',
+    templateUrl: './product-basic-list.component.html',
+    styleUrls: ['./product-basic-list.component.css']
 })
-export class ProductListComponent implements OnInit, OnChanges {
+export class ProductBasicListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
-    @Input() masterkey: number;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/Products';
+    Controller = '/ProductBasics';
     MaterialList: any;
     WarehouseList: any;
     creatpopupVisible: boolean;
@@ -29,7 +26,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     itemkey: string;
     exceldata: any;
     mod: string;
-    visible: boolean;
+    uploadUrl: string;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
@@ -39,11 +36,11 @@ export class ProductListComponent implements OnInit, OnChanges {
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetProducts/' + this.masterkey),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProduct', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProduct', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProduct', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProduct/' + key, 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetProductBasics'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProductBasic', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProductBasic', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProductBasic', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProductBasic/' + key, 'DELETE')
         });
         this.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
@@ -65,11 +62,6 @@ export class ProductListComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
-    }
-    ngOnChanges() {
-        if (this.masterkey) {
-            this.visible = false;
-        }
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -183,3 +175,4 @@ export class ProductListComponent implements OnInit, OnChanges {
         return rowData.Quantity - rowData.QuantityAdv;
     }
 }
+

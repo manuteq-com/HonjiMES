@@ -3,7 +3,6 @@ import { ModuleWithProviders } from '@angular/core';
 import { HomepageComponent } from './globalpage/homepage.component';
 import { MaterialListComponent } from './material/material-list/material-list.component';
 import { OrderListComponent } from './order/order-list/order-list.component';
-import { ProductListComponent } from './product/product-list/product-list.component';
 import { SaleListComponent } from './sale/sale-list/sale-list.component';
 import { PurchaseOrderComponent } from './purchase/purchase-order/purchase-order.component';
 import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchase.component';
@@ -12,13 +11,14 @@ import { SupplierListComponent } from './supplier/supplier-list/supplier-list.co
 import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent },
     { path: 'orderlist', component: OrderListComponent },
     { path: 'materiallist', component: MaterialListComponent },
-    { path: 'productlist', component: ProductListComponent },
+    { path: 'productbasiclist', component: ProductBasicListComponent },
     { path: 'salelist', component: SaleListComponent },
     { path: 'billpurchase', component: BillPurchaseComponent },
     { path: 'purchaseorder', component: PurchaseOrderComponent },
