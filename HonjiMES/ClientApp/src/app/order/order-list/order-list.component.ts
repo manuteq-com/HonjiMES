@@ -38,14 +38,6 @@ export class OrderListComponent {
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.DetailsDataSourceStorage = [];
-        // this.dataSourceDB = new CustomStore({
-        //     key: 'Id',
-        //     load: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-        //     byKey: () => SendService.sendRequest( http, '/OrderHeads/GetOrderHeads'),
-        //     insert: (values) => SendService.sendRequest( http, '/OrderHeads/PostOrderHead', 'POST', { values }),
-        //     update: (key, values) => SendService.sendRequest( http, '/OrderHeads/PutOrderHead', 'PUT', { key, values }),
-        //     remove: (key) => SendService.sendRequest( http, '/OrderHeads/DeleteOrderHead', 'DELETE')
-        // });
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetOrderHeads'),
@@ -54,7 +46,7 @@ export class OrderListComponent {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
         });
-
+        this.getProductsData();
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
@@ -62,15 +54,11 @@ export class OrderListComponent {
                 }
             }
         );
-        // this.GetData(this.url + '/OrderDetails/GetOrderDetails').subscribe(
-        //     (s) => {
-        //         console.log(s);
-        //         this.dataSourceDBDetails = s.data;
-        //         if (s.success) {
-
-        //         }
-        //     }
-        // );
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
+    getProductsData() {
         this.GetData('/Products/GetProducts').subscribe(
             (s) => {
                 this.ProductList = s.data;
@@ -95,17 +83,13 @@ export class OrderListComponent {
                     store: new ArrayStore({
                         data: this.dataSourceDBDetails,
                         key: 'Id'
-                      }),
-                      filter: ['OrderId', '=', key]
-                  })
-              };
+                    }),
+                    filter: ['OrderId', '=', key]
+                })
+            };
             this.DetailsDataSourceStorage.push(item);
-          }
+        }
         return item.dataSourceInstance;
-      }
-
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     completedValue(rowData) {
         // tslint:disable-next-line: triple-equals
@@ -220,6 +204,7 @@ export class OrderListComponent {
                     } else {
                         this.uploader.instance.reset();
                     }
+                    this.getProductsData();
                 });
             } else {
                 this.mod = 'excel';

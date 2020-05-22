@@ -277,7 +277,7 @@ namespace HonjiMES.Controllers
                 if (Productitemlist.Length == 3)
                 {
                     //再檢查一次
-                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0]).Any()) {
+                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0] && x.DeleteFlag == 0).Any()) {
                         var nProductBasics = new ProductBasic{
                             ProductNo = Productitemlist[0].Trim(),
                             ProductNumber = Productitemlist[0].Trim(),
@@ -287,25 +287,26 @@ namespace HonjiMES.Controllers
                             CreateTime = dt,
                             CreateUser = 1,
                         };
-                        var  nProduct = new Product
-                        {
-                            ProductNo = Productitemlist[0].Trim(),
-                            ProductNumber = Productitemlist[0].Trim(),
-                            Name = Productitemlist[1].Trim(),
-                            Quantity = 0,
-                            Specification = Productitemlist[2].Trim(),
-                            Property = "",
-                            MaterialId = 0,
-                            MaterialRequire = 1,
-                            CreateTime = dt,
-                            CreateUser = 1,
-                            WarehouseId  = 2
-                        };
+
+                        // 暫時停用，自動新增Product資料。
+                        // var  nProduct = new Product
+                        // {
+                        //     ProductNo = Productitemlist[0].Trim(),
+                        //     ProductNumber = Productitemlist[0].Trim(),
+                        //     Name = Productitemlist[1].Trim(),
+                        //     Quantity = 0,
+                        //     Specification = Productitemlist[2].Trim(),
+                        //     Property = "",
+                        //     MaterialId = 0,
+                        //     MaterialRequire = 1,
+                        //     CreateTime = dt,
+                        //     CreateUser = 1,
+                        //     WarehouseId  = 2
+                        // };
                         // nProduct.ProductLogs.Add(new ProductLog{
 
                         // })
-                        // if(nProductBasics.where())
-                        nProductBasics.Products.Add(nProduct);
+                        // nProductBasics.Products.Add(nProduct);
                         nProductBasicslist.Add(nProductBasics);
                     }
                 }
