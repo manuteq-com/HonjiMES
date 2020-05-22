@@ -39,7 +39,7 @@ export class ProductListComponent implements OnInit, OnChanges {
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetProducts/' + this.masterkey),
+            load: () => SendService.sendRequest(http, this.Controller + '/GetProductsById/' + this.masterkey),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProduct', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProduct', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProduct', 'PUT', { key, values }),

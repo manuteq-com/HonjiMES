@@ -30,8 +30,23 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: api/Products
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.Products.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var Products = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(Products));
+            //return Ok(new { data = Products, success = true, timestamp = DateTime.Now, message = "" });
+        }
+
+        /// <summary>
+        /// 查詢產品列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Products
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int? id)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsById(int? id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = _context.Products.AsQueryable().Where(x => x.DeleteFlag == 0);
