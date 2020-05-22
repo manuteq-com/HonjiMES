@@ -7,31 +7,27 @@
         <div class="lefttriangle2"></div>
     </div>
     <div class="headerfont font2">客戶訂單</div>
-    <!-- <div class="row"> -->
-        <div class="col-md-1">
-            <dx-button
-                class="mt-1"
-                stylingMode="contained"
-                text="新增訂單"
-                type="success"
-                [width]="120"
-                (onClick)="creatdata()">
-            </dx-button>
-        </div>
-        <div class="col-md-1">
-            <dx-file-uploader
-                #fileUploader
-                selectButtonText="匯入訂單"
-                abelText=""
-                [uploadUrl]="uploadUrl"
-                [multiple]="false"
-                [width]="120"
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-                uploadMode="instantly"
-                (onUploaded)="onUploaded($event)">
-            </dx-file-uploader>
-        </div>
-    <!-- </div> -->
+    <div class="buttongroup">
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增訂單"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+        <dx-file-uploader
+            #fileUploader
+            selectButtonText="匯入訂單"
+            abelText=""
+            [uploadUrl]="uploadUrl"
+            [multiple]="false"
+            [width]="120"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+            uploadMode="instantly"
+            (onUploaded)="onUploaded($event)">
+        </dx-file-uploader>
+    </div>
 </div>
 
 

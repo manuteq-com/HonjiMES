@@ -33,16 +33,29 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     buttonOptions: any =  {text: '存檔', type: 'success', useSubmitBehavior: true};
     editorOptions: any;
     ProductList: any;
+    WarehouseList: any;
     dataSourceDB: any;
     ProductBasicList: any;
+    ProductsAllList: any;
     async ngOnChanges() {
         this.dataSourceDB = [];
+        this.ProductsAllList =[];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
-        this.dataSourceDB.forEach(x => {
+        this.dataSourceDB.forEach(async x => {
             x.Quantity  = x.Quantity - x.SaleCount;
+            this.GetData(this.url + '/Products/GetProductsById/' + x.ProductBasicId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        s.data.forEach(element => {
+                            this.ProductsAllList.push(element);
+                        });
+                    }
+                }
+            );
         });
 
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
+        this.WarehouseList = await SendService.sendRequest(this.http, '/Warehouses/GetWarehouses');
         this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'add') {
             this.showdisabled = false;
@@ -102,6 +115,12 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             const rowIndex = e.row.rowIndex;
             const originData = this.itemkeyval[rowIndex];
             e.editorOptions.max  = originData.Quantity - originData.SaleCount;
+        }
+        if (e.parentType === 'dataRow' && e.dataField === 'WarehouseId') {
+            const gg = this.ProductsAllList;
+            debugger;
+            const rowIndex = e.row.rowIndex;
+            const originData = this.itemkeyval[rowIndex];
         }
     }
     validate_before(): boolean {
