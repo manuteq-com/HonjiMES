@@ -369,8 +369,10 @@ namespace HonjiMES.Models
 
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
-            var dbQuery = db.AsAsyncEnumerable();
+            var dbQuery = db.AsQueryable();
+            QueryCollection queries = new QueryCollection();
             object? DeleteFlag = 0;
+
             dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x) == DeleteFlag);
             var FromQueryResult = new FromQueryResult();
             if (fromQuery.Filter != null)
@@ -380,30 +382,31 @@ namespace HonjiMES.Models
                 {
                     if (item.where == "contains")
                     {
-                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.Contains, Value = item.val });
                     }
                     else if (item.where == "notcontains")
                     {
-                        dbQuery = dbQuery.Where(x => !x.GetType().GetProperty(item.key).GetValue(x).ToString().Contains(item.val, StringComparison.OrdinalIgnoreCase));
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.NotContains, Value = item.val });
                     }
                     else if (item.where == "startswith")
                     {
-                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().StartsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.StartWith, Value = item.val });
                     }
                     else if (item.where == "endswith")
                     {
-                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().EndsWith(item.val, StringComparison.OrdinalIgnoreCase));
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.EndWidth, Value = item.val });
                     }
                     else if (item.where == "=")
                     {
-                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() == item.val.ToLower());
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.Equal, Value = item.val });
                     }
                     else if (item.where == "<>")
                     {
-                        dbQuery = dbQuery.Where(x => x.GetType().GetProperty(item.key).GetValue(x).ToString().ToLower() != item.val.ToLower());
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.NotEqual, Value = item.val });
                     }
                 }
             }
+            dbQuery = dbQuery.Where(queries.AsExpression<T>());
             if (fromQuery.Sort != null)
             {
                 var firstSort = true;
@@ -413,11 +416,11 @@ namespace HonjiMES.Models
                     {
                         if (Sortitem.Desc)
                         {
-                            dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                            dbQuery = dbQuery.OrderBy(Sortitem.Selector,true);
                         }
                         else
                         {
-                            dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                            dbQuery = dbQuery.OrderBy(Sortitem.Selector);
                         }
                     }
                     // else

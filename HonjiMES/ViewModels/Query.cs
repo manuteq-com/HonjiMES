@@ -6,22 +6,60 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace HonjiMES.ViewModels
+namespace HonjiMES.Models
 {
     public class Query
     {
         public enum Operators
         {
-            None = 0,
-            Equal = 1,
-            GreaterThan = 2,
-            GreaterThanOrEqual = 3,
-            LessThan = 4,
-            LessThanOrEqual = 5,
-            Contains = 6,
-            StartWith = 7,
-            EndWidth = 8,
-            Range = 9
+            /// <summary>
+            /// 沒做用
+            /// </summary>
+            None,
+            /// <summary>
+            /// =
+            /// </summary>
+            Equal,
+            /// <summary>
+            /// !=
+            /// </summary>
+            NotEqual,
+            /// <summary>
+            /// 〉
+            /// </summary>
+            GreaterThan,
+            /// <summary>
+            /// 〉=
+            /// </summary>
+            GreaterThanOrEqual,
+            /// <summary>
+            /// 〈
+            /// </summary>
+            LessThan,
+            /// <summary>
+            /// 〈=
+            /// </summary>
+            LessThanOrEqual,
+            /// <summary>
+            /// Contains
+            /// </summary>
+            Contains,
+            /// <summary>
+            /// NotContains
+            /// </summary>
+            NotContains,
+            /// <summary>
+            /// StartWith
+            /// </summary>
+            StartWith,
+            /// <summary>
+            /// EndWidth
+            /// </summary>
+            EndWidth,
+            /// <summary>
+            /// Range
+            /// </summary>
+            Range,
         }
         public enum Condition
         {
@@ -41,7 +79,7 @@ namespace HonjiMES.ViewModels
         {
             Type targetType = typeof(T);
             TypeInfo typeInfo = targetType.GetTypeInfo();
-            var parameter = Expression.Parameter(targetType, "m");
+            var parameter = Expression.Parameter(targetType, "x");
             Expression expression = null;
             Func<Expression, Expression, Expression> Append = (exp1, exp2) =>
             {
@@ -75,6 +113,12 @@ namespace HonjiMES.ViewModels
                                 Expression.Convert(valueLamba.Body, property.PropertyType)));
                             break;
                         }
+                    case Query.Operators.NotEqual:
+                        {
+                            expression = Append(expression, Expression.NotEqual(Expression.Property(parameter, item.Name),
+                                Expression.Convert(valueLamba.Body, property.PropertyType)));
+                            break;
+                        }
                     case Query.Operators.GreaterThan:
                         {
                             expression = Append(expression, Expression.GreaterThan(Expression.Property(parameter, item.Name),
@@ -105,6 +149,15 @@ namespace HonjiMES.ViewModels
                             var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
                                 Expression.Convert(valueLamba.Body, property.PropertyType));
                             expression = Append(expression, Expression.AndAlso(nullCheck, contains));
+                            break;
+                        }
+                    case Query.Operators.NotContains:
+                        {
+                            var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
+                            var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
+                                Expression.Convert(valueLamba.Body, property.PropertyType));
+                            var doesNotContain = Expression.Not(contains);
+                            expression = Append(expression, Expression.AndAlso(nullCheck, doesNotContain));
                             break;
                         }
                     case Query.Operators.StartWith:
@@ -161,6 +214,37 @@ namespace HonjiMES.ViewModels
                 return null;
             }
             return ((Expression<Func<T, bool>>)Expression.Lambda(expression, parameter));
+        }
+
+        //makes expression for specific prop
+    }
+    public static class QueryableExtensions
+    {
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName)
+        {
+            return QueryableHelper<T>.OrderBy(queryable, propertyName, false);
+        }
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName, bool desc)
+        {
+            return QueryableHelper<T>.OrderBy(queryable, propertyName, desc);
+        }
+        static class QueryableHelper<T>
+        {
+            private static Dictionary<string, LambdaExpression> cache = new Dictionary<string, LambdaExpression>();
+            public static IQueryable<T> OrderBy(IQueryable<T> queryable, string propertyName, bool desc)
+            {
+                dynamic keySelector = GetLambdaExpression(propertyName);
+                return desc ? Queryable.OrderByDescending(queryable, keySelector) : Queryable.OrderBy(queryable, keySelector);
+            }
+            private static LambdaExpression GetLambdaExpression(string propertyName)
+            {
+                if (cache.ContainsKey(propertyName)) return cache[propertyName];
+                var param = Expression.Parameter(typeof(T));
+                var body = Expression.Property(param, propertyName);
+                var keySelector = Expression.Lambda(body, param);
+                cache[propertyName] = keySelector;
+                return keySelector;
+            }
         }
     }
 }
