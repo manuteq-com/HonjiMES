@@ -57,7 +57,6 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(warehouse));
         }
-
         /// <summary>
         /// 用ID最倉庫
         /// </summary>
@@ -102,7 +101,7 @@ namespace HonjiMES.Controllers
             //     item.UpdateTime=DateTime.Now;
             // }
             // _context.SaveChanges();
-            
+
             var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
             // var WarehouseData = await _context.Products.Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x =>new{x.Warehouse.Id,x.Warehouse.Name} ).OrderBy(x=> x.Name).ThenBy(x=>x.Id).ToListAsync();
 
@@ -142,7 +141,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("倉庫的名稱 [" + Csupplier.Name + "] 重複!", Csupplier));
             }
-            
+
             var Msg = MyFun.MappingData(ref Osupplier, warehouse);
             Osupplier.UpdateTime = DateTime.Now;
             Osupplier.UpdateUser = 1;
