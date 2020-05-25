@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -75,7 +77,7 @@ namespace HonjiMES.Models
 
     public class QueryCollection : Collection<Query>
     {
-        public Expression<Func<T, bool>> AsExpression<T>(Query.Condition? condition = Query.Condition.OrElse) where T : class
+        public Expression<Func<T, bool>> AsExpression<T>(Query.Condition? condition = Query.Condition.AndAlso) where T : class
         {
             Type targetType = typeof(T);
             TypeInfo typeInfo = targetType.GetTypeInfo();
@@ -147,7 +149,7 @@ namespace HonjiMES.Models
                         {
                             var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
                             var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType));
+                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
                             expression = Append(expression, Expression.AndAlso(nullCheck, contains));
                             break;
                         }
@@ -155,7 +157,7 @@ namespace HonjiMES.Models
                         {
                             var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
                             var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType));
+                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
                             var doesNotContain = Expression.Not(contains);
                             expression = Append(expression, Expression.AndAlso(nullCheck, doesNotContain));
                             break;
@@ -164,7 +166,7 @@ namespace HonjiMES.Models
                         {
                             var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
                             var startsWith = Expression.Call(Expression.Property(parameter, item.Name), "StartsWith", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType));
+                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
                             expression = Append(expression, Expression.AndAlso(nullCheck, startsWith));
                             break;
                         }
@@ -172,7 +174,7 @@ namespace HonjiMES.Models
                         {
                             var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
                             var endsWith = Expression.Call(Expression.Property(parameter, item.Name), "EndsWith", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType));
+                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
                             expression = Append(expression, Expression.AndAlso(nullCheck, endsWith));
                             break;
                         }
@@ -245,6 +247,23 @@ namespace HonjiMES.Models
                 cache[propertyName] = keySelector;
                 return keySelector;
             }
+        }
+    }
+    public static class IQueryableExtensions
+    {
+        private static object Private(this object obj, string privateField) => obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+        private static T Private<T>(this object obj, string privateField) => (T)obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+        public static string ToSql<TEntity>(this IQueryable<TEntity> query) where TEntity : class
+        {
+            var enumerator = query.Provider.Execute<IEnumerable<TEntity>>(query.Expression).GetEnumerator();
+            var relationalCommandCache = enumerator.Private("_relationalCommandCache");
+            var selectExpression = relationalCommandCache.Private<SelectExpression>("_selectExpression");
+            var factory = relationalCommandCache.Private<IQuerySqlGeneratorFactory>("_querySqlGeneratorFactory");
+
+            var sqlGenerator = factory.Create();
+            var command = sqlGenerator.GetCommand(selectExpression);
+            string sql = command.CommandText;
+            return sql;
         }
     }
 }

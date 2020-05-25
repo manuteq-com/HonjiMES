@@ -8,40 +8,39 @@
     </div>
     <div class="headerfont font2">客戶訂單</div>
     <div class="buttongroup">
-        <dx-button
-            class="insertbtn"
-            stylingMode="contained"
-            text="新增訂單"
-            type="success"
-            [width]="120"
+        <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
-        <dx-file-uploader
-            #fileUploader
-            selectButtonText="匯入訂單"
-            abelText=""
-            [uploadUrl]="uploadUrl"
-            [multiple]="false"
+        <dx-file-uploader #fileUploader selectButtonText="匯入訂單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             [width]="120"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-            uploadMode="instantly"
-            (onUploaded)="onUploaded($event)">
+            uploadMode="instantly" (onUploaded)="onUploaded($event)">
         </dx-file-uploader>
     </div>
 </div>
+<div id="form-container">
+    <form action="">
+        <dx-form id="form" [formData]="formData" [colCount]="4">
+            <dxi-item dataField="MachineNo">
+                <dxo-label text="機號"></dxo-label>
+            </dxi-item>
+        </dx-form>
+    </form>
+    <div class="col-auto-12 mt-4">
+        <dx-button horizontalAlignment="right" text='查詢' type='success' icon='save' [useSubmitBehavior]="true"
+            (onClick)="onClickQuery($event)">
+        </dx-button>
+    </div>
+</div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true"   keyExpr="id" [masterDetail]="{ enabled: true, template: 'detail' }"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onRowPrepared)="onRowPrepared($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true"
-    [showColumnLines]="true" [showRowLines]="false"  [rowAlternationEnabled]="true" [focusedRowEnabled]="true" >
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
+    (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false"
+    [rowAlternationEnabled]="true" [focusedRowEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
