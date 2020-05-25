@@ -103,6 +103,7 @@ export class SendService {
     constructor() { }
 
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
+        debugger;
         Date.prototype.toJSON = function () {
             return this.toLocaleDateString(); // 轉本地時間
         };
@@ -123,8 +124,9 @@ export class SendService {
         let result;
         switch (method) {
             case 'GET':
+                let params: HttpParams = new HttpParams();
+                params = params.set('dfilter', body);
                 if (data.remote) {
-                    let params: HttpParams = new HttpParams();
                     [
                         'skip',
                         'take',
@@ -141,8 +143,8 @@ export class SendService {
                             params = params.set(i, JSON.stringify(data.loadOptions[i]));
                         }
                     });
-                    httpOptions.params = params;
                 }
+                httpOptions.params = params;
                 result = http.get(apiurl + url, httpOptions);
                 break;
             case 'PUT':

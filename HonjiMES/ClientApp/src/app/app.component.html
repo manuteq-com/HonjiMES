@@ -1,5 +1,4 @@
-<div class="layout-wrapper" (click)="onLayoutClick()"
-    [ngClass]="{'menu-layout-static': !isOverlay(),
+<div class="layout-wrapper" (click)="onLayoutClick()" [ngClass]="{'menu-layout-static': !isOverlay(),
                 'menu-layout-overlay': isOverlay(),
                 'layout-menu-overlay-active': overlayMenuActive,
                 'menu-layout-horizontal': isHorizontal(),
@@ -10,7 +9,7 @@
     <app-topbar></app-topbar>
 
     <div class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
-        <p-scrollPanel #layoutMenuScroller >
+        <p-scrollPanel #layoutMenuScroller>
             <div class="menu-scroll-content">
                 <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></app-inline-profile>
                 <app-menu [reset]="resetMenu"></app-menu>
@@ -19,6 +18,30 @@
     </div>
 
     <div class="layout-main">
+        <!-- breadcrumb -->
+        <!-- <div class="headerblock"> breadcrumb未完成
+            <div class="headerfont font1">訂單管理</div>
+            <div class="triangle"></div>
+            <div class="lefttriangle">
+                <div class="lefttriangle1"></div>
+                <div class="lefttriangle2"></div>
+            </div>
+            <div class="headerfont font2">銷貨單</div>
+            <div class="buttongroup">
+            </div>
+        </div> -->
+
+        <!-- <div class="col">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" *ngFor="let item of breadcrumbList; let i = index"
+                    [class.active]="i===breadcrumbList.length-1">
+                    <a [routerLink]="item.path" *ngIf="i!==breadcrumbList.length-1">
+                        {{ item.name }}
+                    </a>
+                    <span *ngIf="i===breadcrumbList.length-1">{{ item.name }}</span>
+                </li>
+            </ol>
+        </div> -->
         <router-outlet></router-outlet>
     </div>
 

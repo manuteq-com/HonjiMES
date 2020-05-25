@@ -1,4 +1,4 @@
-import {NgModule, Component, OnInit, ViewChild } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class OrderListComponent {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
@@ -33,19 +33,13 @@ export class OrderListComponent {
     exceldata: any;
     Controller = '/OrderHeads';
     ProductBasicList: any;
+    qyery = [];
     constructor(private http: HttpClient) {
 
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.DetailsDataSourceStorage = [];
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetOrderHeads'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetOrderHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostOrderHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
-        });
+        this.getdata();
         this.getProductsData();
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
@@ -57,6 +51,16 @@ export class OrderListComponent {
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetOrderHeads', 'GET', { values: this.qyery }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetOrderHead', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostOrderHead', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
+        });
     }
     getProductsData() {
         this.GetData('/Products/GetProducts').subscribe(
@@ -192,7 +196,7 @@ export class OrderListComponent {
                 }).then(async (result) => {
                     if (result.value) {
                         // tslint:disable-next-line: new-parens
-                        const postval =  {OrderNo : response.data.OrderNo, Products : response.message};
+                        const postval = { OrderNo: response.data.OrderNo, Products: response.message };
                         // tslint:disable-next-line: max-line-length
                         const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
                         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
@@ -243,12 +247,12 @@ export class OrderListComponent {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
@@ -262,6 +266,12 @@ export class OrderListComponent {
 
     }
     onFocusedRowChanged(e) {
+    }
+    onClickQuery(e) {
+        debugger;
+        this.qyery = this.myform.instance.option('formData');
+        this.getdata();
+        this.dataGrid.instance.refresh();
     }
     //   onEditorPreparing(e) {
     //     if (e.parentType === 'dataRow' && (e.dataField === 'Id')) {

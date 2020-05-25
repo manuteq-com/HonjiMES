@@ -369,11 +369,15 @@ namespace HonjiMES.Models
 
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
-            var dbQuery = db.AsQueryable();
             QueryCollection queries = new QueryCollection();
-            object? DeleteFlag = 0;
+            object DeleteFlag = 0;
 
-            dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x) == DeleteFlag);
+            //dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x) == DeleteFlag);
+            var cDeleteFlag = typeof(T).GetProperty("DeleteFlag");
+            if (cDeleteFlag != null)
+            {
+                queries.Add(new Query { Name = "DeleteFlag", Operator = Query.Operators.Equal, Value = 0 });
+            }
             var FromQueryResult = new FromQueryResult();
             if (fromQuery.Filter != null)
             {
@@ -406,7 +410,7 @@ namespace HonjiMES.Models
                     }
                 }
             }
-            dbQuery = dbQuery.Where(queries.AsExpression<T>());
+            var dbQuery = db.Where(queries.AsExpression<T>());
             if (fromQuery.Sort != null)
             {
                 var firstSort = true;
@@ -416,7 +420,7 @@ namespace HonjiMES.Models
                     {
                         if (Sortitem.Desc)
                         {
-                            dbQuery = dbQuery.OrderBy(Sortitem.Selector,true);
+                            dbQuery = dbQuery.OrderBy(Sortitem.Selector, true);
                         }
                         else
                         {
@@ -446,6 +450,7 @@ namespace HonjiMES.Models
             {
                 dbQuery = dbQuery.Take(fromQuery.Take);
             }
+            var sql = dbQuery.ToSql();
             FromQueryResult.data = await dbQuery.ToListAsync();
             return FromQueryResult;
         }

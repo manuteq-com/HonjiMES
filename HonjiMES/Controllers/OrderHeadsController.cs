@@ -11,6 +11,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.JsonPatch;
+using Newtonsoft.Json;
 
 namespace HonjiMES.Controllers
 {
@@ -37,10 +38,21 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads()
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads([FromQuery(Name = "dfilter")] string OrderDetail)
         {
+
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
             var data = _context.OrderHeads.AsQueryable().Where(x => x.DeleteFlag == 0);
+            try
+            {
+                var qOrderDetail = JsonConvert.DeserializeObject<OrderDetail>(OrderDetail);
+                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo == qOrderDetail.MachineNo).Any());
+            }
+            catch (System.Exception)
+            {
+
+
+            }
             var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
@@ -270,15 +282,17 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
 
             var dt = DateTime.Now;
-             var nProductBasicslist = new List<ProductBasic>();
+            var nProductBasicslist = new List<ProductBasic>();
             foreach (var Productitem in ProductByExcel.Products.Split("<br/>"))
             {
                 var Productitemlist = Productitem.Split(" ; ");
                 if (Productitemlist.Length == 3)
                 {
                     //再檢查一次
-                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0] && x.DeleteFlag == 0).Any()) {
-                        var nProductBasics = new ProductBasic{
+                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0] && x.DeleteFlag == 0).Any())
+                    {
+                        var nProductBasics = new ProductBasic
+                        {
                             ProductNo = Productitemlist[0].Trim(),
                             ProductNumber = Productitemlist[0].Trim(),
                             Name = Productitemlist[1].Trim(),
@@ -360,7 +374,7 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         //public async Task<ActionResult<OrderHead>> Test1Async([FromBody] JsonPatchDocument<OrderHead> OrderHead)
         //public ActionResult<OrderHead> Test1([FromBody] OrderHead OrderHead)
-        public async Task<ActionResult<OrderHead>> Test1Async(int id,dynamic val)
+        public async Task<ActionResult<OrderHead>> Test1Async(int id, dynamic val)
         {
             var OldOrderHead = _context.OrderHeads.Find(id);
             Stream req = Request.Body;
@@ -373,7 +387,7 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(OldOrderHead));
         }
-                
+
         [HttpPatch]
         public ActionResult<OrderHead> Test2(OrderHead OrderHead)
         {
