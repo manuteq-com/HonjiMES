@@ -48,8 +48,9 @@
     right: 0%;
 }
 .buttongroup {
+    padding-top: 10px;
     position: absolute;
-    right: 0;
+    right: 10px;
 }
 .insertbtn {
     margin-top: -6px;

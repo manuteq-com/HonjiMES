@@ -46,7 +46,7 @@ namespace HonjiMES.Controllers
             try
             {
                 var qOrderDetail = JsonConvert.DeserializeObject<OrderDetail>(OrderDetail);
-                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo == qOrderDetail.MachineNo).Any());
+                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qOrderDetail.MachineNo)).Any());
             }
             catch (System.Exception)
             {
