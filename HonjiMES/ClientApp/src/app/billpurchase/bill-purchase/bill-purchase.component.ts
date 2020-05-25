@@ -6,6 +6,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { Observable } from 'rxjs';
 import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
+import { Myservice } from '../../service/myservice';
 
 @Component({
     selector: 'app-bill-purchase',
@@ -24,7 +25,9 @@ export class BillPurchaseComponent implements OnInit {
     mod: string;
     Controller = '/BillofPurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
-    constructor(private http: HttpClient) {
+    listBillofPurchaseOrderStatus: any;
+    constructor(private http: HttpClient, myservice: Myservice) {
+        this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHeads'),

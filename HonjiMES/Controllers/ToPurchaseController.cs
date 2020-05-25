@@ -124,6 +124,7 @@ namespace HonjiMES.Controllers
             BillofPurchaseCheckin.CreateUser = 1;
             BillofPurchaseDetails.UpdateTime = dt;
             BillofPurchaseDetails.UpdateUser = 1;
+            BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
             //入庫
@@ -134,6 +135,21 @@ namespace HonjiMES.Controllers
             }
             Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
+            
+            //檢查進貨單明細是否都完成進貨
+            var CheckBillofPurchaseHeadStatus = true;
+            var BillofPurchaseDetailData = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
+            var BillofPurchaseHeadData = _context.BillofPurchaseHeads.Find(BillofPurchaseDetailData.BillofPurchaseId);
+            foreach (var Detailitem in BillofPurchaseHeadData.BillofPurchaseDetails)
+            {
+                if (Detailitem.CheckStatus != 1) {
+                    CheckBillofPurchaseHeadStatus = false;
+                }
+            }
+            if (CheckBillofPurchaseHeadStatus) {
+                BillofPurchaseHeadData.Status = 1;
+            }
+
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
         }

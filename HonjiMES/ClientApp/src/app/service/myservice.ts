@@ -19,6 +19,9 @@ export class Myservice {
     getSaleOrderStatus(): Selectitem[] {
         return saleOrderStatus;
     }
+    getBillofPurchaseOrderStatus(): Selectitem[] {
+        return billofpurchaseOrderStatus;
+    }
     getComponent(): Selectitem[] {
         return componenttypes;
     }
@@ -44,6 +47,10 @@ const OrderStatus: Selectitem[] = [
     { Id: 10, Name: '結案' }
 ];
 const saleOrderStatus: Selectitem[] = [
+    { Id: 0, Name: '未完成' },
+    { Id: 1, Name: '結案' }
+];
+const billofpurchaseOrderStatus: Selectitem[] = [
     { Id: 0, Name: '未完成' },
     { Id: 1, Name: '結案' }
 ];

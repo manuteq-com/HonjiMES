@@ -107,7 +107,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         }
     }
     onContentReady(e) {
-        debugger;
+        // debugger;
         // const _dataGrid = $(e.element);
         // const dataGrid = e.component;
         // if (this.changeMode && !_dataGrid.find('.dx-row-inserted').length) {
@@ -121,7 +121,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         // }
     }
     onInitNewRow(e) {
-        debugger;
+        // debugger;
         // const dataGrid = e.component;
         // dataGrid.beginUpdate();
         // dataGrid.option('editing.mode', 'form');
@@ -253,7 +253,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/PostBillofPurchaseHead_Detail', 'POST', { values: this.postval });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
-            this.dataSourceDB = null;
+            this.dataSourceDB = [];
             this.dataGrid.instance.refresh();
             this.myform.instance.resetValues();
             this.CustomerVal = null;
