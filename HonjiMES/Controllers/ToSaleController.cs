@@ -33,11 +33,13 @@ namespace HonjiMES.Controllers
             {
                 try
                 {
+                    var OrderHeadId = 0;
                     var dt = DateTime.Now;
                     var nlist = new List<SaleDetailNew>();
                     //var OrderDetails = _context.OrderDetails.Where(x => ToSales.Orderlist.Contains(x.Id)).ToList();
                     foreach (var PDetailitem in ToSales.Orderlist)
                     {
+                        OrderHeadId = PDetailitem.OrderId; 
                         var Detailitem = _context.OrderDetails.Find(PDetailitem.Id);//取目前的資料來使用
                         if (Detailitem.Quantity >= Detailitem.SaleCount + PDetailitem.Quantity)//原有數量+目前數量不超過未銷貨完的可以開
                         {
@@ -66,6 +68,20 @@ namespace HonjiMES.Controllers
                             return Ok(MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量"));
                         }
                     }
+
+                    //檢查訂單明細是否都完成銷貨
+                    var CheckOrderHeadStatus = true;
+                    var OrderHeadData = _context.OrderHeads.Find(OrderHeadId);
+                    foreach (var Detailitem in OrderHeadData.OrderDetails)
+                    {
+                        if (Detailitem.SaleCount != Detailitem.Quantity) {
+                            CheckOrderHeadStatus = false;
+                        }
+                    }
+                    if (CheckOrderHeadStatus) {
+                        OrderHeadData.Status = 1;//完成銷貨(尚未結案)
+                    }
+
                     if (ToSales.SaleID.HasValue)//有訂單ID，合併銷貨單
                     {
                         var SaleHead = _context.SaleHeads.Find(ToSales.SaleID);

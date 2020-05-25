@@ -151,6 +151,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             this.myform.instance.resetValues();
             e.preventDefault();
             this.childOuter.emit(true);
+            this.dataGrid.instance.refresh();
         }
         this.buttondisabled = false;
 
