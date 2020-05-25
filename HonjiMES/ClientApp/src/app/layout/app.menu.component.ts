@@ -60,7 +60,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '庫存管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materiallist'] },
+                    { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materialbasiclist'] },
                     { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productbasiclist'] },
                     // { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
                     // { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },

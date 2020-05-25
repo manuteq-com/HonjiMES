@@ -44,6 +44,25 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(material));
         }
 
+        /// <summary>
+        /// 查詢產品列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Materials
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialsById(int? id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.Materials.AsQueryable().Where(x => x.DeleteFlag == 0);
+            if (id.HasValue)
+            {
+                data = data.Where(x => x.MaterialBasicId == id);
+            }
+            var Materials = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(Materials));
+            //return Ok(new { data = Materials, success = true, timestamp = DateTime.Now, message = "" });
+        }
+
         // PUT: api/Materials/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

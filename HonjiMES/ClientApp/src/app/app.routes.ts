@@ -12,6 +12,7 @@ import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-lis
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
+import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
 
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'orderlist', component: OrderListComponent },
     { path: 'materiallist', component: MaterialListComponent },
     { path: 'productbasiclist', component: ProductBasicListComponent },
+    { path: 'materialbasiclist', component: MaterialBasicListComponent },
     { path: 'salelist', component: SaleListComponent },
     { path: 'billpurchase', component: BillPurchaseComponent },
     { path: 'purchaseorder', component: PurchaseOrderComponent },

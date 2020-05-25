@@ -1,57 +1,51 @@
-import { NgModule, Component, OnInit, ViewChild, Input , OnChanges} from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
-import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
-import notify from 'devextreme/ui/notify';
-import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { Observable } from 'rxjs';
+import { APIResponse } from 'src/app/app.module';
+import notify from 'devextreme/ui/notify';
 
 @Component({
-    selector: 'app-material-list',
-    templateUrl: './material-list.component.html',
-    styleUrls: ['./material-list.component.css']
+  selector: 'app-material-basic-list',
+  templateUrl: './material-basic-list.component.html',
+  styleUrls: ['./material-basic-list.component.css']
 })
-export class MaterialListComponent implements OnInit {
-
+export class MaterialBasicListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
-    @Input() masterkey: number;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/Materials';
+    Controller = '/MaterialBasics';
+    MaterialList: any;
     WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
-    itemkey: number;
+    itemkey: string;
+    exceldata: any;
     mod: string;
     uploadUrl: string;
-    exceldata: any;
-    Supplierlist: any;
-    visible: boolean;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
-        this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetMaterialsById/' + this.masterkey),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterial', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterial', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetMaterialBasics'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterialBasic', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterialBasic', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterialBasic', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterialBasic/' + key, 'DELETE')
         });
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 console.log(s);
-                this.Supplierlist = s.data;
+                this.MaterialList = s.data;
                 if (s.success) {
 
                 }
@@ -69,11 +63,6 @@ export class MaterialListComponent implements OnInit {
     }
     ngOnInit() {
     }
-    ngOnChanges() {
-        if (this.masterkey) {
-            this.visible = false;
-        }
-    }
     creatdata() {
         this.creatpopupVisible = true;
     }
@@ -81,7 +70,7 @@ export class MaterialListComponent implements OnInit {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
         notify({
-            message: '原料新增完成',
+            message: '成品資料新增完成',
             position: {
                 my: 'center top',
                 at: 'center top'
@@ -118,7 +107,7 @@ export class MaterialListComponent implements OnInit {
     }
     Inventory_Change_Click(e) {
         this.itemkey = e.row.key;
-        this.mod = 'material';
+        this.mod = 'Material';
         this.editpopupVisible = true;
     }
     onFocusedRowChanging(e) {
@@ -130,14 +119,22 @@ export class MaterialListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
+            }
+        }
+    }
+    onRowPrepared(e) {
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
         }
     }
@@ -156,14 +153,25 @@ export class MaterialListComponent implements OnInit {
             }
         }, 'error', 3000);
     }
+    onEditingStart(e) {
+
+    }
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
 
+                e.cellElement.style.backgroundColor = '#d9534f';
+                e.cellElement.style.color = '#fff';
+            }
+        }
     }
     onEditorPreparing(e) {
     }
     selectionChanged(e) {
     }
-
+    QuantityAdvValue(rowData) {
+        return rowData.Quantity - rowData.QuantityAdv;
+    }
 }
