@@ -58,6 +58,7 @@
             <dxi-item dataField="Customer"></dxi-item>
             <dxi-item dataField="OrderDate"></dxi-item>
             <dxi-item dataField="ReplyDate"></dxi-item>
+            <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
     </dxo-editing>
     <dxi-column type="buttons">
@@ -75,8 +76,13 @@
         <dxo-lookup [dataSource]="Customerlist" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
+    <dxi-column dataField="Status" caption="狀態" width="200">
+        <dxo-lookup [dataSource]="listOrderStatus" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="OrderDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回覆日期" dataType="date"></dxi-column>
+    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <!-- <dxi-column type="buttons">
         <dxi-button hint="to_sale" text="轉鎖貨" [onClick]="to_saleClick"></dxi-button>
     </dxi-column> -->

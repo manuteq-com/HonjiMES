@@ -13,6 +13,9 @@ export class Myservice {
     getDepartment(): Selectitem[] {
         return departmenttypes;
     }
+    getOrderStatus(): Selectitem[] {
+        return OrderStatus;
+    }
     getSaleOrderStatus(): Selectitem[] {
         return saleOrderStatus;
     }
@@ -35,11 +38,15 @@ const permissiontypes: Selectitem[] = [
 const departmenttypes: Selectitem[] = [
     { Id: 1, Name: '預設' }
 ];
+const OrderStatus: Selectitem[] = [
+    { Id: 0, Name: '未完成' },
+    { Id: 1, Name: '完成銷貨' },
+    { Id: 10, Name: '結案' }
+];
 const saleOrderStatus: Selectitem[] = [
     { Id: 0, Name: '未完成' },
     { Id: 1, Name: '結案' }
 ];
-
 const componenttypes: Selectitem[] = [
     { Id: 1, Name: '原料' },
     { Id: 2, Name: '成品' },

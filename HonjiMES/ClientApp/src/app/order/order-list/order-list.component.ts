@@ -9,6 +9,7 @@ import { DxDataGridComponent, DxFormComponent, DxPopupComponent, DxFileUploaderC
 import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import Swal from 'sweetalert2';
+import { Myservice } from '../../service/myservice';
 
 @Component({
     selector: 'app-order-list',
@@ -34,8 +35,9 @@ export class OrderListComponent {
     Controller = '/OrderHeads';
     ProductBasicList: any;
     qyery = [];
-    constructor(private http: HttpClient) {
-
+    listOrderStatus: any;
+    constructor(private http: HttpClient, myservice: Myservice) {
+        this.listOrderStatus = myservice.getOrderStatus();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.DetailsDataSourceStorage = [];
