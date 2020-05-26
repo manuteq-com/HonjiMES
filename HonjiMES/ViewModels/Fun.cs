@@ -114,6 +114,19 @@ namespace HonjiMES.Models
             return "";
         }
 
+        internal static T JsonToData<T>(string jsonstring) where T : new()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(jsonstring);
+            }
+            catch (Exception)
+            {
+
+                return new T();
+            }
+        }
+
         internal static HSSFWorkbook ExportHtmlTableToObj(string htmlTable)
         {
             try
@@ -315,16 +328,19 @@ namespace HonjiMES.Models
             {
                 if (!filterarray.FirstOrDefault().Any())
                 {
-                    QueryList.Add(new QueryList { key = filterarray[0].ToString(), where = filterarray[1].ToString(), val = filterarray[2].ToString() });
+                    if (filterarray.Count() == 3)
+                    {
+                        QueryList.Add(new QueryList { key = filterarray[0].ToString(), where = filterarray[1].ToString(), val = filterarray[2].ToString() });
+                    }
                 }
                 else
                 {
-
                     foreach (var item in filterarray)
                     {
-                        if (item.Count() == 3)
+                        if (item.Children().Any())
                         {
-                            QueryList.Add(new QueryList { key = item[0].ToString(), where = item[1].ToString(), val = item[2].ToString() });
+                            IList Iitem = (IList)item;
+                            QueryList.AddRange(GetFilterToList(Iitem));
                         }
                     }
                 }
@@ -367,17 +383,17 @@ namespace HonjiMES.Models
             return bomlist;
         }
 
-        internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
+        internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(IQueryable<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             QueryCollection queries = new QueryCollection();
-            object DeleteFlag = 0;
+            // object DeleteFlag = 0;
 
             //dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x) == DeleteFlag);
-            var cDeleteFlag = typeof(T).GetProperty("DeleteFlag");
-            if (cDeleteFlag != null)
-            {
-                queries.Add(new Query { Name = "DeleteFlag", Operator = Query.Operators.Equal, Value = 0 });
-            }
+            // var cDeleteFlag = typeof(T).GetProperty("DeleteFlag");
+            // if (cDeleteFlag != null)
+            // {
+            //     queries.Add(new Query { Name = "DeleteFlag", Operator = Query.Operators.Equal, Value = 0 });
+            // }
             var FromQueryResult = new FromQueryResult();
             if (fromQuery.Filter != null)
             {
@@ -408,9 +424,25 @@ namespace HonjiMES.Models
                     {
                         queries.Add(new Query { Name = item.key, Operator = Query.Operators.NotEqual, Value = item.val });
                     }
+                    else if (item.where == ">")
+                    {
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.GreaterThan, Value = item.val });
+                    }
+                    else if (item.where == "<")
+                    {
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.LessThan, Value = item.val });
+                    }
+                    else if (item.where == ">=")
+                    {
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.GreaterThanOrEqual, Value = item.val });
+                    }
+                    else if (item.where == "<=")
+                    {
+                        queries.Add(new Query { Name = item.key, Operator = Query.Operators.LessThanOrEqual, Value = item.val });
+                    }
                 }
             }
-            var dbQuery = db.Where(queries.AsExpression<T>());
+            var dbQuery = queries.Count() > 0 ? db.Where(queries.AsExpression<T>()) : db;
             if (fromQuery.Sort != null)
             {
                 var firstSort = true;
@@ -450,13 +482,13 @@ namespace HonjiMES.Models
             {
                 dbQuery = dbQuery.Take(fromQuery.Take);
             }
-            var sql = dbQuery.ToSql();
+            var sql = dbQuery.ToSql();//看SQL語法專用
             FromQueryResult.data = await dbQuery.ToListAsync();
             return FromQueryResult;
         }
-        internal static async Task<FromQueryResult> FromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
+        internal static FromQueryResult FromQueryResultAsync<T>(DbSet<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
-            var dbQuery = db.AsAsyncEnumerable();
+            var dbQuery = db.AsQueryable();
             dbQuery = dbQuery.Where(x => x.GetType().GetProperty("DeleteFlag").GetValue(x).ToString() == "0");
             var FromQueryResult = new FromQueryResult();
             if (fromQuery.Filter != null)
@@ -520,7 +552,7 @@ namespace HonjiMES.Models
                     firstSort = false;
                 }
             }
-            FromQueryResult.totalCount = await dbQuery.CountAsync();
+            FromQueryResult.totalCount = dbQuery.Count();
             if (fromQuery.Skip != 0)
             {
                 dbQuery = dbQuery.Skip(fromQuery.Skip);
@@ -529,7 +561,7 @@ namespace HonjiMES.Models
             {
                 dbQuery = dbQuery.Take(fromQuery.Take);
             }
-            FromQueryResult.data = await dbQuery.ToListAsync();
+            FromQueryResult.data = dbQuery.ToList();
             return FromQueryResult;
         }
 

@@ -125,7 +125,9 @@ export class SendService {
         switch (method) {
             case 'GET':
                 let params: HttpParams = new HttpParams();
-                params = params.set('dfilter', body);
+                if (data.detailfilter) {
+                    params = params.set('detailfilter', JSON.stringify(data.detailfilter));
+                }
                 if (data.remote) {
                     [
                         'skip',

@@ -34,9 +34,11 @@ export class OrderListComponent {
     exceldata: any;
     Controller = '/OrderHeads';
     ProductBasicList: any;
-    qyery = [];
+    detailfilter = [];
     listOrderStatus: any;
+    remoteOperations: boolean;
     constructor(private http: HttpClient, myservice: Myservice) {
+        this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
@@ -57,7 +59,10 @@ export class OrderListComponent {
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetOrderHeads', 'GET', { values: this.qyery }),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetOrderHeads',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetOrderHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostOrderHead', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
@@ -271,8 +276,8 @@ export class OrderListComponent {
     }
     onClickQuery(e) {
         debugger;
-        this.qyery = this.myform.instance.option('formData');
-        this.getdata();
+        this.detailfilter = this.myform.instance.option('formData');
+        // this.getdata();
         this.dataGrid.instance.refresh();
     }
     //   onEditorPreparing(e) {

@@ -12,7 +12,7 @@
             (onClick)="onClickQuery($event)">
         </dx-button> -->
         <dx-button class="searchbtn" stylingMode="contained" text="過濾查詢" type="normal" [width]="120"
-            (onClick)="onClickQuery()">
+            (onClick)="onClickQuery($event)">
         </dx-button>
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="120"
             (onClick)="creatdata()">
@@ -36,14 +36,14 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
     [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)"
     (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
     [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
     (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
     (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false"
-    [rowAlternationEnabled]="true" [focusedRowEnabled]="true">
+    [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>

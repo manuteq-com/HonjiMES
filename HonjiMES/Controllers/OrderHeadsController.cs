@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DevExtreme.AspNet.Mvc;
+using HonjiMES.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HonjiMES.Models;
-using NPOI.SS.UserModel;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.JsonPatch;
-using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HonjiMES.Controllers
 {
@@ -38,22 +34,20 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads([FromQuery(Name = "dfilter")] string OrderDetail)
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderHeads(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-            var data = _context.OrderHeads.AsQueryable().Where(x => x.DeleteFlag == 0);
-            try
+
+            var data = _context.OrderHeads.Where(x => x.DeleteFlag == 0);
+            var qOrderDetail = MyFun.JsonToData<OrderDetail>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qOrderDetail.MachineNo))
             {
-                var qOrderDetail = JsonConvert.DeserializeObject<OrderDetail>(OrderDetail);
                 data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qOrderDetail.MachineNo)).Any());
             }
-            catch (System.Exception)
-            {
 
-
-            }
-            var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
+            //var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
             // var FromSqlRawdata = await _context.OrderHeads.FromSqlRaw(query, parameters).Select(x => x).ToListAsync();
@@ -70,7 +64,8 @@ namespace HonjiMES.Controllers
             // {
             //     nOrderHead.Add(DBHelper.DataReaderMapping<OrderHead>(reader));
             // }
-            return Ok(MyFun.APIResponseOK(OrderHeads));
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>

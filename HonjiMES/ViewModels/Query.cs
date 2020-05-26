@@ -77,7 +77,7 @@ namespace HonjiMES.Models
 
     public class QueryCollection : Collection<Query>
     {
-        public Expression<Func<T, bool>> AsExpression<T>(Query.Condition? condition = Query.Condition.AndAlso) where T : class
+        public Expression<Func<T, bool>> AsExpression<T>(Query.Condition condition = Query.Condition.AndAlso) where T : class
         {
             Type targetType = typeof(T);
             TypeInfo typeInfo = targetType.GetTypeInfo();
@@ -89,7 +89,7 @@ namespace HonjiMES.Models
                 {
                     return exp2;
                 }
-                return (condition ?? Query.Condition.OrElse) == Query.Condition.OrElse ? Expression.OrElse(exp1, exp2) : Expression.AndAlso(exp1, exp2);
+                return condition == Query.Condition.OrElse ? Expression.OrElse(exp1, exp2) : Expression.AndAlso(exp1, exp2);
             };
             foreach (var item in this)
             {

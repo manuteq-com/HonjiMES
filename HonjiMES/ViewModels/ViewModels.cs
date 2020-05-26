@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DevExtreme.AspNet.Mvc;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -180,6 +182,10 @@ namespace HonjiMES.Models
         public int? BasicType { get; set; }
         public int? BasicId { get; set; }
         public int Quantity { get; set; }
+    }
+    public class DataDetailSourceLoadOptions : DataSourceLoadOptions
+    {
+        public IList Detailfilter { get; set; }
     }
     /// <summary>
     /// 對應EXCL

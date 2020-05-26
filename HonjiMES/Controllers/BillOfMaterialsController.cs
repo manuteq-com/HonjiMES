@@ -276,8 +276,7 @@ namespace HonjiMES.Controllers
             //var ProductBasic = _context.ProductBasics.AsQueryable();
             //var ProductBasic = await DataSourceLoader.LoadAsync(_context.ProductBasics.AsQueryable(), FromQuery);
 
-            var FromQueryResult = new FromQueryResult();
-            FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics, FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics.AsQueryable(), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
         [HttpGet("{id}")]
