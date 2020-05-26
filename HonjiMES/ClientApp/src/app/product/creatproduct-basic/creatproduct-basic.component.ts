@@ -8,13 +8,13 @@ import { SendService } from '../../shared/mylib';
 import { Product } from '../../model/viewmodels';
 
 @Component({
-    selector: 'app-creatproduct',
-    templateUrl: './creatproduct.component.html',
-    styleUrls: ['./creatproduct.component.css']
+  selector: 'app-creatproduct-basic',
+  templateUrl: './creatproduct-basic.component.html',
+  styleUrls: ['./creatproduct-basic.component.css']
 })
-export class CreatproductComponent implements OnInit {
+export class CreatproductBasicComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
-    @Input() itemdata: any;
+    @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -74,10 +74,8 @@ export class CreatproductComponent implements OnInit {
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
     }
-    // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
         // debugger;
-        this.formData = this.itemdata;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     ngOnInit() {
@@ -107,7 +105,7 @@ export class CreatproductComponent implements OnInit {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Products/PostProduct', 'POST', { values: this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/ProductBasics/PostProduct', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

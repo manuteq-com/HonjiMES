@@ -67,6 +67,7 @@ import { ToOrderSaleComponent } from './sale/to-order-sale/to-order-sale.compone
 import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
+import { CreatproductBasicComponent } from './product/creatproduct-basic/creatproduct-basic.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -141,6 +142,7 @@ import { MaterialBasicListComponent } from './material/material-basic-list/mater
         EditbomComponent,
         ProductBasicListComponent,
         MaterialBasicListComponent,
+        CreatproductBasicComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
