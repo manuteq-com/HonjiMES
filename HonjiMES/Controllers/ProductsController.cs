@@ -165,21 +165,10 @@ namespace HonjiMES.Controllers
             var ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
             if (ProductsBasicData == null)
             {
-                var ProductBasics = new List<ProductBasic>();
-                _context.ProductBasics.Add(new ProductBasic
-                {
-                    ProductNo = product.ProductNo,
-                    ProductNumber = product.ProductNumber,
-                    Name = product.Name,
-                    Specification = product.Specification,
-                    Property = product.Property,
-                    Price = product.Price,
-                    SubInventory = product.SubInventory
-                });
-                _context.SaveChanges();
-                ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
+                return Ok(MyFun.APIResponseError("[主件品號] 不存在，請確認資訊是否正確。"));
+            } else {
+                product.ProductBasicId = ProductsBasicData.Id;
             }
-            product.ProductBasicId = ProductsBasicData.Id;
 
             string sRepeatProduct = null;
             var nProductlist = new List<Product>();
@@ -203,6 +192,7 @@ namespace HonjiMES.Controllers
                         Property = product.Property,
                         Price = product.Price,
                         MaterialId = product.MaterialId,
+                        MaterialRequire = 1,
                         SubInventory = product.SubInventory,
                         WarehouseId = warehouseId,
                         ProductBasicId = product.ProductBasicId,

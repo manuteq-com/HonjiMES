@@ -18,6 +18,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
+    @Input() itemval: any;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
@@ -27,6 +28,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: string;
+    itemdata: any;
     exceldata: any;
     mod: string;
     visible: boolean;
@@ -143,6 +145,17 @@ export class ProductListComponent implements OnInit, OnChanges {
             if (e.data.QuantityLimit > e.data.Quantity) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
+            }
+        }
+    }
+    cellClick(e) {
+        if (e.rowType === 'header') {
+            if (e.column.type === 'buttons') {
+                if (e.column.cssClass === 'addmod') {
+                    // tslint:disable-next-line: deprecation
+                    this.itemdata = this.itemval.data;
+                    this.creatdata();
+                }
             }
         }
     }
