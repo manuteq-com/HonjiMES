@@ -26,6 +26,7 @@ export class BomlistComponent implements OnInit {
     }
     constructor(private http: HttpClient) {
         this.onReorder = this.onReorder.bind(this);
+        this.isUploadVisible = this.isUploadVisible.bind(this);
         this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
@@ -112,5 +113,13 @@ export class BomlistComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    isUploadVisible(e) {
+        debugger;
+        if (e.row.data.ProductNo !== '') {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
