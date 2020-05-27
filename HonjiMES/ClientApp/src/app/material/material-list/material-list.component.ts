@@ -19,6 +19,7 @@ export class MaterialListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
+    @Input() itemval: any;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
@@ -27,6 +28,7 @@ export class MaterialListComponent implements OnInit {
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
+    itemdata: any;
     mod: string;
     uploadUrl: string;
     exceldata: any;
@@ -138,6 +140,17 @@ export class MaterialListComponent implements OnInit {
                 e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
+            }
+        }
+    }
+    cellClick(e) {
+        if (e.rowType === 'header') {
+            if (e.column.type === 'buttons') {
+                if (e.column.cssClass === 'addmod') {
+                    // tslint:disable-next-line: deprecation
+                    this.itemdata = this.itemval.data;
+                    this.creatdata();
+                }
             }
         }
     }

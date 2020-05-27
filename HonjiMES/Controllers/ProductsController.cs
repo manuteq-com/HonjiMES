@@ -83,7 +83,8 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            // var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.AsQueryable().Where(x => x.Id == id).Include(x => x.Warehouse).FirstAsync();
 
             if (product == null)
             {

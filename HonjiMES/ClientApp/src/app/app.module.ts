@@ -68,6 +68,7 @@ import { EditbomComponent } from './billofmaterial/editbom/editbom.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
 import { CreatproductBasicComponent } from './product/creatproduct-basic/creatproduct-basic.component';
+import { CreatmaterialBasicComponent } from './material/creatmaterial-basic/creatmaterial-basic.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -143,6 +144,7 @@ import { CreatproductBasicComponent } from './product/creatproduct-basic/creatpr
         ProductBasicListComponent,
         MaterialBasicListComponent,
         CreatproductBasicComponent,
+        CreatmaterialBasicComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

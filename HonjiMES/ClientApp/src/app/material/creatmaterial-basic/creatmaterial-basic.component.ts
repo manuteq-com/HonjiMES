@@ -8,13 +8,13 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 
 @Component({
-    selector: 'app-creatmaterial',
-    templateUrl: './creatmaterial.component.html',
-    styleUrls: ['./creatmaterial.component.css']
+  selector: 'app-creatmaterial-basic',
+  templateUrl: './creatmaterial-basic.component.html',
+  styleUrls: ['./creatmaterial-basic.component.css']
 })
-export class CreatmaterialComponent implements OnInit {
+export class CreatmaterialBasicComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
-    @Input() itemdata: any;
+    @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -82,7 +82,6 @@ export class CreatmaterialComponent implements OnInit {
     // tslint:disable-next-line: use-lifecycle-interface
     }ngOnChanges() {
         // debugger;
-        this.formData = this.itemdata;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     ngOnInit() {
@@ -113,10 +112,10 @@ export class CreatmaterialComponent implements OnInit {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Materials/PostMaterial', 'POST', { values:  this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/MaterialBasics/PostMaterial', 'POST', { values:  this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
-            // this.myform.instance.resetValues();
+            this.myform.instance.resetValues();
             e.preventDefault();
             this.childOuter.emit(true);
         }

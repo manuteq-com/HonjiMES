@@ -8,14 +8,14 @@
     </div>
     <div class="headerfont font2">原料庫存</div>
     <div class="buttongroup">
-        <!-- <dx-button
+        <dx-button
             class="insertbtn"
             stylingMode="contained"
-            text="新增"
+            text="新增物料"
             type="success"
             [width]="120"
             (onClick)="creatdata()">
-        </dx-button> -->
+        </dx-button>
         <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)"></dx-file-uploader> -->
@@ -42,16 +42,13 @@
         <dxo-form>
             <dxi-item dataField="MaterialNo" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Name"></dxi-item>
-            <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item dataField="QuantityLimit"></dxi-item>
+            <!-- <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item> -->
             <dxi-item dataField="Specification"></dxi-item>
             <dxi-item dataField="Property"></dxi-item>
-            <dxi-item dataField="Price"></dxi-item>
-            <dxi-item dataField="MaterialId"></dxi-item>
-            <dxi-item dataField="WarehouseId"></dxi-item>
-            <dxi-item dataField="MaterialNumber"></dxi-item>
+            <!-- <dxi-item dataField="Price"></dxi-item> -->
+            <!-- <dxi-item dataField="WarehouseId"></dxi-item> -->
         </dxo-form>
-        <dxo-popup [width]="800" [height]="400">
+        <dxo-popup [showTitle]="true" title="修改原料基本資訊"  [width]="800" [height]="300">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
                 [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
@@ -67,8 +64,8 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="MaterialNo" caption="主件品號" [width]="250"></dxi-column>
-    <dxi-column dataField="Name" caption="主件品名"></dxi-column>
+    <dxi-column dataField="MaterialNo" caption="元件品號" [width]="250"></dxi-column>
+    <dxi-column dataField="Name" caption="元件品名"></dxi-column>
     <dxi-column dataField="Specification" caption="規格"></dxi-column>
     <dxi-column dataField="Property" caption="屬性"></dxi-column>
     <!-- <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column> -->
@@ -78,14 +75,14 @@
         </dxo-lookup>
     </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
-        <app-material-list [masterkey]="item.key"></app-material-list>
+        <app-material-list [masterkey]="item.key" [itemval]="item.row"></app-material-list>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
-    [height]="400" [(visible)]="creatpopupVisible">
+    [height]="300" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-            [exceldata]="exceldata"></app-creatmaterial>
+        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-creatmaterial-basic>
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="修改原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400"

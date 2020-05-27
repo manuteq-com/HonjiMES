@@ -110,7 +110,7 @@ export class CreatproductComponent implements OnInit {
         const sendRequest = await SendService.sendRequest(this.http, '/Products/PostProduct', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
-            this.myform.instance.resetValues();
+            // this.myform.instance.resetValues();
             e.preventDefault();
             this.childOuter.emit(true);
         }
