@@ -37,14 +37,17 @@ export class OrderListComponent {
     detailfilter = [];
     listOrderStatus: any;
     remoteOperations: boolean;
+    editorOptions: any;
     constructor(private http: HttpClient, myservice: Myservice) {
         this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
+        this.onValueChanged = this.onValueChanged.bind(this);
         this.DetailsDataSourceStorage = [];
         this.getdata();
         this.getProductsData();
+        this.editorOptions = { onValueChanged: this.onValueChanged };
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
@@ -279,6 +282,9 @@ export class OrderListComponent {
         this.detailfilter = this.myform.instance.option('formData');
         // this.getdata();
         this.dataGrid.instance.refresh();
+    }
+    onValueChanged(e) {
+        this.onClickQuery(e);
     }
     //   onEditorPreparing(e) {
     //     if (e.parentType === 'dataRow' && (e.dataField === 'Id')) {

@@ -11,9 +11,6 @@
         <!-- <dx-button class="insertbtn" text='查詢' type='success' icon='save' [useSubmitBehavior]="true"
             (onClick)="onClickQuery($event)">
         </dx-button> -->
-        <!-- <dx-button class="searchbtn" stylingMode="contained" text="過濾查詢" type="normal" [width]="120"
-            (onClick)="onClickQuery()">
-        </dx-button> -->
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
@@ -25,15 +22,12 @@
     </div>
 </div>
 <div id="form-container">
-    <div class="col-auto-12 mt-2">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
         <form action="">
             <dx-form id="form" [formData]="formData" [colCount]="5">
-                <dxi-item dataField="MachineNo">
+                <dxi-item dataField="MachineNo" [editorOptions]="editorOptions">
                     <dxo-label text="機號查詢"></dxo-label>
                 </dxi-item>
-                <dx-button class="insertbtn" text='查詢' type='success' icon='save' [useSubmitBehavior]="true"
-                    (onClick)="onClickQuery($event)">
-                </dx-button>
             </dx-form>
         </form>
     </div>
