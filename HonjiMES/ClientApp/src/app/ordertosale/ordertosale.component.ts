@@ -63,7 +63,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             this.showdisabled = true;
         }
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1};
-        this.GetData(this.url + '/Sales/GetSales?status=0').subscribe(
+        this.GetData(this.url + '/Sales/GetSalesByStatus?status=0').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {

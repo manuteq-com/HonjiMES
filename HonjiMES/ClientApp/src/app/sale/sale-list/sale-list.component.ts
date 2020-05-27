@@ -20,7 +20,7 @@ import { Myservice } from '../../service/myservice';
 export class SaleListComponent implements OnInit {
 
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
@@ -43,20 +43,19 @@ export class SaleListComponent implements OnInit {
     listSaleOrderStatus: any;
     postval: POrderSale;
     ProductBasicList: any;
+    remoteOperations: boolean;
+    detailfilter = [];
+    editorOptions: any;
     constructor(private http: HttpClient, myservice: Myservice) {
+        this.remoteOperations = true;
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
+        this.onValueChanged = this.onValueChanged.bind(this);
         this.DetailsDataSourceStorage = [];
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetSales'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetSale', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostSale', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutSale', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteSale', 'DELETE')
-        });
+        this.getdata();
+        this.editorOptions = { onValueChanged: this.onValueChanged };
 
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
@@ -79,6 +78,21 @@ export class SaleListComponent implements OnInit {
                 }
             }
         );
+    }
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            // load: () => SendService.sendRequest(this.http, this.Controller + '/GetSalesByStatus'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetSales',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetSale', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostSale', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutSale', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteSale', 'DELETE')
+        });
+
     }
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
@@ -345,6 +359,15 @@ export class SaleListComponent implements OnInit {
                 at: 'center top'
             }
         }, 'error', 3000);
+    }
+    onClickQuery(e) {
+        debugger;
+        this.detailfilter = this.myform.instance.option('formData');
+        // this.getdata();
+        this.dataGrid.instance.refresh();
+    }
+    onValueChanged(e) {
+        this.onClickQuery(e);
     }
     onDetailsDataErrorOccurred(e) {
         // debugger;

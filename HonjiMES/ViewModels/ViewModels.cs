@@ -57,6 +57,14 @@ namespace HonjiMES.Models
 
     }
     /// <summary>
+    /// 銷貨單過濾
+    /// </summary>
+    public class SearchSale
+    {
+        public string? OrderNo { get; set; }
+        public string? ProductNo { get; set; }
+    }
+    /// <summary>
     /// 銷貨單銷貨
     /// </summary>
     public class OrderSale

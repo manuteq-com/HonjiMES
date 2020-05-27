@@ -11,8 +11,26 @@
         <!-- <dx-button text="新增銷貨單" type="default" (onClick)="creatdata()"></dx-button> -->
     </div>
 </div>
+<div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="OrderNo" [editorOptions]="editorOptions">
+                    <dxo-label text="訂單單號查詢"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="ProductNo" [editorOptions]="editorOptions">
+                    <dxo-label text="主件品號查詢"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
+    </div>
+</div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
     [masterDetail]="{ enabled: true, template: 'detail' }"
     (onEditorPreparing)="onEditorPreparing($event)"
     (onSelectionChanged)="selectionChanged($event)"
@@ -21,7 +39,6 @@
     (onFocusedRowChanging)="onFocusedRowChanging($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
     (onEditingStart)="onEditingStart($event)"
     (onSelectionChanged)="selectionChanged($event)"
     (onCellPrepared)="onCellPrepared($event)"
@@ -29,15 +46,16 @@
     [showColumnLines]="true"
     [showRowLines]="false"
     [rowAlternationEnabled]="true"
-    [focusedRowEnabled]="true">
+    [focusedRowEnabled]="true"
+    [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
@@ -52,7 +70,7 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="SaleNo" caption="銷貨單號"></dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號" sortOrder="desc"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" width="200">
         <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>

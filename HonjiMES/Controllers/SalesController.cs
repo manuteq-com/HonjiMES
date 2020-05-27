@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using DevExtreme.AspNet.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HonjiMES.Controllers
 {
@@ -17,12 +19,44 @@ namespace HonjiMES.Controllers
     [ApiController]
     public class SalesController : ControllerBase
     {
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
         private readonly HonjiContext _context;
 
-        public SalesController(HonjiContext context)
+        public SalesController(HonjiContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _IWebHostEnvironment = environment;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+        
+        /// <summary>
+        /// 銷貨單列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <param name="detailfilter"></param>
+        /// <returns></returns>
+        // GET: api/Sales
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaleHead>>> GetSales(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.SaleHeads.Where(x => x.DeleteFlag == 0);
+            var qSearchSale = MyFun.JsonToData<SearchSale>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchSale.OrderNo))
+            {
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.Order.OrderNo.Contains(qSearchSale.OrderNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(qSearchSale.ProductNo))
+            {
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchSale.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                var dd = data.ToSql();
+            }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
         /// <summary>
         /// 銷貨單列表
         /// </summary>
@@ -30,7 +64,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Sales
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SaleHead>>> GetSales(int? status)
+        public async Task<ActionResult<IEnumerable<SaleHead>>> GetSalesByStatus(int? status)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var SaleHeads = _context.SaleHeads.AsQueryable();

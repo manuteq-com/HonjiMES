@@ -44,7 +44,7 @@ namespace HonjiMES.Controllers
             var qOrderDetail = MyFun.JsonToData<OrderDetail>(detailfilter);
             if (!string.IsNullOrWhiteSpace(qOrderDetail.MachineNo))
             {
-                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qOrderDetail.MachineNo)).Any());
+                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qOrderDetail.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
             //var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
