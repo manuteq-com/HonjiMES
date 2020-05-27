@@ -369,8 +369,8 @@ namespace HonjiMES.Models
                         MaterialName = item.MaterialBasic?.Name,
                         MaterialNo = item.MaterialBasic?.MaterialNo,
                         Quantity = item.Quantity,
-                        ProductName = item.InverseP.Any() ? item.ProductBasic?.Name : "",
-                        ProductNo = item.InverseP.Any() ? item.ProductBasic?.ProductNo : "",
+                        ProductName = item.InverseP.FirstOrDefault()?.ProductBasic?.Name ?? "",
+                        ProductNo = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNo ?? "",
                         MaterialBasicId = item.MaterialBasicId,
                         ProductBasicId = item.ProductBasicId
                     });

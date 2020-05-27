@@ -285,7 +285,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
-            var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+            var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             bomlist.AddRange(MyFun.GetBomListList(BillOfMaterials));
             return Ok(MyFun.APIResponseOK(bomlist));
         }
@@ -300,6 +300,10 @@ namespace HonjiMES.Controllers
             if (PutBomlist.Quantity != 0)
             {
                 BillOfMaterial.Quantity = PutBomlist.Quantity;
+            }
+            if (PutBomlist.Pid.HasValue)
+            {
+                BillOfMaterial.Pid = PutBomlist.Pid;
             }
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(PutBomlist));

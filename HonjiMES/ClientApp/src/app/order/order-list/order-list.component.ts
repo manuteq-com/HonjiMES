@@ -280,7 +280,6 @@ export class OrderListComponent {
     onClickQuery(e) {
         debugger;
         this.detailfilter = this.myform.instance.option('formData');
-        // this.getdata();
         this.dataGrid.instance.refresh();
     }
     onValueChanged(e) {

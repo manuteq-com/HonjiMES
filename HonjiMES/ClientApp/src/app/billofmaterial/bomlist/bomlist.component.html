@@ -28,6 +28,7 @@
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
     </dxi-column>
 </dx-tree-list>
 <dx-popup [showTitle]="true" title="新增組成表" [dragEnabled]="false" [closeOnOutsideClick]="false" height="30%"
