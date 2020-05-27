@@ -1,24 +1,24 @@
 <!-- <p>所有訂單</p> -->
-<div class="row">
-    <div class="col-md-10 col-sm-10">
-        <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-            uploadMode="instantly" (onUploaded)="onUploaded($event)"></dx-file-uploader> -->
-    </div>
-    <div class="col-md-1 col-sm-1">
-    </div>
-    <div class="col-md-1 col-sm-1">
-        <!-- <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button> -->
-    </div>
-</div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)"
-    (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellPrepared)="onCellPrepared($event)" (onCellClick)="cellClick($event)"
-    [showColumnLines]="true" [showRowLines]="false" hoverStateEnabled="true"
-    [rowAlternationEnabled]="true">
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellClick)="cellClick($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="visible"></dxo-filter-row>
@@ -41,7 +41,7 @@
             <dxi-item dataField="WarehouseId"></dxi-item>
             <dxi-item dataField="ProductNumber" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxo-form>
-        <dxo-popup title="修改成品明細資訊" [width]="800" [height]="400">
+        <dxo-popup [showTitle]="true" title="修改成品明細資訊" [width]="800" [height]="450">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
                 [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
@@ -87,7 +87,7 @@
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="修改成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400"
-    [height]="350" [(visible)]="editpopupVisible">
+    [height]="370" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-inventory-change>

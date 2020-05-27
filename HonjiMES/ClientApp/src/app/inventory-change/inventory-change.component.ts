@@ -19,7 +19,7 @@ export class InventoryChangeComponent implements OnInit {
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    buttondisabled: false;
+    buttondisabled = false;
     formData: InventoryChange;
     dataSourceDB: any;
     postval: any;
@@ -47,6 +47,7 @@ export class InventoryChangeComponent implements OnInit {
     itemval1: string;
     itemval2: string;
     itemval3: string;
+    itemval4: string;
     editorOptions: any;
     minval: number;
     ngOnInit() {
@@ -67,7 +68,8 @@ export class InventoryChangeComponent implements OnInit {
                     if (s.success) {
                         this.itemval1 = '元件品號：' + s.data.MaterialNo;
                         this.itemval2 = '元件品名：' + s.data.Name;
-                        this.itemval3 = '庫存數：' + s.data.Quantity;
+                        this.itemval3 = '　庫存數：' + s.data.Quantity;
+                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
@@ -81,9 +83,10 @@ export class InventoryChangeComponent implements OnInit {
                 (s) => {
                     console.log(s);
                     if (s.success) {
-                        this.itemval1 = '主件品名號：' + s.data.ProductNo;
+                        this.itemval1 = '主件品號：' + s.data.ProductNo;
                         this.itemval2 = '主件品名：' + s.data.Name;
-                        this.itemval3 = '庫存數：' + s.data.Quantity;
+                        this.itemval3 = '　庫存數：' + s.data.Quantity;
+                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
@@ -128,7 +131,7 @@ export class InventoryChangeComponent implements OnInit {
         return true;
     }
     onFormSubmit = async function(e) {
-        this.buttondisabled = true;
+        // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;

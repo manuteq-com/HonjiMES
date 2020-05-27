@@ -35,7 +35,8 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Material>> GetMaterial(int id)
         {
-            var material = await _context.Materials.FindAsync(id);
+            // var material = await _context.Materials.FindAsync(id);
+            var material = await _context.Materials.AsQueryable().Where(x => x.Id == id).Include(x => x.Warehouse).FirstAsync();
 
             if (material == null)
             {
@@ -125,18 +126,10 @@ namespace HonjiMES.Controllers
             var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             if (MaterialBasicData == null)
             {
-                var MaterialBasics = new List<MaterialBasic>();
-                _context.MaterialBasics.Add(new MaterialBasic
-                {
-                    MaterialNo = material.MaterialNo,
-                    Name = material.Name,
-                    Specification = material.Specification,
-                    Property = material.Property
-                });
-                _context.SaveChanges();
-                MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
+                return Ok(MyFun.APIResponseError("[元件品號] 不存在，請確認資訊是否正確。"));
+            } else {
+                material.MaterialBasicId = MaterialBasicData.Id;
             }
-            material.MaterialBasicId = MaterialBasicData.Id;
 
             string sRepeatMaterial = null;
             var nMateriallist = new List<Material>();
@@ -156,6 +149,8 @@ namespace HonjiMES.Controllers
                         Quantity = material.Quantity,
                         Specification = material.Specification,
                         Property = material.Property,
+                        Composition = 1,
+                        BaseQuantity = 2,
                         WarehouseId = warehouseId,
                         MaterialBasicId = material.MaterialBasicId,
                         CreateUser = 1
@@ -174,18 +169,6 @@ namespace HonjiMES.Controllers
                 // return BadRequest("主件品號：" + material.MaterialNo + "重複");
                 return Ok(MyFun.APIResponseError(sRepeatMaterial, material));
             }
-
-            // //新增時檢查元件品號是否重複
-            // if (_context.Materials.Where(x => x.MaterialNo == material.MaterialNo).Any())
-            // {
-            //     return BadRequest("元件品號：" + material.MaterialNo + "重複");
-            //     //return NotFound("元件品號：" + material.MaterialNo + "重複");
-            //     //return Ok(MyFun.APIResponseError("元件品號：" + material.MaterialNo + "重複"));
-            // }
-            // _context.Materials.Add(material);
-            // await _context.SaveChangesAsync();
-
-            // return Ok(MyFun.APIResponseOK(material));
         }
 
         // DELETE: api/Materials/5

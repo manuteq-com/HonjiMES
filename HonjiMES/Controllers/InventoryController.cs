@@ -20,6 +20,7 @@ namespace HonjiMES.Controllers
         public InventoryController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 修改庫存
