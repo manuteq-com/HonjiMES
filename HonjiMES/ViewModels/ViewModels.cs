@@ -62,6 +62,7 @@ namespace HonjiMES.Models
     public class SearchValue
     {
         public string? OrderNo { get; set; }
+        public string? MachineNo { get; set; }
         public string? ProductNo { get; set; }
         public string? PurchaseNo { get; set; }
         public string? SupplierCode { get; set; }

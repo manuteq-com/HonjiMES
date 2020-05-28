@@ -47,6 +47,10 @@ namespace HonjiMES.Controllers
             {
                 data = data.Where(x => x.SaleDetailNews.Where(y => y.Order.OrderNo.Contains(qSearchValue.OrderNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
+            {
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.OrderDetail.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
             if (!string.IsNullOrWhiteSpace(qSearchValue.ProductNo))
             {
                 data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());

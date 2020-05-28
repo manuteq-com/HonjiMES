@@ -41,10 +41,14 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
 
             var data = _context.OrderHeads.Where(x => x.DeleteFlag == 0);
-            var qOrderDetail = MyFun.JsonToData<OrderDetail>(detailfilter);
-            if (!string.IsNullOrWhiteSpace(qOrderDetail.MachineNo))
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
             {
-                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qOrderDetail.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(qSearchValue.ProductNo))
+            {
+                data = data.Where(x => x.OrderDetails.Where(y => y.ProductBasic.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
             //var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
