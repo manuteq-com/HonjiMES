@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from '../../shared/mylib';
@@ -14,26 +14,30 @@ import notify from 'devextreme/ui/notify';
 })
 export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
-    DetailsDataSourceStorage: any = [];
     SupplierList: any;
     MaterialList: any;
     itemkey: number;
     mod: string;
     Controller = '/PurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
-    constructor(private http: HttpClient) {
 
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetPurchaseHeads'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetPurchaseHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostPurchaseHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeletePurchaseHead/' + key, 'DELETE')
-        });
+    remoteOperations: boolean;
+    formData: any;
+    editorOptions: any;
+    detailfilter = [];
+    DetailsDataSourceStorage: any;
+
+    constructor(private http: HttpClient) {
+        this.remoteOperations = true;
+        this.DetailsDataSourceStorage = [];
+        this.getdata();
+        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
@@ -51,6 +55,20 @@ export class PurchaseOrderComponent implements OnInit {
      }
      public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            // load: () => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseHeads'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetPurchaseHeads',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseHead', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostPurchaseHead', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseHead/' + key, 'DELETE')
+        });
     }
     ngOnInit() {
     }
@@ -116,6 +134,11 @@ export class PurchaseOrderComponent implements OnInit {
                 });
             }
         }
+    }
+    onValueChanged(e) {
+        debugger;
+        this.detailfilter = this.myform.instance.option('formData');
+        this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
         if (e.rowType === 'data') {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using DevExtreme.AspNet.Mvc;
 
 namespace HonjiMES.Controllers
 {
@@ -21,19 +22,44 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+        
         /// <summary>
         /// 採購單列表
         /// </summary>
         /// <returns></returns>
         // GET: api/PurchaseHeads
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeads()
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeadsOld()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0);
             var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(PurchaseHeads));
         }
+
+        /// <summary>
+        /// 進貨單列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <param name="detailfilter"></param>
+        /// <returns></returns>
+        // GET: api/BillofPurchaseHead
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetPurchaseHeads(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.PurchaseHeads.Where(x => x.DeleteFlag == 0);
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MaterialNo))
+            {
+                data = data.Where(x => x.PurchaseDetails.Where(y => y.DataNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
         /// <summary>
         /// 用ID取採購單
         /// </summary>

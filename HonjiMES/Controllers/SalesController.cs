@@ -42,14 +42,14 @@ namespace HonjiMES.Controllers
                 [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             var data = _context.SaleHeads.Where(x => x.DeleteFlag == 0);
-            var qSearchSale = MyFun.JsonToData<SearchSale>(detailfilter);
-            if (!string.IsNullOrWhiteSpace(qSearchSale.OrderNo))
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchValue.OrderNo))
             {
-                data = data.Where(x => x.SaleDetailNews.Where(y => y.Order.OrderNo.Contains(qSearchSale.OrderNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.Order.OrderNo.Contains(qSearchValue.OrderNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-            if (!string.IsNullOrWhiteSpace(qSearchSale.ProductNo))
+            if (!string.IsNullOrWhiteSpace(qSearchValue.ProductNo))
             {
-                data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchSale.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

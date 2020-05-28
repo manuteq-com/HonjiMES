@@ -50,14 +50,18 @@ namespace HonjiMES.Controllers
                 [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             var data = _context.BillofPurchaseHeads.Where(x => x.DeleteFlag == 0);
-            var qSearchBillofPurchase = MyFun.JsonToData<SearchBillofPurchase>(detailfilter);
-            if (!string.IsNullOrWhiteSpace(qSearchBillofPurchase.PurchaseNo))
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchValue.PurchaseNo))
             {
-                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.Purchase.PurchaseNo.Contains(qSearchBillofPurchase.PurchaseNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.Purchase.PurchaseNo.Contains(qSearchValue.PurchaseNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-            if (!string.IsNullOrWhiteSpace(qSearchBillofPurchase.MaterialNo))
+            if (!string.IsNullOrWhiteSpace(qSearchValue.SupplierCode))
             {
-                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.DataNo.Contains(qSearchBillofPurchase.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.Supplier.Code.Contains(qSearchValue.SupplierCode, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MaterialNo))
+            {
+                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.DataNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

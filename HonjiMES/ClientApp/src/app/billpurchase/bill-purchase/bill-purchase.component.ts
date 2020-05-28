@@ -142,9 +142,7 @@ export class BillPurchaseComponent implements OnInit {
     // }
     onValueChanged(e) {
         debugger;
-        // this.onClickQuery(e);
         this.detailfilter = this.myform.instance.option('formData');
-        // this.getdata();
         this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
