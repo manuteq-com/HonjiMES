@@ -22,10 +22,17 @@
     <div class="long-title">
         <h5>採購內容</h5>
     </div>
-    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Serial" height="500"
-        (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)">
-        <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true"
-            startEditAction="click">
+    <dx-data-grid
+        [dataSource]="dataSourceDB"
+        [showBorders]="true"
+        keyExpr="Serial"
+        height="500"
+        (onFocusedCellChanging)="onFocusedCellChanging($event)"
+        (onInitNewRow)="saveCheckFalse($event)"
+        (onEditingStart)="saveCheckFalse($event)"
+        (onCellPrepared)="onCellPrepared($event)">
+
+        <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=3>
                 <dxi-item dataField="DataId"></dxi-item>
                 <dxi-item dataField="Quantity"></dxi-item>

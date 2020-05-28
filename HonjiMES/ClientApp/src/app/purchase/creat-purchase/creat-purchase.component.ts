@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
+import { Button } from 'primeng';
 
 @Component({
     selector: 'app-creat-purchase',
@@ -47,6 +48,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     addRow = true;
     eformData: any;
     Quantityvalmax: number;
+    saveCheck = true;
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
         this.formData = null;
@@ -101,9 +103,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
-
-    }
-    onInitNewRow(e) {
 
     }
     onFocusedCellChanging(e) {
@@ -162,10 +161,22 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         return true;
     }
+    saveCheckFalse(e) {
+        this.saveCheck = false;
+    }
+    onCellPrepared(e) {
+        if (e.column.command === 'edit') {
+            this.saveCheck = true;
+        }
+    }
     onFormSubmit = async function (e) {
         // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
+        if (!this.saveCheck) {
             this.buttondisabled = false;
             return;
         }

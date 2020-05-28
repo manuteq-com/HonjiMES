@@ -8,9 +8,6 @@
     </div>
     <div class="headerfont font2">客戶訂單</div>
     <div class="buttongroup">
-        <!-- <dx-button class="insertbtn" text='查詢' type='success' icon='save' [useSubmitBehavior]="true"
-            (onClick)="onClickQuery($event)">
-        </dx-button> -->
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
@@ -28,6 +25,9 @@
                 <dxi-item dataField="MachineNo" [editorOptions]="editorOptions">
                     <dxo-label text="機號查詢"></dxo-label>
                 </dxi-item>
+                <!-- <dx-button class="insertbtn" text='查詢' type='success' icon='save' [useSubmitBehavior]="true"
+                    (onClick)="onClickQuery($event)">
+                </dx-button> -->
             </dx-form>
         </form>
     </div>

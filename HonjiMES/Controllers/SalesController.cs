@@ -50,7 +50,6 @@ namespace HonjiMES.Controllers
             if (!string.IsNullOrWhiteSpace(qSearchSale.ProductNo))
             {
                 data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchSale.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
-                var dd = data.ToSql();
             }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

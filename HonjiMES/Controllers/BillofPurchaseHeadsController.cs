@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using DevExtreme.AspNet.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HonjiMES.Controllers
 {
@@ -21,18 +23,47 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+
         /// <summary>
         /// 進貨單列表
         /// </summary>
         /// <returns></returns>
         // GET: api/BillofPurchaseHeads
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseHeads()
+        public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseHeadsOld()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var data = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
+
+        /// <summary>
+        /// 進貨單列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <param name="detailfilter"></param>
+        /// <returns></returns>
+        // GET: api/BillofPurchaseHead
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseHeads(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.BillofPurchaseHeads.Where(x => x.DeleteFlag == 0);
+            var qSearchBillofPurchase = MyFun.JsonToData<SearchBillofPurchase>(detailfilter);
+            if (!string.IsNullOrWhiteSpace(qSearchBillofPurchase.PurchaseNo))
+            {
+                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.Purchase.PurchaseNo.Contains(qSearchBillofPurchase.PurchaseNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(qSearchBillofPurchase.MaterialNo))
+            {
+                data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.DataNo.Contains(qSearchBillofPurchase.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
         /// <summary>
         /// 用ID查進貨單
         /// </summary>

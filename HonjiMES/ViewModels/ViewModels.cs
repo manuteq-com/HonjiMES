@@ -65,6 +65,14 @@ namespace HonjiMES.Models
         public string? ProductNo { get; set; }
     }
     /// <summary>
+    /// 進貨單過濾
+    /// </summary>
+    public class SearchBillofPurchase
+    {
+        public string? PurchaseNo { get; set; }
+        public string? MaterialNo { get; set; }
+    }
+    /// <summary>
     /// 銷貨單銷貨
     /// </summary>
     public class OrderSale
