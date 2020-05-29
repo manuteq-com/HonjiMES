@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import notify from 'devextreme/ui/notify';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { Observable } from 'rxjs';
@@ -15,10 +15,11 @@ import { Myservice } from '../../service/myservice';
 })
 export class BillPurchaseComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
-    DetailsDataSourceStorage: any = [];
     SupplierList: any;
     MaterialList: any;
     itemkey: number;
@@ -26,16 +27,20 @@ export class BillPurchaseComponent implements OnInit {
     Controller = '/BillofPurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     listBillofPurchaseOrderStatus: any;
+
+    remoteOperations: boolean;
+    formData: any;
+    editorOptions: any;
+    detailfilter = [];
+    DetailsDataSourceStorage: any;
+
     constructor(private http: HttpClient, myservice: Myservice) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHeads'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetBillofPurchaseHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostBillofPurchaseHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteBillofPurchaseHead/' + key, 'DELETE')
-        });
+        this.remoteOperations = true;
+        this.DetailsDataSourceStorage = [];
+        this.getdata();
+        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
@@ -50,9 +55,23 @@ export class BillPurchaseComponent implements OnInit {
                 }
             }
         );
-     }
-     public GetData(apiUrl: string): Observable<APIResponse> {
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            // load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHeads'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetBillofPurchaseHeads',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHead', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseHead', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseHead/' + key, 'DELETE')
+        });
     }
     ngOnInit() {
     }
@@ -113,6 +132,18 @@ export class BillPurchaseComponent implements OnInit {
                 });
             }
         }
+    }
+    // onClickQuery(e) {
+    //     debugger;
+    //     alert('!!');
+    //     this.detailfilter = this.myform.instance.option('formData');
+    //     // this.getdata();
+    //     this.dataGrid.instance.refresh();
+    // }
+    onValueChanged(e) {
+        debugger;
+        this.detailfilter = this.myform.instance.option('formData');
+        this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
         if (e.rowType === 'data') {

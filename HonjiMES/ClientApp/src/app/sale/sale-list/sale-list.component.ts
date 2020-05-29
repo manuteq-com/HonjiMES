@@ -22,15 +22,14 @@ export class SaleListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
+
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     Customerlist: any;
     ProductList: any;
-    DetailsDataSourceStorage: any;
     creatpopupVisible = false;
     resalepopupVisible = false;
     tosalepopupVisible = false;
-    formData: any;
     dataSourceDBDetails: any[];
     itemkey: number;
     mod: string;
@@ -43,19 +42,22 @@ export class SaleListComponent implements OnInit {
     listSaleOrderStatus: any;
     postval: POrderSale;
     ProductBasicList: any;
+
     remoteOperations: boolean;
-    detailfilter = [];
+    formData: any;
     editorOptions: any;
+    detailfilter = [];
+    DetailsDataSourceStorage: any;
+
     constructor(private http: HttpClient, myservice: Myservice) {
-        this.remoteOperations = true;
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
-        this.onValueChanged = this.onValueChanged.bind(this);
+        this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.getdata();
-        this.editorOptions = { onValueChanged: this.onValueChanged };
+        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
         this.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
