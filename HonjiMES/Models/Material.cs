@@ -12,6 +12,7 @@ namespace HonjiMES.Models
         public Material()
         {
             MaterialLogs = new HashSet<MaterialLog>();
+            MaterialReceives = new HashSet<MaterialReceive>();
         }
 
         [Key]
@@ -61,5 +62,7 @@ namespace HonjiMES.Models
         public virtual Warehouse Warehouse { get; set; }
         [InverseProperty("Material")]
         public virtual ICollection<MaterialLog> MaterialLogs { get; set; }
+        [InverseProperty("Material")]
+        public virtual ICollection<MaterialReceive> MaterialReceives { get; set; }
     }
 }
