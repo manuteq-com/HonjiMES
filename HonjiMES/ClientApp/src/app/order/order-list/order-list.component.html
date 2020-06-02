@@ -8,14 +8,14 @@
     </div>
     <div class="headerfont font2">客戶訂單</div>
     <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="120"
-            (onClick)="creatdata()">
-        </dx-button>
         <dx-file-uploader #fileUploader selectButtonText="匯入訂單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
-            [width]="120"
+            [width]="130"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)">
         </dx-file-uploader>
+        <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130"
+            (onClick)="creatdata()">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
