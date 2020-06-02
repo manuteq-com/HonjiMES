@@ -86,6 +86,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     item.ProductBasicId = null;
                 } else {
                     const Product = this.ProductBasicList.filter(x => x.Id === item.ProductBasicId)[0];
+                    item.DBOriginPrice = Product.Price;
+                    item.DBPrice = Product.Price * item.Quantity;
                     if (Product.Price !== item.OriginPrice) {
                         ProductPricrErr += Product.ProductNo + '：' + Product.Price + '=>' + item.OriginPrice + '<br/>';
                     }

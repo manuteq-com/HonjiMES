@@ -174,37 +174,41 @@ namespace HonjiMES.Controllers
         {
             try
             {
-                var dt = DateTime.Now;
-                var OrderNo = dt.ToString("yyMMdd");
-                var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo)).Count() + 1;
-                var orderHead = PostOrderMaster_Detail.OrderHead;
-                var OrderDetail = PostOrderMaster_Detail.OrderDetail;
-                var DirName = orderHead.OrderNo;
-                orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
-                orderHead.CreateTime = dt;
-                orderHead.CreateUser = 1;
-                var OrderDetails = new List<OrderDetail>();
-                foreach (var item in OrderDetail)
-                {
-                    item.CreateTime = dt;
-                    item.CreateUser = 1;
-                    OrderDetails.Add(item);
+                var checkCustomer = _context.OrderHeads.AsQueryable().Where(x => x.CustomerNo == PostOrderMaster_Detail.OrderHead.CustomerNo && x.DeleteFlag == 0).Count();
+                if (checkCustomer != 0) {
+                    return Ok(MyFun.APIResponseError("[客戶單號] 重複建立!"));
+                } else {
+                    var dt = DateTime.Now;
+                    var OrderNo = dt.ToString("yyMMdd");
+                    var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).Count() + 1;
+                    var orderHead = PostOrderMaster_Detail.OrderHead;
+                    var OrderDetail = PostOrderMaster_Detail.OrderDetail;
+                    var DirName = orderHead.OrderNo;
+                    orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
+                    orderHead.CreateTime = dt;
+                    orderHead.CreateUser = 1;
+                    var OrderDetails = new List<OrderDetail>();
+                    foreach (var item in OrderDetail)
+                    {
+                        item.CreateTime = dt;
+                        item.CreateUser = 1;
+                        OrderDetails.Add(item);
+                    }
+                    orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
+                    _context.OrderHeads.Add(orderHead);
+                    await _context.SaveChangesAsync();
+                    MemoryStream excelDatas = MyFun.DataToExcel(_context, orderHead);
+                    //Excel存檔
+                    var webRootPath = _IWebHostEnvironment.WebRootPath;
+                    var Dir = $"{webRootPath}";
+                    var bsave = MyFun.ProcessSaveExcelAsync(Dir, DirName, orderHead.OrderNo, excelDatas.ToArray());
+                    return Ok(MyFun.APIResponseOK(orderHead.OrderNo));
+                    //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
+                    //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
                 }
-                orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
-                _context.OrderHeads.Add(orderHead);
-                await _context.SaveChangesAsync();
-                MemoryStream excelDatas = MyFun.DataToExcel(_context, orderHead);
-                //Excel存檔
-                var webRootPath = _IWebHostEnvironment.WebRootPath;
-                var Dir = $"{webRootPath}";
-                var bsave = MyFun.ProcessSaveExcelAsync(Dir, DirName, orderHead.OrderNo, excelDatas.ToArray());
-                return Ok(MyFun.APIResponseOK(orderHead.OrderNo));
-                //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
-                //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
             }
             catch (Exception ex)
             {
-
                 return Ok(MyFun.APIResponseError(ex.Message));
             }
         }
