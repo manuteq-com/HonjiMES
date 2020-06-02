@@ -6,32 +6,37 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material_basic")]
-    public partial class MaterialBasic
+[Table("material_requisition")]
+    public partial class MaterialRequisition
     {
-        public MaterialBasic()
+        public MaterialRequisition()
         {
-            BillOfMaterials = new HashSet<BillOfMaterial>();
             MaterialRequisitionDetails = new HashSet<MaterialRequisitionDetail>();
-            Materials = new HashSet<Material>();
         }
 
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
         [Required]
-        [Column("material_no", TypeName = "varchar(50)")]
-        public string MaterialNo { get; set; }
+        [Column("requisition_no", TypeName = "varchar(50)")]
+        public string RequisitionNo { get; set; }
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
-        [Column("specification", TypeName = "varchar(50)")]
-        public string Specification { get; set; }
         [Required]
-        [Column("property", TypeName = "varchar(50)")]
-        public string Property { get; set; }
-        [Column("supplier", TypeName = "int(11)")]
-        public int? Supplier { get; set; }
+        [Column("product_no", TypeName = "varchar(50)")]
+        public string ProductNo { get; set; }
+        [Required]
+        [Column("product_number", TypeName = "varchar(50)")]
+        public string ProductNumber { get; set; }
+        [Column("quantity", TypeName = "int(11)")]
+        public int Quantity { get; set; }
+        [Column("remarks", TypeName = "varchar(100)")]
+        public string Remarks { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -40,14 +45,11 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("delete_flag", TypeName = "tinyint(4)")]
-        public sbyte DeleteFlag { get; set; }
 
-        [InverseProperty("MaterialBasic")]
-        public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
-        [InverseProperty("MaterialBasic")]
+        [ForeignKey("ProductBasicId")]
+        [InverseProperty("MaterialRequisitions")]
+        public virtual ProductBasic ProductBasic { get; set; }
+        [InverseProperty("MaterialRequisition")]
         public virtual ICollection<MaterialRequisitionDetail> MaterialRequisitionDetails { get; set; }
-        [InverseProperty("MaterialBasic")]
-        public virtual ICollection<Material> Materials { get; set; }
     }
 }
