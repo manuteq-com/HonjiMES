@@ -352,8 +352,9 @@ namespace HonjiMES.Models
         /// </summary>
         /// <param name="billOfMaterials"></param>
         /// <param name="Lv"></param>
+        /// <param name="Receive">生產數量</param>
         /// <returns></returns>
-        internal static List<BomList> GetBomListList(IEnumerable<BillOfMaterial> billOfMaterials, int Lv = 0)
+        internal static List<BomList> GetBomList(IEnumerable<BillOfMaterial> billOfMaterials, int Lv = 0, int Receive = 1)
         {
             var bomlist = new List<BomList>();
             if (Lv < 3)//目前限定3階
@@ -368,21 +369,24 @@ namespace HonjiMES.Models
                         Name = item.Name,
                         MaterialName = item.MaterialBasic?.Name,
                         MaterialNo = item.MaterialBasic?.MaterialNo,
+                        MateriaSpecification = item.MaterialBasic?.Specification,
                         Quantity = item.Quantity,
                         ProductName = item.InverseP.FirstOrDefault()?.ProductBasic?.Name ?? "",
                         ProductNo = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNo ?? "",
+                        ProductNumber = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNumber ?? "",
+                        ProductSpecification = item.InverseP.FirstOrDefault()?.ProductBasic?.Specification ?? "",
                         MaterialBasicId = item.MaterialBasicId,
-                        ProductBasicId = item.ProductBasicId
+                        ProductBasicId = item.ProductBasicId,
+                        ReceiveQty = item.Quantity * Receive
                     });
                     if (item.InverseP.Any())
                     {
-                        bomlist.AddRange(MyFun.GetBomListList(item.InverseP, Lv + 1));
+                        bomlist.AddRange(MyFun.GetBomList(item.InverseP, Lv + 1, item.Quantity * Receive));
                     }
                 }
             }
             return bomlist;
         }
-
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(IQueryable<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             QueryCollection queries = new QueryCollection();

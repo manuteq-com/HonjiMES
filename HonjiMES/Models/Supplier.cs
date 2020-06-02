@@ -54,7 +54,7 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [InverseProperty("Supplier")]
+        [InverseProperty(nameof(BillofPurchaseDetail.Supplier))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }
 }

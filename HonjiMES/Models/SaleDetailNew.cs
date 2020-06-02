@@ -56,22 +56,22 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [ForeignKey("OrderId")]
-        [InverseProperty("SaleDetailNews")]
+        [ForeignKey(nameof(OrderId))]
+        [InverseProperty(nameof(OrderHead.SaleDetailNews))]
         public virtual OrderHead Order { get; set; }
-        [ForeignKey("OrderDetailId")]
+        [ForeignKey(nameof(OrderDetailId))]
         [InverseProperty("SaleDetailNews")]
         public virtual OrderDetail OrderDetail { get; set; }
-        [ForeignKey("ProductId")]
+        [ForeignKey(nameof(ProductId))]
         [InverseProperty("SaleDetailNews")]
         public virtual Product Product { get; set; }
-        [ForeignKey("ProductBasicId")]
+        [ForeignKey(nameof(ProductBasicId))]
         [InverseProperty("SaleDetailNews")]
         public virtual ProductBasic ProductBasic { get; set; }
-        [ForeignKey("SaleId")]
-        [InverseProperty("SaleDetailNews")]
+        [ForeignKey(nameof(SaleId))]
+        [InverseProperty(nameof(SaleHead.SaleDetailNews))]
         public virtual SaleHead Sale { get; set; }
-        [InverseProperty("SaleDetailNew")]
+        [InverseProperty(nameof(ReturnSale.SaleDetailNew))]
         public virtual ICollection<ReturnSale> ReturnSales { get; set; }
     }
 }

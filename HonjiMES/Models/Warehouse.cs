@@ -48,11 +48,11 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [InverseProperty("Warehouse")]
+        [InverseProperty(nameof(Material.Warehouse))]
         public virtual ICollection<Material> Materials { get; set; }
-        [InverseProperty("Warehouse")]
+        [InverseProperty(nameof(Product.Warehouse))]
         public virtual ICollection<Product> Products { get; set; }
-        [InverseProperty("Warehouse")]
+        [InverseProperty(nameof(ReturnSale.Warehouse))]
         public virtual ICollection<ReturnSale> ReturnSales { get; set; }
     }
 }

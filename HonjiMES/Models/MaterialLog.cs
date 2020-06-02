@@ -33,7 +33,7 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [ForeignKey("MaterialId")]
+        [ForeignKey(nameof(MaterialId))]
         [InverseProperty("MaterialLogs")]
         public virtual Material Material { get; set; }
     }

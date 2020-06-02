@@ -58,10 +58,10 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [ForeignKey("PurchaseId")]
-        [InverseProperty("PurchaseDetails")]
+        [ForeignKey(nameof(PurchaseId))]
+        [InverseProperty(nameof(PurchaseHead.PurchaseDetails))]
         public virtual PurchaseHead Purchase { get; set; }
-        [InverseProperty("PurchaseDetail")]
+        [InverseProperty(nameof(BillofPurchaseDetail.PurchaseDetail))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }
 }

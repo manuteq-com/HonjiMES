@@ -50,16 +50,16 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [ForeignKey("MaterialBasicId")]
+        [ForeignKey(nameof(MaterialBasicId))]
         [InverseProperty("BillOfMaterials")]
         public virtual MaterialBasic MaterialBasic { get; set; }
-        [ForeignKey("Pid")]
-        [InverseProperty("InverseP")]
+        [ForeignKey(nameof(Pid))]
+        [InverseProperty(nameof(BillOfMaterial.InverseP))]
         public virtual BillOfMaterial P { get; set; }
-        [ForeignKey("ProductBasicId")]
+        [ForeignKey(nameof(ProductBasicId))]
         [InverseProperty("BillOfMaterials")]
         public virtual ProductBasic ProductBasic { get; set; }
-        [InverseProperty("P")]
+        [InverseProperty(nameof(BillOfMaterial.P))]
         public virtual ICollection<BillOfMaterial> InverseP { get; set; }
     }
 }

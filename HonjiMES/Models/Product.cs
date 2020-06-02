@@ -64,17 +64,17 @@ namespace HonjiMES.Models
         [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
 
-        [ForeignKey("ProductBasicId")]
+        [ForeignKey(nameof(ProductBasicId))]
         [InverseProperty("Products")]
         public virtual ProductBasic ProductBasic { get; set; }
-        [ForeignKey("WarehouseId")]
+        [ForeignKey(nameof(WarehouseId))]
         [InverseProperty("Products")]
         public virtual Warehouse Warehouse { get; set; }
-        [InverseProperty("Product")]
+        [InverseProperty(nameof(OrderDetail.Product))]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        [InverseProperty("Product")]
+        [InverseProperty(nameof(ProductLog.Product))]
         public virtual ICollection<ProductLog> ProductLogs { get; set; }
-        [InverseProperty("Product")]
+        [InverseProperty(nameof(SaleDetailNew.Product))]
         public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

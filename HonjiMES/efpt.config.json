@@ -102,6 +102,18 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "receive"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "requisition"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "requisition_detail"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "return_sale"
       },
       {

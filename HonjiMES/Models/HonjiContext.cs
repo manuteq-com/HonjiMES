@@ -16,9 +16,6 @@ namespace HonjiMES.Models
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
-        public virtual DbSet<MaterialReceive> MaterialReceives { get; set; }
-        public virtual DbSet<MaterialRequisition> MaterialRequisitions { get; set; }
-        public virtual DbSet<MaterialRequisitionDetail> MaterialRequisitionDetails { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -32,6 +29,9 @@ namespace HonjiMES.Models
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
         public virtual DbSet<PurchaseHead> PurchaseHeads { get; set; }
+        public virtual DbSet<Receive> Receives { get; set; }
+        public virtual DbSet<Requisition> Requisitions { get; set; }
+        public virtual DbSet<RequisitionDetail> RequisitionDetails { get; set; }
         public virtual DbSet<ReturnSale> ReturnSales { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
@@ -563,141 +563,6 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.MaterialId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_material_log_material1");
-            });
-
-            modelBuilder.Entity<MaterialReceive>(entity =>
-            {
-                entity.HasComment("原料領用記者會");
-
-                entity.HasIndex(e => e.MaterialId)
-                    .HasName("fk_material_receive_material1_idx");
-
-                entity.HasIndex(e => e.MaterialRequisitionDetailId)
-                    .HasName("fk_material_receive_material_requisition_detail1_idx");
-
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.Quantity).HasComment("領取數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .ValueGeneratedOnAddOrUpdate();
-
-                entity.HasOne(d => d.Material)
-                    .WithMany(p => p.MaterialReceives)
-                    .HasForeignKey(d => d.MaterialId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_material_receive_material1");
-
-                entity.HasOne(d => d.MaterialRequisitionDetail)
-                    .WithMany(p => p.MaterialReceives)
-                    .HasForeignKey(d => d.MaterialRequisitionDetailId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_material_receive_material_requisition_detail1");
-            });
-
-            modelBuilder.Entity<MaterialRequisition>(entity =>
-            {
-                entity.HasComment("原料領用主檔");
-
-                entity.HasIndex(e => e.ProductBasicId)
-                    .HasName("fk_material_requisition_product_basic1_idx");
-
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.Name)
-                    .HasComment("領料單名稱")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.ProductNo)
-                    .HasComment("主件品號")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.ProductNumber)
-                    .HasComment("廠內成品號")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.Quantity).HasComment("驗收數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.RequisitionNo)
-                    .HasComment("領料單號")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .ValueGeneratedOnAddOrUpdate();
-
-                entity.HasOne(d => d.ProductBasic)
-                    .WithMany(p => p.MaterialRequisitions)
-                    .HasForeignKey(d => d.ProductBasicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_material_requisition_product_basic1");
-            });
-
-            modelBuilder.Entity<MaterialRequisitionDetail>(entity =>
-            {
-                entity.HasComment("原料領用副檔");
-
-                entity.HasIndex(e => e.MaterialBasicId)
-                    .HasName("fk_material_requisition_detail_material_basic1_idx");
-
-                entity.HasIndex(e => e.MaterialRequisitionId)
-                    .HasName("fk_material_requisition_detail_material_requisition1_idx");
-
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.MaterialNo)
-                    .HasComment("元件品號")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.Name)
-                    .HasComment("元件品名")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.Quantity).HasComment("驗收數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .ValueGeneratedOnAddOrUpdate();
-
-                entity.HasOne(d => d.MaterialBasic)
-                    .WithMany(p => p.MaterialRequisitionDetails)
-                    .HasForeignKey(d => d.MaterialBasicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_material_requisition_detail_material_basic1");
-
-                entity.HasOne(d => d.MaterialRequisition)
-                    .WithMany(p => p.MaterialRequisitionDetails)
-                    .HasForeignKey(d => d.MaterialRequisitionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_material_requisition_detail_material_requisition1");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -1333,6 +1198,178 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<Receive>(entity =>
+            {
+                entity.HasComment("領料數量記錄表");
+
+                entity.HasIndex(e => e.RequisitionDetailId)
+                    .HasName("fk_receive_requisition_detail1_idx");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Quantity).HasComment("領取數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.RequisitionDetail)
+                    .WithMany(p => p.Receives)
+                    .HasForeignKey(d => d.RequisitionDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_receive_requisition_detail1");
+            });
+
+            modelBuilder.Entity<Requisition>(entity =>
+            {
+                entity.HasComment("領料資料主檔");
+
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_requisition_product_basic1_idx");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Name)
+                    .HasComment("領料單名稱")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductNumber)
+                    .HasComment("廠內成品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Quantity).HasComment("生產數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.RequisitionNo)
+                    .HasComment("領料單號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.Requisitions)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_requisition_product_basic1");
+            });
+
+            modelBuilder.Entity<RequisitionDetail>(entity =>
+            {
+                entity.HasComment("領料資料副檔");
+
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("fk_requisition_detail_material_basic1_idx");
+
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("fk_requisition_detail_product_basic1_idx");
+
+                entity.HasIndex(e => e.RequisitionId)
+                    .HasName("fk_requisition_detail_requisition1_idx");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Ismaterial).HasComment("是否為原料");
+
+                entity.Property(e => e.Lv).HasComment("階層");
+
+                entity.Property(e => e.MaterialName)
+                    .HasComment("元件品名")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.MaterialNo)
+                    .HasComment("元件品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.MaterialSpecification)
+                    .HasComment("元件規格")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Name)
+                    .HasComment("元件品名")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductName)
+                    .HasComment("主件品名")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductNumber)
+                    .HasComment("廠內成品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProductSpecification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Quantity).HasComment("驗收數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.RequisitionDetails)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .HasConstraintName("fk_requisition_detail_material_basic1");
+
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.RequisitionDetails)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .HasConstraintName("fk_requisition_detail_product_basic1");
+
+                entity.HasOne(d => d.Requisition)
+                    .WithMany(p => p.RequisitionDetails)
+                    .HasForeignKey(d => d.RequisitionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_requisition_detail_requisition1");
             });
 
             modelBuilder.Entity<ReturnSale>(entity =>
