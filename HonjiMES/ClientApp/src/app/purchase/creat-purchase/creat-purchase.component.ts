@@ -130,10 +130,10 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         const today = new Date();
         this.MaterialList.forEach(x => {
             if (x.Id === e.value) {
-                this.Quantityvalmax = x.Quantity;
-                this.Quantityval = x.Quantity;
-                this.OriginPriceval = x.OriginPrice;
-                this.Priceval = x.Quantity * x.OriginPrice;
+                this.Quantityvalmax = 999;
+                this.Quantityval = 1;
+                this.OriginPriceval = x.OriginPrice ? x.OriginPrice : 0;
+                this.Priceval = (x.Quantity * x.OriginPrice) ? (x.Quantity * x.OriginPrice) : 0;
             }
         });
     }
