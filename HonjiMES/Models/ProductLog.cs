@@ -33,7 +33,7 @@ namespace HonjiMES.Models
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
 
-        [ForeignKey("ProductId")]
+        [ForeignKey(nameof(ProductId))]
         [InverseProperty("ProductLogs")]
         public virtual Product Product { get; set; }
     }

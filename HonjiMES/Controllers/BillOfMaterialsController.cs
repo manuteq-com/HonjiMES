@@ -32,7 +32,10 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
-
+        /// <summary>
+        /// 取BOM表的資料列表
+        /// </summary>
+        /// <returns></returns>
         // GET: api/BillOfMaterials
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillOfMaterial>>> GetBillOfMaterials()
@@ -40,7 +43,11 @@ namespace HonjiMES.Controllers
             var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
-
+        /// <summary>
+        /// 用ID取BOM表的資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/BillOfMaterials/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BillOfMaterial>> GetBillOfMaterial(int id)
@@ -54,7 +61,12 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(billOfMaterial));
         }
-
+        /// <summary>
+        /// 更新BOM表資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="billOfMaterial"></param>
+        /// <returns></returns>
         // PUT: api/BillOfMaterials/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -86,7 +98,11 @@ namespace HonjiMES.Controllers
 
             return NoContent();
         }
-
+        /// <summary>
+        /// 新增BOM表資料
+        /// </summary>
+        /// <param name="billOfMaterial"></param>
+        /// <returns></returns>
         // POST: api/BillOfMaterials
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -98,7 +114,11 @@ namespace HonjiMES.Controllers
 
             return CreatedAtAction("GetBillOfMaterial", new { id = billOfMaterial.Id }, billOfMaterial);
         }
-
+        /// <summary>
+        /// 刪除BOM表資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/BillOfMaterials/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<BillOfMaterial>> DeleteBillOfMaterial(int id)
@@ -114,6 +134,10 @@ namespace HonjiMES.Controllers
 
             return billOfMaterial;
         }
+        /// <summary>
+        /// 用EXCEL水匯入BOM表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<OrderHead> Bomexcel()
         {
@@ -267,6 +291,11 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(null, MaterialBasiclist.Count + ";" + excelcount));
 
         }
+        /// <summary>
+        /// 取產品列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <returns></returns>
         [HttpGet]
         //public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] FromQuery FromQuery)
         public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] DataSourceLoadOptions FromQuery)
@@ -279,6 +308,11 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics.AsQueryable(), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+        /// <summary>
+        /// 用性品ID取BOM的列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
 
         public async Task<ActionResult<IEnumerable<BomList>>> GetBomlist(int id)
@@ -286,9 +320,15 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
-            bomlist.AddRange(MyFun.GetBomListList(BillOfMaterials));
+            bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
             return Ok(MyFun.APIResponseOK(bomlist));
         }
+        /// <summary>
+        /// 更新BOM表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="PutBomlist"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<ActionResult<IEnumerable<BomList>>> PutBomlist(int id, BomList PutBomlist)
         {
@@ -310,7 +350,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 
+        /// 新增BOM表
         /// </summary>
         /// <param name="id"></param>
         /// <param name="PostBom"></param>

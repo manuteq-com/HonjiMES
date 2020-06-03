@@ -13,6 +13,7 @@ import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
+import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
 
 
 export const routes: Routes = [
@@ -28,7 +29,8 @@ export const routes: Routes = [
     { path: 'supplierlist', component: SupplierListComponent },
     { path: 'warehouselist', component: WarehouseListComponent },
     { path: 'userlist', component: UserListComponent },
-    { path: 'Billofmateriallist', component: BillofmateriallistComponent }
+    { path: 'billofmateriallist', component: BillofmateriallistComponent },
+    { path: 'receiveList', component: ReceiveListComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

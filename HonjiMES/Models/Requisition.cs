@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material_requisition")]
-    public partial class MaterialRequisition
+[Table("requisition")]
+    public partial class Requisition
     {
-        public MaterialRequisition()
+        public Requisition()
         {
-            MaterialRequisitionDetails = new HashSet<MaterialRequisitionDetail>();
+            RequisitionDetails = new HashSet<RequisitionDetail>();
         }
 
         [Key]
@@ -31,6 +31,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("product_number", TypeName = "varchar(50)")]
         public string ProductNumber { get; set; }
+        [Column("specification", TypeName = "varchar(50)")]
+        public string Specification { get; set; }
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
@@ -46,10 +48,10 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [ForeignKey("ProductBasicId")]
-        [InverseProperty("MaterialRequisitions")]
+        [ForeignKey(nameof(ProductBasicId))]
+        [InverseProperty("Requisitions")]
         public virtual ProductBasic ProductBasic { get; set; }
-        [InverseProperty("MaterialRequisition")]
-        public virtual ICollection<MaterialRequisitionDetail> MaterialRequisitionDetails { get; set; }
+        [InverseProperty(nameof(RequisitionDetail.Requisition))]
+        public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
     }
 }

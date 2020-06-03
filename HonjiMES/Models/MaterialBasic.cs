@@ -12,8 +12,8 @@ namespace HonjiMES.Models
         public MaterialBasic()
         {
             BillOfMaterials = new HashSet<BillOfMaterial>();
-            MaterialRequisitionDetails = new HashSet<MaterialRequisitionDetail>();
             Materials = new HashSet<Material>();
+            RequisitionDetails = new HashSet<RequisitionDetail>();
         }
 
         [Key]
@@ -43,11 +43,11 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [InverseProperty("MaterialBasic")]
+        [InverseProperty(nameof(BillOfMaterial.MaterialBasic))]
         public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
-        [InverseProperty("MaterialBasic")]
-        public virtual ICollection<MaterialRequisitionDetail> MaterialRequisitionDetails { get; set; }
-        [InverseProperty("MaterialBasic")]
+        [InverseProperty(nameof(Material.MaterialBasic))]
         public virtual ICollection<Material> Materials { get; set; }
+        [InverseProperty(nameof(RequisitionDetail.MaterialBasic))]
+        public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
     }
 }

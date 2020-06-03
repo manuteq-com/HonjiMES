@@ -69,6 +69,8 @@ import { ProductBasicListComponent } from './product/product-basic-list/product-
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
 import { CreatproductBasicComponent } from './product/creatproduct-basic/creatproduct-basic.component';
 import { CreatmaterialBasicComponent } from './material/creatmaterial-basic/creatmaterial-basic.component';
+import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
+import { ReceiveDetailListComponent } from './receive/receivedetail-list/receivedetail-list.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -145,6 +147,8 @@ import { CreatmaterialBasicComponent } from './material/creatmaterial-basic/crea
         MaterialBasicListComponent,
         CreatproductBasicComponent,
         CreatmaterialBasicComponent,
+        ReceiveListComponent,
+        ReceiveDetailListComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

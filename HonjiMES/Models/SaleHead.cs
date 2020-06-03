@@ -41,7 +41,7 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [InverseProperty("Sale")]
+        [InverseProperty(nameof(SaleDetailNew.Sale))]
         public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

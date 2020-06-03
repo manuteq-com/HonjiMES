@@ -74,16 +74,16 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [ForeignKey("OrderId")]
-        [InverseProperty("OrderDetails")]
+        [ForeignKey(nameof(OrderId))]
+        [InverseProperty(nameof(OrderHead.OrderDetails))]
         public virtual OrderHead Order { get; set; }
-        [ForeignKey("ProductId")]
+        [ForeignKey(nameof(ProductId))]
         [InverseProperty("OrderDetails")]
         public virtual Product Product { get; set; }
-        [ForeignKey("ProductBasicId")]
+        [ForeignKey(nameof(ProductBasicId))]
         [InverseProperty("OrderDetails")]
         public virtual ProductBasic ProductBasic { get; set; }
-        [InverseProperty("OrderDetail")]
+        [InverseProperty(nameof(SaleDetailNew.OrderDetail))]
         public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

@@ -33,10 +33,10 @@ namespace HonjiMES.Models
         [Column("sale_detail_new_id", TypeName = "int(11)")]
         public int SaleDetailNewId { get; set; }
 
-        [ForeignKey("SaleDetailNewId")]
+        [ForeignKey(nameof(SaleDetailNewId))]
         [InverseProperty("ReturnSales")]
         public virtual SaleDetailNew SaleDetailNew { get; set; }
-        [ForeignKey("WarehouseId")]
+        [ForeignKey(nameof(WarehouseId))]
         [InverseProperty("ReturnSales")]
         public virtual Warehouse Warehouse { get; set; }
     }

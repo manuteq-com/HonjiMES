@@ -6,12 +6,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material_receive")]
-    public partial class MaterialReceive
+[Table("receive")]
+    public partial class Receive
     {
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("requisition_detail_id", TypeName = "int(11)")]
+        public int RequisitionDetailId { get; set; }
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
@@ -26,16 +28,9 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("material_requisition_detail_id", TypeName = "int(11)")]
-        public int MaterialRequisitionDetailId { get; set; }
-        [Column("material_id", TypeName = "int(11)")]
-        public int MaterialId { get; set; }
 
-        [ForeignKey("MaterialId")]
-        [InverseProperty("MaterialReceives")]
-        public virtual Material Material { get; set; }
-        [ForeignKey("MaterialRequisitionDetailId")]
-        [InverseProperty("MaterialReceives")]
-        public virtual MaterialRequisitionDetail MaterialRequisitionDetail { get; set; }
+        [ForeignKey(nameof(RequisitionDetailId))]
+        [InverseProperty("Receives")]
+        public virtual RequisitionDetail RequisitionDetail { get; set; }
     }
 }

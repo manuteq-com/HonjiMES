@@ -12,7 +12,6 @@ namespace HonjiMES.Models
         public Material()
         {
             MaterialLogs = new HashSet<MaterialLog>();
-            MaterialReceives = new HashSet<MaterialReceive>();
         }
 
         [Key]
@@ -54,15 +53,13 @@ namespace HonjiMES.Models
         [Column("material_basic_id", TypeName = "int(11)")]
         public int MaterialBasicId { get; set; }
 
-        [ForeignKey("MaterialBasicId")]
+        [ForeignKey(nameof(MaterialBasicId))]
         [InverseProperty("Materials")]
         public virtual MaterialBasic MaterialBasic { get; set; }
-        [ForeignKey("WarehouseId")]
+        [ForeignKey(nameof(WarehouseId))]
         [InverseProperty("Materials")]
         public virtual Warehouse Warehouse { get; set; }
-        [InverseProperty("Material")]
+        [InverseProperty(nameof(MaterialLog.Material))]
         public virtual ICollection<MaterialLog> MaterialLogs { get; set; }
-        [InverseProperty("Material")]
-        public virtual ICollection<MaterialReceive> MaterialReceives { get; set; }
     }
 }

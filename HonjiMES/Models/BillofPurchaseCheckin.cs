@@ -31,7 +31,7 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [ForeignKey("BillofPurchaseDetailId")]
+        [ForeignKey(nameof(BillofPurchaseDetailId))]
         [InverseProperty("BillofPurchaseCheckins")]
         public virtual BillofPurchaseDetail BillofPurchaseDetail { get; set; }
     }

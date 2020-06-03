@@ -1,0 +1,56 @@
+<!-- <p>所有訂單</p> -->
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+    [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+    [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onCellClick)="cellClick($event)"
+    (onContentReady)="onContentReady($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="onRowInserting($event)"
+    (onEditingStart)="onEditingStart($event)" [remoteOperations]="remoteOperations">
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form [colCount]=3>
+            <dxi-item dataField="Name"></dxi-item>
+            <dxi-item dataField="ProductBasicId" dataType="number" editorType="dxSelectBox"
+                [editorOptions]="selectBoxOptions">
+                <dxi-validation-rule type="required" message="成品名稱 必填"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Quantity">
+                <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
+                <dxi-validation-rule type="range" [min]="1" message="數量 必須大於1"></dxi-validation-rule>
+            </dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-paging [enabled]="true" [pageSize]="10">
+    </dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
+        [showNavigationButtons]="true" visible="true">
+    </dxo-pager>
+    <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+    </dxo-remote-operations>
+    <dxi-column dataField="RequisitionNo" caption="領料單號" [allowEditing]="false" [filterValue]="" dataType="string">
+    </dxi-column>
+    <dxi-column dataField="Name" caption="領料單名稱" dataType="string"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="成品號" dataType="string"></dxi-column>
+    <dxi-column dataField="ProductNumber" caption="廠內成品號" dataType="string"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
+    <dxi-column dataField="Quantity" caption="生產數量" dataType="number"></dxi-column>
+    <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
+    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+    <div *dxTemplate="let item of 'detail'">
+        <app-receivedetail-list [itemkeyval]="item.key"></app-receivedetail-list>
+    </div>
+</dx-data-grid>

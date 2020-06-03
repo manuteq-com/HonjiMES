@@ -1,21 +1,18 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from 'src/app/shared/mylib';
-import { HttpClient } from '@angular/common/http';
-import dxTreeList from 'devextreme/ui/tree_list';
-import { DxTreeListComponent } from 'devextreme-angular';
-import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
+import { HttpClient } from '@angular/common/http';
+import { SendService } from 'src/app/shared/mylib';
+import notify from 'devextreme/ui/notify';
 
 @Component({
-    selector: 'app-bomlist',
-    templateUrl: './bomlist.component.html',
-    styleUrls: ['./bomlist.component.css']
+    selector: 'app-receivedetail-list',
+    templateUrl: './receivedetail-list.component.html',
+    styleUrls: ['./receivedetail-list.component.css']
 })
-export class BomlistComponent implements OnInit {
+export class ReceiveDetailListComponent implements OnInit {
     @Input() itemkeyval: any;
-    @ViewChild(DxTreeListComponent) TreeList: DxTreeListComponent;
     Controller = '/BillOfMaterials';
     dataSourceDB: CustomStore;
     popupVisible: boolean;
@@ -82,7 +79,6 @@ export class BomlistComponent implements OnInit {
     }
 
     onReorder(e) {
-        debugger;
         const visibleRows = e.component.getVisibleRows();
         const sourceData = e.itemData;
         const targetData = visibleRows[e.toIndex].data;
@@ -105,7 +101,6 @@ export class BomlistComponent implements OnInit {
     }
     popup_result(e) {
         this.popupVisible = false;
-        this.TreeList.instance.refresh();
         notify({
             message: '存檔完成',
             position: {

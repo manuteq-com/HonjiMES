@@ -61,12 +61,12 @@ namespace HonjiMES.Models
     /// </summary>
     public class SearchValue
     {
-        public string? OrderNo { get; set; }
-        public string? MachineNo { get; set; }
-        public string? ProductNo { get; set; }
-        public string? PurchaseNo { get; set; }
-        public string? SupplierCode { get; set; }
-        public string? MaterialNo { get; set; }
+        public string OrderNo { get; set; }
+        public string MachineNo { get; set; }
+        public string ProductNo { get; set; }
+        public string PurchaseNo { get; set; }
+        public string SupplierCode { get; set; }
+        public string MaterialNo { get; set; }
     }
     /// <summary>
     /// 銷貨單銷貨
@@ -183,10 +183,14 @@ namespace HonjiMES.Models
         public int? MaterialBasicId { get; set; }
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
+        public string MateriaSpecification { get; internal set; }
         public int? ProductBasicId { get; set; }
         public string ProductName { get; set; }
         public string ProductNo { get; set; }
+        public string ProductNumber { get; internal set; }
+        public string ProductSpecification { get; internal set; }
         public int Lv { get; set; }
+        public int ReceiveQty { get; internal set; }
     }
     public class PostBom
     {
