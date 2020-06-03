@@ -177,7 +177,9 @@ namespace HonjiMES.Controllers
                 var Details = new List<BillofPurchaseDetail>();
                 foreach (var item in Detail)
                 {
+                    var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId).FirstOrDefault();
                     var Material = _context.Materials.Find(item.DataId);
+                    item.PurchaseDetailId = PurchaseDetail.Id;
                     item.DataName = Material.Name;
                     item.DataNo = Material.MaterialNo;
                     item.Specification = Material.Specification;

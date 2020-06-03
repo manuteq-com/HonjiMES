@@ -122,12 +122,12 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
             if (BillofPurchaseDetails == null)
             {
-                return Ok(MyFun.APIResponseError("進貨單資料有誤"));
+                return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
             BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
             if (BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
             {
-                return Ok(MyFun.APIResponseError("驗收數量超過採購數量"));
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
             }
             var dt = DateTime.Now;
             BillofPurchaseCheckin.CreateTime = dt;
@@ -137,6 +137,20 @@ namespace HonjiMES.Controllers
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
+
+            // //更新採購單明細資訊
+            // var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
+            // if (PurchaseDetail == null)
+            // {
+            //     return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
+            // }
+            // PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
+            // PurchaseDetail.UpdateTime = dt;
+            // PurchaseDetail.UpdateUser = 1;
+            // if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+            //     return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
+            // }
+            
             //入庫
             var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
             if (Material == null)
@@ -145,7 +159,7 @@ namespace HonjiMES.Controllers
             }
             Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
-            
+
             //檢查進貨單明細是否都完成進貨
             var CheckBillofPurchaseHeadStatus = true;
             var BillofPurchaseDetailData = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
