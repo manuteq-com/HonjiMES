@@ -28,7 +28,8 @@ export class BillPurchaseDetailComponent implements OnInit {
     mod: string;
     keyID: any;
     constructor(private http: HttpClient) {
-        this.checkinonClick = this.checkinonClick.bind(this);
+        this.checkInOnClick = this.checkInOnClick.bind(this);
+        this.checkOutOnClick = this.checkOutOnClick.bind(this);
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.dataSourceDB = new CustomStore({
@@ -90,6 +91,13 @@ export class BillPurchaseDetailComponent implements OnInit {
     to_purchaseClick(e) {
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
+    allowEdit(e) {
+        if (e.row.data.CheckStatus === 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     selectvalueChanged(e, data) {
         data.setValue(e.value);
         const today = new Date();
@@ -125,12 +133,15 @@ export class BillPurchaseDetailComponent implements OnInit {
             }
         }, 'error', 3000);
     }
-    checkinonClick(e) {
+    checkInOnClick(e, item) {
         debugger;
-        this.keyID = e.row.key;
+        this.keyID = item.key;
         this.popupVisible = true;
     }
-
+    checkOutOnClick(e, item) {
+        this.keyID = item.key;
+        this.popupVisible = true;
+    }
     popup_result(e) {
         this.popupVisible = false;
         this.dataGrid.instance.refresh();

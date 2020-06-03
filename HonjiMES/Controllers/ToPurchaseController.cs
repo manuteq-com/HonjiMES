@@ -138,18 +138,18 @@ namespace HonjiMES.Controllers
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
 
-            // //更新採購單明細資訊
-            // var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
-            // if (PurchaseDetail == null)
-            // {
-            //     return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
-            // }
-            // PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
-            // PurchaseDetail.UpdateTime = dt;
-            // PurchaseDetail.UpdateUser = 1;
-            // if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
-            //     return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
-            // }
+            //更新採購單明細資訊
+            var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
+            if (PurchaseDetail == null)
+            {
+                return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
+            }
+            PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
+            PurchaseDetail.UpdateTime = dt;
+            PurchaseDetail.UpdateUser = 1;
+            if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
+            }
             
             //入庫
             var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
@@ -175,6 +175,7 @@ namespace HonjiMES.Controllers
             }
 
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
         }
         /// <summary>
