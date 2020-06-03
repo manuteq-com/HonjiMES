@@ -38,6 +38,10 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     ProductBasicList: any;
     ProductsAllList: any;
     async ngOnChanges() {
+        this.startTimeInput = {
+            min: new Date().toDateString(),
+            value: new Date().toDateString()
+        };
         this.dataSourceDB = [];
         this.ProductsAllList =[];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
@@ -87,10 +91,6 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 3;
-        this.startTimeInput = {
-            min: new Date().toDateString(),
-            value: new Date().toDateString()
-        };
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);

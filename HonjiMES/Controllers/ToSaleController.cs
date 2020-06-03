@@ -94,8 +94,16 @@ namespace HonjiMES.Controllers
                     }
                     else if (ToSales.SaleDate.HasValue)//有銷貨日期，新增銷貨單
                     {
-                        var SaleNo = dt.ToString("yyyyMMdd");
-                        var NoCount = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.StartsWith("S" + SaleNo)).Count() + 1;
+                        var SaleNo = dt.ToString("yyMMdd");
+                        var NoData = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.StartsWith("S" + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                        var NoCount = NoData.Count() + 1;
+                        if (NoCount != 1) {
+                            var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                            var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                            if (NoCount <= NoLast) {
+                                NoCount = NoLast + 1;
+                            }
+                        }
                         //S  20200415  001
                         var nsale = new SaleHead
                         {

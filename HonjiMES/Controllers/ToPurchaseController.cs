@@ -55,13 +55,23 @@ namespace HonjiMES.Controllers
         {
             try
             {
-                var dt = DateTime.Now;
-                var PurchaseNo = dt.ToString("yyMMdd");
-                var NoCount = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(PurchaseNo)).Count() + 1;
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
                 var key = purchaseHead.Type == 10 ? "PI" : "PO";
+
+                var dt = DateTime.Now;
+                var PurchaseNo = dt.ToString("yyMMdd");
+                var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                    var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                
                 purchaseHead.PurchaseNo = key + PurchaseNo + NoCount.ToString("000");
                 purchaseHead.CreateTime = dt;
                 purchaseHead.CreateUser = 1;
