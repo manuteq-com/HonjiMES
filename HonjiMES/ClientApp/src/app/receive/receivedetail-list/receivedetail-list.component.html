@@ -1,1 +1,29 @@
-<p>receive-list works!</p>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+    [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+    [columnAutoWidth]="false" [showBorders]="true" (onCellClick)="cellClick($event)"
+    (onToolbarPreparing)="onToolbarPreparing($event)">
+    <dxo-editing mode="batch" [allowUpdating]="true">
+        <dxo-texts saveAllChanges="領料"></dxo-texts>
+    </dxo-editing>
+    <dxi-column dataField="Name" caption="名稱" dataType="string" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="組成品項" dataType="string" [allowEditing]="false">
+    </dxi-column>
+    <dxi-column dataField="MaterialNo" caption="組成元件" dataType="string" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="RQty" caption="領取數量" dataType="number"></dxi-column>
+    <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
+    </dxi-column> -->
+</dx-data-grid>
+<dx-popup [showTitle]="true" title="新增組成表" [dragEnabled]="false" [closeOnOutsideClick]="false" height="30%"
+    [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval">
+        </app-editbom>
+    </div>
+</dx-popup>

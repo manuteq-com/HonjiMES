@@ -1,59 +1,68 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnChanges } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
-import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
     selector: 'app-receivedetail-list',
     templateUrl: './receivedetail-list.component.html',
     styleUrls: ['./receivedetail-list.component.css']
 })
-export class ReceiveDetailListComponent implements OnInit {
+export class ReceivedetailListComponent implements OnInit, OnChanges {
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
-    Controller = '/BillOfMaterials';
+    Controller = '/Requisitions';
     dataSourceDB: CustomStore;
     popupVisible: boolean;
-    MaterialList: any;
-    ProductList: any;
+    WarehouseID: any;
+    Warehouselist: any;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
-        this.onReorder = this.onReorder.bind(this);
-        this.isUploadVisible = this.isUploadVisible.bind(this);
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialList = s.data;
-                }
-            }
-        );
-        this.GetData('/ProductBasics/GetProductBasics').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.ProductList = s.data;
-                }
-            }
-        );
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBomlist/' + this.itemkeyval),
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetail/' + this.itemkeyval),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutBomlist', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT', { key, values }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
-
+        this.Warehouselist = new CustomStore({
+            key: 'Id',
+            load: () =>
+                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        });
     }
 
     ngOnInit() {
     }
+    ngOnChanges() {
+    }
+    onToolbarPreparing(e) {
+        debugger;
+        e.toolbarOptions.items.unshift({
+            location: 'after',
+            widget: 'dxSelectBox',
+            options: {
+                dataSource: this.Warehouselist,
+                displayExpr: 'Name',
+                valueExpr: 'Id',
+                onValueChanged: this.WarehouseChanged.bind(this)
+            }
+        });
+    }
+    WarehouseChanged(e) {
+        this.WarehouseID = e.value;
+    }
+
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
@@ -62,41 +71,6 @@ export class ReceiveDetailListComponent implements OnInit {
                     // this.TreeList.instance.addRow();
                 }
             }
-        }
-    }
-    onDragChange(e) {
-        const visibleRows = e.component.getVisibleRows();
-        const sourceNode = e.component.getNodeByKey(e.itemData.Id);
-        let targetNode = visibleRows[e.toIndex].node;
-
-        while (targetNode && targetNode.data) {
-            if (targetNode.data.Id === sourceNode.data.Id) {
-                e.cancel = true;
-                break;
-            }
-            targetNode = targetNode.parent;
-        }
-    }
-
-    onReorder(e) {
-        const visibleRows = e.component.getVisibleRows();
-        const sourceData = e.itemData;
-        const targetData = visibleRows[e.toIndex].data;
-        if (e.dropInsideItem) {
-            this.dataSourceDB.update(e.itemData.Id, { Pid: targetData.Id }).then(() => {
-                e.component.refresh();
-            });
-        } else {
-            if (targetData.Pid) {
-                this.dataSourceDB.update(e.itemData.Id, { Pid: targetData.Pid }).then(() => {
-                    e.component.refresh();
-                });
-            } else {
-                this.dataSourceDB.update(e.itemData.Id, { ProductBasicId: targetData.ProductBasicId }).then(() => {
-                    e.component.refresh();
-                });
-            }
-
         }
     }
     popup_result(e) {
@@ -108,12 +82,5 @@ export class ReceiveDetailListComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
-    }
-    isUploadVisible(e) {
-        if (e.row.data.ProductNo !== '') {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

@@ -69,20 +69,23 @@ namespace HonjiMES.Controllers
                 foreach (var item in purchaseDetail)
                 {
                     var BillP = _context.BillofPurchaseDetails.Find(item.DataId);
-                    if (BillP != null) {
+                    if (BillP != null)
+                    {
                         item.DataNo = BillP.DataNo;
                         item.DataName = BillP.DataName;
                         item.Specification = BillP.Specification;
                         item.CreateTime = dt;
                         item.CreateUser = 1;
-                    } else {
+                    }
+                    else
+                    {
                         var MaterialData = _context.Materials.Find(item.DataId);
                         item.DataNo = MaterialData.MaterialNo;
                         item.DataName = MaterialData.Name;
                         item.Specification = MaterialData.Specification;
                         item.CreateTime = dt;
                         item.CreateUser = 1;
-                    }                    
+                    }
                     item.PurchaseType = purchaseHead.Type;
                     item.SupplierId = purchaseHead.SupplierId;
                     PurchaseDetail.Add(item);
@@ -135,22 +138,25 @@ namespace HonjiMES.Controllers
             }
             Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
-            
+
             //檢查進貨單明細是否都完成進貨
             var CheckBillofPurchaseHeadStatus = true;
             var BillofPurchaseDetailData = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
             var BillofPurchaseHeadData = _context.BillofPurchaseHeads.Find(BillofPurchaseDetailData.BillofPurchaseId);
             foreach (var Detailitem in BillofPurchaseHeadData.BillofPurchaseDetails)
             {
-                if (Detailitem.CheckStatus != 1) {
+                if (Detailitem.CheckStatus != 1)
+                {
                     CheckBillofPurchaseHeadStatus = false;
                 }
             }
-            if (CheckBillofPurchaseHeadStatus) {
+            if (CheckBillofPurchaseHeadStatus)
+            {
                 BillofPurchaseHeadData.Status = 1;
             }
 
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
         }
         /// <summary>
@@ -164,5 +170,5 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetail = await _context.BillofPurchaseDetails.FindAsync(Id);
             return Ok(MyFun.APIResponseOK(BillofPurchaseDetail));
         }
-     }
+    }
 }

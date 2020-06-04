@@ -16,6 +16,7 @@ import { MaterialBasicListComponent } from './material/material-basic-list/mater
 import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
 
 
+
 export const routes: Routes = [
     { path: '', component: HomepageComponent },
     { path: 'orderlist', component: OrderListComponent },

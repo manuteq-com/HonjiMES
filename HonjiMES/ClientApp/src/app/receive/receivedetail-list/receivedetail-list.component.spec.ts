@@ -1,23 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReceiveDetailListComponent } from './receivedetail-list.component';
-describe('ReceiveListComponent', () => {
-    let component: ReceiveDetailListComponent;
-    let fixture: ComponentFixture<ReceiveDetailListComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [ReceiveDetailListComponent]
-        })
-            .compileComponents();
-    }));
+import { ReceivedetailListComponent } from './receivedetail-list.component';
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ReceiveDetailListComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+describe('ReceivedetailListComponent', () => {
+  let component: ReceivedetailListComponent;
+  let fixture: ComponentFixture<ReceivedetailListComponent>;
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ ReceivedetailListComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ReceivedetailListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

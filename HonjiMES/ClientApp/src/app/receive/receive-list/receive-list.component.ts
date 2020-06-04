@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DxDataGridComponent } from 'devextreme-angular';
 import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
-import { DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 
 @Component({
@@ -25,13 +25,6 @@ export class ReceiveListComponent implements OnInit {
     }
     constructor(private http: HttpClient) {
         const remote = this.remoteOperations;
-        // this.dataSourceDB = createStore({
-        //     key: 'Id',
-        //     loadUrl: this.apiurl + this.Controller + '/GetProducts',
-        //     insertUrl: this.apiurl + this.Controller + '/PostBillofPurchaseDetail',
-        //     updateUrl: this.apiurl + this.Controller + '/PutProduct',
-        //     deleteUrl: this.apiurl + this.Controller + '/DeleteBillofPurchaseDetail',
-        // });
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
@@ -45,19 +38,6 @@ export class ReceiveListComponent implements OnInit {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition', 'DELETE')
         });
-        this.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
-            (s) => {
-                debugger;
-                if (s.success) {
-                    this.selectBoxOptions = {
-                        searchEnabled: true,
-                        items: s.data,
-                        displayExpr: 'Name',
-                        valueExpr: 'Id',
-                    };
-                }
-            }
-        );
     }
     ngOnInit() {
     }
@@ -67,9 +47,7 @@ export class ReceiveListComponent implements OnInit {
                 if (e.column.cssClass === 'addmod') {
                     // tslint:disable-next-line: deprecation
                     this.dataGrid.instance.insertRow();
-
                 }
-
             }
         }
     }

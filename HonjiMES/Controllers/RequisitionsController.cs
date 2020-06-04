@@ -124,7 +124,7 @@ namespace HonjiMES.Controllers
                     ProductNo = item.ProductNo,
                     ProductNumber = item.ProductNumber,
                     ProductSpecification = item.ProductSpecification,
-
+                    Ismaterial = item.Ismaterial,
                     Quantity = item.ReceiveQty,
                     CreateTime = dt,
                     CreateUser = 1
@@ -148,6 +148,40 @@ namespace HonjiMES.Controllers
             _context.Requisitions.Remove(Requisitions);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(Requisitions));
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetail(int id)
+        {
+            var RequisitionDetails = await _context.RequisitionDetails
+            .Where(x => x.RequisitionId == id && x.DeleteFlag == 0)
+            .Select(x => new RequisitionDetailR
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
+                Quantity = x.Quantity,
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(RequisitionDetails));
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRequisitionsDetail(int id, [FromBody] GetReceive Receive)
+        {
+            var rr = Request;
+            var RequisitionDetail = _context.RequisitionDetails.Find(id);
+            if (Receive.RQty > 0)
+            {
+                var dt = DateTime.Now;
+                RequisitionDetail.Receives.Add(new Receive
+                {
+                    Quantity = Receive.RQty,
+                    CreateTime = dt,
+                    CreateUser = 1
+                });
+                await _context.SaveChangesAsync();
+            }
+            return Ok(MyFun.APIResponseOK(RequisitionDetail));
         }
 
         private bool RequisitionExists(int id)
