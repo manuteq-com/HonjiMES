@@ -156,18 +156,30 @@ namespace HonjiMES.Controllers
         {
             try
             {
-                var dt = DateTime.Now;
-                var No = dt.ToString("yyMMdd");
-                var NoCount = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(No)).Count() + 1;
                 var Head = PostBillofPurchaseHead_Detail.BillofPurchaseHead;
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
+
+                var dt = DateTime.Now;
+                var No = dt.ToString("yyMMdd");
+                var NoData = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(No) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
+                    var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+
                 Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
                 Head.CreateTime = dt;
                 Head.CreateUser = 1;
                 var Details = new List<BillofPurchaseDetail>();
                 foreach (var item in Detail)
                 {
+                    var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId).FirstOrDefault();
                     var Material = _context.Materials.Find(item.DataId);
+                    item.PurchaseDetailId = PurchaseDetail.Id;
                     item.DataName = Material.Name;
                     item.DataNo = Material.MaterialNo;
                     item.Specification = Material.Specification;

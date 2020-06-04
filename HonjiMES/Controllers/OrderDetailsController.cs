@@ -54,15 +54,21 @@ namespace HonjiMES.Controllers
             var data = await OrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
             foreach (var Detailitem in data)
             {
-                foreach (var SaleDetailitem in Detailitem.SaleDetailNews)
+                foreach (var SaleDetailitem in Detailitem.SaleDetailNews.ToList())
                 {
-                    SaleDetailitem.Sale = _context.SaleHeads.Find(SaleDetailitem.SaleId);
+                    var SaleHeads = _context.SaleHeads.Find(SaleDetailitem.SaleId);
+                    if (SaleHeads.DeleteFlag == 0)
+                    {
+                        SaleDetailitem.Sale = SaleHeads;
+                    }
+                    else
+                    {
+                        Detailitem.SaleDetailNews.Remove(SaleDetailitem);
+                    }
                 }
             }
             return Ok(MyFun.APIResponseOK(data));
         }
-
-
 
         /// <summary>
         /// 使用ID查詢訂單明細

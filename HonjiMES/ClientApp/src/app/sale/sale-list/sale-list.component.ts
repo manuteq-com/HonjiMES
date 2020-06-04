@@ -92,7 +92,7 @@ export class SaleListComponent implements OnInit {
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetSale', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostSale', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutSale', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteSale', 'DELETE')
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteSale/' + key, 'DELETE')
         });
 
     }
@@ -113,7 +113,7 @@ export class SaleListComponent implements OnInit {
                     insert: (values) => SendService.sendRequest(this.http, DController + '/PostSaleDetailNew', 'POST', { values }),
                     // tslint:disable-next-line: max-line-length
                     update: (key, values) => SendService.sendRequest(this.http, DController + '/PutSaleDetailNewQty', 'PUT', { key, values }),
-                    remove: (key) => SendService.sendRequest(this.http, DController + '/DeleteSaleDetailNew', 'DELETE')
+                    remove: (key) => SendService.sendRequest(this.http, DController + '/DeleteSaleDetailNew/' + key, 'DELETE')
                 })
               };
             this.DetailsDataSourceStorage.push(item);

@@ -177,7 +177,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            _context.SaleHeads.Remove(SaleHead);
+            SaleHead.DeleteFlag = 1;
+            // _context.SaleHeads.Remove(SaleHead);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(SaleHead));
         }

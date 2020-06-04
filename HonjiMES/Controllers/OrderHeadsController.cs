@@ -178,12 +178,22 @@ namespace HonjiMES.Controllers
                 if (checkCustomer != 0) {
                     return Ok(MyFun.APIResponseError("[客戶單號] 重複建立!"));
                 } else {
-                    var dt = DateTime.Now;
-                    var OrderNo = dt.ToString("yyMMdd");
-                    var NoCount = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).Count() + 1;
                     var orderHead = PostOrderMaster_Detail.OrderHead;
                     var OrderDetail = PostOrderMaster_Detail.OrderDetail;
                     var DirName = orderHead.OrderNo;
+
+                    var dt = DateTime.Now;
+                    var OrderNo = dt.ToString("yyMMdd");
+                    var NoData = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    var NoCount = NoData.Count() + 1;
+                    if (NoCount != 1) {
+                        var LastOrderNo = NoData.FirstOrDefault().OrderNo;
+                        var NoLast = Int32.Parse(LastOrderNo.Substring(LastOrderNo.Length - 3, 3));
+                        if (NoCount <= NoLast) {
+                            NoCount = NoLast + 1;
+                        }
+                    }
+
                     orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
                     orderHead.CreateTime = dt;
                     orderHead.CreateUser = 1;

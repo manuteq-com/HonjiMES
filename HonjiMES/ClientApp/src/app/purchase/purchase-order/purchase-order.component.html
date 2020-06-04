@@ -82,7 +82,7 @@
     <dxi-column dataField="SupplierId" caption="供應商">
          <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <!-- <dxi-column type="buttons">

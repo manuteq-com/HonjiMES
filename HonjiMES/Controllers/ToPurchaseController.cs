@@ -55,13 +55,23 @@ namespace HonjiMES.Controllers
         {
             try
             {
-                var dt = DateTime.Now;
-                var PurchaseNo = dt.ToString("yyMMdd");
-                var NoCount = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(PurchaseNo)).Count() + 1;
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
                 var key = purchaseHead.Type == 10 ? "PI" : "PO";
+
+                var dt = DateTime.Now;
+                var PurchaseNo = dt.ToString("yyMMdd");
+                var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                    var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                
                 purchaseHead.PurchaseNo = key + PurchaseNo + NoCount.ToString("000");
                 purchaseHead.CreateTime = dt;
                 purchaseHead.CreateUser = 1;
@@ -115,12 +125,12 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
             if (BillofPurchaseDetails == null)
             {
-                return Ok(MyFun.APIResponseError("進貨單資料有誤"));
+                return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
             BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
             if (BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
             {
-                return Ok(MyFun.APIResponseError("驗收數量超過採購數量"));
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
             }
             var dt = DateTime.Now;
             BillofPurchaseCheckin.CreateTime = dt;
@@ -130,6 +140,20 @@ namespace HonjiMES.Controllers
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
+
+            //更新採購單明細資訊
+            var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
+            if (PurchaseDetail == null)
+            {
+                return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
+            }
+            PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
+            PurchaseDetail.UpdateTime = dt;
+            PurchaseDetail.UpdateUser = 1;
+            if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
+            }
+            
             //入庫
             var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
             if (Material == null)
