@@ -150,10 +150,26 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(Requisitions));
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetail(int id)
+        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailMaterial(int id)
         {
             var RequisitionDetails = await _context.RequisitionDetails
-            .Where(x => x.RequisitionId == id && x.DeleteFlag == 0)
+            .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && x.MaterialBasicId.HasValue)
+            .Select(x => new RequisitionDetailR
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
+                Quantity = x.Quantity,
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(RequisitionDetails));
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailProduct(int id)
+        {
+            var RequisitionDetails = await _context.RequisitionDetails
+            .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(x.ProductNo))
             .Select(x => new RequisitionDetailR
             {
                 Id = x.Id,

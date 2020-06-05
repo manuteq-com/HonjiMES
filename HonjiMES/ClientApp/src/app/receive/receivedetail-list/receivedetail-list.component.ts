@@ -16,18 +16,31 @@ export class ReceivedetailListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
     Controller = '/Requisitions';
-    dataSourceDB: CustomStore;
+    dataSourceMaterialDB: CustomStore;
+    dataSourceProductDB: CustomStore;
     popupVisible: boolean;
-    WarehouseID: any;
+    WarehouseIDP: any;
+    WarehouseIDM: any;
     Warehouselist: any;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
-        this.dataSourceDB = new CustomStore({
+        this.dataSourceMaterialDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetail/' + this.itemkeyval),
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterial/' + this.itemkeyval),
+            insert: (values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
+            update: (key, values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT', { key, values }),
+            remove: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        });
+        this.dataSourceProductDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailProduct/' + this.itemkeyval),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
             update: (key, values) =>
@@ -46,23 +59,48 @@ export class ReceivedetailListComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
     }
-    onToolbarPreparing(e) {
+    onToolbarPreparingP(e) {
         debugger;
-        e.toolbarOptions.items.unshift({
-            location: 'after',
-            widget: 'dxSelectBox',
-            options: {
-                dataSource: this.Warehouselist,
-                displayExpr: 'Name',
-                valueExpr: 'Id',
-                onValueChanged: this.WarehouseChanged.bind(this)
-            }
-        });
+        e.toolbarOptions.items.unshift(
+            {
+                text: '原料領料',
+                location: 'before'
+            },
+            {
+                location: 'after',
+                widget: 'dxSelectBox',
+                options: {
+                    dataSource: this.Warehouselist,
+                    displayExpr: 'Name',
+                    valueExpr: 'Id',
+                    onValueChanged: this.WarehouseChangedP.bind(this)
+                }
+            });
     }
-    WarehouseChanged(e) {
-        this.WarehouseID = e.value;
+    onToolbarPreparingM(e) {
+        debugger;
+        e.toolbarOptions.items.unshift(
+            {
+                text: '成品領料',
+                location: 'before'
+            },
+            {
+                location: 'after',
+                widget: 'dxSelectBox',
+                options: {
+                    dataSource: this.Warehouselist,
+                    displayExpr: 'Name',
+                    valueExpr: 'Id',
+                    onValueChanged: this.WarehouseChangedM.bind(this)
+                }
+            });
     }
-
+    WarehouseChangedP(e) {
+        this.WarehouseIDP = e.value;
+    }
+    WarehouseChangedM(e) {
+        this.WarehouseIDM = e.value;
+    }
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
