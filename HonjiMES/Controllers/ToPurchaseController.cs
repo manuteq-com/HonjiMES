@@ -151,7 +151,7 @@ namespace HonjiMES.Controllers
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = 1;
             if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
-                return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際採購數量： " + PurchaseDetail.Quantity + " ]"));
             }
             
             //入庫

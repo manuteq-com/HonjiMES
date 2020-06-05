@@ -24,7 +24,8 @@ export class BillPurchaseDetailComponent implements OnInit {
     OriginPriceval: number;
     Priceval: number;
     changeMode: boolean;
-    popupVisible: boolean;
+    popupVisibleTo: boolean;
+    popupVisibleRe: boolean;
     mod: string;
     keyID: any;
     constructor(private http: HttpClient) {
@@ -136,14 +137,15 @@ export class BillPurchaseDetailComponent implements OnInit {
     checkInOnClick(e, item) {
         debugger;
         this.keyID = item.key;
-        this.popupVisible = true;
+        this.popupVisibleTo = true;
     }
     checkOutOnClick(e, item) {
         this.keyID = item.key;
-        this.popupVisible = true;
+        this.popupVisibleRe = true;
     }
     popup_result(e) {
-        this.popupVisible = false;
+        this.popupVisibleTo = false;
+        this.popupVisibleRe = false;
         this.dataGrid.instance.refresh();
         notify({
             message: '存檔完成',

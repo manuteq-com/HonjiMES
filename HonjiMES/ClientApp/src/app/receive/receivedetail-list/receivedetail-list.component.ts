@@ -12,7 +12,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
     templateUrl: './receivedetail-list.component.html',
     styleUrls: ['./receivedetail-list.component.css']
 })
-export class ReceivedetailListComponent implements OnInit, OnChanges {
+export class ReceiveDetailListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
     Controller = '/Requisitions';
