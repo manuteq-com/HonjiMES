@@ -134,7 +134,7 @@ export class OrderListComponent {
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
-        if (e.message !== '') {
+        if (e.message !== undefined) {
             notify({
                 message: '注意!! 客戶單號已存在!! ' + e.message,
                 position: {

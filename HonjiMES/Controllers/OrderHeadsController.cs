@@ -174,6 +174,7 @@ namespace HonjiMES.Controllers
         {
             try
             {
+                var checkNo = 0;
                 var errorList = "";
                 var ListOrderHeads = ListOrderHead(PostOrderMaster_Detail);
                 foreach (var OrderHeadData in ListOrderHeads)
@@ -201,6 +202,10 @@ namespace HonjiMES.Controllers
                             if (NoCount <= NoLast) {
                                 NoCount = NoLast + 1;
                             }
+                            if (checkNo != 0 && checkNo >= NoCount) {
+                                NoCount = checkNo + 1;
+                            }
+                            checkNo = NoCount;
                         }
 
                         var orderHead = new OrderHead{
