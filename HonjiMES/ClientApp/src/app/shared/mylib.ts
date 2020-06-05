@@ -168,6 +168,8 @@ export class SendService {
                             summary: ReturnData.data.summary,
                             groupCount: ReturnData.data.groupCount
                         };
+                    } else if (ReturnData.message !== '') {
+                        return (ReturnData);
                     } else {
                         return (ReturnData.data);
                     }

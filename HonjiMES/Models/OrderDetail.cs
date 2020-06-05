@@ -19,6 +19,9 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("order_id", TypeName = "int(11)")]
         public int OrderId { get; set; }
+        [Required]
+        [Column("customer_no", TypeName = "varchar(50)")]
+        public string CustomerNo { get; set; }
         [Column("serial", TypeName = "int(11)")]
         public int Serial { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]

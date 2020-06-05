@@ -258,7 +258,12 @@ namespace HonjiMES.Models
                                     var Mappingitem = MappingExtelToModel[j];
                                     var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
 
-                                    if (Mappingitem.TableName == "OrderHead")
+                                    if (Mappingitem.TableName == "OrderHead" && Mappingitem.ModelName == "CustomerNo")
+                                    {
+                                        DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
+                                        DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
+                                    }
+                                    else if (Mappingitem.TableName == "OrderHead")
                                     {
                                         DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
                                         //foreach (var Props in nOrderHead.GetType().GetProperties())

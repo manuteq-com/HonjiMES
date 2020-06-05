@@ -653,6 +653,11 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");
 
+                entity.Property(e => e.CustomerNo)
+                    .HasComment("客戶單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.Delivered).HasComment("實際交貨數");
 
                 entity.Property(e => e.Discount).HasComment("折扣率");
