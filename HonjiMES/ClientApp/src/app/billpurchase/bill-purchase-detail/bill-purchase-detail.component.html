@@ -94,10 +94,18 @@
         </dx-number-box>
     </div>
 </dx-data-grid>
+
 <dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="250"
-    [(visible)]="popupVisible">
+    [(visible)]="popupVisibleTo">
     <div *dxTemplate="let data of 'content'">
         <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">
         </app-bill-purchase-checkin>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="進貨單驗退" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="250"
+    [(visible)]="popupVisibleRe">
+    <div *dxTemplate="let data of 'content'">
+        <app-bill-purchase-return (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">
+        </app-bill-purchase-return>
     </div>
 </dx-popup>
