@@ -90,7 +90,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<PurchaseHead>> GetPurchasesBySupplier(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0 && x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id && y.Quantity != y.PurchaseCount).Any()).ToListAsync();
+            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Status == 0 && x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id && y.Quantity != y.PurchaseCount).Any()).ToListAsync();
 
             if (purchaseHead == null)
             {
