@@ -377,7 +377,8 @@ namespace HonjiMES.Models
                         ProductSpecification = item.InverseP.FirstOrDefault()?.ProductBasic?.Specification ?? "",
                         MaterialBasicId = item.MaterialBasicId,
                         ProductBasicId = item.ProductBasicId,
-                        ReceiveQty = item.Quantity * Receive
+                        ReceiveQty = item.Quantity * Receive,
+                        Ismaterial = !item.InverseP.Any()
                     });
                     if (item.InverseP.Any())
                     {

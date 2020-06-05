@@ -26,7 +26,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     labelLocation: string;
-    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number;};
+    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number; };
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -72,13 +72,14 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
             return;
         }
         this.formData = this.myform.instance.option('formData');
-        this.postval =  this.formData;
+        this.postval = this.formData;
         this.postval.BillofPurchaseDetailId = this.itemkeyval;
         debugger;
         try {
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckIn', 'POST', { values: this.postval });
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+            debugger;
             if (sendRequest) {
                 this.myform.instance.resetValues();
                 this.CustomerVal = null;

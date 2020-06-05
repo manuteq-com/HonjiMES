@@ -7,7 +7,7 @@
     <div class="col-md-1 col-sm-1">
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
     [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
     [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
     [masterDetail]="{ enabled: true, template: 'detail' }" (onCellClick)="cellClick($event)"
@@ -34,8 +34,8 @@
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
         [showNavigationButtons]="true" visible="true">
     </dxo-pager>
-    <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
-    </dxo-remote-operations>
+    <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+    </dxo-remote-operations> -->
     <dxi-column dataField="RequisitionNo" caption="領料單號" [allowEditing]="false" [filterValue]="" dataType="string">
     </dxi-column>
     <dxi-column dataField="Name" caption="領料單名稱" dataType="string"></dxi-column>

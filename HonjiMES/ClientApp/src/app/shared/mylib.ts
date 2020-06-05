@@ -103,7 +103,6 @@ export class SendService {
     constructor() { }
 
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
-        debugger;
         Date.prototype.toJSON = function () {
             return this.toLocaleDateString(); // 轉本地時間
         };

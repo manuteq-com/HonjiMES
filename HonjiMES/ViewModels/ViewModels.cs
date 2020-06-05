@@ -191,6 +191,7 @@ namespace HonjiMES.Models
         public string ProductSpecification { get; internal set; }
         public int Lv { get; set; }
         public int ReceiveQty { get; internal set; }
+        public bool? Ismaterial { get; internal set; }
     }
     public class PostBom
     {
@@ -219,5 +220,13 @@ namespace HonjiMES.Models
         public string I { get; set; }
         public string J { get; set; }
         public string K { get; set; }
+    }
+    public class RequisitionDetailR : RequisitionDetail
+    {
+        public int ReceiveQty { get; set; }
+    }
+    public class GetReceive
+    {
+        public int RQty { get; set; }
     }
 }
