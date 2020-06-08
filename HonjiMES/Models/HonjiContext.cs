@@ -12,6 +12,7 @@ namespace HonjiMES.Models
         public virtual DbSet<BillofPurchaseCheckin> BillofPurchaseCheckins { get; set; }
         public virtual DbSet<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         public virtual DbSet<BillofPurchaseHead> BillofPurchaseHeads { get; set; }
+        public virtual DbSet<BillofPurchaseReturn> BillofPurchaseReturns { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
@@ -346,6 +347,58 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<BillofPurchaseReturn>(entity =>
+            {
+                entity.HasIndex(e => e.BillofPurchaseDetailId)
+                    .HasName("billof_purchase_detail_id");
+
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("warehouse_id");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.BillofPurchaseDetailId).HasComment("進貨單明細id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記	");
+
+                entity.Property(e => e.Quantity).HasComment("數量");
+
+                entity.Property(e => e.Reason)
+                    .HasComment("原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ReturnNo)
+                    .HasComment("驗退單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WarehouseId).HasComment("倉庫id");
+
+                entity.HasOne(d => d.BillofPurchaseDetail)
+                    .WithMany(p => p.BillofPurchaseReturns)
+                    .HasForeignKey(d => d.BillofPurchaseDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("billof_purchase_return_ibfk_1");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.BillofPurchaseReturns)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("billof_purchase_return_ibfk_2");
             });
 
             modelBuilder.Entity<Customer>(entity =>

@@ -216,7 +216,7 @@ namespace HonjiMES.Controllers
                         };
                         var DirName = orderHead.OrderNo;
                         orderHead.CustomerNo = OrderHeadData.CustomerNo;//替換客戶單號
-                        orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
+                        orderHead.OrderNo = OrderNo + NoCount.ToString("000");
                         orderHead.CreateTime = dt;
                         orderHead.CreateUser = 1;
                         var OrderDetails = new List<OrderDetail>();

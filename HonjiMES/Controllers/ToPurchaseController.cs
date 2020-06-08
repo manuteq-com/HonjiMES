@@ -23,6 +23,7 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+
         /// <summary>
         /// 採購單轉進貨
         /// </summary>
@@ -34,6 +35,7 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetails = await _context.BillofPurchaseDetails.AsQueryable().Where(x => ToPurchase.BillofPurchaseDetail.Select(y => y.Id).Contains(x.Id)).ToListAsync();
             return Ok(MyFun.APIResponseOK("OK"));
         }
+
         /// <summary>
         /// 查詢採購單，供應商的採購品項
         /// </summary>
@@ -45,6 +47,29 @@ namespace HonjiMES.Controllers
             var BillofPurchaseDetails = await _context.BillofPurchaseDetails.AsQueryable().Where(x => x.SupplierId == Id && x.Quantity > x.PurchaseCount).ToListAsync();
             return Ok(MyFun.APIResponseOK(BillofPurchaseDetails));
         }
+
+        /// <summary>
+        /// 取得驗退單號
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<BillofPurchaseReturn>> GetBillofPurchaseReturnNo()
+        {
+            var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
+                var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - 6, 6));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var ReturnData = new BillofPurchaseReturn{
+                ReturnNo = "BOPR" + NoCount.ToString("000000")
+            };
+            return Ok(MyFun.APIResponseOK(ReturnData));
+        }
+
         /// <summary>
         /// 新增採購單，同時新增明細
         /// </summary>
@@ -113,6 +138,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError(ex.Message));
             }
         }
+
         /// <summary>
         /// 進貨單驗收
         /// </summary>
@@ -183,6 +209,78 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
         }
+
+        /// <summary>
+        /// 進貨單驗收
+        /// </summary>
+        /// <param name="BillofPurchaseReturn"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BillofPurchaseReturn>> PostPurchaseCheckReturn(BillofPurchaseReturn BillofPurchaseReturn)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseReturn.BillofPurchaseDetailId);
+            if (BillofPurchaseDetails == null)
+            {
+                return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
+            }
+            BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
+            if (BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
+            {
+                return Ok(MyFun.APIResponseError("驗退數量超過採購數量!"));
+            }
+            var dt = DateTime.Now;
+            BillofPurchaseReturn.CreateTime = dt;
+            BillofPurchaseReturn.CreateUser = 1;
+            BillofPurchaseDetails.UpdateTime = dt;
+            BillofPurchaseDetails.UpdateUser = 1;
+            BillofPurchaseDetails.CheckCountOut = (int)BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
+            BillofPurchaseDetails.CheckPriceOut = BillofPurchaseDetails.CheckCountOut * BillofPurchaseDetails.OriginPrice;
+
+            //更新採購單明細資訊
+            var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
+            if (PurchaseDetail == null) 
+            {
+                return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
+            }
+            if (PurchaseDetail.PurchaseCount < (int)BillofPurchaseReturn.Quantity) 
+            {
+                return Ok(MyFun.APIResponseError("驗退數量超過驗收數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際已驗收數量： " + PurchaseDetail.PurchaseCount + " ]"));
+            }
+            PurchaseDetail.PurchaseCount = PurchaseDetail.PurchaseCount - (int)BillofPurchaseReturn.Quantity;
+            PurchaseDetail.UpdateTime = dt;
+            PurchaseDetail.UpdateUser = 1;
+            
+            //入庫
+            var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
+            if (Material == null)
+            {
+                return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
+            }
+            Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = (int)BillofPurchaseReturn.Quantity, Message = "進貨驗退出庫" });
+            Material.Quantity -= (int)BillofPurchaseReturn.Quantity;
+
+            //檢查進貨單明細是否都完成進貨(此為驗退，訂單狀態需修改?)
+            // var CheckBillofPurchaseHeadStatus = true;
+            // var BillofPurchaseDetailData = _context.BillofPurchaseDetails.Find(BillofPurchaseReturn.BillofPurchaseDetailId);
+            // var BillofPurchaseHeadData = _context.BillofPurchaseHeads.Find(BillofPurchaseDetailData.BillofPurchaseId);
+            // foreach (var Detailitem in BillofPurchaseHeadData.BillofPurchaseDetails)
+            // {
+            //     if (Detailitem.CheckStatus != 1)
+            //     {
+            //         CheckBillofPurchaseHeadStatus = false;
+            //     }
+            // }
+            // if (CheckBillofPurchaseHeadStatus)
+            // {
+            //     BillofPurchaseHeadData.Status = 1;
+            // }
+
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(BillofPurchaseReturn));
+        }
+
         /// <summary>
         /// 進貨單可驗收的數量
         /// </summary>

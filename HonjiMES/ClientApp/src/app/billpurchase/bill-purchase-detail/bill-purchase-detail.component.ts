@@ -28,6 +28,7 @@ export class BillPurchaseDetailComponent implements OnInit {
     popupVisibleRe: boolean;
     mod: string;
     keyID: any;
+    bopData: any;
     constructor(private http: HttpClient) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
@@ -140,7 +141,7 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.popupVisibleTo = true;
     }
     checkOutOnClick(e, item) {
-        this.keyID = item.key;
+        this.bopData = item.data;
         this.popupVisibleRe = true;
     }
     popup_result(e) {

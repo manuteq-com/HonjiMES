@@ -11,6 +11,7 @@ namespace HonjiMES.Models
     {
         public Warehouse()
         {
+            BillofPurchaseReturns = new HashSet<BillofPurchaseReturn>();
             Materials = new HashSet<Material>();
             Products = new HashSet<Product>();
             ReturnSales = new HashSet<ReturnSale>();
@@ -48,6 +49,8 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [InverseProperty(nameof(BillofPurchaseReturn.Warehouse))]
+        public virtual ICollection<BillofPurchaseReturn> BillofPurchaseReturns { get; set; }
         [InverseProperty(nameof(Material.Warehouse))]
         public virtual ICollection<Material> Materials { get; set; }
         [InverseProperty(nameof(Product.Warehouse))]

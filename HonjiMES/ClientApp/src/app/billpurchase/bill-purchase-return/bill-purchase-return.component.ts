@@ -26,7 +26,9 @@ export class BillPurchaseReturnComponent implements OnInit {
     width: any;
     colCount: number;
     labelLocation: string;
-    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number;};
+    selectBoxOptions: any;
+    NumberBoxOptions: any;
+    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number; };
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -41,8 +43,26 @@ export class BillPurchaseReturnComponent implements OnInit {
     ngOnInit() {
     }
     ngOnChanges() {
-        debugger;
-        this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval).subscribe(
+        this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
+        this.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
+            (s) => {
+                debugger;
+                if (s.success) {
+                    this.selectBoxOptions = {
+                        items: s.data,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                    };
+                }
+            }
+        );
+        this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval.Id).subscribe(
             (s) => {
                 if (s.success) {
                     this.editorOptions = { showSpinButtons: true, mode: 'number', format: '#0', value: 1, min: 1, max: s.data.Quantity };
@@ -65,6 +85,15 @@ export class BillPurchaseReturnComponent implements OnInit {
         }
         return true;
     }
+    refreshReturnNo() {
+        this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData.ReturnNo = s.data.ReturnNo;
+                }
+            }
+        );
+    }
     async onFormSubmit(e) {
         this.buttondisabled = true;
         if (this.validate_before() === false) {
@@ -73,11 +102,11 @@ export class BillPurchaseReturnComponent implements OnInit {
         }
         this.formData = this.myform.instance.option('formData');
         this.postval =  this.formData;
-        this.postval.BillofPurchaseDetailId = this.itemkeyval;
+        this.postval.BillofPurchaseDetailId = this.itemkeyval.Id;
         debugger;
         try {
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckIn', 'POST', { values: this.postval });
+            const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckReturn', 'POST', { values: this.postval });
             // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
             if (sendRequest) {
                 this.myform.instance.resetValues();
