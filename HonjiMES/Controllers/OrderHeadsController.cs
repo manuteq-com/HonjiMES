@@ -174,48 +174,72 @@ namespace HonjiMES.Controllers
         {
             try
             {
-                var checkCustomer = _context.OrderHeads.AsQueryable().Where(x => x.CustomerNo == PostOrderMaster_Detail.OrderHead.CustomerNo && x.DeleteFlag == 0).Count();
-                if (checkCustomer != 0) {
-                    return Ok(MyFun.APIResponseError("[客戶單號] 重複建立!"));
-                } else {
-                    var orderHead = PostOrderMaster_Detail.OrderHead;
-                    var OrderDetail = PostOrderMaster_Detail.OrderDetail;
-                    var DirName = orderHead.OrderNo;
-
-                    var dt = DateTime.Now;
-                    var OrderNo = dt.ToString("yyMMdd");
-                    var NoData = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
-                    var NoCount = NoData.Count() + 1;
-                    if (NoCount != 1) {
-                        var LastOrderNo = NoData.FirstOrDefault().OrderNo;
-                        var NoLast = Int32.Parse(LastOrderNo.Substring(LastOrderNo.Length - 3, 3));
-                        if (NoCount <= NoLast) {
-                            NoCount = NoLast + 1;
+                var checkNo = 0;
+                var errorList = "";
+                var ListOrderHeads = ListOrderHead(PostOrderMaster_Detail);
+                foreach (var OrderHeadData in ListOrderHeads)
+                {
+                    var checkCustomer = _context.OrderHeads.AsQueryable().Where(x => x.CustomerNo == OrderHeadData.CustomerNo && x.DeleteFlag == 0).Count();
+                    if (checkCustomer != 0) {
+                        errorList += " [ " + OrderHeadData.CustomerNo + " ] ";
+                        // return Ok(MyFun.APIResponseError("[客戶單號： " + OrderHeadData.CustomerNo + " ] 重複建立!"));
+                    } else {
+                        
+                        var OrderDetail = new List<OrderDetail>();
+                        foreach (var item in PostOrderMaster_Detail.OrderDetail)
+                        {
+                            if (item.CustomerNo.Contains(OrderHeadData.CustomerNo)) {
+                                OrderDetail.Add(item);
+                            }
                         }
-                    }
+                        var dt = DateTime.Now;
+                        var OrderNo = dt.ToString("yyMMdd");
+                        var NoData = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                        var NoCount = NoData.Count() + 1;
+                        if (NoCount != 1) {
+                            var LastOrderNo = NoData.FirstOrDefault().OrderNo;
+                            var NoLast = Int32.Parse(LastOrderNo.Substring(LastOrderNo.Length - 3, 3));
+                            if (NoCount <= NoLast) {
+                                NoCount = NoLast + 1;
+                            }
+                            if (checkNo != 0 && checkNo >= NoCount) {
+                                NoCount = checkNo + 1;
+                            }
+                            checkNo = NoCount;
+                        }
 
-                    orderHead.OrderNo = OrderNo + NoCount.ToString("0000");
-                    orderHead.CreateTime = dt;
-                    orderHead.CreateUser = 1;
-                    var OrderDetails = new List<OrderDetail>();
-                    foreach (var item in OrderDetail)
-                    {
-                        item.CreateTime = dt;
-                        item.CreateUser = 1;
-                        OrderDetails.Add(item);
+                        var orderHead = new OrderHead{
+                            OrderNo = PostOrderMaster_Detail.OrderHead.OrderNo,
+                            OrderDate = PostOrderMaster_Detail.OrderHead.OrderDate,
+                            ReplyDate = PostOrderMaster_Detail.OrderHead.ReplyDate,
+                            Customer = PostOrderMaster_Detail.OrderHead.Customer
+                        };
+                        var DirName = orderHead.OrderNo;
+                        orderHead.CustomerNo = OrderHeadData.CustomerNo;//替換客戶單號
+                        orderHead.OrderNo = OrderNo + NoCount.ToString("000");
+                        orderHead.CreateTime = dt;
+                        orderHead.CreateUser = 1;
+                        var OrderDetails = new List<OrderDetail>();
+                        foreach (var item in OrderDetail)
+                        {
+                            item.CreateTime = dt;
+                            item.CreateUser = 1;
+                            OrderDetails.Add(item);
+                        }
+                        orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
+                        _context.OrderHeads.Add(orderHead);
+                        await _context.SaveChangesAsync();
+                        MemoryStream excelDatas = MyFun.DataToExcel(_context, orderHead);
+                        //Excel存檔
+                        var webRootPath = _IWebHostEnvironment.WebRootPath;
+                        var Dir = $"{webRootPath}";
+                        var bsave = MyFun.ProcessSaveExcelAsync(Dir, DirName, orderHead.OrderNo, excelDatas.ToArray());
                     }
-                    orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
-                    _context.OrderHeads.Add(orderHead);
-                    await _context.SaveChangesAsync();
-                    MemoryStream excelDatas = MyFun.DataToExcel(_context, orderHead);
-                    //Excel存檔
-                    var webRootPath = _IWebHostEnvironment.WebRootPath;
-                    var Dir = $"{webRootPath}";
-                    var bsave = MyFun.ProcessSaveExcelAsync(Dir, DirName, orderHead.OrderNo, excelDatas.ToArray());
-                    return Ok(MyFun.APIResponseOK(orderHead.OrderNo));
-                    //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
-                    //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
                 }
+                return Ok(MyFun.APIResponseOK("OK", errorList));
+                
+                //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
+                //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
             }
             catch (Exception ex)
             {
@@ -409,6 +433,26 @@ namespace HonjiMES.Controllers
         private bool OrderHeadExists(int id)
         {
             return _context.OrderHeads.Any(e => e.Id == id);
+        }
+
+        internal List<OrderHead> ListOrderHead(PostOrderMaster_Detail Data)
+        {
+            //從明細中找出有多少[客戶單號]。
+            var list = new List<OrderHead>();
+            var len = ("000-000000000").Length;
+            foreach (var item in Data.OrderDetail)
+            {
+                if (!string.IsNullOrWhiteSpace(item.CustomerNo) && item.CustomerNo.Length > len) {
+                    var tempCustomerNoVal = item.CustomerNo.Substring(0, len);
+                    if (!list.Any() || !list.Exists(x => x.CustomerNo == tempCustomerNoVal)) {
+                        var tempOrderHead = new OrderHead{
+                           CustomerNo = tempCustomerNoVal
+                        };
+                        list.Add(tempOrderHead);
+                    }
+                }
+            }
+            return list;
         }
     }
 }

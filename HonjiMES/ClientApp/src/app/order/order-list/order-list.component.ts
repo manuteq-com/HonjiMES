@@ -134,13 +134,23 @@ export class OrderListComponent {
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
+        if (e.message !== undefined) {
+            notify({
+                message: '注意!! 客戶單號已存在!! ' + e.message,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'warning', 6000);
+        } else {
+            notify({
+                message: '存檔完成!',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
+        }
     }
 
     selectionChanged(e) {

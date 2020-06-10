@@ -26,7 +26,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasics()
         {
-            var materialBasic = await _context.MaterialBasics.AsQueryable().ToListAsync();
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).ToListAsync();
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
 

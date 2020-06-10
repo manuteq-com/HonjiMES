@@ -34,6 +34,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "billof_purchase_return"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "customer"
       },
       {
