@@ -86,18 +86,28 @@ namespace HonjiMES.Controllers
                 var key = purchaseHead.Type == 10 ? "PI" : "PO";
 
                 var dt = DateTime.Now;
-                var PurchaseNo = dt.ToString("yyMMdd");
-                var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
-                var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
-                    var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
-                    var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
-                    if (NoCount <= NoLast) {
-                        NoCount = NoLast + 1;
-                    }
-                }
+                // var PurchaseNo = dt.ToString("yyMMdd");
+                // var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                // var NoCount = NoData.Count() + 1;
+                // if (NoCount != 1) {
+                //     var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                //     var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                //     if (NoCount <= NoLast) {
+                //         NoCount = NoLast + 1;
+                //     }
+                // }
+                // var PurchaseNumber = key + PurchaseNo + NoCount.ToString("000");
+                var PurchaseNumber = purchaseHead.PurchaseNo;
                 
-                purchaseHead.PurchaseNo = key + PurchaseNo + NoCount.ToString("000");
+                if (purchaseHead.SupplierId == 0) {
+                    return Ok(MyFun.APIResponseError("請選擇供應商!"));
+                }
+                var checkPurchaseNo = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(PurchaseNumber) && x.DeleteFlag == 0).Count();
+                if (checkPurchaseNo != 0) {
+                    return Ok(MyFun.APIResponseError("[採購單號]已存在! 請重新確認!"));
+                }
+
+                purchaseHead.PurchaseNo = PurchaseNumber;
                 purchaseHead.CreateTime = dt;
                 purchaseHead.CreateUser = 1;
                 var PurchaseDetail = new List<PurchaseDetail>();
