@@ -60,10 +60,9 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
     ngOnChanges() {
     }
     onToolbarPreparingP(e) {
-        debugger;
         e.toolbarOptions.items.unshift(
             {
-                text: '原料領料',
+                text: '成品領料',
                 location: 'before'
             },
             {
@@ -78,10 +77,9 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
             });
     }
     onToolbarPreparingM(e) {
-        debugger;
         e.toolbarOptions.items.unshift(
             {
-                text: '成品領料',
+                text: '原料領料',
                 location: 'before'
             },
             {

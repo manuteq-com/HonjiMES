@@ -75,15 +75,15 @@ export class OrderListComponent {
     getProductsData() {
         this.GetData('/Products/GetProducts').subscribe(
             (s) => {
-                this.ProductList = s.data;
                 if (s.success) {
+                    this.ProductList = s.data;
                 }
             }
         );
         this.GetData('/Products/GetProductBasics').subscribe(
             (s) => {
-                this.ProductBasicList = s.data;
                 if (s.success) {
+                    this.ProductBasicList = s.data;
                 }
             }
         );
