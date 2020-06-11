@@ -7,7 +7,6 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
-import value from '*.json';
 
 @Component({
     selector: 'app-creat-purchase',
