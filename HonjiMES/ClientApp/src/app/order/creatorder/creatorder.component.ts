@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
 import { DxFormComponent, DxDataGridComponent, DxPopupComponent } from 'devextreme-angular';
 import { SendService } from '../../shared/mylib';
-import { OrderHead, OrderDetail, PostOrderMaster_Detail } from '../../model/viewmodels';
+import { OrderHead, OrderDetail, PostOrderMaster_Detail, CreateNumberInfo } from '../../model/viewmodels';
 import CustomStore from 'devextreme/data/custom_store';
 import { NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
@@ -24,7 +24,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
-    formData: OrderHead;
+    formData: any;
     SerialNo = 0;
     dataSourceDB: any;
     postval: any;
@@ -50,15 +50,71 @@ export class CreatorderComponent implements OnInit, OnChanges {
     controller: string;
     CustomerVal: string;
     ProductBasicList: any;
-    // tslint:disable-next-line: use-lifecycle-interface
+    CreateNumberInfoVal: any;
+    CreateTime: any;
+    CreateOrderNo: any;
+    CreateTimeDateBoxOptions: any;
+
+    constructor(private http: HttpClient) {
+        this.CustomerVal = null;
+        this.formData = null;
+        this.editOnkeyPress = true;
+        this.enterKeyAction = 'moveFocus';
+        this.enterKeyDirection = 'row';
+        this.labelLocation = 'left';
+        this.readOnly = false;
+        this.showColon = true;
+        this.minColWidth = 300;
+        this.colCount = 5;
+        this.url = location.origin + '/api';
+        this.dataSourceDB = [];
+        this.controller = '/OrderDetails';
+        this.CreateTimeDateBoxOptions = {
+            onValueChanged: this.CreateTimeValueChange.bind(this)
+        };
+
+        // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
+        // this.GetData('/Products/GetProducts').subscribe(
+        //     (s) => {
+        //         console.log(s);
+        //         debugger;
+        //         if (s.success) {
+        //             this.ProductList = s.data;
+        //         }
+        //     }
+        // );
+        this.GetData('/Customers/GetCustomers').subscribe(
+            (s) => {
+                console.log(s);
+                if (s.success) {
+                    this.Customerlist = s.data;
+                    this.selectBoxOptions = {
+                        items: this.Customerlist,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        onValueChanged: this.onCustomerSelectionChanged.bind(this)
+                    };
+                }
+            }
+        );
+    }
     ngOnInit() {
     }
-    // tslint:disable-next-line: use-lifecycle-interface
     async ngOnChanges() {
+        this.GetData('/OrderHeads/GetOrderNumber').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                    this.CreateNumberInfoVal = new CreateNumberInfo();
+                    this.CreateNumberInfoVal.CreateNumber = s.data.OrderNo;
+                    this.CreateNumberInfoVal.CreateTime = s.data.CreateTime;
+                }
+            }
+        );
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
         this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'clone') {
-            this.GetData(this.url + '/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
+            this.GetData('/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -94,6 +150,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 }
             });
             this.formData = this.exceldata;
+            this.formData.OrderNo = this.CreateNumberInfoVal.CreateNumber;
+            this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;
             this.dataSourceDB = this.exceldata.OrderDetails;
             if (ProductPricrErr) {
                 Swal.fire({
@@ -107,50 +165,23 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
         }
     }
-    constructor(private http: HttpClient) {
-        // debugger;
-        this.CustomerVal = null;
-        this.formData = null;
-        this.editOnkeyPress = true;
-        this.enterKeyAction = 'moveFocus';
-        this.enterKeyDirection = 'row';
-        this.labelLocation = 'left';
-        this.readOnly = false;
-        this.showColon = true;
-        this.minColWidth = 300;
-        this.colCount = 4;
-        this.url = location.origin + '/api';
-        this.dataSourceDB = [];
-        this.controller = '/OrderDetails';
-
-        // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
-        // this.GetData(this.url + '/Products/GetProducts').subscribe(
-        //     (s) => {
-        //         console.log(s);
-        //         debugger;
-        //         if (s.success) {
-        //             this.ProductList = s.data;
-        //         }
-        //     }
-        // );
-        this.GetData(this.url + '/Customers/GetCustomers').subscribe(
-            (s) => {
-                console.log(s);
-                if (s.success) {
-                    this.Customerlist = s.data;
-                    this.selectBoxOptions = {
-                        items: this.Customerlist,
-                        displayExpr: 'Name',
-                        valueExpr: 'Id',
-                        onValueChanged: this.onCustomerSelectionChanged.bind(this)
-                    };
-                }
-            }
-        );
-    }
     public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
+    CreateTimeValueChange = async function(e) {
+        // this.formData = this.myform.instance.option('formData');
+        if (this.formData.CreateTime != null) {
+            this.CreateNumberInfoVal = new CreateNumberInfo();
+            this.CreateNumberInfoVal.CreateNumber = this.formData.OrderNo;
+            this.CreateNumberInfoVal.CreateTime = this.formData.CreateTime;
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/GetOrderNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
+            if (sendRequest) {
+                this.formData.OrderNo = sendRequest.CreateNumber;
+                this.formData.CreateTime = sendRequest.CreateTime;
+            }
+        }
+    };
     onInitNewRow(e) {
         // debugger;
         this.SerialNo++;
@@ -213,7 +244,11 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     this.SerialNo = 0;
                     this.dataSourceDB = [];
                     this.dataGrid.instance.refresh();
-                    this.myform.instance.resetValues();
+                    // this.myform.instance.resetValues();
+                    this.formData.CreateTime = new Date();
+                    this.formData.Customer = 0;
+                    this.formData.OrderDate = null;
+                    this.formData.ReplyDate = null;
                     this.CustomerVal = null;
                     e.preventDefault();
                     this.childOuter.emit(sendRequest);

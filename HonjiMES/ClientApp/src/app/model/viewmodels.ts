@@ -1,3 +1,7 @@
+export class CreateNumberInfo {
+    CreateNumber: string;
+    CreateTime: Date;
+}
 export class OrderHead {
     id: number;
     orderNo: string;

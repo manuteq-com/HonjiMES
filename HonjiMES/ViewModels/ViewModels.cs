@@ -34,6 +34,15 @@ namespace HonjiMES.Models
         public string Message { get; internal set; }
     }
     /// <summary>
+    /// 建立單號
+    /// </summary>
+    public class CreateNumberInfo
+    {
+        public int Type { get; set; }
+        public string CreateNumber { get; set; }
+        public DateTime CreateTime { get; set; }
+    }
+    /// <summary>
     /// 轉銷貨
     /// </summary>
     public class ToSales

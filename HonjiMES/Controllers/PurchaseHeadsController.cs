@@ -59,11 +59,11 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // POST: api/PurchaseHeads
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseNumberByInfo(PurchaseHead PurchaseHeadData)
+        public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetPurchaseNumberByInfo(CreateNumberInfo CreateNoData)
         {
-            if (PurchaseHeadData != null) {
-                var key = PurchaseHeadData.Type == 10 ? "PI" : "PO";
-                var PurchaseNo = PurchaseHeadData.CreateTime.ToString("yyMMdd");
+            if (CreateNoData != null) {
+                var key = CreateNoData.Type == 10 ? "PI" : "PO";
+                var PurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
                 
                 var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;
@@ -74,8 +74,8 @@ namespace HonjiMES.Controllers
                         NoCount = NoLast + 1;
                     }
                 }
-                PurchaseHeadData.PurchaseNo = key + PurchaseNo + NoCount.ToString("000");
-                return Ok(MyFun.APIResponseOK(PurchaseHeadData));
+                CreateNoData.CreateNumber = key + PurchaseNo + NoCount.ToString("000");
+                return Ok(MyFun.APIResponseOK(CreateNoData));
             }
             return Ok(MyFun.APIResponseOK("OK"));
         }

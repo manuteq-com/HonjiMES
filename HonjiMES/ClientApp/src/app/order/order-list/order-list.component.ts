@@ -235,7 +235,6 @@ export class OrderListComponent {
                 this.creatpopupVisible = true;
                 this.exceldata = response.data;
             }
-
         } else {
             notify({
                 message: 'Excel 檔案讀取失敗:' + response.message,
@@ -245,7 +244,6 @@ export class OrderListComponent {
                 }
             }, 'error', 3000);
         }
-
     }
     onDataErrorOccurred(e) {
         notify({

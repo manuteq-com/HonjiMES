@@ -7,6 +7,7 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
+import { CreateNumberInfo } from 'src/app/model/viewmodels';
 
 @Component({
     selector: 'app-creat-purchase',
@@ -49,6 +50,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Priceval: number;
     addRow = true;
     eformData: any;
+    CreateNumberInfoVal: any;
     Quantityvalmax: number;
     saveCheck = true;
     constructor(private http: HttpClient, myservice: Myservice) {
@@ -125,14 +127,19 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     CreateTimeValueChange = async function(e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
+            this.CreateNumberInfoVal = new CreateNumberInfo();
+            this.CreateNumberInfoVal.Type = this.formData.Type;
+            this.CreateNumberInfoVal.CreateNumber = this.formData.PurchaseNo;
+            this.CreateNumberInfoVal.CreateTime = this.formData.CreateTime;
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/PurchaseHeads/GetPurchaseNumberByInfo', 'POST', { values: this.formData });
+            const sendRequest = await SendService.sendRequest(this.http, '/PurchaseHeads/GetPurchaseNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
             if (sendRequest) {
-                this.formData = sendRequest;
+                this.formData.Type = sendRequest.Type;
+                this.formData.PurchaseNo = sendRequest.CreateNumber;
+                this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
-
-    }
+    };
     PurchaseDateValueChange(e) {
     }
     onSupplierSelectionChanged(e) {//依照供應商ID去進貨單查詢，可進貨的原料項目。
