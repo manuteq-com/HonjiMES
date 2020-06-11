@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DxFormComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from 'src/app/shared/mylib';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   templateUrl: './bill-purchase-return.component.html',
   styleUrls: ['./bill-purchase-return.component.css']
 })
-export class BillPurchaseReturnComponent implements OnInit {
+export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
@@ -43,6 +43,8 @@ export class BillPurchaseReturnComponent implements OnInit {
     ngOnInit() {
     }
     ngOnChanges() {
+        // tslint:disable-next-line: max-line-length
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.Quantity, min: 1, value: this.itemkeyval.CheckCountIn};
         this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
             (s) => {
                 if (s.success) {

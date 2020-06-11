@@ -12,6 +12,10 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("return_no", TypeName = "varchar(50)")]
+        public string ReturnNo { get; set; }
+        [Column("sale_detail_new_id", TypeName = "int(11)")]
+        public int SaleDetailNewId { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
         [Column("quantity", TypeName = "int(11)")]
@@ -20,6 +24,8 @@ namespace HonjiMES.Models
         public string Reason { get; set; }
         [Column("remarks", TypeName = "varchar(500)")]
         public string Remarks { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -28,10 +34,6 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("delete_flag", TypeName = "tinyint(4)")]
-        public sbyte DeleteFlag { get; set; }
-        [Column("sale_detail_new_id", TypeName = "int(11)")]
-        public int SaleDetailNewId { get; set; }
 
         [ForeignKey(nameof(SaleDetailNewId))]
         [InverseProperty("ReturnSales")]

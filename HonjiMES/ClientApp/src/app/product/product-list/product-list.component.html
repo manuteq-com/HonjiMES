@@ -54,7 +54,7 @@
     <dxi-column dataField="Name" caption="主件品名" [visible]="visible"></dxi-column>
     <dxi-column dataField="Quantity" caption="實際庫存量"></dxi-column>
     <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
-    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue'>
+    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue' [visible]="visible">
     </dxi-column>
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="廠內規格" [visible]="visible"></dxi-column>

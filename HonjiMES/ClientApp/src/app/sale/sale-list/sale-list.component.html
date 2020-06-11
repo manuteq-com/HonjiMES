@@ -135,7 +135,7 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="銷貨退回" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="300"
+<dx-popup [showTitle]="true" title="銷貨退回" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="330"
     [(visible)]="resalepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-re-order-sale (childOuter)="resalepopup_result($event)" [itemkeyval]="resaleitemkey"></app-re-order-sale>
