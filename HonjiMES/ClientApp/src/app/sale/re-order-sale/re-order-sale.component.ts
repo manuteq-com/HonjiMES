@@ -15,7 +15,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    url = location.origin + '/api';
+    // url = location.origin + '/api';
     buttondisabled: boolean;
     formData: any;
     labelLocation: string;
@@ -27,6 +27,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     selectBoxOptions: any;
     NumberBoxOptions: any;
+
     constructor(private http: HttpClient) {
         this.formData = null;
         this.labelLocation = 'left';
@@ -36,14 +37,21 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         this.colCount = 1;
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
+        return this.http.get<APIResponse>('/api' + apiUrl);
+    }
+    ngOnInit() {
     }
     ngOnChanges() {
-        debugger;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty};
-        this.GetData(this.url + '/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
+        this.GetData('/ToSale/GetSaleReturnNo').subscribe(
             (s) => {
-                debugger;
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
+        this.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
+            (s) => {
                 if (s.success) {
                     this.selectBoxOptions = {
                         items: s.data,
@@ -53,8 +61,6 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
                 }
             }
         );
-    }
-    ngOnInit() {
     }
     validate_before(): boolean {
         // 表單驗證
@@ -70,6 +76,15 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         }
         return true;
     }
+    refreshReturnNo() {
+        this.GetData('/ToSale/GetSaleReturnNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData.ReturnNo = s.data.ReturnNo;
+                }
+            }
+        );
+    }
     onFormSubmit = async function(e) {
         debugger;
         this.buttondisabled = true;
@@ -77,13 +92,17 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         }
-        this.formData = this.myform.instance.option('formData');
-        this.formData.SaleDID = this.itemkeyval.key;
-        const sendRequest = await SendService.sendRequest(this.http, '/ToSale/ReOrderSale', 'POST', { values: this.formData });
-        if (sendRequest) {
-            this.myform.instance.resetValues();
-            e.preventDefault();
-            this.childOuter.emit(true);
+        try {
+            this.formData = this.myform.instance.option('formData');
+            this.formData.SaleDetailNewId = this.itemkeyval.key;
+            const sendRequest = await SendService.sendRequest(this.http, '/ToSale/ReOrderSale', 'POST', { values: this.formData });
+            if (sendRequest) {
+                this.myform.instance.resetValues();
+                e.preventDefault();
+                this.childOuter.emit(true);
+            }
+        } catch (error) {
+
         }
         this.buttondisabled = false;
 

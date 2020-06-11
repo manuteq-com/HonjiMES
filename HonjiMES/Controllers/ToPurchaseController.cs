@@ -55,17 +55,19 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<BillofPurchaseReturn>> GetBillofPurchaseReturnNo()
         {
-            var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var ReturnNoName = "BOPR";
+            var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(ReturnNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1) {
                 var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
-                var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - 6, 6));
+                var LastLength = LastReturnNo.Length - ReturnNoName.Length;
+                var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - LastLength, LastLength));
                 if (NoCount <= NoLast) {
                     NoCount = NoLast + 1;
                 }
             }
             var ReturnData = new BillofPurchaseReturn{
-                ReturnNo = "BOPR" + NoCount.ToString("000000")
+                ReturnNo = ReturnNoName + NoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(ReturnData));
         }
@@ -229,16 +231,22 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<BillofPurchaseReturn>> PostPurchaseCheckReturn(BillofPurchaseReturn BillofPurchaseReturn)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
+            if (BillofPurchaseReturn.WarehouseId == 0)
+            {
+                return Ok(MyFun.APIResponseError("請選擇驗退倉!"));
+            }
             var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseReturn.BillofPurchaseDetailId);
             if (BillofPurchaseDetails == null)
             {
                 return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
             BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
-            if (BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
+            var ReturnCount = BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
+            if (ReturnCount > BillofPurchaseDetails.Quantity)
             {
-                return Ok(MyFun.APIResponseError("驗退數量超過採購數量!"));
+                return Ok(MyFun.APIResponseError("驗退數量超過採購數量! [已驗退數量：" + (ReturnCount - BillofPurchaseReturn.Quantity) + "]"));
             }
+            
             var dt = DateTime.Now;
             BillofPurchaseReturn.CreateTime = dt;
             BillofPurchaseReturn.CreateUser = 1;
