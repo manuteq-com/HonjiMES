@@ -5,12 +5,20 @@
             <dxi-validation-rule type="required" message="採購類別 必填"></dxi-validation-rule>
             <dxo-label text="採購類別"></dxo-label>
         </dxi-item>
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
+            <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
+            <dxo-label text="建立日期"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="PurchaseNo" [disabled]="true">
+            <dxi-validation-rule type="required" message="採購單號 必填"></dxi-validation-rule>
+            <dxo-label text="採購單號"></dxo-label>
+        </dxi-item>
         <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox"
             [editorOptions]="SupplierselectBoxOptions">
             <dxi-validation-rule type="required" message="供應商 必填"></dxi-validation-rule>
             <dxo-label text="供應商"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="PurchaseDate" editorType="dxDateBox">
+        <dxi-item dataField="PurchaseDate" editorType="dxDateBox" [editorOptions]="PurchaseDateBoxOptions">
             <dxi-validation-rule type="required" message="採購日期 必填"></dxi-validation-rule>
             <dxo-label text="採購日期"></dxo-label>
         </dxi-item>

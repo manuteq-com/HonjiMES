@@ -36,6 +36,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     url: string;
     dataSourceDB: any[];
     controller: string;
+    CreateTimeDateBoxOptions: any;
+    PurchaseDateBoxOptions: any;
     SupplierselectBoxOptions: any;
     MaterialselectBoxOptions: any;
     SupplierList: any;
@@ -63,6 +65,13 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
+        this.CreateTimeDateBoxOptions = {
+            onValueChanged: this.CreateTimeValueChange.bind(this)
+        };
+        this.PurchaseDateBoxOptions = {
+            // displayFormat: 'yyyyMMdd',
+            onValueChanged: this.PurchaseDateValueChange.bind(this)
+        };
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
@@ -103,9 +112,28 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
-
+        this.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
     }
     onFocusedCellChanging(e) {
+    }
+    CreateTimeValueChange = async function(e) {
+        // this.formData = this.myform.instance.option('formData');
+        if (this.formData.CreateTime != null) {
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/PurchaseHeads/GetPurchaseNumberByInfo', 'POST', { values: this.formData });
+            if (sendRequest) {
+                this.formData = sendRequest;
+            }
+        }
+
+    }
+    PurchaseDateValueChange(e) {
     }
     onSupplierSelectionChanged(e) {//依照供應商ID去進貨單查詢，可進貨的原料項目。
         // this.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
@@ -193,7 +221,12 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             if (sendRequest) {
                 this.dataSourceDB = [];
                 this.dataGrid.instance.refresh();
-                this.myform.instance.resetValues();
+                // this.myform.instance.resetValues();
+                this.formData.CreateTime = new Date();
+                this.formData.PurchaseDate = null;
+                this.formData.SupplierId = 0;
+                this.formData.Type = 10;
+                this.formData.Remarks = '';
                 e.preventDefault();
                 this.childOuter.emit(true);
             }

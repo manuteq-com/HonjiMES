@@ -24,6 +24,63 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
+        /// 採購單號
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/PurchaseHeads
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseNumber()
+        {
+            var key = "PI";
+            var dt = DateTime.Now;
+            var PurchaseNo = dt.ToString("yyMMdd");
+
+            var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var PurchaseHeadData = new PurchaseHead{
+                Type = 10,
+                CreateTime = dt,
+                SupplierId = 0,
+                PurchaseNo = key + PurchaseNo + NoCount.ToString("000")
+            };
+            return Ok(MyFun.APIResponseOK(PurchaseHeadData));
+        }
+
+        /// <summary>
+        /// 採購單號
+        /// </summary>
+        /// <returns></returns>
+        // POST: api/PurchaseHeads
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseNumberByInfo(PurchaseHead PurchaseHeadData)
+        {
+            if (PurchaseHeadData != null) {
+                var key = PurchaseHeadData.Type == 10 ? "PI" : "PO";
+                var PurchaseNo = PurchaseHeadData.CreateTime.ToString("yyMMdd");
+                
+                var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                    var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                PurchaseHeadData.PurchaseNo = key + PurchaseNo + NoCount.ToString("000");
+                return Ok(MyFun.APIResponseOK(PurchaseHeadData));
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
+        /// <summary>
         /// 採購單列表
         /// </summary>
         /// <returns></returns>
