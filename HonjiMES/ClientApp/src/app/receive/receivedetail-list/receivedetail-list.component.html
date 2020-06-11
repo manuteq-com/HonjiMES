@@ -2,7 +2,7 @@
     [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
     [columnAutoWidth]="false" [showBorders]="true" (onCellClick)="cellClick($event)"
     (onToolbarPreparing)="onToolbarPreparingM($event)">
-    <dxo-editing mode="batch" [allowUpdating]="true">
+    <dxo-editing mode="batch" [allowUpdating]="true" useIcons="false">
         <dxo-texts saveAllChanges="領料"></dxo-texts>
     </dxo-editing>
     <dxi-column dataField="MaterialNo" caption="組成元件" dataType="string" [allowEditing]="false"></dxi-column>

@@ -77,6 +77,18 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
             });
     }
     onToolbarPreparingM(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '領料';
+                item.showText = 'always';
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });
         e.toolbarOptions.items.unshift(
             {
                 text: '原料領料',
