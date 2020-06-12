@@ -501,6 +501,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Price).HasComment("原價格");
+
                 entity.Property(e => e.Property)
                     .HasComment("屬性")
                     .HasCharSet("utf8mb4")
@@ -519,6 +521,11 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Supplier).HasComment("供應商");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -557,6 +564,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Price).HasComment("原價格");
+
                 entity.Property(e => e.Property)
                     .HasComment("屬性")
                     .HasCharSet("utf8mb4")
@@ -568,6 +577,11 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Supplier).HasComment("供應商");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")

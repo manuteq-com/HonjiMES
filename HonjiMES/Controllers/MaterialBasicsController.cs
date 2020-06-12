@@ -70,6 +70,8 @@ namespace HonjiMES.Controllers
                 item.Name = OmaterialBasic.Name;
                 item.Specification = OmaterialBasic.Specification;
                 item.Property = OmaterialBasic.Property;
+                item.Price = OmaterialBasic.Price;
+                item.Unit = OmaterialBasic.Unit;
             }
 
             try
