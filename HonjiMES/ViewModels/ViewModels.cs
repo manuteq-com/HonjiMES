@@ -63,7 +63,8 @@ namespace HonjiMES.Models
         /// 訂單銷貨備註
         /// </summary>
         public string Remarks { get; set; }
-
+        public DateTime CreateTime { get; set; }
+        public string SaleNo { get; set; }
     }
     /// <summary>
     /// 過濾

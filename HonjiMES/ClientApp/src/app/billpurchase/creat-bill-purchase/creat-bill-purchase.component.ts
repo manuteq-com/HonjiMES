@@ -109,7 +109,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();
-            this.CreateNumberInfoVal.CreateNumber = this.formData.PurchaseNo;
+            this.CreateNumberInfoVal.CreateNumber = this.formData.BillofPurchaseNo;
             this.CreateNumberInfoVal.CreateTime = this.formData.CreateTime;
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/GetBillofPurchaseNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });

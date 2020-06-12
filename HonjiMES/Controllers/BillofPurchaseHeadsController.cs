@@ -226,8 +226,8 @@ namespace HonjiMES.Controllers
                 //     }
                 // }
                 // Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
-                var checkPurchaseNo = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(Head.BillofPurchaseNo) && x.DeleteFlag == 0).Count();
-                if (checkPurchaseNo != 0) {
+                var checkBillofPurchaseNo = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(Head.BillofPurchaseNo) && x.DeleteFlag == 0).Count();
+                if (checkBillofPurchaseNo != 0) {
                     return Ok(MyFun.APIResponseError("[進貨單號]已存在! 請刷新單號!"));
                 }
                 Head.CreateTime = dt;

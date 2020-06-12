@@ -72,12 +72,12 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField="SaleNo" caption="銷貨單號" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" width="200">
         <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
     <!-- <dxi-column type="buttons"><dxi-button hint="整批銷貨" text="整批銷貨" [onClick]="to_hsaleClick"></dxi-button></dxi-column> -->
     <div *dxTemplate="let item of 'detail'">

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
 import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
+import { CreateNumberInfo } from '../model/viewmodels';
 
 @Component({
     selector: 'app-ordertosale',
@@ -37,17 +38,41 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     dataSourceDB: any;
     ProductBasicList: any;
     ProductsAllList: any;
+    CreateTimeDateBoxOptions: any;
+
+    constructor(private http: HttpClient) {
+        this.formData = null;
+        this.labelLocation = 'left';
+        this.readOnly = false;
+        this.showColon = true;
+        this.minColWidth = 100;
+        this.colCount = 5;
+        this.CreateTimeDateBoxOptions = {
+            onValueChanged: this.CreateTimeValueChange.bind(this)
+        };
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>('/api' + apiUrl);
+    }
+    ngOnInit() {
+    }
     async ngOnChanges() {
+        this.GetData('/ToSale/GetSaleNumber').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
         this.startTimeInput = {
-            min: new Date().toDateString(),
-            value: new Date().toDateString()
+            min: new Date().toDateString()
         };
         this.dataSourceDB = [];
         this.ProductsAllList =[];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
         this.dataSourceDB.forEach(async x => {
             x.Quantity  = x.Quantity - x.SaleCount;
-            this.GetData(this.url + '/Products/GetProductsById/' + x.ProductBasicId).subscribe(
+            this.GetData('/Products/GetProductsById/' + x.ProductBasicId).subscribe(
                 (s) => {
                     if (s.success) {
                         s.data.forEach(element => {
@@ -67,7 +92,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             this.showdisabled = true;
         }
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1};
-        this.GetData(this.url + '/Sales/GetSalesByStatus?status=0').subscribe(
+        this.GetData('/Sales/GetSalesByStatus?status=0').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -84,19 +109,20 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             }
         );
     }
-    constructor(private http: HttpClient) {
-        this.formData = null;
-        this.labelLocation = 'left';
-        this.readOnly = false;
-        this.showColon = true;
-        this.minColWidth = 100;
-        this.colCount = 3;
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
-    }
-    ngOnInit() {
-    }
+    CreateTimeValueChange = async function(e) {
+        // this.formData = this.myform.instance.option('formData');
+        if (this.formData.CreateTime != null) {
+            this.CreateNumberInfoVal = new CreateNumberInfo();
+            this.CreateNumberInfoVal.CreateNumber = this.formData.SaleNo;
+            this.CreateNumberInfoVal.CreateTime = this.formData.CreateTime;
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/ToSale/GetSaleNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
+            if (sendRequest) {
+                this.formData.SaleNo = sendRequest.CreateNumber;
+                this.formData.CreateTime = sendRequest.CreateTime;
+            }
+        }
+    };
     onCustomerSelectionChanged(e) {
     }
     onDataErrorOccurred(e) {
@@ -148,10 +174,13 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         this.formData.Orderlist = this.dataSourceDB;
         const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSale', 'POST', { values: this.formData });
         if (sendRequest) {
-            this.myform.instance.resetValues();
             e.preventDefault();
             this.childOuter.emit(true);
             this.dataGrid.instance.refresh();
+            this.myform.instance.resetValues();
+            this.formData.CreateTime = new Date();
+            this.formData.SaleDate = null;
+            this.formData.Remarks = '';
         }
         this.buttondisabled = false;
 
