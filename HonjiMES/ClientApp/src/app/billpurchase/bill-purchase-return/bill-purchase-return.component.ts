@@ -27,14 +27,15 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     colCount: number;
     labelLocation: string;
     selectBoxOptions: any;
-    NumberBoxOptions: any;
-    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number; };
+    QuantityEditorOptions: any;
+    PriceEditorOptions: any;
+    UnitCountEditorOptions: any;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 1;
+        this.colCount = 2;
         this.labelLocation = 'left';
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
@@ -43,8 +44,17 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        // tslint:disable-next-line: max-line-length
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.Quantity, min: 1, value: this.itemkeyval.CheckCountIn};
+        this.QuantityEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: this.itemkeyval.CheckCountIn,
+            min: 1,
+            max: this.itemkeyval.Quantity,
+            onValueChanged: this.QuantityValueChanged.bind(this)
+        };
+        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
+        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
         this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
             (s) => {
                 if (s.success) {
@@ -64,14 +74,17 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval.Id).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.editorOptions = { showSpinButtons: true, mode: 'number', format: '#0', value: 1, min: 1, max: s.data.Quantity };
-                }
-            }
-        );
 
+    }
+    QuantityValueChanged(e) {
+        this.formData.PriceAll = this.formData.Price * e.value;
+        this.formData.UnitCountAll = this.formData.UnitCount * e.value;
+    }
+    PriceValueChanged(e) {
+        this.formData.PriceAll = this.formData.Quantity * e.value;
+    }
+    UnitCountValueChanged(e) {
+        this.formData.UnitCountAll = this.formData.Quantity * e.value;
     }
     validate_before(): boolean {
         // 表單驗證

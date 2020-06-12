@@ -55,7 +55,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
                         min: 1,
                         max: s.data.Quantity,
                         onValueChanged: this.QuantityValueChanged.bind(this)
-                     };
+                    };
                 }
             }
         );
