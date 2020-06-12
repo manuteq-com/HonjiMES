@@ -82,7 +82,7 @@
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
-    [height]="300" [(visible)]="creatpopupVisible">
+    [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatmaterial-basic>

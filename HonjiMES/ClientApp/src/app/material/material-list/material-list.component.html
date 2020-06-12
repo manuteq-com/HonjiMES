@@ -65,7 +65,7 @@
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="300"
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod"

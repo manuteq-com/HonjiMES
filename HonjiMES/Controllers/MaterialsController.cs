@@ -149,6 +149,8 @@ namespace HonjiMES.Controllers
                         Quantity = material.Quantity,
                         Specification = material.Specification,
                         Property = material.Property,
+                        Price = material.Price,
+                        Unit = material.Unit,
                         Composition = 1,
                         BaseQuantity = 2,
                         WarehouseId = warehouseId,
