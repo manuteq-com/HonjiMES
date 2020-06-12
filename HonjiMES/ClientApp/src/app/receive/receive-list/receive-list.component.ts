@@ -38,6 +38,18 @@ export class ReceiveListComponent implements OnInit {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition', 'DELETE')
         });
+        this.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.selectBoxOptions = {
+                        searchEnabled: true,
+                        items: s.data,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                    };
+                }
+            }
+        );
     }
     ngOnInit() {
     }

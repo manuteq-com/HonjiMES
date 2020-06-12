@@ -237,5 +237,6 @@ namespace HonjiMES.Models
     public class GetReceive
     {
         public int RQty { get; set; }
+        public int WarehouseID { get; set; }
     }
 }

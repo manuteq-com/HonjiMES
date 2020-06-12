@@ -186,12 +186,29 @@ namespace HonjiMES.Controllers
         {
             var rr = Request;
             var RequisitionDetail = _context.RequisitionDetails.Find(id);
+            var Material = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == RequisitionDetail.MaterialBasicId).FirstOrDefault();
+            if (Material == null)
+            {
+                return Ok(MyFun.APIResponseError("沒有庫存資料"));
+            }
             if (Receive.RQty > 0)
             {
                 var dt = DateTime.Now;
                 RequisitionDetail.Receives.Add(new Receive
                 {
                     Quantity = Receive.RQty,
+                    CreateTime = dt,
+                    CreateUser = 1
+                });
+                var Original = Material.Quantity;
+                Material.Quantity = Original - Receive.RQty;
+                Material.UpdateTime = dt;
+                Material.UpdateUser = 1;
+                Material.MaterialLogs.Add(new MaterialLog
+                {
+                    Original = Original,
+                    Quantity = -Receive.RQty,
+                    Message = "領料出庫",
                     CreateTime = dt,
                     CreateUser = 1
                 });

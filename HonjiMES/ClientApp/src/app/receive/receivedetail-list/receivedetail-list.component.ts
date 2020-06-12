@@ -13,6 +13,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
     styleUrls: ['./receivedetail-list.component.css']
 })
 export class ReceiveDetailListComponent implements OnInit, OnChanges {
+
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
     Controller = '/Requisitions';
@@ -33,7 +34,8 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+                    { key, values: this.setWarehouse(values, this.WarehouseIDM) }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
@@ -44,7 +46,8 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+                    { key, values, WarehouseID: this.WarehouseIDP }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
@@ -54,12 +57,28 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
                 SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
         });
     }
-
+    setWarehouse(values: any, WarehouseIDM: number) {
+        values.WarehouseID = WarehouseIDM;
+        debugger;
+        return values;
+    }
     ngOnInit() {
     }
     ngOnChanges() {
     }
     onToolbarPreparingP(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '領料';
+                item.showText = 'always';
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });
         e.toolbarOptions.items.unshift(
             {
                 text: '成品領料',
