@@ -26,13 +26,15 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     labelLocation: string;
-    editorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; max: number; };
+    QuantityEditorOptions: any;
+    PriceEditorOptions: any;
+    UnitCountEditorOptions: any;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 1;
+        this.colCount = 2;
         this.labelLocation = 'left';
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
@@ -41,15 +43,34 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        debugger;
+        this.formData = {Quantity: 0, Price: 0, PriceAll: 0, Unit: '', UnitCount: 0, UnitCountAll: 0, Remarks: ''};
         this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval).subscribe(
             (s) => {
                 if (s.success) {
-                    this.editorOptions = { showSpinButtons: true, mode: 'number', format: '#0', value: 1, min: 1, max: s.data.Quantity };
+                    this.QuantityEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        format: '#0',
+                        value: s.data.Quantity,
+                        min: 1,
+                        max: s.data.Quantity,
+                        onValueChanged: this.QuantityValueChanged.bind(this)
+                     };
                 }
             }
         );
-
+        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
+        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
+    }
+    QuantityValueChanged(e) {
+        this.formData.PriceAll = this.formData.Price * e.value;
+        this.formData.UnitCountAll = this.formData.UnitCount * e.value;
+    }
+    PriceValueChanged(e) {
+        this.formData.PriceAll = this.formData.Quantity * e.value;
+    }
+    UnitCountValueChanged(e) {
+        this.formData.UnitCountAll = this.formData.Quantity * e.value;
     }
     validate_before(): boolean {
         // 表單驗證

@@ -205,12 +205,25 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
+                entity.Property(e => e.Price).HasComment("單價");
+
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
                 entity.Property(e => e.Quantity).HasComment("驗收數量");
 
                 entity.Property(e => e.Remarks)
                     .HasComment("備註")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UnitCount).HasComment("單位數量");
+
+                entity.Property(e => e.UnitCountAll).HasComment("單位總量");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")

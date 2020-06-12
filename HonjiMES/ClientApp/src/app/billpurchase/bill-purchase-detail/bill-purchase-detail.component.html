@@ -98,7 +98,7 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="250"
+<dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="330"
     [(visible)]="popupVisibleTo">
     <div *dxTemplate="let data of 'content'">
         <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">

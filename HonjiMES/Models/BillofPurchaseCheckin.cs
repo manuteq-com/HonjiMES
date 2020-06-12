@@ -18,6 +18,16 @@ namespace HonjiMES.Models
         public int? CheckinType { get; set; }
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        [Column("price")]
+        public float? Price { get; set; }
+        [Column("price_all")]
+        public float PriceAll { get; set; }
+        [Column("unit", TypeName = "varchar(50)")]
+        public string Unit { get; set; }
+        [Column("unit_count")]
+        public float? UnitCount { get; set; }
+        [Column("unit_count_all")]
+        public float? UnitCountAll { get; set; }
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
