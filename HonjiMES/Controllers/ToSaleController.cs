@@ -25,6 +25,60 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
+        /// 銷貨單號
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ToSales>>> GetSaleNumber()
+        {
+            var key = "S";
+            var dt = DateTime.Now;
+            var SaleNo = dt.ToString("yyMMdd");
+
+            var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var SaleHeadData = new ToSales{
+                CreateTime = dt,
+                SaleNo = key + SaleNo + NoCount.ToString("000"),
+                SaleDate = null
+            };
+            return Ok(MyFun.APIResponseOK(SaleHeadData));
+        }
+
+        /// <summary>
+        /// 銷貨單號
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetSaleNumberByInfo(CreateNumberInfo CreateNoData)
+        {
+            if (CreateNoData != null) {
+                var key = "S";
+                var SaleNo = CreateNoData.CreateTime.ToString("yyMMdd");
+                
+                var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                    var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                CreateNoData.CreateNumber = key + SaleNo + NoCount.ToString("000");
+                return Ok(MyFun.APIResponseOK(CreateNoData));
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
+        /// <summary>
         /// 取得銷退單號
         /// </summary>
         /// <returns></returns>
@@ -123,19 +177,24 @@ namespace HonjiMES.Controllers
                     else if (ToSales.SaleDate.HasValue)//有銷貨日期，新增銷貨單
                     {
                         var SaleNo = dt.ToString("yyMMdd");
-                        var NoData = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.StartsWith("S" + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
-                        var NoCount = NoData.Count() + 1;
-                        if (NoCount != 1) {
-                            var LastSaleNo = NoData.FirstOrDefault().SaleNo;
-                            var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
-                            if (NoCount <= NoLast) {
-                                NoCount = NoLast + 1;
-                            }
-                        }
+                        // var NoData = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.StartsWith("S" + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                        // var NoCount = NoData.Count() + 1;
+                        // if (NoCount != 1) {
+                        //     var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                        //     var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                        //     if (NoCount <= NoLast) {
+                        //         NoCount = NoLast + 1;
+                        //     }
+                        // }
                         //S  20200415  001
+                        var checkSaleNo = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(ToSales.SaleNo) && x.DeleteFlag == 0).Count();
+                        if (checkSaleNo != 0) {
+                            return Ok(MyFun.APIResponseError("[銷貨單號]已存在! 請刷新單號!"));
+                        }
                         var nsale = new SaleHead
                         {
-                            SaleNo = "S" + SaleNo + NoCount.ToString("000"),
+                            // SaleNo = "S" + SaleNo + NoCount.ToString("000"),
+                            SaleNo = ToSales.SaleNo,
                             Status = 0,
                             SaleDate = ToSales.SaleDate,
                             PriceAll = nlist.Sum(x => x.Quantity * x.OriginPrice),

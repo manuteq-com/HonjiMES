@@ -20,6 +20,16 @@ namespace HonjiMES.Models
         public int WarehouseId { get; set; }
         [Column("quantity")]
         public float Quantity { get; set; }
+        [Column("price")]
+        public float? Price { get; set; }
+        [Column("price_all")]
+        public float PriceAll { get; set; }
+        [Column("unit", TypeName = "varchar(50)")]
+        public string Unit { get; set; }
+        [Column("unit_count")]
+        public float? UnitCount { get; set; }
+        [Column("unit_count_all")]
+        public float? UnitCountAll { get; set; }
         [Required]
         [Column("reason", TypeName = "varchar(100)")]
         public string Reason { get; set; }

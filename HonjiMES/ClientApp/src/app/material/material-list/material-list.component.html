@@ -25,13 +25,15 @@
     </dxo-pager>
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item  dataField="MaterialNo" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item  dataField="Name" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item  dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item  dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item  dataField="WarehouseId"></dxi-item>
+            <dxi-item dataField="MaterialNo" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Name" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Price"></dxi-item>
+            <dxi-item dataField="Unit"></dxi-item>
+            <dxi-item dataField="WarehouseId"></dxi-item>
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改原料明細資訊" [width]="800" [height]="350">
+        <dxo-popup [showTitle]="true" title="修改原料明細資訊" [width]="800" [height]="410">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
@@ -43,6 +45,8 @@
     <dxi-column dataField="Quantity" caption="庫存量"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="屬性" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Price" caption="單價"></dxi-column>
+    <dxi-column dataField="Unit" caption="單位"></dxi-column>
     <!-- <dxi-column dataField="Supplier" caption="供應商">
         <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
@@ -61,7 +65,7 @@
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="300"
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod"

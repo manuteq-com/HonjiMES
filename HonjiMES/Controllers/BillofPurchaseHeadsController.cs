@@ -38,6 +38,61 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 進貨單號
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/BillofPurchaseHead
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseNumber()
+        {
+            var key = "BOP";
+            var dt = DateTime.Now;
+            var BillofPurchaseNo = dt.ToString("yyMMdd");
+
+            var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
+                var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var BillofPurchaseHeadData = new BillofPurchaseHead{
+                CreateTime = dt,
+                BillofPurchaseNo = key + BillofPurchaseNo + NoCount.ToString("000")
+            };
+            return Ok(MyFun.APIResponseOK(BillofPurchaseHeadData));
+        }
+
+        /// <summary>
+        /// 進貨單號
+        /// </summary>
+        /// <returns></returns>
+        // POST: api/BillofPurchaseHead
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetBillofPurchaseNumberByInfo(CreateNumberInfo CreateNoData)
+        {
+            if (CreateNoData != null) {
+                var key = "BOP";
+                var BillofPurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
+                
+                var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
+                    var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
+                    if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                CreateNoData.CreateNumber = key + BillofPurchaseNo + NoCount.ToString("000");
+                return Ok(MyFun.APIResponseOK(CreateNoData));
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
+        /// <summary>
         /// 進貨單列表
         /// </summary>
         /// <param name="FromQuery"></param>
@@ -160,18 +215,21 @@ namespace HonjiMES.Controllers
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
 
                 var dt = DateTime.Now;
-                var No = dt.ToString("yyMMdd");
-                var NoData = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(No) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
-                var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
-                    var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
-                    var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
-                    if (NoCount <= NoLast) {
-                        NoCount = NoLast + 1;
-                    }
+                // var No = dt.ToString("yyMMdd");
+                // var NoData = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(No) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                // var NoCount = NoData.Count() + 1;
+                // if (NoCount != 1) {
+                //     var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
+                //     var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
+                //     if (NoCount <= NoLast) {
+                //         NoCount = NoLast + 1;
+                //     }
+                // }
+                // Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
+                var checkBillofPurchaseNo = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(Head.BillofPurchaseNo) && x.DeleteFlag == 0).Count();
+                if (checkBillofPurchaseNo != 0) {
+                    return Ok(MyFun.APIResponseError("[進貨單號]已存在! 請刷新單號!"));
                 }
-
-                Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
                 Head.CreateTime = dt;
                 Head.CreateUser = 1;
                 var Details = new List<BillofPurchaseDetail>();

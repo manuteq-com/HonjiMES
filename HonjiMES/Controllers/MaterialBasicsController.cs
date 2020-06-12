@@ -26,7 +26,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasics()
         {
-            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).ToListAsync();
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
 
@@ -70,6 +70,8 @@ namespace HonjiMES.Controllers
                 item.Name = OmaterialBasic.Name;
                 item.Specification = OmaterialBasic.Specification;
                 item.Property = OmaterialBasic.Property;
+                item.Price = OmaterialBasic.Price;
+                item.Unit = OmaterialBasic.Unit;
             }
 
             try
@@ -124,6 +126,8 @@ namespace HonjiMES.Controllers
                     Name = material.Name,
                     Specification = material.Specification,
                     Property = material.Property,
+                    Price = material.Price,
+                    Unit = material.Unit,
                     CreateUser = 1
                 });
                 _context.SaveChanges();
@@ -151,6 +155,8 @@ namespace HonjiMES.Controllers
                         Quantity = material.Quantity,
                         Specification = material.Specification,
                         Property = material.Property,
+                        Price = material.Price,
+                        Unit = material.Unit,
                         Composition = 1,
                         BaseQuantity = 2,
                         WarehouseId = warehouseId,

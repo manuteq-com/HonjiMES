@@ -1,13 +1,31 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-        <dxi-item dataField="Quantity" editorType="dxNumberBox" dataType="number" [editorOptions]="editorOptions">
-            <dxi-validation-rule type="required" message="修改數量 必填"></dxi-validation-rule>
+
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
+            <dxi-validation-rule type="required" message="驗收數量 必填"></dxi-validation-rule>
             <dxo-label text="驗收數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Unit">
+            <dxo-label text="單位"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
+            <dxi-validation-rule type="required" message="驗收單價 必填"></dxi-validation-rule>
+            <dxo-label text="驗收單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCount" [editorOptions]="UnitCountEditorOptions">
+            <dxo-label text="單位數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="驗收總價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCountAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="單位總量"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">
             <dxo-label text="備註"></dxo-label>
         </dxi-item>
+
     </dx-form>
     <br>
     <!-- <div class="long-title">

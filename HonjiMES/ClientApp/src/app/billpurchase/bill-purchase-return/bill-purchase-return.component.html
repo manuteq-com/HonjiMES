@@ -9,13 +9,32 @@
             <dxi-validation-rule type="required" message="驗退倉 必填"></dxi-validation-rule>
             <dxo-label text="驗退倉"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox"  [editorOptions]="NumberBoxOptions">
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
             <dxi-validation-rule type="required" message="驗退數量 必填"></dxi-validation-rule>
             <dxo-label text="驗退數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Unit">
+            <dxo-label text="單位"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
+            <dxi-validation-rule type="required" message="驗退單價 必填"></dxi-validation-rule>
+            <dxo-label text="驗退單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCount" [editorOptions]="UnitCountEditorOptions">
+            <dxo-label text="單位數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="驗退總價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCountAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="單位總量"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Reason">
             <dxi-validation-rule type="required" message="驗退原因 必填"></dxi-validation-rule>
             <dxo-label text="驗退原因"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remarks">
+            <dxo-label text="備註"></dxo-label>
         </dxi-item>
 
     </dx-form>

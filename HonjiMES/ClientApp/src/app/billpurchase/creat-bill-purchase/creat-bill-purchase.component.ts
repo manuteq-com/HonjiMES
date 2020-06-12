@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import $ from 'jquery';
-import { BillofPurchaseDetail } from 'src/app/model/viewmodels';
+import { BillofPurchaseDetail, CreateNumberInfo } from 'src/app/model/viewmodels';
 @Component({
     selector: 'app-creat-bill-purchase',
     templateUrl: './creat-bill-purchase.component.html',
@@ -51,6 +51,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     allMode: string;
     checkBoxesMode: string;
     postval: any;
+    CreateTimeDateBoxOptions: any;
 
     constructor(private http: HttpClient) {
         this.allMode = 'allPages';
@@ -64,10 +65,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 3;
+        this.colCount = 4;
         this.url = location.origin + '/api';
         this.controller = '/OrderDetails';
         this.dataSourceDB = [];
+        this.CreateTimeDateBoxOptions = {
+            onValueChanged: this.CreateTimeValueChange.bind(this)
+        };
 
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
@@ -76,6 +80,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        this.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
         this.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
@@ -94,6 +105,20 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         //     }
         // );
     }
+    CreateTimeValueChange = async function(e) {
+        // this.formData = this.myform.instance.option('formData');
+        if (this.formData.CreateTime != null) {
+            this.CreateNumberInfoVal = new CreateNumberInfo();
+            this.CreateNumberInfoVal.CreateNumber = this.formData.BillofPurchaseNo;
+            this.CreateNumberInfoVal.CreateTime = this.formData.CreateTime;
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/GetBillofPurchaseNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
+            if (sendRequest) {
+                this.formData.BillofPurchaseNo = sendRequest.CreateNumber;
+                this.formData.CreateTime = sendRequest.CreateTime;
+            }
+        }
+    };
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
@@ -255,7 +280,10 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         if (sendRequest) {
             this.dataSourceDB = [];
             this.dataGrid.instance.refresh();
-            this.myform.instance.resetValues();
+            // this.myform.instance.resetValues();
+            this.formData.CreateTime = new Date();
+            this.formData.BillofPurchaseDate = null;
+            this.formData.Remarks = '';
             this.CustomerVal = null;
             e.preventDefault();
             this.childOuter.emit(true);

@@ -45,10 +45,11 @@
             <!-- <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item> -->
             <dxi-item dataField="Specification"></dxi-item>
             <dxi-item dataField="Property"></dxi-item>
-            <!-- <dxi-item dataField="Price"></dxi-item> -->
+            <dxi-item dataField="Price"></dxi-item>
+            <dxi-item dataField="Unit"></dxi-item>
             <!-- <dxi-item dataField="WarehouseId"></dxi-item> -->
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改原料基本資訊"  [width]="800" [height]="300">
+        <dxo-popup [showTitle]="true" title="修改原料基本資訊"  [width]="800" [height]="360">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
                 [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
@@ -68,6 +69,8 @@
     <dxi-column dataField="Name" caption="元件品名"></dxi-column>
     <dxi-column dataField="Specification" caption="規格"></dxi-column>
     <dxi-column dataField="Property" caption="屬性"></dxi-column>
+    <dxi-column dataField="Price" caption="單價"></dxi-column>
+    <dxi-column dataField="Unit" caption="單位"></dxi-column>
     <!-- <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column> -->
     <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
     <!-- <dxi-column dataField="WarehouseId" caption="存放庫別" [width]="100">
@@ -79,7 +82,7 @@
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
-    [height]="300" [(visible)]="creatpopupVisible">
+    [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatmaterial-basic>
