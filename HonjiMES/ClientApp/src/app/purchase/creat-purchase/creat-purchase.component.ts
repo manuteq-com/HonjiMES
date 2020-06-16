@@ -42,9 +42,12 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     SupplierselectBoxOptions: any;
     MaterialselectBoxOptions: any;
     SupplierList: any;
-    MaterialList: any;
+    MaterialBasicList: any;
+    WarehouseList: any;
+    WarehouseListAll: any;
     PurchasetypeList: any;
     TypeselectBoxOptions: any;
+    Warehouseval: any;
     Quantityval: number;
     OriginPriceval: number;
     Priceval: number;
@@ -53,6 +56,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     CreateNumberInfoVal: any;
     Quantityvalmax: number;
     saveCheck = true;
+
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
         this.formData = null;
@@ -91,11 +95,16 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/Materials/GetMaterials').subscribe(
+        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialList = s.data;
+                    this.MaterialBasicList = s.data;
                 }
+            }
+        );
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                this.WarehouseListAll = s.data;
             }
         );
         this.PurchasetypeList = myservice.getpurchasetypes();
@@ -146,7 +155,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         // this.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
         //     (s) => {
         //         if (s.success) {
-        //             this.MaterialList = s.data;
+        //             this.MaterialBasicList = s.data;
         //             this.Quantityvalmax = null;
         //             this.Quantityval = null;
         //             this.OriginPriceval = null;
@@ -160,17 +169,26 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         // );
     }
     selectvalueChanged(e, data) {
-        debugger;
+        // debugger;
         data.setValue(e.value);
         const today = new Date();
-        this.MaterialList.forEach(x => {
+        this.MaterialBasicList.forEach(x => {
             if (x.Id === e.value) {
                 this.Quantityvalmax = 999;
                 this.Quantityval = 1;
-                this.OriginPriceval = x.OriginPrice ? x.OriginPrice : 0;
-                this.Priceval = (x.Quantity * x.OriginPrice) ? (x.Quantity * x.OriginPrice) : 0;
+                this.OriginPriceval = x.Price ? x.Price : 0;
+                this.Priceval = x.Price ? x.Price : 0;
+                this.Warehouseval = 0;
+                this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
+                    (s) => {
+                        this.WarehouseList = s.data;
+                    }
+                );
             }
         });
+    }
+    WarehousevalvalueChanged(e, data) {
+        data.setValue(e.value);
     }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
@@ -196,8 +214,24 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         return true;
     }
-    saveCheckFalse(e) {
+    onInitNewRow(e) {
         this.saveCheck = false;
+        this.Quantityval = e.data.Quantity;
+        this.OriginPriceval = e.data.OriginPrice;
+        this.Priceval = e.data.Price;
+        this.WarehouseList = null;
+    }
+    onEditingStart(e) {
+        this.saveCheck = false;
+        this.Quantityval = e.data.Quantity;
+        this.OriginPriceval = e.data.OriginPrice;
+        this.Priceval = e.data.Price;
+        this.Warehouseval = e.data.WarehouseId;
+        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+            }
+        );
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {

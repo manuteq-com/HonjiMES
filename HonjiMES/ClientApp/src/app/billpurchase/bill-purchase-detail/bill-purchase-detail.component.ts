@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import $ from 'jquery';
 import { SendService } from 'src/app/shared/mylib';
+import { APIResponse } from 'src/app/app.module';
+import { Observable } from 'rxjs';
+
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',
@@ -14,7 +17,7 @@ export class BillPurchaseDetailComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkey: number;
     @Input() SupplierList: any;
-    @Input() MaterialList: any;
+    @Input() MaterialBasicList: any;
     allMode: string;
     checkBoxesMode: string;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
@@ -29,6 +32,8 @@ export class BillPurchaseDetailComponent implements OnInit {
     mod: string;
     keyID: any;
     bopData: any;
+    WarehouseList: any;
+
     constructor(private http: HttpClient) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
@@ -44,8 +49,15 @@ export class BillPurchaseDetailComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+            }
+        );
     }
-
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
     ngOnInit() {
     }
     cellClick(e) {
@@ -103,7 +115,7 @@ export class BillPurchaseDetailComponent implements OnInit {
     selectvalueChanged(e, data) {
         data.setValue(e.value);
         const today = new Date();
-        this.MaterialList.forEach(x => {
+        this.MaterialBasicList.forEach(x => {
             if (x.Id === e.value) {
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;

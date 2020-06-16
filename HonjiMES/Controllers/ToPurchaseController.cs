@@ -126,10 +126,10 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        var MaterialData = _context.Materials.Find(item.DataId);
-                        item.DataNo = MaterialData.MaterialNo;
-                        item.DataName = MaterialData.Name;
-                        item.Specification = MaterialData.Specification;
+                        var MaterialBasicData = _context.MaterialBasics.Find(item.DataId);
+                        item.DataNo = MaterialBasicData.MaterialNo;
+                        item.DataName = MaterialBasicData.Name;
+                        item.Specification = MaterialBasicData.Specification;
                         item.CreateTime = dt;
                         item.CreateUser = 1;
                     }

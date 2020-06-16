@@ -17,6 +17,8 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("material_basic_id", TypeName = "int(11)")]
+        public int MaterialBasicId { get; set; }
         [Required]
         [Column("material_no", TypeName = "varchar(50)")]
         public string MaterialNo { get; set; }
@@ -42,6 +44,10 @@ namespace HonjiMES.Models
         public int? Supplier { get; set; }
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
+        [Column("warehouse_id", TypeName = "int(11)")]
+        public int WarehouseId { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -50,12 +56,6 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("delete_flag", TypeName = "tinyint(4)")]
-        public sbyte DeleteFlag { get; set; }
-        [Column("warehouse_id", TypeName = "int(11)")]
-        public int WarehouseId { get; set; }
-        [Column("material_basic_id", TypeName = "int(11)")]
-        public int MaterialBasicId { get; set; }
 
         [ForeignKey(nameof(MaterialBasicId))]
         [InverseProperty("Materials")]

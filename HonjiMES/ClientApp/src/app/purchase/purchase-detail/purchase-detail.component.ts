@@ -1,20 +1,22 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 import { HttpClient } from '@angular/common/http';
 import { SendService } from '../../shared/mylib';
 import notify from 'devextreme/ui/notify';
+import { APIResponse } from 'src/app/app.module';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-purchase-detail',
   templateUrl: './purchase-detail.component.html',
   styleUrls: ['./purchase-detail.component.css']
 })
-export class PurchaseDetailComponent implements OnInit {
+export class PurchaseDetailComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkey: number;
     @Input() SupplierList: any;
-    @Input() MaterialList: any;
+    @Input() MaterialBasicList: any;
     allMode: string;
     checkBoxesMode: string;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
@@ -23,6 +25,8 @@ export class PurchaseDetailComponent implements OnInit {
     Quantityval: number;
     OriginPriceval: number;
     Priceval: number;
+    WarehouseList: any;
+
     constructor(private http: HttpClient) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
@@ -34,9 +38,18 @@ export class PurchaseDetailComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutPurchaseDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseDetail/' + key, 'DELETE')
         });
-     }
-
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
     ngOnInit() {
+    }
+    ngOnChanges() {
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+            }
+        );
     }
     to_purchaseClick(e) {
         debugger;

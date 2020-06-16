@@ -89,7 +89,7 @@
         <dxi-button hint="轉進貨" text="轉進貨" [onClick]="to_purchaseClick"></dxi-button>
     </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
-        <app-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialList]="MaterialList"></app-purchase-detail>
+        <app-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-purchase-detail>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"

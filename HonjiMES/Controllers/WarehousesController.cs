@@ -134,6 +134,26 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 用ID最倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseByMaterialBasic(int id)
+        {
+            var materialBasics = _context.MaterialBasics.Find(id);
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+
+            if (WarehouseData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
+        /// <summary>
         /// 新增倉庫
         /// </summary>
         /// <param name="id"></param>

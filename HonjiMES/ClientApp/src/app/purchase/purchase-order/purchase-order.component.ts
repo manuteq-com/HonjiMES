@@ -20,7 +20,7 @@ export class PurchaseOrderComponent implements OnInit {
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     SupplierList: any;
-    MaterialList: any;
+    MaterialBasicList: any;
     itemkey: number;
     mod: string;
     Controller = '/PurchaseHeads';
@@ -45,10 +45,10 @@ export class PurchaseOrderComponent implements OnInit {
                 }
             }
         );
-        this.GetData('/Materials/GetMaterials').subscribe(
+        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialList = s.data;
+                    this.MaterialBasicList = s.data;
                 }
             }
         );

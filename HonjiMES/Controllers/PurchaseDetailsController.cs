@@ -66,29 +66,30 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(data));
         }
 
-        // GET: api/Materials/5
+        // GET: api/MaterialBasics/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Material>> GetMaterialsByPurchase(int id)
+        public async Task<ActionResult<MaterialBasic>> GetMaterialBasicsByPurchase(int id)
         {
-            // Material material = new Material();
-            var material = await _context.PurchaseDetails.AsQueryable()
+            // MaterialBasic materialBasic = new MaterialBasic();
+            var materialBasic = await _context.PurchaseDetails.AsQueryable()
             .Where(x => x.DeleteFlag == 0 && x.PurchaseId == id)
-            .Join(_context.Materials, x => x.DataId, material => material.Id, (x, material) => new {
-                Id = material.Id,
-                MaterialNo = material.MaterialNo,
+            .Join(_context.MaterialBasics, x => x.DataId, materialBasic => materialBasic.Id, (x, materialBasic) => new {
+                Id = materialBasic.Id,
+                MaterialNo = materialBasic.MaterialNo,
                 MaterialName = x.DataName,
                 Specification = x.Specification,
                 Quantity = x.Quantity - x.PurchaseCount,
                 OriginPrice = x.OriginPrice,
-                Price = x.OriginPrice * (x.Quantity - x.PurchaseCount)
+                Price = x.OriginPrice * (x.Quantity - x.PurchaseCount),
+                WarehouseId = x.WarehouseId
             })
             .ToListAsync();
 
-            if (material == null)
+            if (materialBasic == null)
             {
                 return NotFound();
             }
-            return Ok(MyFun.APIResponseOK(material));
+            return Ok(MyFun.APIResponseOK(materialBasic));
         }
 
         /// <summary>

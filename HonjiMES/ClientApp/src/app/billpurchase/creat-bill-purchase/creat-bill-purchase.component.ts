@@ -7,6 +7,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import $ from 'jquery';
 import { BillofPurchaseDetail, CreateNumberInfo } from 'src/app/model/viewmodels';
+
 @Component({
     selector: 'app-creat-bill-purchase',
     templateUrl: './creat-bill-purchase.component.html',
@@ -41,7 +42,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
     PurchaseList: any;
-    MaterialList: any;
+    PurchaseTempList: any[];
+    MaterialBasicList: any;
+    MaterialBasicTempList: any[];
     PurchaseselectBoxOptions: any;
     changeMode: boolean;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
@@ -52,6 +55,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     checkBoxesMode: string;
     postval: any;
     CreateTimeDateBoxOptions: any;
+    Warehouseval: any;
+    WarehouseList: any;
+    WarehouseListAll: any;
 
     constructor(private http: HttpClient) {
         this.allMode = 'allPages';
@@ -72,7 +78,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
+        this.PurchaseTempList = [];
+        this.MaterialBasicTempList = [];
 
+        this.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                this.WarehouseListAll = s.data;
+            }
+        );
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
@@ -97,13 +110,6 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
-        // this.GetData('/Materials/GetMaterials').subscribe(
-        //     (s) => {
-        //         if (s.success) {
-        //             this.MaterialList = s.data;
-        //         }
-        //     }
-        // );
     }
     CreateTimeValueChange = async function(e) {
         // this.formData = this.myform.instance.option('formData');
@@ -145,7 +151,76 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         //     dataGrid.endUpdate();
         // }
     }
+    to_purchaseClick(e) {
+        debugger;
+        this.topurchase = this.dataGrid.instance.getSelectedRowsData();
+    }
+    selectSupplierValueChanged(e, data) {
+        data.setValue(e.value);
+        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseList = s.data;
+                    s.data.forEach(element => {
+                        if (!this.PurchaseTempList.some(x => x.PurchaseNo === element.PurchaseNo)) {
+                            this.PurchaseTempList.push(element);
+                        }
+                    });
+                }
+            }
+        );
+    }
+    selectPurchaseValueChanged(e, data) {
+        data.setValue(e.value);
+        this.WarehouseList = null;
+        this.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MaterialBasicList = s.data;
+                    s.data.forEach(element => {
+                        if (!this.MaterialBasicTempList.some(x => x.MaterialNo === element.MaterialNo)) {
+                            this.MaterialBasicTempList.push(element);
+                        }
+                    });
+                }
+            }
+        );
+    }
+    selectMateriaValueChanged(e, data) {
+        data.setValue(e.value);
+        this.MaterialBasicList.find(x => {
+            if (x.Id === e.value) {
+                this.Quantityval = x.Quantity;
+                this.OriginPriceval = x.OriginPrice;
+                this.Priceval = x.Quantity * x.OriginPrice;
+                this.Warehouseval = x.WarehouseId;
+                this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
+                    (s) => {
+                        this.WarehouseList = s.data;
+                        console.log(this.Warehouseval);
+                    }
+                );
+            }
+        });
+    }
+    WarehousevalvalueChanged(e, data) {
+        data.setValue(e.value);
+    }
+    QuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Quantityval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    OriginValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OriginPriceval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
     onInitNewRow(e) {
+        this.Quantityval = e.data.Quantity;
+        this.OriginPriceval = e.data.OriginPrice;
+        this.Priceval = e.data.Price;
+        this.WarehouseList = null;
         // debugger;
         // const dataGrid = e.component;
         // dataGrid.beginUpdate();
@@ -173,60 +248,23 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.Quantityval = 0;
             this.OriginPriceval = 0;
             this.Priceval = 0;
+            this.Warehouseval = 0;
         }
     }
     onRowInserted(e) {
         debugger;
-    }
-    to_purchaseClick(e) {
-        debugger;
-        this.topurchase = this.dataGrid.instance.getSelectedRowsData();
-    }
-    selectSupplierValueChanged(e, data) {
-        data.setValue(e.value);
-        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + e.value).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.PurchaseList = s.data;
-                }
-            }
-        );
-    }
-    selectPurchaseValueChanged(e, data) {
-        data.setValue(e.value);
-        this.GetData('/PurchaseDetails/GetMaterialsByPurchase/' + e.value).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialList = s.data;
-                }
-            }
-        );
-    }
-    selectMateriaValueChanged(e, data) {
-        data.setValue(e.value);
-        this.MaterialList.find(x => {
-            if (x.Id === e.value) {
-                this.Quantityval = x.Quantity;
-                this.OriginPriceval = x.OriginPrice;
-                this.Priceval = x.Quantity * x.OriginPrice;
-            }
-        });
-    }
-    QuantityValueChanged(e, data) {
-        data.setValue(e.value);
-        this.Quantityval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
-    }
-    OriginValueChanged(e, data) {
-        data.setValue(e.value);
-        this.OriginPriceval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onEditingStart(e) {
         debugger;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
+        this.Warehouseval = e.data.WarehouseId;
+        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+            }
+        );
     }
     onDataErrorOccurred(e) {
         notify({

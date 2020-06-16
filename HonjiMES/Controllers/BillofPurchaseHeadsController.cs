@@ -236,11 +236,11 @@ namespace HonjiMES.Controllers
                 foreach (var item in Detail)
                 {
                     var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId).FirstOrDefault();
-                    var Material = _context.Materials.Find(item.DataId);
+                    var MaterialBasic = _context.MaterialBasics.Find(item.DataId);
                     item.PurchaseDetailId = PurchaseDetail.Id;
-                    item.DataName = Material.Name;
-                    item.DataNo = Material.MaterialNo;
-                    item.Specification = Material.Specification;
+                    item.DataName = MaterialBasic.Name;
+                    item.DataNo = MaterialBasic.MaterialNo;
+                    item.Specification = MaterialBasic.Specification;
                     item.CreateTime = dt;
                     item.CreateUser = 1;
                     Details.Add(item);

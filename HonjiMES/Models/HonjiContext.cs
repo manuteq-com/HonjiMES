@@ -312,6 +312,8 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.Property(e => e.WarehouseId).HasComment("倉別id");
+
                 entity.HasOne(d => d.BillofPurchase)
                     .WithMany(p => p.BillofPurchaseDetails)
                     .HasForeignKey(d => d.BillofPurchaseId)
@@ -1261,6 +1263,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WarehouseId).HasComment("倉別id");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.PurchaseDetails)

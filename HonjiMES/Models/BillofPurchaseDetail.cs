@@ -46,6 +46,8 @@ namespace HonjiMES.Models
         public int OriginPrice { get; set; }
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
+        [Column("warehouse_id", TypeName = "int(11)")]
+        public int? WarehouseId { get; set; }
         [Column("check_status", TypeName = "int(11)")]
         public int CheckStatus { get; set; }
         [Column("check_count_in", TypeName = "int(11)")]
@@ -58,20 +60,20 @@ namespace HonjiMES.Models
         public int CheckPriceOut { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("create_time", TypeName = "timestamp")]
-        public DateTime CreateTime { get; set; }
-        [Column("create_user", TypeName = "int(11)")]
-        public int CreateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime UpdateTime { get; set; }
-        [Column("update_user", TypeName = "int(11)")]
-        public int UpdateUser { get; set; }
         [Column("delivered", TypeName = "int(11)")]
         public int? Delivered { get; set; }
         [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
+        [Column("create_user", TypeName = "int(11)")]
+        public int CreateUser { get; set; }
+        [Column("update_user", TypeName = "int(11)")]
+        public int UpdateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
 
         [ForeignKey(nameof(BillofPurchaseId))]
         [InverseProperty(nameof(BillofPurchaseHead.BillofPurchaseDetails))]

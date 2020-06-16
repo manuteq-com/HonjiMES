@@ -12,16 +12,19 @@
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
     <dxi-column dataField="DataId" caption="品號" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DataId" caption="品名" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DataId" caption="規格" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
-    <dxi-column dataField="PurchaseCount" caption="已交貨數量" dataType="number" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
+        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="PurchaseCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
     <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>

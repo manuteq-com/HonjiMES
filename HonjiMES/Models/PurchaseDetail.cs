@@ -43,10 +43,14 @@ namespace HonjiMES.Models
         public int OriginPrice { get; set; }
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
+        [Column("warehouse_id", TypeName = "int(11)")]
+        public int? WarehouseId { get; set; }
         [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        [Column("delete_flag", TypeName = "tinyint(4)")]
+        public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -55,8 +59,6 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
-        [Column("delete_flag", TypeName = "tinyint(4)")]
-        public sbyte DeleteFlag { get; set; }
 
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.PurchaseDetails))]
