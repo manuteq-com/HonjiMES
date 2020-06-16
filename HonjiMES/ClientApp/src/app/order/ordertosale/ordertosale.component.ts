@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
-import { SendService } from '../shared/mylib';
 import { Observable } from 'rxjs';
-import { APIResponse } from '../app.module';
 import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
-import { CreateNumberInfo } from '../model/viewmodels';
+import { SendService } from 'src/app/shared/mylib';
+import { APIResponse } from 'src/app/app.module';
+import { CreateNumberInfo } from 'src/app/model/viewmodels';
 
 @Component({
     selector: 'app-ordertosale',
