@@ -185,15 +185,16 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
             }
+            var tempPurchaseCount = PurchaseDetail.PurchaseCount;
             PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = 1;
             if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
-                return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際採購數量： " + PurchaseDetail.Quantity + " ]"));
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
             }
             
             //入庫
-            var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
+            var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
             if (Material == null)
             {
                 return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
@@ -269,8 +270,8 @@ namespace HonjiMES.Controllers
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = 1;
             
-            //入庫
-            var Material = _context.Materials.Find(BillofPurchaseDetails.DataId);
+            //出庫(驗退)
+            var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
             if (Material == null)
             {
                 return Ok(MyFun.APIResponseError("原料庫存資料有誤"));

@@ -200,8 +200,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.MaterialBasics.Remove(materialBasic);
+            materialBasic.DeleteFlag = 1;
+            // _context.MaterialBasics.Remove(materialBasic);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
