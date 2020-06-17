@@ -30,6 +30,14 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
 
+        // GET: api/MaterialBasics
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasicsAsc()
+        {
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.MaterialNo).ToListAsync();
+            return Ok(MyFun.APIResponseOK(materialBasic));
+        }
+
         // GET: api/MaterialBasics/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MaterialBasic>> GetMaterialBasic(int id)

@@ -30,7 +30,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(productBasic));
         }
 
-        // GET: api/ProductBasics/5
+        // GET: api/ProductBasics
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductBasic>> GetProductBasic(int id)
         {

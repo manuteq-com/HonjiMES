@@ -20,8 +20,10 @@ export class OerdrdetailListComponent implements OnInit {
     @Input() itemkey: number;
     @Input() ProductBasicList: any;
     url = location.origin + '/api';
-    popupVisible = false;
-    tosealkey: any;
+    popupVisiblePurchase: boolean;
+    popupVisibleSale: boolean;
+    topurchasekey: any;
+    tosalekey: any;
     mod: string;
     dataSourceDB: any;
     controller: string;
@@ -29,6 +31,8 @@ export class OerdrdetailListComponent implements OnInit {
     checkBoxesMode: string;
     disabledValues: number[];
     constructor(private http: HttpClient) {
+        this.popupVisiblePurchase = false;
+        this.popupVisibleSale = false;
         this.disabledValues = [];
         this.onCellPrepared = this.onCellPrepared.bind(this);
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
@@ -46,17 +50,55 @@ export class OerdrdetailListComponent implements OnInit {
     }
     ngOnInit() {
     }
+    to_purchaseClick(e) {
+        this.topurchasekey = null;
+        this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
+        if (this.topurchasekey.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何訂單項目',
+                html: '請勾選要轉採購的訂單項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            Swal.fire({
+                showCloseButton: true,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '轉採購',
+                html: '如需合併採購單，請點選[輸入採購單]!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#71c016',
+                cancelButtonText: '輸入採購單',
+                confirmButtonText: '新建採購單'
+            }).then(async (result) => {
+                if (result.value) {
+                    this.mod = 'add';
+                    this.popupVisiblePurchase = true;
+                } else if (result.dismiss === Swal.DismissReason.cancel)  {
+                    this.mod = 'merge';
+                    this.popupVisiblePurchase = true;
+                } else if (result.dismiss === Swal.DismissReason.close)  {
+                    this.popupVisiblePurchase = false;
+                }
+            });
+        }
+    }
     to_saleClick(e) {
-        this.tosealkey = null;
-        this.tosealkey = this.dataGrid.instance.getSelectedRowsData();
-        if (this.tosealkey.length === 0) {
+        this.tosalekey = null;
+        this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
+        if (this.tosalekey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
                 allowOutsideClick: false,
                 title: '沒有勾選任何訂單項目',
                 html: '請勾選要轉銷貨的訂單項目',
                 icon: 'warning',
-                timer: 1000
+                timer: 3000
             });
         } else {
             Swal.fire({
@@ -74,12 +116,12 @@ export class OerdrdetailListComponent implements OnInit {
             }).then(async (result) => {
                 if (result.value) {
                     this.mod = 'add';
-                    this.popupVisible = true;
+                    this.popupVisibleSale = true;
                 } else if (result.dismiss === Swal.DismissReason.cancel)  {
                     this.mod = 'merge';
-                    this.popupVisible = true;
+                    this.popupVisibleSale = true;
                 } else if (result.dismiss === Swal.DismissReason.close)  {
-                    this.popupVisible = false;
+                    this.popupVisibleSale = false;
                 }
             });
         }
@@ -111,7 +153,7 @@ export class OerdrdetailListComponent implements OnInit {
         }
       }
     popup_result(e) {
-        this.popupVisible = false;
+        this.popupVisibleSale = false;
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();
         notify({

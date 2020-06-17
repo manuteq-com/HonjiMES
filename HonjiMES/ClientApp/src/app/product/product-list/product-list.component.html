@@ -37,7 +37,7 @@
             <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
-            <dxi-item dataField="MaterialId"></dxi-item>
+            <!-- <dxi-item dataField="MaterialId"></dxi-item> -->
             <dxi-item dataField="WarehouseId"></dxi-item>
             <dxi-item dataField="ProductNumber" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxo-form>
@@ -59,10 +59,10 @@
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="廠內規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Price" caption="單價"></dxi-column>
-    <dxi-column dataField="MaterialId" caption="元件品號">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id">
+    <!-- <dxi-column dataField="MaterialId" caption="元件品號">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id">
         </dxo-lookup>
-    </dxi-column>
+    </dxi-column> -->
     <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
     <dxi-column dataField="WarehouseId" caption="存放庫別">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">

@@ -3,6 +3,7 @@
     <div class="col-md-10 col-sm-10">
     </div>
     <div class="col-md-1 col-sm-1">
+        <!-- <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button> -->
     </div>
     <div class="col-md-1 col-sm-1">
         <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
@@ -82,9 +83,21 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="popupVisible">
+<!-- <dx-popup [showTitle]="true" title="轉採購" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="popupVisiblePurchase">
     <div *dxTemplate="let data of 'content'">
-        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosealkey" [modval]="mod"></app-ordertosale>
+        <app-ordertopurchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [modval]="mod"></app-ordertopurchase>
+    </div>
+</dx-popup> -->
+<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="popupVisiblePurchase">
+    <div *dxTemplate="let data of 'content'">
+        <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [modval]="mod"></app-creat-purchase>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="popupVisibleSale">
+    <div *dxTemplate="let data of 'content'">
+        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
     </div>
 </dx-popup>

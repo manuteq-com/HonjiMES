@@ -44,9 +44,9 @@ namespace HonjiMES.Models
         [Column("price")]
         public float Price { get; set; }
         [Column("material_id", TypeName = "int(11)")]
-        public int MaterialId { get; set; }
+        public int? MaterialId { get; set; }
         [Column("material_require", TypeName = "int(11)")]
-        public int MaterialRequire { get; set; }
+        public int? MaterialRequire { get; set; }
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]

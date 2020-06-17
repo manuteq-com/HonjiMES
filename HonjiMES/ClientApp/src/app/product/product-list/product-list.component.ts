@@ -23,7 +23,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     dataSourceDB: any;
     formData: any;
     Controller = '/Products';
-    MaterialList: any;
+    MaterialBasicList: any;
     WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
@@ -47,22 +47,14 @@ export class ProductListComponent implements OnInit, OnChanges {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProduct', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProduct/' + key, 'DELETE')
         });
-        this.GetData('/Materials/GetMaterials').subscribe(
+        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
-                console.log(s);
-                this.MaterialList = s.data;
-                if (s.success) {
-
-                }
+                this.MaterialBasicList = s.data;
             }
         );
         this.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
-                console.log(s);
                 this.WarehouseList = s.data;
-                if (s.success) {
-
-                }
             }
         );
     }
