@@ -12,12 +12,26 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("adjust_no", TypeName = "varchar(50)")]
+        public string AdjustNo { get; set; }
+        [Column("link_order", TypeName = "varchar(50)")]
+        public string LinkOrder { get; set; }
         [Column("material_id", TypeName = "int(11)")]
         public int MaterialId { get; set; }
         [Column("original", TypeName = "int(11)")]
         public int Original { get; set; }
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        [Column("price")]
+        public float? Price { get; set; }
+        [Column("price_all")]
+        public float? PriceAll { get; set; }
+        [Column("unit", TypeName = "varchar(50)")]
+        public string Unit { get; set; }
+        [Column("unit_count")]
+        public float? UnitCount { get; set; }
+        [Column("unit_count_all")]
+        public float? UnitCountAll { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
         [Column("message", TypeName = "varchar(500)")]

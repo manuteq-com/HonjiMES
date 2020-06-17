@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HonjiMES.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonjiMES.Controllers
 {
@@ -22,6 +23,30 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+        
+        /// <summary>
+        /// 取得原料庫存調整單號
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<MaterialLog>> GetMaterialAdjustNo()
+        {
+            var AdjustNoName = "AJM";
+            var NoData = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
+                var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
+                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var AdjustData = new MaterialLog{
+                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+            };
+            return Ok(MyFun.APIResponseOK(AdjustData));
+        }
+
         /// <summary>
         /// 修改庫存
         /// </summary>
@@ -35,12 +60,20 @@ namespace HonjiMES.Controllers
             if (inventorychange.mod == "material")
             {
                 var Material = _context.Materials.Find(inventorychange.id);
-                if (!(Material.MaterialLogs.Any()))//同步資料用，建立原始庫存數
-                {
-                    Material.MaterialLogs.Add(new MaterialLog { Quantity = Material.Quantity, Message = "原始數量", CreateTime = dt, CreateUser = UserID });
-                }
-                Material.MaterialLogs.Add(new MaterialLog { Quantity = inventorychange.quantity, Original= Material.Quantity, Message = inventorychange.Message, Reason = inventorychange.Reason, CreateTime = dt, CreateUser = UserID });
-                Material.Quantity += inventorychange.quantity;
+                // if (!(Material.MaterialLogs.Any()))//同步資料用，建立原始庫存數
+                // {
+                //     Material.MaterialLogs.Add(new MaterialLog { 
+                //         Quantity = Material.Quantity, 
+                //         Message = "原始數量", 
+                //         CreateTime = dt, 
+                //         CreateUser = UserID 
+                //     });
+                // }
+                inventorychange.MaterialLog.Original = Material.Quantity;
+                inventorychange.MaterialLog.CreateTime = dt;
+                inventorychange.MaterialLog.CreateUser = UserID;
+                Material.MaterialLogs.Add(inventorychange.MaterialLog);
+                Material.Quantity += inventorychange.MaterialLog.Quantity;
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK(Material));
             }

@@ -26,12 +26,12 @@ namespace HonjiMES.Models
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime UpdateTime { get; set; }
 
         [ForeignKey(nameof(ProductId))]
         [InverseProperty("ProductLogs")]

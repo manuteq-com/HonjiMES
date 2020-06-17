@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import CustomStore from 'devextreme/data/custom_store';
@@ -13,15 +13,14 @@ import { InventoryChange } from '../model/viewmodels';
     templateUrl: './inventory-change.component.html',
     styleUrls: ['./inventory-change.component.css']
 })
-export class InventoryChangeComponent implements OnInit {
+export class InventoryChangeComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     buttondisabled = false;
-    formData: InventoryChange;
-    dataSourceDB: any;
+    formData: any;
     postval: any;
     readOnly: boolean;
     showColon: boolean;
@@ -48,11 +47,34 @@ export class InventoryChangeComponent implements OnInit {
     itemval2: string;
     itemval3: string;
     itemval4: string;
-    editorOptions: any;
     minval: number;
+    QuantityEditorOptions: any;
+    PriceEditorOptions: any;
+    UnitCountEditorOptions: any;
+
+    constructor(private http: HttpClient) {
+        // debugger;
+        this.CustomerVal = null;
+        this.formData = null;
+        this.editOnkeyPress = true;
+        this.enterKeyAction = 'moveFocus';
+        this.enterKeyDirection = 'row';
+        this.labelLocation = 'left';
+        this.readOnly = false;
+        this.showColon = true;
+        this.minColWidth = 100;
+        this.colCount = 2;
+        this.url = location.origin + '/api';
+        this.controller = '/OrderDetails';
+        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
+        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
+
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>('/api' + apiUrl);
+    }
     ngOnInit() {
     }
-    // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
         if (this.myform) {
             this.myform.instance.resetValues();
@@ -61,7 +83,16 @@ export class InventoryChangeComponent implements OnInit {
         this.itemval2 = '';
         this.itemval3 = '';
         this.minval = 0;
+        debugger;
         if (this.modval === 'material') {
+            this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
+                (s) => {
+                    if (s.success) {
+                        s.data.AdjustNo = '';
+                        this.formData = s.data;
+                    }
+                }
+            );
             this.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
@@ -73,7 +104,14 @@ export class InventoryChangeComponent implements OnInit {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
-                        this.editorOptions = {showSpinButtons: true, mode: 'number', format: '#0', value: 0, min: this.minval};
+                        this.QuantityEditorOptions = {
+                            showSpinButtons: true,
+                            mode: 'number',
+                            format: '#0',
+                            value: 0,
+                            min: this.minval,
+                            onValueChanged: this.QuantityValueChanged.bind(this)
+                        };
                     }
                 }
             );
@@ -90,31 +128,37 @@ export class InventoryChangeComponent implements OnInit {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
-                        this.editorOptions = {showSpinButtons: true, mode: 'number', format: '#0', value: 0, min: this.minval};
+                        this.QuantityEditorOptions = {
+                            showSpinButtons: true,
+                            mode: 'number',
+                            format: '#0',
+                            value: 0,
+                            min: this.minval,
+                            onValueChanged: this.QuantityValueChanged.bind(this)
+                        };
                     }
                 }
             );
         }
     }
-    constructor(private http: HttpClient) {
-        // debugger;
-        this.CustomerVal = null;
-        this.formData = null;
-        this.editOnkeyPress = true;
-        this.enterKeyAction = 'moveFocus';
-        this.enterKeyDirection = 'row';
-        this.labelLocation = 'left';
-        this.readOnly = false;
-        this.showColon = true;
-        this.minColWidth = 100;
-        this.colCount = 1;
-        this.url = location.origin + '/api';
-        this.dataSourceDB = [];
-        this.controller = '/OrderDetails';
-
+    QuantityValueChanged(e) {
+        this.formData.PriceAll = this.formData.Price * e.value;
+        this.formData.UnitCountAll = this.formData.UnitCount * e.value;
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
+    PriceValueChanged(e) {
+        this.formData.PriceAll = this.formData.Quantity * e.value;
+    }
+    UnitCountValueChanged(e) {
+        this.formData.UnitCountAll = this.formData.Quantity * e.value;
+    }
+    refreshAdjustNo() {
+        this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData.AdjustNo = s.data.AdjustNo;
+                }
+            }
+        );
     }
     validate_before(): boolean {
         // 表單驗證
@@ -137,12 +181,12 @@ export class InventoryChangeComponent implements OnInit {
             return;
         }
         this.formData = this.myform.instance.option('formData');
-        this.postval = this.formData as InventoryChange;
+        this.postval = new InventoryChange();
+        this.postval.MaterialLog = this.formData;
         this.postval.id = this.itemkeyval;
         this.postval.mod = this.modval;
         const sendRequest = await SendService.sendRequest(this.http, '/Inventory/inventorychange', 'POST', { values: this.postval });
         if (sendRequest) {
-            this.dataSourceDB = null;
             this.myform.instance.resetValues();
             e.preventDefault();
             this.childOuter.emit(true);

@@ -5,15 +5,39 @@
     <label>{{itemval4}}</label><br>
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-        <dxi-item dataField="quantity" editorType="dxNumberBox" dataType="number" [editorOptions]="editorOptions">
+
+        <dxi-item dataField="AdjustNo">
+            <dxo-label text="調整單號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="LinkOrder">
+            <dxo-label text="關連單號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
             <dxi-validation-rule type="required" message="增減數量 必填"></dxi-validation-rule>
             <dxo-label text="增減數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="message"  editorType="dxTextArea">
+        <dxi-item dataField="Unit">
+            <dxo-label text="單位"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
+            <dxo-label text="調整單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCount" [editorOptions]="UnitCountEditorOptions">
+            <dxo-label text="單位數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="調整總價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCountAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="單位總量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Message"  editorType="dxTextArea">
             <dxi-validation-rule type="required" message="原因 必填"></dxi-validation-rule>
             <dxo-label text="原因"></dxo-label>
         </dxi-item>
+
     </dx-form>
+
     <div class="current-value">
         <span>{{CustomerVal}}</span>
     </div>
@@ -21,5 +45,8 @@
     <div class="col-auto-12 mt-1">
         <dx-button horizontalAlignment="left" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="buttondisabled"></dx-button>
+        <dx-button horizontalAlignment="right" text='更新調整單號' type='default' icon='refresh' [useSubmitBehavior]="false"
+            (onClick)="refreshAdjustNo()"></dx-button>
     </div>
+
 </form>
