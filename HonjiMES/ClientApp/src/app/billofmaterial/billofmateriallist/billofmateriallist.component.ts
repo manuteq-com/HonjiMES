@@ -31,7 +31,7 @@ export class BillofmateriallistComponent implements OnInit {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetProducts', 'GET', { loadOptions, remote }),
+                SendService.sendRequest(this.http, this.Controller + '/GetProductBasics', 'GET', { loadOptions, remote }),
             byKey: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>

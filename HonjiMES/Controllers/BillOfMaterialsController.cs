@@ -32,6 +32,7 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+
         /// <summary>
         /// 取BOM表的資料列表
         /// </summary>
@@ -43,6 +44,7 @@ namespace HonjiMES.Controllers
             var BillOfMaterials = await _context.BillOfMaterials.AsQueryable().ToListAsync();
             return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
+
         /// <summary>
         /// 用ID取BOM表的資料
         /// </summary>
@@ -61,6 +63,26 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(billOfMaterial));
         }
+
+        /// <summary>
+        /// 用PriductID取BOM表的資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetBillOfMaterialByProductBasic(int id)
+        {
+            var billOfMaterial = await _context.BillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync();
+
+            if (billOfMaterial == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(MyFun.APIResponseOK(billOfMaterial));
+        }
+        
         /// <summary>
         /// 更新BOM表資料
         /// </summary>
@@ -98,6 +120,7 @@ namespace HonjiMES.Controllers
 
             return NoContent();
         }
+
         /// <summary>
         /// 新增BOM表資料
         /// </summary>
@@ -298,7 +321,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpGet]
         //public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] FromQuery FromQuery)
-        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] DataSourceLoadOptions FromQuery)
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProductBasics([FromQuery] DataSourceLoadOptions FromQuery)
         {
 
             //var ProductBasict = _context.ProductBasics.AsEnumerable();

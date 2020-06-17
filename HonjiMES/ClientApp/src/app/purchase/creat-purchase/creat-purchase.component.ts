@@ -56,6 +56,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     CreateNumberInfoVal: any;
     Quantityvalmax: number;
     saveCheck = true;
+    showdisabled: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
@@ -123,6 +124,57 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
+        this.dataSourceDB = [];
+        if (this.modval === 'merge') {
+            this.showdisabled = false;
+        } else {
+            this.showdisabled = true;
+        }
+        if (this.itemkeyval != null) {
+            this.itemkeyval.forEach(x => {
+
+                this.GetData('/BillOfMaterials/GetBillOfMaterialByProductBasic/' + x.ProductBasicId).subscribe(
+                    (s) => {
+                        debugger;
+                        if (s.success) {
+                            this.dataSourceDB.push({
+                                Serial: x.Serial,
+                                DataId: s.data[0].MaterialBasicId,
+                                WarehouseId: s.data[0].Id,
+                                Quantity: x.Quantity,
+                                OriginPrice: x.OriginPrice,
+                                Price: x.Quantity * x.OriginPrice,
+                                DeliveryTime: new Date()
+                            });
+                        }
+                    }
+                );
+                // this.GetData('/Warehouses/GetWarehouseByProductBasic/' + x.ProductBasicId).subscribe(
+                //     (s) => {
+                //         if (s.success) {
+                //             this.dataSourceDB.push({
+                //                 Serial: x.Serial,
+                //                 DataId: x.ProductBasicId,
+                //                 WarehouseId: s.data[0].Id,
+                //                 Quantity: x.Quantity,
+                //                 OriginPrice: x.OriginPrice,
+                //                 Price: x.Quantity * x.OriginPrice,
+                //                 DeliveryTime: new Date()
+
+                //                 // DataId: 394
+                //                 // DeliveryTime: Wed Jun 17 2020 00:00:00 GMT+0800 (台北標準時間) {}
+                //                 // OriginPrice: 0
+                //                 // Price: 0
+                //                 // Quantity: 1
+                //                 // Serial: "1959f2f9-44dd-299b-552a-b1352e927bcc"
+                //                 // WarehouseId: 1
+                //             });
+                //         }
+                //     }
+                // );
+                // this.dataSourceDB.push(Object.assign({}, x));
+            });
+        }
         this.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {

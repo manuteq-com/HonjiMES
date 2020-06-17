@@ -72,6 +72,7 @@ import { CreatmaterialBasicComponent } from './material/creatmaterial-basic/crea
 import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
 import { ReceiveDetailListComponent } from './receive/receivedetail-list/receivedetail-list.component';
 import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return/bill-purchase-return.component';
+import { OrdertopurchaseComponent } from './order/ordertopurchase/ordertopurchase.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -151,6 +152,7 @@ import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return
         ReceiveListComponent,
         ReceiveDetailListComponent,
         BillPurchaseReturnComponent,
+        OrdertopurchaseComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
