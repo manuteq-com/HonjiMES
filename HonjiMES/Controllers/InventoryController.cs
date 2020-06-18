@@ -48,6 +48,29 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 取得成品庫存調整單號
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<ProductLog>> GetProductAdjustNo()
+        {
+            var AdjustNoName = "AJP";
+            var NoData = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
+                var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
+                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            var AdjustData = new ProductLog{
+                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+            };
+            return Ok(MyFun.APIResponseOK(AdjustData));
+        }
+
+        /// <summary>
         /// 修改庫存
         /// </summary>
         /// <param name="inventorychange">修改內容</param>
@@ -80,12 +103,20 @@ namespace HonjiMES.Controllers
             else if (inventorychange.mod == "product")
             {
                 var Products = _context.Products.Find(inventorychange.id);
-                if (!(Products.ProductLogs.Any()))//同步資料用，建立原始庫存數
-                {
-                    Products.ProductLogs.Add(new ProductLog { Quantity = Products.Quantity, Message = "原始數量", CreateTime = dt, CreateUser = UserID });
-                }
-                Products.ProductLogs.Add(new ProductLog { Quantity = inventorychange.quantity, Original = Products.Quantity, Message = inventorychange.Message, Reason = inventorychange.Reason, CreateTime = dt, CreateUser = UserID });
-                Products.Quantity += inventorychange.quantity;
+                // if (!(Products.ProductLogs.Any()))//同步資料用，建立原始庫存數
+                // {
+                //     Products.ProductLogs.Add(new ProductLog { 
+                //         Quantity = Products.Quantity, 
+                //         Message = "原始數量", 
+                //         CreateTime = dt, 
+                //         CreateUser = UserID 
+                //     });
+                // }
+                inventorychange.ProductLog.Original = Products.Quantity;
+                inventorychange.ProductLog.CreateTime = dt;
+                inventorychange.ProductLog.CreateUser = UserID;
+                Products.ProductLogs.Add(inventorychange.ProductLog);
+                Products.Quantity += inventorychange.ProductLog.Quantity;
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK(Products));
             }

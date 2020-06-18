@@ -34,6 +34,7 @@ namespace HonjiMES.Models
         public string Message { get; internal set; }
         
         public MaterialLog MaterialLog { get; set; }
+        public ProductLog ProductLog { get; set; }
     }
     /// <summary>
     /// 建立單號

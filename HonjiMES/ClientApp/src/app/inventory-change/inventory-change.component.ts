@@ -116,7 +116,14 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.modval === 'product') {
-
+            this.GetData('/Inventory/GetProductAdjustNo').subscribe(
+                (s) => {
+                    if (s.success) {
+                        s.data.AdjustNo = '';
+                        this.formData = s.data;
+                    }
+                }
+            );
             this.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
@@ -152,13 +159,23 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.formData.UnitCountAll = this.formData.Quantity * e.value;
     }
     refreshAdjustNo() {
-        this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.formData.AdjustNo = s.data.AdjustNo;
+        if (this.modval === 'material') {
+            this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData.AdjustNo = s.data.AdjustNo;
+                    }
                 }
-            }
-        );
+            );
+        } else if (this.modval === 'product') {
+            this.GetData('/Inventory/GetProductAdjustNo').subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData.AdjustNo = s.data.AdjustNo;
+                    }
+                }
+            );
+        }
     }
     validate_before(): boolean {
         // 表單驗證
@@ -182,7 +199,11 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         }
         this.formData = this.myform.instance.option('formData');
         this.postval = new InventoryChange();
-        this.postval.MaterialLog = this.formData;
+        if (this.modval === 'material') {
+            this.postval.MaterialLog = this.formData;
+        } else if (this.modval === 'product') {
+            this.postval.ProductLog = this.formData;
+        }
         this.postval.id = this.itemkeyval;
         this.postval.mod = this.modval;
         const sendRequest = await SendService.sendRequest(this.http, '/Inventory/inventorychange', 'POST', { values: this.postval });
