@@ -269,9 +269,15 @@ namespace HonjiMES.Controllers
                 if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
-                    
-                    // 暫時停用
-                    // item.Product.ProductLogs.Add(new ProductLog { Original = item.Product.Quantity, Quantity = -item.Quantity, Reason = item.Sale.SaleNo + "銷貨", CreateTime = dt, CreateUser = 1 });
+                    item.Product.ProductLogs.Add(new ProductLog { 
+                        LinkOrder = item.Sale.SaleNo,
+                        Original = item.Product.Quantity,
+                        Quantity = -item.Quantity,
+                        Price = item.Price,
+                        PriceAll = item.Quantity * item.Price,
+                        Message = "銷貨",
+                        CreateUser = 1
+                    });
                     item.Product.Quantity -= item.Quantity;
                     item.Product.QuantityAdv -= item.Quantity;
                     item.Status = 1;//1已銷貨
@@ -366,7 +372,16 @@ namespace HonjiMES.Controllers
                 if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
                     var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
-                    ProductsData.ProductLogs.Add(new ProductLog { Original = ProductsData.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + " 銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    ProductsData.ProductLogs.Add(new ProductLog { 
+                        LinkOrder = ReturnSale.ReturnNo,
+                        Original = ProductsData.Quantity,
+                        Quantity = ReturnSale.Quantity,
+                        Price = ProductsData.Price,
+                        PriceAll = ProductsData.Price * ReturnSale.Quantity,
+                        Reason = ReturnSale.Reason,
+                        Message = "銷退",
+                        CreateUser = 1
+                    });
                     ProductsData.Quantity += ReturnSale.Quantity;
                     ProductsData.UpdateTime = dt;
                     ProductsData.UpdateUser = 1;

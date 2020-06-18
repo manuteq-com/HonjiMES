@@ -199,7 +199,18 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
             }
-            Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = BillofPurchaseCheckin.Quantity, Message = "進貨檢驗入庫" });
+            Material.MaterialLogs.Add(new MaterialLog { 
+                LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                Original = Material.Quantity,
+                Quantity = BillofPurchaseCheckin.Quantity,
+                Price = BillofPurchaseCheckin.Price,
+                PriceAll = BillofPurchaseCheckin.PriceAll,
+                Unit = BillofPurchaseCheckin.Unit,
+                UnitCount = BillofPurchaseCheckin.UnitCount,
+                UnitCountAll = BillofPurchaseCheckin.UnitCountAll,
+                Message = "進貨檢驗入庫",
+                CreateUser = 1
+            });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
 
             //檢查進貨單明細是否都完成進貨
@@ -276,7 +287,20 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
             }
-            Material.MaterialLogs.Add(new MaterialLog { Original = Material.Quantity, Quantity = (int)BillofPurchaseReturn.Quantity, Message = "進貨驗退出庫" });
+            
+            Material.MaterialLogs.Add(new MaterialLog { 
+                LinkOrder = BillofPurchaseReturn.ReturnNo,
+                Original = Material.Quantity,
+                Quantity = (int)BillofPurchaseReturn.Quantity,
+                Price = BillofPurchaseReturn.Price,
+                PriceAll = BillofPurchaseReturn.PriceAll,
+                Unit = BillofPurchaseReturn.Unit,
+                UnitCount = BillofPurchaseReturn.UnitCount,
+                UnitCountAll = BillofPurchaseReturn.UnitCountAll,
+                Reason = BillofPurchaseReturn.Reason,
+                Message = "進貨驗退出庫",
+                CreateUser = 1
+            });
             Material.Quantity -= (int)BillofPurchaseReturn.Quantity;
 
             //檢查進貨單明細是否都完成進貨(此為驗退，訂單狀態需修改?)

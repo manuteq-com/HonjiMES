@@ -95,6 +95,7 @@ namespace HonjiMES.Controllers
                 inventorychange.MaterialLog.Original = Material.Quantity;
                 inventorychange.MaterialLog.CreateTime = dt;
                 inventorychange.MaterialLog.CreateUser = UserID;
+                inventorychange.MaterialLog.Message = "原料庫存調整";
                 Material.MaterialLogs.Add(inventorychange.MaterialLog);
                 Material.Quantity += inventorychange.MaterialLog.Quantity;
                 await _context.SaveChangesAsync();
@@ -115,6 +116,7 @@ namespace HonjiMES.Controllers
                 inventorychange.ProductLog.Original = Products.Quantity;
                 inventorychange.ProductLog.CreateTime = dt;
                 inventorychange.ProductLog.CreateUser = UserID;
+                inventorychange.ProductLog.Message = "成品庫存調整";
                 Products.ProductLogs.Add(inventorychange.ProductLog);
                 Products.Quantity += inventorychange.ProductLog.Quantity;
                 await _context.SaveChangesAsync();
