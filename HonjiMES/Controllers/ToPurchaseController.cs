@@ -82,34 +82,14 @@ namespace HonjiMES.Controllers
         {
             try
             {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
                 var key = purchaseHead.Type == 10 ? "PI" : "PO";
-
                 var dt = DateTime.Now;
-                // var PurchaseNo = dt.ToString("yyMMdd");
-                // var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
-                // var NoCount = NoData.Count() + 1;
-                // if (NoCount != 1) {
-                //     var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
-                //     var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
-                //     if (NoCount <= NoLast) {
-                //         NoCount = NoLast + 1;
-                //     }
-                // }
-                // var PurchaseNumber = key + PurchaseNo + NoCount.ToString("000");
-                var PurchaseNumber = purchaseHead.PurchaseNo;
-                
-                if (purchaseHead.SupplierId == 0) {
-                    return Ok(MyFun.APIResponseError("請選擇供應商!"));
-                }
-                var checkPurchaseNo = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(PurchaseNumber) && x.DeleteFlag == 0).Count();
-                if (checkPurchaseNo != 0) {
-                    return Ok(MyFun.APIResponseError("[採購單號]已存在! 請重新確認!"));
-                }
 
-                purchaseHead.PurchaseNo = PurchaseNumber;
+                purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;
                 purchaseHead.CreateTime = dt;
                 purchaseHead.CreateUser = 1;
                 var PurchaseDetail = new List<PurchaseDetail>();
@@ -137,12 +117,46 @@ namespace HonjiMES.Controllers
                     item.SupplierId = purchaseHead.SupplierId;
                     PurchaseDetail.Add(item);
                 }
-                purchaseHead.PurchaseDetails = PurchaseDetail.ToList();
-                _context.PurchaseHeads.Add(purchaseHead);
-                await _context.SaveChangesAsync();
+
+                if (purchaseHead.Id != 0) {
+                    var PurchaseHead = _context.PurchaseHeads.Find(purchaseHead.Id);
+                    foreach (var Detailitem in PurchaseDetail)
+                    {
+                        PurchaseHead.PurchaseDetails.Add(Detailitem);
+                    }
+                    PurchaseHead.PriceAll = PurchaseHead.PurchaseDetails.Sum(x => x.Quantity * x.OriginPrice);
+                    await _context.SaveChangesAsync();
+                } else {
+                    // var PurchaseNo = dt.ToString("yyMMdd");
+                    // var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    // var NoCount = NoData.Count() + 1;
+                    // if (NoCount != 1) {
+                    //     var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
+                    //     var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
+                    //     if (NoCount <= NoLast) {
+                    //         NoCount = NoLast + 1;
+                    //     }
+                    // }
+                    // var PurchaseNumber = key + PurchaseNo + NoCount.ToString("000");
+                    
+                    if (purchaseHead.SupplierId == 0) {
+                        return Ok(MyFun.APIResponseError("請選擇供應商!"));
+                    }
+                    var checkPurchaseNo = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(purchaseHead.PurchaseNo) && x.DeleteFlag == 0).Count();
+                    if (checkPurchaseNo != 0) {
+                        return Ok(MyFun.APIResponseError("[採購單號]已存在! 請重新確認!"));
+                    }
+
+                    
+                    purchaseHead.PurchaseDetails = PurchaseDetail.ToList();
+                    purchaseHead.PriceAll = purchaseHead.PurchaseDetails.Sum(x => x.Quantity * x.OriginPrice);
+                    _context.PurchaseHeads.Add(purchaseHead);
+                    await _context.SaveChangesAsync();
+                    //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
+                    //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
+                }
+                _context.ChangeTracker.LazyLoadingEnabled = false;
                 return Ok(MyFun.APIResponseOK(purchaseHead.PurchaseNo));
-                //return Ok(new { success = true, timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), message = "", data = true});
-                //return CreatedAtAction("GetOrderHead", new { id = PostOrderMaster_Detail.OrderHead.Id }, PostOrderMaster_Detail.OrderHead);
             }
             catch (Exception ex)
             {

@@ -29,7 +29,7 @@ export class OrdertopurchaseComponent implements OnInit, OnChanges {
     width: any;
     startTimeInput: any;
     showdisabled: boolean;
-    Seallist: any;
+    Salelist: any;
     selectBoxOptions: any;
     buttonOptions: any =  {text: '存檔', type: 'success', useSubmitBehavior: true};
     editorOptions: any;
@@ -96,11 +96,11 @@ export class OrdertopurchaseComponent implements OnInit, OnChanges {
             (s) => {
                 console.log(s);
                 if (s.success) {
-                    this.Seallist = s.data;
+                    this.Salelist = s.data;
                     this.selectBoxOptions = {
                         searchMode: 'startswith',
                         searchEnabled: true,
-                        items: this.Seallist,
+                        items: this.Salelist,
                         displayExpr: 'SaleNo',
                         valueExpr: 'Id',
                         onValueChanged: this.onCustomerSelectionChanged.bind(this)

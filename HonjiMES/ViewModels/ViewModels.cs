@@ -196,12 +196,14 @@ namespace HonjiMES.Models
         public int? MaterialBasicId { get; set; }
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
-        public string MateriaSpecification { get; internal set; }
+        public string MaterialSpecification { get; internal set; }
+        public float MaterialPrice { get; set; }
         public int? ProductBasicId { get; set; }
         public string ProductName { get; set; }
         public string ProductNo { get; set; }
         public string ProductNumber { get; internal set; }
         public string ProductSpecification { get; internal set; }
+        public float ProductPrice { get; set; }
         public int Lv { get; set; }
         public int ReceiveQty { get; internal set; }
         public bool? Ismaterial { get; internal set; }

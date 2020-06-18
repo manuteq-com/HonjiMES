@@ -117,7 +117,7 @@ namespace HonjiMES.Controllers
                     MaterialBasicId = item.MaterialBasicId.Value,
                     MaterialNo = item.MaterialNo,
                     MaterialName = item.MaterialName,
-                    MaterialSpecification = item.MateriaSpecification,
+                    MaterialSpecification = item.MaterialSpecification,
                     //成品，半成品，組件
                     ProductBasicId = item.ProductBasicId,
                     ProductName = item.Name,

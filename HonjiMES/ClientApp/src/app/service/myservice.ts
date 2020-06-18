@@ -16,6 +16,9 @@ export class Myservice {
     getOrderStatus(): Selectitem[] {
         return OrderStatus;
     }
+    getPurchaseOrderStatus(): Selectitem[] {
+        return OrderStatus;
+    }
     getSaleOrderStatus(): Selectitem[] {
         return saleOrderStatus;
     }

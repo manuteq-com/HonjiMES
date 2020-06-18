@@ -6,6 +6,7 @@ import { SendService } from '../../shared/mylib';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import notify from 'devextreme/ui/notify';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
   selector: 'app-purchase-order',
@@ -26,13 +27,15 @@ export class PurchaseOrderComponent implements OnInit {
     Controller = '/PurchaseHeads';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
 
+    listPurchaseOrderStatus: any;
     remoteOperations: boolean;
     formData: any;
     editorOptions: any;
     detailfilter = [];
     DetailsDataSourceStorage: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, myservice: Myservice) {
+        this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.getdata();

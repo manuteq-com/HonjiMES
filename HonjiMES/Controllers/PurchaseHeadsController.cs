@@ -137,6 +137,26 @@ namespace HonjiMES.Controllers
             //return purchaseHead;
             return Ok(MyFun.APIResponseOK(purchaseHead));
         }
+        
+        /// <summary>
+        /// 採購單列表
+        /// </summary>
+        /// <param name="status">0:未完成，1:已結案</param>
+        /// <returns></returns>
+        // GET: api/Purchases
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchasesByStatus(int? status)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            var PurchaseHeads = _context.PurchaseHeads.AsQueryable();
+            if (status.HasValue)
+            {
+                PurchaseHeads = PurchaseHeads.Where(x => x.Status == status);
+            }
+            var data = await PurchaseHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
         /// <summary>
         /// 用ID取採購單
         /// </summary>

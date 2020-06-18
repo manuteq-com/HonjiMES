@@ -153,6 +153,7 @@ export class OerdrdetailListComponent implements OnInit {
         }
       }
     popup_result(e) {
+        this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();

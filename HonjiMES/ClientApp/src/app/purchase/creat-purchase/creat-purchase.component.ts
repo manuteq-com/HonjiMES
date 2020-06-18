@@ -57,6 +57,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Quantityvalmax: number;
     saveCheck = true;
     showdisabled: boolean;
+    Serial: number;
+    Purchaselist: any;
+    selectBoxOptions: any;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
@@ -96,7 +99,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
@@ -126,59 +129,61 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     ngOnChanges() {
         this.dataSourceDB = [];
         if (this.modval === 'merge') {
-            this.showdisabled = false;
-        } else {
             this.showdisabled = true;
+            this.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
+                (s) => {
+                    console.log(s);
+                    if (s.success) {
+                        this.Purchaselist = s.data;
+                        this.selectBoxOptions = {
+                            searchMode: 'startswith',
+                            searchEnabled: true,
+                            items: this.Purchaselist,
+                            displayExpr: 'PurchaseNo',
+                            valueExpr: 'Id'
+                        };
+                    }
+                }
+            );
+        } else {
+            this.showdisabled = false;
         }
         if (this.itemkeyval != null) {
+            this.Serial = 1;
             this.itemkeyval.forEach(x => {
-
-                this.GetData('/BillOfMaterials/GetBillOfMaterialByProductBasic/' + x.ProductBasicId).subscribe(
+                this.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
                     (s) => {
                         debugger;
                         if (s.success) {
-                            this.dataSourceDB.push({
-                                Serial: x.Serial,
-                                DataId: s.data[0].MaterialBasicId,
-                                WarehouseId: s.data[0].Id,
-                                Quantity: x.Quantity,
-                                OriginPrice: x.OriginPrice,
-                                Price: x.Quantity * x.OriginPrice,
-                                DeliveryTime: new Date()
+                            s.data.forEach(element => {
+                                const index = this.dataSourceDB.findIndex(z => z.DataId === element.MaterialBasicId);
+                                if (~index) {
+                                    this.dataSourceDB[index].Quantity += x.Quantity * element.Quantity;
+                                    this.dataSourceDB[index].Price += (x.Quantity * element.Quantity) * element.MaterialPrice;
+                                } else {
+                                    this.dataSourceDB.push({
+                                        Serial: this.Serial,
+                                        DataId: element.MaterialBasicId,
+                                        WarehouseId: null,
+                                        Quantity: x.Quantity * element.Quantity,
+                                        OriginPrice: element.MaterialPrice,
+                                        Price: (x.Quantity * element.Quantity) * element.MaterialPrice,
+                                        DeliveryTime: new Date()
+                                    });
+                                }
                             });
+                            this.Serial++;
                         }
                     }
                 );
-                // this.GetData('/Warehouses/GetWarehouseByProductBasic/' + x.ProductBasicId).subscribe(
-                //     (s) => {
-                //         if (s.success) {
-                //             this.dataSourceDB.push({
-                //                 Serial: x.Serial,
-                //                 DataId: x.ProductBasicId,
-                //                 WarehouseId: s.data[0].Id,
-                //                 Quantity: x.Quantity,
-                //                 OriginPrice: x.OriginPrice,
-                //                 Price: x.Quantity * x.OriginPrice,
-                //                 DeliveryTime: new Date()
-
-                //                 // DataId: 394
-                //                 // DeliveryTime: Wed Jun 17 2020 00:00:00 GMT+0800 (台北標準時間) {}
-                //                 // OriginPrice: 0
-                //                 // Price: 0
-                //                 // Quantity: 1
-                //                 // Serial: "1959f2f9-44dd-299b-552a-b1352e927bcc"
-                //                 // WarehouseId: 1
-                //             });
-                //         }
-                //     }
-                // );
-                // this.dataSourceDB.push(Object.assign({}, x));
             });
         }
         this.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
+                    this.formData.Id = 0;
+                    this.formData.SupplierId = null;
                 }
             }
         );
@@ -303,11 +308,13 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
+        if (this.formData.SupplierId == null) {
+            this.formData.SupplierId = 0;
+        }
         this.postval = {
             PurchaseHead: this.formData,
             PurchaseDetails: this.dataSourceDB
         };
-        this.buttondisabled = false;
         try {
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseMaster_Detail', 'POST', { values: this.postval });
@@ -317,7 +324,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 // this.myform.instance.resetValues();
                 this.formData.CreateTime = new Date();
                 this.formData.PurchaseDate = null;
-                this.formData.SupplierId = 0;
+                this.formData.SupplierId = null;
                 this.formData.Type = 10;
                 this.formData.Remarks = '';
                 e.preventDefault();

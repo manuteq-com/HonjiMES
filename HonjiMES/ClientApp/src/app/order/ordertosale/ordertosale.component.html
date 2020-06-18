@@ -1,11 +1,12 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
+
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [(visible)]="!showdisabled">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="SaleNo" [disabled]="true">
+        <dxi-item dataField="SaleNo" [disabled]="true" [(visible)]="!showdisabled">
             <dxi-validation-rule type="required" message="銷貨單號 必填"></dxi-validation-rule>
             <dxo-label text="銷貨單號"></dxo-label>
         </dxi-item>
@@ -22,6 +23,7 @@
             <dxo-label text="銷貨單號"></dxo-label>
         </dxi-item>
         <dxi-item itemType="button" alignment="left" [buttonOptions]="buttonOptions" [disabled]="buttondisabled"></dxi-item>
+        
     </dx-form>
     <!-- <dx-button  text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button> -->
     <br/>
