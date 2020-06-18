@@ -98,11 +98,11 @@
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column>
         <div *dxTemplate="let data of 'SupplierEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectSupplierValueChanged($event,data)"
+            <dx-select-box [value]="Supplierval" (onValueChanged)="selectSupplierValueChanged($event,data)"
                 [dataSource]="SupplierList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'PurchaseEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectPurchaseValueChanged($event,data)"
+            <dx-select-box [value]="Purchaseval" (onValueChanged)="selectPurchaseValueChanged($event,data)"
                 [dataSource]="PurchaseList" valueExpr="Id" displayExpr="PurchaseNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'MaterialEditCellTemplate'">

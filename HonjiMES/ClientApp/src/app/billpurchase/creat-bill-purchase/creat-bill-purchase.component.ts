@@ -55,6 +55,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     checkBoxesMode: string;
     postval: any;
     CreateTimeDateBoxOptions: any;
+    Supplierval: any;
+    Purchaseval: any;
     Warehouseval: any;
     WarehouseList: any;
     WarehouseListAll: any;
@@ -157,34 +159,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     }
     selectSupplierValueChanged(e, data) {
         data.setValue(e.value);
-        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + e.value).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.PurchaseList = s.data;
-                    s.data.forEach(element => {
-                        if (!this.PurchaseTempList.some(x => x.PurchaseNo === element.PurchaseNo)) {
-                            this.PurchaseTempList.push(element);
-                        }
-                    });
-                }
-            }
-        );
+        this.Supplierval = e.value;
+        this.GetPurchasesBySupplier(e.value);
     }
     selectPurchaseValueChanged(e, data) {
         data.setValue(e.value);
+        this.Purchaseval = e.value;
         this.WarehouseList = null;
-        this.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + e.value).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialBasicList = s.data;
-                    s.data.forEach(element => {
-                        if (!this.MaterialBasicTempList.some(x => x.MaterialNo === element.MaterialNo)) {
-                            this.MaterialBasicTempList.push(element);
-                        }
-                    });
-                }
-            }
-        );
+        this.GetMaterialBasicsByPurchase(e.value);
     }
     selectMateriaValueChanged(e, data) {
         data.setValue(e.value);
@@ -194,12 +176,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                 this.OriginPriceval = x.OriginPrice;
                 this.Priceval = x.Quantity * x.OriginPrice;
                 this.Warehouseval = x.WarehouseId;
-                this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
-                    (s) => {
-                        this.WarehouseList = s.data;
-                        console.log(this.Warehouseval);
-                    }
-                );
+                this.GetWarehouseByMaterialBasic(x.Id);
             }
         });
     }
@@ -217,6 +194,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onInitNewRow(e) {
+        this.Supplierval = e.data.SupplierId;
+        this.Purchaseval = e.data.PurchaseId;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -232,6 +211,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     }
     onRowInserting(e) {
         debugger;
+        // this.Supplierval = e.data.SupplierId;
+        // this.Purchaseval = e.data.PurchaseId;
         const SupplierId = e.data.SupplierId;
         const PurchaseId = e.data.PurchaseId;
         const DataId = e.data.DataId;
@@ -248,7 +229,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.Quantityval = 0;
             this.OriginPriceval = 0;
             this.Priceval = 0;
-            this.Warehouseval = 0;
+            // this.Warehouseval = 0;
         }
     }
     onRowInserted(e) {
@@ -260,7 +241,40 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.Warehouseval = e.data.WarehouseId;
-        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
+        this.GetPurchasesBySupplier(e.data.SupplierId);
+        this.GetMaterialBasicsByPurchase(e.data.PurchaseId);
+        this.GetWarehouseByMaterialBasic(e.data.DataId);
+    }
+    GetPurchasesBySupplier(Id) {
+        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseList = s.data;
+                    s.data.forEach(element => {
+                        if (!this.PurchaseTempList.some(x => x.PurchaseNo === element.PurchaseNo)) {
+                            this.PurchaseTempList.push(element);
+                        }
+                    });
+                }
+            }
+        );
+    }
+    GetMaterialBasicsByPurchase(Id) {
+        this.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + Id).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MaterialBasicList = s.data;
+                    s.data.forEach(element => {
+                        if (!this.MaterialBasicTempList.some(x => x.MaterialNo === element.MaterialNo)) {
+                            this.MaterialBasicTempList.push(element);
+                        }
+                    });
+                }
+            }
+        );
+    }
+    GetWarehouseByMaterialBasic(Id) {
+        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }
