@@ -2,11 +2,11 @@ import { Component, OnInit, EventEmitter, Output, Input, ViewChild, OnChanges } 
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from '../shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { APIResponse } from '../app.module';
-import { InventoryChange } from '../model/viewmodels';
+import { APIResponse } from 'src/app/app.module';
+import { InventoryChange } from 'src/app/model/viewmodels';
+import { SendService } from 'src/app/shared/mylib';
 
 @Component({
     selector: 'app-inventory-change',

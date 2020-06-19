@@ -72,7 +72,7 @@
         [exceldata]="exceldata"></app-creatmaterial>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="修改原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="700" [height]="520"
+<dx-popup [showTitle]="true" title="調整原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="700" [height]="520"
     [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

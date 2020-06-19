@@ -42,7 +42,7 @@ import { ProductListComponent } from './product/product-list/product-list.compon
 import { MaterialListComponent } from './material/material-list/material-list.component';
 import { CreatproductComponent } from './product/creatproduct/creatproduct.component';
 import { CreatmaterialComponent } from './material/creatmaterial/creatmaterial.component';
-import { InventoryChangeComponent } from './inventory-change/inventory-change.component';
+import { InventoryChangeComponent } from './inventory/inventory-change/inventory-change.component';
 import { OrdertosaleComponent } from './order/ordertosale/ordertosale.component';
 import { SaleListComponent } from './sale/sale-list/sale-list.component';
 import { ReOrderSaleComponent } from './sale/re-order-sale/re-order-sale.component';
