@@ -73,6 +73,7 @@ import { ReceiveListComponent } from './receive/receive-list/receive-list.compon
 import { ReceiveDetailListComponent } from './receive/receivedetail-list/receivedetail-list.component';
 import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return/bill-purchase-return.component';
 import { OrdertopurchaseComponent } from './order/ordertopurchase/ordertopurchase.component';
+import { InventoryListComponent } from './inventory/inventory-list/inventory-list.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -153,6 +154,7 @@ import { OrdertopurchaseComponent } from './order/ordertopurchase/ordertopurchas
         ReceiveDetailListComponent,
         BillPurchaseReturnComponent,
         OrdertopurchaseComponent,
+        InventoryListComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

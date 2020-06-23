@@ -36,6 +36,54 @@ namespace HonjiMES.Models
         public MaterialLog MaterialLog { get; set; }
         public ProductLog ProductLog { get; set; }
     }
+    
+    /// <summary>
+    /// 庫存調整單
+    /// </summary>
+    public class AdjustData
+    {
+        public string AdjustNo { get; set; }
+        public string LinkOrder { get; set; }
+        public List<MaterialLog> MaterialLog { get; set; }
+        public List<ProductLog> ProductLog { get; set; }
+        public List<AdjustDataDetail> AdjustDataDetail { get; set;}
+    }
+    
+    /// <summary>
+    /// 庫存調整單
+    /// </summary>
+    public class AdjustDataDetail
+    {
+        public int TempId { get; set; }
+        public int DataType { get; set; }
+        public int DataId { get; set; }
+        public int WarehouseId { get; set;}
+        public int Quantity { get; set;}
+        public float Price { get; set;}
+        public float PriceAll { get; set;}
+        public string Unit { get; set;}
+        public float UnitCount { get; set;}
+        public float UnitPrice { get; set;}
+        public float UnitPriceAll { get; set;}
+        public float WorkPrice { get; set;}
+        public string Remark { get; set;}
+    }
+    
+    /// <summary>
+    /// 庫存調整單Basic資料(包含原料、成品)
+    /// </summary>
+    public class BasicData
+    {
+        public int TempId { get; set; }
+        public int DataType { get; set; }
+        public int DataId { get; set; }
+        public string DataNo { get; set; }
+        public string Name { get; set; }
+        public string Specification { get; set; }
+        public string Property { get; set; }
+        public float Price { get; set; }
+    }
+    
     /// <summary>
     /// 建立單號
     /// </summary>

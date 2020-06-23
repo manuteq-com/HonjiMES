@@ -30,8 +30,12 @@ namespace HonjiMES.Models
         public string Unit { get; set; }
         [Column("unit_count")]
         public float? UnitCount { get; set; }
-        [Column("unit_count_all")]
-        public float? UnitCountAll { get; set; }
+        [Column("unit_price")]
+        public float? UnitPrice { get; set; }
+        [Column("unit_price_all")]
+        public float? UnitPriceAll { get; set; }
+        [Column("work_price")]
+        public float? WorkPrice { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
         [Column("message", TypeName = "varchar(500)")]

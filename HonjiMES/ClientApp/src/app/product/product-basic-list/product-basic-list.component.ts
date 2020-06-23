@@ -23,6 +23,7 @@ export class ProductBasicListComponent implements OnInit {
     WarehouseList: any;
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
+    adjustpopupVisible: boolean;
     itemkey: string;
     exceldata: any;
     mod: string;
@@ -66,11 +67,26 @@ export class ProductBasicListComponent implements OnInit {
     creatdata() {
         this.creatpopupVisible = true;
     }
+    creatAdjust() {
+        this.adjustpopupVisible = true;
+    }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
         notify({
             message: '成品資料新增完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
+
+    adjustpopup_result(e) {
+        this.adjustpopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '庫存調整單建立完成',
             position: {
                 my: 'center top',
                 at: 'center top'

@@ -9,6 +9,14 @@
     <div class="headerfont font2">成品庫存</div>
     <div class="buttongroup">
         <dx-button
+            class="adjustbtn"
+            stylingMode="contained"
+            text="庫存調整單"
+            type="normal"
+            [width]="120"
+            (onClick)="creatAdjust()">
+        </dx-button>
+        <dx-button
             class="insertbtn"
             stylingMode="contained"
             text="新增成品"
@@ -91,6 +99,12 @@
     <div *dxTemplate="let data of 'content'">
         <app-creatproduct-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatproduct-basic>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1500" [height]="760" [(visible)]="adjustpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-list>
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="調整成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400"

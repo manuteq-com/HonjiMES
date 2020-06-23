@@ -25,6 +25,46 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
+        /// 取得庫存調整單號
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<AdjustData>> GetAdjustNo()
+        {
+            var AdjustNoName = "AJ";
+            var NoDataProduct = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCountProduct = NoDataProduct.Count() + 1;
+            var NoDataMaterial = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCountMaterial = NoDataMaterial.Count() + 1;
+
+            if (NoCountProduct != 1) {
+                var LastAdjustNo = NoDataProduct.FirstOrDefault().AdjustNo;
+                var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
+                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+                if (NoCountProduct <= NoLast) {
+                    NoCountProduct = NoLast + 1;
+                }
+            }
+            if (NoCountMaterial != 1) {
+                var LastAdjustNo = NoDataMaterial.FirstOrDefault().AdjustNo;
+                var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
+                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+                if (NoCountMaterial <= NoLast) {
+                    NoCountMaterial = NoLast + 1;
+                }
+            }
+            
+            var NoCount = NoCountProduct;
+            if (NoCountProduct < NoCountMaterial) {
+                NoCount = NoCountMaterial;
+            }
+
+            var AdjustData = new AdjustData{
+                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+            };
+            return Ok(MyFun.APIResponseOK(AdjustData));
+        }
+
+        /// <summary>
         /// 取得原料庫存調整單號
         /// </summary>
         [HttpGet]
@@ -67,6 +107,90 @@ namespace HonjiMES.Controllers
             var AdjustData = new ProductLog{
                 AdjustNo = AdjustNoName + NoCount.ToString("000000")
             };
+            return Ok(MyFun.APIResponseOK(AdjustData));
+        }
+
+        // GET: api/MaterialBasics
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BasicData>>> GetMaterialBasics()
+        {
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.MaterialNo).ToListAsync();
+            var BasicData = new List<BasicData>();
+            foreach (var item in materialBasic)
+            {
+                var tempData = new BasicData{
+                    DataType = 1,
+                    DataId = item.Id,
+                    DataNo = item.MaterialNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                BasicData.Add(tempData);
+            }
+            return Ok(MyFun.APIResponseOK(BasicData));
+        }
+
+        // GET: api/ProductBasics
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BasicData>>> GetProductBasics()
+        {
+            var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.ProductNo).ToListAsync();
+            var BasicData = new List<BasicData>();
+            foreach (var item in ProductBasic)
+            {
+                var tempData = new BasicData{
+                    DataType = 1,
+                    DataId = item.Id,
+                    DataNo = item.ProductNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                BasicData.Add(tempData);
+            }
+            return Ok(MyFun.APIResponseOK(BasicData));
+        }
+
+        // GET: api/MaterialBasics&ProductBasics
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BasicData>>> GetBasicsData()
+        {
+            var MaterialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.MaterialNo).ToListAsync();
+            var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.ProductNo).ToListAsync();
+            var AdjustData = new List<BasicData>();
+            var TempId = 1;
+            foreach (var item in MaterialBasic)
+            {
+                var tempData = new BasicData{
+                    TempId = TempId++,
+                    DataType = 1,
+                    DataId = item.Id,
+                    DataNo = item.MaterialNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                AdjustData.Add(tempData);
+            }
+            foreach (var item in ProductBasic)
+            {
+                var tempData = new BasicData{
+                    TempId = TempId++,
+                    DataType = 2,
+                    DataId = item.Id,
+                    DataNo = item.ProductNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                AdjustData.Add(tempData);
+            }
+
             return Ok(MyFun.APIResponseOK(AdjustData));
         }
 
@@ -125,5 +249,84 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseError("無對應的資料"));
             //return Ok(new { data = CreatedAtAction("GetProduct", new { id = product.Id }, product), success = true });
         }
+        
+        /// <summary>
+        /// 修改庫存
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult<APIResponse>> inventoryListChange(AdjustData AdjustData)
+        {
+            var UserID = 1;
+            var dt = DateTime.Now;
+            if (AdjustData.AdjustDataDetail.Count() == 0) {
+                return Ok(MyFun.APIResponseError("無庫存調整項目!"));
+            } else {
+                foreach (var item in AdjustData.AdjustDataDetail)
+                {
+                    if (item.DataType == 1)//material
+                    {
+                        var MaterialBasic = _context.MaterialBasics.Find(item.DataId);
+                        var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId).FirstOrDefault();
+                        if (Material != null) {
+                            Material.MaterialLogs.Add(new MaterialLog{
+                                AdjustNo = AdjustData.AdjustNo,
+                                LinkOrder = AdjustData.LinkOrder,
+                                MaterialId = Material.Id,
+                                Original = Material.Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remark,
+                                Message = "庫存調整單",
+                                CreateTime = dt,
+                                CreateUser = UserID
+                            });
+                            Material.Quantity += item.Quantity;
+                        } else {
+                            return Ok(MyFun.APIResponseError("查無 [" + MaterialBasic.MaterialNo + "] 的倉別資訊!"));
+                        }
+                    }
+                    else if (item.DataType == 2)//product
+                    {
+                        var ProductBasic = _context.ProductBasics.Find(item.DataId);
+                        var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == item.DataId && x.WarehouseId == item.WarehouseId).FirstOrDefault();
+                        if (Product != null) {
+                            Product.ProductLogs.Add(new ProductLog{
+                                AdjustNo = AdjustData.AdjustNo,
+                                LinkOrder = AdjustData.LinkOrder,
+                                ProductId = Product.Id,
+                                Original = Product.Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remark,
+                                Message = "庫存調整單",
+                                CreateTime = dt,
+                                CreateUser = UserID
+                            });
+                            Product.Quantity += item.Quantity;
+                        } else {
+                            return Ok(MyFun.APIResponseError("查無 [" + ProductBasic.ProductNo + "] 的倉別資訊!"));
+                        }
+                    } else {
+                        return Ok(MyFun.APIResponseError("資訊錯誤!"));
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK("OK"));
+            }
+        }
+
+
     }
 }

@@ -9,6 +9,14 @@
     <div class="headerfont font2">原料庫存</div>
     <div class="buttongroup">
         <dx-button
+            class="adjustbtn"
+            stylingMode="contained"
+            text="庫存調整單"
+            type="normal"
+            [width]="120"
+            (onClick)="creatAdjust()">
+        </dx-button>
+        <dx-button
             class="insertbtn"
             stylingMode="contained"
             text="新增物料"
@@ -81,15 +89,19 @@
         <app-material-list [masterkey]="item.key" [itemval]="item.row"></app-material-list>
     </div>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
-    [height]="360" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatmaterial-basic>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="調整原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400"
-    [height]="350" [(visible)]="editpopupVisible">
+<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1500" [height]="760" [(visible)]="adjustpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-list>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="調整原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400" [height]="350" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-inventory-change>

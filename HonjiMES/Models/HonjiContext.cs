@@ -670,11 +670,15 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.UnitCount).HasComment("單位數量");
 
-                entity.Property(e => e.UnitCountAll).HasComment("單位總量");
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
 
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.MaterialLogs)
@@ -1162,7 +1166,9 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.UnitCount).HasComment("單位數量");
 
-                entity.Property(e => e.UnitCountAll).HasComment("單位總量");
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -1170,6 +1176,8 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductLogs)

@@ -221,7 +221,7 @@ namespace HonjiMES.Controllers
                 PriceAll = BillofPurchaseCheckin.PriceAll,
                 Unit = BillofPurchaseCheckin.Unit,
                 UnitCount = BillofPurchaseCheckin.UnitCount,
-                UnitCountAll = BillofPurchaseCheckin.UnitCountAll,
+                UnitPriceAll = BillofPurchaseCheckin.UnitCountAll,
                 Message = "進貨檢驗入庫",
                 CreateUser = 1
             });
@@ -310,7 +310,7 @@ namespace HonjiMES.Controllers
                 PriceAll = BillofPurchaseReturn.PriceAll,
                 Unit = BillofPurchaseReturn.Unit,
                 UnitCount = BillofPurchaseReturn.UnitCount,
-                UnitCountAll = BillofPurchaseReturn.UnitCountAll,
+                UnitPriceAll = BillofPurchaseReturn.UnitCountAll,
                 Reason = BillofPurchaseReturn.Reason,
                 Message = "進貨驗退出庫",
                 CreateUser = 1

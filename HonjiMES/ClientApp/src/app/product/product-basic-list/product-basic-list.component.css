@@ -56,3 +56,10 @@
     margin-top: -6px;
     border-radius: 2px;
 }
+.adjustbtn {
+    margin-top: -6px;
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #1e90ff;
+}
