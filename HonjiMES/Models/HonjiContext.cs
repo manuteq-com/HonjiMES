@@ -223,7 +223,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.UnitCount).HasComment("單位數量");
 
-                entity.Property(e => e.UnitCountAll).HasComment("單位總量");
+                entity.Property(e => e.UnitPrice).HasComment("單位金額	");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -408,7 +408,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.UnitCount).HasComment("單位數量");
 
-                entity.Property(e => e.UnitCountAll).HasComment("單位總量");
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")

@@ -206,6 +206,29 @@ namespace HonjiMES.Models
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
+
+    /// <summary>
+    /// 進貨單驗收內容
+    /// </summary>
+    public class BillofPurchaseCheckData
+    {
+        public string ReturnNo { get; set; }
+        public int BillofPurchaseDetailId { get; set; }
+        public int WarehouseId { get; set; }
+        public int Quantity { get; set;}
+        public float Price { get; set;}
+        public float PriceAll { get; set;}
+        public string Unit { get; set;}
+        public float UnitCount { get; set;}
+        public float UnitPrice { get; set;}
+        public float UnitPriceAll { get; set;}
+        public float WorkPrice { get; set;}
+        public string Reason { get; set; }
+        public string Remarks { get; set;}
+        public DateTime CreateTime { get; set; }
+        public int CreateUser { get; set; }
+    }
+
     /// <summary>
     /// 回傳From的查詢條件
     /// </summary>

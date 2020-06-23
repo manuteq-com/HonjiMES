@@ -150,13 +150,13 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;
-        this.formData.UnitCountAll = this.formData.UnitCount * e.value;
+        // this.formData.UnitPrice = this.formData.UnitCount * e.value;
     }
     PriceValueChanged(e) {
         this.formData.PriceAll = this.formData.Quantity * e.value;
     }
     UnitCountValueChanged(e) {
-        this.formData.UnitCountAll = this.formData.Quantity * e.value;
+        // this.formData.UnitPrice = this.formData.Quantity * e.value;
     }
     refreshAdjustNo() {
         if (this.modval === 'material') {

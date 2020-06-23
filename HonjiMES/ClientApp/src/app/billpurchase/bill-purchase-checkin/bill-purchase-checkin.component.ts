@@ -43,7 +43,17 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        this.formData = {Quantity: 0, Price: 0, PriceAll: 0, Unit: '', UnitCount: 0, UnitCountAll: 0, Remarks: ''};
+        this.formData = {
+            Quantity: 0,
+            Price: 0,
+            PriceAll: 0,
+            Unit: '',
+            UnitCount: 0,
+            UnitPrice: 0,
+            UnitPriceAll: 0,
+            WorkPrice: 0,
+            Remarks: ''
+        };
         this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval).subscribe(
             (s) => {
                 if (s.success) {
@@ -64,13 +74,13 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;
-        this.formData.UnitCountAll = this.formData.UnitCount * e.value;
+        // this.formData.UnitPrice = this.formData.UnitCount * e.value;
     }
     PriceValueChanged(e) {
         this.formData.PriceAll = this.formData.Quantity * e.value;
     }
     UnitCountValueChanged(e) {
-        this.formData.UnitCountAll = this.formData.Quantity * e.value;
+        // this.formData.UnitPrice = this.formData.Quantity * e.value;
     }
     validate_before(): boolean {
         // 表單驗證

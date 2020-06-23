@@ -171,7 +171,7 @@ namespace HonjiMES.Controllers
         /// <param name="BillofPurchaseCheckin"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BillofPurchaseCheckin>> PostPurchaseCheckIn(BillofPurchaseCheckin BillofPurchaseCheckin)
+        public async Task<ActionResult<BillofPurchaseCheckin>> PostPurchaseCheckIn(BillofPurchaseCheckData BillofPurchaseCheckin)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var BillofPurchaseDetails = _context.BillofPurchaseDetails.Find(BillofPurchaseCheckin.BillofPurchaseDetailId);
@@ -179,7 +179,18 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
-            BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
+            // BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
+            BillofPurchaseDetails.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin(){
+                BillofPurchaseDetailId = BillofPurchaseCheckin.BillofPurchaseDetailId,
+                CheckinType = null,
+                Quantity = BillofPurchaseCheckin.Quantity,
+                Price = BillofPurchaseCheckin.Price,
+                PriceAll = BillofPurchaseCheckin.PriceAll,
+                Unit = BillofPurchaseCheckin.Unit,
+                UnitCount = BillofPurchaseCheckin.UnitCount,
+                UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                Remarks = BillofPurchaseCheckin.Remarks
+            });
             if (BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity) > BillofPurchaseDetails.Quantity)
             {
                 return Ok(MyFun.APIResponseError("驗收數量超過採購數量!"));
@@ -221,7 +232,10 @@ namespace HonjiMES.Controllers
                 PriceAll = BillofPurchaseCheckin.PriceAll,
                 Unit = BillofPurchaseCheckin.Unit,
                 UnitCount = BillofPurchaseCheckin.UnitCount,
-                UnitPriceAll = BillofPurchaseCheckin.UnitCountAll,
+                UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                Reason = BillofPurchaseCheckin.Remarks,
                 Message = "進貨檢驗入庫",
                 CreateUser = 1
             });
@@ -254,7 +268,7 @@ namespace HonjiMES.Controllers
         /// <param name="BillofPurchaseReturn"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BillofPurchaseReturn>> PostPurchaseCheckReturn(BillofPurchaseReturn BillofPurchaseReturn)
+        public async Task<ActionResult<BillofPurchaseReturn>> PostPurchaseCheckReturn(BillofPurchaseCheckData BillofPurchaseReturn)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             if (BillofPurchaseReturn.WarehouseId == 0)
@@ -266,7 +280,20 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
-            BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
+            // BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
+            BillofPurchaseDetails.BillofPurchaseReturns.Add(new BillofPurchaseReturn(){
+                ReturnNo = BillofPurchaseReturn.ReturnNo,
+                BillofPurchaseDetailId = BillofPurchaseReturn.BillofPurchaseDetailId,
+                WarehouseId = BillofPurchaseReturn.WarehouseId,
+                Quantity = BillofPurchaseReturn.Quantity,
+                Price = BillofPurchaseReturn.Price,
+                PriceAll = BillofPurchaseReturn.PriceAll,
+                Unit = BillofPurchaseReturn.Unit,
+                UnitCount = BillofPurchaseReturn.UnitCount,
+                UnitPrice = BillofPurchaseReturn.UnitPrice,
+                Reason = BillofPurchaseReturn.Reason,
+                Remarks = BillofPurchaseReturn.Remarks
+            });
             var ReturnCount = BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
             if (ReturnCount > BillofPurchaseDetails.Quantity)
             {
@@ -310,7 +337,9 @@ namespace HonjiMES.Controllers
                 PriceAll = BillofPurchaseReturn.PriceAll,
                 Unit = BillofPurchaseReturn.Unit,
                 UnitCount = BillofPurchaseReturn.UnitCount,
-                UnitPriceAll = BillofPurchaseReturn.UnitCountAll,
+                UnitPrice = BillofPurchaseReturn.UnitPrice,
+                UnitPriceAll = BillofPurchaseReturn.UnitPriceAll,
+                WorkPrice = BillofPurchaseReturn.WorkPrice,
                 Reason = BillofPurchaseReturn.Reason,
                 Message = "進貨驗退出庫",
                 CreateUser = 1

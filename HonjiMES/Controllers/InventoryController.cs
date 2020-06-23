@@ -216,6 +216,10 @@ namespace HonjiMES.Controllers
                 //         CreateUser = UserID 
                 //     });
                 // }
+                if (inventorychange.MaterialLog.AdjustNo.Length == 0) {
+                    inventorychange.MaterialLog.AdjustNo = null;
+                }
+
                 inventorychange.MaterialLog.Original = Material.Quantity;
                 inventorychange.MaterialLog.CreateTime = dt;
                 inventorychange.MaterialLog.CreateUser = UserID;
@@ -237,6 +241,10 @@ namespace HonjiMES.Controllers
                 //         CreateUser = UserID 
                 //     });
                 // }
+                if (inventorychange.ProductLog.AdjustNo.Length == 0) {
+                    inventorychange.ProductLog.AdjustNo = null;
+                }
+
                 inventorychange.ProductLog.Original = Products.Quantity;
                 inventorychange.ProductLog.CreateTime = dt;
                 inventorychange.ProductLog.CreateUser = UserID;
