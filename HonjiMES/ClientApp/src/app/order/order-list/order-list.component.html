@@ -69,7 +69,7 @@
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
-        <dxo-form>
+        <dxo-form colCount=4>
             <dxi-item dataField="OrderNo"></dxi-item>
             <dxi-item dataField="CustomerNo"></dxi-item>
             <dxi-item dataField="Customer"></dxi-item>
@@ -78,13 +78,7 @@
             <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
     </dxo-editing>
-    <dxi-column type="buttons">
-        <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button>
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+
     <dxi-column dataField="OrderNo" caption="訂單單號" sortOrder="desc">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
@@ -100,12 +94,21 @@
     <dxi-column dataField="OrderDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回覆日期" dataType="date"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button>
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
     <!-- <dxi-column type="buttons">
         <dxi-button hint="to_sale" text="轉鎖貨" [onClick]="to_saleClick"></dxi-button>
     </dxi-column> -->
+
     <div *dxTemplate="let item of 'detail'">
         <app-oerdrdetail-list [itemkey]="item.key" [ProductBasicList]="ProductBasicList"></app-oerdrdetail-list>
     </div>
+
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="creatpopupVisible">

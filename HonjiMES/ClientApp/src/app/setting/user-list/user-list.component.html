@@ -50,13 +50,7 @@
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+
     <!-- <dxi-column dataField="Code" caption="代號" [width]="100"></dxi-column> -->
     <dxi-column dataField="Username" caption="帳號" [width]="260"></dxi-column>
     <dxi-column dataField="Realname" caption="姓名" [width]="260"></dxi-column>
@@ -70,7 +64,16 @@
     <dxi-column dataField="CreateUser" caption="新增人員">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
 </dx-data-grid>
+
 <dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="420"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">

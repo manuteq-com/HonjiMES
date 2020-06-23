@@ -62,20 +62,14 @@
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
-        <dxo-form>
+        <dxo-form colCount=4>
             <dxi-item dataField="PurchaseNo"></dxi-item>
             <dxi-item dataField="SupplierId"></dxi-item>
             <dxi-item dataField="PurchaseDate"></dxi-item>
             <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
     </dxo-editing>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+
     <dxi-column dataField="PurchaseNo" caption="採購單號">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
@@ -89,12 +83,21 @@
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
     <!-- <dxi-column type="buttons">
         <dxi-button hint="轉進貨" text="轉進貨" [onClick]="to_purchaseClick"></dxi-button>
     </dxi-column> -->
+
     <div *dxTemplate="let item of 'detail'">
         <app-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-purchase-detail>
     </div>
+
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">

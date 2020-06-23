@@ -68,20 +68,14 @@
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
-        <dxo-form [colCount]=3>
+        <dxo-form [colCount]=4>
             <dxi-item dataField="BillofPurchaseNo"></dxi-item>
             <dxi-item dataField="Status"></dxi-item>
             <dxi-item dataField="BillofPurchaseDate"></dxi-item>
             <dxi-item dataField="Remarks" [colSpan]=3></dxi-item>
         </dxo-form>
     </dxo-editing>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+
     <dxi-column dataField="BillofPurchaseNo" caption="進貨單號" [allowEditing]="false">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
@@ -92,12 +86,21 @@
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
     <dxi-column dataField="BillofPurchaseDate" caption="進貨日期" dataType="date"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
     <!-- <dxi-column type="buttons">
         <dxi-button hint="轉進貨" text="轉進貨" [onClick]="to_purchaseClick"></dxi-button>
     </dxi-column> -->
+
     <div *dxTemplate="let item of 'detail'">
         <app-bill-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-bill-purchase-detail>
     </div>
+    
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">

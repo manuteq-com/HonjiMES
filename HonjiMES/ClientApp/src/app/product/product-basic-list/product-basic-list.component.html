@@ -68,13 +68,7 @@
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+
     <dxi-column dataField="ProductNo" caption="主件品號" [width]="250"></dxi-column>
     <dxi-column dataField="Name" caption="主件品名"></dxi-column>
     <dxi-column dataField="Specification" caption="規格"></dxi-column>
@@ -90,10 +84,20 @@
         </dxo-lookup>
     </dxi-column> -->
     <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
     <div *dxTemplate="let item of 'detail'">
         <app-product-list [masterkey]="item.key" [itemval]="item.row"></app-product-list>
     </div>
+
 </dx-data-grid>
+
 <dx-popup [showTitle]="true" title="新增成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
     [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
