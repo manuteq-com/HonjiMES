@@ -290,6 +290,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Price).HasComment("價格");
 
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
                 entity.Property(e => e.PurchaseCount).HasComment("已開採購數量");
 
                 entity.Property(e => e.PurchaseId).HasComment("採購單id");
@@ -308,11 +310,24 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.SupplierId).HasComment("供應商id");
 
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UnitCount).HasComment("單位數量");
+
+                entity.Property(e => e.UnitPrice).HasComment("單位單價");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.WarehouseId).HasComment("倉別id");
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
 
                 entity.HasOne(d => d.BillofPurchase)
                     .WithMany(p => p.BillofPurchaseDetails)

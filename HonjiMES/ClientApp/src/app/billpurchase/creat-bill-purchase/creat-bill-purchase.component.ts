@@ -50,7 +50,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     Quantityval: any;
     OriginPriceval: any;
-    Priceval: number;
+    Priceval: any;
+    PriceAllval: number;
     allMode: string;
     checkBoxesMode: string;
     postval: any;
@@ -174,7 +175,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             if (x.Id === e.value) {
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;
-                this.Priceval = x.Quantity * x.OriginPrice;
+                this.Priceval = x.OriginPrice;
+                this.PriceAllval = x.Quantity * x.OriginPrice;
                 this.Warehouseval = x.WarehouseId;
                 this.GetWarehouseByMaterialBasic(x.Id);
             }
@@ -186,12 +188,12 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
         this.Quantityval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
+        this.PriceAllval = this.Quantityval * this.Priceval;
     }
-    OriginValueChanged(e, data) {
+    PriceValueChanged(e, data) {
         data.setValue(e.value);
-        this.OriginPriceval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
+        this.Priceval = e.value;
+        this.PriceAllval = this.Quantityval * this.Priceval;
     }
     onInitNewRow(e) {
         this.Supplierval = e.data.SupplierId;
@@ -199,6 +201,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
+        this.PriceAllval = e.data.PriceAll;
         this.WarehouseList = null;
         // debugger;
         // const dataGrid = e.component;
@@ -227,9 +230,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         });
         if (e.cancel === false) {
             this.Quantityval = 0;
-            this.OriginPriceval = 0;
             this.Priceval = 0;
-            // this.Warehouseval = 0;
+            this.PriceAllval = 0;
+            this.Warehouseval = 0;
         }
     }
     onRowInserted(e) {
@@ -240,6 +243,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
+        this.PriceAllval = e.data.PriceAll;
         this.Warehouseval = e.data.WarehouseId;
         this.GetPurchasesBySupplier(e.data.SupplierId);
         this.GetMaterialBasicsByPurchase(e.data.PurchaseId);

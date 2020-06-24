@@ -7,6 +7,7 @@ import $ from 'jquery';
 import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-bill-purchase-detail',
@@ -24,8 +25,8 @@ export class BillPurchaseDetailComponent implements OnInit {
     dataSourceDB: CustomStore;
     Controller = '/BillofPurchaseDetails';
     Quantityval: number;
-    OriginPriceval: number;
     Priceval: number;
+    PriceAllval: number;
     changeMode: boolean;
     popupVisibleTo: boolean;
     popupVisibleRe: boolean;
@@ -33,12 +34,16 @@ export class BillPurchaseDetailComponent implements OnInit {
     keyID: any;
     bopData: any;
     WarehouseList: any;
+    CheckInBtnVisible: boolean;
+    postval: any;
 
     constructor(private http: HttpClient) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
+        this.onCellPrepared = this.onCellPrepared.bind(this);
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
+        this.CheckInBtnVisible = false;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetailByPId?PId=' + this.itemkey),
@@ -72,6 +77,13 @@ export class BillPurchaseDetailComponent implements OnInit {
             }
         }
     }
+    onCellPrepared(e: any) {
+        if (e.rowType === 'data') {
+            if (e.data.CheckStatus === 0) {
+                this.CheckInBtnVisible = true;
+            }
+        }
+    }
     onContentReady(e) {
         const _dataGrid = $(e.element);
         const dataGrid = e.component;
@@ -93,8 +105,8 @@ export class BillPurchaseDetailComponent implements OnInit {
         dataGrid.endUpdate();
         this.changeMode = true;
         this.Quantityval = null;
-        this.OriginPriceval = null;
         this.Priceval = null;
+        this.PriceAllval = null;
     }
     onRowInserting(e) {
 
@@ -102,8 +114,44 @@ export class BillPurchaseDetailComponent implements OnInit {
     onRowInserted(e) {
 
     }
-    to_purchaseClick(e) {
-        this.topurchase = this.dataGrid.instance.getSelectedRowsData();
+    async to_CheckInClick(e) {
+        Swal.fire({
+            showCloseButton: true,
+            allowEnterKey: false,
+            allowOutsideClick: false,
+            title: '整批驗收',
+            html: '如確認全數驗收，請點選[確認]!',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#CE312C',
+            cancelButtonText: '取消',
+            confirmButtonText: '確認'
+        }).then(async (result) => {
+            if (result.value) {
+                try {
+                    this.postval = {
+                        Id: this.itemkey
+                    };
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckInArray', 'POST', { values: this.postval });
+                    if (sendRequest) {
+                        this.CheckInBtnVisible = false;
+                        // e.preventDefault();
+                        this.dataGrid.instance.refresh();
+                        notify({
+                            message: sendRequest.message,
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'success', 3000);
+                    }
+                } catch (error) {
+
+                }
+            }
+        });
     }
     allowEdit(e) {
         if (e.row.data.CheckStatus === 1) {
@@ -118,25 +166,25 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.MaterialBasicList.forEach(x => {
             if (x.Id === e.value) {
                 this.Quantityval = x.Quantity;
-                this.OriginPriceval = x.OriginPrice;
-                this.Priceval = x.Quantity * x.OriginPrice;
+                this.Priceval = x.OriginPrice;
+                this.PriceAllval = x.Quantity * x.OriginPrice;
             }
         });
     }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
         this.Quantityval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
+        this.PriceAllval = this.Quantityval * this.Priceval;
     }
-    OriginValueChanged(e, data) {
+    PriceValueChanged(e, data) {
         data.setValue(e.value);
-        this.OriginPriceval = e.value;
-        this.Priceval = this.Quantityval * this.OriginPriceval;
+        this.Priceval = e.value;
+        this.PriceAllval = this.Quantityval * this.Priceval;
     }
     onEditingStart(e) {
         this.Quantityval = e.data.Quantity;
-        this.OriginPriceval = e.data.OriginPrice;
-        this.Priceval = e.data.Price;
+        this.Priceval = e.data.OriginPrice;
+        this.PriceAllval = e.data.Price;
     }
     onDataErrorOccurred(e) {
         notify({

@@ -45,6 +45,9 @@ export class BillPurchaseComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
+                    this.SupplierList.forEach(x => {
+                        x.Name = x.Name.substring(0, 4);
+                    });
                 }
             }
         );

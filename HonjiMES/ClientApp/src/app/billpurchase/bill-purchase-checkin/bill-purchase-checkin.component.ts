@@ -69,6 +69,13 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.GetData('/BillofPurchaseDetails/GetBillofPurchaseDetail/' + this.itemkeyval).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                }
+            }
+        );
         this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
         this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
     }

@@ -202,7 +202,17 @@ namespace HonjiMES.Controllers
             BillofPurchaseDetails.UpdateUser = 1;
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
-            BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.OriginPrice;
+            BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.Price;
+            
+            BillofPurchaseDetails.Quantity = BillofPurchaseCheckin.Quantity;
+            BillofPurchaseDetails.Price = (int)BillofPurchaseCheckin.Price;
+            BillofPurchaseDetails.PriceAll = BillofPurchaseCheckin.PriceAll;
+            BillofPurchaseDetails.Unit = BillofPurchaseCheckin.Unit;
+            BillofPurchaseDetails.UnitCount = BillofPurchaseCheckin.UnitCount;
+            BillofPurchaseDetails.UnitPrice = BillofPurchaseCheckin.UnitPrice;
+            BillofPurchaseDetails.UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll;
+            BillofPurchaseDetails.WorkPrice = BillofPurchaseCheckin.WorkPrice;
+            BillofPurchaseDetails.Remarks = BillofPurchaseCheckin.Remarks;
 
             //更新採購單明細資訊
             var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
@@ -260,6 +270,109 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillofPurchaseCheckin));
+        }
+
+        /// <summary>
+        /// 進貨單批量驗收
+        /// </summary>
+        /// <param name="BillofPurchaseHead"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BillofPurchaseCheckin>> PostPurchaseCheckInArray(BillofPurchaseHead BillofPurchaseHead)
+        {
+            var dt = DateTime.Now;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var BillofPurchaseHeads = _context.BillofPurchaseHeads.Find(BillofPurchaseHead.Id);
+            if (BillofPurchaseHeads == null)
+            {
+                return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
+            }
+
+            var NoUpdataCount = 0;
+            var CheckBillofPurchaseHeadStatus = true;
+            foreach (var item in BillofPurchaseHeads.BillofPurchaseDetails)
+            {
+                if (item.CheckStatus == 0) {
+                    CheckBillofPurchaseHeadStatus = false;
+
+                    item.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin(){
+                        BillofPurchaseDetailId = item.Id,
+                        CheckinType = null,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        PriceAll = item.PriceAll,
+                        Unit = item.Unit,
+                        UnitCount = item.UnitCount,
+                        UnitPrice = item.UnitPrice,
+                        Remarks = item.Remarks,
+                        CreateTime = dt,
+                        CreateUser = 1
+                    });
+                    if (item.BillofPurchaseCheckins.Sum(x => x.Quantity) > item.Quantity)
+                    {
+                        return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + item.DataNo + " ]"));
+                    }
+                    item.UpdateTime = dt;
+                    item.UpdateUser = 1;
+                    item.CheckStatus = 1;
+                    item.CheckCountIn = item.BillofPurchaseCheckins.Sum(x => x.Quantity);
+                    item.CheckPriceIn = item.CheckCountIn * item.Price;
+
+                    //更新採購單明細資訊
+                    var PurchaseDetail = _context.PurchaseDetails.Find(item.PurchaseDetailId);
+                    if (PurchaseDetail == null)
+                    {
+                        return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
+                    }
+                    var tempPurchaseCount = PurchaseDetail.PurchaseCount;
+                    PurchaseDetail.PurchaseCount += item.Quantity;
+                    PurchaseDetail.UpdateTime = dt;
+                    PurchaseDetail.UpdateUser = 1;
+                    if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+                        return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
+                    }
+
+                    //入庫
+                    var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+                    if (Material == null)
+                    {
+                        return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
+                    }
+                    Material.MaterialLogs.Add(new MaterialLog { 
+                        LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                        Original = Material.Quantity,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        PriceAll = item.PriceAll,
+                        Unit = item.Unit,
+                        UnitCount = item.UnitCount,
+                        UnitPrice = item.UnitPrice,
+                        UnitPriceAll = item.UnitPriceAll,
+                        WorkPrice = item.WorkPrice,
+                        Reason = item.Remarks,
+                        Message = "批量驗收入庫",
+                        CreateUser = 1
+                    });
+                    Material.Quantity += item.Quantity;
+                 
+                } else {
+                    NoUpdataCount++;
+                }
+            }
+
+            if (NoUpdataCount == BillofPurchaseHeads.BillofPurchaseDetails.Count()) {
+                return Ok(MyFun.APIResponseOK("OK", "項目皆已驗收完畢!"));
+            }
+            
+            //檢查進貨單明細是否都完成進貨
+            if (CheckBillofPurchaseHeadStatus)
+            {
+                BillofPurchaseHeads.Status = 1;
+            }
+
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK("OK", "驗收完成!"));
         }
 
         /// <summary>

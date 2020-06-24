@@ -38,17 +38,23 @@
                 <dxi-item dataField="DataId"></dxi-item>
                 <dxi-item dataField="WarehouseId"></dxi-item>
                 <dxi-item dataField="Quantity"></dxi-item>
-                <dxi-item dataField="OriginPrice"></dxi-item>
+                <dxi-item dataField="OriginPrice" [editorOptions]="{ disabled: true }"></dxi-item>
                 <dxi-item dataField="Price"></dxi-item>
+                <dxi-item dataField="PriceAll"></dxi-item>
+                <dxi-item dataField="Unit"></dxi-item>
+                <dxi-item dataField="UnitCount"></dxi-item>
+                <dxi-item dataField="UnitPrice"></dxi-item>
+                <dxi-item dataField="UnitPriceAll"></dxi-item>
+                <dxi-item dataField="WorkPrice"></dxi-item>
                 <dxi-item dataField="Remarks"></dxi-item>
             </dxo-form>
         </dxo-editing>
         <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
-        <dxi-column dataField="SupplierId" caption="供應商名稱" editCellTemplate="SupplierEditCellTemplate">
+        <dxi-column dataField="SupplierId" caption="供應商代號" editCellTemplate="SupplierEditCellTemplate" [width]="100">
             <dxo-lookup [dataSource]="SupplierList" displayExpr="Code" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="SupplierId" caption="供應商代號">
+        <dxi-column dataField="SupplierId" caption="供應商名稱">
             <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
@@ -68,30 +74,39 @@
             <dxo-lookup [dataSource]="MaterialBasicTempList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="DataId" caption="品名">
+        <!-- <dxi-column dataField="DataId" caption="品名">
             <dxo-lookup [dataSource]="MaterialBasicTempList" displayExpr="MaterialName" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="DataId" caption="規格">
             <dxo-lookup [dataSource]="MaterialBasicTempList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-        </dxi-column>
+        </dxi-column> -->
         <dxi-column dataField="WarehouseId" caption="倉別" [visible]="false" editCellTemplate="WarehouseEditCellTemplate">
             <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate">
+        <dxi-column dataField="WarehouseId" caption="倉別">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" editCellTemplate="OriginPriceEditCellTemplate">
+        <dxi-column dataField="OriginPrice" caption="原單價" [visible]="false" dataType="number" editCellTemplate="OriginPriceEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Price" caption="金額" dataType="number" editCellTemplate="PriceEditCellTemplate">
+        <dxi-column dataField="Price" caption="單價" dataType="number" editCellTemplate="PriceEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
+        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" editCellTemplate="PriceAllEditCellTemplate">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="Unit" caption="單位"></dxi-column>
+        <dxi-column dataField="UnitCount" caption="單位數量" dataType="number"></dxi-column>
+        <dxi-column dataField="UnitPrice" caption="單位單價" dataType="number"></dxi-column>
+        <dxi-column dataField="UnitPriceAll" caption="單位總額" dataType="number"></dxi-column>
+        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number"></dxi-column>
+
         <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 
         <dxi-column type="buttons" caption="新增" cssClass="addmod">
@@ -122,11 +137,15 @@
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
-            <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)"
+            <dx-number-box [value]='OriginPriceval' (onValueChanged)="data.setValue($event.value)" [disabled]="true"
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceEditCellTemplate'">
-            <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
+            <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)"
+                [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'PriceAllEditCellTemplate'">
+            <dx-number-box [value]='PriceAllval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
             </dx-number-box>
         </div>
 
