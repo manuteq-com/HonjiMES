@@ -73,6 +73,12 @@ import { ReceiveListComponent } from './receive/receive-list/receive-list.compon
 import { ReceiveDetailListComponent } from './receive/receivedetail-list/receivedetail-list.component';
 import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return/bill-purchase-return.component';
 import { InventoryListComponent } from './inventory/inventory-list/inventory-list.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { LoginComponent } from './login/login/login.component';
+
+export function tokenGetter() {
+    return localStorage.getItem('token');
+}
 @NgModule({
     imports: [
         BrowserModule,
@@ -100,7 +106,12 @@ import { InventoryListComponent } from './inventory/inventory-list/inventory-lis
         DxNumberBoxModule,
         DxCheckBoxModule,
         BreadcrumbModule,
-        SweetAlert2Module.forRoot()
+        SweetAlert2Module.forRoot(),
+        JwtModule.forRoot({
+            config: {
+                tokenGetter
+            }
+        })
     ],
     declarations: [
         AppComponent,
@@ -153,6 +164,7 @@ import { InventoryListComponent } from './inventory/inventory-list/inventory-lis
         ReceiveDetailListComponent,
         BillPurchaseReturnComponent,
         InventoryListComponent,
+        LoginComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

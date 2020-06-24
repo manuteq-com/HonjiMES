@@ -316,4 +316,18 @@ namespace HonjiMES.Models
         public int RQty { get; set; }
         public int WarehouseID { get; set; }
     }
+    /// <summary>
+    /// 登入用
+    /// </summary>
+    public class LoginViewModel
+    {
+        /// <summary>
+        /// 帳號
+        /// </summary>
+        public string Username { get; set; }
+        /// <summary>
+        /// 密碼
+        /// </summary>
+        public string Password { get; set; }
+    }
 }

@@ -1,6 +1,9 @@
-import { Component, AfterViewInit, ElementRef, Renderer2, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Renderer2, ViewChild, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ScrollPanel } from 'primeng';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { AuthService } from './service/auth.service';
+import { LoginUser } from './model/loginuser';
 
 enum MenuOrientation {
     STATIC,
@@ -14,7 +17,7 @@ enum MenuOrientation {
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnInit, OnChanges {
 
     layoutMode: MenuOrientation = MenuOrientation.HORIZONTAL;
 
@@ -47,11 +50,28 @@ export class AppComponent implements AfterViewInit, OnInit {
     @ViewChild('layoutMenuScroller', { static: true }) layoutMenuScrollerViewChild: ScrollPanel;
     menu: Array<any> = [];
     breadcrumbList: Array<any> = [];
-
-    constructor(public renderer: Renderer2, private _router: Router) { }
+    login$: LoginUser;
+    constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService) {
+        this._authService.currentUser.subscribe(x => this.login$ = x);
+    }
     ngOnInit() {
-
         this.listenRouting();
+    }
+    ngOnChanges() {
+
+    }
+    logout() {
+        this._authService.logout();
+        this._router.navigate(['/login']);
+    }
+    isLoggedIn() {
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            return of(true);
+        } else {
+            return of(false);
+        }
+
     }
     /* 監聽routing事件 */
     listenRouting() {
@@ -88,7 +108,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         });
     }
     ngAfterViewInit() {
-        setTimeout(() => { this.layoutMenuScrollerViewChild.moveBar(); }, 100);
+        //   setTimeout(() => { this.layoutMenuScrollerViewChild.moveBar(); }, 100);
     }
 
     onLayoutClick() {

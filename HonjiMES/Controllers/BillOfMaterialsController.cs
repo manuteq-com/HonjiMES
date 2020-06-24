@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using LinqKit;
 using DevExtreme.AspNet.Mvc;
 using DevExtreme.AspNet.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HonjiMES.Controllers
 {
@@ -22,6 +23,7 @@ namespace HonjiMES.Controllers
     /// </summary>
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
+    //[Authorize]
     [ApiController]
     public class BillOfMaterialsController : ControllerBase
     {

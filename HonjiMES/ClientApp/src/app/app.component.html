@@ -6,9 +6,10 @@
                 'layout-menu-static-inactive': staticMenuDesktopInactive,
                 'layout-menu-static-active': staticMenuMobileActive}">
 
-    <app-topbar></app-topbar>
+    <app-topbar *ngIf="login$"></app-topbar>
 
-    <div class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
+    <div *ngIf="login$" class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}"
+        (click)="onMenuClick($event)">
         <p-scrollPanel #layoutMenuScroller>
             <div class="menu-scroll-content">
                 <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></app-inline-profile>

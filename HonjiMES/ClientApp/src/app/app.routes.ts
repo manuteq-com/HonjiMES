@@ -14,11 +14,14 @@ import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
 import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
+import { AuthGuard } from './helpers/auth.guard';
+import { LoginComponent } from './login/login/login.component';
 
 
 
 export const routes: Routes = [
-    { path: '', component: HomepageComponent },
+    { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
+    { path: 'login', component: LoginComponent },
     { path: 'orderlist', component: OrderListComponent },
     { path: 'materiallist', component: MaterialListComponent },
     { path: 'productbasiclist', component: ProductBasicListComponent },
