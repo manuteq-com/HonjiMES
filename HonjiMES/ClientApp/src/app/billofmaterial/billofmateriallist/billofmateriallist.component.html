@@ -1,30 +1,46 @@
 <!-- <p>所有訂單</p> -->
-<div class="row">
-    <div class="col-md-10 col-sm-10">
+<div class="headerblock">
+    <div class="headerfont font1">組成管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
     </div>
-    <div class="col-md-1 col-sm-1">
-    </div>
-    <div class="col-md-1 col-sm-1">
+    <div class="headerfont font2">物料清單管理</div>
+    <div class="buttongroup">
+        <!-- <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增成品"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button> -->
     </div>
 </div>
+
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
     [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
     [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
     [masterDetail]="{ enabled: true, template: 'detail' }">
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
-    <dxo-paging [enabled]="true" [pageSize]="10">
+    <dxo-paging [enabled]="true" [pageSize]="15">
     </dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true"
         [showNavigationButtons]="true" visible="true">
     </dxo-pager>
     <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
     </dxo-remote-operations> -->
     <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="false"></dxo-editing>
-    <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false" [filterValue]="" dataType="string">
+
+    <dxi-column dataField="ProductNo" caption="成品品號" [allowEditing]="false" [filterValue]="" dataType="string">
     </dxi-column>
-    <dxi-column dataField="Name" caption="品名" dataType="string"></dxi-column>
-    <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
+    <dxi-column dataField="Name" caption="成品品名" dataType="string"></dxi-column>
+    <dxi-column dataField="Specification" caption="成品規格" dataType="string"></dxi-column>
+    <dxi-column dataField="Property" caption="廠內規格"></dxi-column>
+    <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
+
     <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>

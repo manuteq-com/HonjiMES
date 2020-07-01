@@ -85,7 +85,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '組成管理', icon: 'fa fa-fw fa-bars',
                 items: [
-                    { label: '組成資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billofmateriallist'] },
+                    { label: '物料清單管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/billofmateriallist'] },
                 ]
 
             },
