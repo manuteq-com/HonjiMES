@@ -98,7 +98,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
                 if (s.success) {
                     this.Salelist = s.data;
                     this.selectBoxOptions = {
-                        searchMode: 'startswith',
+                        // searchMode: 'startswith',
                         searchEnabled: true,
                         items: this.Salelist,
                         displayExpr: 'SaleNo',

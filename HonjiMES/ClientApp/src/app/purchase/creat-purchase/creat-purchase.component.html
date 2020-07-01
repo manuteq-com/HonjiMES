@@ -97,7 +97,9 @@
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column>
         <div *dxTemplate="let data of 'DataEditCellTemplate'">
-            <dx-select-box [value]="data.value" [searchEnabled]="true" (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="MaterialBasicList" valueExpr="Id" displayExpr="MaterialNo"></dx-select-box>
+            <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }"
+                valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
             <dx-select-box [value]="Warehouseval" (onValueChanged)="WarehousevalvalueChanged($event,data)"

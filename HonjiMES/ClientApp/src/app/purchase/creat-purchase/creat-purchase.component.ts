@@ -116,7 +116,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             items: this.PurchasetypeList,
             displayExpr: 'Name',
             valueExpr: 'Id',
-            searchEnabled: true
+            searchEnabled: true,
+            onValueChanged: this.onTypeSelectionChanged.bind(this)
         };
 
     }
@@ -136,7 +137,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     if (s.success) {
                         this.Purchaselist = s.data;
                         this.selectBoxOptions = {
-                            searchMode: 'startswith',
+                            // searchMode: 'startswith',
                             searchEnabled: true,
                             items: this.Purchaselist,
                             displayExpr: 'PurchaseNo',
@@ -189,6 +190,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         );
     }
     onFocusedCellChanging(e) {
+    }
+    onTypeSelectionChanged(e) {
+        this.CreateTimeValueChange(e);
     }
     CreateTimeValueChange = async function(e) {
         // this.formData = this.myform.instance.option('formData');

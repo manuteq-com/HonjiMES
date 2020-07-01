@@ -117,11 +117,11 @@
         </dxi-column>
 
         <div *dxTemplate="let data of 'SupplierEditCellTemplate'">
-            <dx-select-box [value]="Supplierval" (onValueChanged)="selectSupplierValueChanged($event,data)"
+            <dx-select-box [value]="data.value" (onValueChanged)="selectSupplierValueChanged($event,data)" (onInitialized)="onInitialized(Supplierval,data)"
                 [dataSource]="SupplierList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'PurchaseEditCellTemplate'">
-            <dx-select-box [value]="Purchaseval" (onValueChanged)="selectPurchaseValueChanged($event,data)"
+            <dx-select-box [value]="data.value" (onValueChanged)="selectPurchaseValueChanged($event,data)" (onInitialized)="onInitialized(Purchaseval,data)"
                 [dataSource]="PurchaseList" valueExpr="Id" displayExpr="PurchaseNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'MaterialEditCellTemplate'">
@@ -129,7 +129,7 @@
                 [dataSource]="MaterialBasicList" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-            <dx-select-box [value]="Warehouseval" (onValueChanged)="WarehousevalvalueChanged($event,data)"
+            <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(Warehouseval,data)"
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">

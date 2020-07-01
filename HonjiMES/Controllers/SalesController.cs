@@ -73,7 +73,7 @@ namespace HonjiMES.Controllers
             var SaleHeads = _context.SaleHeads.AsQueryable();
             if (status.HasValue)
             {
-                SaleHeads = SaleHeads.Where(x => x.Status == status);
+                SaleHeads = SaleHeads.Where(x => x.Status == status && x.DeleteFlag == 0);
             }
             var data = await SaleHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));

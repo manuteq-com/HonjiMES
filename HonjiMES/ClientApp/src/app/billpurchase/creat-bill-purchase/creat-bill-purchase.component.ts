@@ -61,6 +61,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     Warehouseval: any;
     WarehouseList: any;
     WarehouseListAll: any;
+    SupplierIdVal: any;
+    PurchaseIdVal: any;
 
     constructor(private http: HttpClient) {
         this.allMode = 'allPages';
@@ -158,9 +160,22 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
+    onInitialized(value, data) {
+        data.setValue(value);
+    }
     selectSupplierValueChanged(e, data) {
         data.setValue(e.value);
         this.Supplierval = e.value;
+
+        this.Purchaseval = null;
+        this.Warehouseval = null;
+        this.Quantityval = 0;
+        this.OriginPriceval = 0;
+        this.Priceval = 0;
+        this.PriceAllval = 0;
+        this.MaterialBasicList = null;
+        this.WarehouseList = null;
+
         this.GetPurchasesBySupplier(e.value);
     }
     selectPurchaseValueChanged(e, data) {
@@ -182,9 +197,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             }
         });
     }
-    WarehousevalvalueChanged(e, data) {
-        data.setValue(e.value);
-    }
+    // WarehousevalvalueChanged(e, data) {
+    //     data.setValue(e.value);
+    // }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
         this.Quantityval = e.value;
@@ -196,8 +211,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.PriceAllval = this.Quantityval * this.Priceval;
     }
     onInitNewRow(e) {
-        this.Supplierval = e.data.SupplierId;
-        this.Purchaseval = e.data.PurchaseId;
+        this.Supplierval = this.SupplierIdVal;
+        this.Purchaseval = this.PurchaseIdVal;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -213,26 +228,25 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         // this.changeMode = true;
     }
     onRowInserting(e) {
-        debugger;
-        // this.Supplierval = e.data.SupplierId;
-        // this.Purchaseval = e.data.PurchaseId;
-        const SupplierId = e.data.SupplierId;
-        const PurchaseId = e.data.PurchaseId;
+        this.SupplierIdVal = e.data.SupplierId;
+        this.PurchaseIdVal = e.data.PurchaseId;
         const DataId = e.data.DataId;
         const datas = this.dataSourceDB;
         datas.forEach(element => {// 阻擋重複新增
-            if (element.SupplierId === SupplierId &&
-                element.PurchaseId === PurchaseId &&
+            if (element.SupplierId === this.SupplierIdVal &&
+                element.PurchaseId === this.PurchaseIdVal &&
                 element.DataId === DataId) {
                 this.showMessage('新增項目已存在!!');
                 e.cancel = true;
             }
         });
         if (e.cancel === false) {
+            this.Warehouseval = 0;
             this.Quantityval = 0;
+            this.OriginPriceval = 0;
             this.Priceval = 0;
             this.PriceAllval = 0;
-            this.Warehouseval = 0;
+            this.WarehouseList = null;
         }
     }
     onRowInserted(e) {

@@ -151,7 +151,7 @@ namespace HonjiMES.Controllers
             var PurchaseHeads = _context.PurchaseHeads.AsQueryable();
             if (status.HasValue)
             {
-                PurchaseHeads = PurchaseHeads.Where(x => x.Status == status);
+                PurchaseHeads = PurchaseHeads.Where(x => x.Status == status && x.DeleteFlag == 0);
             }
             var data = await PurchaseHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
