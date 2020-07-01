@@ -16,6 +16,12 @@ namespace HonjiMES.Helper
         {
             this.Configuration = configuration;
         }
+        /// <summary>
+        /// 取Token
+        /// </summary>
+        /// <param name="userName">使用者名稱</param>
+        /// <param name="expireMinutes">到期時間</param>
+        /// <returns></returns>
         public string GenerateToken(string userName, int expireMinutes = 30)
         {
             var issuer = Configuration.GetValue<string>("JwtSettings:Issuer");
@@ -41,7 +47,7 @@ namespace HonjiMES.Helper
 
             // 你可以自行擴充 "roles" 加入登入者該有的角色
             claims.Add(new Claim("roles", "Admin"));
-            claims.Add(new Claim("roles", "Users"));
+            //claims.Add(new Claim("roles", "Users"));
 
             var userClaimsIdentity = new ClaimsIdentity(claims);
 

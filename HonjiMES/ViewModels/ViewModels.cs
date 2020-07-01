@@ -330,4 +330,39 @@ namespace HonjiMES.Models
         /// </summary>
         public string Password { get; set; }
     }
+    public class MenuViewModel
+    {
+        /// <summary>
+        /// 名稱
+        /// </summary>
+        public string label { get; set; }
+        /// <summary>
+        /// 圖示
+        /// </summary>
+        public string icon { get; set; }
+        /// <summary>
+        /// 路徑
+        /// </summary>
+        public string[] routerLink { get; set; }
+        /// <summary>
+        /// 子層
+        /// </summary>
+        public MenuViewModel[] items { get; set; }
+    }
+    public class UserRoles
+    {
+        /// <summary>
+        /// 帳號
+        /// </summary>
+        public string Username { get; set; }
+        /// <summary>
+        /// Token
+        /// </summary>
+        public string Token { get; set; }
+        /// <summary>
+        /// 可以用的選單
+        /// </summary>
+        public MenuViewModel[] Menu { get; set; }
+        public DateTime Timeout { get; internal set; }
+    }
 }

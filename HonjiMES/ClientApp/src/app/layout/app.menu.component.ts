@@ -3,6 +3,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { MenuItem } from 'primeng/primeng';
 import { AppComponent } from '../app.component';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { APIResponse } from '../app.module';
+import { Observable } from 'rxjs';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-menu',
@@ -21,7 +24,7 @@ export class AppMenuComponent implements OnInit {
 
     version = 'v4';
     breadcrumbs: string[] = [];
-    constructor(public app: AppComponent, route: ActivatedRoute, router: Router) {
+    constructor(public app: AppComponent, route: ActivatedRoute, router: Router, private authenticationService: AuthService) {
         //  this.changeLayout('cyan');
 
         this.changeLayout('joomla', true);
@@ -43,74 +46,76 @@ export class AppMenuComponent implements OnInit {
         });
     }
     ngOnInit() {
+        debugger;
         this.breadcrumbitem = [];
-        this.model = [
+        this.model = this.authenticationService.currentUserValue.Menu;
+        // this.model = [
 
-            // { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
-            {
-                label: '訂單管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '客戶訂單', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
-                    { label: '採購單', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
-                    { label: '進貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
-                    { label: '銷貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
-                ]
+        //     // { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
+        //     {
+        //         label: '訂單管理', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: '客戶訂單', icon: 'fa fa-fw fa-genderless', routerLink: ['/orderlist'] },
+        //             { label: '採購單', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+        //             { label: '進貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+        //             { label: '銷貨單', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
+        //         ]
 
-            },
-            {
-                label: '庫存管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materialbasiclist'] },
-                    { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productbasiclist'] },
-                    // { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
-                    // { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
-                ]
+        //     },
+        //     {
+        //         label: '庫存管理', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: '原料庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/materialbasiclist'] },
+        //             { label: '成品庫存', icon: 'fa fa-fw fa-genderless', routerLink: ['/productbasiclist'] },
+        //             // { label: '半成品庫存', icon: 'fa fa-fw fa-genderless' },
+        //             // { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
+        //         ]
 
-            },
-            // {
-            //     label: '採購管理', icon: 'fa fa-fw fa-bars',
-            //     items: [
-            //         { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
-            //         { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
-            //     ]
+        //     },
+        //     // {
+        //     //     label: '採購管理', icon: 'fa fa-fw fa-bars',
+        //     //     items: [
+        //     //         { label: '採購資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/purchaseorder'] },
+        //     //         { label: '進貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billpurchase'] },
+        //     //     ]
 
-            // },
-            // {
-            //     label: '銷貨管理', icon: 'fa fa-fw fa-bars',
-            //     items: [
-            //         { label: '銷貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
-            //     ]
+        //     // },
+        //     // {
+        //     //     label: '銷貨管理', icon: 'fa fa-fw fa-bars',
+        //     //     items: [
+        //     //         { label: '銷貨資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/salelist'] },
+        //     //     ]
 
-            // },
-            {
-                label: '組成管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '組成資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billofmateriallist'] },
-                ]
+        //     // },
+        //     {
+        //         label: '組成管理', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: '組成資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/billofmateriallist'] },
+        //         ]
 
-            },
-            {
-                label: '生產管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '領料資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/receiveList'] },
-                ]
+        //     },
+        //     {
+        //         label: '生產管理', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: '領料資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/receiveList'] },
+        //         ]
 
-            },
-            {
-                label: '基本資訊管理', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist'] },
-                    { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist'] },
-                    { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
-                    { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist'] },
-                ]
+        //     },
+        //     {
+        //         label: '基本資訊管理', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: '客戶資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/customerlist'] },
+        //             { label: '供應商資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/supplierlist'] },
+        //             { label: '倉庫資訊管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/warehouselist'] },
+        //             { label: '使用者帳戶管理', icon: 'fa fa-fw fa-genderless', routerLink: ['/userlist'] },
+        //         ]
 
-            },
-            // { label: '報工表單', icon: 'fa fa-fw fa-bars', routerLink: ['/taskform'] },
-            // { label: '報工歷史', icon: 'fa fa-fw fa-bars', routerLink: ['/taskview'] },
-            // { label: '報工歷史', icon: 'fa fa-exchange', routerLink: ['/taskviewdx'] },
-            // { label: '測試區1', icon: 'fa fa-warning', routerLink: ['/test1'] },
-        ];
+        //     },
+        //     // { label: '報工表單', icon: 'fa fa-fw fa-bars', routerLink: ['/taskform'] },
+        //     // { label: '報工歷史', icon: 'fa fa-fw fa-bars', routerLink: ['/taskview'] },
+        //     // { label: '報工歷史', icon: 'fa fa-exchange', routerLink: ['/taskviewdx'] },
+        //     // { label: '測試區1', icon: 'fa fa-warning', routerLink: ['/test1'] },
+        // ];
 
 
     }

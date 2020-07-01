@@ -54,6 +54,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "menu"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "message"
       },
       {

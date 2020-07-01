@@ -27,18 +27,55 @@ namespace HonjiMES.Controllers
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult<string> SignIn(LoginViewModel login)
+        public ActionResult<string> SingIn(LoginViewModel login)
         {
             if (ValidateUser(login))
             {
-                return _jwt.GenerateToken(login.Username);
+                var UserRoles = new UserRoles();
+                UserRoles.Token = _jwt.GenerateToken(login.Username);
+                UserRoles.Username = login.Username;
+                UserRoles.Timeout = DateTime.Now.AddMinutes(30);
+                UserRoles.Menu = GetMenu();
+                return Ok(MyFun.APIResponseOK(UserRoles));
             }
             else
             {
-                return BadRequest();
+                return Ok(MyFun.APIResponseError("帳號密碼錯誤"));
             }
 
         }
+
+        private MenuViewModel[] GetMenu()
+        {
+            var MenuViewModellist = new List<MenuViewModel>();
+            var Allmenu = _context.Menus.Where(x => x.DeleteFlag == 0).ToList();
+            foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
+            {
+                MenuViewModellist.Add(new MenuViewModel
+                {
+                    label = item.Name,
+                    icon = item.Icon,
+                    items = GetMenuitem(item.Id, Allmenu)
+                });
+            }
+            return MenuViewModellist.ToArray();
+        }
+
+        private MenuViewModel[] GetMenuitem(int id, List<Menu> allmenu)
+        {
+            var MenuViewModellist = new List<MenuViewModel>();
+            foreach (var item in allmenu.Where(x => x.Pid == id))
+            {
+                MenuViewModellist.Add(new MenuViewModel
+                {
+                    label = item.Name,
+                    icon = item.Icon,
+                    routerLink = item.RouterLink.Split(',')
+                });
+            }
+            return MenuViewModellist.ToArray();
+        }
+
         private bool ValidateUser(LoginViewModel login)
         {
             return true; // TODO
