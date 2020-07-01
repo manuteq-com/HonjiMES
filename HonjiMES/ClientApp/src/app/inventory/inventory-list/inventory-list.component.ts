@@ -40,7 +40,9 @@ export class InventoryListComponent implements OnInit, OnChanges {
     eformData: any;
     saveCheck = true;
     showdisabled: boolean;
-
+    Quantityval: any;
+    Priceval: any;
+    PriceAllval: number;
     BasicDataList: any;
     WarehouseList: any;
     WarehouseListAll: any;
@@ -121,6 +123,16 @@ export class InventoryListComponent implements OnInit, OnChanges {
         // const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         // this.DataType = basicData.DataType;
         // this.DataId = basicData.DataId;
+    }
+    QuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Quantityval = e.value;
+        this.PriceAllval = this.Quantityval * this.Priceval;
+    }
+    PriceValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Priceval = e.value;
+        this.PriceAllval = this.Quantityval * this.Priceval;
     }
     onRowInserting(e) {
         const datas = this.dataSourceDB;

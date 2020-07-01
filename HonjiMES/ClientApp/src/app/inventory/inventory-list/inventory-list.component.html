@@ -74,14 +74,14 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataId" valueExpr="TempId"></dxo-lookup>
         </dxi-column> -->
 
-        <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80">
-            <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
+        <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Price" caption="單價" dataType="number" [width]="80">
-            <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
+        <dxi-column dataField="Price" caption="單價" dataType="number" editCellTemplate="PriceEditCellTemplate">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="100">
-            <dxi-validation-rule type="required" message="總金額 必填"></dxi-validation-rule>
+        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" editCellTemplate="PriceAllEditCellTemplate">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Unit" caption="單位" [width]="100"></dxi-column>
         <dxi-column dataField="UnitCount" caption="單位數量" [width]="100"></dxi-column>
@@ -105,6 +105,18 @@
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
             <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        </div>
+        <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
+            <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
+                [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'PriceEditCellTemplate'">
+            <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)"
+                [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'PriceAllEditCellTemplate'">
+            <dx-number-box [value]='PriceAllval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
+            </dx-number-box>
         </div>
         <!-- <div *dxTemplate="let data of 'DataTypeEditCellTemplate'">
             <dx-number-box [value]='DataType' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
