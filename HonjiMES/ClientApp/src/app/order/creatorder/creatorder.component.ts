@@ -54,6 +54,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     CreateTime: any;
     CreateOrderNo: any;
     CreateTimeDateBoxOptions: any;
+    ProductPricrErrList: any;
 
     constructor(private http: HttpClient) {
         this.CustomerVal = null;
@@ -131,11 +132,13 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 remove: (key) => SendService.sendRequest(this.http, this.controller + '/DeleteOrderDetail', 'DELETE')
             });
         } else if (this.modval === 'excel') {
-            // debugger;
+            debugger;
             let ProductPricrErr = '';
             if (this.exceldata.Customer === 0) {
                 this.exceldata.Customer = null;
             }
+
+            this.ProductPricrErrList = [];
             this.exceldata.OrderDetails.forEach(item => {
                 this.SerialNo++;
                 if (item.ProductBasicId === 0) {
@@ -144,11 +147,13 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     const Product = this.ProductBasicList.filter(x => x.Id === item.ProductBasicId)[0];
                     item.DBOriginPrice = Product.Price;
                     item.DBPrice = Product.Price * item.Quantity;
-                    if (Product.Price !== item.OriginPrice) {
+                    if (Product.Price !== item.OriginPrice && !this.ProductPricrErrList.some(x => x === Product.ProductNo)) {
+                        this.ProductPricrErrList.push(Product.ProductNo);
                         ProductPricrErr += Product.ProductNo + '：' + Product.Price + '=>' + item.OriginPrice + '<br/>';
                     }
                 }
             });
+
             this.formData = this.exceldata;
             this.formData.OrderNo = this.CreateNumberInfoVal.CreateNumber;
             this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;

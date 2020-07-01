@@ -185,6 +185,8 @@ namespace HonjiMES.Models
                 item.CopyTo(ms);
                 ms.Position = 0; // <-- Add this, to make it work
                 var bytes = ms.ToArray();
+                var lostProductNoList = new List<string>();
+
                 try
                 {
                     if (Path.GetExtension(Fileitem).ToLower() == ".xls")
@@ -280,8 +282,9 @@ namespace HonjiMES.Models
                                         {
                                             case "ProductBasic":
                                                 Cellval = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
-                                                if (string.IsNullOrWhiteSpace(Cellval))
+                                                if (string.IsNullOrWhiteSpace(Cellval) && !lostProductNoList.Contains(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j))))
                                                 {
+                                                    lostProductNoList.Add(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)));
                                                     sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
                                                         + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
                                                         + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
