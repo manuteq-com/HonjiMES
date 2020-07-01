@@ -2,7 +2,7 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="AdjustNo" [disabled]="true">
+        <dxi-item dataField="AdjustNo" [disabled]="false">
             <dxi-validation-rule type="required" message="調整單號 必填"></dxi-validation-rule>
             <dxo-label text="調整單號"></dxo-label>
         </dxi-item>
@@ -58,8 +58,12 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別">
+        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="false" editCellTemplate="WarehouseEditCellTemplate">
             <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="倉別">
+            <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
 
@@ -97,6 +101,10 @@
             <dx-select-box [value]="data.value" (onValueChanged)="TempIdValueChanged($event,data)"
                 [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'TempId' } }"
                 valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
+        </div>
+        <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
+                [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <!-- <div *dxTemplate="let data of 'DataTypeEditCellTemplate'">
             <dx-number-box [value]='DataType' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>

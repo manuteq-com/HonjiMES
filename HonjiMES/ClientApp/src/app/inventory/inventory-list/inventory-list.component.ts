@@ -43,6 +43,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
 
     BasicDataList: any;
     WarehouseList: any;
+    WarehouseListAll: any;
     DataType: any;
     DataId: any;
 
@@ -84,7 +85,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         );
         this.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
-                this.WarehouseList = s.data;
+                this.WarehouseListAll = s.data;
             }
         );
     }
@@ -101,6 +102,22 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     TempIdValueChanged(e, data) {
         data.setValue(e.value);
+        const basicData = this.BasicDataList.find(z => z.TempId === e.value);
+        const dataType = basicData.DataType;
+        const dataId = basicData.DataId;
+        if (dataType === 1) {   //查詢原料
+            this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = s.data;
+                }
+            );
+        } else if (dataType === 2) {    //查詢成品
+            this.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = s.data;
+                }
+            );
+        }
         // const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         // this.DataType = basicData.DataType;
         // this.DataId = basicData.DataId;
@@ -121,6 +138,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
         this.saveCheck = false;
+        this.WarehouseList = null;
     }
     onEditingStart(e) {
         this.saveCheck = false;

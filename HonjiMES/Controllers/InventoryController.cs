@@ -31,9 +31,11 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<AdjustData>> GetAdjustNo()
         {
             var AdjustNoName = "AJ";
-            var NoDataProduct = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoDataProduct = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
+                && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCountProduct = NoDataProduct.Count() + 1;
-            var NoDataMaterial = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoDataMaterial = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
+                && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCountMaterial = NoDataMaterial.Count() + 1;
 
             if (NoCountProduct != 1) {
