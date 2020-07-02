@@ -111,36 +111,31 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(user));
         }
         /// <summary>
-        /// 新增帳戶
+        /// 新增帳戶及權限
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="ceeatuser"></param>
         /// <returns></returns>
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(PostUserViewModel ceeatuser)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Users.AsQueryable().Where(x => x.Username == user.Username && x.DeleteFlag == 0).Any())
+            if (_context.Users.AsQueryable().Where(x => x.Username == ceeatuser.user.Username && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("帳戶名稱已存在!", user));
+                return Ok(MyFun.APIResponseError("帳戶名稱已存在!"));
             }
-            
-            var key = "60246598";
-            var message = user.Password;
-            var encoding = new System.Text.UTF8Encoding();
-            byte[] keyByte = encoding.GetBytes(key);
-            byte[] messageBytes = encoding.GetBytes(message);
-            using (var hmacSHA256 = new HMACSHA256(keyByte))
+            ceeatuser.user.Password = MyFun.Encryption(ceeatuser.user.Password);
+            ceeatuser.user.CreateUser = 1;
+            var UserRoleList = MyFun.ReturnRole(ceeatuser.MenuList);
+            foreach (var UserRole in UserRoleList)
             {
-                byte[] hashMessage = hmacSHA256.ComputeHash(messageBytes);
-                user.Password = BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
+                ceeatuser.user.UserRoles.Add(UserRole);
             }
-            user.CreateUser = 1;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(user));
+            _context.Users.Add(ceeatuser.user);
+            //await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(ceeatuser));
         }
         /// <summary>
         /// 刪除帳戶
@@ -162,7 +157,28 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(user));
         }
-
+        /// <summary>
+        ///  帳戶列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MenuListViewModel>>> GetUsersMenu()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.Menus.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Pid != null);
+            var Menus = await data.ToListAsync();
+            var MenuList = new List<MenuListViewModel>();
+            foreach (var item in Menus)
+            {
+                MenuList.Add(new MenuListViewModel
+                {
+                    Id = item.Id,
+                    Name=item.Name
+                });
+            }
+            return Ok(MyFun.APIResponseOK(MenuList));
+        }
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);

@@ -6,26 +6,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("menu")]
-    public partial class Menu
+[Table("user_roles")]
+    public partial class UserRole
     {
-        public Menu()
-        {
-            UserRoles = new HashSet<UserRole>();
-        }
-
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("pid", TypeName = "int(11)")]
-        public int? Pid { get; set; }
-        [Required]
-        [Column("name", TypeName = "varchar(50)")]
-        public string Name { get; set; }
-        [Column("icon", TypeName = "varchar(50)")]
-        public string Icon { get; set; }
-        [Column("routerLink", TypeName = "varchar(200)")]
-        public string RouterLink { get; set; }
+        [Column("roles", TypeName = "varchar(10)")]
+        public string Roles { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -36,12 +24,18 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
-        [Column("order", TypeName = "int(11)")]
-        public int? Order { get; set; }
+        [Column("menu_id", TypeName = "int(11)")]
+        public int MenuId { get; set; }
+        [Column("users_id", TypeName = "int(11)")]
+        public int UsersId { get; set; }
         [Column("memo", TypeName = "text")]
         public string Memo { get; set; }
 
-        [InverseProperty(nameof(UserRole.Menu))]
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        [ForeignKey(nameof(MenuId))]
+        [InverseProperty("UserRoles")]
+        public virtual Menu Menu { get; set; }
+        [ForeignKey(nameof(UsersId))]
+        [InverseProperty(nameof(User.UserRoles))]
+        public virtual User Users { get; set; }
     }
 }

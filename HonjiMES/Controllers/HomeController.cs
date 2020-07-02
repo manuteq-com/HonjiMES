@@ -31,12 +31,12 @@ namespace HonjiMES.Controllers
         {
             if (ValidateUser(login))
             {
-                var UserRoles = new UserRoles();
-                UserRoles.Token = _jwt.GenerateToken(login.Username);
-                UserRoles.Username = login.Username;
-                UserRoles.Timeout = DateTime.Now.AddMinutes(30);
-                UserRoles.Menu = GetMenu();
-                return Ok(MyFun.APIResponseOK(UserRoles));
+                var UserRolesToken = new UserRolesToken();
+                UserRolesToken.Token = _jwt.GenerateToken(login.Username);
+                UserRolesToken.Username = login.Username;
+                UserRolesToken.Timeout = DateTime.Now.AddMinutes(30);
+                UserRolesToken.Menu = GetMenu();
+                return Ok(MyFun.APIResponseOK(UserRolesToken));
             }
             else
             {

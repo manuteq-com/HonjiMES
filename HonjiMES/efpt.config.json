@@ -162,6 +162,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "user_roles"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "users"
       },
       {

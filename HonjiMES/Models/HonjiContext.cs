@@ -45,6 +45,7 @@ namespace HonjiMES.Models
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<WebSession> WebSessions { get; set; }
 
@@ -712,6 +713,11 @@ namespace HonjiMES.Models
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Icon)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Memo)
+                    .HasComment("說明")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -2134,6 +2140,51 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
 
                 entity.Property(e => e.UserId).HasComment("使用者ID");
+            });
+
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.HasIndex(e => e.MenuId)
+                    .HasName("fk_user_roles_menu_idx");
+
+                entity.HasIndex(e => e.UsersId)
+                    .HasName("fk_user_roles_users1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Memo)
+                    .HasComment("說明")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MenuId).HasComment("目錄ID");
+
+                entity.Property(e => e.Roles)
+                    .HasComment("權限")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.UsersId).HasComment("使用都ID");
+
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.MenuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_user_roles_menu");
+
+                entity.HasOne(d => d.Users)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.UsersId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_user_roles_users1");
             });
 
             modelBuilder.Entity<Warehouse>(entity =>

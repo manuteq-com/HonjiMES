@@ -11,19 +11,11 @@
         <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
     </div>
 </div>
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true" [rowAlternationEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -36,17 +28,19 @@
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <!-- <dxi-item  dataField="Code"></dxi-item> -->
-            <dxi-item  dataField="Username"></dxi-item>
-            <dxi-item  dataField="Realname"></dxi-item>
+            <dxi-item dataField="Username"></dxi-item>
+            <dxi-item dataField="Realname"></dxi-item>
             <!-- <dxi-item  dataField="Password"></dxi-item>
             <dxi-item  dataField="PasswordConfirm"></dxi-item> -->
-            <dxi-item  dataField="Permission"></dxi-item>
-            <dxi-item  dataField="Department"></dxi-item>
+            <dxi-item dataField="Permission"></dxi-item>
+            <dxi-item dataField="Department"></dxi-item>
         </dxo-form>
         <dxo-popup [width]="800" [height]="300">
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
@@ -74,12 +68,10 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="420"
+<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatuser (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-        [exceldata]="exceldata"></app-creatuser>
+            [exceldata]="exceldata"></app-creatuser>
     </div>
 </dx-popup>
-
-

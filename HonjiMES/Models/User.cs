@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("users")]
     public partial class User
     {
+        public User()
+        {
+            UserRoles = new HashSet<UserRole>();
+        }
+
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
@@ -37,5 +42,8 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+
+        [InverseProperty(nameof(UserRole.Users))]
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }
