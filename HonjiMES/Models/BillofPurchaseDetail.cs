@@ -46,18 +46,18 @@ namespace HonjiMES.Models
         public int OriginPrice { get; set; }
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
-        [Column("price_all")]
-        public float PriceAll { get; set; }
+        [Column("price_all", TypeName = "decimal(10,2)")]
+        public decimal PriceAll { get; set; }
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
-        [Column("unit_count")]
-        public float UnitCount { get; set; }
-        [Column("unit_price")]
-        public float UnitPrice { get; set; }
-        [Column("unit_price_all")]
-        public float UnitPriceAll { get; set; }
-        [Column("work_price")]
-        public float WorkPrice { get; set; }
+        [Column("unit_count", TypeName = "decimal(10,2)")]
+        public decimal UnitCount { get; set; }
+        [Column("unit_price", TypeName = "decimal(10,2)")]
+        public decimal UnitPrice { get; set; }
+        [Column("unit_price_all", TypeName = "decimal(10,2)")]
+        public decimal UnitPriceAll { get; set; }
+        [Column("work_price", TypeName = "decimal(10,2)")]
+        public decimal WorkPrice { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int? WarehouseId { get; set; }
         [Column("check_status", TypeName = "int(11)")]

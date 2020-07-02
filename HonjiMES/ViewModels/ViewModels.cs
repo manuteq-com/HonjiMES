@@ -59,13 +59,13 @@ namespace HonjiMES.Models
         public int DataId { get; set; }
         public int WarehouseId { get; set;}
         public int Quantity { get; set;}
-        public float Price { get; set;}
-        public float PriceAll { get; set;}
+        public decimal Price { get; set;}
+        public decimal PriceAll { get; set;}
         public string Unit { get; set;}
-        public float UnitCount { get; set;}
-        public float UnitPrice { get; set;}
-        public float UnitPriceAll { get; set;}
-        public float WorkPrice { get; set;}
+        public decimal UnitCount { get; set;}
+        public decimal UnitPrice { get; set;}
+        public decimal UnitPriceAll { get; set;}
+        public decimal WorkPrice { get; set;}
         public string Remark { get; set;}
     }
     
@@ -81,7 +81,7 @@ namespace HonjiMES.Models
         public string Name { get; set; }
         public string Specification { get; set; }
         public string Property { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
     }
     
     /// <summary>
@@ -216,13 +216,13 @@ namespace HonjiMES.Models
         public int BillofPurchaseDetailId { get; set; }
         public int WarehouseId { get; set; }
         public int Quantity { get; set;}
-        public float Price { get; set;}
-        public float PriceAll { get; set;}
+        public decimal Price { get; set;}
+        public decimal PriceAll { get; set;}
         public string Unit { get; set;}
-        public float UnitCount { get; set;}
-        public float UnitPrice { get; set;}
-        public float UnitPriceAll { get; set;}
-        public float WorkPrice { get; set;}
+        public decimal UnitCount { get; set;}
+        public decimal UnitPrice { get; set;}
+        public decimal UnitPriceAll { get; set;}
+        public decimal WorkPrice { get; set;}
         public string Reason { get; set; }
         public string Remarks { get; set;}
         public DateTime CreateTime { get; set; }
@@ -268,13 +268,13 @@ namespace HonjiMES.Models
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
         public string MaterialSpecification { get; internal set; }
-        public float MaterialPrice { get; set; }
+        public decimal MaterialPrice { get; set; }
         public int? ProductBasicId { get; set; }
         public string ProductName { get; set; }
         public string ProductNo { get; set; }
         public string ProductNumber { get; internal set; }
         public string ProductSpecification { get; internal set; }
-        public float ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public int Lv { get; set; }
         public int ReceiveQty { get; internal set; }
         public bool? Ismaterial { get; internal set; }

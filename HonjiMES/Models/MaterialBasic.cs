@@ -30,8 +30,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
-        [Column("price")]
-        public float Price { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
         [Column("supplier", TypeName = "int(11)")]

@@ -36,8 +36,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
-        [Column("price")]
-        public float Price { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]

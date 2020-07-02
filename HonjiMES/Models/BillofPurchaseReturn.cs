@@ -18,18 +18,18 @@ namespace HonjiMES.Models
         public int BillofPurchaseDetailId { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int WarehouseId { get; set; }
-        [Column("quantity")]
-        public float Quantity { get; set; }
-        [Column("price")]
-        public float? Price { get; set; }
-        [Column("price_all")]
-        public float PriceAll { get; set; }
+        [Column("quantity", TypeName = "decimal(10,2)")]
+        public decimal Quantity { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal? Price { get; set; }
+        [Column("price_all", TypeName = "decimal(10,2)")]
+        public decimal PriceAll { get; set; }
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
-        [Column("unit_count")]
-        public float? UnitCount { get; set; }
-        [Column("unit_price")]
-        public float? UnitPrice { get; set; }
+        [Column("unit_count", TypeName = "decimal(10,2)")]
+        public decimal? UnitCount { get; set; }
+        [Column("unit_price", TypeName = "decimal(10,2)")]
+        public decimal? UnitPrice { get; set; }
         [Required]
         [Column("reason", TypeName = "varchar(100)")]
         public string Reason { get; set; }

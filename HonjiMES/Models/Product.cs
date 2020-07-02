@@ -41,8 +41,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
-        [Column("price")]
-        public float Price { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
         [Column("material_id", TypeName = "int(11)")]
         public int? MaterialId { get; set; }
         [Column("material_require", TypeName = "int(11)")]
