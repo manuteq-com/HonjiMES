@@ -382,9 +382,9 @@ namespace HonjiMES.Models
         /// 名稱
         /// </summary>
         public string Name { get; set; }
-        public bool Creat { get; set; }
-        public bool Edit { get; set; }
-        public bool Delete { get; set; }
+        public bool? Creat { get; set; }
+        public bool? Edit { get; set; }
+        public bool? Delete { get; set; }
     }
     public class PostUserViewModel
     {
@@ -395,6 +395,6 @@ namespace HonjiMES.Models
         /// <summary>
         /// 目錄權限
         /// </summary>
-        public List< MenuListViewModel> MenuList { get; set; }
+        public List<MenuListViewModel> MenuList { get; set; }
     }
 }

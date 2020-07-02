@@ -47,7 +47,7 @@ export class CreatuserComponent implements OnInit {
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
-
+    creatuser: any = {};
     // passwordComparison = () => {
     //     return this.myform.instance.option('formData').Password;
     // }
@@ -142,8 +142,11 @@ export class CreatuserComponent implements OnInit {
         // this.postval = new User();
         // this.postval = this.formData as User;
         // tslint:disable-next-line: max-line-length
-        // const sendRequest = await SendService.sendRequest(this.http, '/Users/PostUser', 'POST', { values: this.formData });
-        const sendRequest = true;
+
+        this.creatuser.user = this.formData;
+        this.creatuser.MenuList = this.dataSourceDB;
+        const sendRequest = await SendService.sendRequest(this.http, '/Users/PostUser', 'POST', { values: this.creatuser });
+        // const sendRequest = true;
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

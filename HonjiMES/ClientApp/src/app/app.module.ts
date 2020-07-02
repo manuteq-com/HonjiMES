@@ -75,6 +75,7 @@ import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return
 import { InventoryListComponent } from './inventory/inventory-list/inventory-list.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { LoginComponent } from './login/login/login.component';
+import { UserRolesComponent } from './setting/user-roles/user-roles.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -165,6 +166,7 @@ export function tokenGetter() {
         BillPurchaseReturnComponent,
         InventoryListComponent,
         LoginComponent,
+        UserRolesComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

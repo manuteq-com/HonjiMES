@@ -139,9 +139,9 @@ namespace HonjiMES.Models
             foreach (var Menuitem in menuList)
             {
             var Roles = "";
-                Roles += Menuitem.Creat ? "1" : "0";
-                Roles += Menuitem.Edit ? "1" : "0";
-                Roles += Menuitem.Delete ? "1" : "0";
+                Roles += Menuitem.Creat.HasValue ? Menuitem.Creat.Value ? "1" : "0" : "0";
+                Roles += Menuitem.Edit.HasValue ? Menuitem.Edit.Value ? "1" : "0" : "0";
+                Roles += Menuitem.Delete.HasValue ? Menuitem.Delete.Value ? "1" : "0" : "0";
                 UserRoleList.Add(new UserRole { 
                  MenuId= Menuitem.Id,
                   Roles= Roles

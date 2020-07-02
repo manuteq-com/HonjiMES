@@ -12,10 +12,10 @@
     </div>
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true" [rowAlternationEnabled]="true">
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -65,7 +65,11 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
+    <div *dxTemplate="let item of 'detail'">
+        <app-user-roles [itemkeyval]="item.key">
 
+        </app-user-roles>
+    </div>
 </dx-data-grid>
 
 <dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false"
