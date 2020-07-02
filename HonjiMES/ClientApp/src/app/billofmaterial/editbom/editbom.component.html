@@ -2,6 +2,7 @@
 
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
         <dxi-item dataField="Name">
             <dxo-label text="名稱"></dxo-label>
         </dxi-item>
@@ -12,25 +13,12 @@
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
             <dxo-label text="品號"></dxo-label>
         </dxi-item>
-        <!-- <dxi-item dataField="BasicId" caption="品號" editCellTemplate="BasicEditCellTemplate">
-            <dxo-lookup [dataSource]="BasicDataList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-            <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
-        </dxi-item> -->
-        <!-- <dxi-item dataField="BasicId" dataType="number" editorType="dxSelectBox" editCellTemplate="BasicEditCellTemplate">
-            <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
-            <dxo-label text="品號"></dxo-label>
-        </dxi-item> -->
-        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox">
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
             <dxi-validation-rule type="required" message="組成數量 必填"></dxi-validation-rule>
             <dxi-validation-rule type="range" [min]="1" message="組成數量 必須大於1"></dxi-validation-rule>
             <dxo-label text="組成數量"></dxo-label>
         </dxi-item>
 
-        <!-- <div *dxTemplate="let data of 'BasicEditCellTemplate'">
-            <dx-select-box [value]="data.value"
-                [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'Id' } }"
-                valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
-        </div> -->
     </dx-form>
 
     <div class="col-auto-12 mt-2">

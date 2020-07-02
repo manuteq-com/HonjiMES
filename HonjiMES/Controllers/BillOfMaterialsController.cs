@@ -446,15 +446,21 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<BillOfMaterial>> DeleteBomlist(int id)
         {
-            var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
-            if (BillOfMaterial == null)
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.Id == id).ToListAsync();
+            // var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
+            if (BillOfMaterials != null)
             {
-                return NotFound();
+                // BillOfMaterial.DeleteFlag = 2;
+                var result = MyFun.DeleteBomList(BillOfMaterials);
+                foreach (var item in result)
+                {
+                    _context.BillOfMaterials.Remove(item);
+                }
+                await _context.SaveChangesAsync();
             }
-            // BillOfMaterial.DeleteFlag = 1;
-            _context.BillOfMaterials.Remove(BillOfMaterial);
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(BillOfMaterial));
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
 
         /// <summary>
@@ -481,7 +487,7 @@ namespace HonjiMES.Controllers
             var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Select(x => new
             {
                 x.Id,
-                Name = x.Name + "_" + x.ProductNo,
+                Name = x.ProductNo + "_" + x.Name,
                 Group = x.Name
             }).OrderBy(x => x.Name).ToListAsync();
             return Ok(MyFun.APIResponseOK(productBasic));

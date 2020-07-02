@@ -390,6 +390,24 @@ namespace HonjiMES.Models
             }
             return bomlist;
         }
+        /// <summary>
+        /// 用遞迴的方式刪除所有的BOM層
+        /// </summary>
+        /// <param name="billOfMaterials"></param>
+        /// <returns></returns>
+        internal static List<BillOfMaterial> DeleteBomList(IEnumerable<BillOfMaterial> billOfMaterials)
+        {
+            var BillOfMaterial = new List<BillOfMaterial>();
+            foreach (var item in billOfMaterials)
+            {
+                if (item.InverseP.Any())
+                {
+                    BillOfMaterial.AddRange(MyFun.DeleteBomList(item.InverseP));
+                }
+                BillOfMaterial.Add(item);
+            }
+            return BillOfMaterial;
+        }
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(IQueryable<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             QueryCollection queries = new QueryCollection();

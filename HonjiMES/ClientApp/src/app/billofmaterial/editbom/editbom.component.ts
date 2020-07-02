@@ -28,10 +28,10 @@ export class EditbomComponent implements OnInit, OnChanges {
     postval: any;
     editorOptions: any;
     ComponentList: any;
-    BasicDataList: any;
     MaterialList: any;
     ProductList: any;
     PostBom: { BasicType: number, BasicId: number, Quantity: number, Name: string };
+    QuantityEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
 
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
@@ -67,6 +67,13 @@ export class EditbomComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.QuantityEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 1,
+            min: 1
+        };
         // const remote = true;
         // this.MaterialList = new CustomStore({
         //     key: 'Id',
@@ -79,18 +86,19 @@ export class EditbomComponent implements OnInit, OnChanges {
     }
     onComponentSelectionChanged(e) {
         if (e.value === 1) {
-            // this.BasicDataList = this.MaterialList;
             this.editorOptions = {
+                dataSource: { paginate: true, store: { type: 'array', data: this.MaterialList, key: 'Id' } },
                 searchEnabled: true,
-                items: this.MaterialList,
+                // items: this.MaterialList,
                 displayExpr: 'Name',
                 valueExpr: 'Id',
+
             };
         } else if (e.value === 2) {
-            // this.BasicDataList = this.ProductList;
             this.editorOptions = {
+                dataSource: { paginate: true, store: { type: 'array', data: this.ProductList, key: 'Id' } },
                 searchEnabled: true,
-                items: this.ProductList,
+                // items: this.ProductList,
                 displayExpr: 'Name',
                 valueExpr: 'Id',
             };

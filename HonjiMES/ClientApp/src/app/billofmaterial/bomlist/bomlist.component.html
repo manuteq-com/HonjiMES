@@ -31,7 +31,7 @@
         <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
     </dxi-column>
 </dx-tree-list>
-<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="35%" [width]="400"
+<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="35%" [width]="600"
     [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval">
