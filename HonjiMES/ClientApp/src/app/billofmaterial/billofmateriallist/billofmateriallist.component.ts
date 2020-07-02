@@ -15,7 +15,7 @@ export class BillofmateriallistComponent implements OnInit {
     dataSourceDB: any;
     apiurl = location.origin + '/api';
     Controller = '/BillOfMaterials';
-    remoteOperations = true;
+    remoteOperations = false;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }

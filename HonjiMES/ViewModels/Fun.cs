@@ -370,7 +370,7 @@ namespace HonjiMES.Models
                         MaterialName = item.MaterialBasic?.Name,
                         MaterialNo = item.MaterialBasic?.MaterialNo,
                         MaterialSpecification = item.MaterialBasic?.Specification,
-                        MaterialPrice = item.MaterialBasic.Price,
+                        MaterialPrice = item.MaterialBasic?.Price ?? 0,
                         Quantity = item.Quantity,
                         ProductName = item.InverseP.FirstOrDefault()?.ProductBasic?.Name ?? "",
                         ProductNo = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNo ?? "",

@@ -330,7 +330,7 @@ namespace HonjiMES.Controllers
             //var ProductBasic = _context.ProductBasics.AsQueryable();
             //var ProductBasic = await DataSourceLoader.LoadAsync(_context.ProductBasics.AsQueryable(), FromQuery);
 
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics.AsQueryable(), FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
         /// <summary>
@@ -345,7 +345,9 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
-            bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
+            if (BillOfMaterials != null) {
+                bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
+            }
             return Ok(MyFun.APIResponseOK(bomlist));
         }
         /// <summary>
@@ -439,6 +441,22 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(PostBom));
         }
+        
+        // DELETE: api/BillOfMaterials/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> DeleteBomlist(int id)
+        {
+            var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
+            if (BillOfMaterial == null)
+            {
+                return NotFound();
+            }
+            // BillOfMaterial.DeleteFlag = 1;
+            _context.BillOfMaterials.Remove(BillOfMaterial);
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(BillOfMaterial));
+        }
+
         /// <summary>
         /// 取可用的原料下拉列表
         /// </summary>

@@ -28,6 +28,7 @@ export class EditbomComponent implements OnInit, OnChanges {
     postval: any;
     editorOptions: any;
     ComponentList: any;
+    BasicDataList: any;
     MaterialList: any;
     ProductList: any;
     PostBom: { BasicType: number, BasicId: number, Quantity: number, Name: string };
@@ -40,7 +41,7 @@ export class EditbomComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 1;
         this.ComponentList = {
             items: myservice.getComponent(),
             displayExpr: 'Name',
@@ -78,6 +79,7 @@ export class EditbomComponent implements OnInit, OnChanges {
     }
     onComponentSelectionChanged(e) {
         if (e.value === 1) {
+            // this.BasicDataList = this.MaterialList;
             this.editorOptions = {
                 searchEnabled: true,
                 items: this.MaterialList,
@@ -85,6 +87,7 @@ export class EditbomComponent implements OnInit, OnChanges {
                 valueExpr: 'Id',
             };
         } else if (e.value === 2) {
+            // this.BasicDataList = this.ProductList;
             this.editorOptions = {
                 searchEnabled: true,
                 items: this.ProductList,

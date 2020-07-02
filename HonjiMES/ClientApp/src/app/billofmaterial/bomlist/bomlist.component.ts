@@ -50,7 +50,7 @@ export class BomlistComponent implements OnInit {
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutBomlist', 'PUT', { key, values }),
             remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist/' + key, 'DELETE')
         });
 
     }
