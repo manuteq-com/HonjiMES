@@ -22,13 +22,13 @@
         <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
             <dxo-label text="調整單價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="UnitCount" [editorOptions]="UnitCountEditorOptions">
+        <dxi-item dataField="UnitCount" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitCountEditorOptions">
             <dxo-label text="單位數量"></dxo-label>
         </dxi-item>
         <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
             <dxo-label text="調整總價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="UnitPrice">
+        <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitPriceEditorOptions">
             <dxo-label text="單位單價"></dxo-label>
         </dxi-item>
         <dxi-item dataField="WorkPrice">

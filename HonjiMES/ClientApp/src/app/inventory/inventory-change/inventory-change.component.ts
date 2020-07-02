@@ -51,6 +51,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
     QuantityEditorOptions: any;
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
+    UnitPriceEditorOptions: any;
 
     constructor(private http: HttpClient) {
         // debugger;
@@ -68,6 +69,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.controller = '/OrderDetails';
         this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
         this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
+        this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
 
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
@@ -156,7 +158,10 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.formData.PriceAll = this.formData.Quantity * e.value;
     }
     UnitCountValueChanged(e) {
-        // this.formData.UnitPrice = this.formData.Quantity * e.value;
+        this.formData.UnitPriceAll = this.formData.UnitPrice * e.value;
+    }
+    UnitPriceValueChanged(e) {
+        this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
     }
     refreshAdjustNo() {
         if (this.modval === 'material') {

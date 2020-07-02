@@ -43,6 +43,9 @@ export class InventoryListComponent implements OnInit, OnChanges {
     Quantityval: any;
     Priceval: any;
     PriceAllval: number;
+    UnitQuantityval: any;
+    UnitPriceval: any;
+    UnitPriceAllval: any;
     BasicDataList: any;
     WarehouseList: any;
     WarehouseListAll: any;
@@ -134,6 +137,16 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.Priceval = e.value;
         this.PriceAllval = this.Quantityval * this.Priceval;
     }
+    UnitQuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitQuantityval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
+    UnitPriceValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitPriceval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
     onRowInserting(e) {
         const datas = this.dataSourceDB;
         this.dataSourceDB.forEach(element => {// 阻擋重複新增
@@ -151,6 +164,12 @@ export class InventoryListComponent implements OnInit, OnChanges {
     onInitNewRow(e) {
         this.saveCheck = false;
         this.WarehouseList = null;
+        this.Quantityval = null;
+        this.Priceval = null;
+        this.PriceAllval = null;
+        this.UnitQuantityval = null;
+        this.UnitPriceval = null;
+        this.UnitPriceAllval = null;
     }
     onEditingStart(e) {
         this.saveCheck = false;

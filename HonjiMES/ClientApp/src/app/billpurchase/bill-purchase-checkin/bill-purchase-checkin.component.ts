@@ -29,6 +29,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     QuantityEditorOptions: any;
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
+    UnitPriceEditorOptions: any;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -78,6 +79,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
         );
         this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
         this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
+        this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;
@@ -87,7 +89,10 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
         this.formData.PriceAll = this.formData.Quantity * e.value;
     }
     UnitCountValueChanged(e) {
-        // this.formData.UnitPrice = this.formData.Quantity * e.value;
+        this.formData.UnitPriceAll = this.formData.UnitPrice * e.value;
+    }
+    UnitPriceValueChanged(e) {
+        this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
     }
     validate_before(): boolean {
         // 表單驗證

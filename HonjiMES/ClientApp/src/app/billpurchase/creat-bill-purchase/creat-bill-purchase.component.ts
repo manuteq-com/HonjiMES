@@ -52,6 +52,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     OriginPriceval: any;
     Priceval: any;
     PriceAllval: number;
+    UnitQuantityval: any;
+    UnitPriceval: any;
+    UnitPriceAllval: any;
     allMode: string;
     checkBoxesMode: string;
     postval: any;
@@ -173,6 +176,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = 0;
         this.Priceval = 0;
         this.PriceAllval = 0;
+        this.UnitQuantityval = null;
+        this.UnitPriceval = null;
+        this.UnitPriceAllval = null;
         this.MaterialBasicList = null;
         this.WarehouseList = null;
 
@@ -210,6 +216,16 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.Priceval = e.value;
         this.PriceAllval = this.Quantityval * this.Priceval;
     }
+    UnitQuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitQuantityval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
+    UnitPriceValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitPriceval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
     onInitNewRow(e) {
         this.Supplierval = this.SupplierIdVal;
         this.Purchaseval = this.PurchaseIdVal;
@@ -217,6 +233,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.PriceAllval = e.data.PriceAll;
+        this.UnitQuantityval = e.data.UnitQuantityval;
+        this.UnitPriceval = e.data.UnitPriceval;
+        this.UnitPriceAllval = e.data.UnitPriceAllval;
         this.WarehouseList = null;
         // debugger;
         // const dataGrid = e.component;
@@ -246,6 +265,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.OriginPriceval = 0;
             this.Priceval = 0;
             this.PriceAllval = 0;
+            this.UnitQuantityval = null;
+            this.UnitPriceval = null;
+            this.UnitPriceAllval = null;
             this.WarehouseList = null;
         }
     }
@@ -258,6 +280,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.PriceAllval = e.data.PriceAll;
+        this.UnitQuantityval = e.data.UnitQuantityval;
+        this.UnitPriceval = e.data.UnitPriceval;
+        this.UnitPriceAllval = e.data.UnitPriceAllval;
         this.Warehouseval = e.data.WarehouseId;
         this.GetPurchasesBySupplier(e.data.SupplierId);
         this.GetMaterialBasicsByPurchase(e.data.PurchaseId);
