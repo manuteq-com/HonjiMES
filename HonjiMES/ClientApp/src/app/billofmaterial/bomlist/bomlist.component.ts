@@ -26,6 +26,8 @@ export class BomlistComponent implements OnInit {
     }
     constructor(private http: HttpClient) {
         this.onReorder = this.onReorder.bind(this);
+        this.isEditVisible = this.isEditVisible.bind(this);
+        this.isDeleteVisible = this.isDeleteVisible.bind(this);
         this.isUploadVisible = this.isUploadVisible.bind(this);
         this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
@@ -113,6 +115,20 @@ export class BomlistComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    isEditVisible(e) {
+        // if (e.row.data.Lv === 1) {
+        //     return true;
+        // } else {
+            return false;
+        // }
+    }
+    isDeleteVisible(e) {
+        if (e.row.data.Lv === 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
     isUploadVisible(e) {
         if (e.row.data.ProductNo !== '') {

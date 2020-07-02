@@ -156,19 +156,35 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     (s) => {
                         debugger;
                         if (s.success) {
+                            let productId = 1;
+                            let productQuantity = 1;
                             s.data.forEach(element => {
+                                if (element.MaterialBasicId == null) {
+                                    if (element.Pid === productId) {
+                                        productId = element.Id;
+                                        productQuantity = productQuantity * element.Quantity;
+                                    } else {
+                                        productId = element.Id;
+                                        productQuantity = element.Quantity;
+                                    }
+                                }
+                                let tempQuantity = element.Quantity;
+                                if (element.Pid !== 0 && element.Pid === productId) {
+                                    tempQuantity = element.Quantity * productQuantity;
+                                }
+
                                 const index = this.dataSourceDB.findIndex(z => z.DataId === element.MaterialBasicId);
                                 if (~index) {
-                                    this.dataSourceDB[index].Quantity += x.Quantity * element.Quantity;
-                                    this.dataSourceDB[index].Price += (x.Quantity * element.Quantity) * element.MaterialPrice;
-                                } else {
+                                    this.dataSourceDB[index].Quantity += x.Quantity * tempQuantity;
+                                    this.dataSourceDB[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
+                                } else if (element.MaterialBasicId != null) {
                                     this.dataSourceDB.push({
                                         Serial: this.Serial,
                                         DataId: element.MaterialBasicId,
                                         WarehouseId: null,
-                                        Quantity: x.Quantity * element.Quantity,
+                                        Quantity: x.Quantity * tempQuantity,
                                         OriginPrice: element.MaterialPrice,
-                                        Price: (x.Quantity * element.Quantity) * element.MaterialPrice,
+                                        Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
                                         DeliveryTime: new Date()
                                     });
                                 }

@@ -404,7 +404,8 @@ namespace HonjiMES.Controllers
                 //複製BOM內容
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 int BasicId = PostBom.BasicId.Value;
-                var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
+                // var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
+                var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.Where(x => x.Pid == null).ToList();
                 foreach (var item1 in BillOfMaterials)
                 {
                     var nbom1 = new BillOfMaterial
