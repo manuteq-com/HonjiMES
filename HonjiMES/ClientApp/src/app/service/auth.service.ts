@@ -8,7 +8,7 @@ import { APIResponse } from '../app.module';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    private currentUserSubject: BehaviorSubject<LoginUser>;
+    public currentUserSubject: BehaviorSubject<LoginUser>;
     public currentUser: Observable<LoginUser>;
 
     constructor(private http: HttpClient) {

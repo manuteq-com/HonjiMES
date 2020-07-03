@@ -87,6 +87,7 @@ export class LoginComponent implements OnInit {
             .then((ReturnData: any) => {
                 debugger;
                 if (ReturnData.success) {
+                    this.app.UserName = ReturnData.data.Username;
                     localStorage.setItem('currentUser', JSON.stringify(ReturnData.data));
                     this.authService.currentUserSubject.next(ReturnData.data);
                     this.router.navigate([this.returnUrl]);

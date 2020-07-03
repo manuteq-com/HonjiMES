@@ -20,41 +20,28 @@ enum MenuOrientation {
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit, OnInit, OnChanges {
-
     layoutMode: MenuOrientation = MenuOrientation.HORIZONTAL;
-
     darkMenu = true; // 黑色 Menu
-
     profileMode = 'top';
-
     rotateMenuButton: boolean;
-
     topbarMenuActive: boolean;
-
     overlayMenuActive: boolean;
-
     staticMenuDesktopInactive: boolean;
-
     staticMenuMobileActive: boolean;
-
     layoutMenuScroller: HTMLDivElement;
-
     menuClick: boolean;
-
     topbarItemClick: boolean;
-
     activeTopbarItem: any;
-
     resetMenu: boolean;
-
     menuHoverActive: boolean;
-
     @ViewChild('layoutMenuScroller', { static: true }) layoutMenuScrollerViewChild: ScrollPanel;
+    UserName: string;
     menu: Array<any> = [];
     breadcrumbList: Array<any> = [];
     login$: LoginUser;
     constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
@@ -74,6 +61,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     }
     ngOnChanges() {
 
+    }
+    GetUserName() {
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+        return this.UserName;
     }
     logout() {
         this._authService.logout();
