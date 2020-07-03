@@ -30,38 +30,69 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<AdjustData>> GetAdjustNo()
         {
-            var AdjustNoName = "AJ";
-            var NoDataProduct = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
-                && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var NoCountProduct = NoDataProduct.Count() + 1;
-            var NoDataMaterial = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
-                && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var NoCountMaterial = NoDataMaterial.Count() + 1;
-
-            if (NoCountProduct != 1) {
-                var LastAdjustNo = NoDataProduct.FirstOrDefault().AdjustNo;
-                var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
-                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-                if (NoCountProduct <= NoLast) {
-                    NoCountProduct = NoLast + 1;
-                }
-            }
-            if (NoCountMaterial != 1) {
-                var LastAdjustNo = NoDataMaterial.FirstOrDefault().AdjustNo;
-                var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
-                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-                if (NoCountMaterial <= NoLast) {
-                    NoCountMaterial = NoLast + 1;
-                }
-            }
+            var key = "AJ";
+            var dt = DateTime.Now.ToString("yyMMdd");
             
-            var NoCount = NoCountProduct;
-            if (NoCountProduct < NoCountMaterial) {
-                NoCount = NoCountMaterial;
+            var MaterialNoData = await _context.MaterialLogs.AsQueryable().Where(x => x.AdjustNo.Contains(key + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var MaterialNoCount = MaterialNoData.Count() + 1;
+            var ProductNoData = await _context.ProductLogs.AsQueryable().Where(x => x.AdjustNo.Contains(key + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var ProductNoCount = ProductNoData.Count() + 1;
+            
+            if (MaterialNoCount != 1) {
+                foreach (var item in MaterialNoData)
+                {
+                    if (MyFun.CheckNoFormat(item.AdjustNo, key, dt, 3)) {
+                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
+                        if (MaterialNoCount <= No) {
+                            MaterialNoCount = No + 1;
+                        }
+                    }
+                }
+            }
+            if (ProductNoCount != 1) {
+                foreach (var item in ProductNoData)
+                {
+                    if (MyFun.CheckNoFormat(item.AdjustNo, key, dt, 3)) {
+                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
+                        if (ProductNoCount <= No) {
+                            ProductNoCount = No + 1;
+                        }
+                    }
+                }
+            }
+
+            // var AdjustNoName = "AJ";
+            // var NoDataProduct = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
+            //     && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            // var NoCountProduct = NoDataProduct.Count() + 1;
+            // var NoDataMaterial = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName) 
+            //     && x.AdjustNo.Length == (AdjustNoName.Length + 6)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            // var NoCountMaterial = NoDataMaterial.Count() + 1;
+
+            // if (NoCountProduct != 1) {
+            //     var LastAdjustNo = NoDataProduct.FirstOrDefault().AdjustNo;
+            //     var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
+            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+            //     if (NoCountProduct <= NoLast) {
+            //         NoCountProduct = NoLast + 1;
+            //     }
+            // }
+            // if (NoCountMaterial != 1) {
+            //     var LastAdjustNo = NoDataMaterial.FirstOrDefault().AdjustNo;
+            //     var LastLength = LastAdjustNo.Length - (LastAdjustNo.Length - 6);
+            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+            //     if (NoCountMaterial <= NoLast) {
+            //         NoCountMaterial = NoLast + 1;
+            //     }
+            // }
+            
+            var NoCount = MaterialNoCount;
+            if (MaterialNoCount < ProductNoCount) {
+                NoCount = ProductNoCount;
             }
 
             var AdjustData = new AdjustData{
-                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+                AdjustNo = key + dt + NoCount.ToString("000")
             };
             return Ok(MyFun.APIResponseOK(AdjustData));
         }
@@ -72,19 +103,35 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<MaterialLog>> GetMaterialAdjustNo()
         {
-            var AdjustNoName = "AJM";
-            var NoData = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
-                var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
-                var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
-                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-                if (NoCount <= NoLast) {
-                    NoCount = NoLast + 1;
+            var AdjustNoName = "AJ";
+            var dt = DateTime.Now.ToString("yyMMdd");
+            var MaterialNoData = await _context.MaterialLogs.AsQueryable().Where(x => x.AdjustNo.Contains(AdjustNoName + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var MaterialNoCount = MaterialNoData.Count() + 1;
+            if (MaterialNoCount != 1) {
+                foreach (var item in MaterialNoData)
+                {
+                    if (MyFun.CheckNoFormat(item.AdjustNo, AdjustNoName, dt, 3)) {
+                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
+                        if (MaterialNoCount <= No) {
+                            MaterialNoCount = No + 1;
+                        }
+                    }
                 }
             }
+            // var AdjustNoName = "AJM";
+            // var NoData = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            // var MaterialNoCount = NoData.Count() + 1;
+            // if (MaterialNoCount != 1) {
+            //     var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
+            //     var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
+            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+            //     if (MaterialNoCount <= NoLast) {
+            //         MaterialNoCount = NoLast + 1;
+            //     }
+            // }
             var AdjustData = new MaterialLog{
-                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+                AdjustNo = AdjustNoName + dt + MaterialNoCount.ToString("000")
+                // AdjustNo = AdjustNoName + MaterialNoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(AdjustData));
         }
@@ -95,19 +142,35 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<ProductLog>> GetProductAdjustNo()
         {
-            var AdjustNoName = "AJP";
-            var NoData = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
-                var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
-                var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
-                var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-                if (NoCount <= NoLast) {
-                    NoCount = NoLast + 1;
+            var AdjustNoName = "AJ";
+            var dt = DateTime.Now.ToString("yyMMdd");
+            var ProductNoData = await _context.ProductLogs.AsQueryable().Where(x => x.AdjustNo.Contains(AdjustNoName + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var ProductNoCount = ProductNoData.Count() + 1;
+            if (ProductNoCount != 1) {
+                foreach (var item in ProductNoData)
+                {
+                    if (MyFun.CheckNoFormat(item.AdjustNo, AdjustNoName, dt, 3)) {
+                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
+                        if (ProductNoCount <= No) {
+                            ProductNoCount = No + 1;
+                        }
+                    }
                 }
             }
+            // var AdjustNoName = "AJP";
+            // var NoData = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            // var ProductNoCount = NoData.Count() + 1;
+            // if (ProductNoCount != 1) {
+            //     var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
+            //     var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
+            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
+            //     if (ProductNoCount <= NoLast) {
+            //         ProductNoCount = NoLast + 1;
+            //     }
+            // }
             var AdjustData = new ProductLog{
-                AdjustNo = AdjustNoName + NoCount.ToString("000000")
+                AdjustNo = AdjustNoName + dt + ProductNoCount.ToString("000")
+                // AdjustNo = AdjustNoName + ProductNoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(AdjustData));
         }

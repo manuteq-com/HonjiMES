@@ -408,6 +408,29 @@ namespace HonjiMES.Models
             }
             return BillOfMaterial;
         }
+        /// <summary>
+        /// 確認單號格式
+        /// </summary>
+        /// <param name="Number"></param>
+        /// <param name="Type"></param>
+        /// <param name="Date"></param>
+        /// <param name="Len"></param>
+        /// <returns></returns>
+        internal static Boolean CheckNoFormat(string Number, string Type, string Date, int Len)
+        {
+            var result = false;
+            var checkLength = (Type + Date).Length + Len;
+
+            if (Type == "AJ") {
+                if (Number.Contains(Type + Date) && Number.Length == checkLength) {
+                    if (int.TryParse(Number.Substring(Number.Length - Len, Len), out int n)) {
+                        result = true;
+                    }
+                }
+            }
+            
+            return result;
+        }
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(IQueryable<T> db, DataSourceLoadOptions fromQuery) where T : class
         {
             QueryCollection queries = new QueryCollection();
