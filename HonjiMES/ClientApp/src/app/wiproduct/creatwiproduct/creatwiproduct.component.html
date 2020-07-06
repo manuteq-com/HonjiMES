@@ -1,0 +1,77 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="WiproductNo" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="主件品號 必填"></dxi-validation-rule>
+            <dxo-label text="主件品號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="主件品名 必填"></dxi-validation-rule>
+            <dxo-label text="主件品名"></dxo-label>
+        </dxi-item>
+        <!-- <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
+            <dxi-validation-rule type="required" message="庫存量 必填"></dxi-validation-rule>
+            <dxo-label text="庫存量"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="QuantityLimit" dataType="number" editorType="dxNumberBox"
+            [editorOptions]="NumberBoxOptions">
+            <dxi-validation-rule type="required" message="庫存警示 必填"></dxi-validation-rule>
+            <dxo-label text="庫存警示"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="規格 必填"></dxi-validation-rule>
+            <dxo-label text="規格"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Property" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="廠內規格 必填"></dxi-validation-rule>
+            <dxo-label text="廠內規格"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
+            <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
+            <dxo-label text="單價"></dxo-label>
+        </dxi-item>
+        <!-- <dxi-item dataField="MaterialId" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
+            <dxi-validation-rule type="required" message="元件品號 必填"></dxi-validation-rule>
+            <dxo-label text="元件品號"></dxo-label>
+        </dxi-item> -->
+
+        <!-- <dxi-item dataField="WarehouseId" editorType="dxSelectBox" [editorOptions]="warehousesOptions">
+            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <dxo-label text="存放庫別"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="wid">
+            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <dxo-label text="存放庫別"></dxo-label>
+            <dx-drop-down-box
+                [(value)]="gridBoxValue"
+                valueExpr="Id"
+                displayExpr="Name"
+                [showClearButton]="true"
+                [dataSource]="warehousesOptions">
+                <div *dxTemplate="let data of 'content'">
+                    <dx-data-grid
+                        keyExpr="Id"
+                        [dataSource]="warehousesOptions"
+                        [columns]="['Name']"
+                        [selection]="{ mode: 'multiple' }"
+                        [hoverStateEnabled]="true"
+                        [paging]="{ enabled: true, pageSize: 10 }"
+                        [filterRow]="{ visible: false }"
+                        [scrolling]="{ mode: 'infinite' }"
+                        [height]="245"
+                        [(selectedRowKeys)]="gridBoxValue">
+                    </dx-data-grid>
+                </div>
+            </dx-drop-down-box>
+        </dxi-item>
+        <dxi-item dataField="WiproductNumber" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="廠內品號 必填"></dxi-validation-rule>
+            <dxo-label text="廠內品號"></dxo-label>
+        </dxi-item>
+    </dx-form>
+    <div class="col-auto-12 mt-4">
+        <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+    </div>
+</form>

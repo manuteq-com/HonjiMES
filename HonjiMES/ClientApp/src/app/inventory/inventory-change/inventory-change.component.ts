@@ -86,15 +86,15 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.itemval3 = '';
         this.minval = 0;
         debugger;
-        if (this.modval === 'material') {
-            this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
-                (s) => {
-                    if (s.success) {
-                        s.data.AdjustNo = '';
-                        this.formData = s.data;
-                    }
+        this.GetData('/Inventory/GetAdjustNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.AdjustNo = '';
+                    this.formData = s.data;
                 }
-            );
+            }
+        );
+        if (this.modval === 'material') {
             this.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
@@ -106,26 +106,10 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
-                        this.QuantityEditorOptions = {
-                            showSpinButtons: true,
-                            mode: 'number',
-                            format: '#0',
-                            value: 0,
-                            min: this.minval,
-                            onValueChanged: this.QuantityValueChanged.bind(this)
-                        };
                     }
                 }
             );
         } else if (this.modval === 'product') {
-            this.GetData('/Inventory/GetProductAdjustNo').subscribe(
-                (s) => {
-                    if (s.success) {
-                        s.data.AdjustNo = '';
-                        this.formData = s.data;
-                    }
-                }
-            );
             this.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
@@ -137,18 +121,33 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
-                        this.QuantityEditorOptions = {
-                            showSpinButtons: true,
-                            mode: 'number',
-                            format: '#0',
-                            value: 0,
-                            min: this.minval,
-                            onValueChanged: this.QuantityValueChanged.bind(this)
-                        };
+                    }
+                }
+            );
+        } else if (this.modval === 'wiproduct') {
+            this.GetData('/Wiproducts/GetWiproduct/' + this.itemkeyval).subscribe(
+                (s) => {
+                    console.log(s);
+                    if (s.success) {
+                        this.itemval1 = '主件品號：' + s.data.WiproductNo;
+                        this.itemval2 = '主件品名：' + s.data.Name;
+                        this.itemval3 = '　庫存數：' + s.data.Quantity;
+                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
+                        if (s.data.Quantity >= 0) {
+                            this.minval = (-s.data.Quantity);
+                        }
                     }
                 }
             );
         }
+        this.QuantityEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 0,
+            min: this.minval,
+            onValueChanged: this.QuantityValueChanged.bind(this)
+        };
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;
@@ -164,23 +163,13 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
     }
     refreshAdjustNo() {
-        if (this.modval === 'material') {
-            this.GetData('/Inventory/GetMaterialAdjustNo').subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.formData.AdjustNo = s.data.AdjustNo;
-                    }
+        this.GetData('/Inventory/GetAdjustNo').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData.AdjustNo = s.data.AdjustNo;
                 }
-            );
-        } else if (this.modval === 'product') {
-            this.GetData('/Inventory/GetProductAdjustNo').subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.formData.AdjustNo = s.data.AdjustNo;
-                    }
-                }
-            );
-        }
+            }
+        );
     }
     validate_before(): boolean {
         // 表單驗證
@@ -208,6 +197,8 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
             this.postval.MaterialLog = this.formData;
         } else if (this.modval === 'product') {
             this.postval.ProductLog = this.formData;
+        } else if (this.modval === 'wiproduct') {
+            this.postval.WiproductLog = this.formData;
         }
         this.postval.id = this.itemkeyval;
         this.postval.mod = this.modval;

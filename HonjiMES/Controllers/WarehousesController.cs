@@ -39,7 +39,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID最倉庫
+        /// 用ID找倉庫
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -57,8 +57,28 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(warehouse));
         }
+        
         /// <summary>
-        /// 用ID最倉庫
+        /// 用ID找倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseByWiproductBasic(int id)
+        {
+            var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+
+            if (WarehouseData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
+        /// <summary>
+        /// 用ID找倉庫
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -78,7 +98,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID最倉庫
+        /// 用ID找倉庫
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -114,16 +134,16 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID最倉庫
+        /// 用ID找倉庫
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseByMaterial(int id)
+        public async Task<ActionResult<Warehouse>> GetWarehouseByMaterialBasic(int id)
         {
-            var materials = _context.Materials.Find(id);
-            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materials.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var materialBasics = _context.MaterialBasics.Find(id);
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {
@@ -134,16 +154,16 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID最倉庫
+        /// 用ID找倉庫
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseByMaterialBasic(int id)
+        public async Task<ActionResult<Warehouse>> GetWarehouseByMaterial(int id)
         {
-            var materialBasics = _context.MaterialBasics.Find(id);
-            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var materials = _context.Materials.Find(id);
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materials.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {

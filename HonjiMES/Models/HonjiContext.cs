@@ -46,6 +46,9 @@ namespace HonjiMES.Models
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<WebSession> WebSessions { get; set; }
+        public virtual DbSet<Wiproduct> Wiproducts { get; set; }
+        public virtual DbSet<WiproductBasic> WiproductBasics { get; set; }
+        public virtual DbSet<WiproductLog> WiproductLogs { get; set; }
 
         public HonjiContext(DbContextOptions<HonjiContext> options) : base(options)
         {
@@ -2185,6 +2188,212 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
+            });
+
+            modelBuilder.Entity<Wiproduct>(entity =>
+            {
+                entity.HasComment("半成品庫存");
+
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("fk_wiproduct_warehouse1_idx");
+
+                entity.HasIndex(e => e.WiproductBasicId)
+                    .HasName("fk_wiproduct_wiproduct_basic1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("新增時間");
+
+                entity.Property(e => e.MaterialId).HasComment("元件品號");
+
+                entity.Property(e => e.MaterialRequire).HasComment("原料需求量");
+
+                entity.Property(e => e.Name)
+                    .HasComment("主件品名")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Price).HasComment("原價格");
+
+                entity.Property(e => e.Property)
+                    .HasComment("屬性")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Quantity).HasComment("實際庫存數");
+
+                entity.Property(e => e.QuantityAdv).HasComment("預先扣庫數量");
+
+                entity.Property(e => e.QuantityLimit).HasComment("庫存極限");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SubInventory)
+                    .HasComment("存放庫別")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WiproductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.WiproductNumber)
+                    .HasComment("廠內半成品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Wiproducts)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_wiproduct_warehouse1");
+
+                entity.HasOne(d => d.WiproductBasic)
+                    .WithMany(p => p.Wiproducts)
+                    .HasForeignKey(d => d.WiproductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_wiproduct_wiproduct_basic1");
+            });
+
+            modelBuilder.Entity<WiproductBasic>(entity =>
+            {
+                entity.HasComment("半成品基本檔");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("新增時間");
+
+                entity.Property(e => e.Name)
+                    .HasComment("主件品名")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Price).HasComment("原價格");
+
+                entity.Property(e => e.Property)
+                    .HasComment("屬性")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Specification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SubInventory)
+                    .HasComment("存放庫別")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WiproductNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.WiproductNumber)
+                    .HasComment("廠內半成品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+            });
+
+            modelBuilder.Entity<WiproductLog>(entity =>
+            {
+                entity.HasComment("半成品LOG");
+
+                entity.HasIndex(e => e.WiproductId)
+                    .HasName("fk_wiproduct_log_wiproduct1_idx");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.AdjustNo)
+                    .HasComment("調整單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("建立日期");
+
+                entity.Property(e => e.CreateUser).HasComment("使用者id");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.LinkOrder)
+                    .HasComment("關連訂單")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Message)
+                    .HasComment("補充說明")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Original).HasComment("原始數量");
+
+                entity.Property(e => e.Price).HasComment("單價");
+
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
+                entity.Property(e => e.Quantity).HasComment("增減數量");
+
+                entity.Property(e => e.Reason)
+                    .HasComment("修改原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UnitCount).HasComment("單位數量");
+
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("更新時間")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.UpdateUser).HasComment("更新者id");
+
+                entity.Property(e => e.WiproductId).HasComment("半成品ID");
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
+
+                entity.HasOne(d => d.Wiproduct)
+                    .WithMany(p => p.WiproductLogs)
+                    .HasForeignKey(d => d.WiproductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_wiproduct_log_wiproduct1");
             });
 
             OnModelCreatingPartial(modelBuilder);

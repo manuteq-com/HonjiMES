@@ -167,6 +167,18 @@
       {
          "HasPrimaryKey": true,
          "Name": "web_sessions"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "wiproduct"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "wiproduct_basic"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "wiproduct_log"
       }
    ],
    "UseDatabaseNames": false,

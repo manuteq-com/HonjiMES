@@ -75,6 +75,10 @@ import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return
 import { InventoryListComponent } from './inventory/inventory-list/inventory-list.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { LoginComponent } from './login/login/login.component';
+import { WiproductListComponent } from './wiproduct/wiproduct-list/wiproduct-list.component';
+import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
+import { CreatwiproductComponent } from './wiproduct/creatwiproduct/creatwiproduct.component';
+import { CreatwiproductBasicComponent } from './wiproduct/creatwiproduct-basic/creatwiproduct-basic.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -165,6 +169,10 @@ export function tokenGetter() {
         BillPurchaseReturnComponent,
         InventoryListComponent,
         LoginComponent,
+        WiproductListComponent,
+        WiproductBasicListComponent,
+        CreatwiproductComponent,
+        CreatwiproductBasicComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

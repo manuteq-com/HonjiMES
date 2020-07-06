@@ -15,6 +15,7 @@ namespace HonjiMES.Models
             Materials = new HashSet<Material>();
             Products = new HashSet<Product>();
             ReturnSales = new HashSet<ReturnSale>();
+            Wiproducts = new HashSet<Wiproduct>();
         }
 
         [Key]
@@ -57,5 +58,7 @@ namespace HonjiMES.Models
         public virtual ICollection<Product> Products { get; set; }
         [InverseProperty(nameof(ReturnSale.Warehouse))]
         public virtual ICollection<ReturnSale> ReturnSales { get; set; }
+        [InverseProperty(nameof(Wiproduct.Warehouse))]
+        public virtual ICollection<Wiproduct> Wiproducts { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace HonjiMES.Models
         public string Message { get; internal set; }
         
         public MaterialLog MaterialLog { get; set; }
+        public WiproductLog WiproductLog { get; set; }
         public ProductLog ProductLog { get; set; }
     }
     
@@ -197,6 +198,11 @@ namespace HonjiMES.Models
 
     }
     public class ProductW : Product
+    {
+        public List<int> wid { get; set; }
+        public List<Warehouse> warehouseData { get; set; }
+    }
+      public class WiproductW : Wiproduct
     {
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }

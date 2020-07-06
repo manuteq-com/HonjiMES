@@ -122,6 +122,12 @@ export class InventoryListComponent implements OnInit, OnChanges {
                     this.WarehouseList = s.data;
                 }
             );
+        } else if (dataType === 3) {    //查詢半成品
+            this.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = s.data;
+                }
+            );
         }
         // const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         // this.DataType = basicData.DataType;

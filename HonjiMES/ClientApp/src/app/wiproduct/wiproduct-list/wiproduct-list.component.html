@@ -1,0 +1,95 @@
+<!-- <p>所有訂單</p> -->
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellClick)="cellClick($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false">
+
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="visible"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true" [visible]="visible">
+    </dxo-pager>
+    <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <dxi-item dataField="WiproductNo" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Name" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="QuantityLimit"></dxi-item>
+            <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Price"></dxi-item>
+            <!-- <dxi-item dataField="MaterialId"></dxi-item> -->
+            <dxi-item dataField="WarehouseId"></dxi-item>
+            <dxi-item dataField="WiproductNumber" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxo-form>
+        <dxo-popup [showTitle]="true" title="修改半成品明細資訊" [width]="800" [height]="450">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+    <dxi-column dataField="WiproductNo" caption="主件品號" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Name" caption="主件品名" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Quantity" caption="實際庫存量"></dxi-column>
+    <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
+    <dxi-column dataField="CanShipped" caption="可出貨數量" [calculateCellValue]='QuantityAdvValue' [visible]="visible">
+    </dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Property" caption="廠內規格" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Price" caption="單價"></dxi-column>
+    <!-- <dxi-column dataField="MaterialId" caption="元件品號">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column> -->
+    <!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
+    <dxi-column dataField="WarehouseId" caption="存放庫別">
+        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="WiproductNumber" caption="廠內品號" [visible]="visible"></dxi-column>
+    <dxi-column type="buttons" caption="新增半成品明細" cssClass="addmod" [width]="200">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
+    </dxi-column>
+
+</dx-data-grid>
+<dx-popup [showTitle]="true" title="新增半成品明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+    [height]="400" [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatwiproduct (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod"
+            [exceldata]="exceldata"></app-creatwiproduct>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="調整半成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700"
+    [height]="600" [(visible)]="editpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-change>
+    </div>
+</dx-popup>

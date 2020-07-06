@@ -37,6 +37,8 @@ namespace HonjiMES.Controllers
             var MaterialNoCount = MaterialNoData.Count() + 1;
             var ProductNoData = await _context.ProductLogs.AsQueryable().Where(x => x.AdjustNo.Contains(key + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             var ProductNoCount = ProductNoData.Count() + 1;
+            var WiproductNoData = await _context.WiproductLogs.AsQueryable().Where(x => x.AdjustNo.Contains(key + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var WiproductNoCount = WiproductNoData.Count() + 1;
             
             if (MaterialNoCount != 1) {
                 foreach (var item in MaterialNoData)
@@ -56,6 +58,17 @@ namespace HonjiMES.Controllers
                         var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
                         if (ProductNoCount <= No) {
                             ProductNoCount = No + 1;
+                        }
+                    }
+                }
+            }
+            if (WiproductNoCount != 1) {
+                foreach (var item in WiproductNoData)
+                {
+                    if (MyFun.CheckNoFormat(item.AdjustNo, key, dt, 3)) {
+                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
+                        if (WiproductNoCount <= No) {
+                            WiproductNoCount = No + 1;
                         }
                     }
                 }
@@ -87,90 +100,15 @@ namespace HonjiMES.Controllers
             // }
             
             var NoCount = MaterialNoCount;
-            if (MaterialNoCount < ProductNoCount) {
+            if (NoCount < ProductNoCount) {
                 NoCount = ProductNoCount;
+            }
+            if (NoCount < WiproductNoCount) {
+                NoCount = WiproductNoCount;
             }
 
             var AdjustData = new AdjustData{
                 AdjustNo = key + dt + NoCount.ToString("000")
-            };
-            return Ok(MyFun.APIResponseOK(AdjustData));
-        }
-
-        /// <summary>
-        /// 取得原料庫存調整單號
-        /// </summary>
-        [HttpGet]
-        public async Task<ActionResult<MaterialLog>> GetMaterialAdjustNo()
-        {
-            var AdjustNoName = "AJ";
-            var dt = DateTime.Now.ToString("yyMMdd");
-            var MaterialNoData = await _context.MaterialLogs.AsQueryable().Where(x => x.AdjustNo.Contains(AdjustNoName + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var MaterialNoCount = MaterialNoData.Count() + 1;
-            if (MaterialNoCount != 1) {
-                foreach (var item in MaterialNoData)
-                {
-                    if (MyFun.CheckNoFormat(item.AdjustNo, AdjustNoName, dt, 3)) {
-                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
-                        if (MaterialNoCount <= No) {
-                            MaterialNoCount = No + 1;
-                        }
-                    }
-                }
-            }
-            // var AdjustNoName = "AJM";
-            // var NoData = await _context.MaterialLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            // var MaterialNoCount = NoData.Count() + 1;
-            // if (MaterialNoCount != 1) {
-            //     var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
-            //     var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
-            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-            //     if (MaterialNoCount <= NoLast) {
-            //         MaterialNoCount = NoLast + 1;
-            //     }
-            // }
-            var AdjustData = new MaterialLog{
-                AdjustNo = AdjustNoName + dt + MaterialNoCount.ToString("000")
-                // AdjustNo = AdjustNoName + MaterialNoCount.ToString("000000")
-            };
-            return Ok(MyFun.APIResponseOK(AdjustData));
-        }
-
-        /// <summary>
-        /// 取得成品庫存調整單號
-        /// </summary>
-        [HttpGet]
-        public async Task<ActionResult<ProductLog>> GetProductAdjustNo()
-        {
-            var AdjustNoName = "AJ";
-            var dt = DateTime.Now.ToString("yyMMdd");
-            var ProductNoData = await _context.ProductLogs.AsQueryable().Where(x => x.AdjustNo.Contains(AdjustNoName + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-            var ProductNoCount = ProductNoData.Count() + 1;
-            if (ProductNoCount != 1) {
-                foreach (var item in ProductNoData)
-                {
-                    if (MyFun.CheckNoFormat(item.AdjustNo, AdjustNoName, dt, 3)) {
-                        var No = Int32.Parse(item.AdjustNo.Substring(item.AdjustNo.Length - 3, 3));
-                        if (ProductNoCount <= No) {
-                            ProductNoCount = No + 1;
-                        }
-                    }
-                }
-            }
-            // var AdjustNoName = "AJP";
-            // var NoData = await _context.ProductLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.AdjustNo.Contains(AdjustNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
-            // var ProductNoCount = NoData.Count() + 1;
-            // if (ProductNoCount != 1) {
-            //     var LastAdjustNo = NoData.FirstOrDefault().AdjustNo;
-            //     var LastLength = LastAdjustNo.Length - AdjustNoName.Length;
-            //     var NoLast = Int32.Parse(LastAdjustNo.Substring(LastAdjustNo.Length - LastLength, LastLength));
-            //     if (ProductNoCount <= NoLast) {
-            //         ProductNoCount = NoLast + 1;
-            //     }
-            // }
-            var AdjustData = new ProductLog{
-                AdjustNo = AdjustNoName + dt + ProductNoCount.ToString("000")
-                // AdjustNo = AdjustNoName + ProductNoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(AdjustData));
         }
@@ -206,7 +144,7 @@ namespace HonjiMES.Controllers
             foreach (var item in ProductBasic)
             {
                 var tempData = new BasicData{
-                    DataType = 1,
+                    DataType = 2,
                     DataId = item.Id,
                     DataNo = item.ProductNo,
                     Name = item.Name,
@@ -225,6 +163,7 @@ namespace HonjiMES.Controllers
         {
             var MaterialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.MaterialNo).ToListAsync();
             var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.ProductNo).ToListAsync();
+            var WiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.WiproductNo).ToListAsync();
             var AdjustData = new List<BasicData>();
             var TempId = 1;
             foreach (var item in MaterialBasic)
@@ -248,6 +187,20 @@ namespace HonjiMES.Controllers
                     DataType = 2,
                     DataId = item.Id,
                     DataNo = item.ProductNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                AdjustData.Add(tempData);
+            }
+            foreach (var item in WiproductBasic)
+            {
+                var tempData = new BasicData{
+                    TempId = TempId++,
+                    DataType = 3,
+                    DataId = item.Id,
+                    DataNo = item.WiproductNo,
                     Name = item.Name,
                     Specification = item.Specification,
                     Property = item.Property,
@@ -318,6 +271,31 @@ namespace HonjiMES.Controllers
                 Products.Quantity += inventorychange.ProductLog.Quantity;
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK(Products));
+            }
+            else if (inventorychange.mod == "wiproduct")
+            {
+                var Wiproducts = _context.Wiproducts.Find(inventorychange.id);
+                // if (!(Wiproducts.WiproductLogs.Any()))//同步資料用，建立原始庫存數
+                // {
+                //     Wiproducts.WiproductLogs.Add(new WiproductLog { 
+                //         Quantity = Wiproducts.Quantity, 
+                //         Message = "原始數量", 
+                //         CreateTime = dt, 
+                //         CreateUser = UserID 
+                //     });
+                // }
+                if (inventorychange.WiproductLog.AdjustNo.Length == 0) {
+                    inventorychange.WiproductLog.AdjustNo = null;
+                }
+
+                inventorychange.WiproductLog.Original = Wiproducts.Quantity;
+                inventorychange.WiproductLog.CreateTime = dt;
+                inventorychange.WiproductLog.CreateUser = UserID;
+                inventorychange.WiproductLog.Message = "半成品庫存調整";
+                Wiproducts.WiproductLogs.Add(inventorychange.WiproductLog);
+                Wiproducts.Quantity += inventorychange.WiproductLog.Quantity;
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK(Wiproducts));
             }
             return Ok(MyFun.APIResponseError("無對應的資料"));
             //return Ok(new { data = CreatedAtAction("GetProduct", new { id = product.Id }, product), success = true });
@@ -390,6 +368,34 @@ namespace HonjiMES.Controllers
                             Product.Quantity += item.Quantity;
                         } else {
                             return Ok(MyFun.APIResponseError("查無 [" + ProductBasic.ProductNo + "] 的倉別資訊!"));
+                        }
+                    }
+                    else if (item.DataType == 3)//wiproduct
+                    {
+                        var WiproductBasic = _context.WiproductBasics.Find(item.DataId);
+                        var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == item.DataId && x.WarehouseId == item.WarehouseId).FirstOrDefault();
+                        if (Wiproduct != null) {
+                            Wiproduct.WiproductLogs.Add(new WiproductLog{
+                                AdjustNo = AdjustData.AdjustNo,
+                                LinkOrder = AdjustData.LinkOrder,
+                                WiproductId = Wiproduct.Id,
+                                Original = Wiproduct.Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remark,
+                                Message = "庫存調整單",
+                                CreateTime = dt,
+                                CreateUser = UserID
+                            });
+                            Wiproduct.Quantity += item.Quantity;
+                        } else {
+                            return Ok(MyFun.APIResponseError("查無 [" + WiproductBasic.WiproductNo + "] 的倉別資訊!"));
                         }
                     } else {
                         return Ok(MyFun.APIResponseError("資訊錯誤!"));
