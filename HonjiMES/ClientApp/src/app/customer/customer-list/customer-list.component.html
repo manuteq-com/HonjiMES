@@ -1,16 +1,23 @@
-<!-- <p>所有訂單</p> -->
-<div class="row">
-    <div class="col-md-10 col-sm-10">
-        <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-            uploadMode="instantly" (onUploaded)="onUploaded($event)"></dx-file-uploader> -->
+<div class="headerblock">
+    <div class="headerfont font1">基本資訊管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
     </div>
-    <div class="col-md-1 col-sm-1">
-    </div>
-    <div class="col-md-1 col-sm-1">
-        <dx-button text="新增" type="default" (onClick)="creatdata()"></dx-button>
+    <div class="headerfont font2">客戶資料</div>
+    <div class="buttongroup">
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增客戶"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
     </div>
 </div>
+
 <dx-data-grid
     [dataSource]="dataSourceDB"
     showBorders="true"

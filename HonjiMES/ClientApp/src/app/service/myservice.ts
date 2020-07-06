@@ -39,7 +39,7 @@ const permissiontypes: Selectitem[] = [
     { Id: 3, Name: '一般人員' },
     { Id: 4, Name: '採購人員' },
     { Id: 5, Name: '設計人員' },
-    { Id: 6, Name: '生館人員' }
+    { Id: 6, Name: '生管人員' }
 ];
 const departmenttypes: Selectitem[] = [
     { Id: 1, Name: '預設' }
