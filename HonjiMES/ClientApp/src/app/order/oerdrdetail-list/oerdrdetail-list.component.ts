@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { DxDataGridComponent } from 'devextreme-angular';
@@ -17,6 +17,7 @@ import CheckBox from 'devextreme/ui/check_box';
 })
 export class OerdrdetailListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @Output() childOuter = new EventEmitter();
     @Input() itemkey: number;
     @Input() ProductBasicList: any;
     url = location.origin + '/api';
@@ -155,6 +156,7 @@ export class OerdrdetailListComponent implements OnInit {
     popup_result(e) {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
+        this.childOuter.emit(true);
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();
         notify({

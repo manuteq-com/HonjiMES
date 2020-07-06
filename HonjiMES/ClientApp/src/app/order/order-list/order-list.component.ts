@@ -131,6 +131,9 @@ export class OrderListComponent {
     creatdata() {
         this.creatpopupVisible = true;
     }
+    updatepopup_result(e) {
+        this.dataGrid.instance.refresh();
+    }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();

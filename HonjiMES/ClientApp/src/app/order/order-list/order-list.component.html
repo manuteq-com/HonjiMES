@@ -106,7 +106,7 @@
     </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-oerdrdetail-list [itemkey]="item.key" [ProductBasicList]="ProductBasicList"></app-oerdrdetail-list>
+        <app-oerdrdetail-list [itemkey]="item.key" [ProductBasicList]="ProductBasicList" (childOuter)="updatepopup_result($event)"></app-oerdrdetail-list>
     </div>
 
 </dx-data-grid>
