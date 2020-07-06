@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, Input, OnChanges, EventEmitter } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class BillPurchaseDetailComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @Output() childOuter = new EventEmitter();
     @Input() itemkey: number;
     @Input() SupplierList: any;
     @Input() MaterialBasicList: any;
@@ -139,6 +140,7 @@ export class BillPurchaseDetailComponent implements OnInit {
                         this.CheckInBtnVisible = false;
                         // e.preventDefault();
                         this.dataGrid.instance.refresh();
+                        this.childOuter.emit(true);
                         notify({
                             message: sendRequest.message,
                             position: {
@@ -208,6 +210,7 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.popupVisibleTo = false;
         this.popupVisibleRe = false;
         this.dataGrid.instance.refresh();
+        this.childOuter.emit(true);
         notify({
             message: '存檔完成',
             position: {

@@ -228,6 +228,24 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
             }
             
+            //檢查該採購單是否完成
+            var PurchaseHead = _context.PurchaseHeads.Find(PurchaseDetail.PurchaseId);
+            if (PurchaseHead == null)
+            {
+                return Ok(MyFun.APIResponseError("採購單主檔資料有誤!"));
+            }
+            var CheckPurchaseHeadStatus = true;
+            foreach (var item2 in PurchaseHead.PurchaseDetails)
+            {
+                if (item2.Quantity != item2.PurchaseCount) {
+                    CheckPurchaseHeadStatus = false;
+                }
+            }
+            if (CheckPurchaseHeadStatus)
+            {
+                PurchaseHead.Status = 2;
+            }
+
             //入庫
             var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
             if (Material == null)
@@ -289,12 +307,9 @@ namespace HonjiMES.Controllers
             }
 
             var NoUpdataCount = 0;
-            var CheckBillofPurchaseHeadStatus = true;
             foreach (var item in BillofPurchaseHeads.BillofPurchaseDetails)
             {
                 if (item.CheckStatus == 0) {
-                    CheckBillofPurchaseHeadStatus = false;
-
                     item.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin(){
                         BillofPurchaseDetailId = item.Id,
                         CheckinType = null,
@@ -332,6 +347,24 @@ namespace HonjiMES.Controllers
                         return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
                     }
 
+                    //檢查該採購單是否完成
+                    var PurchaseHead = _context.PurchaseHeads.Find(PurchaseDetail.PurchaseId);
+                    if (PurchaseHead == null)
+                    {
+                        return Ok(MyFun.APIResponseError("採購單主檔資料有誤!"));
+                    }
+                    var CheckPurchaseHeadStatus = true;
+                    foreach (var item2 in PurchaseHead.PurchaseDetails)
+                    {
+                        if (item2.Quantity != item2.PurchaseCount) {
+                            CheckPurchaseHeadStatus = false;
+                        }
+                    }
+                    if (CheckPurchaseHeadStatus)
+                    {
+                        PurchaseHead.Status = 2;
+                    }
+
                     //入庫
                     var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                     if (Material == null)
@@ -365,6 +398,13 @@ namespace HonjiMES.Controllers
             }
             
             //檢查進貨單明細是否都完成進貨
+            var CheckBillofPurchaseHeadStatus = true;
+            foreach (var item in BillofPurchaseHeads.BillofPurchaseDetails)
+            {
+                if (item.CheckStatus == 0) {
+                    CheckBillofPurchaseHeadStatus = false;
+                }
+            }
             if (CheckBillofPurchaseHeadStatus)
             {
                 BillofPurchaseHeads.Status = 1;

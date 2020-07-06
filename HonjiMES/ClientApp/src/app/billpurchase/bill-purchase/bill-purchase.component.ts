@@ -92,6 +92,9 @@ export class BillPurchaseComponent implements OnInit {
             }
         }, 'success', 3000);
     }
+    updatepopup_result(e) {
+        this.dataGrid.instance.refresh();
+    }
     onEditorPreparing(e) {
     }
     selectionChanged(e) {

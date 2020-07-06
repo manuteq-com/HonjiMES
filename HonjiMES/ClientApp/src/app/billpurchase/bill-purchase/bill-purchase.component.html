@@ -98,9 +98,9 @@
     </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-bill-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-bill-purchase-detail>
+        <app-bill-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList" (childOuter)="updatepopup_result($event)"></app-bill-purchase-detail>
     </div>
-    
+
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">

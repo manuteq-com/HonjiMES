@@ -47,6 +47,7 @@ const departmenttypes: Selectitem[] = [
 const OrderStatus: Selectitem[] = [
     { Id: 0, Name: '未完成' },
     { Id: 1, Name: '完成銷貨' },
+    { Id: 2, Name: '完成採購' },
     { Id: 10, Name: '結案' }
 ];
 const saleOrderStatus: Selectitem[] = [
