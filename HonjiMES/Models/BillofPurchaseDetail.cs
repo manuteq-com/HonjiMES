@@ -51,13 +51,13 @@ namespace HonjiMES.Models
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
         [Column("unit_count", TypeName = "decimal(10,2)")]
-        public decimal UnitCount { get; set; }
+        public decimal? UnitCount { get; set; }
         [Column("unit_price", TypeName = "decimal(10,2)")]
-        public decimal UnitPrice { get; set; }
+        public decimal? UnitPrice { get; set; }
         [Column("unit_price_all", TypeName = "decimal(10,2)")]
-        public decimal UnitPriceAll { get; set; }
+        public decimal? UnitPriceAll { get; set; }
         [Column("work_price", TypeName = "decimal(10,2)")]
-        public decimal WorkPrice { get; set; }
+        public decimal? WorkPrice { get; set; }
         [Column("warehouse_id", TypeName = "int(11)")]
         public int? WarehouseId { get; set; }
         [Column("check_status", TypeName = "int(11)")]

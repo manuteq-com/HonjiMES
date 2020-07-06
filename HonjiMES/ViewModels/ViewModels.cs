@@ -225,10 +225,10 @@ namespace HonjiMES.Models
         public decimal Price { get; set;}
         public decimal PriceAll { get; set;}
         public string Unit { get; set;}
-        public decimal UnitCount { get; set;}
-        public decimal UnitPrice { get; set;}
-        public decimal UnitPriceAll { get; set;}
-        public decimal WorkPrice { get; set;}
+        public decimal? UnitCount { get; set;}
+        public decimal? UnitPrice { get; set;}
+        public decimal? UnitPriceAll { get; set;}
+        public decimal? WorkPrice { get; set;}
         public string Reason { get; set; }
         public string Remarks { get; set;}
         public DateTime CreateTime { get; set; }

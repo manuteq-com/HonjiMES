@@ -205,6 +205,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             }
         );
     }
+    onInitialized(value, data) {
+        data.setValue(value);
+    }
     onFocusedCellChanging(e) {
     }
     onTypeSelectionChanged(e) {
@@ -255,10 +258,10 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 this.Quantityval = 1;
                 this.OriginPriceval = x.Price ? x.Price : 0;
                 this.Priceval = x.Price ? x.Price : 0;
-                this.Warehouseval = 0;
                 this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
                     (s) => {
                         this.WarehouseList = s.data;
+                        this.Warehouseval = s.data[0].Id ? s.data[0].Id : null;
                     }
                 );
             }
