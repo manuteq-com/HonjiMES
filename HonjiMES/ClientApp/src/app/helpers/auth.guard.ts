@@ -9,10 +9,17 @@ export class AuthGuard implements CanActivate {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        debugger;
         const currentUser = this.authenticationService.currentUserValue;
         if (currentUser) {
-            // logged in so return true
-            return true;
+            // 檢查是不是 Timeout 了
+            const dateTime = new Date();
+            const Timeout = new Date(currentUser.Timeout);
+            if (Timeout > dateTime) {
+                return true;
+            } else {
+                this.authenticationService.logout();
+            }
         }
         // not logged in so redirect to login page with the return url
         // this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
