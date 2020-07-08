@@ -169,6 +169,13 @@ export class SendService {
                             groupCount: ReturnData.data.groupCount
                         };
                     } else if (ReturnData.message !== '') {
+                        notify({
+                            message: ReturnData.message,
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'success', 3000);
                         return (ReturnData);
                     } else {
                         return (ReturnData.data);

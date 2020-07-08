@@ -378,7 +378,8 @@ namespace HonjiMES.Models
                         ProductSpecification = item.InverseP.FirstOrDefault()?.ProductBasic?.Specification ?? "",
                         ProductPrice = item.InverseP.FirstOrDefault()?.ProductBasic?.Price ?? 0,
                         MaterialBasicId = item.MaterialBasicId,
-                        ProductBasicId = item.ProductBasicId,
+                        // ProductBasicId = item.ProductBasicId,
+                        ProductBasicId = item.InverseP.FirstOrDefault()?.ProductBasic?.Id ?? null,//改放ProductBasic本身的ID
                         ReceiveQty = item.Quantity * Receive,
                         Ismaterial = !item.InverseP.Any()
                     });

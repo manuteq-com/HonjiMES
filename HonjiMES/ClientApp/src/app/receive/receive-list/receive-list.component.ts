@@ -19,7 +19,11 @@ export class ReceiveListComponent implements OnInit {
     Controller = '/Requisitions';
     remoteOperations = true;
     url: string;
-    selectBoxOptions: { searchEnabled: boolean; items: any; displayExpr: string; valueExpr: string; };
+    selectBoxOptions: {
+        dataSource: { paginate: boolean; store: { type: string; data: any; key: string; }; }; searchEnabled: boolean;
+        // items: this.MaterialList,
+        displayExpr: string; valueExpr: string;
+    };
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
@@ -36,22 +40,28 @@ export class ReceiveListComponent implements OnInit {
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutRequisition', 'PUT', { key, values }),
             remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition', 'DELETE')
+                SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition/' + key, 'DELETE')
         });
         this.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
             (s) => {
                 if (s.success) {
                     this.selectBoxOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } },
                         searchEnabled: true,
-                        items: s.data,
+                        // items: this.MaterialList,
                         displayExpr: 'Name',
                         valueExpr: 'Id',
+
                     };
                 }
             }
         );
     }
     ngOnInit() {
+    }
+    creatdata() {
+        // tslint:disable-next-line: deprecation
+        this.dataGrid.instance.insertRow();
     }
     cellClick(e) {
         if (e.rowType === 'header') {

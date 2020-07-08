@@ -47,7 +47,8 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.itemkeyval, 'POST', { values }),
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
-                    { key, values, WarehouseID: this.WarehouseIDP }),
+                    // { key, values, WarehouseID: this.WarehouseIDP }),
+                    { key, values: this.setWarehouse(values, this.WarehouseIDP) }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });

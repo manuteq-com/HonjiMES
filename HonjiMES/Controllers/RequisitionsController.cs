@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Requisition>>> GetRequisitions([FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.Requisitions.AsQueryable(), FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.Requisitions.AsQueryable().Where(x => x.DeleteFlag == 0), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
@@ -109,46 +109,81 @@ namespace HonjiMES.Controllers
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
             {
-                requisition.RequisitionDetails.Add(new RequisitionDetail
-                {
-                    Lv = item.Lv,
-                    Name = item.Name,
-                    //原料
-                    MaterialBasicId = item.MaterialBasicId.Value,
-                    MaterialNo = item.MaterialNo,
-                    MaterialName = item.MaterialName,
-                    MaterialSpecification = item.MaterialSpecification,
-                    //成品，半成品，組件
-                    ProductBasicId = item.ProductBasicId,
-                    ProductName = item.Name,
-                    ProductNo = item.ProductNo,
-                    ProductNumber = item.ProductNumber,
-                    ProductSpecification = item.ProductSpecification,
-                    Ismaterial = item.Ismaterial,
-                    Quantity = item.ReceiveQty,
-                    CreateTime = dt,
-                    CreateUser = 1
-                });
+                var sameCheck = false;
+                if (!string.IsNullOrWhiteSpace(item.ProductNo)) {   //判斷是否為成品
+                    foreach (var item2 in requisition.RequisitionDetails)
+                    {
+                        if (item2.ProductBasicId == item.ProductBasicId &&
+                            item2.ProductNo == item.ProductNo &&
+                            item2.MaterialBasicId == item.MaterialBasicId &&
+                            item2.MaterialNo == item.MaterialNo) {
+                            sameCheck = true;
+                            item2.Quantity += item.ReceiveQty;
+                        }
+                    }
+                } else {    //判斷是否為原料
+                    foreach (var item2 in requisition.RequisitionDetails)
+                    {
+                        if (item2.MaterialBasicId == item.MaterialBasicId &&
+                            item2.MaterialNo == item.MaterialNo) {
+                            sameCheck = true;
+                            item2.Quantity += item.ReceiveQty;
+                        }
+                    }
+                }
+                
+                if (!sameCheck) {
+                    requisition.RequisitionDetails.Add(new RequisitionDetail
+                    {
+                        // Lv = item.Lv,
+                        // Name = item.Name,
+                        //原料
+                        MaterialBasicId = item.MaterialBasicId,
+                        MaterialNo = item.MaterialNo,
+                        MaterialName = item.MaterialName,
+                        MaterialSpecification = item.MaterialSpecification,
+                        //成品，半成品，組件
+                        ProductBasicId = item.ProductBasicId,
+                        ProductName = item.Name,
+                        ProductNo = item.ProductNo,
+                        ProductNumber = item.ProductNumber,
+                        ProductSpecification = item.ProductSpecification,
+                        Ismaterial = item.Ismaterial,
+                        Quantity = item.ReceiveQty,
+                        CreateTime = dt,
+                        CreateUser = 1
+                    });
+                }
+                
             }
             _context.Requisitions.Add(requisition);
             await _context.SaveChangesAsync();
             _context.ChangeTracker.LazyLoadingEnabled = false;
-            return Ok(MyFun.APIResponseOK(requisition));
+            return Ok(MyFun.APIResponseOK(null));
         }
 
         // DELETE: api/MaterialRequisitions/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Requisition>> DeleteRequisition(int id)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var Requisitions = await _context.Requisitions.FindAsync(id);
             if (Requisitions == null)
             {
                 return NotFound();
+            } else {
+                var RequisitionDetails = await _context.RequisitionDetails.AsQueryable().Where(x => x.RequisitionId == id).ToListAsync();
+                foreach (var item in RequisitionDetails)
+                {
+                    _context.RequisitionDetails.Remove(item);
+                }
+                _context.Requisitions.Remove(Requisitions);
+                await _context.SaveChangesAsync();
             }
-            _context.Requisitions.Remove(Requisitions);
-            await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(Requisitions));
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailMaterial(int id)
         {
@@ -165,6 +200,7 @@ namespace HonjiMES.Controllers
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(RequisitionDetails));
         }
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailProduct(int id)
         {
@@ -184,37 +220,78 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequisitionsDetail(int id, [FromBody] GetReceive Receive)
         {
-            var rr = Request;
+            if (Receive.WarehouseID == 0) {
+                return Ok(MyFun.APIResponseError("請選擇倉別資訊!"));
+            }
+            var hasTake = false;
             var RequisitionDetail = _context.RequisitionDetails.Find(id);
-            var Material = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == RequisitionDetail.MaterialBasicId).FirstOrDefault();
-            if (Material == null)
-            {
-                return Ok(MyFun.APIResponseError("沒有庫存資料"));
+            if (RequisitionDetail.Ismaterial != null) { //判斷是否為物料
+                if (RequisitionDetail.Ismaterial ?? false) {
+                    var Material = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == RequisitionDetail.MaterialBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                    if (Material == null)
+                    {
+                        return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + RequisitionDetail.MaterialNo + " ]的庫存資訊!"));
+                    }
+                    if (Receive.RQty > 0)
+                    {
+                        hasTake = true;
+                        var dt = DateTime.Now;
+                        RequisitionDetail.Receives.Add(new Receive
+                        {
+                            Quantity = Receive.RQty,
+                            CreateTime = dt,
+                            CreateUser = 1
+                        });
+                        var Original = Material.Quantity;
+                        Material.Quantity = Original - Receive.RQty;
+                        Material.UpdateTime = dt;
+                        Material.UpdateUser = 1;
+                        Material.MaterialLogs.Add(new MaterialLog
+                        {
+                            Original = Original,
+                            Quantity = -Receive.RQty,
+                            Message = "領料出庫",
+                            CreateTime = dt,
+                            CreateUser = 1
+                        });
+                    }
+                } else {
+                    var Product = _context.Products.Where(x => x.WarehouseId == Receive.WarehouseID && x.ProductBasicId == RequisitionDetail.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                    if (Product == null)
+                    {
+                        return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + RequisitionDetail.ProductNo + " ]的庫存資訊!"));
+                    }
+                    if (Receive.RQty > 0)
+                    {
+                        hasTake = true;
+                        var dt = DateTime.Now;
+                        RequisitionDetail.Receives.Add(new Receive
+                        {
+                            Quantity = Receive.RQty,
+                            CreateTime = dt,
+                            CreateUser = 1
+                        });
+                        var Original = Product.Quantity;
+                        Product.Quantity = Original - Receive.RQty;
+                        Product.UpdateTime = dt;
+                        Product.UpdateUser = 1;
+                        Product.ProductLogs.Add(new ProductLog
+                        {
+                            Original = Original,
+                            Quantity = -Receive.RQty,
+                            Message = "領料出庫",
+                            CreateTime = dt,
+                            CreateUser = 1
+                        });
+                    }
+                }
             }
-            if (Receive.RQty > 0)
-            {
-                var dt = DateTime.Now;
-                RequisitionDetail.Receives.Add(new Receive
-                {
-                    Quantity = Receive.RQty,
-                    CreateTime = dt,
-                    CreateUser = 1
-                });
-                var Original = Material.Quantity;
-                Material.Quantity = Original - Receive.RQty;
-                Material.UpdateTime = dt;
-                Material.UpdateUser = 1;
-                Material.MaterialLogs.Add(new MaterialLog
-                {
-                    Original = Original,
-                    Quantity = -Receive.RQty,
-                    Message = "領料出庫",
-                    CreateTime = dt,
-                    CreateUser = 1
-                });
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            if (hasTake) {
+                return Ok(MyFun.APIResponseOK(RequisitionDetail, "完成領料!"));
+            } else {
+                return Ok(MyFun.APIResponseOK(RequisitionDetail));
             }
-            return Ok(MyFun.APIResponseOK(RequisitionDetail));
         }
 
         private bool RequisitionExists(int id)
