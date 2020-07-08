@@ -1,0 +1,80 @@
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">製程資料</div>
+    <div class="buttongroup">
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增製程"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+    </div>
+</div>
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true">
+
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <dxi-item  dataField="Code"></dxi-item>
+            <dxi-item  dataField="Name"></dxi-item>
+            <dxi-item  dataField="Remark"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+
+    <dxi-column dataField="Code" caption="製程代號" sortOrder="asc"></dxi-column>
+    <dxi-column dataField="Name" caption="製程名稱"></dxi-column>
+    <dxi-column dataField="Remark" caption="備註"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立時間"></dxi-column>
+    <dxi-column dataField="UpdateTime" caption="更新時間"></dxi-column>
+    <dxi-column type="buttons">
+        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
+</dx-data-grid>
+
+<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="500"
+    [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        [exceldata]="exceldata"></app-creatprocess>
+    </div>
+</dx-popup>
+
+

@@ -15,6 +15,7 @@ import { ProductBasicListComponent } from './product/product-basic-list/product-
 import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
 import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
+import { ProcessListComponent } from './process/process-list/process-list.component';
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './login/login/login.component';
 
@@ -36,7 +37,8 @@ export const routes: Routes = [
     { path: 'warehouselist', component: WarehouseListComponent },
     { path: 'userlist', component: UserListComponent },
     { path: 'billofmateriallist', component: BillofmateriallistComponent },
-    { path: 'receiveList', component: ReceiveListComponent }
+    { path: 'receiveList', component: ReceiveListComponent },
+    { path: 'processList', component: ProcessListComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

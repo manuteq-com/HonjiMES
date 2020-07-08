@@ -93,7 +93,9 @@ export class AppMenuComponent implements OnInit {
             {
                 label: '生產管理', icon: 'fa fa-fw fa-bars',
                 items: [
+                    { label: '製程資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/processList'] },
                     { label: '領料資料', icon: 'fa fa-fw fa-genderless', routerLink: ['/receiveList'] },
+
                 ]
 
             },

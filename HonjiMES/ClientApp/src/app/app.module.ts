@@ -79,6 +79,8 @@ import { WiproductListComponent } from './wiproduct/wiproduct-list/wiproduct-lis
 import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
 import { CreatwiproductComponent } from './wiproduct/creatwiproduct/creatwiproduct.component';
 import { CreatwiproductBasicComponent } from './wiproduct/creatwiproduct-basic/creatwiproduct-basic.component';
+import { ProcessListComponent } from './process/process-list/process-list.component';
+import { CreatprocessComponent } from './process/creatprocess/creatprocess.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -173,6 +175,8 @@ export function tokenGetter() {
         WiproductBasicListComponent,
         CreatwiproductComponent,
         CreatwiproductBasicComponent,
+        ProcessListComponent,
+        CreatprocessComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
