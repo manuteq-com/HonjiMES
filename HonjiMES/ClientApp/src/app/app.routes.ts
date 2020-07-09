@@ -38,7 +38,7 @@ export const routes: Routes = [
     // { path: 'userlist', component: UserListComponent },
     // { path: 'billofmateriallist', component: BillofmateriallistComponent },
     // { path: 'receiveList', component: ReceiveListComponent },
-    { path: 'processList', component: ProcessListComponent }
+    { path: 'processList', component: ProcessListComponent },
     { path: 'orderlist', component: OrderListComponent, canActivate: [AuthGuard] },
     { path: 'materiallist', component: MaterialListComponent, canActivate: [AuthGuard] },
     { path: 'productbasiclist', component: ProductBasicListComponent, canActivate: [AuthGuard] },
