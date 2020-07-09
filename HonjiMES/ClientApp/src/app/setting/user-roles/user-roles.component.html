@@ -1,0 +1,21 @@
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" height="500"
+    (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
+    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)">
+
+    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
+    </dxo-editing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+        [enterKeyDirection]="enterKeyDirection">
+    </dxo-keyboard-navigation>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+    <dxi-column dataField="Name" caption="名稱"></dxi-column>
+    <dxi-column dataField="Creat" caption="新增" editCellTemplate="EditCellTemplate"></dxi-column>
+    <dxi-column dataField="Edit" caption="修改" editCellTemplate="EditCellTemplate"></dxi-column>
+    <dxi-column dataField="Delete" caption="刪除" editCellTemplate="EditCellTemplate"></dxi-column>
+    <div *dxTemplate="let data of 'EditCellTemplate'">
+        <dx-check-box [value]="data.value" (onValueChanged)="onValueChanged($event,data)"></dx-check-box>
+    </div>
+</dx-data-grid>

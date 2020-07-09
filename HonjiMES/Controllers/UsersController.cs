@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("帳戶的名稱 [" + Csupplier.Username + "] 重複!", Csupplier));
             }
-            
+
             var Msg = MyFun.MappingData(ref Osupplier, user);
             Osupplier.UpdateTime = DateTime.Now;
             Osupplier.UpdateUser = 1;
@@ -111,36 +111,31 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(user));
         }
         /// <summary>
-        /// 新增帳戶
+        /// 新增帳戶及權限
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="creatuser"></param>
         /// <returns></returns>
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(PostUserViewModel creatuser)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Users.AsQueryable().Where(x => x.Username == user.Username && x.DeleteFlag == 0).Any())
+            if (_context.Users.AsQueryable().Where(x => x.Username == creatuser.user.Username && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("帳戶名稱已存在!", user));
+                return Ok(MyFun.APIResponseError("帳戶名稱已存在!"));
             }
-            
-            var key = "60246598";
-            var message = user.Password;
-            var encoding = new System.Text.UTF8Encoding();
-            byte[] keyByte = encoding.GetBytes(key);
-            byte[] messageBytes = encoding.GetBytes(message);
-            using (var hmacSHA256 = new HMACSHA256(keyByte))
+            creatuser.user.Password = MyFun.Encryption(creatuser.user.Password);
+            creatuser.user.CreateUser = 1;
+            var UserRoleList = MyFun.ReturnRole(creatuser.MenuList);
+            foreach (var UserRole in UserRoleList)
             {
-                byte[] hashMessage = hmacSHA256.ComputeHash(messageBytes);
-                user.Password = BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
+                creatuser.user.UserRoles.Add(UserRole);
             }
-            user.CreateUser = 1;
-            _context.Users.Add(user);
+            _context.Users.Add(creatuser.user);
             await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(user));
+            return Ok(MyFun.APIResponseOK(creatuser));
         }
         /// <summary>
         /// 刪除帳戶
@@ -162,10 +157,112 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(user));
         }
-
+        /// <summary>
+        ///  帳戶列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MenuListViewModel>>> GetUsersMenu()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var Menus = await _context.Menus.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Pid != null).ToListAsync();
+            var MenuList = new List<MenuListViewModel>();
+            foreach (var item in Menus)
+            {
+                MenuList.Add(new MenuListViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+            return Ok(MyFun.APIResponseOK(MenuList));
+        }
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+        /// <summary>
+        ///  使用者權限
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Users
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<MenuListViewModel>>> GetUsersMenuRoles(int id)
+        {
+            var Menus = await _context.Menus.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Pid != null).ToListAsync();
+            var UserRoles = await _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == id).ToListAsync();
+            var MenuList = new List<MenuListViewModel>();
+            foreach (var item in Menus)
+            {
+                var Creat = false;
+                var Edit = false;
+                var Delete = false;
+                var UserRolesitem = UserRoles.Where(x => x.MenuId == item.Id).FirstOrDefault();
+                if (UserRolesitem != null)
+                {
+                    try
+                    {
+                        var Rolearray = UserRolesitem.Roles.ToCharArray();
+                        Creat = Rolearray[0] == '1';
+                        Edit = Rolearray[1] == '1';
+                        Delete = Rolearray[2] == '1';
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else
+                {
+                    UserRolesitem = new UserRole
+                    {
+                        MenuId = item.Id,
+                        UsersId = id,
+                    };
+                    _context.UserRoles.Add(UserRolesitem);
+                    _context.SaveChanges();
+                }
+                MenuList.Add(new MenuListViewModel
+                {
+                    Id = UserRolesitem.Id,
+                    Name = item.Name,
+                    Creat = Creat,
+                    Edit = Edit,
+                    Delete = Delete
+                });
+            }
+            return Ok(MyFun.APIResponseOK(MenuList));
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsersMenuRoles(int id, MenuListViewModel MenuList)
+        {
+            var UserRoles = _context.UserRoles.Find(id);
+            if (UserRoles == null)
+            {
+
+            }
+            var Creat = "0";
+            var Edit = "0";
+            var Delete = "0";
+            try
+            {
+                var Rolearray = UserRoles.Roles.ToCharArray();
+                Creat = Rolearray[0].ToString();
+                Edit = Rolearray[1].ToString();
+                Delete = Rolearray[2].ToString();
+            }
+            catch
+            {
+
+            }
+            var Roles = "";
+            Roles += MenuList.Creat.HasValue ? MenuList.Creat.Value ? "1" : "0" : Creat;
+            Roles += MenuList.Edit.HasValue ? MenuList.Edit.Value ? "1" : "0" : Edit;
+            Roles += MenuList.Delete.HasValue ? MenuList.Delete.Value ? "1" : "0" : Delete;
+            UserRoles.Roles = Roles;
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(MenuList));
         }
     }
 }

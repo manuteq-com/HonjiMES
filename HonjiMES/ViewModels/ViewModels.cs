@@ -32,12 +32,12 @@ namespace HonjiMES.Models
         /// 修改原因說明
         /// </summary>
         public string Message { get; internal set; }
-        
+
         public MaterialLog MaterialLog { get; set; }
         public WiproductLog WiproductLog { get; set; }
         public ProductLog ProductLog { get; set; }
     }
-    
+
     /// <summary>
     /// 庫存調整單
     /// </summary>
@@ -47,9 +47,9 @@ namespace HonjiMES.Models
         public string LinkOrder { get; set; }
         public List<MaterialLog> MaterialLog { get; set; }
         public List<ProductLog> ProductLog { get; set; }
-        public List<AdjustDataDetail> AdjustDataDetail { get; set;}
+        public List<AdjustDataDetail> AdjustDataDetail { get; set; }
     }
-    
+
     /// <summary>
     /// 庫存調整單
     /// </summary>
@@ -69,7 +69,7 @@ namespace HonjiMES.Models
         public decimal WorkPrice { get; set;}
         public string Remark { get; set;}
     }
-    
+
     /// <summary>
     /// 庫存調整單Basic資料(包含原料、成品)
     /// </summary>
@@ -84,7 +84,7 @@ namespace HonjiMES.Models
         public string Property { get; set; }
         public decimal Price { get; set; }
     }
-    
+
     /// <summary>
     /// 建立單號
     /// </summary>
@@ -230,7 +230,7 @@ namespace HonjiMES.Models
         public decimal? UnitPriceAll { get; set;}
         public decimal? WorkPrice { get; set;}
         public string Reason { get; set; }
-        public string Remarks { get; set;}
+        public string Remarks { get; set; }
         public DateTime CreateTime { get; set; }
         public int CreateUser { get; set; }
     }
@@ -335,5 +335,72 @@ namespace HonjiMES.Models
         /// 密碼
         /// </summary>
         public string Password { get; set; }
+    }
+
+    /// <summary>
+    /// 目錄清單
+    /// </summary>
+    public class MenuViewModel
+    {
+        /// <summary>
+        /// 名稱
+        /// </summary>
+        public string label { get; set; }
+        /// <summary>
+        /// 圖示
+        /// </summary>
+        public string icon { get; set; }
+        /// <summary>
+        /// 路徑
+        /// </summary>
+        public string[] routerLink { get; set; }
+        /// <summary>
+        /// 子層
+        /// </summary>
+        public MenuViewModel[] items { get; set; }
+    }
+    /// <summary>
+    /// 使用登入權限
+    /// </summary>
+    public class UserRolesToken
+    {
+        /// <summary>
+        /// 帳號
+        /// </summary>
+        public string Username { get; set; }
+        /// <summary>
+        /// Token
+        /// </summary>
+        public string Token { get; set; }
+        /// <summary>
+        /// 可以用的選單
+        /// </summary>
+        public MenuViewModel[] Menu { get; set; }
+        public DateTime Timeout { get; internal set; }
+    }
+    public class MenuListViewModel
+    {
+        /// <summary>
+        /// Id
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 名稱
+        /// </summary>
+        public string Name { get; set; }
+        public bool? Creat { get; set; }
+        public bool? Edit { get; set; }
+        public bool? Delete { get; set; }
+    }
+    public class PostUserViewModel
+    {
+        /// <summary>
+        /// 使用者資料
+        /// </summary>
+        public User user { get; set; }
+        /// <summary>
+        /// 目錄權限
+        /// </summary>
+        public List<MenuListViewModel> MenuList { get; set; }
     }
 }

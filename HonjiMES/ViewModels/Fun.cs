@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -124,6 +126,46 @@ namespace HonjiMES.Models
             {
 
                 return new T();
+            }
+        }
+        /// <summary>
+        /// 前端資料轉資料庫模式
+        /// </summary>
+        /// <param name="menuList">前端</param>
+        /// <returns></returns>
+        internal static List<UserRole> ReturnRole(List<MenuListViewModel> menuList)
+        {
+            var UserRoleList = new List<UserRole>();
+            foreach (var Menuitem in menuList)
+            {
+            var Roles = "";
+                Roles += Menuitem.Creat.HasValue ? Menuitem.Creat.Value ? "1" : "0" : "0";
+                Roles += Menuitem.Edit.HasValue ? Menuitem.Edit.Value ? "1" : "0" : "0";
+                Roles += Menuitem.Delete.HasValue ? Menuitem.Delete.Value ? "1" : "0" : "0";
+                UserRoleList.Add(new UserRole { 
+                 MenuId= Menuitem.Id,
+                  Roles= Roles
+                });
+            }
+            return UserRoleList;
+        }
+
+        /// <summary>
+        /// 密碼加密
+        /// </summary>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        internal static string Encryption(string Password)
+        {
+            var key = "60246598";
+            var message = Password;
+            var encoding = new UTF8Encoding();
+            byte[] keyByte = encoding.GetBytes(key);
+            byte[] messageBytes = encoding.GetBytes(message);
+            using (var hmacSHA256 = new HMACSHA256(keyByte))
+            {
+                byte[] hashMessage = hmacSHA256.ComputeHash(messageBytes);
+               return BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
             }
         }
 

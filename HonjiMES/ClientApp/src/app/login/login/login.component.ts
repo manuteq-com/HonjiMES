@@ -6,6 +6,8 @@ import { first } from 'rxjs/operators';
 import { DxFormComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
+import { LoginUser } from 'src/app/model/loginuser';
+import { APIResponse } from 'src/app/app.module';
 
 @Component({
     selector: 'app-login',
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit {
         private authService: AuthService,
         public app: AppComponent
     ) {
-        // redirect to home if already logged in
+        // 已登入的狀態下直接到首頁
         if (this.authService.currentUserValue) {
             this.router.navigate(['/']);
         }
@@ -63,14 +65,54 @@ export class LoginComponent implements OnInit {
         }
         return true;
     }
+
+
+
+
     onFormSubmit = async function (e) {
+        // return this.http.post<any>(`/users/authenticate`, { loginUser })
+        //     .pipe(map(user => {
+        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+        //         localStorage.setItem('currentUser', JSON.stringify(user));
+        //         this.currentUserSubject.next(user);
+        //         return user;
+        //     }));
         this.formData = this.myform.instance.option('formData');
-        debugger;
-        if (this.authService.login(this.formData)) {
-            debugger;
-            this.router.navigate([this.returnUrl]);
-            this.app.isLoggedIn();
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
         }
-    }
+        this.app.PostData('/api/Home/SingIn/', this.formData).toPromise()
+            .then((ReturnData: any) => {
+                debugger;
+                if (ReturnData.success) {
+                    this.app.UserName = ReturnData.data.Username;
+                    localStorage.setItem('currentUser', JSON.stringify(ReturnData.data));
+                    this.authService.currentUserSubject.next(ReturnData.data);
+                    this.router.navigate([this.returnUrl]);
+                    this.app.isLoggedIn();
+                } else {
+                    notify({
+                        message: '帳號密碼錯誤',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error');
+                    this.buttondisabled = false;
+                }
+            })
+            .catch((e) => {
+                notify({
+                    message: e,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error');
+
+            });
+    };
 
 }

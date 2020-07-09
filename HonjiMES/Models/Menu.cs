@@ -6,10 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("users")]
-    public partial class User
+[Table("menu")]
+    public partial class Menu
     {
-        public User()
+        public Menu()
         {
             UserRoles = new HashSet<UserRole>();
         }
@@ -17,21 +17,15 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        [Column("pid", TypeName = "int(11)")]
+        public int? Pid { get; set; }
         [Required]
-        [Column("username", TypeName = "varchar(50)")]
-        public string Username { get; set; }
-        [Required]
-        [Column("realname", TypeName = "varchar(50)")]
-        public string Realname { get; set; }
-        [Required]
-        [Column("password", TypeName = "tinytext")]
-        public string Password { get; set; }
-        [Column("permission", TypeName = "int(11)")]
-        public int Permission { get; set; }
-        [Column("department", TypeName = "int(11)")]
-        public int Department { get; set; }
-        [Column("remarks", TypeName = "varchar(50)")]
-        public string Remarks { get; set; }
+        [Column("name", TypeName = "varchar(50)")]
+        public string Name { get; set; }
+        [Column("icon", TypeName = "varchar(50)")]
+        public string Icon { get; set; }
+        [Column("routerLink", TypeName = "varchar(200)")]
+        public string RouterLink { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -42,8 +36,12 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+        [Column("order", TypeName = "int(11)")]
+        public int? Order { get; set; }
+        [Column("memo", TypeName = "text")]
+        public string Memo { get; set; }
 
-        [InverseProperty(nameof(UserRole.Users))]
+        [InverseProperty(nameof(UserRole.Menu))]
         public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

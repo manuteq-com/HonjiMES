@@ -24,7 +24,8 @@
 
                 <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                     <!-- <img class="profile-image" src="assets/layout/images/avatar.png" /> -->
-                    <span class="topbar-item-name">管理者</span>
+                    <span class="topbar-item-name">使用者:{{app.GetUserName()}}
+                    </span>
                     <!-- <span class="topbar-item-role">管理者</span> -->
                 </a>
 
@@ -48,7 +49,7 @@
                         </a>
                     </li> -->
                     <li role="menuitem">
-                        <a href="#" (click)="app.logout()">
+                        <a (click)="app.logout()">
                             <i class="fa fa-fw fa-sign-out"></i>
                             <span>Logout</span>
                         </a>
@@ -94,7 +95,7 @@
                     <span class="topbar-badge animated rubberBand">10</span>
                     <span class="topbar-item-name">Messages</span>
                 </a>
-                <ul class="layout-menu fadeInDown">
+                <!-- <ul class="layout-menu fadeInDown">
                     <li role="menuitem">
                         <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
                             <img src="assets/layout/images/avatar1.png" width="35" />
@@ -125,7 +126,7 @@
                             <span>Out of office</span>
                         </a>
                     </li>
-                </ul>
+                </ul> -->
             </li>
             <!-- <li #messages [ngClass]="{'active-top-menu':app.activeTopbarItem === messages}">
                 <a href="#" (click)="app.onTopbarItemClick($event,messages)">

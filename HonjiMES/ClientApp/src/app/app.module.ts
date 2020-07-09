@@ -75,12 +75,16 @@ import { BillPurchaseReturnComponent } from './billpurchase/bill-purchase-return
 import { InventoryListComponent } from './inventory/inventory-list/inventory-list.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { LoginComponent } from './login/login/login.component';
+<<<<<<< HEAD
 import { WiproductListComponent } from './wiproduct/wiproduct-list/wiproduct-list.component';
 import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
 import { CreatwiproductComponent } from './wiproduct/creatwiproduct/creatwiproduct.component';
 import { CreatwiproductBasicComponent } from './wiproduct/creatwiproduct-basic/creatwiproduct-basic.component';
 import { ProcessListComponent } from './process/process-list/process-list.component';
 import { CreatprocessComponent } from './process/creatprocess/creatprocess.component';
+=======
+import { UserRolesComponent } from './setting/user-roles/user-roles.component';
+>>>>>>> e1f1b2bb1f514696bcc8301fe39957a9c40d1fac
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -177,6 +181,7 @@ export function tokenGetter() {
         CreatwiproductBasicComponent,
         ProcessListComponent,
         CreatprocessComponent,
+        UserRolesComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

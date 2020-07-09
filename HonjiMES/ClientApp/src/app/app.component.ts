@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AuthService } from './service/auth.service';
 import { LoginUser } from './model/loginuser';
+import { APIResponse } from './app.module';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 enum MenuOrientation {
     STATIC,
@@ -18,47 +20,51 @@ enum MenuOrientation {
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit, OnInit, OnChanges {
-
     layoutMode: MenuOrientation = MenuOrientation.HORIZONTAL;
-
     darkMenu = true; // 黑色 Menu
-
     profileMode = 'top';
-
     rotateMenuButton: boolean;
-
     topbarMenuActive: boolean;
-
     overlayMenuActive: boolean;
-
     staticMenuDesktopInactive: boolean;
-
     staticMenuMobileActive: boolean;
-
     layoutMenuScroller: HTMLDivElement;
-
     menuClick: boolean;
-
     topbarItemClick: boolean;
-
     activeTopbarItem: any;
-
     resetMenu: boolean;
-
     menuHoverActive: boolean;
-
     @ViewChild('layoutMenuScroller', { static: true }) layoutMenuScrollerViewChild: ScrollPanel;
+    UserName: string;
     menu: Array<any> = [];
     breadcrumbList: Array<any> = [];
     login$: LoginUser;
-    constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService) {
+    constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>('/api' + apiUrl);
+    }
+    public PostData(apiUrl: string, data: any = {}): Observable<APIResponse> {
+        debugger;
+        const body = JSON.stringify(data);
+        const httpOptions = {
+            withCredentials: true, body,
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            params: null
+        };
+        return this.http.post<APIResponse>(apiUrl, body, httpOptions);
     }
     ngOnInit() {
         this.listenRouting();
     }
     ngOnChanges() {
 
+    }
+    GetUserName() {
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+        return this.UserName;
     }
     logout() {
         this._authService.logout();

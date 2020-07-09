@@ -7,11 +7,12 @@ import { User } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
+import CustomStore from 'devextreme/data/custom_store';
 
 @Component({
-  selector: 'app-creatuser',
-  templateUrl: './creatuser.component.html',
-  styleUrls: ['./creatuser.component.css']
+    selector: 'app-creatuser',
+    templateUrl: './creatuser.component.html',
+    styleUrls: ['./creatuser.component.css']
 })
 export class CreatuserComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
@@ -40,6 +41,13 @@ export class CreatuserComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
+    // MENU
+    Controller = '/Users';
+    dataSourceDB: any;
+    editOnkeyPress: boolean;
+    enterKeyAction: string;
+    enterKeyDirection: string;
+    creatuser: any = {};
     // passwordComparison = () => {
     //     return this.myform.instance.option('formData').Password;
     // }
@@ -52,10 +60,22 @@ export class CreatuserComponent implements OnInit {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
-        this.colCount = 1;
+        this.colCount = 2;
         this.url = location.origin + '/api';
         this.listPermission = myservice.getPermission();
         this.listDepartment = myservice.getDepartment();
+        // MENU
+        this.editOnkeyPress = true;
+        this.enterKeyAction = 'moveFocus';
+        this.enterKeyDirection = 'row';
+        this.labelLocation = 'left';
+        this.GetData(this.url + '/Users/GetUsersMenu').subscribe(
+            (s) => {
+                debugger;
+                this.dataSourceDB = s.data;
+            }
+        );
+        //this.dataSourceDB =  SendService.sendRequest(this.http, this.Controller + '/GetUsersMenu');
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
@@ -74,6 +94,9 @@ export class CreatuserComponent implements OnInit {
         };
     }
     ngOnInit() {
+    }
+    onValueChanged(e, data) {
+        data.setValue(e.value);
     }
     passwordComparison(data): boolean {
         if (data.Password !== data.PasswordConfirm) {
@@ -102,10 +125,12 @@ export class CreatuserComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
-        // debugger;
+    onFormSubmit = async function (e) {
+        debugger;
         // this.buttondisabled = true;
         this.formData = this.myform.instance.option('formData');
+        this.dataGrid.instance.saveEditData();
+        const db = this.dataSourceDB;
         if (this.passwordComparison(this.formData) === false) {
             return;
         }
@@ -113,11 +138,15 @@ export class CreatuserComponent implements OnInit {
             this.buttondisabled = false;
             return;
         }
-        this.formData = this.myform.instance.option('formData');
+        // this.formData = this.myform.instance.option('formData');
         // this.postval = new User();
         // this.postval = this.formData as User;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Users/PostUser', 'POST', { values:  this.formData });
+
+        this.creatuser.user = this.formData;
+        this.creatuser.MenuList = this.dataSourceDB;
+        const sendRequest = await SendService.sendRequest(this.http, '/Users/PostUser', 'POST', { values: this.creatuser });
+        // const sendRequest = true;
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();
@@ -127,5 +156,17 @@ export class CreatuserComponent implements OnInit {
         this.buttondisabled = false;
 
     };
+    onInitNewRow(e) {
 
+    }
+    onFocusedCellChanging(e) {
+    }
+    onCellPrepared(e) {
+        if (e.column.command === 'edit') {
+
+        }
+    }
+    onEditingStart(e) {
+
+    }
 }
