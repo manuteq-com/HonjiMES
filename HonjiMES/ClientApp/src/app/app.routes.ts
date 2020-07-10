@@ -24,21 +24,6 @@ import { LoginComponent } from './login/login/login.component';
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    // { path: 'orderlist', component: OrderListComponent },
-    // { path: 'materiallist', component: MaterialListComponent },
-    // { path: 'productbasiclist', component: ProductBasicListComponent },
-    { path: 'wiproductbasiclist', component: WiproductBasicListComponent },
-    // { path: 'materialbasiclist', component: MaterialBasicListComponent },
-    // { path: 'salelist', component: SaleListComponent },
-    // { path: 'billpurchase', component: BillPurchaseComponent },
-    // { path: 'purchaseorder', component: PurchaseOrderComponent },
-    // { path: 'customerlist', component: CustomerListComponent },
-    // { path: 'supplierlist', component: SupplierListComponent },
-    // { path: 'warehouselist', component: WarehouseListComponent },
-    // { path: 'userlist', component: UserListComponent },
-    // { path: 'billofmateriallist', component: BillofmateriallistComponent },
-    // { path: 'receiveList', component: ReceiveListComponent },
-    { path: 'processList', component: ProcessListComponent },
     { path: 'orderlist', component: OrderListComponent, canActivate: [AuthGuard] },
     { path: 'materiallist', component: MaterialListComponent, canActivate: [AuthGuard] },
     { path: 'productbasiclist', component: ProductBasicListComponent, canActivate: [AuthGuard] },
@@ -51,6 +36,8 @@ export const routes: Routes = [
     { path: 'warehouselist', component: WarehouseListComponent, canActivate: [AuthGuard] },
     { path: 'userlist', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },
+    { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
+    { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
     { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] }
 ];
 
