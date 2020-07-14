@@ -456,6 +456,11 @@ namespace HonjiMES.Controllers
                 var result = MyFun.DeleteBomList(BillOfMaterials);
                 foreach (var item in result)
                 {
+                    var MBillOfMaterials = _context.MBillOfMaterials.Where(x => x.BomId == item.Id).ToList();
+                    foreach (var item2 in MBillOfMaterials)
+                    {
+                        _context.MBillOfMaterials.Remove(item2);
+                    }
                     _context.BillOfMaterials.Remove(item);
                 }
                 await _context.SaveChangesAsync();
