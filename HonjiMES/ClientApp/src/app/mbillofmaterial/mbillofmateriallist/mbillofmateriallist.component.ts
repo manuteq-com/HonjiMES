@@ -98,6 +98,21 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         // data.setValue(value);
         e.component.option('value', value);
     }
+    readBomProcess(e, data) {
+        this.bomId = data.data.Id;
+        this.bomNo = data.data.ProductNo;
+        this.bomName = data.data.Name;
+        this.saveDisabled = false;
+        this.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        this.dataSourceDB_Process = s.data;
+                    }
+                }
+            }
+        );
+    }
     onChangeVar(variable: any) {
         this.bomId = variable.Id;
         if (variable.Ismaterial) {

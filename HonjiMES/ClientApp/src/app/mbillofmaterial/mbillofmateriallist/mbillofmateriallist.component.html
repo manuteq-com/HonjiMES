@@ -45,12 +45,18 @@
             <dxi-column dataField="Property" caption="廠內規格"></dxi-column>
             <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
 
+            <dxi-column caption="" cellTemplate="cellTemplate" width="70"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button icon="chevrondoubleright" type="default" (onClick)="readBomProcess($event,data)"></dx-button>
+            </div>
+
             <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column> -->
+
             <div *dxTemplate="let item of 'detail'">
                 <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (onChangeVar)="onChangeVar($event)"></app-bomlist>
             </div>
@@ -65,7 +71,7 @@
 
             <div class="col-5">
                 <div class="input-group">
-                  <label class="pt-2">料號：{{bomNo}}</label>
+                  <label class="pt-2">編號：{{bomNo}}</label>
                 </div>
             </div>
             <div class="col-5">
@@ -91,8 +97,7 @@
             [dataSource]="dataSourceDB_Process"
             [showBorders]="true"
             height="500"
-            (onInitNewRow)="onInitNewRow($event)"
-            >
+            (onInitNewRow)="onInitNewRow($event)">
 
             <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-form colCount=2>

@@ -32,7 +32,7 @@
         <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
     </dxi-column>
 
-    <dxi-column  dataField='Status' caption="" cellTemplate="cellTemplate" width="70" [visible]="!btnVisible"></dxi-column>
+    <dxi-column caption="" cellTemplate="cellTemplate" width="70" [visible]="!btnVisible"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button icon="chevrondoubleright" type="default" (onClick)="readBomProcess($event,data)"></dx-button>
     </div>
