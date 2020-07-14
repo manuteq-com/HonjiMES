@@ -497,5 +497,79 @@ namespace HonjiMES.Controllers
         {
             return _context.BillOfMaterials.Any(e => e.Id == id);
         }
+
+        
+        /// <summary>
+        /// 用BomID取BOM表的製程資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByBomId(int id)
+        {
+            if (id != 0) {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).ToListAsync(); 
+                
+                if (billOfMaterial == null)
+                {
+                    return NotFound();
+                }    
+                return Ok(MyFun.APIResponseOK(billOfMaterial));
+
+            } else {
+                return NotFound();
+            }
+        }
+        
+        /// <summary>
+        /// 新增MBOM表
+        /// </summary>
+        /// <param name="MbomData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BomList>> PostMbomlist(MbomData MbomData)
+        {
+            if (MbomData.BomId != 0) {
+                var MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.BomId == MbomData.BomId).ToListAsync();
+                if (MbillOfMaterials != null)
+                {
+                    foreach (var item in MbillOfMaterials)
+                    {
+                        _context.MBillOfMaterials.Remove(item);
+                    }
+                    // await _context.SaveChangesAsync();
+                }
+
+                foreach (var item in MbomData.MBillOfMaterialList)
+                {
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    var nMbom = new MBillOfMaterial{
+                        Pid = null,
+                        Name = null,
+                        BomId = MbomData.BomId,
+                        SerialNumber = item.SerialNumber,
+                        ProcessId = item.ProcessId,
+                        ProcessNo = ProcessInfo.Code,
+                        ProcessName = ProcessInfo.Name,
+                        ProcessLeadTime = item.ProcessLeadTime,
+                        ProcessTime = item.ProcessTime,
+                        ProcessCost = item.ProcessCost,
+                        Manpower = item.Manpower,
+                        ProducingMachine = item.ProducingMachine,
+                        Status = item.Status,
+                        Type = item.Type,
+                        Remarks = item.Remarks,
+                        Version = item.Version,
+                        CreateUser = 1,
+                    };
+                    _context.MBillOfMaterials.Add(nMbom);
+                }
+                await _context.SaveChangesAsync();
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+        
+
     }
 }

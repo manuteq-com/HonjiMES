@@ -10,7 +10,7 @@ using HonjiMES.Models;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 顧客列表
+    /// 製程基本資料列表
     /// </summary>
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
@@ -24,7 +24,7 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         /// <summary>
-        /// 查詢顧客列表
+        /// 查詢製程基本資料列表
         /// </summary>
         /// <returns></returns>
         // GET: api/Processes
@@ -37,7 +37,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 使用ID查詢顧客列表
+        /// 使用ID查詢製程基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(process));
         }
         /// <summary>
-        /// 修改顧客列表
+        /// 修改製程基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <param name="process"></param>
@@ -103,7 +103,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(process));
         }
         /// <summary>
-        /// 新增顧客列表
+        /// 新增製程基本資料列表
         /// </summary>
         /// <param name="process"></param>
         /// <returns></returns>
@@ -123,7 +123,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(process));
         }
         /// <summary>
-        /// 刪除顧客列表
+        /// 刪除製程基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

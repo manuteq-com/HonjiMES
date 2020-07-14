@@ -48,6 +48,6 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column> -->
     <div *dxTemplate="let item of 'detail'">
-        <app-bomlist [itemkeyval]="item.key"></app-bomlist>
+        <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
     </div>
 </dx-data-grid>

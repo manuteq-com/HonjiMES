@@ -14,6 +14,7 @@ namespace HonjiMES.Models
         public virtual DbSet<BillofPurchaseHead> BillofPurchaseHeads { get; set; }
         public virtual DbSet<BillofPurchaseReturn> BillofPurchaseReturns { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -517,6 +518,70 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<MBillOfMaterial>(entity =>
+            {
+                entity.HasComment("MBOM");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Manpower).HasComment("所需人力");
+
+                entity.Property(e => e.Name)
+                    .HasComment("工序名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Pid).HasComment("父ID");
+
+                entity.Property(e => e.ProcessCost)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("成本");
+
+                entity.Property(e => e.ProcessLeadTime)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("前置時間");
+
+                entity.Property(e => e.ProcessName)
+                    .HasComment("工序名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessNo)
+                    .HasComment("工序代號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessTime)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("標準工時");
+
+                entity.Property(e => e.ProducingMachine)
+                    .HasComment("機台")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SerialNumber).HasComment("工序順序");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.Type)
+                    .HasDefaultValueSql("'0'")
+                    .HasComment("種類")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.Version).HasComment("版本");
             });
 
             modelBuilder.Entity<Material>(entity =>

@@ -11,6 +11,7 @@ import { SupplierListComponent } from './supplier/supplier-list/supplier-list.co
 import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
@@ -36,6 +37,7 @@ export const routes: Routes = [
     { path: 'warehouselist', component: WarehouseListComponent, canActivate: [AuthGuard] },
     { path: 'userlist', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },
+    { path: 'mbillofmateriallist', component: MbillofmateriallistComponent, canActivate: [AuthGuard] },
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
     { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] }
