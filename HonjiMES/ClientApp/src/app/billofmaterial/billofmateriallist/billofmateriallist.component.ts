@@ -13,6 +13,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class BillofmateriallistComponent implements OnInit {
     dataSourceDB: any;
+    bomMod: any;
     apiurl = location.origin + '/api';
     Controller = '/BillOfMaterials';
     remoteOperations = true;
@@ -20,6 +21,7 @@ export class BillofmateriallistComponent implements OnInit {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     constructor(private http: HttpClient) {
+        this.bomMod = 'PBOM';
         const remote = this.remoteOperations;
         // this.dataSourceDB = createStore({
         //     key: 'Id',

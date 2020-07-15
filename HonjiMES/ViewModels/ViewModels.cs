@@ -403,4 +403,10 @@ namespace HonjiMES.Models
         /// </summary>
         public List<MenuListViewModel> MenuList { get; set; }
     }
+
+    public class MbomData
+    {
+        public int BomId { get; set; }
+        public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
+    }
 }

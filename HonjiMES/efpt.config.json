@@ -42,6 +42,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "m_bill_of_material"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "material"
       },
       {
