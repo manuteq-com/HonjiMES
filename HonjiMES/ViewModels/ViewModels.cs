@@ -58,16 +58,16 @@ namespace HonjiMES.Models
         public int TempId { get; set; }
         public int DataType { get; set; }
         public int DataId { get; set; }
-        public int WarehouseId { get; set;}
-        public int Quantity { get; set;}
-        public decimal Price { get; set;}
-        public decimal PriceAll { get; set;}
-        public string Unit { get; set;}
-        public decimal UnitCount { get; set;}
-        public decimal UnitPrice { get; set;}
-        public decimal UnitPriceAll { get; set;}
-        public decimal WorkPrice { get; set;}
-        public string Remark { get; set;}
+        public int WarehouseId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal PriceAll { get; set; }
+        public string Unit { get; set; }
+        public decimal UnitCount { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal UnitPriceAll { get; set; }
+        public decimal WorkPrice { get; set; }
+        public string Remark { get; set; }
     }
 
     /// <summary>
@@ -202,7 +202,7 @@ namespace HonjiMES.Models
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
-      public class WiproductW : Wiproduct
+    public class WiproductW : Wiproduct
     {
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
@@ -221,14 +221,14 @@ namespace HonjiMES.Models
         public string ReturnNo { get; set; }
         public int BillofPurchaseDetailId { get; set; }
         public int WarehouseId { get; set; }
-        public int Quantity { get; set;}
-        public decimal Price { get; set;}
-        public decimal PriceAll { get; set;}
-        public string Unit { get; set;}
-        public decimal? UnitCount { get; set;}
-        public decimal? UnitPrice { get; set;}
-        public decimal? UnitPriceAll { get; set;}
-        public decimal? WorkPrice { get; set;}
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal PriceAll { get; set; }
+        public string Unit { get; set; }
+        public decimal? UnitCount { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? UnitPriceAll { get; set; }
+        public decimal? WorkPrice { get; set; }
         public string Reason { get; set; }
         public string Remarks { get; set; }
         public DateTime CreateTime { get; set; }
@@ -413,5 +413,78 @@ namespace HonjiMES.Models
     {
         public int BomId { get; set; }
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
+    }
+    /// <summary>
+    /// 製成進度
+    /// </summary>
+    public class ProcessesStatus
+    {
+        /// <summary>
+        /// 製成進度的欄位
+        /// </summary>
+        public List<ColumnOption> ColumnOptionlist { get; set; }
+        /// <summary>
+        /// 製成進度的資料
+        /// </summary>
+        public List<ProcessesData> ProcessesDataList { get; set; }
+    }
+    /// <summary>
+    /// 要動態產生的欄位
+    /// </summary>
+    public class ColumnOption
+    {
+        /// <summary>
+        /// table 欄位
+        /// </summary>
+        public string key { get; set; }
+        /// <summary>
+        ///  table 欄位顯示的名稱
+        /// </summary>
+        public string title { get; set; }
+        /// <summary>
+        /// 是否顯示
+        /// </summary>
+        public bool show { get; set; }
+        /// <summary>
+        /// 欄位固定 左：nzLeft  右：nzRight
+        /// </summary>
+        public string Columnlock { get; set; }
+    }
+    public class ProcessesData
+    {
+        public int Key { get; set; }
+        public string Name { get; set; }
+        public string ProductNo { get; set; }
+        public string Remark { get; set; }
+        public int Count { get; set; }
+        /// <summary>
+        ///  製成0~19 共20組
+        /// </summary>
+        public TempString Temp0 { get; set; }
+        public TempString Temp1 { get; set; }
+        public TempString Temp2 { get; set; }
+        public TempString Temp3 { get; set; }
+        public TempString Temp4 { get; set; }
+        public TempString Temp5 { get; set; }
+        public TempString Temp6 { get; set; }
+        public TempString Temp7 { get; set; }
+        public TempString Temp8 { get; set; }
+        public TempString Temp9 { get; set; }
+        public TempString Temp10 { get; set; }
+        public TempString Temp11 { get; set; }
+        public TempString Temp12 { get; set; }
+        public TempString Temp13 { get; set; }
+        public TempString Temp14 { get; set; }
+        public TempString Temp15 { get; set; }
+        public TempString Temp16 { get; set; }
+        public TempString Temp17 { get; set; }
+        public TempString Temp18 { get; set; }
+        public TempString Temp19 { get; set; }
+    }
+    public class TempString
+    {
+        public string value0 { get; set; }
+        public string value1 { get; set; }
+        public string value2 { get; set; }
     }
 }

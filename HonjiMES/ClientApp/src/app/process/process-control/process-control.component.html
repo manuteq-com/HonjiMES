@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+
+    </div>
+</div>
+
+<nz-table #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" [nzFrontPagination]="false"
+    [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '600px' }">
+    <thead>
+        <!-- <tr>
+            <th nzLeft colspan="3" rowspan='3' nzWidth="300px">XXX BOM表</th>
+        </tr>
+        <tr>
+            <th colspan="19" nzWidth="800px">訂單編號</th>
+        </tr>
+        <tr>
+            <th colspan="19" nzWidth="800px">加工流程</th>
+        </tr> -->
+        <tr>
+            <th nzWidth="100px" nzLeft>名稱</th>
+            <th nzWidth="200px" nzLeft>品號</th>
+            <th nzWidth="70px" nzLeft>數量</th>
+            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+                <th nzWidth="100px">{{ col.title }}</th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td nzLeft>{{data.Name}}</td>
+            <td nzLeft>{{data.ProductNo}}</td>
+            <td nzLeft>{{data.Count}}</td>
+            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+                <td *ngIf="col.show">
+                    <div>
+                        <ng-container *ngIf="data[col.key].value0">
+                            {{data[col.key].value0}}
+                        </ng-container>
+                        <ng-container *ngIf="data[col.key].value1">
+                            <br />
+                            <hr />
+                            {{data[col.key].value1}}
+                        </ng-container>
+                        <ng-container *ngIf="data[col.key].value2">
+                            <br />
+                            <hr />
+                            {{data[col.key].value2}}
+                        </ng-container>
+                        <!-- {{data[col.key]}}
+                        <br />
+                        <hr />{{data[col.key]}} -->
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
+    </tbody>
+</nz-table>
