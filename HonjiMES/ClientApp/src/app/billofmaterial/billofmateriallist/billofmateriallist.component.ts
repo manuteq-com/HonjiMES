@@ -17,12 +17,14 @@ export class BillofmateriallistComponent implements OnInit {
     apiurl = location.origin + '/api';
     Controller = '/BillOfMaterials';
     remoteOperations = true;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
+    verpopupVisible: boolean;
+    itemkey: number;
+    bomverdata: any;
+
     constructor(private http: HttpClient) {
         this.bomMod = 'PBOM';
         const remote = this.remoteOperations;
+        this.readBomVer = this.readBomVer.bind(this);
         // this.dataSourceDB = createStore({
         //     key: 'Id',
         //     loadUrl: this.apiurl + this.Controller + '/GetProducts',
@@ -44,10 +46,18 @@ export class BillofmateriallistComponent implements OnInit {
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
     }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
     ngOnInit() {
     }
     readBomVer(e, data) {
-        debugger;
+        this.GetData('/BillOfMaterials/GetBomVerByProductId/' + data.key).subscribe(
+            (s) => {
+                this.bomverdata = s.data;
+                this.verpopupVisible = true;
+            }
+        );
         // this.onChangeVar.emit(data.data);
     }
 }

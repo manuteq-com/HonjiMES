@@ -57,3 +57,10 @@
         <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
     </div>
 </dx-data-grid>
+
+<dx-popup [showTitle]="true" title="變更紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="verpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-bomverlist [bomverdata]="bomverdata"></app-bomverlist>
+    </div>
+</dx-popup>
