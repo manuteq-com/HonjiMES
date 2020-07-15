@@ -81,7 +81,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("製程的的 [代號] 或 [名稱] 重複!", Cprocess));
             }
-            
+
             var Msg = MyFun.MappingData(ref Oprocess, process);
             Oprocess.UpdateTime = DateTime.Now;
             Oprocess.UpdateUser = 1;
@@ -141,7 +141,18 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(process));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Process>>> GetProcessesStatus(int id)
+        {
+            var data = _context.Processes.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var Processes = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(Processes));
+        }
         private bool ProcesseExists(int id)
         {
             return _context.Processes.Any(e => e.Id == id);

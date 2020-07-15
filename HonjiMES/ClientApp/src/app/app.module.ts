@@ -82,7 +82,8 @@ import { CreatwiproductBasicComponent } from './wiproduct/creatwiproduct-basic/c
 import { ProcessListComponent } from './process/process-list/process-list.component';
 import { CreatprocessComponent } from './process/creatprocess/creatprocess.component';
 import { UserRolesComponent } from './setting/user-roles/user-roles.component';
-
+import { ProcessControlComponent } from './process/process-control/process-control.component';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -118,7 +119,8 @@ export function tokenGetter() {
             config: {
                 tokenGetter
             }
-        })
+        }),
+        NgZorroAntdModule
     ],
     declarations: [
         AppComponent,
@@ -179,6 +181,7 @@ export function tokenGetter() {
         ProcessListComponent,
         CreatprocessComponent,
         UserRolesComponent,
+        ProcessControlComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

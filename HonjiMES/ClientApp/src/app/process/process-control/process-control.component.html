@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-md-10 col-sm-10">
+    </div>
+    <div class="col-md-1 col-sm-1">
+    </div>
+    <div class="col-md-1 col-sm-1">
+
+    </div>
+</div>
+
+<nz-table #basicTable [nzData]="listOfData" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th colspan="2" rowspan='3'>XXX BOM表</th>
+        </tr>
+        <tr>
+            <th>訂單編號</th>
+        </tr>
+        <tr>
+            <th>加工流程</th>
+        </tr>
+        <tr>
+            <th *ngFor="let col of columnOptions">{{ col.title }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <ng-container *ngFor="let col of columnOptions">
+                <td *ngIf="col.span">{{data[col.key]}}</td>
+            </ng-container>
+        </tr>
+    </tbody>
+</nz-table>

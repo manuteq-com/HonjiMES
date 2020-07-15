@@ -18,6 +18,7 @@ import { ReceiveListComponent } from './receive/receive-list/receive-list.compon
 import { ProcessListComponent } from './process/process-list/process-list.component';
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './login/login/login.component';
+import { ProcessControlComponent } from './process/process-control/process-control.component';
 
 
 
@@ -38,7 +39,8 @@ export const routes: Routes = [
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
-    { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] }
+    { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] },
+    { path: 'processControl', component: ProcessControlComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
