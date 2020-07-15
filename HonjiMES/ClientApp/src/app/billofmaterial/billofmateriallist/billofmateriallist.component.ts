@@ -46,5 +46,8 @@ export class BillofmateriallistComponent implements OnInit {
     }
     ngOnInit() {
     }
-
+    readBomVer(e, data) {
+        debugger;
+        // this.onChangeVar.emit(data.data);
+    }
 }

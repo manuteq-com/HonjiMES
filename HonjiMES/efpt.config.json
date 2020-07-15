@@ -18,6 +18,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "bill_of_material_ver"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "billof_purchase"
       },
       {

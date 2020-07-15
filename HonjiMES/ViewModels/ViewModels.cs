@@ -270,6 +270,11 @@ namespace HonjiMES.Models
         public int? Pid { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
+        public string Unit { get; set; }
+        public sbyte? Outsource { get; set; }
+        public int Group { get; set; }
+        public sbyte? Type { get; set; }
+        public string Remarks { get; set; }
         public int? MaterialBasicId { get; set; }
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
