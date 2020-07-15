@@ -10,19 +10,19 @@ export class ProcessControlComponent implements OnInit {
     listOfData = [
         {
             key: '1',
-            name: 'John Brown',
+            name: 'test1',
             age: 32,
             address: 'New York No. 1 Lake Park'
         },
         {
             key: '2',
-            name: 'Jim Green',
+            name: 'test2',
             age: 42,
             address: 'London No. 1 Lake Park'
         },
         {
             key: '3',
-            name: 'Joe Black',
+            name: 'test3',
             age: 32,
             address: 'Sidney No. 1 Lake Park'
         }
