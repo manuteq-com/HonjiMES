@@ -85,6 +85,7 @@ import { UserRolesComponent } from './setting/user-roles/user-roles.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -187,7 +188,8 @@ export function tokenGetter() {
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
-        { provide: LocationStrategy, useClass: PathLocationStrategy }
+        { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: NZ_I18N, useValue: zh_TW }
     ],
     bootstrap: [AppComponent]
 })
