@@ -14,13 +14,14 @@ export class ProcessControlComponent implements OnInit {
     creatpopupVisible: any;
     itemkey: number;
     mod: string;
-
+    loadingVisible = false;
     constructor(public app: AppComponent) {
+        this.loadingVisible = true;
         this.creatpopupVisible = false;
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
-                debugger;
                 this.dataSourceDB = s.data;
+                this.loadingVisible = false;
             }
         );
         // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
