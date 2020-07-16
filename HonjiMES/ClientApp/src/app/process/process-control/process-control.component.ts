@@ -51,6 +51,8 @@ export class ProcessControlComponent implements OnInit {
         //     { key: 'count', title: '數量', span: false },
         // ];
     }
+    ngOnInit() {
+    }
     tdclick(e) {
         notify({
             message: e.ProductNo,
@@ -60,7 +62,7 @@ export class ProcessControlComponent implements OnInit {
             }
         }, 'error', 3000);
     }
-    ngOnInit() {
-    }
+    creatdata() {
 
+    }
 }

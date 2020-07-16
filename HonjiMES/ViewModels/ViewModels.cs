@@ -454,8 +454,10 @@ namespace HonjiMES.Models
     public class ProcessesData
     {
         public int Key { get; set; }
+        public string WorkOrderNo { get; set; }
         public string Name { get; set; }
         public string ProductNo { get; set; }
+        public string MachineNo { get; set; }
         public string Remark { get; set; }
         public int Count { get; set; }
         /// <summary>
