@@ -144,6 +144,61 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 工單號
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WorkOrder>>> GetWorkOrderNumber()
+        {
+            var key = "WO";
+            var dt = DateTime.Now;
+            var WorkOrderNo = dt.ToString("yyMMdd");
+
+            var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                // if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                // }
+            }
+            var WorkOrderHeadData = new WorkOrder{
+                CreateTime = dt,
+                WorkOrderNo = key + WorkOrderNo + NoCount.ToString("000")
+            };
+            return Ok(MyFun.APIResponseOK(WorkOrderHeadData));
+        }
+
+        /// <summary>
+        /// 工單號
+        /// </summary>
+        /// <returns></returns>
+        // POST: api/Processes
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetWorkOrderNumberByInfo(CreateNumberInfo CreateNoData)
+        {
+            if (CreateNoData != null) {
+                var key = "WO";
+                var WorkOrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
+                
+                var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                    var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                    // if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    // }
+                }
+                CreateNoData.CreateNumber = key + WorkOrderNo + NoCount.ToString("000");
+                return Ok(MyFun.APIResponseOK(CreateNoData));
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -151,7 +206,6 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProcessesStatus>> GetWorkOrderByStatus(int id)
         {
-            var Processesname = _context.Processes.Select(x => x.Name).ToList();
             var ptype = typeof(ProcessesData);
             var ProcessesStatus = new ProcessesStatus();
             var ColumnOptionlist = new List<ColumnOption> {

@@ -89,6 +89,7 @@ import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriall
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.component';
+import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -190,6 +191,7 @@ export function tokenGetter() {
         ProcessControlComponent,
         MbillofmateriallistComponent,
         BomverlistComponent,
+        CreatprocessControlComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

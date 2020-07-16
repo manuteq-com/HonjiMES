@@ -31,6 +31,14 @@ namespace HonjiMES.Controllers
         }
 
         // GET: api/ProductBasics
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProductBasicsAsc()
+        {
+            var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.ProductNo).ToListAsync();
+            return Ok(MyFun.APIResponseOK(productBasic));
+        }
+
+        // GET: api/ProductBasics
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductBasic>> GetProductBasic(int id)
         {

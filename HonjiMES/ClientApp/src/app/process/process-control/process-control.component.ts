@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
     selector: 'app-process-control',
@@ -8,9 +9,14 @@ import notify from 'devextreme/ui/notify';
     styleUrls: ['./process-control.component.css']
 })
 export class ProcessControlComponent implements OnInit {
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     dataSourceDB: any = {};
+    creatpopupVisible: any;
+    itemkey: number;
+    mod: string;
 
     constructor(public app: AppComponent) {
+        this.creatpopupVisible = false;
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
                 debugger;
@@ -63,6 +69,17 @@ export class ProcessControlComponent implements OnInit {
         }, 'error', 3000);
     }
     creatdata() {
-
+        this.creatpopupVisible = true;
+    }
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 }
