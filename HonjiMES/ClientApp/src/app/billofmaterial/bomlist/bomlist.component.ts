@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, OnChanges } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
@@ -13,22 +13,25 @@ import { APIResponse } from 'src/app/app.module';
     templateUrl: './bomlist.component.html',
     styleUrls: ['./bomlist.component.css']
 })
-export class BomlistComponent implements OnInit {
+export class BomlistComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
+    @Input() bomMod: any;
+    @Output() onChangeVar  = new EventEmitter();
     @ViewChild(DxTreeListComponent) TreeList: DxTreeListComponent;
     Controller = '/BillOfMaterials';
     dataSourceDB: CustomStore;
     popupVisible: boolean;
     MaterialList: any;
     ProductList: any;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
+    btnVisible: boolean;
+
     constructor(private http: HttpClient) {
+        this.btnVisible = true;
         this.onReorder = this.onReorder.bind(this);
         this.isEditVisible = this.isEditVisible.bind(this);
         this.isDeleteVisible = this.isDeleteVisible.bind(this);
         this.isUploadVisible = this.isUploadVisible.bind(this);
+        this.readBomProcess = this.readBomProcess.bind(this);
         this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
@@ -56,8 +59,15 @@ export class BomlistComponent implements OnInit {
         });
 
     }
-
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>('/api' + apiUrl);
+    }
     ngOnInit() {
+    }
+    ngOnChanges() {
+        if (this.bomMod === 'MBOM') {
+            this.btnVisible = false;
+        }
     }
     cellClick(e) {
         if (e.rowType === 'header') {
@@ -136,5 +146,8 @@ export class BomlistComponent implements OnInit {
         } else {
             return false;
         }
+    }
+    readBomProcess(e, data) {
+        this.onChangeVar.emit(data.data);
     }
 }

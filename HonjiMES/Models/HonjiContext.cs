@@ -8,12 +8,14 @@ namespace HonjiMES.Models
     public partial class HonjiContext : DbContext
     {
         public virtual DbSet<BillOfMaterial> BillOfMaterials { get; set; }
+        public virtual DbSet<BillOfMaterialVer> BillOfMaterialVers { get; set; }
         public virtual DbSet<BillofPurchase> BillofPurchases { get; set; }
         public virtual DbSet<BillofPurchaseCheckin> BillofPurchaseCheckins { get; set; }
         public virtual DbSet<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         public virtual DbSet<BillofPurchaseHead> BillofPurchaseHeads { get; set; }
         public virtual DbSet<BillofPurchaseReturn> BillofPurchaseReturns { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -127,6 +129,64 @@ namespace HonjiMES.Models
                     .WithMany(p => p.BillOfMaterials)
                     .HasForeignKey(d => d.ProductBasicId)
                     .HasConstraintName("fk_bill_of_material_product_basic1");
+            });
+
+            modelBuilder.Entity<BillOfMaterialVer>(entity =>
+            {
+                entity.Property(e => e.Bomid).HasComment("bomID");
+
+                entity.Property(e => e.Bompid).HasComment("父bomID	");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Group)
+                    .HasDefaultValueSql("'1'")
+                    .HasComment("組成表群組");
+
+                entity.Property(e => e.Lv)
+                    .HasDefaultValueSql("'1'")
+                    .HasComment("層數");
+
+                entity.Property(e => e.MaterialName)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MaterialNo)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Name)
+                    .HasComment("名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Outsource).HasComment("外包註記");
+
+                entity.Property(e => e.ProductName)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProductNo)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Quantity).HasComment("數量");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Type).HasComment("BOM的類型");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Version)
+                    .HasDefaultValueSql("'1.00'")
+                    .HasComment("版本");
             });
 
             modelBuilder.Entity<BillofPurchase>(entity =>
@@ -517,6 +577,70 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<MBillOfMaterial>(entity =>
+            {
+                entity.HasComment("MBOM");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Manpower).HasComment("所需人力");
+
+                entity.Property(e => e.Name)
+                    .HasComment("工序名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Pid).HasComment("父ID");
+
+                entity.Property(e => e.ProcessCost)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("成本");
+
+                entity.Property(e => e.ProcessLeadTime)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("前置時間");
+
+                entity.Property(e => e.ProcessName)
+                    .HasComment("工序名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessNo)
+                    .HasComment("工序代號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessTime)
+                    .HasDefaultValueSql("'0.00'")
+                    .HasComment("標準工時");
+
+                entity.Property(e => e.ProducingMachine)
+                    .HasComment("機台")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SerialNumber).HasComment("工序順序");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.Type)
+                    .HasDefaultValueSql("'0'")
+                    .HasComment("種類")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.Version).HasComment("版本");
             });
 
             modelBuilder.Entity<Material>(entity =>

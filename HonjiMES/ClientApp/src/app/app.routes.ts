@@ -12,6 +12,7 @@ import { AdjustListComponent } from './inventory/adjust-list/adjust-list.compone
 import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
+import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
 import { ProductBasicListComponent } from './product/product-basic-list/product-basic-list.component';
 import { WiproductBasicListComponent } from './wiproduct/wiproduct-basic-list/wiproduct-basic-list.component';
 import { MaterialBasicListComponent } from './material/material-basic-list/material-basic-list.component';
@@ -19,6 +20,7 @@ import { ReceiveListComponent } from './receive/receive-list/receive-list.compon
 import { ProcessListComponent } from './process/process-list/process-list.component';
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './login/login/login.component';
+import { ProcessControlComponent } from './process/process-control/process-control.component';
 
 
 
@@ -38,9 +40,11 @@ export const routes: Routes = [
     { path: 'warehouselist', component: WarehouseListComponent, canActivate: [AuthGuard] },
     { path: 'userlist', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },
+    { path: 'mbillofmateriallist', component: MbillofmateriallistComponent, canActivate: [AuthGuard] },
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
-    { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] }
+    { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] },
+    { path: 'processControl', component: ProcessControlComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

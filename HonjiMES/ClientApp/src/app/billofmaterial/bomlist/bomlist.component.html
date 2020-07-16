@@ -2,8 +2,8 @@
     [autoExpandAll]="true" parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true"
     [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
     (onCellClick)="cellClick($event)">
-    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="true"
-        [allowReordering]="true" [showDragIcons]="false"></dxo-row-dragging>
+    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="btnVisible"
+        [allowReordering]="btnVisible" [showDragIcons]="false"></dxo-row-dragging>
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false">
         <dxo-form colCount=1>
             <dxi-item dataField="Name"></dxi-item>
@@ -23,13 +23,20 @@
     <dxi-column dataField="MaterialBasicId" caption="元件品號" dataType="number" [visible]="false" [allowEditing]="false">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+
+    <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="btnVisible">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit" [visible]="isEditVisible"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash" [visible]="isDeleteVisible"></dxi-button>
         <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
     </dxi-column>
+
+    <dxi-column caption="" cellTemplate="cellTemplate" width="70" [visible]="!btnVisible"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <dx-button icon="chevrondoubleright" type="default" (onClick)="readBomProcess($event,data)"></dx-button>
+    </div>
+
 </dx-tree-list>
 <dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="35%" [width]="600"
     [(visible)]="popupVisible">

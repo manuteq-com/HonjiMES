@@ -395,6 +395,8 @@ namespace HonjiMES.Controllers
                 Name = PostBom.Name,
                 Quantity = PostBom.Quantity,
             };
+            
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             if (PostBom.BasicType == 1)//原料直接加入
             {
                 nBillOfMaterials.MaterialBasicId = PostBom.BasicId;
@@ -402,7 +404,6 @@ namespace HonjiMES.Controllers
             else if (PostBom.BasicType == 2 && PostBom.BasicId.HasValue)//成品連同組成加入
             {
                 //複製BOM內容
-                _context.ChangeTracker.LazyLoadingEnabled = true;
                 int BasicId = PostBom.BasicId.Value;
                 // var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
                 var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.Where(x => x.Pid == null).ToList();
@@ -436,10 +437,49 @@ namespace HonjiMES.Controllers
                     }
                     nBillOfMaterials.InverseP.Add(nbom1);
                 }
-                _context.ChangeTracker.LazyLoadingEnabled = false;
             }
             _context.BillOfMaterials.Add(nBillOfMaterials);
             await _context.SaveChangesAsync();
+
+            /////紀錄變更版本
+            var bomlist = new List<BomList>();
+            var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
+            if (BomData.Count() != 0) {
+                bomlist.AddRange(MyFun.GetBomList(BomData));
+                var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == id).OrderByDescending(x => x.Id).ToList();
+                decimal VerNo = 1;
+                if (BomVerData.Count() != 0) {
+                    VerNo = BomVerData[0].Version + 1;
+                }
+                foreach (var item in bomlist)
+                {
+                    var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
+                    var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
+                    var nVer = new BillOfMaterialVer{
+                        ProductBasicId = id,
+                        Version = VerNo,
+                        Bomid = item.Id,
+                        Bompid = item.Pid,
+                        MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
+                        MaterialName = MaterialBasicInfo?.Name ?? null,
+                        ProductNo = ProductBasicInfo?.ProductNo ?? null,
+                        ProductName = ProductBasicInfo?.Name ?? null,
+                        Name = item.Name,
+                        Quantity = item.Quantity,
+                        Unit = item.Unit,
+                        Lv = item.Lv,
+                        Outsource = item.Outsource,
+                        Group = item.Group,
+                        Type = item.Type,
+                        Remarks = item.Remarks,
+                        CreateUser = 1
+                    };
+                    _context.BillOfMaterialVers.Add(nVer);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(PostBom));
         }
         
@@ -448,6 +488,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<BillOfMaterial>> DeleteBomlist(int id)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
+            var TempProductBasicData = _context.BillOfMaterialVers.Where(x => x.Bomid == id).FirstOrDefault();
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.Id == id).ToListAsync();
             // var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
             if (BillOfMaterials != null)
@@ -456,10 +497,54 @@ namespace HonjiMES.Controllers
                 var result = MyFun.DeleteBomList(BillOfMaterials);
                 foreach (var item in result)
                 {
+                    var MBillOfMaterials = _context.MBillOfMaterials.Where(x => x.BomId == item.Id).ToList();
+                    foreach (var item2 in MBillOfMaterials)
+                    {
+                        _context.MBillOfMaterials.Remove(item2);
+                    }
                     _context.BillOfMaterials.Remove(item);
                 }
                 await _context.SaveChangesAsync();
             }
+
+            /////紀錄變更版本
+            var bomlist = new List<BomList>();
+            var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
+            if (BomData.Count() != 0) {
+                bomlist.AddRange(MyFun.GetBomList(BomData));
+                var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId).OrderByDescending(x => x.Id).ToList();
+                decimal VerNo = 1;
+                if (BomVerData.Count() != 0) {
+                    VerNo = BomVerData[0].Version + 1;
+                }
+                foreach (var item in bomlist)
+                {
+                    var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
+                    var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
+                    var nVer = new BillOfMaterialVer{
+                        ProductBasicId = TempProductBasicData.ProductBasicId,
+                        Version = VerNo,
+                        Bomid = item.Id,
+                        Bompid = item.Pid,
+                        MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
+                        MaterialName = MaterialBasicInfo?.Name ?? null,
+                        ProductNo = ProductBasicInfo?.ProductNo ?? null,
+                        ProductName = ProductBasicInfo?.Name ?? null,
+                        Name = item.Name,
+                        Quantity = item.Quantity,
+                        Unit = item.Unit,
+                        Lv = item.Lv,
+                        Outsource = item.Outsource,
+                        Group = item.Group,
+                        Type = item.Type,
+                        Remarks = item.Remarks,
+                        CreateUser = 1
+                    };
+                    _context.BillOfMaterialVers.Add(nVer);
+                }
+                await _context.SaveChangesAsync();
+            }
+
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
@@ -497,5 +582,124 @@ namespace HonjiMES.Controllers
         {
             return _context.BillOfMaterials.Any(e => e.Id == id);
         }
+        
+        /// <summary>
+        /// 用ProductBasicID取BOM表的製程資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByProductBasicId(int id)
+        {
+            if (id != 0) {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync(); 
+                
+                if (billOfMaterial == null)
+                {
+                    return NotFound();
+                }    
+                return Ok(MyFun.APIResponseOK(billOfMaterial));
+
+            } else {
+                return NotFound();
+            }
+        }
+        
+        /// <summary>
+        /// 用BomID取BOM表的製程資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByBomId(int id)
+        {
+            if (id != 0) {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).ToListAsync(); 
+                
+                if (billOfMaterial == null)
+                {
+                    return NotFound();
+                }    
+                return Ok(MyFun.APIResponseOK(billOfMaterial));
+
+            } else {
+                return NotFound();
+            }
+        }
+        
+        /// <summary>
+        /// 新增MBOM表
+        /// </summary>
+        /// <param name="MbomData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<BomList>> PostMbomlist(MbomData MbomData)
+        {
+            if (MbomData.BomId != 0 || MbomData.ProductBasicId != 0) {
+                var MbillOfMaterials = new List<MBillOfMaterial>();
+                if (MbomData.ProductBasicId != 0) {
+                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.ProductBasicId == MbomData.ProductBasicId).ToListAsync();
+                } else {
+                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.BomId == MbomData.BomId).ToListAsync();
+                }
+                if (MbillOfMaterials != null)
+                {
+                    foreach (var item in MbillOfMaterials)
+                    {
+                        _context.MBillOfMaterials.Remove(item);
+                    }
+                    // await _context.SaveChangesAsync();
+                }
+
+                foreach (var item in MbomData.MBillOfMaterialList)
+                {
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    var nMbom = new MBillOfMaterial{
+                        Pid = null,
+                        Name = null,
+                        ProductBasicId = MbomData.ProductBasicId,
+                        BomId = MbomData.BomId,
+                        SerialNumber = item.SerialNumber,
+                        ProcessId = item.ProcessId,
+                        ProcessNo = ProcessInfo.Code,
+                        ProcessName = ProcessInfo.Name,
+                        ProcessLeadTime = item.ProcessLeadTime,
+                        ProcessTime = item.ProcessTime,
+                        ProcessCost = item.ProcessCost,
+                        Manpower = item.Manpower,
+                        ProducingMachine = item.ProducingMachine,
+                        Status = item.Status,
+                        Type = item.Type,
+                        Remarks = item.Remarks,
+                        Version = item.Version,
+                        CreateUser = 1,
+                    };
+                    _context.MBillOfMaterials.Add(nMbom);
+                }
+                await _context.SaveChangesAsync();
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+        
+        /// <summary>
+        /// 用ProductID取BOM表的變更紀錄
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterialVer>> GetBomVerByProductId(int id)
+        {
+           _context.ChangeTracker.LazyLoadingEnabled = true;
+            var BillOfMaterialVers = await _context.BillOfMaterialVers.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            if (BillOfMaterialVers == null) {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(BillOfMaterialVers));
+        }
+        
+
     }
 }
