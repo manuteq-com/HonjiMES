@@ -8,6 +8,7 @@ import { PurchaseOrderComponent } from './purchase/purchase-order/purchase-order
 import { BillPurchaseComponent } from './billpurchase/bill-purchase/bill-purchase.component';
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { SupplierListComponent } from './supplier/supplier-list/supplier-list.component';
+import { AdjustListComponent } from './inventory/adjust-list/adjust-list.component';
 import { WarehouseListComponent } from './warehouse/warehouse-list/warehouse-list.component';
 import { UserListComponent } from './setting/user-list/user-list.component';
 import { BillofmateriallistComponent } from './billofmaterial/billofmateriallist/billofmateriallist.component';
@@ -33,6 +34,7 @@ export const routes: Routes = [
     { path: 'purchaseorder', component: PurchaseOrderComponent, canActivate: [AuthGuard] },
     { path: 'customerlist', component: CustomerListComponent, canActivate: [AuthGuard] },
     { path: 'supplierlist', component: SupplierListComponent, canActivate: [AuthGuard] },
+    { path: 'adjustlist', component: AdjustListComponent, canActivate: [AuthGuard] },
     { path: 'warehouselist', component: WarehouseListComponent, canActivate: [AuthGuard] },
     { path: 'userlist', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },
