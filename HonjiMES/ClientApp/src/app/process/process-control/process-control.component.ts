@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
+import notify from 'devextreme/ui/notify';
 
 @Component({
     selector: 'app-process-control',
@@ -50,7 +51,15 @@ export class ProcessControlComponent implements OnInit {
         //     { key: 'count', title: '數量', span: false },
         // ];
     }
-
+    tdclick(e) {
+        notify({
+            message: e.ProductNo,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
+    }
     ngOnInit() {
     }
 

@@ -721,6 +721,7 @@ namespace HonjiMES.Controllers
             //資料轉型
             string strjsonData = JsonConvert.SerializeObject(BillOfMaterialVers);
             var BillOfMaterialVerLvList = JsonConvert.DeserializeObject<List<BillOfMaterialVerLv>>(strjsonData);
+            //產出階層
             foreach (var item in BillOfMaterialVerLvList)
             {
                 if (item.Bompid == 0)
@@ -734,6 +735,7 @@ namespace HonjiMES.Controllers
                 item.ShowLV = int.Parse(decimal.ToInt32(item.Version).ToString() + item.Bomid.ToString());
 
             }
+            //補上表頭
             foreach (var item in BillOfMaterialVerLvList.GroupBy(x => x.Version).ToList())
             {
                 BillOfMaterialVerLvList.Add(new BillOfMaterialVerLv
