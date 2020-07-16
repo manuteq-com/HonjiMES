@@ -20,14 +20,14 @@ namespace HonjiMES.Models
         public int Bomid { get; set; }
         [Column("bompid", TypeName = "int(11)")]
         public int? Bompid { get; set; }
-        [Column("material_no", TypeName = "varchar(50)")]
-        public string MaterialNo { get; set; }
-        [Column("material_name", TypeName = "varchar(50)")]
-        public string MaterialName { get; set; }
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
         [Column("product_name", TypeName = "varchar(50)")]
         public string ProductName { get; set; }
+        [Column("material_no", TypeName = "varchar(50)")]
+        public string MaterialNo { get; set; }
+        [Column("material_name", TypeName = "varchar(50)")]
+        public string MaterialName { get; set; }
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         [Column("quantity", TypeName = "int(11)")]

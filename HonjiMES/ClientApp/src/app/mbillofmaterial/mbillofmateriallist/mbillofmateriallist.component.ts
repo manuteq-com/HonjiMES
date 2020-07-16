@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-mbillofmateriallist',
@@ -14,6 +15,7 @@ import notify from 'devextreme/ui/notify';
   styleUrls: ['./mbillofmateriallist.component.css']
 })
 export class MbillofmateriallistComponent implements OnInit, OnChanges {
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     dataSourceDB: any;
     dataSourceDB_Process: any[];
     apiurl = location.origin + '/api';
@@ -26,6 +28,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     enterKeyDirection: string;
     ProcessBasicList: any;
     SerialNo = 0;
+    productbasicId: any;
     bomId: any;
     bomNo: any;
     bomName: any;
@@ -92,18 +95,19 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         e.data.ProcessLeadTime = 0;
         e.data.ProcessTime = 0;
         e.data.ProcessCost = 0;
-        e.data.ProducingMachine = 0;
+        e.data.ProducingMachine = '';
     }
     onInitialized(value, e) {
         // data.setValue(value);
         e.component.option('value', value);
     }
     readBomProcess(e, data) {
-        this.bomId = data.data.Id;
+        this.productbasicId = data.data.Id;
+        this.bomId = 0;
         this.bomNo = data.data.ProductNo;
         this.bomName = data.data.Name;
         this.saveDisabled = false;
-        this.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
+        this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
             (s) => {
                 if (s.success) {
                     if (s.success) {
@@ -114,6 +118,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         );
     }
     onChangeVar(variable: any) {
+        this.productbasicId = 0;
         this.bomId = variable.Id;
         if (variable.Ismaterial) {
             this.bomNo = variable.MaterialNo;
@@ -155,7 +160,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         });
     }
     async savedata() {
+        this.dataGrid.instance.saveEditData();
         this.postval = {
+            ProductBasicId: this.productbasicId,
             BomId: this.bomId,
             MBillOfMaterialList: this.dataSourceDB_Process
         };

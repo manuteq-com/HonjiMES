@@ -584,6 +584,29 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
+        /// 用ProductBasicID取BOM表的製程資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/BillOfMaterials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByProductBasicId(int id)
+        {
+            if (id != 0) {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync(); 
+                
+                if (billOfMaterial == null)
+                {
+                    return NotFound();
+                }    
+                return Ok(MyFun.APIResponseOK(billOfMaterial));
+
+            } else {
+                return NotFound();
+            }
+        }
+        
+        /// <summary>
         /// 用BomID取BOM表的製程資料
         /// </summary>
         /// <param name="id"></param>
@@ -614,8 +637,13 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BomList>> PostMbomlist(MbomData MbomData)
         {
-            if (MbomData.BomId != 0) {
-                var MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.BomId == MbomData.BomId).ToListAsync();
+            if (MbomData.BomId != 0 || MbomData.ProductBasicId != 0) {
+                var MbillOfMaterials = new List<MBillOfMaterial>();
+                if (MbomData.ProductBasicId != 0) {
+                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.ProductBasicId == MbomData.ProductBasicId).ToListAsync();
+                } else {
+                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.BomId == MbomData.BomId).ToListAsync();
+                }
                 if (MbillOfMaterials != null)
                 {
                     foreach (var item in MbillOfMaterials)
@@ -631,6 +659,7 @@ namespace HonjiMES.Controllers
                     var nMbom = new MBillOfMaterial{
                         Pid = null,
                         Name = null,
+                        ProductBasicId = MbomData.ProductBasicId,
                         BomId = MbomData.BomId,
                         SerialNumber = item.SerialNumber,
                         ProcessId = item.ProcessId,
