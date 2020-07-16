@@ -11,13 +11,23 @@ export class ProcessControlComponent implements OnInit {
     dataSourceDB: any = {};
     loadingVisible = false;
     constructor(public app: AppComponent) {
+<<<<<<< HEAD
         this.loadingVisible = true;
         this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
+=======
+        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
+>>>>>>> 18f59a52ea635609e4e8a9893dfe9a5cc389e60f
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;
             }
         );
+        // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
+        //     (s) => {
+        //         debugger;
+        //         this.dataSourceDB = s.data;
+        //     }
+        // );
 
         // this.dataSourceDB.listOfData = [
         //     {
@@ -46,6 +56,8 @@ export class ProcessControlComponent implements OnInit {
         //     { key: 'count', title: '數量', span: false },
         // ];
     }
+    ngOnInit() {
+    }
     tdclick(e) {
         notify({
             message: e.ProductNo,
@@ -55,7 +67,7 @@ export class ProcessControlComponent implements OnInit {
             }
         }, 'error', 3000);
     }
-    ngOnInit() {
-    }
+    creatdata() {
 
+    }
 }

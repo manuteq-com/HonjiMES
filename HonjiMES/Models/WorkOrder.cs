@@ -6,36 +6,37 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("m_bill_of_material")]
-    public partial class MBillOfMaterial
+[Table("work_order")]
+    public partial class WorkOrder
     {
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("pid", TypeName = "int(11)")]
-        public int? Pid { get; set; }
-        [Column("name", TypeName = "varchar(45)")]
-        public string Name { get; set; }
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int? ProductBasicId { get; set; }
-        [Column("bom_id", TypeName = "int(11)")]
-        public int? BomId { get; set; }
+        [Required]
+        [Column("work_order_no", TypeName = "varchar(50)")]
+        public string WorkOrderNo { get; set; }
+        [Column("order_detail_id", TypeName = "int(11)")]
+        public int? OrderDetailId { get; set; }
         [Column("serial_number", TypeName = "int(11)")]
         public int SerialNumber { get; set; }
+        [Column("product_basic_id", TypeName = "int(11)")]
+        public int ProductBasicId { get; set; }
         [Column("process_id", TypeName = "int(11)")]
         public int ProcessId { get; set; }
         [Required]
         [Column("process_no", TypeName = "varchar(50)")]
         public string ProcessNo { get; set; }
         [Required]
-        [Column("process_name", TypeName = "varchar(100)")]
+        [Column("process_name", TypeName = "varchar(50)")]
         public string ProcessName { get; set; }
         [Column("process_lead_time", TypeName = "decimal(10,2)")]
-        public decimal? ProcessLeadTime { get; set; }
+        public decimal ProcessLeadTime { get; set; }
         [Column("process_time", TypeName = "decimal(10,2)")]
-        public decimal? ProcessTime { get; set; }
+        public decimal ProcessTime { get; set; }
         [Column("process_cost", TypeName = "decimal(10,2)")]
-        public decimal? ProcessCost { get; set; }
+        public decimal ProcessCost { get; set; }
+        [Column("count", TypeName = "int(11)")]
+        public int Count { get; set; }
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
         [Column("producing_machine", TypeName = "varchar(50)")]
@@ -45,10 +46,8 @@ namespace HonjiMES.Models
         [Required]
         [Column("type", TypeName = "varchar(50)")]
         public string Type { get; set; }
-        [Column("remarks", TypeName = "varchar(100)")]
+        [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
-        [Column("version", TypeName = "decimal(10,2)")]
-        public decimal Version { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -58,10 +57,16 @@ namespace HonjiMES.Models
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
-        public int UpdateUser { get; set; }
+        public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(OrderDetailId))]
+        [InverseProperty("WorkOrders")]
+        public virtual OrderDetail OrderDetail { get; set; }
         [ForeignKey(nameof(ProcessId))]
-        [InverseProperty("MBillOfMaterials")]
+        [InverseProperty("WorkOrders")]
         public virtual Process Process { get; set; }
+        [ForeignKey(nameof(ProductBasicId))]
+        [InverseProperty("WorkOrders")]
+        public virtual ProductBasic ProductBasic { get; set; }
     }
 }

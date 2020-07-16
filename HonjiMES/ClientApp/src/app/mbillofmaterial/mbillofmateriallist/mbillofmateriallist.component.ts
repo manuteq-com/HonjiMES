@@ -16,6 +16,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 })
 export class MbillofmateriallistComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     dataSourceDB: any;
     dataSourceDB_Process: any[];
     apiurl = location.origin + '/api';
@@ -160,7 +161,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         });
     }
     async savedata() {
-        this.dataGrid.instance.saveEditData();
+        this.dataGrid2.instance.saveEditData();
         this.postval = {
             ProductBasicId: this.productbasicId,
             BomId: this.bomId,

@@ -53,6 +53,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Wiproduct> Wiproducts { get; set; }
         public virtual DbSet<WiproductBasic> WiproductBasics { get; set; }
         public virtual DbSet<WiproductLog> WiproductLogs { get; set; }
+        public virtual DbSet<WorkOrder> WorkOrders { get; set; }
 
         public HonjiContext(DbContextOptions<HonjiContext> options) : base(options)
         {
@@ -133,6 +134,11 @@ namespace HonjiMES.Models
 
             modelBuilder.Entity<BillOfMaterialVer>(entity =>
             {
+                entity.HasKey(e => new { e.Id, e.Bomid })
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Bomid).HasComment("bomID");
 
                 entity.Property(e => e.Bompid).HasComment("父bomID	");
@@ -583,6 +589,9 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("MBOM");
 
+                entity.HasIndex(e => e.ProcessId)
+                    .HasName("process_id");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.Manpower).HasComment("所需人力");
@@ -641,6 +650,12 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.Version).HasComment("版本");
+
+                entity.HasOne(d => d.Process)
+                    .WithMany(p => p.MBillOfMaterials)
+                    .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("m_bill_of_material_ibfk_1");
             });
 
             modelBuilder.Entity<Material>(entity =>
@@ -2600,6 +2615,88 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.WiproductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_wiproduct_log_wiproduct1");
+            });
+
+            modelBuilder.Entity<WorkOrder>(entity =>
+            {
+                entity.HasIndex(e => e.OrderDetailId)
+                    .HasName("order_detail_id");
+
+                entity.HasIndex(e => e.ProcessId)
+                    .HasName("process_id");
+
+                entity.HasIndex(e => e.ProductBasicId)
+                    .HasName("product_basic_id");
+
+                entity.Property(e => e.Count)
+                    .HasDefaultValueSql("'1'")
+                    .HasComment("需求量");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Manpower).HasComment("所需人力	");
+
+                entity.Property(e => e.ProcessCost).HasComment("成本	");
+
+                entity.Property(e => e.ProcessLeadTime).HasComment("前置時間	");
+
+                entity.Property(e => e.ProcessName)
+                    .HasComment("工序名稱	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessNo)
+                    .HasComment("工序代號	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessTime).HasComment("標準工時	");
+
+                entity.Property(e => e.ProducingMachine)
+                    .HasComment("機台	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProductBasicId).HasComment("成品基本ID");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SerialNumber).HasComment("工序順序	");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.Type)
+                    .HasComment("種類	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkOrderNo)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany(p => p.WorkOrders)
+                    .HasForeignKey(d => d.OrderDetailId)
+                    .HasConstraintName("work_order_ibfk_1");
+
+                entity.HasOne(d => d.Process)
+                    .WithMany(p => p.WorkOrders)
+                    .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("work_order_ibfk_2");
+
+                entity.HasOne(d => d.ProductBasic)
+                    .WithMany(p => p.WorkOrders)
+                    .HasForeignKey(d => d.ProductBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("work_order_ibfk_3");
             });
 
             OnModelCreatingPartial(modelBuilder);
