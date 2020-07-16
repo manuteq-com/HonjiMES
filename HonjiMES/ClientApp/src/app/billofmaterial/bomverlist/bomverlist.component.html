@@ -1,8 +1,7 @@
-<dx-tree-list [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-    [autoExpandAll]="true" parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true"
+<dx-tree-list id="tasks" [dataSource]="dataSourceDB" showBorders="true" keyExpr="ShowLV" hoverStateEnabled="true"
+    rootValue="0" [autoExpandAll]="true" parentIdExpr="ShowPLV" [showColumnLines]="false" [showRowLines]="true"
     [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true">
-    <dxo-scrolling
-        [useNative]="true">
+    <dxo-scrolling [useNative]="true">
     </dxo-scrolling>
 
     <dxi-column dataField="Version" caption="版本紀錄" dataType="string"></dxi-column>
@@ -15,7 +14,6 @@
     <dxi-column dataField="Quantity" caption="組成數量" dataType="number"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" dataType="string"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立時間" dataType="string"></dxi-column>
-
     <dxi-column type="buttons" [visible]="false">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -25,4 +23,3 @@
     </dxi-column>
 
 </dx-tree-list>
-

@@ -138,13 +138,14 @@ namespace HonjiMES.Models
             var UserRoleList = new List<UserRole>();
             foreach (var Menuitem in menuList)
             {
-            var Roles = "";
+                var Roles = "";
                 Roles += Menuitem.Creat.HasValue ? Menuitem.Creat.Value ? "1" : "0" : "0";
                 Roles += Menuitem.Edit.HasValue ? Menuitem.Edit.Value ? "1" : "0" : "0";
                 Roles += Menuitem.Delete.HasValue ? Menuitem.Delete.Value ? "1" : "0" : "0";
-                UserRoleList.Add(new UserRole { 
-                 MenuId= Menuitem.Id,
-                  Roles= Roles
+                UserRoleList.Add(new UserRole
+                {
+                    MenuId = Menuitem.Id,
+                    Roles = Roles
                 });
             }
             return UserRoleList;
@@ -165,7 +166,7 @@ namespace HonjiMES.Models
             using (var hmacSHA256 = new HMACSHA256(keyByte))
             {
                 byte[] hashMessage = hmacSHA256.ComputeHash(messageBytes);
-               return BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
+                return BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
             }
         }
 
@@ -469,14 +470,17 @@ namespace HonjiMES.Models
             var result = false;
             var checkLength = (Type + Date).Length + Len;
 
-            if (Type == "AJ") {
-                if (Number.Contains(Type + Date) && Number.Length == checkLength) {
-                    if (int.TryParse(Number.Substring(Number.Length - Len, Len), out int n)) {
+            if (Type == "AJ")
+            {
+                if (Number.Contains(Type + Date) && Number.Length == checkLength)
+                {
+                    if (int.TryParse(Number.Substring(Number.Length - Len, Len), out int n))
+                    {
                         result = true;
                     }
                 }
             }
-            
+
             return result;
         }
         internal static async Task<FromQueryResult> ExFromQueryResultAsync<T>(IQueryable<T> db, DataSourceLoadOptions fromQuery) where T : class
@@ -709,7 +713,6 @@ namespace HonjiMES.Models
             }
             return QueryList;
         }
-
 
         /// <summary>
         /// Excel檔案暫存檔處理

@@ -488,4 +488,9 @@ namespace HonjiMES.Models
         public string value1 { get; set; }
         public string value2 { get; set; }
     }
+    public class BillOfMaterialVerLv : BillOfMaterialVer
+    {
+        public int ShowLV { get; set; }
+        public int ShowPLV { get; set; }
+    }
 }

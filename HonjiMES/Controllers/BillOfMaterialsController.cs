@@ -84,7 +84,7 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(billOfMaterial));
         }
-        
+
         /// <summary>
         /// 更新BOM表資料
         /// </summary>
@@ -345,7 +345,8 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
-            if (BillOfMaterials != null) {
+            if (BillOfMaterials != null)
+            {
                 bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
             }
             return Ok(MyFun.APIResponseOK(bomlist));
@@ -395,7 +396,7 @@ namespace HonjiMES.Controllers
                 Name = PostBom.Name,
                 Quantity = PostBom.Quantity,
             };
-            
+
             _context.ChangeTracker.LazyLoadingEnabled = true;
             if (PostBom.BasicType == 1)//原料直接加入
             {
@@ -444,18 +445,21 @@ namespace HonjiMES.Controllers
             /////紀錄變更版本
             var bomlist = new List<BomList>();
             var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
-            if (BomData.Count() != 0) {
+            if (BomData.Count() != 0)
+            {
                 bomlist.AddRange(MyFun.GetBomList(BomData));
                 var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == id).OrderByDescending(x => x.Id).ToList();
                 decimal VerNo = 1;
-                if (BomVerData.Count() != 0) {
+                if (BomVerData.Count() != 0)
+                {
                     VerNo = BomVerData[0].Version + 1;
                 }
                 foreach (var item in bomlist)
                 {
                     var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
                     var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
-                    var nVer = new BillOfMaterialVer{
+                    var nVer = new BillOfMaterialVer
+                    {
                         ProductBasicId = id,
                         Version = VerNo,
                         Bomid = item.Id,
@@ -482,7 +486,7 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(PostBom));
         }
-        
+
         // DELETE: api/BillOfMaterials/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<BillOfMaterial>> DeleteBomlist(int id)
@@ -510,18 +514,21 @@ namespace HonjiMES.Controllers
             /////紀錄變更版本
             var bomlist = new List<BomList>();
             var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
-            if (BomData.Count() != 0) {
+            if (BomData.Count() != 0)
+            {
                 bomlist.AddRange(MyFun.GetBomList(BomData));
                 var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId).OrderByDescending(x => x.Id).ToList();
                 decimal VerNo = 1;
-                if (BomVerData.Count() != 0) {
+                if (BomVerData.Count() != 0)
+                {
                     VerNo = BomVerData[0].Version + 1;
                 }
                 foreach (var item in bomlist)
                 {
                     var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
                     var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
-                    var nVer = new BillOfMaterialVer{
+                    var nVer = new BillOfMaterialVer
+                    {
                         ProductBasicId = TempProductBasicData.ProductBasicId,
                         Version = VerNo,
                         Bomid = item.Id,
@@ -582,7 +589,7 @@ namespace HonjiMES.Controllers
         {
             return _context.BillOfMaterials.Any(e => e.Id == id);
         }
-        
+
         /// <summary>
         /// 用ProductBasicID取BOM表的製程資料
         /// </summary>
@@ -592,20 +599,23 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BillOfMaterial>> GetProcessByProductBasicId(int id)
         {
-            if (id != 0) {
-                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync(); 
-                
+            if (id != 0)
+            {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync();
+
                 if (billOfMaterial == null)
                 {
                     return NotFound();
-                }    
+                }
                 return Ok(MyFun.APIResponseOK(billOfMaterial));
 
-            } else {
+            }
+            else
+            {
                 return NotFound();
             }
         }
-        
+
         /// <summary>
         /// 用BomID取BOM表的製程資料
         /// </summary>
@@ -615,20 +625,23 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BillOfMaterial>> GetProcessByBomId(int id)
         {
-            if (id != 0) {
-                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).ToListAsync(); 
-                
+            if (id != 0)
+            {
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).ToListAsync();
+
                 if (billOfMaterial == null)
                 {
                     return NotFound();
-                }    
+                }
                 return Ok(MyFun.APIResponseOK(billOfMaterial));
 
-            } else {
+            }
+            else
+            {
                 return NotFound();
             }
         }
-        
+
         /// <summary>
         /// 新增MBOM表
         /// </summary>
@@ -637,11 +650,15 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BomList>> PostMbomlist(MbomData MbomData)
         {
-            if (MbomData.BomId != 0 || MbomData.ProductBasicId != 0) {
+            if (MbomData.BomId != 0 || MbomData.ProductBasicId != 0)
+            {
                 var MbillOfMaterials = new List<MBillOfMaterial>();
-                if (MbomData.ProductBasicId != 0) {
+                if (MbomData.ProductBasicId != 0)
+                {
                     MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.ProductBasicId == MbomData.ProductBasicId).ToListAsync();
-                } else {
+                }
+                else
+                {
                     MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.BomId == MbomData.BomId).ToListAsync();
                 }
                 if (MbillOfMaterials != null)
@@ -656,7 +673,8 @@ namespace HonjiMES.Controllers
                 foreach (var item in MbomData.MBillOfMaterialList)
                 {
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
-                    var nMbom = new MBillOfMaterial{
+                    var nMbom = new MBillOfMaterial
+                    {
                         Pid = null,
                         Name = null,
                         ProductBasicId = MbomData.ProductBasicId,
@@ -682,7 +700,7 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK("OK"));
         }
-        
+
         /// <summary>
         /// 用ProductID取BOM表的變更紀錄
         /// </summary>
@@ -692,14 +710,42 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BillOfMaterialVer>> GetBomVerByProductId(int id)
         {
-           _context.ChangeTracker.LazyLoadingEnabled = true;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var BillOfMaterialVers = await _context.BillOfMaterialVers.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
-            if (BillOfMaterialVers == null) {
+            if (BillOfMaterialVers == null)
+            {
                 return NotFound();
             }
-            return Ok(MyFun.APIResponseOK(BillOfMaterialVers));
+            //整理資料
+
+            //資料轉型
+            string strjsonData = JsonConvert.SerializeObject(BillOfMaterialVers);
+            var BillOfMaterialVerLvList = JsonConvert.DeserializeObject<List<BillOfMaterialVerLv>>(strjsonData);
+            foreach (var item in BillOfMaterialVerLvList)
+            {
+                if (item.Bompid == 0)
+                {
+                    item.ShowPLV = Decimal.ToInt32(item.Version);
+                }
+                else
+                {
+                    item.ShowPLV = int.Parse(decimal.ToInt32(item.Version).ToString() + item.Bompid.ToString());
+                }
+                item.ShowLV = int.Parse(decimal.ToInt32(item.Version).ToString() + item.Bomid.ToString());
+
+            }
+            foreach (var item in BillOfMaterialVerLvList.GroupBy(x => x.Version).ToList())
+            {
+                BillOfMaterialVerLvList.Add(new BillOfMaterialVerLv
+                {
+                    ShowPLV = 0,
+                    ShowLV = Decimal.ToInt32(item.Key),
+                    Version = item.Key
+                });
+            }
+            return Ok(MyFun.APIResponseOK(BillOfMaterialVerLvList.OrderByDescending(x => x.Version)));
         }
-        
+
 
     }
 }
