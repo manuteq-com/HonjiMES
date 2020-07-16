@@ -35,7 +35,7 @@
             <td nzLeft>{{data.ProductNo}}</td>
             <td nzLeft>{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td *ngIf="col.show">
+                <td *ngIf="col.show" (click)="tdclick(data)">
                     <div>
                         <ng-container *ngIf="data[col.key].value0">
                             {{data[col.key].value0}}
