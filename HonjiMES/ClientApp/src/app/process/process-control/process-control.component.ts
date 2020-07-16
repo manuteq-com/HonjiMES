@@ -9,12 +9,13 @@ import notify from 'devextreme/ui/notify';
 })
 export class ProcessControlComponent implements OnInit {
     dataSourceDB: any = {};
-
+    loadingVisible = false;
     constructor(public app: AppComponent) {
+        this.loadingVisible = true;
         this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
             (s) => {
-                debugger;
                 this.dataSourceDB = s.data;
+                this.loadingVisible = false;
             }
         );
 
