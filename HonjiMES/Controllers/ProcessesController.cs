@@ -22,6 +22,7 @@ namespace HonjiMES.Controllers
         public ProcessesController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;
         }
         /// <summary>
         /// 查詢製程基本資料列表
@@ -141,6 +142,146 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(process));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProcessesStatus>> GetWorkOrderByStatus(int id)
+        {
+            var Processesname = _context.Processes.Select(x => x.Name).ToList();
+            var ptype = typeof(ProcessesData);
+            var ProcessesStatus = new ProcessesStatus();
+            var ColumnOptionlist = new List<ColumnOption> {
+                new ColumnOption{ key="Temp0", title ="製程1",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp1", title ="製程2",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp2", title ="製程3",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp3", title ="製程4",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp4", title ="製程5",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp5", title ="製程6",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp6", title ="製程7",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp7", title ="製程8",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp8", title ="製程9",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp9", title ="製程10",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp10", title ="製程11",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp11", title ="製程12",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp12", title ="製程13",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp13", title ="製程14",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp14", title ="製程15",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp15", title ="製程16",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp16", title ="製程17",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp17", title ="製程18",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp18", title ="製程19",show=true,Columnlock=""},
+                new ColumnOption{ key="Temp19", title ="製程20",show=true,Columnlock=""},
+            };
+            
+            var j = 0;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var ProcessesDataList = new List<ProcessesData>();
+            try
+            {
+                var WorkOrdersHeads = _context.WorkOrders.Where(x => x.Status == id).ToList().GroupBy(x => x.WorkOrderNo);
+                foreach (var item in WorkOrdersHeads)
+                {
+                    // var WorkOrdersDetails = await _context.WorkOrders.Where(x => x.Status == id && x.WorkOrderNo == item).ToListAsync();
+                    var nProcessesData = new ProcessesData
+                    {
+                        Key = item.FirstOrDefault().Id,
+                        Name = item.FirstOrDefault().ProductBasic.Name,
+                        ProductNo = item.FirstOrDefault().ProductBasic.ProductNo,
+                        Count = item.FirstOrDefault().Count
+                    };
+                    var i = 0;
+                    foreach (var item2 in item)
+                    {
+                        foreach (var Columnitem in ColumnOptionlist)
+                        {
+                            foreach (var item3 in ptype.GetProperties())
+                            {
+                                if (Columnitem.key == item3.Name)
+                                {
+                                    
+                                    try
+                                    {
+                                        var nTempString = new TempString
+                                        {
+                                            value0 = Processesname[j],
+                                            value1 = item3.Name,
+                                            value2 = Columnitem.Columnlock
+                                        };
+                                        item3.SetValue(nProcessesData, nTempString);
+                                        j++;
+                                        if (j > Processesname.Count - 1)
+                                        {
+                                            j = 0;
+                                        }
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                }
+                            }
+                        }
+                        ProcessesDataList.Add(nProcessesData);
+                    }
+                }    
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
+            
+            for (int i = 1; i < 6; i++)
+            {
+                var ProductBasics = await _context.ProductBasics.Where(x => x.Id == i).FirstOrDefaultAsync();
+                var nProcessesData = new ProcessesData
+                {
+                    Key = ProductBasics.Id,
+                    Name = ProductBasics.Name,
+                    ProductNo = ProductBasics.ProductNo,
+                    Count = 1
+                };
+                foreach (var Columnitem in ColumnOptionlist)
+                {
+                    foreach (var item in ptype.GetProperties())
+                    {
+                        if (Columnitem.key == item.Name)
+                        {
+                            try
+                            {
+                                var nTempString = new TempString
+                                {
+                                    value0 = Processesname[j],
+                                    value1 = item.Name,
+                                    value2 = Columnitem.Columnlock
+                                };
+                                item.SetValue(nProcessesData, nTempString);
+                                j++;
+                                if (j > Processesname.Count - 1)
+                                {
+                                    j = 0;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+
+                        }
+                    }
+                }
+                ProcessesDataList.Add(nProcessesData);
+            }
+            ProcessesStatus.ColumnOptionlist = ColumnOptionlist;//顯示項目
+            ProcessesStatus.ProcessesDataList = ProcessesDataList;
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(ProcessesStatus));
+        }
+
         /// <summary>
         /// 
         /// </summary>

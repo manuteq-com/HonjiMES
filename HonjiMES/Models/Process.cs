@@ -9,6 +9,12 @@ namespace HonjiMES.Models
 [Table("process")]
     public partial class Process
     {
+        public Process()
+        {
+            MBillOfMaterials = new HashSet<MBillOfMaterial>();
+            WorkOrders = new HashSet<WorkOrder>();
+        }
+
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
@@ -30,5 +36,10 @@ namespace HonjiMES.Models
         public int? UpdateUser { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+
+        [InverseProperty(nameof(MBillOfMaterial.Process))]
+        public virtual ICollection<MBillOfMaterial> MBillOfMaterials { get; set; }
+        [InverseProperty(nameof(WorkOrder.Process))]
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

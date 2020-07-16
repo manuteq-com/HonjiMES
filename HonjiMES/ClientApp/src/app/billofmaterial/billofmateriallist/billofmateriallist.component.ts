@@ -54,6 +54,13 @@ export class BillofmateriallistComponent implements OnInit {
     readBomVer(e, data) {
         this.GetData('/BillOfMaterials/GetBomVerByProductId/' + data.key).subscribe(
             (s) => {
+                debugger;
+                s.data.forEach(element => {
+                    if (element.ShowPLV === 0) {
+                        element.Lv = null;
+                        element.Quantity = null;
+                    }
+                });
                 this.bomverdata = s.data;
                 this.verpopupVisible = true;
             }

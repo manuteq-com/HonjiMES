@@ -16,6 +16,7 @@ namespace HonjiMES.Models
         public int ProductBasicId { get; set; }
         [Column("version", TypeName = "decimal(10,2)")]
         public decimal Version { get; set; }
+        [Key]
         [Column("bomid", TypeName = "int(11)")]
         public int Bomid { get; set; }
         [Column("bompid", TypeName = "int(11)")]

@@ -10,12 +10,18 @@ export class ProcessControlComponent implements OnInit {
     dataSourceDB: any = {};
 
     constructor(public app: AppComponent) {
-        this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
                 debugger;
                 this.dataSourceDB = s.data;
             }
         );
+        // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
+        //     (s) => {
+        //         debugger;
+        //         this.dataSourceDB = s.data;
+        //     }
+        // );
 
         // this.dataSourceDB.listOfData = [
         //     {
