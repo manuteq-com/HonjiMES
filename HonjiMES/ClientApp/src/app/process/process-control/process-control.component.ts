@@ -9,7 +9,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
     styleUrls: ['./process-control.component.css']
 })
 export class ProcessControlComponent implements OnInit {
-    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     dataSourceDB: any = {};
     creatpopupVisible: any;
     itemkey: number;
@@ -18,7 +18,7 @@ export class ProcessControlComponent implements OnInit {
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;
@@ -60,21 +60,40 @@ export class ProcessControlComponent implements OnInit {
     }
     ngOnInit() {
     }
+    trclick(e) {
+        this.creatpopupVisible = true;
+        this.itemkey = e.Key;
+        // notify({
+        //     message: e.ProductNo,
+        //     position: {
+        //         my: 'center top',
+        //         at: 'center top'
+        //     }
+        // }, 'error', 3000);
+    }
     tdclick(e) {
-        notify({
-            message: e.ProductNo,
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'error', 3000);
+        // notify({
+        //     message: e.ProductNo,
+        //     position: {
+        //         my: 'center top',
+        //         at: 'center top'
+        //     }
+        // }, 'error', 3000);
     }
     creatdata() {
         this.creatpopupVisible = true;
+        this.itemkey = null;
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.dataGrid.instance.refresh();
+        // this.dataGrid.instance.refresh();
+        this.loadingVisible = true;
+        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
+            (s) => {
+                this.dataSourceDB = s.data;
+                this.loadingVisible = false;
+            }
+        );
         notify({
             message: '存檔完成',
             position: {

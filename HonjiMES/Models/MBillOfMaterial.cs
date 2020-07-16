@@ -31,11 +31,11 @@ namespace HonjiMES.Models
         [Column("process_name", TypeName = "varchar(100)")]
         public string ProcessName { get; set; }
         [Column("process_lead_time", TypeName = "decimal(10,2)")]
-        public decimal? ProcessLeadTime { get; set; }
+        public decimal ProcessLeadTime { get; set; }
         [Column("process_time", TypeName = "decimal(10,2)")]
-        public decimal? ProcessTime { get; set; }
+        public decimal ProcessTime { get; set; }
         [Column("process_cost", TypeName = "decimal(10,2)")]
-        public decimal? ProcessCost { get; set; }
+        public decimal ProcessCost { get; set; }
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
         [Column("producing_machine", TypeName = "varchar(50)")]

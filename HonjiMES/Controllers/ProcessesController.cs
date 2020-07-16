@@ -244,7 +244,7 @@ namespace HonjiMES.Controllers
                         WorkOrderNo = item.Key,
                         Name = item.FirstOrDefault().ProductBasic.Name,
                         ProductNo = item.FirstOrDefault().ProductBasic.ProductNo,
-                        MachineNo = item.FirstOrDefault().ProducingMachine,
+                        MachineNo = item.FirstOrDefault().MachineNo,
                         Count = item.FirstOrDefault().Count
                     };
 
@@ -260,7 +260,7 @@ namespace HonjiMES.Controllers
                                 {
                                     value0 = gitem[i].ProcessNo,
                                     value1 = gitem[i].ProcessName,
-                                    value2 = gitem[i].ProcessTime.ToString()
+                                    value2 = gitem[i].ProducingMachine
                                 };
                                 typeitem.SetValue(nProcessesData, nTempString);
                                 foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + i.ToString()))
@@ -364,6 +364,80 @@ namespace HonjiMES.Controllers
             ProcessesStatus.ProcessesDataList = ProcessesDataList;
             return Ok(MyFun.APIResponseOK(ProcessesStatus));
         }
+        
+        /// <summary>
+        /// 用WorkOrderNo取製程資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByWorkOrderNo(int id)
+        {
+            var WorkOrder = await _context.WorkOrders.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var WorkOrders = await _context.WorkOrders.Where(x => x.WorkOrderNo == WorkOrder.WorkOrderNo).ToListAsync();
+            if (WorkOrders == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrders));
+        }
+
+        /// <summary>
+        /// 新增MBOM表
+        /// </summary>
+        /// <param name="WordOrderData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<WordOrderData>> PostWorkOrderList(WordOrderData WordOrderData)
+        {
+            if (WordOrderData.ProductBasicId != 0)
+            {
+                var checkIndex = 0;
+                var workOrderNo = "";
+                foreach (var item in WordOrderData.MBillOfMaterialList)
+                {
+                    //取得工單號
+                    if (checkIndex == 0) {
+                        var key = "WO";
+                        var WorkOrderNo = WordOrderData.CreateTime.ToString("yyMMdd");
+                        var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                        var NoCount = NoData.Count() + 1;
+                        if (NoCount != 1) {
+                            var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                            var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                            // if (NoCount <= NoLast) {
+                                NoCount = NoLast + 1;
+                            // }
+                        }
+                        workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+                    }
+
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    var nWorkOrder = new WorkOrder
+                    {
+                        WorkOrderNo = workOrderNo,
+                        SerialNumber = item.SerialNumber ,
+                        MachineNo = WordOrderData.MachineNo,
+                        ProductBasicId = WordOrderData.ProductBasicId,
+                        ProcessId = item.ProcessId,
+                        ProcessNo = ProcessInfo.Code,
+                        ProcessName = ProcessInfo.Name,
+                        ProcessLeadTime = item.ProcessLeadTime,
+                        ProcessTime = item.ProcessTime,
+                        ProcessCost = item.ProcessCost,
+                        Count = WordOrderData.Count,
+                        ProducingMachine = item.ProducingMachine,
+                        Remarks = item.Remarks,
+                        CreateUser = 1
+                    };
+                    _context.WorkOrders.Add(nWorkOrder);
+                }
+                await _context.SaveChangesAsync();
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
         private bool ProcesseExists(int id)
         {
             return _context.Processes.Any(e => e.Id == id);

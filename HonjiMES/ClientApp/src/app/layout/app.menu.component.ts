@@ -46,7 +46,7 @@ export class AppMenuComponent implements OnInit {
         });
     }
     ngOnInit() {
-        debugger;
+        // debugger;
         this.breadcrumbitem = [];
         this.model = this.authenticationService.currentUserValue.Menu;
         // this.model = [

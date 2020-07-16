@@ -513,45 +513,47 @@ namespace HonjiMES.Controllers
 
             /////紀錄變更版本
             var bomlist = new List<BomList>();
-            var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
-            if (BomData.Count() != 0)
-            {
-                bomlist.AddRange(MyFun.GetBomList(BomData));
-                var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId).OrderByDescending(x => x.Id).ToList();
-                decimal VerNo = 1;
-                if (BomVerData.Count() != 0)
+            if (TempProductBasicData != null) {
+                var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
+                if (BomData.Count() != 0)
                 {
-                    VerNo = BomVerData[0].Version + 1;
-                }
-                foreach (var item in bomlist)
-                {
-                    var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
-                    var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
-                    var nVer = new BillOfMaterialVer
+                    bomlist.AddRange(MyFun.GetBomList(BomData));
+                    var BomVerData = _context.BillOfMaterialVers.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId).OrderByDescending(x => x.Id).ToList();
+                    decimal VerNo = 1;
+                    if (BomVerData.Count() != 0)
                     {
-                        ProductBasicId = TempProductBasicData.ProductBasicId,
-                        Version = VerNo,
-                        Bomid = item.Id,
-                        Bompid = item.Pid,
-                        MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
-                        MaterialName = MaterialBasicInfo?.Name ?? null,
-                        ProductNo = ProductBasicInfo?.ProductNo ?? null,
-                        ProductName = ProductBasicInfo?.Name ?? null,
-                        Name = item.Name,
-                        Quantity = item.Quantity,
-                        Unit = item.Unit,
-                        Lv = item.Lv,
-                        Outsource = item.Outsource,
-                        Group = item.Group,
-                        Type = item.Type,
-                        Remarks = item.Remarks,
-                        CreateUser = 1
-                    };
-                    _context.BillOfMaterialVers.Add(nVer);
+                        VerNo = BomVerData[0].Version + 1;
+                    }
+                    foreach (var item in bomlist)
+                    {
+                        var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
+                        var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
+                        var nVer = new BillOfMaterialVer
+                        {
+                            ProductBasicId = TempProductBasicData.ProductBasicId,
+                            Version = VerNo,
+                            Bomid = item.Id,
+                            Bompid = item.Pid,
+                            MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
+                            MaterialName = MaterialBasicInfo?.Name ?? null,
+                            ProductNo = ProductBasicInfo?.ProductNo ?? null,
+                            ProductName = ProductBasicInfo?.Name ?? null,
+                            Name = item.Name,
+                            Quantity = item.Quantity,
+                            Unit = item.Unit,
+                            Lv = item.Lv,
+                            Outsource = item.Outsource,
+                            Group = item.Group,
+                            Type = item.Type,
+                            Remarks = item.Remarks,
+                            CreateUser = 1
+                        };
+                        _context.BillOfMaterialVers.Add(nVer);
+                    }
+                    await _context.SaveChangesAsync();
                 }
-                await _context.SaveChangesAsync();
             }
-
+            
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }

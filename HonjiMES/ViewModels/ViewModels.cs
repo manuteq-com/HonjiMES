@@ -415,6 +415,17 @@ namespace HonjiMES.Models
         public int BomId { get; set; }
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }
+    
+    public class WordOrderData
+    {
+        public DateTime CreateTime { get; set; }
+        public int ProductBasicId { get; set; }
+        public int Count { get; set; }
+        public string MachineNo { get; set; }
+        public string Remarks { get; set; }
+        public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
+    }
+    
     /// <summary>
     /// 製成進度
     /// </summary>

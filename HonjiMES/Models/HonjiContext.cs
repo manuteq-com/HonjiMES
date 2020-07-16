@@ -603,13 +603,9 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Pid).HasComment("父ID");
 
-                entity.Property(e => e.ProcessCost)
-                    .HasDefaultValueSql("'0.00'")
-                    .HasComment("成本");
+                entity.Property(e => e.ProcessCost).HasComment("成本");
 
-                entity.Property(e => e.ProcessLeadTime)
-                    .HasDefaultValueSql("'0.00'")
-                    .HasComment("前置時間");
+                entity.Property(e => e.ProcessLeadTime).HasComment("前置時間");
 
                 entity.Property(e => e.ProcessName)
                     .HasComment("工序名稱")
@@ -621,9 +617,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.ProcessTime)
-                    .HasDefaultValueSql("'0.00'")
-                    .HasComment("標準工時");
+                entity.Property(e => e.ProcessTime).HasComment("標準工時");
 
                 entity.Property(e => e.ProducingMachine)
                     .HasComment("機台")
@@ -2634,6 +2628,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
+                entity.Property(e => e.MachineNo)
+                    .HasComment("機號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.Manpower).HasComment("所需人力	");
 
                 entity.Property(e => e.ProcessCost).HasComment("成本	");
@@ -2669,6 +2668,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Status).HasComment("狀態");
 
                 entity.Property(e => e.Type)
+                    .HasDefaultValueSql("'0'")
                     .HasComment("種類	")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
