@@ -12,6 +12,7 @@ var material_list_component_1 = require("./material/material-list/material-list.
 var product_list_component_1 = require("./product-list/product-list.component");
 var customer_list_component_1 = require("./customer/customer-list/customer-list.component");
 var supplier_list_component_1 = require("./supplier/supplier-list/supplier-list.component");
+var adjust_list_component_1 = require("./inventory/adjust-list/adjust-list.component");
 var warehouse_list_component_1 = require("./warehouse/warehouse-list/warehouse-list.component");
 var user_list_component_1 = require("./setting/user-list/user-list.component");
 
@@ -27,6 +28,7 @@ exports.routes = [
     { path: 'productlist', component: product_list_component_1.ProductListComponent },
     { path: 'customerlist', component: customer_list_component_1.CustomerListComponent },
     { path: 'supplierlist', component: supplier_list_component_1.SupplierListComponent },
+    { path: 'adjustlist', component: adjust_list_component_1.AdjustListComponent },
     { path: 'warehouselist', component: warehouse_list_component_1.WarehouseListComponent },
     { path: 'userlist', component: user_list_component_1.UserListComponent },
 ];

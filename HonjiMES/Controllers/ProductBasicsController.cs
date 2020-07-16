@@ -78,7 +78,7 @@ namespace HonjiMES.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException) 
             {
                 if (!ProductBasicExists(id))
                 {
