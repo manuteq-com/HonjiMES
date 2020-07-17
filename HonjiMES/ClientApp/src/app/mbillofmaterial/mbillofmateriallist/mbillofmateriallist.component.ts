@@ -37,7 +37,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     saveDisabled: boolean;
 
     constructor(private http: HttpClient) {
-
+        this.onReorder = this.onReorder.bind(this);
+        this.onRowRemoved = this.onRowRemoved.bind(this);
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
@@ -102,6 +103,23 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         // data.setValue(value);
         e.component.option('value', value);
     }
+    onRowRemoved(e) {
+        this.dataSourceDB_Process.forEach((element, index) => {
+            element.SerialNumber = index + 1;
+        });
+    }
+    onReorder(e) {
+        debugger;
+        const visibleRows = e.component.getVisibleRows();
+        const toIndex = this.dataSourceDB_Process.indexOf(visibleRows[e.toIndex].data);
+        const fromIndex = this.dataSourceDB_Process.indexOf(e.itemData);
+
+        this.dataSourceDB_Process.splice(fromIndex, 1);
+        this.dataSourceDB_Process.splice(toIndex, 0, e.itemData);
+        this.dataSourceDB_Process.forEach((element, index) => {
+            element.SerialNumber = index + 1;
+        });
+    }
     readBomProcess(e, data) {
         this.productbasicId = data.data.Id;
         this.bomId = 0;
@@ -111,9 +129,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
             (s) => {
                 if (s.success) {
-                    if (s.success) {
-                        this.dataSourceDB_Process = s.data;
-                    }
+                    this.dataSourceDB_Process = s.data;
                 }
             }
         );
@@ -132,10 +148,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
             (s) => {
                 if (s.success) {
-                    if (s.success) {
-                        debugger;
-                        this.dataSourceDB_Process = s.data;
-                    }
+                    debugger;
+                    this.dataSourceDB_Process = s.data;
                 }
             }
         );

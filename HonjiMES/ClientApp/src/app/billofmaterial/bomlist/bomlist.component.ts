@@ -92,7 +92,6 @@ export class BomlistComponent implements OnInit, OnChanges {
             targetNode = targetNode.parent;
         }
     }
-
     onReorder(e) {
         debugger;
         const visibleRows = e.component.getVisibleRows();

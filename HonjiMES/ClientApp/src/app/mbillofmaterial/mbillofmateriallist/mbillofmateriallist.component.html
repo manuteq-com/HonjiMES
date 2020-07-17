@@ -98,9 +98,15 @@
             [dataSource]="dataSourceDB_Process"
             [showBorders]="true"
             height="600"
-            (onInitNewRow)="onInitNewRow($event)">
-            <dxo-row-dragging [allowDropInsideItem]="true" [allowReordering]="true" [showDragIcons]="false">
-            </dxo-row-dragging>
+            (onInitNewRow)="onInitNewRow($event)"
+            (onRowRemoved)="onRowRemoved($event)">
+
+            <dxo-row-dragging
+                [allowReordering]="true"
+                [onReorder]="onReorder"
+                [showDragIcons]="false"
+            ></dxo-row-dragging>
+
             <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-form colCount=2>
                     <dxi-item dataField="ProcessId"></dxi-item>
@@ -108,7 +114,6 @@
                     <dxi-item dataField="ProcessTime"></dxi-item>
                     <dxi-item dataField="ProcessCost"></dxi-item>
                     <dxi-item dataField="ProducingMachine"></dxi-item>
-
                 </dxo-form>
             </dxo-editing>
             <dxo-filter-row [visible]="false"></dxo-filter-row>
@@ -119,7 +124,7 @@
             <dxo-paging [enabled]="false">
             </dxo-paging>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50">
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
             </dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="300">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
@@ -133,7 +138,6 @@
             </dxi-column>
             <dxi-column dataField="ProducingMachine" caption="機台">
             </dxi-column>
-
 
             <dxi-column type="buttons" [width]="50">
                 <dxi-button name="save" text="存檔"></dxi-button>
