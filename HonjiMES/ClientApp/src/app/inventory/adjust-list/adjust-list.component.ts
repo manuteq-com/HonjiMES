@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -30,6 +30,7 @@ export class AdjustListComponent implements OnInit {
     exceldata: any;
     Supplierlist: any;
     remoteOperations: boolean;
+    MaterialList: any;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
@@ -50,6 +51,13 @@ export class AdjustListComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutAdjustList', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteAdjustList/' + key, 'DELETE')
         });
+        this.GetData('/Materials/GetMaterials').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MaterialList = s.data;
+                }
+            }
+        );
     }
     creatdata() {
         this.creatpopupVisible = true;

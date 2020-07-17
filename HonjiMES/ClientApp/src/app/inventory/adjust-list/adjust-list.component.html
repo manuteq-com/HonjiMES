@@ -41,11 +41,12 @@
     <dxo-paging [pageSize]="15"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
         <dxo-form>
             <dxi-item  dataField="AdjustNo"></dxi-item>
             <dxi-item  dataField="LinkOrder"></dxi-item>
             <dxi-item  dataField="MaterialId"></dxi-item>
+            <dxi-item  dataField="MaterialName"></dxi-item>
             <dxi-item  dataField="Original"></dxi-item>
             <dxi-item  dataField="Quantity"></dxi-item>
             <dxi-item  dataField="Price"></dxi-item>
@@ -70,7 +71,12 @@
 
     <dxi-column dataField="AdjustNo" caption="調整單號" [width]="100"></dxi-column>
     <dxi-column dataField="LinkOrder" caption="關聯訂單"></dxi-column>
-    <dxi-column dataField="MaterialId" caption="原料" [width]="100"></dxi-column>
+    <dxi-column dataField="MaterialId" caption="原料" [width]="250">
+        <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="MaterialId" caption="原料名稱" [width]="250">
+        <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="Original" caption="原始數量"></dxi-column>
     <dxi-column dataField="Quantity" caption="增減數量"></dxi-column>
     <dxi-column dataField="Price" caption="單價"></dxi-column>
@@ -84,13 +90,13 @@
     <dxi-column dataField="Message" caption="補充說明" [width]="160"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" [width]="160"></dxi-column>
     <dxi-column dataField="CreateU" caption="使用者"></dxi-column>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+    <!-- <dxi-column type="buttons">
+        <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button>
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
+    </dxi-column> -->
 
 </dx-data-grid>
 
