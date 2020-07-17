@@ -46,7 +46,14 @@
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)"
-        (onCellPrepared)="onCellPrepared($event)">
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowRemoved)="onRowRemoved($event)">
+
+        <dxo-row-dragging
+            [allowReordering]="true"
+            [onReorder]="onReorder"
+            [showDragIcons]="false"
+        ></dxo-row-dragging>
 
         <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
@@ -66,7 +73,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50">
+        <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="300">
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>

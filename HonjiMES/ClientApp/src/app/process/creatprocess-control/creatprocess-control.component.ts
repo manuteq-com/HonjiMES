@@ -38,9 +38,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     buttondisabled = false;
 
 
-
-
-
     CreateTimeDateBoxOptions: any;
     ProductBasicSelectBoxOptions: any;
     ProductBasicList: any;
@@ -50,38 +47,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     productbasicId: number;
     saveDisabled: boolean;
 
-
-
-
-
-
-
-
-    // buttondisabled = false;
-    // CustomerVal: any;
-    //
-    //
-    // PurchaseDateBoxOptions: any;
-    //
-    // ProductselectBoxOptions: any;
-    // SupplierList: any;
-    // ProductBasicList: any;
-    // WarehouseList: any;
-    // WarehouseListAll: any;
-    // PurchasetypeList: any;
-    // Warehouseval: any;
-    // Quantityval: number;
-    // OriginPriceval: number;
-    // Priceval: number;
-    // addRow = true;
-    // eformData: any;
-    // CreateNumberInfoVal: any;
-    // Quantityvalmax: number;
-    // saveCheck = true;
-    // Serial: number;
-    // Purchaselist: any;
-
     constructor(private http: HttpClient, myservice: Myservice) {
+        this.onReorder = this.onReorder.bind(this);
+        this.onRowRemoved = this.onRowRemoved.bind(this);
         // this.CustomerVal = null;
         // this.formData = null;
         this.editOnkeyPress = true;
@@ -176,6 +144,23 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     onInitialized(value, data) {
         data.setValue(value);
+    }
+    onRowRemoved(e) {
+        this.dataSourceDB.forEach((element, index) => {
+            element.SerialNumber = index + 1;
+        });
+    }
+    onReorder(e) {
+        debugger;
+        const visibleRows = e.component.getVisibleRows();
+        const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
+        const fromIndex = this.dataSourceDB.indexOf(e.itemData);
+
+        this.dataSourceDB.splice(fromIndex, 1);
+        this.dataSourceDB.splice(toIndex, 0, e.itemData);
+        this.dataSourceDB.forEach((element, index) => {
+            element.SerialNumber = index + 1;
+        });
     }
     onFocusedCellChanging(e) {
     }

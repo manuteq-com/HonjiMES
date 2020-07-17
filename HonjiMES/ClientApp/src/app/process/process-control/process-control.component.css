@@ -56,3 +56,8 @@
     margin-top: -6px;
     border-radius: 2px;
 }
+
+.table-hover tbody tr:hover {
+    color: #FF9500;
+    /* background-color: #eaeaf1; */
+}
