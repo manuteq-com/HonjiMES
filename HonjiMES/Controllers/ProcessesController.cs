@@ -267,7 +267,7 @@ namespace HonjiMES.Controllers
                     var i = 0;
                     foreach (var typeitem in ptype.GetProperties())
                     {
-                        var gitem = item.WorkOrderDetails.ToList();
+                        var gitem = item.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToList();
                         if (gitem.Count > i)
                         {
                             if (typeitem.Name == "Temp" + i.ToString())
@@ -370,7 +370,6 @@ namespace HonjiMES.Controllers
                             {
 
                             }
-
                         }
                     }
                 }
@@ -388,29 +387,35 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Processes
         [HttpGet("{id}")]
-        public async Task<ActionResult<WorkOrderDetail>> GetProcessByWorkOrderId(int id)
+        public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderId(int id)
         {
-            var WorkOrder = await _context.WorkOrderHeads.Where(x => x.Id == id).Include(x => x.WorkOrderDetails).FirstOrDefaultAsync();
-            if (WorkOrder == null)
+            var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
+            var WorkOrderData = new WorkOrderData{
+                WorkOrderHead = WorkOrderHeads,
+                WorkOrderDetail = WorkOrderDetails
+            };
+            // var WorkOrder = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).Where(x => x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)).FirstOrDefaultAsync();
+            if (WorkOrderHeads == null || WorkOrderDetails == null)
             {
                 return NotFound();
             }
-            return Ok(MyFun.APIResponseOK(WorkOrder));
+            return Ok(MyFun.APIResponseOK(WorkOrderData));
         }
 
         /// <summary>
         /// 新增工單資訊
         /// </summary>
-        /// <param name="WordOrderData"></param>
+        /// <param name="WorkOrderData"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<WordOrderData>> PostWorkOrderList(WordOrderData WordOrderData)
+        public async Task<ActionResult<WorkOrderData>> PostWorkOrderList(WorkOrderData WorkOrderData)
         {
-            if (WordOrderData.BasicDataId != 0)
+            if (WorkOrderData.WorkOrderHead.DataId != 0)
             {
                 //取得工單號
                 var key = "WO";
-                var WorkOrderNo = WordOrderData.CreateTime.ToString("yyMMdd");
+                var WorkOrderNo = WorkOrderData.WorkOrderHead.CreateTime.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1) {
@@ -429,7 +434,7 @@ namespace HonjiMES.Controllers
                 if (DataType == 0) {
 
                 } else if (DataType == 1) {
-                    var BasicData = _context.ProductBasics.Find(WordOrderData.BasicDataId);
+                    var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.ProductNo;
                     BasicDataName = BasicData.Name;
@@ -439,16 +444,16 @@ namespace HonjiMES.Controllers
                 var nWorkOrderHead = new WorkOrderHead
                 {
                     WorkOrderNo = workOrderNo,
-                    MachineNo = WordOrderData.MachineNo,
+                    MachineNo = WorkOrderData.WorkOrderHead.MachineNo,
                     DataType = DataType,
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
-                    Count = WordOrderData.Count,
+                    Count = WorkOrderData.WorkOrderHead.Count,
                     CreateUser = 1
                 };
 
-                foreach (var item in WordOrderData.MBillOfMaterialList)
+                foreach (var item in WorkOrderData.WorkOrderDetail)
                 {
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
                     var nWorkOrderDetail = new WorkOrderDetail
@@ -460,7 +465,7 @@ namespace HonjiMES.Controllers
                         ProcessLeadTime = item.ProcessLeadTime,
                         ProcessTime = item.ProcessTime,
                         ProcessCost = item.ProcessCost,
-                        Count = WordOrderData.Count,
+                        Count = WorkOrderData.WorkOrderHead.Count,
                         ProducingMachine = item.ProducingMachine,
                         Remarks = item.Remarks,
                         CreateUser = 1
@@ -472,6 +477,67 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK("OK"));
         }
+ 
+        /// <summary>
+        /// 更新工單資訊
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderData"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutWorkOrderList(int id, WorkOrderData WorkOrderData)
+        {
+            if (id != 0)
+            {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var OWorkOrderHeads = _context.WorkOrderHeads.Find(id);
+                foreach (var item in OWorkOrderHeads.WorkOrderDetails)
+                {
+                    item.DeleteFlag = 1;
+                }
+                foreach (var item in WorkOrderData.WorkOrderDetail)
+                {
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    var nWorkOrderDetail = new WorkOrderDetail
+                    {
+                        SerialNumber = item.SerialNumber ,
+                        ProcessId = item.ProcessId,
+                        ProcessNo = ProcessInfo.Code,
+                        ProcessName = ProcessInfo.Name,
+                        ProcessLeadTime = item.ProcessLeadTime,
+                        ProcessTime = item.ProcessTime,
+                        ProcessCost = item.ProcessCost,
+                        Count = WorkOrderData.WorkOrderHead.Count,
+                        ProducingMachine = item.ProducingMachine,
+                        Remarks = item.Remarks,
+                        CreateUser = 1
+                    };
+                    OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
+                }
+
+                var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
+                OWorkOrderHeads.UpdateTime = DateTime.Now;
+                OWorkOrderHeads.UpdateUser = 1;
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    _context.ChangeTracker.LazyLoadingEnabled = false;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProcesseExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return Ok(MyFun.APIResponseOK(WorkOrderData));
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
 
         /// <summary>
         /// 刪除工單資訊
@@ -479,7 +545,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // DELETE: api/Processes/
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WordOrderData>> DeleteWorkOrderList(int id)
+        public async Task<ActionResult<WorkOrderData>> DeleteWorkOrderList(int id)
         {
             if (id != 0)
             {

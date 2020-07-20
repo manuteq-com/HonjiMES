@@ -141,13 +141,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 (s) => {
                     if (s.success) {
                         this.modCheck = true; // 避免製程資訊被刷新
-                        this.dataSourceDB = s.data.WorkOrderDetails;
-                        this.formData.WorkOrderHeadId = s.data.Id;
-                        this.formData.WorkOrderNo = s.data.WorkOrderNo;
-                        this.formData.CreateTime = s.data.CreateTime;
-                        this.formData.ProductBasicId = s.data.DataId;
-                        this.formData.Count = s.data.Count;
-                        this.formData.MachineNo = s.data.MachineNo;
+                        this.dataSourceDB = s.data.WorkOrderDetail;
+                        this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
+                        this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
+                        this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
+                        this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
+                        this.formData.Count = s.data.WorkOrderHead.Count;
+                        this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
                         // this.formData.Remarks = s.data[0].Remarks;
                     }
                 }
@@ -267,14 +267,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             // this.saveCheck = true;
         }
     }
-    async DeleteOnClick(e) {
+    DeleteOnClick(e) {
         this.modName = 'delete';
     }
     UpdateOnClick(e) {
-
+        this.modName = 'update';
     }
     RunOnClick(e) {
-
+        this.modName = 'run';
     }
     onFormSubmit = async function(e) {
         // debugger;
@@ -295,21 +295,26 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
         this.dataGrid2.instance.saveEditData();
         this.postval = {
-            WorkOrderHeadId: this.formData.WorkOrderHeadId,
-            WorkOrderNo: this.formData.WorkOrderNo,
-            CreateTime: this.formData.CreateTime,
-            BasicDataType: 1,
-            BasicDataId: this.formData.ProductBasicId,
-            Count: this.formData.Count,
-            MachineNo: this.formData.MachineNo,
-            // Remarks: this.formData.Remarks,
-            MBillOfMaterialList: this.dataSourceDB
+            WorkOrderHead: {
+                Id: this.formData.WorkOrderHeadId,
+                WorkOrderNo: this.formData.WorkOrderNo,
+                CreateTime: this.formData.CreateTime,
+                DataType: 1,
+                DataId: this.formData.ProductBasicId,
+                Count: this.formData.Count,
+                MachineNo: this.formData.MachineNo,
+            },
+            WorkOrderDetail: this.dataSourceDB
         };
 
         try {
             if (this.modName === 'new') {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modName === 'update') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.formData.WorkOrderHeadId, values: this.postval });
                 this.viewRefresh(e, sendRequest);
             } else if (this.modName === 'delete') {
                 Swal.fire({

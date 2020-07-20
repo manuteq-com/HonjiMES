@@ -56,6 +56,7 @@ export class ProcessControlComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
+        this.itemkey = null;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
         this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(

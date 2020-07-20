@@ -416,17 +416,10 @@ namespace HonjiMES.Models
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }
     
-    public class WordOrderData
+    public class WorkOrderData
     { 
-        public int WorkOrderHeadId { get; set; }
-        public string WorkOrderNo { get; set; }
-        public DateTime CreateTime { get; set; }
-        public int BasicDataType { get; set; }
-        public int BasicDataId { get; set; }
-        public int Count { get; set; }
-        public string MachineNo { get; set; }
-        public string Remarks { get; set; }
-        public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
+        public WorkOrderHead WorkOrderHead { get; set; }
+        public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
     
     /// <summary>
