@@ -417,9 +417,12 @@ namespace HonjiMES.Models
     }
     
     public class WordOrderData
-    {
+    { 
+        public int WorkOrderHeadId { get; set; }
+        public string WorkOrderNo { get; set; }
         public DateTime CreateTime { get; set; }
-        public int ProductBasicId { get; set; }
+        public int BasicDataType { get; set; }
+        public int BasicDataId { get; set; }
         public int Count { get; set; }
         public string MachineNo { get; set; }
         public string Remarks { get; set; }
@@ -466,8 +469,8 @@ namespace HonjiMES.Models
     {
         public int Key { get; set; }
         public string WorkOrderNo { get; set; }
-        public string Name { get; set; }
-        public string ProductNo { get; set; }
+        public string BasicDataName { get; set; }
+        public string BasicDataNo { get; set; }
         public string MachineNo { get; set; }
         public string Remark { get; set; }
         public int Count { get; set; }

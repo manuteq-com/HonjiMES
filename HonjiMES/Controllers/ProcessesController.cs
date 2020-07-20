@@ -144,18 +144,18 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 工單號
+        /// 產生新的工單號
         /// </summary>
         /// <returns></returns>
         // GET: api/Processes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WorkOrder>>> GetWorkOrderNumber()
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderNumber()
         {
             var key = "WO";
             var dt = DateTime.Now;
             var WorkOrderNo = dt.ToString("yyMMdd");
 
-            var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1) {
                 var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
@@ -164,7 +164,7 @@ namespace HonjiMES.Controllers
                     NoCount = NoLast + 1;
                 // }
             }
-            var WorkOrderHeadData = new WorkOrder{
+            var WorkOrderHeadData = new WorkOrderHead{
                 CreateTime = dt,
                 WorkOrderNo = key + WorkOrderNo + NoCount.ToString("000")
             };
@@ -172,7 +172,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 工單號
+        /// 產生新的工單號(藉由日期)
         /// </summary>
         /// <returns></returns>
         // POST: api/Processes
@@ -183,7 +183,7 @@ namespace HonjiMES.Controllers
                 var key = "WO";
                 var WorkOrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
                 
-                var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1) {
                     var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
@@ -199,7 +199,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 
+        /// 藉由工單狀態取得工單資訊
         /// </summary>
         /// <returns></returns>
         // GET: api/Processes
@@ -235,23 +235,39 @@ namespace HonjiMES.Controllers
             var ProcessesDataList = new List<ProcessesData>();
             try
             {
-                var WorkOrdersHeads = _context.WorkOrders.Where(x => x.Status == id).ToList().GroupBy(x => x.WorkOrderNo);
-                foreach (var item in WorkOrdersHeads)
+                var WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).ToListAsync();
+                foreach (var item in WorkOrderHeads)
                 {
+                    var BasicDataNo = "";
+                    var BasicDataName = "";
+                    if (item.DataType == 0) {
+                        var BasicData = _context.MaterialBasics.Find(item.DataId);
+                        BasicDataNo = BasicData.MaterialNo;
+                        BasicDataName = BasicData.Name;
+                    } else if (item.DataType == 1) {
+                        var BasicData = _context.ProductBasics.Find(item.DataId);
+                        BasicDataNo = BasicData.ProductNo;
+                        BasicDataName = BasicData.Name;
+                    } else if (item.DataType == 2) {
+                        var BasicData = _context.WiproductBasics.Find(item.DataId);
+                        BasicDataNo = BasicData.WiproductNo;
+                        BasicDataName = BasicData.Name;
+                    }
+
                     var nProcessesData = new ProcessesData
                     {
-                        Key = item.FirstOrDefault().Id,
-                        WorkOrderNo = item.Key,
-                        Name = item.FirstOrDefault().ProductBasic.Name,
-                        ProductNo = item.FirstOrDefault().ProductBasic.ProductNo,
-                        MachineNo = item.FirstOrDefault().MachineNo,
-                        Count = item.FirstOrDefault().Count
+                        Key = item.Id,
+                        WorkOrderNo = item.WorkOrderNo,
+                        BasicDataName = BasicDataName,
+                        BasicDataNo = BasicDataNo,
+                        MachineNo = item.MachineNo,
+                        Count = item.Count
                     };
 
                     var i = 0;
                     foreach (var typeitem in ptype.GetProperties())
                     {
-                        var gitem = item.ToList();
+                        var gitem = item.WorkOrderDetails.ToList();
                         if (gitem.Count > i)
                         {
                             if (typeitem.Name == "Temp" + i.ToString())
@@ -285,7 +301,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 
+        /// 藉由工單狀態取得工單資訊(舊)
         /// </summary>
         /// <returns></returns>
         // GET: api/Processes
@@ -325,8 +341,8 @@ namespace HonjiMES.Controllers
                 var nProcessesData = new ProcessesData
                 {
                     Key = ProductBasics.Id,
-                    Name = ProductBasics.Name,
-                    ProductNo = ProductBasics.ProductNo,
+                    BasicDataName = ProductBasics.Name,
+                    BasicDataNo = ProductBasics.ProductNo,
                     Count = 1
                 };
                 foreach (var Columnitem in ColumnOptionlist)
@@ -366,60 +382,78 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
-        /// 用WorkOrderNo取製程資料
+        /// 用WorkOrderID取得製程資料
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Processes
         [HttpGet("{id}")]
-        public async Task<ActionResult<BillOfMaterial>> GetProcessByWorkOrderNo(int id)
+        public async Task<ActionResult<WorkOrderDetail>> GetProcessByWorkOrderId(int id)
         {
-            var WorkOrder = await _context.WorkOrders.Where(x => x.Id == id).FirstOrDefaultAsync();
-            var WorkOrders = await _context.WorkOrders.Where(x => x.WorkOrderNo == WorkOrder.WorkOrderNo).ToListAsync();
-            if (WorkOrders == null)
+            var WorkOrder = await _context.WorkOrderHeads.Where(x => x.Id == id).Include(x => x.WorkOrderDetails).FirstOrDefaultAsync();
+            if (WorkOrder == null)
             {
                 return NotFound();
             }
-            return Ok(MyFun.APIResponseOK(WorkOrders));
+            return Ok(MyFun.APIResponseOK(WorkOrder));
         }
 
         /// <summary>
-        /// 新增MBOM表
+        /// 新增工單資訊
         /// </summary>
         /// <param name="WordOrderData"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<WordOrderData>> PostWorkOrderList(WordOrderData WordOrderData)
         {
-            if (WordOrderData.ProductBasicId != 0)
+            if (WordOrderData.BasicDataId != 0)
             {
-                var checkIndex = 0;
-                var workOrderNo = "";
+                //取得工單號
+                var key = "WO";
+                var WorkOrderNo = WordOrderData.CreateTime.ToString("yyMMdd");
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1) {
+                    var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                    var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                    // if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                    // }
+                }
+                var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+
+                var DataType = 1;
+                var BasicDataID = 0;
+                var BasicDataNo = "";
+                var BasicDataName = "";
+                if (DataType == 0) {
+
+                } else if (DataType == 1) {
+                    var BasicData = _context.ProductBasics.Find(WordOrderData.BasicDataId);
+                    BasicDataID = BasicData.Id;
+                    BasicDataNo = BasicData.ProductNo;
+                    BasicDataName = BasicData.Name;
+                } else if (DataType == 2) {
+
+                }
+                var nWorkOrderHead = new WorkOrderHead
+                {
+                    WorkOrderNo = workOrderNo,
+                    MachineNo = WordOrderData.MachineNo,
+                    DataType = DataType,
+                    DataId = BasicDataID,
+                    DataNo = BasicDataNo,
+                    DataName = BasicDataName,
+                    Count = WordOrderData.Count,
+                    CreateUser = 1
+                };
+
                 foreach (var item in WordOrderData.MBillOfMaterialList)
                 {
-                    //取得工單號
-                    if (checkIndex == 0) {
-                        var key = "WO";
-                        var WorkOrderNo = WordOrderData.CreateTime.ToString("yyMMdd");
-                        var NoData = await _context.WorkOrders.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
-                        var NoCount = NoData.Count() + 1;
-                        if (NoCount != 1) {
-                            var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
-                            var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
-                            // if (NoCount <= NoLast) {
-                                NoCount = NoLast + 1;
-                            // }
-                        }
-                        workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
-                    }
-
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
-                    var nWorkOrder = new WorkOrder
+                    var nWorkOrderDetail = new WorkOrderDetail
                     {
-                        WorkOrderNo = workOrderNo,
                         SerialNumber = item.SerialNumber ,
-                        MachineNo = WordOrderData.MachineNo,
-                        ProductBasicId = WordOrderData.ProductBasicId,
                         ProcessId = item.ProcessId,
                         ProcessNo = ProcessInfo.Code,
                         ProcessName = ProcessInfo.Name,
@@ -431,11 +465,37 @@ namespace HonjiMES.Controllers
                         Remarks = item.Remarks,
                         CreateUser = 1
                     };
-                    _context.WorkOrders.Add(nWorkOrder);
+                    nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
                 }
+                _context.WorkOrderHeads.Add(nWorkOrderHead);
                 await _context.SaveChangesAsync();
             }
             return Ok(MyFun.APIResponseOK("OK"));
+        }
+
+        /// <summary>
+        /// 刪除工單資訊
+        /// </summary>
+        /// <returns></returns>
+        // DELETE: api/Processes/
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<WordOrderData>> DeleteWorkOrderList(int id)
+        {
+            if (id != 0)
+            {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var WorkOrderHeads = _context.WorkOrderHeads.Find(id);
+                foreach (var item in WorkOrderHeads.WorkOrderDetails)
+                {
+                    item.DeleteFlag = 1;
+                }
+                WorkOrderHeads.DeleteFlag = 1;
+                await _context.SaveChangesAsync();
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK("OK"));
+            } else {
+                return Ok(MyFun.APIResponseError("工單刪除失敗!"));
+            }
         }
 
         private bool ProcesseExists(int id)

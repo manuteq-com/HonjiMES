@@ -166,20 +166,7 @@ namespace HonjiMES.Controllers
             var WiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.WiproductNo).ToListAsync();
             var AdjustData = new List<BasicData>();
             var TempId = 1;
-            foreach (var item in MaterialBasic)
-            {
-                var tempData = new BasicData{
-                    TempId = TempId++,
-                    DataType = 1,
-                    DataId = item.Id,
-                    DataNo = item.MaterialNo,
-                    Name = item.Name,
-                    Specification = item.Specification,
-                    Property = item.Property,
-                    Price = item.Price
-                };
-                AdjustData.Add(tempData);
-            }
+            
             foreach (var item in ProductBasic)
             {
                 var tempData = new BasicData{
@@ -201,6 +188,20 @@ namespace HonjiMES.Controllers
                     DataType = 3,
                     DataId = item.Id,
                     DataNo = item.WiproductNo,
+                    Name = item.Name,
+                    Specification = item.Specification,
+                    Property = item.Property,
+                    Price = item.Price
+                };
+                AdjustData.Add(tempData);
+            }
+            foreach (var item in MaterialBasic)
+            {
+                var tempData = new BasicData{
+                    TempId = TempId++,
+                    DataType = 1,
+                    DataId = item.Id,
+                    DataNo = item.MaterialNo,
                     Name = item.Name,
                     Specification = item.Specification,
                     Property = item.Property,

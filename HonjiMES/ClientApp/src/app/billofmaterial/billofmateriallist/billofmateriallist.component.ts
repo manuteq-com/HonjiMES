@@ -59,6 +59,9 @@ export class BillofmateriallistComponent implements OnInit {
                     if (element.ShowPLV === 0) {
                         element.Lv = null;
                         element.Quantity = null;
+                        element.Version = 'ver.' + element.Version;
+                    } else {
+                        element.Version = '';
                     }
                 });
                 this.bomverdata = s.data;

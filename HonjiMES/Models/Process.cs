@@ -12,7 +12,7 @@ namespace HonjiMES.Models
         public Process()
         {
             MBillOfMaterials = new HashSet<MBillOfMaterial>();
-            WorkOrders = new HashSet<WorkOrder>();
+            WorkOrderDetails = new HashSet<WorkOrderDetail>();
         }
 
         [Key]
@@ -39,7 +39,7 @@ namespace HonjiMES.Models
 
         [InverseProperty(nameof(MBillOfMaterial.Process))]
         public virtual ICollection<MBillOfMaterial> MBillOfMaterials { get; set; }
-        [InverseProperty(nameof(WorkOrder.Process))]
-        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
+        [InverseProperty(nameof(WorkOrderDetail.Process))]
+        public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
     }
 }

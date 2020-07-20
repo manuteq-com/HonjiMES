@@ -8,6 +8,7 @@ import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-creatprocess-control',
@@ -44,8 +45,10 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ProcessBasicList: any;
     NumberBoxOptions: any;
     SerialNo: any;
-    productbasicId: number;
     saveDisabled: boolean;
+    modVisible: boolean;
+    modCheck: boolean;
+    modName: any;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.onReorder = this.onReorder.bind(this);
@@ -64,6 +67,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
+        this.modCheck = false;
+        this.modName = 'new';
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
@@ -116,27 +121,34 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        debugger;
+        // debugger;
         this.dataSourceDB = [];
-        if (this.itemkeyval != null) {
-            this.GetData('/Processes/GetProcessByWorkOrderNo/' + this.itemkeyval).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.dataSourceDB = s.data;
-                        this.formData.CreateTime = s.data[0].CreateTime;
-                        this.formData.ProductBasicId = s.data[0].ProductBasicId;
-                        this.formData.Count = s.data[0].Count;
-                        this.formData.MachineNo = s.data[0].MachineNo;
-                        // this.formData.Remarks = s.data[0].Remarks;
-                    }
-                }
-            );
-        } else {
+        if (this.modval === 'new') {
+            this.modName = 'new';
+            this.modVisible = true;
+            this.saveDisabled = true;
             this.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
                         this.formData = s.data;
                         this.formData.Count = 1;
+                    }
+                }
+            );
+        } else if (this.itemkeyval != null) {
+            this.modVisible = false;
+            this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.modCheck = true; // 避免製程資訊被刷新
+                        this.dataSourceDB = s.data.WorkOrderDetails;
+                        this.formData.WorkOrderHeadId = s.data.Id;
+                        this.formData.WorkOrderNo = s.data.WorkOrderNo;
+                        this.formData.CreateTime = s.data.CreateTime;
+                        this.formData.ProductBasicId = s.data.DataId;
+                        this.formData.Count = s.data.Count;
+                        this.formData.MachineNo = s.data.MachineNo;
+                        // this.formData.Remarks = s.data[0].Remarks;
                     }
                 }
             );
@@ -180,15 +192,20 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     };
     onProductBasicSelectionChanged(e) {
         // debugger;
-        this.productbasicId = e.value;
-        this.saveDisabled = false;
-        this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.dataSourceDB = s.data;
-                }
+        if (this.modCheck) {
+            this.modCheck = false;
+        } else {
+            this.saveDisabled = false;
+            if (e.value !== 0 && e.value !== null && e.value !== undefined) {
+                this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
+                    (s) => {
+                        if (s.success) {
+                            this.dataSourceDB = s.data;
+                        }
+                    }
+                );
             }
-        );
+        }
     }
     selectvalueChanged(e, data) {
         // debugger;
@@ -250,40 +267,88 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             // this.saveCheck = true;
         }
     }
-    onFormSubmit = async function (e) {
+    async DeleteOnClick(e) {
+        this.modName = 'delete';
+    }
+    UpdateOnClick(e) {
+
+    }
+    RunOnClick(e) {
+
+    }
+    onFormSubmit = async function(e) {
         // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
         }
+        if (this.dataSourceDB.length === 0) {
+            notify({
+                message: '製程內容不能為空!',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            return false;
+        }
         this.dataGrid2.instance.saveEditData();
         this.postval = {
+            WorkOrderHeadId: this.formData.WorkOrderHeadId,
+            WorkOrderNo: this.formData.WorkOrderNo,
             CreateTime: this.formData.CreateTime,
-            ProductBasicId: this.productbasicId,
+            BasicDataType: 1,
+            BasicDataId: this.formData.ProductBasicId,
             Count: this.formData.Count,
             MachineNo: this.formData.MachineNo,
-            Remarks: this.formData.Remarks,
+            // Remarks: this.formData.Remarks,
             MBillOfMaterialList: this.dataSourceDB
         };
+
         try {
-            // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
-            if (sendRequest) {
-                this.dataSourceDB = [];
-                this.dataGrid2.instance.refresh();
-                this.formData.CreateTime = new Date();
-                this.productbasicId = null;
-                this.formData.ProductBasicId = null;
-                this.formData.Count = 1;
-                this.formData.ProducingMachine = '';
-                this.formData.Remarks = '';
-                this.dataSourceDB = [];
-                e.preventDefault();
-                this.childOuter.emit(true);
+            if (this.modName === 'new') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modName === 'delete') {
+                Swal.fire({
+                    showCloseButton: true,
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                    title: '確認刪除?',
+                    html: '刪除後將無法復原!',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#296293',
+                    cancelButtonColor: '#CE312C',
+                    confirmButtonText: '確認',
+                    cancelButtonText: '取消'
+                }).then(async (result) => {
+                    if (result.value) {
+                        // tslint:disable-next-line: max-line-length
+                        const sendRequest = await SendService.sendRequest(this.http, '/Processes/DeleteWorkOrderList/' + this.formData.WorkOrderHeadId, 'DELETE');
+                        this.viewRefresh(e, sendRequest);
+                    }
+                });
             }
         } catch (error) {
+
         }
         this.buttondisabled = false;
     };
+    viewRefresh(e, result) {
+        if (result) {
+            this.dataSourceDB = [];
+            this.dataGrid2.instance.refresh();
+            this.formData.CreateTime = new Date();
+            this.formData.ProductBasicId = null;
+            this.formData.Count = 1;
+            this.formData.ProducingMachine = '';
+            this.formData.Remarks = '';
+            this.dataSourceDB = [];
+            e.preventDefault();
+            this.childOuter.emit(true);
+        }
+    }
 }

@@ -2,12 +2,14 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
+        <dxi-item dataField="WorkOrderHeadId" [visible]="false">
+            <dxo-label text="工單主檔ID"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [visible]="modVisible">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="WorkOrderNo" [disabled]="true" [visible]="false">
-            <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
+        <dxi-item dataField="WorkOrderNo" [disabled]="true" [visible]="!modVisible">
             <dxo-label text="工單號"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="OrderDetailId" dataType="number" editorType="dxSelectBox"
@@ -42,7 +44,7 @@
         #dataGrid2
         [dataSource]="dataSourceDB"
         [showBorders]="true"
-        height="500"
+        height="580"
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)"
@@ -106,7 +108,13 @@
 
     <div class="col-auto-12 mt-1">
         <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-            [disabled]="saveDisabled"></dx-button>
+            [disabled]="saveDisabled" [visible]="modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='刪除' type='danger' icon='trash' [useSubmitBehavior]="true"
+            class="editbtn" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='更新' type='success' icon='save' [useSubmitBehavior]="false"
+            class="editbtn" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="false"
+            class="editbtn" (onClick)="RunOnClick($event)" [visible]="!modVisible"></dx-button>
     </div>
 
 </form>

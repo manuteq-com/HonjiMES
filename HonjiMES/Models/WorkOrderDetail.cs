@@ -6,23 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("work_order")]
-    public partial class WorkOrder
+[Table("work_order_detail")]
+    public partial class WorkOrderDetail
     {
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Required]
-        [Column("work_order_no", TypeName = "varchar(50)")]
-        public string WorkOrderNo { get; set; }
-        [Column("order_detail_id", TypeName = "int(11)")]
-        public int? OrderDetailId { get; set; }
+        [Column("work_order_head_id", TypeName = "int(11)")]
+        public int WorkOrderHeadId { get; set; }
         [Column("serial_number", TypeName = "int(11)")]
         public int SerialNumber { get; set; }
-        [Column("machine_no", TypeName = "varchar(50)")]
-        public string MachineNo { get; set; }
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int ProductBasicId { get; set; }
         [Column("process_id", TypeName = "int(11)")]
         public int ProcessId { get; set; }
         [Required]
@@ -39,6 +32,10 @@ namespace HonjiMES.Models
         public decimal ProcessCost { get; set; }
         [Column("count", TypeName = "int(11)")]
         public int Count { get; set; }
+        [Column("purchase_id", TypeName = "int(11)")]
+        public int? PurchaseId { get; set; }
+        [Column("draw_no", TypeName = "varchar(50)")]
+        public string DrawNo { get; set; }
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
         [Column("producing_machine", TypeName = "varchar(50)")]
@@ -50,6 +47,12 @@ namespace HonjiMES.Models
         public string Type { get; set; }
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        [Column("re_count", TypeName = "int(11)")]
+        public int? ReCount { get; set; }
+        [Column("start_time", TypeName = "timestamp")]
+        public DateTime? StartTime { get; set; }
+        [Column("end_time", TypeName = "timestamp")]
+        public DateTime? EndTime { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -61,14 +64,14 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [ForeignKey(nameof(OrderDetailId))]
-        [InverseProperty("WorkOrders")]
-        public virtual OrderDetail OrderDetail { get; set; }
         [ForeignKey(nameof(ProcessId))]
-        [InverseProperty("WorkOrders")]
+        [InverseProperty("WorkOrderDetails")]
         public virtual Process Process { get; set; }
-        [ForeignKey(nameof(ProductBasicId))]
-        [InverseProperty("WorkOrders")]
-        public virtual ProductBasic ProductBasic { get; set; }
+        [ForeignKey(nameof(PurchaseId))]
+        [InverseProperty(nameof(PurchaseHead.WorkOrderDetails))]
+        public virtual PurchaseHead Purchase { get; set; }
+        [ForeignKey(nameof(WorkOrderHeadId))]
+        [InverseProperty("WorkOrderDetails")]
+        public virtual WorkOrderHead WorkOrderHead { get; set; }
     }
 }

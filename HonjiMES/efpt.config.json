@@ -198,7 +198,11 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "work_order"
+         "Name": "work_order_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "work_order_head"
       }
    ],
    "UseDatabaseNames": false,
