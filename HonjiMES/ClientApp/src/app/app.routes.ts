@@ -21,6 +21,7 @@ import { ProcessListComponent } from './process/process-list/process-list.compon
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './login/login/login.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
+import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 
 
 
@@ -44,7 +45,8 @@ export const routes: Routes = [
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
     { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] },
-    { path: 'processControl', component: ProcessControlComponent }
+    { path: 'processcontrol', component: ProcessControlComponent },
+    { path: 'workorderlist', component: WorkorderListComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

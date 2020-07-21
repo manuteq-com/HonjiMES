@@ -83,13 +83,13 @@ import { ProcessListComponent } from './process/process-list/process-list.compon
 import { CreatprocessComponent } from './process/creatprocess/creatprocess.component';
 import { UserRolesComponent } from './setting/user-roles/user-roles.component';
 import { AdjustListComponent } from './inventory/adjust-list/adjust-list.component';
-
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.component';
 import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
+import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -193,6 +193,7 @@ export function tokenGetter() {
         MbillofmateriallistComponent,
         BomverlistComponent,
         CreatprocessControlComponent,
+        WorkorderListComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

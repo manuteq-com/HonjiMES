@@ -5,31 +5,23 @@
         <div class="lefttriangle1"></div>
         <div class="lefttriangle2"></div>
     </div>
-    <div class="headerfont font2">工單管理</div>
+    <div class="headerfont font2">生產看板</div>
     <div class="buttongroup">
-        <dx-button
+        <!-- <dx-button
             class="insertbtn"
             stylingMode="contained"
             text="建立工單"
             type="success"
             [width]="120"
             (onClick)="creatdata()">
-        </dx-button>
+        </dx-button> -->
     </div>
 </div>
 
 <nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" [nzFrontPagination]="false"
     [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
     <thead>
-        <!-- <tr>
-            <th nzLeft colspan="3" rowspan='3' nzWidth="300px">XXX BOM表</th>
-        </tr>
-        <tr>
-            <th colspan="19" nzWidth="800px">訂單編號</th>
-        </tr>
-        <tr>
-            <th colspan="19" nzWidth="800px">加工流程</th>
-        </tr> -->
+
         <tr>
             <th nzWidth="130px" nzLeft>工單號</th>
             <th nzWidth="150px" nzLeft>品號</th>
@@ -43,7 +35,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
-            <td class="process_status" nzLeft>{{data.WorkOrderNo}}</td>
+            <td nzLeft>{{data.WorkOrderNo}}</td>
             <td nzLeft>{{data.BasicDataNo}}</td>
             <td nzLeft>{{data.BasicDataName}}</td>
             <td nzLeft>{{data.MachineNo}}</td>
@@ -74,12 +66,12 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="建立工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<!-- <dx-popup [showTitle]="true" title="建立工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creatprocess-control>
     </div>
-</dx-popup>
+</dx-popup> -->
 <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
     [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>

@@ -1146,6 +1146,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Cost).HasComment("成本");
+
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立時間");
@@ -1154,8 +1156,22 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.LeadTime).HasComment("前置時間	");
+
+                entity.Property(e => e.Manpower).HasComment("所需人力	");
+
                 entity.Property(e => e.Name)
                     .HasComment("名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProducingMachine)
+                    .HasComment("機台	")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -1167,6 +1183,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkTime).HasComment("標準工時	");
             });
 
             modelBuilder.Entity<Product>(entity =>

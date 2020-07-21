@@ -49,10 +49,15 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     modVisible: boolean;
     modCheck: boolean;
     modName: any;
+    ProcessLeadTime: any;
+    ProcessTime: any;
+    ProcessCost: any;
+    ProducingMachine: any;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
+        this.ProcessLeadTimeValueChanged = this.ProcessLeadTimeValueChanged.bind(this);
         // this.CustomerVal = null;
         // this.formData = null;
         this.editOnkeyPress = true;
@@ -69,6 +74,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.saveDisabled = true;
         this.modCheck = false;
         this.modName = 'new';
+
+        this.ProcessLeadTime = 0;
+        this.ProcessTime = 0;
+        this.ProcessCost = 0;
+        this.ProducingMachine = '';
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
@@ -213,18 +223,27 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         const today = new Date();
         this.ProcessBasicList.forEach(x => {
             if (x.Id === e.value) {
-                // this.Quantityvalmax = 999;
-                // this.Quantityval = 1;
-                // this.OriginPriceval = x.Price ? x.Price : 0;
-                // this.Priceval = x.Price ? x.Price : 0;
-                // this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
-                //     (s) => {
-                //         this.WarehouseList = s.data;
-                //         this.Warehouseval = s.data[0].Id ? s.data[0].Id : null;
-                //     }
-                // );
+                this.ProcessLeadTime = x.LeadTime;
+                this.ProcessTime = x.WorkTime;
+                this.ProcessCost = x.Cost;
+                this.ProducingMachine = x.ProducingMachine;
+                data.data.ProcessLeadTime = x.LeadTime;
+                data.data.ProcessTime = x.WorkTime;
+                data.data.ProcessCost = x.Cost;
+                data.data.ProducingMachine = x.ProducingMachine;
+                data.row.data.ProcessLeadTime = x.LeadTime;
+                data.row.data.ProcessTime = x.WorkTime;
+                data.row.data.ProcessCost = x.Cost;
+                data.row.data.ProducingMachine = x.ProducingMachine;
+                data.values[2] = x.LeadTime;
+                data.values[3] = x.WorkTime;
+                data.values[4] = x.Cost;
+                data.values[5] = x.ProducingMachine;
             }
         });
+    }
+    ProcessLeadTimeValueChanged(e, data) {
+        data.setValue(e.value);
     }
     validate_before(): boolean {
         // 表單驗證
@@ -308,7 +327,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         };
 
         try {
-            if (this.modName === 'new') {
+            if (this.modName === 'run') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modName === 'new') {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
                 this.viewRefresh(e, sendRequest);

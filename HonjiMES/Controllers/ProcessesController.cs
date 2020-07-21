@@ -235,7 +235,13 @@ namespace HonjiMES.Controllers
             var ProcessesDataList = new List<ProcessesData>();
             try
             {
-                var WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).ToListAsync();
+                var WorkOrderHeads = new List<WorkOrderHead>();
+                if (id == 0) {
+                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                } else {
+                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                }
+                
                 foreach (var item in WorkOrderHeads)
                 {
                     var BasicDataNo = "";
@@ -474,8 +480,10 @@ namespace HonjiMES.Controllers
                 }
                 _context.WorkOrderHeads.Add(nWorkOrderHead);
                 await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK("OK"));
+            } else {
+                return Ok(MyFun.APIResponseError("工單新增失敗!"));
             }
-            return Ok(MyFun.APIResponseOK("OK"));
         }
  
         /// <summary>
@@ -535,8 +543,9 @@ namespace HonjiMES.Controllers
                     }
                 }
                 return Ok(MyFun.APIResponseOK(WorkOrderData));
+            } else {
+                return Ok(MyFun.APIResponseError("工單更新失敗!"));
             }
-            return Ok(MyFun.APIResponseOK("OK"));
         }
 
         /// <summary>

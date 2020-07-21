@@ -24,6 +24,18 @@ namespace HonjiMES.Models
         [Required]
         [Column("code", TypeName = "varchar(50)")]
         public string Code { get; set; }
+        [Column("lead_time", TypeName = "decimal(10,2)")]
+        public decimal? LeadTime { get; set; }
+        [Column("work_time", TypeName = "decimal(10,2)")]
+        public decimal? WorkTime { get; set; }
+        [Column("cost", TypeName = "decimal(10,2)")]
+        public decimal? Cost { get; set; }
+        [Column("draw_no", TypeName = "varchar(50)")]
+        public string DrawNo { get; set; }
+        [Column("manpower", TypeName = "int(11)")]
+        public int? Manpower { get; set; }
+        [Column("producing_machine", TypeName = "varchar(50)")]
+        public string ProducingMachine { get; set; }
         [Column("remark", TypeName = "varchar(50)")]
         public string Remark { get; set; }
         [Column("create_time", TypeName = "timestamp")]
