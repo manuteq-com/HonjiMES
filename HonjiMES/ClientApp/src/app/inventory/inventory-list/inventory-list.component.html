@@ -107,7 +107,7 @@
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-            <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
+            <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)"
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceEditCellTemplate'">
