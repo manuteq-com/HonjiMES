@@ -2641,6 +2641,10 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.WorkOrderHeadId)
                     .HasName("work_order_head_id");
 
+                entity.Property(e => e.ActualEndTime).HasComment("實際完工日");
+
+                entity.Property(e => e.ActualStartTime).HasComment("實際開工日");
+
                 entity.Property(e => e.Count)
                     .HasDefaultValueSql("'1'")
                     .HasComment("需求量");
@@ -2652,7 +2656,9 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.EndTime).HasComment("結束時間(完工)");
+                entity.Property(e => e.DueEndTime).HasComment("預計完工日");
+
+                entity.Property(e => e.DueStartTime).HasComment("預計開工日");
 
                 entity.Property(e => e.Manpower).HasComment("所需人力	");
 
@@ -2688,9 +2694,9 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.SerialNumber).HasComment("工序順序	");
 
-                entity.Property(e => e.StartTime).HasComment("開始時間(開工)");
-
                 entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.TotalTime).HasComment("總工時");
 
                 entity.Property(e => e.Type)
                     .HasDefaultValueSql("'0'")
@@ -2727,6 +2733,10 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.OrderDetailId)
                     .HasName("order_detail_id");
 
+                entity.Property(e => e.ActualEndTime).HasComment("實際完工日");
+
+                entity.Property(e => e.ActualStartTime).HasComment("實際開工日");
+
                 entity.Property(e => e.Count).HasComment("數量");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
@@ -2745,7 +2755,9 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DataType).HasComment("料號種類(0原料,1成品,2半成品)");
 
-                entity.Property(e => e.EndTime).HasComment("結束時間(完工)");
+                entity.Property(e => e.DueEndTime).HasComment("預計完工日");
+
+                entity.Property(e => e.DueStartTime).HasComment("預計開工日");
 
                 entity.Property(e => e.MachineNo)
                     .HasComment("機號")
@@ -2758,9 +2770,9 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'0'")
                     .HasComment("實際完工數量");
 
-                entity.Property(e => e.StartTime).HasComment("開始時間(派工)");
-
                 entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.TotalTime).HasComment("總工時");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")

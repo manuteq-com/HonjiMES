@@ -37,12 +37,18 @@ namespace HonjiMES.Models
         public int Count { get; set; }
         [Column("re_count", TypeName = "int(11)")]
         public int? ReCount { get; set; }
-        [Column("start_time", TypeName = "timestamp")]
-        public DateTime? StartTime { get; set; }
-        [Column("end_time", TypeName = "timestamp")]
-        public DateTime? EndTime { get; set; }
         [Column("status", TypeName = "int(11)")]
         public int Status { get; set; }
+        [Column("total_time", TypeName = "timestamp")]
+        public DateTime? TotalTime { get; set; }
+        [Column("due_start_time", TypeName = "timestamp")]
+        public DateTime? DueStartTime { get; set; }
+        [Column("due_end_time", TypeName = "timestamp")]
+        public DateTime? DueEndTime { get; set; }
+        [Column("actual_start_time", TypeName = "timestamp")]
+        public DateTime? ActualStartTime { get; set; }
+        [Column("actual_end_time", TypeName = "timestamp")]
+        public DateTime? ActualEndTime { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]

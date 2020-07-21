@@ -1,0 +1,110 @@
+<form action="" (submit)="onFormSubmit($event)">
+
+    <label>{{itemval1}}</label><br>
+    <label>{{itemval2}}</label><br>
+    <label>{{itemval3}}</label><br>
+    <label>{{itemval4}}</label><br>
+    <label>{{itemval5}}</label><br>
+    <label>{{itemval6}}</label><br>
+    <label>{{itemval7}}</label><br>
+    <label>{{itemval8}}</label><br>
+    <label>{{itemval9}}</label><br>
+
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="SerialNumber">
+            <dxo-label text="製程序號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ProcessId">
+            <dxo-label text="製程名稱"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="DrawNo">
+            <dxo-label text="圖號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Manpower">
+            <dxo-label text="所需人力"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remarks">
+            <dxo-label text="備註"></dxo-label>
+        </dxi-item>
+
+        <dxi-item dataField="ProcessLeadTime">
+            <dxo-label text="前置時間(分)"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ProcessTime">
+            <dxo-label text="標準工時(分)"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ProcessCost">
+            <dxo-label text="成本"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ProducingMachine">
+            <dxo-label text="機台"></dxo-label>
+        </dxi-item>
+
+        <dxi-item dataField="DueStartTime">
+            <dxo-label text="預計開工日"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="DueEndTime">
+            <dxo-label text="實際開工日"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ActualStartTime">
+            <dxo-label text="預計完工日"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ActualEndTime">
+            <dxo-label text="實際完工日"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Count">
+            <dxo-label text="需求數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="ReCount">
+            <dxo-label text="完工數量"></dxo-label>
+        </dxi-item>
+
+
+        <!-- <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
+            <dxi-validation-rule type="required" message="驗收數量 必填"></dxi-validation-rule>
+            <dxo-label text="驗收數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Unit">
+            <dxo-label text="單位"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
+            <dxi-validation-rule type="required" message="驗收單價 必填"></dxi-validation-rule>
+            <dxo-label text="驗收單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitCount" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitCountEditorOptions">
+            <dxo-label text="單位數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
+            <dxo-label text="驗收總價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitPriceEditorOptions">
+            <dxo-label text="單位單價"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="WorkPrice">
+            <dxo-label text="加工費用"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="UnitPriceAll">
+            <dxo-label text="單位總額"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remarks">
+            <dxo-label text="備註"></dxo-label>
+        </dxi-item> -->
+
+    </dx-form>
+    <br>
+    <!-- <div class="long-title">
+        <h5>訂單內容</h5>
+    </div> -->
+
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+        <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+            </dxi-item> -->
+    </div>
+
+</form>
+
+

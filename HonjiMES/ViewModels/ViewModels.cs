@@ -467,6 +467,7 @@ namespace HonjiMES.Models
         public string MachineNo { get; set; }
         public string Remark { get; set; }
         public int Count { get; set; }
+        public int Status { get; set; }
         /// <summary>
         ///  製成0~19 共20組
         /// </summary>

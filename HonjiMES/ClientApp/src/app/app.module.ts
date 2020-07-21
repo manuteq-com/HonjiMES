@@ -90,6 +90,7 @@ import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.component';
 import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
+import { WorkorderReportComponent } from './workorder/workorder-report/workorder-report.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -194,6 +195,7 @@ export function tokenGetter() {
         BomverlistComponent,
         CreatprocessControlComponent,
         WorkorderListComponent,
+        WorkorderReportComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

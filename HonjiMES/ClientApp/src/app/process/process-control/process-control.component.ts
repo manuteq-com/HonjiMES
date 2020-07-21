@@ -49,6 +49,13 @@ export class ProcessControlComponent implements OnInit {
         //     }
         // }, 'error', 3000);
     }
+    getBlueClass(data) {
+        if (data.Status === 1) {
+            return 'process_started';
+        } else {
+            return '';
+        }
+    }
     creatdata() {
         this.creatpopupVisible = true;
         this.itemkey = null;

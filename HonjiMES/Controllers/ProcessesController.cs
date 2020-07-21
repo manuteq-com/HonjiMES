@@ -267,7 +267,8 @@ namespace HonjiMES.Controllers
                         BasicDataName = BasicDataName,
                         BasicDataNo = BasicDataNo,
                         MachineNo = item.MachineNo,
-                        Count = item.Count
+                        Count = item.Count,
+                        Status = item.Status
                     };
 
                     var i = 0;

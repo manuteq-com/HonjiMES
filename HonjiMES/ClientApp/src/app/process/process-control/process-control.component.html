@@ -43,11 +43,13 @@
     </thead>
     <tbody>
         <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
-            <td class="process_status" nzLeft>{{data.WorkOrderNo}}</td>
-            <td nzLeft>{{data.BasicDataNo}}</td>
-            <td nzLeft>{{data.BasicDataName}}</td>
-            <td nzLeft>{{data.MachineNo}}</td>
-            <td nzLeft>{{data.Count}}</td>
+
+            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.WorkOrderNo}}</td>
+            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.BasicDataNo}}</td>
+            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.BasicDataName}}</td>
+            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.MachineNo}}</td>
+            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
+
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
                 <td *ngIf="col.show" (click)="tdclick(data)">
                     <div>

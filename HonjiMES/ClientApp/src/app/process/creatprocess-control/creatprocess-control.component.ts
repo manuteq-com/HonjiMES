@@ -46,6 +46,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     NumberBoxOptions: any;
     SerialNo: any;
     saveDisabled: boolean;
+    runVisible: boolean;
     modVisible: boolean;
     modCheck: boolean;
     modName: any;
@@ -136,6 +137,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         if (this.modval === 'new') {
             this.modName = 'new';
             this.modVisible = true;
+            this.runVisible = false;
             this.saveDisabled = true;
             this.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
@@ -159,6 +161,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.Count = s.data.WorkOrderHead.Count;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
                         // this.formData.Remarks = s.data[0].Remarks;
+                        if (s.data.WorkOrderHead.Status === 0) {
+                            this.runVisible = true;
+                        } else {
+                            this.runVisible = false;
+                        }
                     }
                 }
             );
