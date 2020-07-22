@@ -45,8 +45,13 @@ export class ToOrderSaleComponent implements OnInit {
             (s) => {
                 debugger;
                 if (s.success) {
+                    let WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        WarehouseList[index] = element.Warehouse;
+                    });
                     this.selectBoxOptions = {
-                        items: s.data,
+                        items: WarehouseList,
                         displayExpr: 'Name',
                         valueExpr: 'Id',
                     };

@@ -319,7 +319,20 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     GetWarehouseByMaterialBasic(Id) {
         this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
             (s) => {
-                this.WarehouseList = s.data;
+                this.WarehouseList = [];
+                s.data.forEach((element, index) => {
+                    element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                    this.WarehouseList[index] = element.Warehouse;
+                });
+                this.MaterialBasicTempList.forEach(element => {
+                    if (element.Id === Id) {
+                        if (element.WarehouseId !== null) {
+                            this.Warehouseval = element.WarehouseId;
+                        } else {
+                            this.Warehouseval = this.WarehouseList[0].Id;
+                        }
+                    }
+                });
             }
         );
     }

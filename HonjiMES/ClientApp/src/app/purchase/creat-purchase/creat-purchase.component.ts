@@ -260,8 +260,12 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 this.Priceval = x.Price ? x.Price : 0;
                 this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
                     (s) => {
-                        this.WarehouseList = s.data;
-                        this.Warehouseval = s.data[0].Id ? s.data[0].Id : null;
+                        this.WarehouseList = [];
+                        s.data.forEach((element, index) => {
+                            element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                            this.WarehouseList[index] = element.Warehouse;
+                            this.Warehouseval = this.WarehouseList[0].Id;
+                        });
                     }
                 );
             }
@@ -309,7 +313,11 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.Warehouseval = e.data.WarehouseId;
         this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
             (s) => {
-                this.WarehouseList = s.data;
+                this.WarehouseList = [];
+                s.data.forEach((element, index) => {
+                    element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                    this.WarehouseList[index] = element.Warehouse;
+                });
             }
         );
     }

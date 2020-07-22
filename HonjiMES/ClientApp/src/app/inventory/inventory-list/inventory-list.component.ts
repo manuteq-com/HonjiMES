@@ -10,9 +10,9 @@ import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
 
 @Component({
-  selector: 'app-inventory-list',
-  templateUrl: './inventory-list.component.html',
-  styleUrls: ['./inventory-list.component.css']
+    selector: 'app-inventory-list',
+    templateUrl: './inventory-list.component.html',
+    styleUrls: ['./inventory-list.component.css']
 })
 export class InventoryListComponent implements OnInit, OnChanges {
 
@@ -52,6 +52,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     DataType: any;
     DataId: any;
     WarehouseVisible: boolean;
+    Warehouseval: any;
 
     constructor(private http: HttpClient) {
         this.CustomerVal = null;
@@ -96,6 +97,9 @@ export class InventoryListComponent implements OnInit, OnChanges {
             }
         );
     }
+    onInitialized(value, data) {
+        data.setValue(value);
+    }
     refreshAdjustNo() {
         this.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
@@ -119,6 +123,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                     s.data.forEach((element, index) => {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
+                        this.Warehouseval = this.WarehouseList[0].Id;
                     });
                 }
             );
@@ -129,6 +134,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                     s.data.forEach((element, index) => {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
+                        this.Warehouseval = this.WarehouseList[0].Id;
                     });
                 }
             );
@@ -139,6 +145,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                     s.data.forEach((element, index) => {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
+                        this.Warehouseval = this.WarehouseList[0].Id;
                     });
                 }
             );
@@ -200,6 +207,10 @@ export class InventoryListComponent implements OnInit, OnChanges {
         if (e.column.command === 'edit') {
             this.saveCheck = true;
         }
+    }
+
+    ttest(e) {
+        debugger;
     }
     showMessage(data) {
         notify({
