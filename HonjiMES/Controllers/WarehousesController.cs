@@ -67,7 +67,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouseByWiproductBasic(int id)
         {
-            var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {
@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> GetWarehouseByProductBasic(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {
@@ -143,7 +143,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> GetWarehouseByMaterialBasic(int id)
         {
             var materialBasics = _context.MaterialBasics.Find(id);
-            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {

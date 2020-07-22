@@ -112,22 +112,34 @@ export class InventoryListComponent implements OnInit, OnChanges {
         const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         const dataType = basicData.DataType;
         const dataId = basicData.DataId;
-        if (dataType === 1) {   //查詢原料
+        if (dataType === 1) {   // 查詢原料
             this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = s.data;
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
                 }
             );
-        } else if (dataType === 2) {    //查詢成品
+        } else if (dataType === 2) {    // 查詢成品
             this.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = s.data;
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
                 }
             );
-        } else if (dataType === 3) {    //查詢半成品
+        } else if (dataType === 3) {    // 查詢半成品
             this.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = s.data;
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
                 }
             );
         }
