@@ -107,7 +107,7 @@
                 [showDragIcons]="false"
             ></dxo-row-dragging>
 
-            <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+            <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-form colCount=2>
                     <dxi-item dataField="ProcessId"></dxi-item>
                     <dxi-item dataField="ProcessLeadTime"></dxi-item>
@@ -126,17 +126,17 @@
 
             <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
             </dxi-column>
-            <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="300">
+            <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
                 <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" [width]="80" (onInitialized)="onInitialized('0',$event)">
+            <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" editCellTemplate="ProcessLeadTimeTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" [width]="80">
+            <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" editCellTemplate="ProcessTimeTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProcessCost" caption="成本" dataType="number" [width]="80">
+            <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProducingMachine" caption="機台">
+            <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate">
             </dxi-column>
 
             <dxi-column type="buttons" [width]="50">
@@ -145,10 +145,24 @@
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
+
             <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
                 <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
                     [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
                     valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+            </div>
+
+            <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
+                <dx-number-box [value]="ProcessLeadTime" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'ProcessTimeTemplate'">
+                <dx-number-box [value]="ProcessTime" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'ProcessCostTemplate'">
+                <dx-number-box [value]="ProcessCost" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'ProducingMachineTemplate'">
+                <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
             </div>
 
         </dx-data-grid>

@@ -58,7 +58,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     constructor(private http: HttpClient, myservice: Myservice) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
-        this.ProcessLeadTimeValueChanged = this.ProcessLeadTimeValueChanged.bind(this);
         // this.CustomerVal = null;
         // this.formData = null;
         this.editOnkeyPress = true;
@@ -76,9 +75,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.modCheck = false;
         this.modName = 'new';
 
-        this.ProcessLeadTime = 0;
-        this.ProcessTime = 0;
-        this.ProcessCost = 0;
+        this.ProcessLeadTime = null;
+        this.ProcessTime = null;
+        this.ProcessCost = null;
         this.ProducingMachine = '';
 
         this.CreateTimeDateBoxOptions = {
@@ -234,23 +233,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.ProcessTime = x.WorkTime;
                 this.ProcessCost = x.Cost;
                 this.ProducingMachine = x.ProducingMachine;
-                data.data.ProcessLeadTime = x.LeadTime;
-                data.data.ProcessTime = x.WorkTime;
-                data.data.ProcessCost = x.Cost;
-                data.data.ProducingMachine = x.ProducingMachine;
-                data.row.data.ProcessLeadTime = x.LeadTime;
-                data.row.data.ProcessTime = x.WorkTime;
-                data.row.data.ProcessCost = x.Cost;
-                data.row.data.ProducingMachine = x.ProducingMachine;
-                data.values[2] = x.LeadTime;
-                data.values[3] = x.WorkTime;
-                data.values[4] = x.Cost;
-                data.values[5] = x.ProducingMachine;
             }
         });
-    }
-    ProcessLeadTimeValueChanged(e, data) {
-        data.setValue(e.value);
     }
     validate_before(): boolean {
         // 表單驗證
@@ -271,10 +255,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.SerialNo = this.dataSourceDB.length;
         this.SerialNo++;
         e.data.SerialNumber = this.SerialNo;
-        e.data.ProcessLeadTime = 0;
-        e.data.ProcessTime = 0;
-        e.data.ProcessCost = 0;
+        e.data.ProcessLeadTime = null;
+        e.data.ProcessTime = null;
+        e.data.ProcessCost = null;
         e.data.ProducingMachine = '';
+        this.ProcessLeadTime = null;
+        this.ProcessTime = null;
+        this.ProcessCost = null;
+        this.ProducingMachine = '';
     }
     onEditingStart(e) {
         // this.saveCheck = false;

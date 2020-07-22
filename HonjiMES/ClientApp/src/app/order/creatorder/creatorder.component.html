@@ -60,10 +60,10 @@
         [dataSource]="dataSourceDB"
         [showBorders]="true"
         keyExpr="Serial"
-        height="500"
+        height="480"
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)">
-        <dxo-editing mode="batch"
+        <dxo-editing mode="row"
             [allowAdding]="true"
             [allowUpdating]="true"
             [allowDeleting]="true"
@@ -84,11 +84,11 @@
         <dxi-column dataField="Serial" caption="序號" width="50">
             <dxi-validation-rule type="required" message="序號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="品號" width="200">
+        <dxi-column dataField="ProductBasicId" caption="品號" width="200" editCellTemplate="ProductBasicIdEditCellTemplate">
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
             <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="規格">
+        <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false">
             <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="數量" dataType="number" width="50">
@@ -121,17 +121,27 @@
         </dxi-column>
         <dxi-column dataField="Remark" caption="備註"></dxi-column>
         <dxi-column dataField="ReplyRemark" caption="回復備註"></dxi-column>
+
         <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column>
+
+        <div *dxTemplate="let data of 'ProductBasicIdEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: ProductBasicList, key:'Id' } }"
+                valueExpr="Id" displayExpr="ProductNo" [searchEnabled]="true"></dx-select-box>
+        </div>
+
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
         <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-            [disabled]="buttondisabled" ></dx-button>
+            [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
+        <dx-button horizontalAlignment="right" text='清除' type='danger' icon='refresh' [useSubmitBehavior]="true"
+            (onClick)="removeBtn($event)"></dx-button>
         <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
     </div>

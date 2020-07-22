@@ -11,7 +11,7 @@
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
 (onSelectionChanged)="onSelectionChanged($event)" [rowAlternationEnabled]="true">
-    <dxo-editing mode="form"
+    <dxo-editing mode="row"
         [allowAdding]="false"
         [allowUpdating]="true"
         [allowDeleting]="true">
@@ -50,13 +50,13 @@
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
     <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" width="200"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品號" width="200">
+    <dxi-column dataField="ProductBasicId" caption="品號" width="200" editCellTemplate="ProductBasicIdEditCellTemplate">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品名">
+    <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="規格">
+    <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="SaleCount" caption="已銷貨數量" dataType="number"  width="100"></dxi-column>
@@ -76,11 +76,17 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
+    <div *dxTemplate="let data of 'ProductBasicIdEditCellTemplate'">
+        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
+            [dataSource]="{ paginate: true, store: { type: 'array', data: ProductBasicList, key:'Id' } }"
+            valueExpr="Id" displayExpr="ProductNo" [searchEnabled]="true"></dx-select-box>
+    </div>
     <div *dxTemplate="let d of 'diffCellTemplate'" >
         <ul style="list-style-type:none">
             <li *ngFor ="let item of  distinct(d.value)"> {{item.Sale.SaleNo}}</li>
         </ul>
     </div>
+
 </dx-data-grid>
 
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"

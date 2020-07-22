@@ -57,7 +57,7 @@
             [showDragIcons]="false"
         ></dxo-row-dragging>
 
-        <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
                 <dxi-item dataField="SerialNumber"></dxi-item>
                 <dxi-item dataField="ProcessId"></dxi-item>
@@ -87,7 +87,7 @@
         </dxi-column>
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="ProducingMachine" caption="機台">
+        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate">
         </dxi-column>
         <dxi-column dataField="Remarks" caption="備註">
         </dxi-column>
@@ -106,8 +106,7 @@
         </div>
 
         <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
-            <dx-number-box [value]="ProcessLeadTime" (onValueChanged)="ProcessLeadTimeValueChanged($event,data)"
-            (onInitialized)="onInitialized(ProcessLeadTime,data)" [showSpinButtons]="true"></dx-number-box>
+            <dx-number-box [value]="ProcessLeadTime" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'ProcessTimeTemplate'">
             <dx-number-box [value]="ProcessTime" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
@@ -116,7 +115,7 @@
             <dx-number-box [value]="ProcessCost" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'ProducingMachineTemplate'">
-            <dx-number-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-number-box>
+            <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
         </div>
 
     </dx-data-grid>

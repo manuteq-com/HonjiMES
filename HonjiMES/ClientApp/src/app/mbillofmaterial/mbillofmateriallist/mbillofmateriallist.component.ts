@@ -36,6 +36,11 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     postval: any;
     saveDisabled: boolean;
 
+    ProcessLeadTime: any;
+    ProcessTime: any;
+    ProcessCost: any;
+    ProducingMachine: any;
+
     constructor(private http: HttpClient) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
@@ -46,6 +51,11 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.saveDisabled = true;
 
         this.dataSourceDB_Process = [];
+
+        this.ProcessLeadTime = null;
+        this.ProcessTime = null;
+        this.ProcessCost = null;
+        this.ProducingMachine = '';
 
         const remote = this.remoteOperations;
         // this.dataSourceDB = createStore({
@@ -94,10 +104,14 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.SerialNo = this.dataSourceDB_Process.length;
         this.SerialNo++;
         e.data.SerialNumber = this.SerialNo;
-        e.data.ProcessLeadTime = 0;
-        e.data.ProcessTime = 0;
-        e.data.ProcessCost = 0;
+        e.data.ProcessLeadTime = null;
+        e.data.ProcessTime = null;
+        e.data.ProcessCost = null;
         e.data.ProducingMachine = '';
+        this.ProcessLeadTime = null;
+        this.ProcessTime = null;
+        this.ProcessCost = null;
+        this.ProducingMachine = '';
     }
     onInitialized(value, e) {
         // data.setValue(value);
@@ -161,16 +175,10 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         const today = new Date();
         this.ProcessBasicList.forEach(x => {
             if (x.Id === e.value) {
-                // this.Quantityvalmax = 999;
-                // this.Quantityval = 1;
-                // this.OriginPriceval = x.Price ? x.Price : 0;
-                // this.Priceval = x.Price ? x.Price : 0;
-                // this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
-                //     (s) => {
-                //         this.WarehouseList = s.data;
-                //         this.Warehouseval = s.data[0].Id ? s.data[0].Id : null;
-                //     }
-                // );
+                this.ProcessLeadTime = x.LeadTime;
+                this.ProcessTime = x.WorkTime;
+                this.ProcessCost = x.Cost;
+                this.ProducingMachine = x.ProducingMachine;
             }
         });
     }

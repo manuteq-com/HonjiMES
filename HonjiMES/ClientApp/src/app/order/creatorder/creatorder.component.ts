@@ -55,6 +55,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     CreateOrderNo: any;
     CreateTimeDateBoxOptions: any;
     ProductPricrErrList: any;
+    btnMod: any;
 
     constructor(private http: HttpClient) {
         this.CustomerVal = null;
@@ -187,6 +188,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
         }
     };
+    saveBtn(e) {
+        this.btnMod = 'save';
+    }
+    removeBtn(e) {
+        this.btnMod = 'remove';
+    }
     onInitNewRow(e) {
         // debugger;
         this.SerialNo++;
@@ -219,46 +226,50 @@ export class CreatorderComponent implements OnInit, OnChanges {
         return true;
     }
     async onFormSubmit(e) {
-        debugger;
+        // debugger;
         try {
-            // this.buttondisabled = true;
-            if (this.validate_before() === false) {
-                this.buttondisabled = false;
-                return;
-            }
-            this.dataGrid.instance.saveEditData();
-            this.formData = this.myform.instance.option('formData');
-            const hnull = this.dataSourceDB.find(item => item.ProductBasicId == null);
-            if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
-                notify({
-                    message: '請注意訂單內容必填的欄位',
-                    position: {
-                        my: 'center top',
-                        at: 'center top'
-                    }
-                }, 'error', 3000);
-                return false;
-            } else {
-                this.postval = new PostOrderMaster_Detail();
-                this.postval.OrderHead = this.formData as OrderHead;
-                this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
-                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-                if (sendRequest) {
-                    this.SerialNo = 0;
-                    this.dataSourceDB = [];
-                    this.dataGrid.instance.refresh();
-                    // this.myform.instance.resetValues();
-                    this.formData.CreateTime = new Date();
-                    this.formData.Customer = 0;
-                    this.formData.OrderDate = null;
-                    this.formData.ReplyDate = null;
-                    this.CustomerVal = null;
-                    e.preventDefault();
-                    this.childOuter.emit(sendRequest);
-                }
 
+            if (this.btnMod === 'save') {
+                // this.buttondisabled = true;
+                if (this.validate_before() === false) {
+                    this.buttondisabled = false;
+                    return;
+                }
+                this.dataGrid.instance.saveEditData();
+                this.formData = this.myform.instance.option('formData');
+                const hnull = this.dataSourceDB.find(item => item.ProductBasicId == null);
+                if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
+                    notify({
+                        message: '請注意訂單內容必填的欄位',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error', 3000);
+                    return false;
+                } else {
+                    this.postval = new PostOrderMaster_Detail();
+                    this.postval.OrderHead = this.formData as OrderHead;
+                    this.postval.orderDetail = this.dataSourceDB as OrderDetail[];
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/PostOrderMaster_Detail', 'POST', { values: this.postval });
+                    // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                    if (sendRequest) {
+                        this.SerialNo = 0;
+                        this.dataSourceDB = [];
+                        this.dataGrid.instance.refresh();
+                        // this.myform.instance.resetValues();
+                        this.formData.CreateTime = new Date();
+                        this.formData.Customer = 0;
+                        this.formData.OrderDate = null;
+                        this.formData.ReplyDate = null;
+                        this.CustomerVal = null;
+                        e.preventDefault();
+                        this.childOuter.emit(sendRequest);
+                    }
+                }
+            } else if (this.btnMod === 'remove') {
+                this.dataSourceDB = [];
             }
         } catch (error) {
         }
