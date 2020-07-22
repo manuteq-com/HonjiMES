@@ -51,6 +51,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     WarehouseListAll: any;
     DataType: any;
     DataId: any;
+    WarehouseVisible: boolean;
 
     constructor(private http: HttpClient) {
         this.CustomerVal = null;
@@ -65,6 +66,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.colCount = 3;
         this.url = location.origin + '/api';
         this.dataSourceDB = [];
+        this.WarehouseVisible = false;
 
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
@@ -165,6 +167,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         if (e.cancel === false) {
             this.DataType = 0;
             this.DataId = 0;
+            this.WarehouseVisible = false;
         }
     }
     onInitNewRow(e) {
@@ -176,6 +179,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.UnitQuantityval = null;
         this.UnitPriceval = null;
         this.UnitPriceAllval = null;
+        this.WarehouseVisible = true;
     }
     onEditingStart(e) {
         this.saveCheck = false;

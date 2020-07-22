@@ -29,7 +29,7 @@
         (onEditingStart)="onEditingStart($event)"
         (onCellPrepared)="onCellPrepared($event)">
 
-        <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
                 <dxi-item dataField="TempId"></dxi-item>
                 <!-- <dxi-item dataField="DataType" [visible]="false"></dxi-item>
@@ -58,11 +58,11 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="false" editCellTemplate="WarehouseEditCellTemplate">
+        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="WarehouseVisible" editCellTemplate="WarehouseEditCellTemplate">
             <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別">
+        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="!WarehouseVisible" [allowEditing]="false">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
@@ -78,10 +78,10 @@
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Price" caption="單價" dataType="number" editCellTemplate="PriceEditCellTemplate">
-            <dxi-validation-rule type="required"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
         </dxi-column>
         <dxi-column dataField="PriceAll" caption="總金額" dataType="number" editCellTemplate="PriceAllEditCellTemplate">
-            <dxi-validation-rule type="required"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
         </dxi-column>
         <dxi-column dataField="Unit" caption="單位" [width]="100"></dxi-column>
         <dxi-column dataField="UnitCount" caption="單位數量" dataType="number" editCellTemplate="UnitQuantityEditCellTemplate" [width]="100"></dxi-column>
