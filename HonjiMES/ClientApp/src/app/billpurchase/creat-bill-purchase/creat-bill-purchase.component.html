@@ -81,11 +81,7 @@
         <dxi-column dataField="DataId" caption="規格">
             <dxo-lookup [dataSource]="MaterialBasicTempList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column> -->
-        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="false" editCellTemplate="WarehouseEditCellTemplate">
-            <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-            <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別">
+        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="true" editCellTemplate="WarehouseEditCellTemplate">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
@@ -129,7 +125,7 @@
                 [dataSource]="MaterialBasicList" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(Warehouseval,data)"
+            <dx-select-box [value]="Warehouseval" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(Warehouseval,data)"
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">

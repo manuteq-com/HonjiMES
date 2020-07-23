@@ -131,7 +131,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB = [];
-        this.dataSourceDB = this.dataSource;
+        if (this.dataSource !== undefined) {
+            this.dataSourceDB = this.dataSource;
+        }
         if (this.modval === 'merge') {
             this.showdisabled = true;
             this.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
