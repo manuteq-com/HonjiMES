@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -24,6 +24,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
+    @ViewChild('myButton') myButton: DxButtonComponent;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;
@@ -62,6 +63,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Serial: number;
     Purchaselist: any;
     selectBoxOptions: any;
+    onCellPreparedLevel: number;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.CustomerVal = null;
@@ -259,6 +261,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
         this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -266,6 +269,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onEditingStart(e) {
         this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -282,7 +286,14 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {
-            this.saveCheck = true;
+            if (this.onCellPreparedLevel === 1) {
+                this.onCellPreparedLevel = 2;
+            } else if (this.onCellPreparedLevel === 2) {
+                this.onCellPreparedLevel = 3;
+                this.saveCheck = true;
+            } else if (this.onCellPreparedLevel === 3) {
+                this.myButton.instance.focus();
+            }
         }
     }
     onFormSubmit = async function (e) {

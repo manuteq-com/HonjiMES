@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
 import Swal from 'sweetalert2';
+import Buttons from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-creatprocess-control',
@@ -22,6 +23,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
+    @ViewChild('myButton') myButton: DxButtonComponent;
 
     controller: string;
     formData: any;
@@ -54,6 +56,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ProcessTime: any;
     ProcessCost: any;
     ProducingMachine: any;
+    saveCheck: boolean;
+    onCellPreparedLevel: any;
 
     constructor(private http: HttpClient, myservice: Myservice) {
         this.onReorder = this.onReorder.bind(this);
@@ -169,6 +173,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             );
         }
+        this.onCellPreparedLevel = 0;
     }
     onInitialized(value, data) {
         data.setValue(value);
@@ -229,9 +234,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         const today = new Date();
         this.ProcessBasicList.forEach(x => {
             if (x.Id === e.value) {
-                this.ProcessLeadTime = x.LeadTime;
-                this.ProcessTime = x.WorkTime;
-                this.ProcessCost = x.Cost;
+                this.ProcessLeadTime = x?.LeadTime ?? 0;
+                this.ProcessTime = x?.WorkTime ?? 0;
+                this.ProcessCost = x?.Cost ?? 0;
                 this.ProducingMachine = x.ProducingMachine;
             }
         });
@@ -252,33 +257,35 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
         // debugger;
+        this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
+
         this.SerialNo = this.dataSourceDB.length;
         this.SerialNo++;
         e.data.SerialNumber = this.SerialNo;
-        e.data.ProcessLeadTime = null;
-        e.data.ProcessTime = null;
-        e.data.ProcessCost = null;
+        e.data.ProcessLeadTime = 0;
+        e.data.ProcessTime = 0;
+        e.data.ProcessCost = 0;
         e.data.ProducingMachine = '';
-        this.ProcessLeadTime = null;
-        this.ProcessTime = null;
-        this.ProcessCost = null;
+        this.ProcessLeadTime = 0;
+        this.ProcessTime = 0;
+        this.ProcessCost = 0;
         this.ProducingMachine = '';
     }
     onEditingStart(e) {
-        // this.saveCheck = false;
-        // this.Quantityval = e.data.Quantity;
-        // this.OriginPriceval = e.data.OriginPrice;
-        // this.Priceval = e.data.Price;
-        // this.Warehouseval = e.data.WarehouseId;
-        // this.GetData('/Warehouses/GetWarehouseByProductBasic/' + e.data.DataId).subscribe(
-        //     (s) => {
-        //         this.WarehouseList = s.data;
-        //     }
-        // );
+        this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {
-            // this.saveCheck = true;
+            if (this.onCellPreparedLevel === 1) {
+                this.onCellPreparedLevel = 2;
+            } else if (this.onCellPreparedLevel === 2) {
+                this.onCellPreparedLevel = 3;
+                this.saveCheck = true;
+            } else if (this.onCellPreparedLevel === 3) {
+                this.myButton.instance.focus();
+            }
         }
     }
     DeleteOnClick(e) {
@@ -297,6 +304,10 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         }
+        if (!this.saveCheck) {
+            return;
+        }
+        this.dataGrid2.instance.saveEditData();
         if (this.dataSourceDB.length === 0) {
             notify({
                 message: '製程內容不能為空!',
@@ -307,7 +318,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }, 'error', 3000);
             return false;
         }
-        this.dataGrid2.instance.saveEditData();
         this.postval = {
             WorkOrderHead: {
                 Id: this.formData.WorkOrderHeadId,

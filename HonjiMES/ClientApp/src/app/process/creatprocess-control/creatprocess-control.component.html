@@ -121,7 +121,7 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        <dx-button #myButton horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="saveDisabled" [visible]="modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除' type='danger' icon='trash' [useSubmitBehavior]="true"
             class="editbtn" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -22,6 +22,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('myButton') myButton: DxButtonComponent;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;
@@ -52,6 +53,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     DataType: any;
     DataId: any;
     Warehouseval: any;
+    onCellPreparedLevel: number;
 
     constructor(private http: HttpClient) {
         this.CustomerVal = null;
@@ -188,6 +190,8 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
         this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
+
         this.WarehouseList = null;
         this.Quantityval = null;
         this.Priceval = null;
@@ -198,10 +202,18 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     onEditingStart(e) {
         this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {
-            this.saveCheck = true;
+            if (this.onCellPreparedLevel === 1) {
+                this.onCellPreparedLevel = 2;
+            } else if (this.onCellPreparedLevel === 2) {
+                this.onCellPreparedLevel = 3;
+                this.saveCheck = true;
+            } else if (this.onCellPreparedLevel === 3) {
+                this.myButton.instance.focus();
+            }
         }
     }
     showMessage(data) {
