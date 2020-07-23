@@ -56,6 +56,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ProcessTime: any;
     ProcessCost: any;
     ProducingMachine: any;
+    Remark: any;
+    DrawNo: any;
+    Manpower: any;
     saveCheck: boolean;
     onCellPreparedLevel: any;
 
@@ -238,6 +241,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.ProcessTime = x?.WorkTime ?? 0;
                 this.ProcessCost = x?.Cost ?? 0;
                 this.ProducingMachine = x.ProducingMachine;
+                this.Remark = x.Remark;
+                this.DrawNo = x.DrawNo;
+                this.Manpower = x?.Manpower ?? 1;
             }
         });
     }
@@ -267,14 +273,27 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         e.data.ProcessTime = 0;
         e.data.ProcessCost = 0;
         e.data.ProducingMachine = '';
+        e.data.Remark = '';
+        e.data.DrawNo = '';
+        e.data.Manpower = 1;
         this.ProcessLeadTime = 0;
         this.ProcessTime = 0;
         this.ProcessCost = 0;
         this.ProducingMachine = '';
+        this.Remark = '';
+        this.DrawNo = '';
+        this.Manpower = 0;
     }
     onEditingStart(e) {
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
+        this.ProcessLeadTime = e.data.ProcessLeadTime;
+        this.ProcessTime = e.data.ProcessTime;
+        this.ProcessCost = e.data.ProcessCost;
+        this.ProducingMachine = e.data.ProducingMachine;
+        this.Remark = e.data.Remark;
+        this.DrawNo = e.data.DrawNo;
+        this.Manpower = e.data.Manpower;
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {

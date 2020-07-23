@@ -30,6 +30,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
+    ProcessesList: any;
 
     itemval1: string;
     itemval3: string;
@@ -40,6 +41,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     itemval7: string;
     itemval8: string;
     itemval9: string;
+    ProcessEditorOptions: any;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -47,6 +49,24 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
+
+        this.GetData('/Processes/GetProcesses').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(element => {
+                        element.Name = element.Code + '_' + element.Name;
+                    });
+                    this.ProcessEditorOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } },
+                        searchEnabled: true,
+                        // items: this.MaterialList,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        // onValueChanged: this.ProcessEditorOptions.bind(this)
+                    };
+                }
+            }
+        );
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>('/api' + apiUrl);
@@ -58,20 +78,50 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        debugger;
                         this.itemval1 = '　　　　　　　工單號：' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　　　品號：' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　　　名稱：' + s.data.WorkOrderHead.DataName;
-                        this.itemval4 = '　　　　　　　　機號：' + s.data.WorkOrderHead.MachineNo;
+                        this.itemval4 = '　　　　　　　　機號：' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         this.itemval5 = '　預計／實際完工數量：' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
-                        this.itemval6 = '　　　　　預計開工日：' + s.data.WorkOrderHead?.DueStartTime ?? '';
-                        this.itemval7 = '　　　　　預計完工日：' + s.data.WorkOrderHead?.DueEndTime ?? '';
-                        this.itemval8 = '　　　　　實際開工日：' + s.data.WorkOrderHead?.ActualStartTime ?? '';
-                        this.itemval9 = '　　　　　實際完工日：' + s.data.WorkOrderHead?.ActualEndTime ?? '';
+                        this.itemval6 = '　　　　　預計開工日：' + (s.data.WorkOrderHead?.DueStartTime ?? '');
+                        this.itemval7 = '　　　　　預計完工日：' + (s.data.WorkOrderHead?.DueEndTime ?? '');
+                        this.itemval8 = '　　　　　實際開工日：' + (s.data.WorkOrderHead?.ActualStartTime ?? '');
+                        this.itemval9 = '　　　　　實際完工日：' + (s.data.WorkOrderHead?.ActualEndTime ?? '');
 
+                        let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
-                            if (element.Status === 1) {
+                            if (element.Status === 1 && findProcess === false) {
                                 this.formData = element;
+                                findProcess = true;
+                                // ActualEndTime: null
+                                // ActualStartTime: null
+                                // Count: 40
+                                // CreateTime: "2020-07-21T12:04:09"
+                                // CreateUser: 1
+                                // DeleteFlag: 0
+                                // DrawNo: null
+                                // DueEndTime: null
+                                // DueStartTime: null
+                                // Id: 99
+                                // Manpower: null
+                                // Process: null
+                                // ProcessCost: 111
+                                // ProcessId: 6
+                                // ProcessLeadTime: 1
+                                // ProcessName: "銑六面"
+                                // ProcessNo: "AM6"
+                                // ProcessTime: 11
+                                // ProducingMachine: "A3"
+                                // Purchase: null
+                                // PurchaseId: null
+                                // ReCount: null
+                                // Remarks: null
+                                // SerialNumber: 1
+                                // Status: 1
+                                // TotalTime: null
+                                // Type: "0"
+                                // UpdateTime: "2020-07-21T12:04:15"
+                                // UpdateUser: null
                             }
                         });
                         // this.dataSourceDB = s.data.WorkOrderDetail;

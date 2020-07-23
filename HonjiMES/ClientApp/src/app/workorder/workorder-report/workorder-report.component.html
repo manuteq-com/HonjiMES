@@ -16,7 +16,7 @@
         <dxi-item dataField="SerialNumber">
             <dxo-label text="製程序號"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProcessId">
+        <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions">
             <dxo-label text="製程名稱"></dxo-label>
         </dxi-item>
         <dxi-item dataField="DrawNo">
