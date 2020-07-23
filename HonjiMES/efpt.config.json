@@ -14,6 +14,10 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
+         "Name": "all_stock_log"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "bill_of_material"
       },
       {

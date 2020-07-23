@@ -40,6 +40,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     ProcessTime: any;
     ProcessCost: any;
     ProducingMachine: any;
+    Remarks: any;
+    DrawNo: any;
+    Manpower: any;
 
     constructor(private http: HttpClient) {
         this.onReorder = this.onReorder.bind(this);
@@ -108,10 +111,17 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         e.data.ProcessTime = null;
         e.data.ProcessCost = null;
         e.data.ProducingMachine = '';
+        e.data.Remark = '';
+        e.data.DrawNo = '';
+        e.data.Manpower = 1;
+
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
         this.ProcessCost = null;
         this.ProducingMachine = '';
+        this.Remarks = '';
+        this.DrawNo = '';
+        this.Manpower = 0;
     }
     onInitialized(value, e) {
         // data.setValue(value);
@@ -179,6 +189,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
                 this.ProcessTime = x.WorkTime;
                 this.ProcessCost = x.Cost;
                 this.ProducingMachine = x.ProducingMachine;
+                this.Remarks = x.Remark;
+                this.DrawNo = x.DrawNo;
+                this.Manpower = x?.Manpower ?? 1;
             }
         });
     }

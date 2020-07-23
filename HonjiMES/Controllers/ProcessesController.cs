@@ -473,8 +473,15 @@ namespace HonjiMES.Controllers
                         ProcessTime = item.ProcessTime,
                         ProcessCost = item.ProcessCost,
                         Count = WorkOrderData.WorkOrderHead.Count,
+                        // PurchaseId
+                        DrawNo = item.DrawNo,
+                        Manpower = item.Manpower,
                         ProducingMachine = item.ProducingMachine,
                         Remarks = item.Remarks,
+                        DueStartTime = item.DueStartTime,
+                        DueEndTime = item.DueEndTime,
+                        ActualStartTime = item.ActualStartTime,
+                        ActualEndTime = item.ActualEndTime,
                         CreateUser = 1
                     };
                     nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);

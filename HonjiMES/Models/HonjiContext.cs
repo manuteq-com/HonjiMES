@@ -7,6 +7,7 @@ namespace HonjiMES.Models
 {
     public partial class HonjiContext : DbContext
     {
+        public virtual DbSet<AllStockLog> AllStockLogs { get; set; }
         public virtual DbSet<BillOfMaterial> BillOfMaterials { get; set; }
         public virtual DbSet<BillOfMaterialVer> BillOfMaterialVers { get; set; }
         public virtual DbSet<BillofPurchase> BillofPurchases { get; set; }
@@ -62,6 +63,40 @@ namespace HonjiMES.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AllStockLog>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("all_stock_log");
+
+                entity.Property(e => e.AdjustNo)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'0000-00-00 00:00:00'");
+
+                entity.Property(e => e.LinkOrder)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Message)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.NameLog)
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
+
+                entity.Property(e => e.Reason)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Unit)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+            });
+
             modelBuilder.Entity<BillOfMaterial>(entity =>
             {
                 entity.HasComment("產品組成表");
@@ -594,6 +629,11 @@ namespace HonjiMES.Models
                     .HasName("process_id");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Manpower).HasComment("所需人力");
 

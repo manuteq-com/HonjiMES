@@ -36,6 +36,8 @@ namespace HonjiMES.Models
         public decimal ProcessTime { get; set; }
         [Column("process_cost", TypeName = "decimal(10,2)")]
         public decimal ProcessCost { get; set; }
+        [Column("draw_no", TypeName = "varchar(50)")]
+        public string DrawNo { get; set; }
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
         [Column("producing_machine", TypeName = "varchar(50)")]

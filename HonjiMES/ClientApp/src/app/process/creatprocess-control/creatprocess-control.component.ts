@@ -56,7 +56,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ProcessTime: any;
     ProcessCost: any;
     ProducingMachine: any;
-    Remark: any;
+    Remarks: any;
     DrawNo: any;
     Manpower: any;
     saveCheck: boolean;
@@ -241,7 +241,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.ProcessTime = x?.WorkTime ?? 0;
                 this.ProcessCost = x?.Cost ?? 0;
                 this.ProducingMachine = x.ProducingMachine;
-                this.Remark = x.Remark;
+                this.Remarks = x.Remark;
                 this.DrawNo = x.DrawNo;
                 this.Manpower = x?.Manpower ?? 1;
             }
@@ -276,11 +276,16 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         e.data.Remark = '';
         e.data.DrawNo = '';
         e.data.Manpower = 1;
+        e.data.DueStartTime = new Date();
+        e.data.DueEndTime = new Date();
+        e.data.ActualStartTime = new Date();
+        e.data.ActualEndTime = new Date();
+
         this.ProcessLeadTime = 0;
         this.ProcessTime = 0;
         this.ProcessCost = 0;
         this.ProducingMachine = '';
-        this.Remark = '';
+        this.Remarks = '';
         this.DrawNo = '';
         this.Manpower = 0;
     }
@@ -291,7 +296,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.ProcessTime = e.data.ProcessTime;
         this.ProcessCost = e.data.ProcessCost;
         this.ProducingMachine = e.data.ProducingMachine;
-        this.Remark = e.data.Remark;
+        this.Remarks = e.data.Remarks;
         this.DrawNo = e.data.DrawNo;
         this.Manpower = e.data.Manpower;
     }

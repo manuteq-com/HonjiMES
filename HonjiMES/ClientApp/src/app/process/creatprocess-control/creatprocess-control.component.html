@@ -90,7 +90,7 @@
         </dxi-column>
         <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate">
         </dxi-column>
-        <dxi-column dataField="Remark" caption="備註" editCellTemplate="RemarkTemplate">
+        <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
         </dxi-column>
         <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate">
         </dxi-column>
@@ -127,8 +127,8 @@
         <div *dxTemplate="let data of 'ProducingMachineTemplate'">
             <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
         </div>
-        <div *dxTemplate="let data of 'RemarkTemplate'">
-            <dx-text-box [value]="Remark" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
+        <div *dxTemplate="let data of 'RemarksTemplate'">
+            <dx-text-box [value]="Remarks" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
         </div>
         <div *dxTemplate="let data of 'DrawNoTemplate'">
             <dx-text-box [value]="DrawNo" (onValueChanged)="data.setValue($event.value)"></dx-text-box>

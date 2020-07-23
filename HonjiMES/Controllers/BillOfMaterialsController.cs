@@ -688,6 +688,7 @@ namespace HonjiMES.Controllers
                         ProcessLeadTime = item.ProcessLeadTime,
                         ProcessTime = item.ProcessTime,
                         ProcessCost = item.ProcessCost,
+                        DrawNo = item.DrawNo,
                         Manpower = item.Manpower,
                         ProducingMachine = item.ProducingMachine,
                         Status = item.Status,
