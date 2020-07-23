@@ -31,6 +31,8 @@ export class OerdrdetailListComponent implements OnInit {
     allMode: string;
     checkBoxesMode: string;
     disabledValues: number[];
+    dataSource: any;
+
     constructor(private http: HttpClient) {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
@@ -49,11 +51,64 @@ export class OerdrdetailListComponent implements OnInit {
             remove: (key) => SendService.sendRequest(http, this.controller + '/DeleteOrderDetail/' + key, 'DELETE')
         });
     }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
+    }
     ngOnInit() {
     }
     to_purchaseClick(e) {
         this.topurchasekey = null;
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
+
+        let serial = 1;
+        let tempdataSource = [];
+        this.topurchasekey.forEach((x, index) => {
+            this.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        let productId = 1;
+                        let productQuantity = 1;
+                        s.data.forEach(element => {
+                            if (element.MaterialBasicId == null) {
+                                if (element.Pid === productId) {
+                                    productId = element.Id;
+                                    productQuantity = productQuantity * element.Quantity;
+                                } else {
+                                    productId = element.Id;
+                                    productQuantity = element.Quantity;
+                                }
+                            }
+                            let tempQuantity = element.Quantity;
+                            if (element.Pid !== 0 && element.Pid === productId) {
+                                tempQuantity = element.Quantity * productQuantity;
+                            }
+
+                            const index = tempdataSource.findIndex(z => z.DataId === element.MaterialBasicId);
+                            if (~index) {
+                                tempdataSource[index].Quantity += x.Quantity * tempQuantity;
+                                tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
+                            } else if (element.MaterialBasicId != null) {
+                                tempdataSource.push({
+                                    Serial: serial,
+                                    DataId: element.MaterialBasicId,
+                                    WarehouseId: null,
+                                    Quantity: x.Quantity * tempQuantity,
+                                    OriginPrice: element.MaterialPrice,
+                                    Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
+                                    DeliveryTime: new Date()
+                                });
+                            }
+                        });
+                        serial++;
+                    }
+                    if (index === this.topurchasekey.length - 1) {
+                        this.dataSource = [];
+                        this.dataSource = tempdataSource;
+                    }
+                }
+            );
+        });
+
         if (this.topurchasekey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,

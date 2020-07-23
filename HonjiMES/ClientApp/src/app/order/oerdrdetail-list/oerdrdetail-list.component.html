@@ -92,7 +92,7 @@
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="popupVisiblePurchase">
     <div *dxTemplate="let data of 'content'">
-        <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [modval]="mod"></app-creat-purchase>
+        <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"

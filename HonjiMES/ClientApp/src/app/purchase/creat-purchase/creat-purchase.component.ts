@@ -19,9 +19,11 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
+    @Input() dataSource: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;
@@ -129,6 +131,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB = [];
+        this.dataSourceDB = this.dataSource;
         if (this.modval === 'merge') {
             this.showdisabled = true;
             this.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
@@ -148,52 +151,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             );
         } else {
             this.showdisabled = false;
-        }
-        if (this.itemkeyval != null) {
-            this.Serial = 1;
-            this.itemkeyval.forEach(x => {
-                this.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
-                    (s) => {
-                        debugger;
-                        if (s.success) {
-                            let productId = 1;
-                            let productQuantity = 1;
-                            s.data.forEach(element => {
-                                if (element.MaterialBasicId == null) {
-                                    if (element.Pid === productId) {
-                                        productId = element.Id;
-                                        productQuantity = productQuantity * element.Quantity;
-                                    } else {
-                                        productId = element.Id;
-                                        productQuantity = element.Quantity;
-                                    }
-                                }
-                                let tempQuantity = element.Quantity;
-                                if (element.Pid !== 0 && element.Pid === productId) {
-                                    tempQuantity = element.Quantity * productQuantity;
-                                }
-
-                                const index = this.dataSourceDB.findIndex(z => z.DataId === element.MaterialBasicId);
-                                if (~index) {
-                                    this.dataSourceDB[index].Quantity += x.Quantity * tempQuantity;
-                                    this.dataSourceDB[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
-                                } else if (element.MaterialBasicId != null) {
-                                    this.dataSourceDB.push({
-                                        Serial: this.Serial,
-                                        DataId: element.MaterialBasicId,
-                                        WarehouseId: null,
-                                        Quantity: x.Quantity * tempQuantity,
-                                        OriginPrice: element.MaterialPrice,
-                                        Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
-                                        DeliveryTime: new Date()
-                                    });
-                                }
-                            });
-                            this.Serial++;
-                        }
-                    }
-                );
-            });
         }
         this.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
