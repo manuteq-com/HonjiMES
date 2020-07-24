@@ -40,6 +40,7 @@ export class WorkorderListComponent implements OnInit {
         this.mod = 'report';
     }
     tdclick(e) {
+        debugger;
         // notify({
         //     message: e.ProductNo,
         //     position: {
