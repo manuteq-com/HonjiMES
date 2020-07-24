@@ -24,9 +24,27 @@ namespace HonjiMES.Controllers
 
         // GET: api/MaterialBasics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasics()
+        public async Task<ActionResult<IEnumerable<MaterialBasicData>>> GetMaterialBasics()
         {
-            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).ToListAsync();
+             _context.ChangeTracker.LazyLoadingEnabled = true;
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Select(x => new MaterialBasicData
+            {
+                TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+                Id = x.Id,
+                MaterialNo = x.MaterialNo,
+                Name = x.Name,
+                Specification = x.Specification,
+                Property = x.Property,
+                Price = x.Price,
+                Unit = x.Unit,
+                Supplier = x.Supplier,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                DeleteFlag = x.DeleteFlag
+            }).ToListAsync();
+
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
 
