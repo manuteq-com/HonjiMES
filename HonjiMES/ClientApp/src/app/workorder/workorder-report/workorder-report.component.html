@@ -13,48 +13,48 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="SerialNumber">
+        <dxi-item dataField="SerialNumber" [disabled]="true">
             <dxo-label text="製程序號"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions">
+        <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions" [disabled]="true">
             <dxo-label text="製程名稱"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="DrawNo">
+        <dxi-item dataField="DrawNo" [disabled]="true">
             <dxo-label text="圖號"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Manpower">
+        <dxi-item dataField="Manpower" [disabled]="true">
             <dxo-label text="所需人力"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Remarks">
+        <dxi-item dataField="Remarks" [disabled]="true">
             <dxo-label text="備註"></dxo-label>
         </dxi-item>
 
-        <dxi-item dataField="ProcessLeadTime">
+        <dxi-item dataField="ProcessLeadTime" [disabled]="true">
             <dxo-label text="前置時間(分)"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProcessTime">
+        <dxi-item dataField="ProcessTime" [disabled]="true">
             <dxo-label text="標準工時(分)"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProcessCost">
+        <dxi-item dataField="ProcessCost" [disabled]="true">
             <dxo-label text="成本"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ProducingMachine">
             <dxo-label text="機台"></dxo-label>
         </dxi-item>
 
-        <dxi-item dataField="DueStartTime">
+        <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="預計開工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="DueEndTime">
+        <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="實際開工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ActualStartTime">
+        <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="預計完工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ActualEndTime">
+        <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="實際完工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Count">
+        <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ReCount">
