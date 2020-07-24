@@ -81,6 +81,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.saveDisabled = true;
         this.modCheck = false;
         this.modName = 'new';
+        this.saveCheck = true;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
