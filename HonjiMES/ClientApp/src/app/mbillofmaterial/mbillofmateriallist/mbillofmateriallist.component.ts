@@ -185,9 +185,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         const today = new Date();
         this.ProcessBasicList.forEach(x => {
             if (x.Id === e.value) {
-                this.ProcessLeadTime = x.LeadTime;
-                this.ProcessTime = x.WorkTime;
-                this.ProcessCost = x.Cost;
+                this.ProcessLeadTime = x?.LeadTime ?? 0;
+                this.ProcessTime = x?.WorkTime ?? 0;
+                this.ProcessCost = x?.Cost ?? 0;
                 this.ProducingMachine = x.ProducingMachine;
                 this.Remarks = x.Remark;
                 this.DrawNo = x.DrawNo;
