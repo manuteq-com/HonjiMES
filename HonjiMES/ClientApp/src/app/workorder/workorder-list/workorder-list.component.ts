@@ -42,6 +42,8 @@ export class WorkorderListComponent implements OnInit {
     tdclick(e) {
         // debugger;
 
+
+        
         // notify({
         //     message: e.ProductNo,
         //     position: {
