@@ -5,6 +5,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
+import { workOrderReportData } from 'src/app/model/viewmodels';
 
 @Component({
   selector: 'app-workorder-report',
@@ -15,6 +16,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
+    @Input() serialkeyval: any;
     @Input() modval: any;
     buttondisabled = false;
     CustomerVal: any;
@@ -90,54 +92,21 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
 
                         let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
-                            if (element.Status === 1 && findProcess === false) {
+                            if (element.SerialNumber === this.serialkeyval && findProcess === false) {
                                 this.formData = element;
+                                this.formData.ReCount = element.Count;
                                 findProcess = true;
-                                // ActualEndTime: null
-                                // ActualStartTime: null
-                                // Count: 40
-                                // CreateTime: "2020-07-21T12:04:09"
-                                // CreateUser: 1
-                                // DeleteFlag: 0
-                                // DrawNo: null
-                                // DueEndTime: null
-                                // DueStartTime: null
-                                // Id: 99
-                                // Manpower: null
-                                // Process: null
-                                // ProcessCost: 111
-                                // ProcessId: 6
-                                // ProcessLeadTime: 1
-                                // ProcessName: "銑六面"
-                                // ProcessNo: "AM6"
-                                // ProcessTime: 11
-                                // ProducingMachine: "A3"
-                                // Purchase: null
-                                // PurchaseId: null
-                                // ReCount: null
-                                // Remarks: null
-                                // SerialNumber: 1
-                                // Status: 1
-                                // TotalTime: null
-                                // Type: "0"
-                                // UpdateTime: "2020-07-21T12:04:15"
-                                // UpdateUser: null
+                                if (element.Status === 1) {
+                                    this.buttondisabled = false;
+                                } else if (element.Status === 2) {
+                                    this.buttondisabled = true;
+                                }
                             }
                         });
-                        // this.dataSourceDB = s.data.WorkOrderDetail;
-                        // this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
-                        // this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
-                        // this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
-                        // this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
-                        // this.formData.Count = s.data.WorkOrderHead.Count;
-                        // this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
-                        // this.formData.Remarks = s.data[0].Remarks;
-
                     }
                 }
             );
         }
-
         // this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
         // this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
         // this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
@@ -155,6 +124,12 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     // UnitPriceValueChanged(e) {
     //     this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
     // }
+    onStartClick(e) {
+        this.modval = 'start';
+    }
+    onEndClick(e) {
+        this.modval = 'end';
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -170,30 +145,40 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         return true;
     }
     async onFormSubmit(e) {
-        // this.buttondisabled = true;
-        // if (this.validate_before() === false) {
-        //     this.buttondisabled = false;
-        //     return;
-        // }
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
         // this.formData = this.myform.instance.option('formData');
         // this.postval = this.formData;
-        // this.postval.BillofPurchaseDetailId = this.itemkeyval;
-        // debugger;
-        // try {
-        //     // tslint:disable-next-line: max-line-length
-        //     const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckIn', 'POST', { values: this.postval });
-        //     // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-        //     debugger;
-        //     if (sendRequest) {
-        //         this.myform.instance.resetValues();
-        //         this.CustomerVal = null;
-        //         e.preventDefault();
-        //         this.childOuter.emit(true);
-        //     }
-        // } catch (error) {
+        // tslint:disable-next-line: new-parens
+        this.postval = new workOrderReportData;
+        this.postval.WorkOrderID = this.itemkeyval;
+        this.postval.WorkOrderSerial = this.serialkeyval;
+        this.postval.ReCount = this.formData.ReCount;
+        try {
+            if (this.modval === 'start') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportStart', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'end') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            }
+        } catch (error) {
 
-        // }
-        // this.buttondisabled = false;
-
+        }
+        this.buttondisabled = false;
     }
+    viewRefresh(e, result) {
+        if (result) {
+            this.myform.instance.resetValues();
+            this.CustomerVal = null;
+            e.preventDefault();
+            this.childOuter.emit(true);
+        }
+    }
+
 }

@@ -422,6 +422,13 @@ namespace HonjiMES.Models
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
     
+    public class WorkOrderReportData
+    { 
+        public int WorkOrderID { get; set; }
+        public int WorkOrderSerial { get; set; }
+        public int ReCount { get; set; }
+    }
+    
     /// <summary>
     /// 製成進度
     /// </summary>
@@ -497,6 +504,7 @@ namespace HonjiMES.Models
         public string value0 { get; set; }
         public string value1 { get; set; }
         public string value2 { get; set; }
+        public int value3 { get; set; }
     }
     public class BillOfMaterialVerLv : BillOfMaterialVer
     {

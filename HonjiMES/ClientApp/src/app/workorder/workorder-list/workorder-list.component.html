@@ -41,7 +41,7 @@
             <td nzLeft>{{data.MachineNo}}</td>
             <td nzLeft>{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td *ngIf="col.show" (click)="tdclick(data)">
+                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)">
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
                             {{data[col.key]?.value0}}
@@ -69,7 +69,7 @@
 <dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="800"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"> </app-workorder-report>
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [modval]="mod"> </app-workorder-report>
     </div>
 </dx-popup>
 <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"

@@ -14,6 +14,7 @@ namespace HonjiMES.Models
             BillofPurchaseDetails = new HashSet<BillofPurchaseDetail>();
             PurchaseDetails = new HashSet<PurchaseDetail>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            WorkOrderReportLogs = new HashSet<WorkOrderReportLog>();
         }
 
         [Key]
@@ -51,5 +52,7 @@ namespace HonjiMES.Models
         public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
         [InverseProperty(nameof(WorkOrderDetail.Purchase))]
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        [InverseProperty(nameof(WorkOrderReportLog.Purchase))]
+        public virtual ICollection<WorkOrderReportLog> WorkOrderReportLogs { get; set; }
     }
 }

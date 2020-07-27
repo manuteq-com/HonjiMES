@@ -59,6 +59,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     Remarks: any;
     DrawNo: any;
     Manpower: any;
+    DueStartTime: any;
+    DueEndTime: any;
     saveCheck: boolean;
     onCellPreparedLevel: any;
 
@@ -87,6 +89,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.ProcessTime = null;
         this.ProcessCost = null;
         this.ProducingMachine = '';
+        this.DueStartTime = new Date();
+        this.DueEndTime = new Date();
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
@@ -179,6 +183,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
         this.onCellPreparedLevel = 0;
     }
+    allowEdit(e) {
+        if (e.row.data.Status > 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     onInitialized(value, data) {
         data.setValue(value);
     }
@@ -225,6 +236,10 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
                     (s) => {
                         if (s.success) {
+                            s.data.forEach(e => {
+                                e.DueStartTime = new Date();
+                                e.DueEndTime = new Date();
+                            });
                             this.dataSourceDB = s.data;
                         }
                     }
@@ -279,8 +294,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         e.data.Manpower = 1;
         e.data.DueStartTime = new Date();
         e.data.DueEndTime = new Date();
-        e.data.ActualStartTime = new Date();
-        e.data.ActualEndTime = new Date();
+        // e.data.ActualStartTime = new Date();
+        // e.data.ActualEndTime = new Date();
 
         this.ProcessLeadTime = 0;
         this.ProcessTime = 0;
@@ -289,10 +304,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.Remarks = '';
         this.DrawNo = '';
         this.Manpower = 0;
+        this.DueStartTime = new Date();
+        this.DueEndTime = new Date();
     }
     onEditingStart(e) {
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
+
         this.ProcessLeadTime = e.data.ProcessLeadTime;
         this.ProcessTime = e.data.ProcessTime;
         this.ProcessCost = e.data.ProcessCost;
@@ -300,6 +318,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.Remarks = e.data.Remarks;
         this.DrawNo = e.data.DrawNo;
         this.Manpower = e.data.Manpower;
+        this.DueStartTime = e.data.DueStartTime;
+        this.DueEndTime = e.data.DueEndTime;
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {

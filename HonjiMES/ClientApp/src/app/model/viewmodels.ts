@@ -157,3 +157,9 @@ export class BillofPurchaseDetail {
     OriginPrice: number;
     Price: number;
 }
+
+export class workOrderReportData {
+    WorkOrderID: number;
+    WorkOrderSerial: number;
+    ReCount: number;
+}

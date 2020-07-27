@@ -13,6 +13,7 @@ export class WorkorderListComponent implements OnInit {
     dataSourceDB: any = {};
     creatpopupVisible: any;
     itemkey: number;
+    serialkey: number;
     mod: string;
     loadingVisible = false;
     constructor(public app: AppComponent) {
@@ -35,22 +36,22 @@ export class WorkorderListComponent implements OnInit {
     }
     trclick(e) {
         // debugger;
-        this.creatpopupVisible = true;
-        this.itemkey = e.Key;
-        this.mod = 'report';
+        // this.creatpopupVisible = true;
+        // this.itemkey = e.Key;
+        // this.mod = 'report';
     }
-    tdclick(e) {
-        // debugger;
-
-
-        
-        // notify({
-        //     message: e.ProductNo,
-        //     position: {
-        //         my: 'center top',
-        //         at: 'center top'
-        //     }
-        // }, 'error', 3000);
+    tdclick(e, colData) {
+        this.itemkey = e.Key;
+        this.serialkey = Number(colData.key.substring(4)) + 1;
+        this.mod = 'report';
+        this.creatpopupVisible = true;
+    }
+    getBlue2Class(data) {
+        if (data === 2) {
+            return 'process_start';
+        } else if (data === 3) {
+            return 'process_end';
+        }
     }
     creatdata() {
         this.creatpopupVisible = true;
@@ -62,7 +63,7 @@ export class WorkorderListComponent implements OnInit {
         this.itemkey = null;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;

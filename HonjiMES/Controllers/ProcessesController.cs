@@ -157,14 +157,16 @@ namespace HonjiMES.Controllers
 
             var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
                 var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
                 // if (NoCount <= NoLast) {
-                    NoCount = NoLast + 1;
+                NoCount = NoLast + 1;
                 // }
             }
-            var WorkOrderHeadData = new WorkOrderHead{
+            var WorkOrderHeadData = new WorkOrderHead
+            {
                 CreateTime = dt,
                 WorkOrderNo = key + WorkOrderNo + NoCount.ToString("000")
             };
@@ -179,17 +181,19 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetWorkOrderNumberByInfo(CreateNumberInfo CreateNoData)
         {
-            if (CreateNoData != null) {
+            if (CreateNoData != null)
+            {
                 var key = "WO";
                 var WorkOrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
-                
+
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
+                if (NoCount != 1)
+                {
                     var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
                     var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
                     // if (NoCount <= NoLast) {
-                        NoCount = NoLast + 1;
+                    NoCount = NoLast + 1;
                     // }
                 }
                 CreateNoData.CreateNumber = key + WorkOrderNo + NoCount.ToString("000");
@@ -236,25 +240,33 @@ namespace HonjiMES.Controllers
             try
             {
                 var WorkOrderHeads = new List<WorkOrderHead>();
-                if (id == 0) {
+                if (id == 0)
+                {
                     WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
-                } else {
+                }
+                else
+                {
                     WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 }
-                
+
                 foreach (var item in WorkOrderHeads)
                 {
                     var BasicDataNo = "";
                     var BasicDataName = "";
-                    if (item.DataType == 0) {
+                    if (item.DataType == 0)
+                    {
                         var BasicData = _context.MaterialBasics.Find(item.DataId);
                         BasicDataNo = BasicData.MaterialNo;
                         BasicDataName = BasicData.Name;
-                    } else if (item.DataType == 1) {
+                    }
+                    else if (item.DataType == 1)
+                    {
                         var BasicData = _context.ProductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.ProductNo;
                         BasicDataName = BasicData.Name;
-                    } else if (item.DataType == 2) {
+                    }
+                    else if (item.DataType == 2)
+                    {
                         var BasicData = _context.WiproductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.WiproductNo;
                         BasicDataName = BasicData.Name;
@@ -274,7 +286,7 @@ namespace HonjiMES.Controllers
                     var i = 0;
                     foreach (var typeitem in ptype.GetProperties())
                     {
-                        var gitem = item.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToList();
+                        var gitem = item.WorkOrderDetails.Where(x => x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
                         if (gitem.Count > i)
                         {
                             if (typeitem.Name == "Temp" + i.ToString())
@@ -283,7 +295,8 @@ namespace HonjiMES.Controllers
                                 {
                                     value0 = '[' + gitem[i].ProcessNo + ']' + gitem[i].ProcessName,
                                     value1 = gitem[i].ProcessTime.ToString(),
-                                    value2 = gitem[i].ProducingMachine
+                                    value2 = gitem[i].ProducingMachine,
+                                    value3 = gitem[i].Status
                                 };
                                 typeitem.SetValue(nProcessesData, nTempString);
                                 foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + i.ToString()))
@@ -317,8 +330,9 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderId(int id)
         {
             var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
-            var WorkOrderData = new WorkOrderData{
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToListAsync();
+            var WorkOrderData = new WorkOrderData
+            {
                 WorkOrderHead = WorkOrderHeads,
                 WorkOrderDetail = WorkOrderDetails
             };
@@ -345,11 +359,12 @@ namespace HonjiMES.Controllers
                 var WorkOrderNo = WorkOrderData.WorkOrderHead.CreateTime.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
+                if (NoCount != 1)
+                {
                     var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
                     var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
                     // if (NoCount <= NoLast) {
-                        NoCount = NoLast + 1;
+                    NoCount = NoLast + 1;
                     // }
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
@@ -358,14 +373,19 @@ namespace HonjiMES.Controllers
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
-                if (DataType == 0) {
+                if (DataType == 0)
+                {
 
-                } else if (DataType == 1) {
+                }
+                else if (DataType == 1)
+                {
                     var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.ProductNo;
                     BasicDataName = BasicData.Name;
-                } else if (DataType == 2) {
+                }
+                else if (DataType == 2)
+                {
 
                 }
                 var nWorkOrderHead = new WorkOrderHead
@@ -385,7 +405,7 @@ namespace HonjiMES.Controllers
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
                     var nWorkOrderDetail = new WorkOrderDetail
                     {
-                        SerialNumber = item.SerialNumber ,
+                        SerialNumber = item.SerialNumber,
                         ProcessId = item.ProcessId,
                         ProcessNo = ProcessInfo.Code,
                         ProcessName = ProcessInfo.Name,
@@ -409,11 +429,13 @@ namespace HonjiMES.Controllers
                 _context.WorkOrderHeads.Add(nWorkOrderHead);
                 await _context.SaveChangesAsync();
                 return Ok(MyFun.APIResponseOK("OK"));
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("工單新增失敗!"));
             }
         }
- 
+
         /// <summary>
         /// 更新工單資訊
         /// </summary>
@@ -426,29 +448,69 @@ namespace HonjiMES.Controllers
             if (id != 0)
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
+                var updataCheck = new List<int>();
                 var OWorkOrderHeads = _context.WorkOrderHeads.Find(id);
-                foreach (var item in OWorkOrderHeads.WorkOrderDetails)
-                {
-                    item.DeleteFlag = 1;
-                }
-                foreach (var item in WorkOrderData.WorkOrderDetail)
+                foreach (var item in WorkOrderData.WorkOrderDetail) // 依照新的工序清單逐一更新(新建)
                 {
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
-                    var nWorkOrderDetail = new WorkOrderDetail
+                    if (item.Id != 0)   // 如果ID不為0，則表示為既有工序，只進行更新
                     {
-                        SerialNumber = item.SerialNumber ,
-                        ProcessId = item.ProcessId,
-                        ProcessNo = ProcessInfo.Code,
-                        ProcessName = ProcessInfo.Name,
-                        ProcessLeadTime = item.ProcessLeadTime,
-                        ProcessTime = item.ProcessTime,
-                        ProcessCost = item.ProcessCost,
-                        Count = WorkOrderData.WorkOrderHead.Count,
-                        ProducingMachine = item.ProducingMachine,
-                        Remarks = item.Remarks,
-                        CreateUser = 1
-                    };
-                    OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
+                        updataCheck.Add(item.Id);
+                        var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == item.Id).FirstOrDefault();
+                        OWorkOrderDetail.SerialNumber = item.SerialNumber;
+                        OWorkOrderDetail.SerialNumber = item.SerialNumber;
+                        OWorkOrderDetail.ProcessId = item.ProcessId;
+                        OWorkOrderDetail.ProcessNo = ProcessInfo.Code;
+                        OWorkOrderDetail.ProcessName = ProcessInfo.Name;
+                        OWorkOrderDetail.ProcessLeadTime = item.ProcessLeadTime;
+                        OWorkOrderDetail.ProcessTime = item.ProcessTime;
+                        OWorkOrderDetail.ProcessCost = item.ProcessCost;
+                        OWorkOrderDetail.Count = WorkOrderData.WorkOrderHead.Count;
+                        // OWorkOrderDetail.PurchaseId
+                        OWorkOrderDetail.DrawNo = item.DrawNo;
+                        OWorkOrderDetail.Manpower = item.Manpower;
+                        OWorkOrderDetail.ProducingMachine = item.ProducingMachine;
+                        OWorkOrderDetail.Remarks = item.Remarks;
+                        OWorkOrderDetail.DueStartTime = item.DueStartTime;
+                        OWorkOrderDetail.DueEndTime = item.DueEndTime;
+                        OWorkOrderDetail.ActualStartTime = item.ActualStartTime;
+                        OWorkOrderDetail.ActualEndTime = item.ActualEndTime;
+                        OWorkOrderDetail.UpdateUser = 1;
+                    }
+                    else // 如ID為0，則表示該工序為新增
+                    {
+                        var nWorkOrderDetail = new WorkOrderDetail
+                        {
+                            SerialNumber = item.SerialNumber,
+                            ProcessId = item.ProcessId,
+                            ProcessNo = ProcessInfo.Code,
+                            ProcessName = ProcessInfo.Name,
+                            ProcessLeadTime = item.ProcessLeadTime,
+                            ProcessTime = item.ProcessTime,
+                            ProcessCost = item.ProcessCost,
+                            Count = WorkOrderData.WorkOrderHead.Count,
+                            // PurchaseId
+                            DrawNo = item.DrawNo,
+                            Manpower = item.Manpower,
+                            ProducingMachine = item.ProducingMachine,
+                            Status = OWorkOrderHeads.Status,
+                            Remarks = item.Remarks,
+                            DueStartTime = item.DueStartTime,
+                            DueEndTime = item.DueEndTime,
+                            ActualStartTime = item.ActualStartTime,
+                            ActualEndTime = item.ActualEndTime,
+                            CreateUser = 1,
+                            UpdateUser = 1
+                        };
+                        OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
+                    }
+                }
+                foreach (var item in OWorkOrderHeads.WorkOrderDetails) // 檢查剩下未更新的工序，變更為[刪除]
+                {
+                    if (!updataCheck.Exists(x => x == item.Id) && item.Id != 0 && item.DeleteFlag == 0)
+                    {
+                        item.DeleteFlag = 1;
+                    }
                 }
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
@@ -471,7 +533,9 @@ namespace HonjiMES.Controllers
                     }
                 }
                 return Ok(MyFun.APIResponseOK(WorkOrderData));
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("工單更新失敗!"));
             }
         }
@@ -496,7 +560,9 @@ namespace HonjiMES.Controllers
                 await _context.SaveChangesAsync();
                 _context.ChangeTracker.LazyLoadingEnabled = false;
                 return Ok(MyFun.APIResponseOK("OK"));
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("工單刪除失敗!"));
             }
         }

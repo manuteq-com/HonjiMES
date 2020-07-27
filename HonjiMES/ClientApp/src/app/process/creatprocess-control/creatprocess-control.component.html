@@ -57,7 +57,7 @@
             [showDragIcons]="false"
         ></dxo-row-dragging>
 
-        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
             <dxo-form colCount=4>
                 <dxi-item dataField="SerialNumber"></dxi-item>
                 <dxi-item dataField="ProcessId"></dxi-item>
@@ -97,10 +97,10 @@
         <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate">
         </dxi-column>
 
-        <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date"></dxi-column>
-        <dxi-column dataField="DueEndTime" caption="實際開工日" dataType="date"></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="預計完工日" dataType="date"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date"></dxi-column>
+        <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate"></dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" editCellTemplate="DueEndTimeTemplate"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" [allowEditing]="false"></dxi-column>
 
         <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
@@ -135,6 +135,12 @@
         </div>
         <div *dxTemplate="let data of 'ManpowerTemplate'">
             <dx-number-box [value]="Manpower" (onValueChanged)="data.setValue($event.value)"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'DueStartTimeTemplate'">
+            <dx-date-box [value]="DueStartTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
+        </div>
+        <div *dxTemplate="let data of 'DueEndTimeTemplate'">
+            <dx-date-box [value]="DueEndTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
         </div>
 
     </dx-data-grid>

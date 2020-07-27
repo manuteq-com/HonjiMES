@@ -9,6 +9,11 @@ namespace HonjiMES.Models
 [Table("work_order_detail")]
     public partial class WorkOrderDetail
     {
+        public WorkOrderDetail()
+        {
+            WorkOrderReportLogs = new HashSet<WorkOrderReportLog>();
+        }
+
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
@@ -79,5 +84,7 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(WorkOrderHeadId))]
         [InverseProperty("WorkOrderDetails")]
         public virtual WorkOrderHead WorkOrderHead { get; set; }
+        [InverseProperty(nameof(WorkOrderReportLog.WorkOrderDetail))]
+        public virtual ICollection<WorkOrderReportLog> WorkOrderReportLogs { get; set; }
     }
 }

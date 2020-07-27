@@ -207,6 +207,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "work_order_head"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "work_order_report_log"
       }
    ],
    "UseDatabaseNames": false,
