@@ -451,6 +451,7 @@ namespace HonjiMES.Models
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
+        public string Remarks { get; set; }
     }
     
 

@@ -44,6 +44,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     itemval8: string;
     itemval9: string;
     ProcessEditorOptions: any;
+    startBtnVisible: boolean;
+    endBtnVisible: boolean;
+    restartedBtnVisible: boolean;
+    ReCountVisible: boolean;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -76,6 +80,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        this.ReCountVisible = false;
+        this.startBtnVisible = false;
+        this.endBtnVisible = false;
+        this.restartedBtnVisible = false;
+
         if (this.itemkeyval != null) {
             this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
@@ -97,9 +106,12 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.ReCount = element.Count;
                                 findProcess = true;
                                 if (element.Status === 1) {
-                                    this.buttondisabled = false;
+                                    this.startBtnVisible = true;
                                 } else if (element.Status === 2) {
-                                    this.buttondisabled = true;
+                                    this.ReCountVisible = true;
+                                    this.endBtnVisible = true;
+                                } else if (element.Status === 3) {
+                                    this.restartedBtnVisible = true;
                                 }
                             }
                         });
@@ -130,6 +142,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     onEndClick(e) {
         this.modval = 'end';
     }
+    onRestartClick(e) {
+        this.modval = 'restart';
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -157,6 +172,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.WorkOrderID = this.itemkeyval;
         this.postval.WorkOrderSerial = this.serialkeyval;
         this.postval.ReCount = this.formData.ReCount;
+        this.postval.Remarks = '';
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length
@@ -165,6 +181,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             } else if (this.modval === 'end') {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'restart') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportRestart', 'POST', { values: this.postval });
                 this.viewRefresh(e, sendRequest);
             }
         } catch (error) {

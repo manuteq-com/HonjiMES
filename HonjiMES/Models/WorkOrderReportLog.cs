@@ -14,6 +14,8 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("work_order_detail_id", TypeName = "int(11)")]
         public int WorkOrderDetailId { get; set; }
+        [Column("report_type", TypeName = "int(11)")]
+        public int ReportType { get; set; }
         [Column("purchase_id", TypeName = "int(11)")]
         public int? PurchaseId { get; set; }
         [Column("purchase_no", TypeName = "varchar(50)")]

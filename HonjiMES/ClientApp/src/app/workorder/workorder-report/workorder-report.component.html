@@ -57,7 +57,7 @@
         <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ReCount">
+        <dxi-item dataField="ReCount" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
         </dxi-item>
 
@@ -98,19 +98,16 @@
         <h5>訂單內容</h5>
     </div> -->
 
-    <div class="row">
-        <div class="col-auto-7 mt-1">
-            <h5 #dataTimeNow></h5>
+    <!-- <div class="row"> -->
+        <div class="col-auto-12 mt-1">
+            <dx-button horizontalAlignment="right" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="startBtnVisible" (onClick)="onStartClick($event)"></dx-button>
+            <dx-button horizontalAlignment="right" text='完工回報' type='default' icon='check' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="endBtnVisible" (onClick)="onEndClick($event)"></dx-button>
+            <dx-button horizontalAlignment="right" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="restartedBtnVisible" (onClick)="onRestartClick($event)"></dx-button>
         </div>
-        <div class="col-auto-5 mt-1">
-            <dx-button horizontalAlignment="center" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" (onClick)="onStartClick($event)"></dx-button>
-            <dx-button horizontalAlignment="center" text='完工回報' type='default' icon='check' [useSubmitBehavior]="true"
-                [disabled]="!buttondisabled" (onClick)="onEndClick($event)"></dx-button>
-            <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
-                </dxi-item> -->
-        </div>
-    </div>
+    <!-- </div> -->
 
 </form>
 

@@ -2876,6 +2876,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.ReportType).HasComment("回報種類");
+
                 entity.Property(e => e.StatusN).HasComment("更新狀態");
 
                 entity.Property(e => e.StatusO).HasComment("上一個狀態");

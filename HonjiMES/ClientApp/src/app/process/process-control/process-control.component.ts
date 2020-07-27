@@ -59,8 +59,8 @@ export class ProcessControlComponent implements OnInit {
     getBlue2Class(data) {
         if (data === 2) {
             return 'process_start';
-        } else {
-            return '';
+        } else if (data === 3) {
+            return 'process_end';
         }
     }
     creatdata() {

@@ -162,4 +162,5 @@ export class workOrderReportData {
     WorkOrderID: number;
     WorkOrderSerial: number;
     ReCount: number;
+    Remarks: string;
 }
