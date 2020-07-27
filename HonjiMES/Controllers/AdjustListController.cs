@@ -32,10 +32,10 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaterialLog>>> GetAdjustList(
+        public async Task<ActionResult<IEnumerable<AllStockLog>>> GetAdjustList(
                 [FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var data = _context.MaterialLogs.Where(x => x.DeleteFlag == 0);
+            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0);
             // var MaterialLogs = await data.ToListAsync();
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
@@ -48,16 +48,16 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<MaterialLog>> GetAdjustList(int id)
+        public async Task<ActionResult<AllStockLog>> GetAdjustList(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var materiallog = await _context.MaterialLogs.FindAsync(id);
+            var allStockLog = await _context.AllStockLogs.FindAsync(id);
 
-            if (materiallog == null)
+            if (allStockLog == null)
             {
                 return NotFound();
             }
-            return Ok(MyFun.APIResponseOK(materiallog));
+            return Ok(MyFun.APIResponseOK(allStockLog));
         }
 
         // PUT: api/AdjustList/5

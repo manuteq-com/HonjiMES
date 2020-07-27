@@ -28,6 +28,9 @@ export class Myservice {
     getComponent(): Selectitem[] {
         return componenttypes;
     }
+    getlistAdjustStatus(): Selectitem[] {
+        return adjusttypes;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -61,4 +64,9 @@ const billofpurchaseOrderStatus: Selectitem[] = [
 const componenttypes: Selectitem[] = [
     { Id: 1, Name: '原料' },
     { Id: 2, Name: '成品' },
+];
+const adjusttypes: Selectitem[] = [
+    { Id: 1, Name: '原料' },
+    { Id: 2, Name: '成品' },
+    { Id: 3, Name: '半成品' },
 ];

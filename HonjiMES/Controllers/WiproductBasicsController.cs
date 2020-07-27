@@ -24,9 +24,28 @@ namespace HonjiMES.Controllers
 
         // GET: api/WiproductBasics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WiproductBasic>>> GetWiproductBasics()
+        public async Task<ActionResult<IEnumerable<WiproductBasicData>>> GetWiproductBasics()
         {
-            var wiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var wiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Select(x => new WiproductBasicData
+            {
+                TotalCount = x.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+                Id = x.Id,
+                WiproductNo = x.WiproductNo,
+                WiproductNumber = x.WiproductNumber,
+                Name = x.Name,
+                Specification = x.Specification,
+                Property = x.Property,
+                Price = x.Price,
+                SubInventory = x.SubInventory,
+                Remarks = x.Remarks,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                DeleteFlag = x.DeleteFlag
+            }).ToListAsync();
+
             return Ok(MyFun.APIResponseOK(wiproductBasic));
         }
 

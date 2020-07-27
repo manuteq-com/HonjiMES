@@ -5,7 +5,7 @@
         <div class="lefttriangle1"></div>
         <div class="lefttriangle2"></div>
     </div>
-    <div class="headerfont font2">調整單紀錄</div>
+    <div class="headerfont font2">調整紀錄</div>
     <div class="buttongroup">
         <!-- <dx-button
             class="insertbtn"
@@ -31,8 +31,9 @@
     (onSelectionChanged)="selectionChanged($event)"
     hoverStateEnabled="true"
     [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations">
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true">
 
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
@@ -45,8 +46,7 @@
         <dxo-form>
             <dxi-item  dataField="AdjustNo"></dxi-item>
             <dxi-item  dataField="LinkOrder"></dxi-item>
-            <dxi-item  dataField="MaterialId"></dxi-item>
-            <dxi-item  dataField="MaterialName"></dxi-item>
+            <dxi-item  dataField="DataId"></dxi-item>
             <dxi-item  dataField="Original"></dxi-item>
             <dxi-item  dataField="Quantity"></dxi-item>
             <dxi-item  dataField="Price"></dxi-item>
@@ -59,7 +59,9 @@
             <dxi-item  dataField="Reason"></dxi-item>
             <dxi-item  dataField="Message"></dxi-item>
             <dxi-item  dataField="CreateTime"></dxi-item>
-            <dxi-item  dataField="CreateU"></dxi-item>
+            <dxi-item  dataField="CreateUser"></dxi-item>
+            <dxi-item  dataField="NameLog"></dxi-item>
+            <dxi-item  dataField="NameType"></dxi-item>
         </dxo-form>
         <dxo-popup>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
@@ -69,27 +71,31 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="AdjustNo" caption="調整單號" [width]="100"></dxi-column>
-    <dxi-column dataField="LinkOrder" caption="關聯訂單"></dxi-column>
-    <dxi-column dataField="MaterialId" caption="原料" [width]="250">
+
+    <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
+    <dxi-column dataField="LinkOrder" caption="關聯訂單" [width]="120"></dxi-column>
+    <dxi-column dataField="DataId" caption="原料" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialId" caption="原料名稱" [width]="250">
+    <dxi-column dataField="DataId" caption="原料名稱" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="Original" caption="原始數量"></dxi-column>
-    <dxi-column dataField="Quantity" caption="增減數量"></dxi-column>
-    <dxi-column dataField="Price" caption="單價"></dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額"></dxi-column>
-    <dxi-column dataField="Unit" caption="單位"></dxi-column>
-    <dxi-column dataField="UnitCount" caption="單位數量"></dxi-column>
-    <dxi-column dataField="UnitPrice" caption="單位金額"></dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="單位總額"></dxi-column>
-    <dxi-column dataField="WorkPrice" caption="加工費用"></dxi-column>
+    <dxi-column dataField="NameType" caption="產品別" [width]="100">
+        <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Original" caption="原始數量" [width]="80"></dxi-column>
+    <dxi-column dataField="Quantity" caption="增減數量" [width]="80"></dxi-column>
+    <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="總金額" [width]="80"></dxi-column>
+    <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitCount" caption="單位數量" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitPrice" caption="單位金額" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitPriceAll" caption="單位總額" [width]="80"></dxi-column>
+    <dxi-column dataField="WorkPrice" caption="加工費用" [width]="80"></dxi-column>
     <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
-    <dxi-column dataField="Message" caption="補充說明" [width]="160"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" [width]="160"></dxi-column>
-    <dxi-column dataField="CreateU" caption="使用者"></dxi-column>
+    <dxi-column dataField="Message" caption="補充說明" [width]="140"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" [width]="180" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="使用者"></dxi-column>
     <!-- <dxi-column type="buttons">
         <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button>
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>

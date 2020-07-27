@@ -39,6 +39,30 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 原料主檔資訊
+    /// </summary>
+    public class MaterialBasicData : MaterialBasic
+    {
+        public int TotalCount { get; set; }
+    }
+
+    /// <summary>
+    /// 成品主檔資訊
+    /// </summary>
+    public class ProductBasicData : ProductBasic
+    {
+        public int TotalCount { get; set; }
+    }
+
+    /// <summary>
+    /// 半成品主檔資訊
+    /// </summary>
+    public class WiproductBasicData : WiproductBasic
+    {
+        public int TotalCount { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData
@@ -415,9 +439,9 @@ namespace HonjiMES.Models
         public int BomId { get; set; }
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }
-    
+
     public class WorkOrderData
-    { 
+    {
         public WorkOrderHead WorkOrderHead { get; set; }
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
@@ -429,6 +453,7 @@ namespace HonjiMES.Models
         public int ReCount { get; set; }
     }
     
+
     /// <summary>
     /// 製成進度
     /// </summary>

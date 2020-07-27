@@ -8,6 +8,7 @@ import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextre
 import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
   selector: 'app-adjust-list',
@@ -31,11 +32,13 @@ export class AdjustListComponent implements OnInit {
     Supplierlist: any;
     remoteOperations: boolean;
     MaterialList: any;
+    listAdjustStatus: any;
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, myservice: Myservice) {
         // debugger;
+        this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
