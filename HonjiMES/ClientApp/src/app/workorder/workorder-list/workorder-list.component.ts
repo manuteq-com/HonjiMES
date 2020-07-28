@@ -16,9 +16,12 @@ export class WorkorderListComponent implements OnInit {
     serialkey: number;
     mod: string;
     loadingVisible = false;
+    ReportHeight: any;
+
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
+
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
@@ -45,6 +48,14 @@ export class WorkorderListComponent implements OnInit {
         this.serialkey = Number(colData.key.substring(4)) + 1;
         this.mod = 'report';
         this.creatpopupVisible = true;
+
+        if (e[colData.key].value3 === 1) {
+            this.ReportHeight = 710;
+        } else if (e[colData.key].value3 === 2) {
+            this.ReportHeight = 830;
+        } else if (e[colData.key].value3 === 3) {
+            this.ReportHeight = 780;
+        }
     }
     getBlue2Class(data) {
         if (data === 2) {

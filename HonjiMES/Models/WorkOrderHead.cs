@@ -41,6 +41,8 @@ namespace HonjiMES.Models
         public int Status { get; set; }
         [Column("total_time", TypeName = "timestamp")]
         public DateTime? TotalTime { get; set; }
+        [Column("dispatch_time", TypeName = "timestamp")]
+        public DateTime? DispatchTime { get; set; }
         [Column("due_start_time", TypeName = "timestamp")]
         public DateTime? DueStartTime { get; set; }
         [Column("due_end_time", TypeName = "timestamp")]

@@ -45,6 +45,7 @@ namespace HonjiMES.Controllers
                     }
                 }
                 WorkOrderHeads.Status = 1;
+                WorkOrderHeads.DispatchTime = DateTime.Now;
                 await _context.SaveChangesAsync();
                 _context.ChangeTracker.LazyLoadingEnabled = false;
                 return Ok(MyFun.APIResponseOK("OK"));
@@ -68,12 +69,15 @@ namespace HonjiMES.Controllers
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
-                if (WorkOrderDetails.Count() == 1) {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 1) {
+                if (WorkOrderDetails.Count() == 1)
+                {
+                    if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                    {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
 
-                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog{
+                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
                             WorkOrderDetailId = WorkOrderDetails.FirstOrDefault().Id,
                             ReportType = 1, // 開工回報
                             PurchaseId = WorkOrderDetails.FirstOrDefault().PurchaseId,
@@ -93,10 +97,14 @@ namespace HonjiMES.Controllers
                             CreateTime = DateTime.Now,
                             CreateUser = 1,
                         });
-                    } else {
+                    }
+                    else
+                    {
                         return Ok(MyFun.APIResponseError("工單狀態異常!"));
                     }
-                } else {
+                }
+                else
+                {
                     return Ok(MyFun.APIResponseError("工單數量不正確!"));
                 }
                 await _context.SaveChangesAsync();
@@ -122,13 +130,16 @@ namespace HonjiMES.Controllers
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
-                if (WorkOrderDetails.Count() == 1) {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 2) {
+                if (WorkOrderDetails.Count() == 1)
+                {
+                    if (WorkOrderDetails.FirstOrDefault().Status == 2)
+                    {
                         WorkOrderDetails.FirstOrDefault().Status = 3;
                         WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
-                        
-                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog{
+
+                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
                             WorkOrderDetailId = WorkOrderDetails.FirstOrDefault().Id,
                             ReportType = 2, // 完工回報
                             PurchaseId = WorkOrderDetails.FirstOrDefault().PurchaseId,
@@ -148,10 +159,28 @@ namespace HonjiMES.Controllers
                             CreateTime = DateTime.Now,
                             CreateUser = 1,
                         });
-                    } else {
+
+                        //檢查工單是否全數完工
+                        var statusCheck = true;
+                        foreach (var item in WorkOrderHeads.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToList())
+                        {
+                            if (item.Status != 3)
+                            {
+                                statusCheck = false;
+                            }
+                        }
+                        if (statusCheck)
+                        {
+                            WorkOrderHeads.Status = 3;
+                        }
+                    }
+                    else
+                    {
                         return Ok(MyFun.APIResponseError("工單狀態異常!"));
                     }
-                } else {
+                }
+                else
+                {
                     return Ok(MyFun.APIResponseError("工單數量不正確!"));
                 }
                 await _context.SaveChangesAsync();
@@ -177,13 +206,16 @@ namespace HonjiMES.Controllers
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
-                if (WorkOrderDetails.Count() == 1) {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 3) {
+                if (WorkOrderDetails.Count() == 1)
+                {
+                    if (WorkOrderDetails.FirstOrDefault().Status == 3)
+                    {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         // WorkOrderDetails.FirstOrDefault().ReCount = WorkOrderReportData.ReCount;
-                        
-                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog{
+
+                        WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
                             WorkOrderDetailId = WorkOrderDetails.FirstOrDefault().Id,
                             ReportType = 3, // 完工再開工回報
                             PurchaseId = WorkOrderDetails.FirstOrDefault().PurchaseId,
@@ -203,10 +235,14 @@ namespace HonjiMES.Controllers
                             CreateTime = DateTime.Now,
                             CreateUser = 1,
                         });
-                    } else {
+                    }
+                    else
+                    {
                         return Ok(MyFun.APIResponseError("工單狀態異常!"));
                     }
-                } else {
+                }
+                else
+                {
                     return Ok(MyFun.APIResponseError("工單數量不正確!"));
                 }
                 await _context.SaveChangesAsync();

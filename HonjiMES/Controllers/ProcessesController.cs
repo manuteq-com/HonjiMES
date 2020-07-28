@@ -242,11 +242,11 @@ namespace HonjiMES.Controllers
                 var WorkOrderHeads = new List<WorkOrderHead>();
                 if (id == 0)
                 {
-                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 }
                 else
                 {
-                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).OrderByDescending(x => x.DispatchTime).ToListAsync();
                 }
 
                 foreach (var item in WorkOrderHeads)

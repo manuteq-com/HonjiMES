@@ -2796,6 +2796,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DataType).HasComment("料號種類(0原料,1成品,2半成品)");
 
+                entity.Property(e => e.DispatchTime).HasComment("派工時間");
+
                 entity.Property(e => e.DueEndTime).HasComment("預計完工日");
 
                 entity.Property(e => e.DueStartTime).HasComment("預計開工日");

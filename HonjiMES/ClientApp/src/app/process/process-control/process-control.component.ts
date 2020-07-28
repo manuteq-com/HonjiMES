@@ -52,8 +52,8 @@ export class ProcessControlComponent implements OnInit {
     getBlueClass(data) {
         if (data.Status === 1) {
             return 'process_started';
-        } else {
-            return '';
+        } else if (data.Status === 3) {
+            return 'process_end';
         }
     }
     getBlue2Class(data) {
