@@ -32,6 +32,7 @@ export class OerdrdetailListComponent implements OnInit {
     checkBoxesMode: string;
     disabledValues: number[];
     dataSource: any;
+    totalcount: any;
 
     constructor(private http: HttpClient) {
         this.popupVisiblePurchase = false;
@@ -42,6 +43,7 @@ export class OerdrdetailListComponent implements OnInit {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.controller = '/OrderDetails';
+        this.totalcount = 0;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkey),
@@ -182,6 +184,18 @@ export class OerdrdetailListComponent implements OnInit {
             });
         }
     }
+
+    rowClick(e) {
+        debugger;
+        this.GetData('/OrderDetails/GetStockCountByProductBasicId/' + e.key).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.totalcount = s.data.TotalCount;
+                }
+            }
+        );
+    }
+
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {

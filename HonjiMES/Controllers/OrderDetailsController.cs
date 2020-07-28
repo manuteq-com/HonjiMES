@@ -47,6 +47,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).AsQueryable();
+
             if (OrderId.HasValue)
             {
                 OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x => x.Serial);
@@ -167,6 +168,24 @@ namespace HonjiMES.Controllers
             // _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderDetail));
+        }
+
+        /// <summary>
+        /// 使用成品basic ID查詢總庫存量
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/OrderDetails/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductBasicData>> GetStockCountByProductBasicId(int id)
+        {
+            var OrderDetails = await _context.OrderDetails.FindAsync(id);
+            var productBasic  = await _context.ProductBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.ProductBasicId).Select(x => new ProductBasicData
+            {
+                TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity)
+            }).FirstOrDefaultAsync();
+
+            return Ok(MyFun.APIResponseOK(productBasic));
         }
 
         private bool OrderDetailExists(int id)
