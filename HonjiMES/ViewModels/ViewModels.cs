@@ -345,6 +345,7 @@ namespace HonjiMES.Models
     public class RequisitionDetailR : RequisitionDetail
     {
         public int ReceiveQty { get; set; }
+        public int StockQty { get; set; }
     }
     public class GetReceive
     {
@@ -537,4 +538,10 @@ namespace HonjiMES.Models
         public int ShowLV { get; set; }
         public int ShowPLV { get; set; }
     }
+    public class RequisitionsDetailInfo
+    {
+        public int RequisitionId { get; set; }
+        public int WarehouseId { get; set; }
+    }
+
 }

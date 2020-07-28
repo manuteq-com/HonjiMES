@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
+import Swal from 'sweetalert2';
+import { requisitionsDetailInfo } from 'src/app/model/viewmodels';
 
 @Component({
     selector: 'app-receive-list',
@@ -14,6 +16,8 @@ import notify from 'devextreme/ui/notify';
 })
 export class ReceiveListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('dataGridM') dataGridM: DxDataGridComponent;
+    @ViewChild('dataGridP') dataGridP: DxDataGridComponent;
     dataSourceDB: any;
     apiurl = location.origin + '/api';
     Controller = '/Requisitions';
@@ -24,11 +28,21 @@ export class ReceiveListComponent implements OnInit {
         // items: this.MaterialList,
         displayExpr: string; valueExpr: string;
     };
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
+    requisitionId: any;
+
+
+    dataSourceMaterialDB: CustomStore;
+    dataSourceProductDB: CustomStore;
+    popupVisible: boolean;
+    WarehouseIDP: any;
+    WarehouseIDM: any;
+    Warehouselist: any;
+    WarehouseListM: any;
+    postval: any;
+
     constructor(private http: HttpClient) {
         const remote = this.remoteOperations;
+
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
@@ -56,8 +70,149 @@ export class ReceiveListComponent implements OnInit {
                 }
             }
         );
+        this.Warehouselist = new CustomStore({
+            key: 'Id',
+            load: () =>
+                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        });
+    }
+    public GetData(apiUrl: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
+    }
+    async deleteReceiveList(e, data) {
+        this.requisitionId = data.data.Id;
+        Swal.fire({
+            allowEnterKey: false,
+            allowOutsideClick: false,
+            width: 400,
+            title: '確認刪除 ?',
+            html: '刪除後將無法復原!',
+            icon: 'warning',
+            showCancelButton: true,
+            // confirmButtonColor: '#3085d6',
+            // cancelButtonColor: '#d33',
+            cancelButtonText: '取消',
+            confirmButtonText: '確認'
+        }).then(async (result) => {
+            if (result.value) {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition/' + this.requisitionId, 'DELETE');
+                if (sendRequest) {
+                    this.dataGrid.instance.refresh();
+                    notify({
+                        message: '刪除成功 !',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'success', 3000);
+                }
+            } else {
+                this.dataGrid.instance.refresh();
+            }
+        });
+    }
+    readRequisitionData(e, data) {
+        this.requisitionId = data.data.Id;
+        this.dataSourceMaterialDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByWarehouse', 'POST',
+                    { values: {RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDM} }),
+            insert: (values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+            update: (key, values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+                    { key, values: this.setWarehouse(values, this.WarehouseIDM) }),
+            remove: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        });
+        this.dataSourceProductDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailProductByWarehouse', 'POST',
+                    { values: {RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDP} }),
+            insert: (values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+            update: (key, values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+                    // { key, values, WarehouseID: this.WarehouseIDP }),
+                    { key, values: this.setWarehouse(values, this.WarehouseIDP) }),
+            remove: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        });
+    }
+    setWarehouse(values: any, WarehouseID: number) {
+        values.WarehouseID = WarehouseID;
+        return values;
+    }
+    onToolbarPreparingM(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '領料';
+                item.showText = 'always';
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });
+        e.toolbarOptions.items.unshift(
+        {
+            text: '原料領料',
+            location: 'before'
+        },
+        {
+            location: 'after',
+            widget: 'dxSelectBox',
+            options: {
+                dataSource: this.Warehouselist,
+                displayExpr: 'Name',
+                valueExpr: 'Id',
+                onValueChanged: this.WarehouseChangedM.bind(this)
+            }
+        });
+    }
+    onToolbarPreparingP(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '領料';
+                item.showText = 'always';
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });
+        e.toolbarOptions.items.unshift(
+        {
+            text: '成品領料',
+            location: 'before'
+        },
+        {
+            location: 'after',
+            widget: 'dxSelectBox',
+            options: {
+                dataSource: this.Warehouselist,
+                displayExpr: 'Name',
+                valueExpr: 'Id',
+                onValueChanged: this.WarehouseChangedP.bind(this)
+            }
+        });
+    }
+    async WarehouseChangedM(e) {
+        this.WarehouseIDM = e.value;
+        this.dataGridM.instance.refresh();
+    }
+    async WarehouseChangedP(e) {
+        this.WarehouseIDP = e.value;
+        this.dataGridP.instance.refresh();
     }
     creatdata() {
         // tslint:disable-next-line: deprecation

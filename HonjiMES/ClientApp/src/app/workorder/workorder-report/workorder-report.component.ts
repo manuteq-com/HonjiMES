@@ -48,6 +48,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     endBtnVisible: boolean;
     restartedBtnVisible: boolean;
     ReCountVisible: boolean;
+    RemarkVisible: boolean;
+    DateBoxOptions: any;
 
     constructor(private http: HttpClient) {
         this.readOnly = false;
@@ -55,6 +57,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
+
+        this.DateBoxOptions = {
+            displayFormat: 'yyyy/MM/dd HH:mm:ss',
+            // onValueChanged: this.PurchaseDateValueChange.bind(this)
+        };
 
         this.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
@@ -81,6 +88,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.ReCountVisible = false;
+        this.RemarkVisible = false;
         this.startBtnVisible = false;
         this.endBtnVisible = false;
         this.restartedBtnVisible = false;
@@ -109,9 +117,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     this.startBtnVisible = true;
                                 } else if (element.Status === 2) {
                                     this.ReCountVisible = true;
+                                    this.RemarkVisible = true;
                                     this.endBtnVisible = true;
                                 } else if (element.Status === 3) {
                                     this.restartedBtnVisible = true;
+                                    this.RemarkVisible = true;
                                 }
                             }
                         });
@@ -172,7 +182,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.WorkOrderID = this.itemkeyval;
         this.postval.WorkOrderSerial = this.serialkeyval;
         this.postval.ReCount = this.formData.ReCount;
-        this.postval.Remarks = '';
+        this.postval.Remarks = this.formData.Remark;
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length
