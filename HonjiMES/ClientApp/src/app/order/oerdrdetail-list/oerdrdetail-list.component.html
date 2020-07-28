@@ -1,6 +1,15 @@
 <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
 <div class="row">
-    <div class="col-md-10 col-sm-10">
+    <div class="col-md-8 col-sm-8">
+    </div>
+    <div class="col-md-2 col-sm-2">
+        <div class="input-group">
+            <label class="pt-2">總數量：{{totalcount}}</label>
+          </div>
+        <!-- <div class="dx-field">
+            <div class="dx-field-label">總數量</div>
+            <div class="dx-field-value-static" dataField="TotalCount"></div>
+        </div> -->
     </div>
     <div class="col-md-1 col-sm-1">
         <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button>
@@ -9,7 +18,7 @@
         <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onRowClick)="rowClick($event)" (onCellPrepared)="onCellPrepared($event)"
 (onSelectionChanged)="onSelectionChanged($event)" [rowAlternationEnabled]="true">
     <dxo-editing mode="row"
         [allowAdding]="false"
