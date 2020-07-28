@@ -1,26 +1,52 @@
-<dx-data-grid [dataSource]="dataSourceMaterialDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-    [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" (onCellClick)="cellClick($event)"
+<dx-data-grid
+    [dataSource]="dataSourceMaterialDB"
+    showBorders="true"
+    keyExpr="Id"
+    hoverStateEnabled="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [focusedRowEnabled]="true"
+    [columnAutoWidth]="false"
+    [showBorders]="true"
+    (onCellClick)="cellClick($event)"
     (onToolbarPreparing)="onToolbarPreparingM($event)">
+
     <dxo-editing mode="batch" [allowUpdating]="true" useIcons="false">
         <dxo-texts saveAllChanges="領料"></dxo-texts>
     </dxo-editing>
+
     <dxi-column dataField="MaterialNo" caption="組成元件" dataType="string" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="RQty" caption="領取數量" dataType="number"></dxi-column>
+
 </dx-data-grid>
+
 <br>
-<dx-data-grid [dataSource]="dataSourceProductDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-    [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" (onCellClick)="cellClick($event)"
+
+<dx-data-grid
+    [dataSource]="dataSourceProductDB"
+    showBorders="true"
+    keyExpr="Id"
+    hoverStateEnabled="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [focusedRowEnabled]="true"
+    [columnAutoWidth]="false"
+    [showBorders]="true"
+    (onCellClick)="cellClick($event)"
     (onToolbarPreparing)="onToolbarPreparingP($event)">
+
     <dxo-editing mode="batch" [allowUpdating]="true">
         <dxo-texts saveAllChanges="領料"></dxo-texts>
     </dxo-editing>
+
     <dxi-column dataField="ProductNo" caption="組成品項" dataType="string" [allowEditing]="false">
     </dxi-column>
     <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="RQty" caption="領取數量" dataType="number"></dxi-column>
+
 </dx-data-grid>

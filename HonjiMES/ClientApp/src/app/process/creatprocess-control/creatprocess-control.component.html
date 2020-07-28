@@ -99,8 +99,8 @@
 
         <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate"></dxi-column>
         <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" editCellTemplate="DueEndTimeTemplate"></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [allowEditing]="false"></dxi-column>
 
         <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>

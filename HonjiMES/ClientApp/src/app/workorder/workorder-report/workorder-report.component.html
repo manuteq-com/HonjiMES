@@ -48,17 +48,20 @@
         <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="預計完工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [disabled]="true">
+        <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
             <dxo-label text="實際開工日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [disabled]="true">
+        <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
             <dxo-label text="實際完工日"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ReCount" [visible]="ReCountVisible">
+        <dxi-item dataField="ReCount" [colSpan]="2" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Remark" editorType="dxTextArea" [colSpan]="2" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+            <dxo-label text="回報說明"></dxo-label>
         </dxi-item>
 
 

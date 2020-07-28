@@ -158,9 +158,16 @@ export class BillofPurchaseDetail {
     Price: number;
 }
 
+// tslint:disable-next-line: class-name
 export class workOrderReportData {
     WorkOrderID: number;
     WorkOrderSerial: number;
     ReCount: number;
     Remarks: string;
+}
+
+// tslint:disable-next-line: class-name
+export class requisitionsDetailInfo {
+    RequisitionId: number;
+    WarehouseId: number;
 }

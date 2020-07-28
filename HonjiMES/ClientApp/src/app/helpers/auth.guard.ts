@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        debugger;
+        // debugger;
         const currentUser = this.authenticationService.currentUserValue;
         if (currentUser) {
             // 檢查是不是 Timeout 了

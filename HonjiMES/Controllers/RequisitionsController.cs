@@ -96,10 +96,25 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("沒有品號資料"));
             }
-            var dt = DateTime.Now;
             var ProductBasics = _context.ProductBasics.Find(requisition.ProductBasicId);
-            requisition.RequisitionNo = dt.ToString("yyyyMMddHHmmss");
-            requisition.Name = ProductBasics.Name;
+
+
+            var key = "PK";
+            var dt = DateTime.Now;
+            var RequisitionNo = dt.ToString("yyMMdd");
+
+            var NoData = await _context.Requisitions.AsQueryable().Where(x => x.RequisitionNo.Contains(key + RequisitionNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1) {
+                var LastRequisitionNo = NoData.FirstOrDefault().RequisitionNo;
+                var NoLast = Int32.Parse(LastRequisitionNo.Substring(LastRequisitionNo.Length - 3, 3));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            requisition.RequisitionNo = key + RequisitionNo + NoCount.ToString("000");
+            // requisition.Name = ProductBasics.Name;
+            requisition.Name = requisition?.Name ?? "";
             requisition.ProductNo = ProductBasics.ProductNo;
             requisition.ProductNumber = ProductBasics.ProductNumber;
             requisition.Specification = ProductBasics.Specification;
@@ -175,9 +190,11 @@ namespace HonjiMES.Controllers
                 var RequisitionDetails = await _context.RequisitionDetails.AsQueryable().Where(x => x.RequisitionId == id).ToListAsync();
                 foreach (var item in RequisitionDetails)
                 {
-                    _context.RequisitionDetails.Remove(item);
+                    item.DeleteFlag = 1;
+                    // _context.RequisitionDetails.Remove(item);
                 }
-                _context.Requisitions.Remove(Requisitions);
+                Requisitions.DeleteFlag = 1;
+                // _context.Requisitions.Remove(Requisitions);
                 await _context.SaveChangesAsync();
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;
@@ -196,7 +213,30 @@ namespace HonjiMES.Controllers
                 ProductNo = x.ProductNo,
                 MaterialNo = x.MaterialNo,
                 Quantity = x.Quantity,
-                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                StockQty = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(RequisitionDetails));
+        }
+        
+        /// <summary>
+        /// 依照倉別過濾資訊
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailMaterialByWarehouse(RequisitionsDetailInfo RequisitionsDetailInfo)
+        {
+            var RequisitionDetails = await _context.RequisitionDetails
+            .Where(x => x.RequisitionId == RequisitionsDetailInfo.RequisitionId && x.DeleteFlag == 0 && x.MaterialBasicId.HasValue)
+            .Select(x => new RequisitionDetailR
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
+                Quantity = x.Quantity,
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                StockQty = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.WarehouseId == RequisitionsDetailInfo.WarehouseId).Sum(x => x.Quantity)
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(RequisitionDetails));
         }
@@ -213,10 +253,34 @@ namespace HonjiMES.Controllers
                 ProductNo = x.ProductNo,
                 MaterialNo = x.MaterialNo,
                 Quantity = x.Quantity,
-                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                StockQty = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(RequisitionDetails));
         }
+        
+        /// <summary>
+        /// 依照倉別過濾資訊
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailR>>> GetRequisitionsDetailProductByWarehouse(RequisitionsDetailInfo RequisitionsDetailInfo)
+        {
+            var RequisitionDetails = await _context.RequisitionDetails
+            .Where(x => x.RequisitionId == RequisitionsDetailInfo.RequisitionId && x.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(x.ProductNo))
+            .Select(x => new RequisitionDetailR
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
+                Quantity = x.Quantity,
+                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                StockQty = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.WarehouseId == RequisitionsDetailInfo.WarehouseId).Sum(x => x.Quantity)
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(RequisitionDetails));
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequisitionsDetail(int id, [FromBody] GetReceive Receive)
         {
@@ -234,26 +298,30 @@ namespace HonjiMES.Controllers
                     }
                     if (Receive.RQty > 0)
                     {
-                        hasTake = true;
-                        var dt = DateTime.Now;
-                        RequisitionDetail.Receives.Add(new Receive
-                        {
-                            Quantity = Receive.RQty,
-                            CreateTime = dt,
-                            CreateUser = 1
-                        });
-                        var Original = Material.Quantity;
-                        Material.Quantity = Original - Receive.RQty;
-                        Material.UpdateTime = dt;
-                        Material.UpdateUser = 1;
-                        Material.MaterialLogs.Add(new MaterialLog
-                        {
-                            Original = Original,
-                            Quantity = -Receive.RQty,
-                            Message = "領料出庫",
-                            CreateTime = dt,
-                            CreateUser = 1
-                        });
+                        if (Receive.RQty > Material.Quantity) {
+                            return Ok(MyFun.APIResponseError("領用數量超過庫存數量! 原料[ " + RequisitionDetail.MaterialNo + " ]的庫存不足!"));
+                        } else {
+                            hasTake = true;
+                            var dt = DateTime.Now;
+                            RequisitionDetail.Receives.Add(new Receive
+                            {
+                                Quantity = Receive.RQty,
+                                CreateTime = dt,
+                                CreateUser = 1
+                            });
+                            var Original = Material.Quantity;
+                            Material.Quantity = Original - Receive.RQty;
+                            Material.UpdateTime = dt;
+                            Material.UpdateUser = 1;
+                            Material.MaterialLogs.Add(new MaterialLog
+                            {
+                                Original = Original,
+                                Quantity = -Receive.RQty,
+                                Message = "領料出庫",
+                                CreateTime = dt,
+                                CreateUser = 1
+                            });
+                        }
                     }
                 } else {
                     var Product = _context.Products.Where(x => x.WarehouseId == Receive.WarehouseID && x.ProductBasicId == RequisitionDetail.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
@@ -263,26 +331,30 @@ namespace HonjiMES.Controllers
                     }
                     if (Receive.RQty > 0)
                     {
-                        hasTake = true;
-                        var dt = DateTime.Now;
-                        RequisitionDetail.Receives.Add(new Receive
-                        {
-                            Quantity = Receive.RQty,
-                            CreateTime = dt,
-                            CreateUser = 1
-                        });
-                        var Original = Product.Quantity;
-                        Product.Quantity = Original - Receive.RQty;
-                        Product.UpdateTime = dt;
-                        Product.UpdateUser = 1;
-                        Product.ProductLogs.Add(new ProductLog
-                        {
-                            Original = Original,
-                            Quantity = -Receive.RQty,
-                            Message = "領料出庫",
-                            CreateTime = dt,
-                            CreateUser = 1
-                        });
+                        if (Receive.RQty > Product.Quantity) {
+                            return Ok(MyFun.APIResponseError("領用數量超過庫存數量! 成品[ " + RequisitionDetail.ProductNo + " ]的庫存不足!"));
+                        } else {
+                            hasTake = true;
+                            var dt = DateTime.Now;
+                            RequisitionDetail.Receives.Add(new Receive
+                            {
+                                Quantity = Receive.RQty,
+                                CreateTime = dt,
+                                CreateUser = 1
+                            });
+                            var Original = Product.Quantity;
+                            Product.Quantity = Original - Receive.RQty;
+                            Product.UpdateTime = dt;
+                            Product.UpdateUser = 1;
+                            Product.ProductLogs.Add(new ProductLog
+                            {
+                                Original = Original,
+                                Quantity = -Receive.RQty,
+                                Message = "領料出庫",
+                                CreateTime = dt,
+                                CreateUser = 1
+                            });
+                        }
                     }
                 }
             }
