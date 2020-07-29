@@ -321,6 +321,7 @@ namespace HonjiMES.Controllers
                 var AdjustHead = new AdjustHead{
                     AdjustNo = AdjustData.AdjustNo,
                     LinkOrder = AdjustData.LinkOrder,
+                    Remarks = AdjustData.Remarks,
                     CreateTime = dt,
                     CreateUser = UserID
                 };

@@ -107,7 +107,7 @@
             [exceldata]="exceldata"></app-creatwiproduct-basic>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1500" [height]="760" [(visible)]="adjustpopupVisible">
+<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-inventory-list>

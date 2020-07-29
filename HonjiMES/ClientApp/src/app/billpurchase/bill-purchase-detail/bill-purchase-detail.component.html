@@ -20,8 +20,8 @@
             <dxi-item dataField="Quantity"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
             <dxi-item dataField="PriceAll"></dxi-item>
-            <dxi-item dataField="Unit"></dxi-item>
             <dxi-item dataField="UnitCount"></dxi-item>
+            <dxi-item dataField="Unit"></dxi-item>
             <dxi-item dataField="UnitPrice"></dxi-item>
             <dxi-item dataField="UnitPriceAll"></dxi-item>
             <dxi-item dataField="WorkPrice"></dxi-item>
@@ -67,16 +67,16 @@
     <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="70" editCellTemplate="PriceAllEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
+    <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" [width]="80">
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
     <dxi-column dataField="Unit" caption="單位">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="UnitCount" caption="#數量" dataType="number" [width]="70">
+    <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" [width]="80">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="UnitPrice" caption="#單價" dataType="number" [width]="70">
-        <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="#總額" dataType="number" [width]="70">
+    <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" [width]="80">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費" dataType="number" [width]="70">

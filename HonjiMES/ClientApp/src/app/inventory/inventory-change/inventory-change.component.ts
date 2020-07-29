@@ -91,6 +91,13 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                 if (s.success) {
                     s.data.AdjustNo = '';
                     this.formData = s.data;
+                    this.formData.Quantity = 0;
+                    this.formData.UnitCount = 0;
+                    this.formData.Price = 0;
+                    this.formData.PriceAll = 0;
+                    this.formData.UnitPrice = 0;
+                    this.formData.WorkPrice = 0;
+                    this.formData.UnitPriceAll = 0;
                 }
             }
         );

@@ -43,6 +43,17 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     itemval7: string;
     itemval8: string;
     itemval9: string;
+    itemval10: string;
+    itemval11: string;
+    itemval12: string;
+    itemval13: string;
+    itemval14: string;
+    itemval15: string;
+    itemval16: string;
+    itemval17: string;
+    itemval18: string;
+    itemval19: string;
+
     ProcessEditorOptions: any;
     startBtnVisible: boolean;
     endBtnVisible: boolean;
@@ -55,7 +66,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 2;
+        this.colCount = 3;
         this.labelLocation = 'left';
 
         this.DateBoxOptions = {
@@ -97,22 +108,35 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.itemval1 = '　　　　　　　工單號：' + s.data.WorkOrderHead.WorkOrderNo;
-                        this.itemval2 = '　　　　　　　　品號：' + s.data.WorkOrderHead.DataNo;
-                        this.itemval3 = '　　　　　　　　名稱：' + s.data.WorkOrderHead.DataName;
-                        this.itemval4 = '　　　　　　　　機號：' + (s.data.WorkOrderHead?.MachineNo ?? '');
-                        this.itemval5 = '　預計／實際完工數量：' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
-                        this.itemval6 = '　　　　　預計開工日：' + (s.data.WorkOrderHead?.DueStartTime ?? '');
-                        this.itemval7 = '　　　　　預計完工日：' + (s.data.WorkOrderHead?.DueEndTime ?? '');
-                        this.itemval8 = '　　　　　實際開工日：' + (s.data.WorkOrderHead?.ActualStartTime ?? '');
-                        this.itemval9 = '　　　　　實際完工日：' + (s.data.WorkOrderHead?.ActualEndTime ?? '');
+                        this.itemval1 = '　　　　　　　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
+                        this.itemval2 = '　　　　　　　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
+                        this.itemval3 = '　　　　　　　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
+                        this.itemval4 = '　　　　　　　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
+                        // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
+                        this.itemval5 = '　　　　　　　　　　　　　　　';
+                        this.itemval6 = '';
 
                         let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
                             if (element.SerialNumber === this.serialkeyval && findProcess === false) {
+                                this.itemval7 = '　　　　　　　　　　製程序號：　' + element.SerialNumber;
+                                this.itemval8 = '　　　　　　　　　　製程名稱：　[' + element.ProcessNo + '] ' + element.ProcessName;
+                                this.itemval9 = '　　　　　　　　　　　　圖號：　' + (element?.DrawNo ?? '');
+                                this.itemval10 = '　　　　　　　　　　所需人力：　' + (element?.Manpower ?? '');
+                                this.itemval11 = '　　　　　　　　　　　　備註：　' + (element?.Remarks ?? '');
+                                this.itemval12 = '　　　　　　　前置時間（分）：　' + (element?.ProcessLeadTime ?? '');
+                                this.itemval13 = '　　　　　　　標準工時（分）：　' + (element?.ProcessTime ?? '');
+                                this.itemval14 = '　　　　　　　　　預計開工日：　' + (element?.DueStartTime ?? '');
+                                this.itemval15 = '　　　　　　　　　預計完工日：　' + (element?.DueEndTime ?? '');
+                                this.itemval16 = '　　　　　　　　　實際開工日：　' + (element?.ActualStartTime ?? '');
+                                this.itemval17 = '　　　　　　　　　實際完工日：　' + (element?.ActualEndTime ?? '');
+                                this.itemval18 = '　　　　　　　　　　需求數量：　' + (element?.Count ?? '0');
+                                this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0');
+
                                 this.formData = element;
                                 this.formData.ReCount = element.Count;
                                 findProcess = true;
+
                                 if (element.Status === 1) {
                                     this.startBtnVisible = true;
                                 } else if (element.Status === 2) {
@@ -129,23 +153,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             );
         }
-        // this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
-        // this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
-        // this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
     }
-    // QuantityValueChanged(e) {
-    //     this.formData.PriceAll = this.formData.Price * e.value;
-    //     // this.formData.UnitPrice = this.formData.UnitCount * e.value;
-    // }
-    // PriceValueChanged(e) {
-    //     this.formData.PriceAll = this.formData.Quantity * e.value;
-    // }
-    // UnitCountValueChanged(e) {
-    //     this.formData.UnitPriceAll = this.formData.UnitPrice * e.value;
-    // }
-    // UnitPriceValueChanged(e) {
-    //     this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
-    // }
     onStartClick(e) {
         this.modval = 'start';
     }

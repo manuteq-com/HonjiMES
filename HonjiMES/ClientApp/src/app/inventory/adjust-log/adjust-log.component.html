@@ -39,7 +39,7 @@
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [pageSize]="15"></dxo-paging>
+    <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
@@ -91,10 +91,10 @@
     <dxi-column dataField="Quantity" caption="增減數量" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="單價" [width]="80"></dxi-column>
     <dxi-column dataField="PriceAll" caption="總金額" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitCount" caption="計價數量" [width]="80"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
-    <dxi-column dataField="UnitCount" caption="單位數量" [width]="80"></dxi-column>
     <dxi-column dataField="UnitPrice" caption="單位金額" [width]="80"></dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="單位總額" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitPriceAll" caption="計價總額" [width]="80"></dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費用" [width]="80"></dxi-column>
     <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
     <dxi-column dataField="Message" caption="補充說明" [width]="140"></dxi-column>

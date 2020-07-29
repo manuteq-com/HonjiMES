@@ -35,6 +35,7 @@ export class CreatprocessComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
+    NumberBoxOptions: { showSpinButtons: boolean; mode: string; min: number; value: number; };
     constructor(private http: HttpClient) {
         this.formData = null;
         // this.editOnkeyPress = true;
@@ -46,7 +47,7 @@ export class CreatprocessComponent implements OnInit {
         this.minColWidth = 100;
         this.colCount = 1;
         this.url = location.origin + '/api';
-
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);

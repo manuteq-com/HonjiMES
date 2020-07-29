@@ -86,9 +86,9 @@
                 <dxo-lookup [dataSource]="listBillofPurchaseOrderStatus" displayExpr="Name" valueExpr="Id">
                 </dxo-lookup>
             </dxi-column> -->
-            <!-- <dxi-column dataField="Remarks" caption="備註"></dxi-column> -->
+            <dxi-column dataField="Remarks" caption="備註"></dxi-column>
             <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="CreateUser" caption="建立人員" [allowEditing]="false" [width]="100"></dxi-column>
+            <!-- <dxi-column dataField="CreateUser" caption="建立人員" [allowEditing]="false" [width]="100"></dxi-column> -->
 
             <dxi-column type="buttons" [visible]="false">
                 <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
@@ -106,7 +106,7 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1500" [height]="760" [(visible)]="adjustpopupVisible">
+        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
                     [exceldata]="exceldata"></app-inventory-list>
@@ -155,7 +155,7 @@
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
-            <dxi-column dataField="DataType" caption="產品別" [allowEditing]="false">
+            <dxi-column dataField="DataType" caption="產品別" [allowEditing]="false" [width]="70">
                 <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
@@ -167,13 +167,16 @@
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
 
-            <dxi-column dataField="Original" caption="原始數量" [allowEditing]="false">
+            <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
+                <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Original" caption="原始數量" [allowEditing]="false" [width]="80">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="AftQuantity" caption="目前數量" [allowEditing]="false">
+            <dxi-column dataField="Quantity" caption="調整數量" dataType="number" [width]="80">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="70">
+            <dxi-column dataField="AftQuantity" caption="更新後數量" [allowEditing]="false" [width]="100">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
             <dxi-column dataField="Price" caption="單價" dataType="number" [width]="70">
@@ -182,7 +185,7 @@
             <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="Unit" caption="單位">
+            <!-- <dxi-column dataField="Unit" caption="單位">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
             <dxi-column dataField="UnitCount" caption="#數量" dataType="number" [width]="70">
@@ -196,11 +199,8 @@
             </dxi-column>
             <dxi-column dataField="WorkPrice" caption="加工費" dataType="number" [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
-            </dxi-column>
+            </dxi-column> -->
 
-            <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
-                <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-            </dxi-column>
             <dxi-column dataField="Remarks" caption="備註" [allowEditing]="true">
             </dxi-column>
 

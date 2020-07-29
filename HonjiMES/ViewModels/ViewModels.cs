@@ -69,6 +69,7 @@ namespace HonjiMES.Models
     {
         public string AdjustNo { get; set; }
         public string LinkOrder { get; set; }
+        public string Remarks { get; set; }
         public List<MaterialLog> MaterialLog { get; set; }
         public List<ProductLog> ProductLog { get; set; }
         public List<AdjustDetailData> AdjustDetailData { get; set; }

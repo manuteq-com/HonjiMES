@@ -146,14 +146,14 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button #myButton horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="saveDisabled" [visible]="modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除' type='danger' icon='trash' [useSubmitBehavior]="true"
-            class="editbtn" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='更新' type='success' icon='save' [useSubmitBehavior]="true"
-            class="editbtn" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
-            class="editbtn" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button>
     </div>
 
 </form>

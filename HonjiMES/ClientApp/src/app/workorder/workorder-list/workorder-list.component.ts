@@ -52,9 +52,9 @@ export class WorkorderListComponent implements OnInit {
         if (e[colData.key].value3 === 1) {
             this.ReportHeight = 710;
         } else if (e[colData.key].value3 === 2) {
-            this.ReportHeight = 830;
+            this.ReportHeight = 760;
         } else if (e[colData.key].value3 === 3) {
-            this.ReportHeight = 780;
+            this.ReportHeight = 760;
         }
     }
     getBlue2Class(data) {

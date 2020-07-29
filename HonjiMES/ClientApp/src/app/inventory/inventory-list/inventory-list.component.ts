@@ -260,6 +260,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.postval = {
             AdjustNo: this.formData.AdjustNo,
             LinkOrder: this.formData.LinkOrder,
+            Remarks: this.formData.Remarks,
             AdjustDetailData: this.dataSourceDB
         };
         try {
