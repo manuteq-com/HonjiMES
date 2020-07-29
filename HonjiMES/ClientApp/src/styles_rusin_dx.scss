@@ -20,7 +20,7 @@
     // font-weight: 800;
     font-size: $rusin-text-size;
     height: 28px;
-    line-height: 28px;
+    line-height: 18px;
 }
 
 // .dx-data-row同.dx-state-hover 同時都有的組合
@@ -123,3 +123,7 @@ tr.dx-header-row > td.dx-datagrid-action > div.dx-column-indicators {
     padding-top: 22px;
     display: none;
 }
+
+.dx-button-has-icon .dx-button-content {
+    padding: 1px;
+  }
