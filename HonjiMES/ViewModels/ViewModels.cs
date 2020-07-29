@@ -71,18 +71,22 @@ namespace HonjiMES.Models
         public string LinkOrder { get; set; }
         public List<MaterialLog> MaterialLog { get; set; }
         public List<ProductLog> ProductLog { get; set; }
-        public List<AdjustDataDetail> AdjustDataDetail { get; set; }
+        public List<AdjustDetailData> AdjustDetailData { get; set; }
     }
 
     /// <summary>
     /// 庫存調整單
     /// </summary>
-    public class AdjustDataDetail
+    public class AdjustDetailData
     {
         public int TempId { get; set; }
         public int DataType { get; set; }
         public int DataId { get; set; }
+        public string DataNo { get; set; }
+        public string DataName { get; set; }
         public int WarehouseId { get; set; }
+        public int Original { get; set; }
+        public int AftQuantity { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal PriceAll { get; set; }
@@ -107,6 +111,7 @@ namespace HonjiMES.Models
         public string Specification { get; set; }
         public string Property { get; set; }
         public decimal Price { get; set; }
+        public int WarehouseId { get; set; }
     }
 
     /// <summary>

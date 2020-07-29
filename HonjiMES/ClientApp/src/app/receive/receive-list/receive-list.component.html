@@ -23,13 +23,25 @@
 
     <div class="col-8">
 
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
+        <dx-data-grid
+            [dataSource]="dataSourceDB"
+            showBorders="true"
+            keyExpr="Id"
+            hoverStateEnabled="true"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [focusedRowEnabled]="true"
+            [columnAutoWidth]="false"
+            [showBorders]="true"
+            [remoteOperations]="remoteOperations"
             (onCellClick)="cellClick($event)"
-            (onContentReady)="onContentReady($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
-            (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="onRowInserting($event)"
-            (onEditingStart)="onEditingStart($event)" [remoteOperations]="remoteOperations">
+            (onContentReady)="onContentReady($event)"
+            (onDataErrorOccurred)="onDataErrorOccurred($event)"
+            (onInitNewRow)="onInitNewRow($event)"
+            (onRowInserting)="onRowInserting($event)"
+            (onEditingStart)="onEditingStart($event)"
+            [remoteOperations]="remoteOperations">
 
             <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-popup

@@ -91,6 +91,8 @@ import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.comp
 import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 import { WorkorderReportComponent } from './workorder/workorder-report/workorder-report.component';
+import { AdjustLogComponent } from './inventory/adjust-log/adjust-log.component';
+import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustdetail-list.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -196,6 +198,8 @@ export function tokenGetter() {
         CreatprocessControlComponent,
         WorkorderListComponent,
         WorkorderReportComponent,
+        AdjustLogComponent,
+        AdjustdetailListComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
