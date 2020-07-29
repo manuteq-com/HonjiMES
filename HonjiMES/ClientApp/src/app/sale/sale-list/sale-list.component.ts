@@ -412,6 +412,10 @@ export class SaleListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
 
+    customizeText(e) {
+        return '總數：' + e.value + '筆';
+    }
+
   ngOnInit() {
   }
 

@@ -177,9 +177,9 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/OrderDetails/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductBasicData>> GetStockCountByProductBasicId(int id)
+        public async Task<ActionResult<ProductBasicData>> GetStockCountByProductBasicId(int id)//OrderDetails.id
         {
-            var OrderDetails = await _context.OrderDetails.FindAsync(id);
+            var OrderDetails = await _context.OrderDetails.FindAsync(id);//Find OrderDetails.ProductBasicId
             var productBasic  = await _context.ProductBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.ProductBasicId).Select(x => new ProductBasicData
             {
                 TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity)

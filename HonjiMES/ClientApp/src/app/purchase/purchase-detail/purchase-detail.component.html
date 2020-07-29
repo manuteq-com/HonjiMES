@@ -10,6 +10,13 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id">
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item
+            [customizeText]="customizeText"
+            column="DataId"
+            summaryType="count">
+        </dxi-total-item>
+    </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
     <dxi-column dataField="DataId" caption="品號" [allowEditing]="false">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>

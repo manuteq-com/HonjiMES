@@ -90,7 +90,6 @@
                     (onClick)="savedata()">
                 </dx-button>
             </div>
-
         </div>
 
         <dx-data-grid
@@ -123,6 +122,23 @@
             </dxo-keyboard-navigation>
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item
+                    [customizeText]="customizeText1"
+                    column="ProcessLeadTime"
+                    summaryType="sum">
+                </dxi-total-item>
+                <dxi-total-item
+                    [customizeText]="customizeText2"
+                    column="ProcessTime"
+                    summaryType="sum">
+                </dxi-total-item>
+                <dxi-total-item
+                    [customizeText]="customizeText3"
+                    column="ProcessCost"
+                    summaryType="sum">
+                </dxi-total-item>
+            </dxo-summary>
 
             <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
             </dxi-column>

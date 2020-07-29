@@ -215,4 +215,16 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             }, 'success', 2000);
         }
     }
+
+    customizeText1(e) {
+        return e.value + '分';
+    }
+
+    customizeText2(e) {
+        return e.value + '分';
+    }
+
+    customizeText3(e) {
+        return e.value + '元';
+    }
 }

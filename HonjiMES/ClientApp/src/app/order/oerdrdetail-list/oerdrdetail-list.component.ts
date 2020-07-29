@@ -250,4 +250,8 @@ export class OerdrdetailListComponent implements OnInit {
     //     });
     //     return
     // }
+
+    customizeText(e) {
+        return '總數：' + e.value + '筆';
+    }
 }
