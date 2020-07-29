@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using HonjiMES.Models;
 
 namespace HonjiMES.Helper
 {
@@ -19,10 +20,10 @@ namespace HonjiMES.Helper
         /// <summary>
         /// 取Token
         /// </summary>
-        /// <param name="userName">使用者名稱</param>
+        /// <param name="User">使用者</param>
         /// <param name="expireMinutes">到期時間</param>
         /// <returns></returns>
-        public string GenerateToken(string userName, int expireMinutes = 30)
+        public string GenerateToken(User User, int expireMinutes = 30)
         {
             var issuer = Configuration.GetValue<string>("JwtSettings:Issuer");
             var signKey = Configuration.GetValue<string>("JwtSettings:SignKey");
@@ -32,22 +33,21 @@ namespace HonjiMES.Helper
 
             // 在 RFC 7519 規格中(Section#4)，總共定義了 7 個預設的 Claims，我們應該只用的到兩種！
             //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, issuer));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, userName)); // User.Identity.Name
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, User.Username)); // User.Identity.Name
             //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "The Audience"));
             //claims.Add(new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.UtcNow.AddMinutes(30).ToUnixTimeSeconds().ToString()));
             //claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())); // 必須為數字
             //claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())); // 必須為數字
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())); // JWT ID
 
-            // 網路上常看到的這個 NameId 設定是多餘的
-            //claims.Add(new Claim(JwtRegisteredClaimNames.NameId, userName));
+            claims.Add(new Claim("UserID", User.Id.ToString()));
 
             // 這個 Claim 也以直接被 JwtRegisteredClaimNames.Sub 取代，所以也是多餘的
             //claims.Add(new Claim(ClaimTypes.Name, userName));
 
             // 你可以自行擴充 "roles" 加入登入者該有的角色
             claims.Add(new Claim("roles", "Admin"));
-            //claims.Add(new Claim("roles", "Users"));
+            // claims.Add(new Claim("roles", "Admin"));
 
             var userClaimsIdentity = new ClaimsIdentity(claims);
 

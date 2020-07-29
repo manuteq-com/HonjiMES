@@ -91,7 +91,7 @@ namespace HonjiMES.Controllers
 
                 purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;
                 purchaseHead.CreateTime = dt;
-                purchaseHead.CreateUser = 1;
+                purchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
                 var PurchaseDetail = new List<PurchaseDetail>();
                 foreach (var item in purchaseDetail)
                 {
@@ -102,7 +102,7 @@ namespace HonjiMES.Controllers
                         item.DataName = BillP.DataName;
                         item.Specification = BillP.Specification;
                         item.CreateTime = dt;
-                        item.CreateUser = 1;
+                        item. CreateUser = MyFun.GetUserID(HttpContext);
                     }
                     else
                     {
@@ -111,7 +111,7 @@ namespace HonjiMES.Controllers
                         item.DataName = MaterialBasicData.Name;
                         item.Specification = MaterialBasicData.Specification;
                         item.CreateTime = dt;
-                        item.CreateUser = 1;
+                        item. CreateUser = MyFun.GetUserID(HttpContext);
                     }
                     item.PurchaseType = purchaseHead.Type;
                     item.SupplierId = purchaseHead.SupplierId;
@@ -197,9 +197,9 @@ namespace HonjiMES.Controllers
             }
             var dt = DateTime.Now;
             BillofPurchaseCheckin.CreateTime = dt;
-            BillofPurchaseCheckin.CreateUser = 1;
+            BillofPurchaseCheckin. CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
-            BillofPurchaseDetails.UpdateUser = 1;
+            BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.Price;
@@ -223,7 +223,7 @@ namespace HonjiMES.Controllers
             var tempPurchaseCount = PurchaseDetail.PurchaseCount;
             PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
             PurchaseDetail.UpdateTime = dt;
-            PurchaseDetail.UpdateUser = 1;
+            PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
             if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
                 return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
             }
@@ -265,7 +265,7 @@ namespace HonjiMES.Controllers
                 WorkPrice = BillofPurchaseCheckin.WorkPrice,
                 Reason = BillofPurchaseCheckin.Remarks,
                 Message = "進貨檢驗入庫",
-                CreateUser = 1
+                 CreateUser = MyFun.GetUserID(HttpContext)
             });
             Material.Quantity += BillofPurchaseCheckin.Quantity;
 
@@ -321,14 +321,14 @@ namespace HonjiMES.Controllers
                         UnitPrice = item.UnitPrice,
                         Remarks = item.Remarks,
                         CreateTime = dt,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     if (item.BillofPurchaseCheckins.Sum(x => x.Quantity) > item.Quantity)
                     {
                         return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + item.DataNo + " ]"));
                     }
                     item.UpdateTime = dt;
-                    item.UpdateUser = 1;
+                    item.UpdateUser = MyFun.GetUserID(HttpContext);
                     item.CheckStatus = 1;
                     item.CheckCountIn = item.BillofPurchaseCheckins.Sum(x => x.Quantity);
                     item.CheckPriceIn = item.CheckCountIn * item.Price;
@@ -342,7 +342,7 @@ namespace HonjiMES.Controllers
                     var tempPurchaseCount = PurchaseDetail.PurchaseCount;
                     PurchaseDetail.PurchaseCount += item.Quantity;
                     PurchaseDetail.UpdateTime = dt;
-                    PurchaseDetail.UpdateUser = 1;
+                    PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
                     if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
                         return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
                     }
@@ -384,7 +384,7 @@ namespace HonjiMES.Controllers
                         WorkPrice = item.WorkPrice,
                         Reason = item.Remarks,
                         Message = "批量驗收入庫",
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     Material.Quantity += item.Quantity;
                  
@@ -455,9 +455,9 @@ namespace HonjiMES.Controllers
             
             var dt = DateTime.Now;
             BillofPurchaseReturn.CreateTime = dt;
-            BillofPurchaseReturn.CreateUser = 1;
+            BillofPurchaseReturn. CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
-            BillofPurchaseDetails.UpdateUser = 1;
+            BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckCountOut = (int)BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceOut = BillofPurchaseDetails.CheckCountOut * BillofPurchaseDetails.OriginPrice;
 
@@ -473,7 +473,7 @@ namespace HonjiMES.Controllers
             }
             PurchaseDetail.PurchaseCount = PurchaseDetail.PurchaseCount - (int)BillofPurchaseReturn.Quantity;
             PurchaseDetail.UpdateTime = dt;
-            PurchaseDetail.UpdateUser = 1;
+            PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
             
             //出庫(驗退)
             var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
@@ -495,7 +495,7 @@ namespace HonjiMES.Controllers
                 WorkPrice = BillofPurchaseReturn.WorkPrice,
                 Reason = BillofPurchaseReturn.Reason,
                 Message = "進貨驗退出庫",
-                CreateUser = 1
+                 CreateUser = MyFun.GetUserID(HttpContext)
             });
             Material.Quantity -= (int)BillofPurchaseReturn.Quantity;
 

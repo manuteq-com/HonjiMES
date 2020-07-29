@@ -141,7 +141,7 @@ namespace HonjiMES.Controllers
                                 Name = Detailitem.ProductBasic.Name,
                                 Specification = Detailitem.ProductBasic.Specification,
                                 CreateTime = dt,
-                                CreateUser = 1,
+                                 CreateUser = MyFun.GetUserID(HttpContext),
                                 DeleteFlag = 0
                             });
                         }
@@ -201,7 +201,7 @@ namespace HonjiMES.Controllers
                             Remarks = ToSales.Remarks,
                             DeleteFlag = 0,
                             CreateTime = dt,
-                            CreateUser = 1,
+                             CreateUser = MyFun.GetUserID(HttpContext),
                             SaleDetailNews = nlist
                         };
                         _context.SaleHeads.Add(nsale);
@@ -276,15 +276,15 @@ namespace HonjiMES.Controllers
                         Price = item.Price,
                         PriceAll = item.Quantity * item.Price,
                         Message = "銷貨",
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     item.Product.Quantity -= item.Quantity;
                     item.Product.QuantityAdv -= item.Quantity;
                     item.Status = 1;//1已銷貨
                     item.UpdateTime = dt;
-                    item.UpdateUser = 1;
+                    item.UpdateUser = MyFun.GetUserID(HttpContext);
                     item.Product.UpdateTime = dt;
-                    item.Product.UpdateUser = 1;
+                    item.Product.UpdateUser = MyFun.GetUserID(HttpContext);
                     if (item.Product.Quantity < 0)
                     {
                         oversale.Add(item.Product.ProductNo);
@@ -380,19 +380,19 @@ namespace HonjiMES.Controllers
                         PriceAll = ProductsData.Price * ReturnSale.Quantity,
                         Reason = ReturnSale.Reason,
                         Message = "銷退",
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     ProductsData.Quantity += ReturnSale.Quantity;
                     ProductsData.UpdateTime = dt;
-                    ProductsData.UpdateUser = 1;
-                    // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt, CreateUser = 1 });
+                    ProductsData.UpdateUser = MyFun.GetUserID(HttpContext);
+                    // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
                     // SaleDetail.Product.Quantity += ReturnSale.Quantity;
                     // SaleDetail.Product.UpdateTime = dt;
-                    // SaleDetail.Product.UpdateUser = 1;
+                    // SaleDetail.Product.UpdateUser = MyFun.GetUserID(HttpContext);
                 }
                 else
                 {
-                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = 1 });
+                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
                 }
 
                 await _context.SaveChangesAsync();

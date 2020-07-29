@@ -84,7 +84,7 @@ namespace HonjiMES.Controllers
             
             var Msg = MyFun.MappingData(ref Ocustomer, customer);
             Ocustomer.UpdateTime = DateTime.Now;
-            Ocustomer.UpdateUser = 1;
+            Ocustomer.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();

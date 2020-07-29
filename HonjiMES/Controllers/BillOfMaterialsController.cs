@@ -476,7 +476,7 @@ namespace HonjiMES.Controllers
                         Group = item.Group,
                         Type = item.Type,
                         Remarks = item.Remarks,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     };
                     _context.BillOfMaterialVers.Add(nVer);
                 }
@@ -546,7 +546,7 @@ namespace HonjiMES.Controllers
                             Group = item.Group,
                             Type = item.Type,
                             Remarks = item.Remarks,
-                            CreateUser = 1
+                             CreateUser = MyFun.GetUserID(HttpContext)
                         };
                         _context.BillOfMaterialVers.Add(nVer);
                     }
@@ -695,7 +695,7 @@ namespace HonjiMES.Controllers
                         Type = item.Type,
                         Remarks = item.Remarks,
                         Version = item.Version,
-                        CreateUser = 1,
+                         CreateUser = MyFun.GetUserID(HttpContext),
                     };
                     _context.MBillOfMaterials.Add(nMbom);
                 }

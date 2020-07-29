@@ -161,7 +161,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OldBillofPurchaseHead, billofPurchaseHead);
 
             OldBillofPurchaseHead.UpdateTime = DateTime.Now;
-            OldBillofPurchaseHead.UpdateUser = 1;
+            OldBillofPurchaseHead.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {
@@ -196,7 +196,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseHeads.Add(billofPurchaseHead);
             billofPurchaseHead.CreateTime = DateTime.Now;
-            billofPurchaseHead.CreateUser = 1;
+            billofPurchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(billofPurchaseHead));
@@ -231,7 +231,7 @@ namespace HonjiMES.Controllers
                     return Ok(MyFun.APIResponseError("[進貨單號]已存在! 請刷新單號!"));
                 }
                 Head.CreateTime = dt;
-                Head.CreateUser = 1;
+                Head. CreateUser = MyFun.GetUserID(HttpContext);
                 var Details = new List<BillofPurchaseDetail>();
                 foreach (var item in Detail)
                 {
@@ -242,7 +242,7 @@ namespace HonjiMES.Controllers
                     item.DataNo = MaterialBasic.MaterialNo;
                     item.Specification = MaterialBasic.Specification;
                     item.CreateTime = dt;
-                    item.CreateUser = 1;
+                    item. CreateUser = MyFun.GetUserID(HttpContext);
                     Details.Add(item);
                 }
                 Head.BillofPurchaseDetails = Details;

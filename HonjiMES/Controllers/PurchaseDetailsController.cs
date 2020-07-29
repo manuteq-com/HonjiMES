@@ -110,7 +110,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OldPurchaseDetail, purchaseDetail);
 
             OldPurchaseDetail.UpdateTime = DateTime.Now;
-            OldPurchaseDetail.UpdateUser = 1;
+            OldPurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
             OldPurchaseDetail.Price = OldPurchaseDetail.Quantity * OldPurchaseDetail.OriginPrice;
 
             try
@@ -147,7 +147,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseDetails.Add(purchaseDetail);
             purchaseDetail.CreateTime = DateTime.Now;
-            purchaseDetail.CreateUser = 1;
+            purchaseDetail. CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseDetail));

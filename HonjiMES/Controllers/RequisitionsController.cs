@@ -119,7 +119,7 @@ namespace HonjiMES.Controllers
             requisition.ProductNumber = ProductBasics.ProductNumber;
             requisition.Specification = ProductBasics.Specification;
             requisition.CreateTime = dt;
-            requisition.CreateUser = 1;
+            requisition. CreateUser = MyFun.GetUserID(HttpContext);
             // BOM內容
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
@@ -166,7 +166,7 @@ namespace HonjiMES.Controllers
                         Ismaterial = item.Ismaterial,
                         Quantity = item.ReceiveQty,
                         CreateTime = dt,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
                 
@@ -307,19 +307,19 @@ namespace HonjiMES.Controllers
                             {
                                 Quantity = Receive.RQty,
                                 CreateTime = dt,
-                                CreateUser = 1
+                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Material.Quantity;
                             Material.Quantity = Original - Receive.RQty;
                             Material.UpdateTime = dt;
-                            Material.UpdateUser = 1;
+                            Material.UpdateUser = MyFun.GetUserID(HttpContext);
                             Material.MaterialLogs.Add(new MaterialLog
                             {
                                 Original = Original,
                                 Quantity = -Receive.RQty,
                                 Message = "領料出庫",
                                 CreateTime = dt,
-                                CreateUser = 1
+                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                         }
                     }
@@ -340,19 +340,19 @@ namespace HonjiMES.Controllers
                             {
                                 Quantity = Receive.RQty,
                                 CreateTime = dt,
-                                CreateUser = 1
+                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Product.Quantity;
                             Product.Quantity = Original - Receive.RQty;
                             Product.UpdateTime = dt;
-                            Product.UpdateUser = 1;
+                            Product.UpdateUser = MyFun.GetUserID(HttpContext);
                             Product.ProductLogs.Add(new ProductLog
                             {
                                 Original = Original,
                                 Quantity = -Receive.RQty,
                                 Message = "領料出庫",
                                 CreateTime = dt,
-                                CreateUser = 1
+                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                         }
                     }

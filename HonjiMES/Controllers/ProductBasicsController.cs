@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
 
             var Msg = MyFun.MappingData(ref OproductBasic, productBasic);
             OproductBasic.UpdateTime = DateTime.Now;
-            OproductBasic.UpdateUser = 1;
+            OproductBasic.UpdateUser = MyFun.GetUserID(HttpContext);
 
             //更新完basic後，同步更新底下資料
             var Products = _context.Products.AsQueryable().Where(x => x.ProductBasicId == OproductBasic.Id && x.DeleteFlag == 0);
@@ -160,7 +160,7 @@ namespace HonjiMES.Controllers
                     Property = product.Property,
                     Price = product.Price,
                     SubInventory = product.SubInventory,
-                    CreateUser = 1
+                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
                 ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
@@ -195,7 +195,7 @@ namespace HonjiMES.Controllers
                         SubInventory = product.SubInventory,
                         WarehouseId = warehouseId,
                         ProductBasicId = product.ProductBasicId,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
             }

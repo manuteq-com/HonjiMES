@@ -196,7 +196,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OldPurchaseHead, purchaseHead);
 
             OldPurchaseHead.UpdateTime = DateTime.Now;
-            OldPurchaseHead.UpdateUser = 1;
+            OldPurchaseHead.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {
@@ -231,7 +231,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseHeads.Add(purchaseHead);
             purchaseHead.CreateTime = DateTime.Now;
-            purchaseHead.CreateUser = 1;
+            purchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseHead));

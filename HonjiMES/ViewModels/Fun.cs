@@ -115,6 +115,17 @@ namespace HonjiMES.Models
             }
             return "";
         }
+        /// <summary>
+        /// 從 Token 取出使用者ID 
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        internal static int GetUserID(HttpContext httpContext)
+        {
+            var UserID = 1;
+            int.TryParse(httpContext.User.Claims.Where(x => x.Type == "UserID").FirstOrDefault()?.Value, out UserID);        
+            return UserID;
+        }
 
         internal static T JsonToData<T>(string jsonstring) where T : new()
         {

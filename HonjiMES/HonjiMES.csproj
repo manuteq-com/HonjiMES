@@ -24,7 +24,9 @@
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.1" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
     <PackageReference Include="EntityFrameworkCore.Scaffolding.Handlebars" Version="3.7.0" />
+    <PackageReference Include="jose-jwt" Version="2.5.0" />
     <PackageReference Include="LINQKit.Core" Version="1.1.17" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.4" />
@@ -79,6 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Filter\JwtAuthActionFilter.cs" />
     <Compile Remove="Migrations\20200518061853_InitialCreate.cs" />
     <Compile Remove="Migrations\20200518061853_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20200518063846_InitialCreate.cs" />

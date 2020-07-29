@@ -126,7 +126,7 @@ namespace HonjiMES.Controllers
             
             var Msg = MyFun.MappingData(ref Oproduct, product);
             Oproduct.UpdateTime = DateTime.Now;
-            Oproduct.UpdateUser = 1;
+            Oproduct.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {
@@ -197,7 +197,7 @@ namespace HonjiMES.Controllers
                         SubInventory = product.SubInventory,
                         WarehouseId = warehouseId,
                         ProductBasicId = product.ProductBasicId,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
             }

@@ -85,7 +85,7 @@ namespace HonjiMES.Controllers
 
             var Msg = MyFun.MappingData(ref Oprocess, process);
             Oprocess.UpdateTime = DateTime.Now;
-            Oprocess.UpdateUser = 1;
+            Oprocess.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();
@@ -397,7 +397,7 @@ namespace HonjiMES.Controllers
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
                     Count = WorkOrderData.WorkOrderHead.Count,
-                    CreateUser = 1
+                     CreateUser = MyFun.GetUserID(HttpContext)
                 };
 
                 foreach (var item in WorkOrderData.WorkOrderDetail)
@@ -422,7 +422,7 @@ namespace HonjiMES.Controllers
                         DueEndTime = item.DueEndTime,
                         ActualStartTime = item.ActualStartTime,
                         ActualEndTime = item.ActualEndTime,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     };
                     nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
                 }
@@ -475,7 +475,7 @@ namespace HonjiMES.Controllers
                         OWorkOrderDetail.DueEndTime = item.DueEndTime;
                         OWorkOrderDetail.ActualStartTime = item.ActualStartTime;
                         OWorkOrderDetail.ActualEndTime = item.ActualEndTime;
-                        OWorkOrderDetail.UpdateUser = 1;
+                        OWorkOrderDetail.UpdateUser = MyFun.GetUserID(HttpContext);
                     }
                     else // 如ID為0，則表示該工序為新增
                     {
@@ -499,8 +499,8 @@ namespace HonjiMES.Controllers
                             DueEndTime = item.DueEndTime,
                             ActualStartTime = item.ActualStartTime,
                             ActualEndTime = item.ActualEndTime,
-                            CreateUser = 1,
-                            UpdateUser = 1
+                             CreateUser = MyFun.GetUserID(HttpContext),
+                            UpdateUser = MyFun.GetUserID(HttpContext)
                         };
                         OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
                     }
@@ -515,7 +515,7 @@ namespace HonjiMES.Controllers
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
-                OWorkOrderHeads.UpdateUser = 1;
+                OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try
                 {
                     await _context.SaveChangesAsync();

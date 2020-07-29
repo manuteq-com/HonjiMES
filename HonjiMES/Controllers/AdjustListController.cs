@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
             
             var Msg = MyFun.MappingData(ref Omateriallog, materiallog);
             Omateriallog.UpdateTime = DateTime.Now;
-            Omateriallog.UpdateUser = 1;
+            Omateriallog.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {

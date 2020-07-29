@@ -221,7 +221,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<APIResponse>> inventorychange(inventorychange inventorychange)
         {
-            var UserID = 1;
+            var UserID = MyFun.GetUserID(HttpContext);
             var dt = DateTime.Now;
             if (inventorychange.mod == "material")
             {
@@ -308,7 +308,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<APIResponse>> inventoryListChange(AdjustData AdjustData)
         {
-            var UserID = 1;
+            var UserID = MyFun.GetUserID(HttpContext);
             var dt = DateTime.Now;
             if (AdjustData.AdjustDataDetail.Count() == 0) {
                 return Ok(MyFun.APIResponseError("無庫存調整項目!"));

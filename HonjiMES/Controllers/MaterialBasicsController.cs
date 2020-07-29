@@ -86,7 +86,7 @@ namespace HonjiMES.Controllers
 
             var Msg = MyFun.MappingData(ref OmaterialBasic, materialBasic);
             OmaterialBasic.UpdateTime = DateTime.Now;
-            OmaterialBasic.UpdateUser = 1;
+            OmaterialBasic.UpdateUser = MyFun.GetUserID(HttpContext);
 
             //更新完basic後，同步更新底下資料
             var Materials = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == OmaterialBasic.Id && x.DeleteFlag == 0);
@@ -154,7 +154,7 @@ namespace HonjiMES.Controllers
                     Property = material.Property,
                     Price = material.Price,
                     Unit = material.Unit,
-                    CreateUser = 1
+                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
                 MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
@@ -187,7 +187,7 @@ namespace HonjiMES.Controllers
                         BaseQuantity = 2,
                         WarehouseId = warehouseId,
                         MaterialBasicId = material.MaterialBasicId,
-                        CreateUser = 1
+                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
             }

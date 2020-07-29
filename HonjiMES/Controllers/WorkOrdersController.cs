@@ -95,7 +95,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                            CreateUser = 1,
+                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
@@ -157,7 +157,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                            CreateUser = 1,
+                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
 
                         //檢查工單是否全數完工
@@ -233,7 +233,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                            CreateUser = 1,
+                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else

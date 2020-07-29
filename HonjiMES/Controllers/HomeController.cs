@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using HonjiMES.Filter;
 using HonjiMES.Helper;
 using HonjiMES.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HonjiMES.Controllers
@@ -29,14 +32,14 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public ActionResult<string> SingIn(LoginViewModel login)
         {
-            var UserID = ValidateUser(login);
-            if (UserID.HasValue)
+            var User = ValidateUser(login);
+            if (User != null)
             {
                 var UserRolesToken = new UserRolesToken();
-                UserRolesToken.Token = _jwt.GenerateToken(login.Username);
-                UserRolesToken.Username = login.Username;
+                UserRolesToken.Token = _jwt.GenerateToken(User);
+                UserRolesToken.Username = User.Username;
                 UserRolesToken.Timeout = DateTime.Now.AddMonths(1);
-                UserRolesToken.Menu = GetMenu(UserID.Value);
+                UserRolesToken.Menu = GetMenu(User.Id);
                 return Ok(MyFun.APIResponseOK(UserRolesToken));
             }
             else
@@ -50,7 +53,16 @@ namespace HonjiMES.Controllers
         {
             var MenuViewModellist = new List<MenuViewModel>();
             var Allmenu = _context.Menus.Where(x => x.DeleteFlag == 0).ToList();
-            var UserRoles = _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id).Select(x => x.MenuId).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
+            var UserRoles = new List<int>();
+
+            if (Id == 1)//SUPER USER 可以使用全部的頁面，不必設權限
+            {
+                UserRoles = Allmenu.Select(x => x.Id).ToList();
+            }
+            else
+            {
+                UserRoles = _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id).Select(x => x.MenuId).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
+            }
             foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
             {
                 var Menuitem = GetMenuitem(item.Id, Allmenu, UserRoles);
@@ -88,9 +100,9 @@ namespace HonjiMES.Controllers
             return MenuViewModellist.ToArray();
         }
 
-        private int? ValidateUser(LoginViewModel login)
+        private User ValidateUser(LoginViewModel login)
         {
-            return 1; // TODO
+            return _context.Users.Find(1);
             var Password = MyFun.Encryption(login.Password);
             var Users = _context.Users.Where(x => x.DeleteFlag == 0 && x.Username == login.Username && x.Password == Password).FirstOrDefault();
             if (Users == null)
@@ -99,8 +111,16 @@ namespace HonjiMES.Controllers
             }
             else
             {
-                return Users.Id;
+                return Users;
             }
+        }
+        [JWTAuthorize]
+        [HttpGet]
+        public ActionResult<string> TestToken()
+        {
+            int identity = MyFun.GetUserID(HttpContext);
+            return Ok(MyFun.APIResponseOK(null, "登入中"));
+
         }
     }
 }

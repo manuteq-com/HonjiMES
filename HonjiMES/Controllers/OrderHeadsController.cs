@@ -164,7 +164,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OldorderHead, orderHead);
 
             OldorderHead.UpdateTime = DateTime.Now;
-            OldorderHead.UpdateUser = 1;
+            OldorderHead.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();
@@ -197,7 +197,7 @@ namespace HonjiMES.Controllers
         {
             _context.OrderHeads.Add(orderHead);
             orderHead.CreateTime = DateTime.Now;
-            orderHead.CreateUser = 1;
+            orderHead. CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(orderHead));
         }
@@ -278,12 +278,12 @@ namespace HonjiMES.Controllers
                             orderHead.CustomerNo = OrderHeadData.CustomerNo;//替換客戶單號
                             orderHead.OrderNo = OrderNo + NoCount.ToString("000");
                             orderHead.CreateTime = dt;
-                            orderHead.CreateUser = 1;
+                            orderHead. CreateUser = MyFun.GetUserID(HttpContext);
                             var OrderDetails = new List<OrderDetail>();
                             foreach (var item in OrderDetail)
                             {
                                 item.CreateTime = dt;
-                                item.CreateUser = 1;
+                                item. CreateUser = MyFun.GetUserID(HttpContext);
                                 OrderDetails.Add(item);
                             }
                             orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
@@ -404,7 +404,7 @@ namespace HonjiMES.Controllers
                             Specification = Productitemlist[2].Trim(),
                             Property = "",
                             CreateTime = dt,
-                            CreateUser = 1,
+                             CreateUser = MyFun.GetUserID(HttpContext),
                         };
 
                         // 暫時停用，自動新增Product資料。
@@ -419,7 +419,7 @@ namespace HonjiMES.Controllers
                         //     MaterialId = 0,
                         //     MaterialRequire = 1,
                         //     CreateTime = dt,
-                        //     CreateUser = 1,
+                        //      CreateUser = MyFun.GetUserID(HttpContext),
                         //     WarehouseId  = 2
                         // };
                         // nProduct.ProductLogs.Add(new ProductLog{

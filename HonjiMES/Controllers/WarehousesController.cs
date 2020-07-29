@@ -204,7 +204,7 @@ namespace HonjiMES.Controllers
 
             var Msg = MyFun.MappingData(ref Osupplier, warehouse);
             Osupplier.UpdateTime = DateTime.Now;
-            Osupplier.UpdateUser = 1;
+            Osupplier.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {

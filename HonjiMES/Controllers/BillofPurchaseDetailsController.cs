@@ -89,7 +89,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OldBillofPurchaseDetail, billofPurchaseDetail);
 
             OldBillofPurchaseDetail.UpdateTime = DateTime.Now;
-            OldBillofPurchaseDetail.UpdateUser = 1;
+            OldBillofPurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {
@@ -129,7 +129,7 @@ namespace HonjiMES.Controllers
             billofPurchaseDetail.DataNo = Material.MaterialNo;
             billofPurchaseDetail.Specification = Material.Specification;
             billofPurchaseDetail.CreateTime = DateTime.Now;
-            billofPurchaseDetail.CreateUser = 1;
+            billofPurchaseDetail. CreateUser = MyFun.GetUserID(HttpContext);
             var BillofPurchaseHead = _context.BillofPurchaseHeads.Find(Pid);
             if (BillofPurchaseHead == null)
             {

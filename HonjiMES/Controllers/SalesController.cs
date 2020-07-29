@@ -129,7 +129,7 @@ namespace HonjiMES.Controllers
             var OsaleHead = _context.SaleHeads.Find(id);
             var Msg = MyFun.MappingData(ref OsaleHead, saleHead);
             OsaleHead.UpdateTime = DateTime.Now;
-            OsaleHead.UpdateUser = 1;
+            OsaleHead.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();

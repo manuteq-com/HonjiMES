@@ -104,7 +104,7 @@ namespace HonjiMES.Controllers
             var OrderDetails = _context.OrderDetails.Find(id);
             var Msg = MyFun.MappingData(ref OrderDetails, orderDetail);
             OrderDetails.UpdateTime = DateTime.Now;
-            OrderDetails.UpdateUser = 1;
+            OrderDetails.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();
@@ -143,7 +143,7 @@ namespace HonjiMES.Controllers
             orderDetail.Serial = Serial + 1;
             orderDetail.OrderId = PID;
             orderDetail.CreateTime = DateTime.Now;
-            orderDetail.CreateUser = 1;
+            orderDetail. CreateUser = MyFun.GetUserID(HttpContext);
             _context.OrderDetails.Add(orderDetail);
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             await _context.SaveChangesAsync();

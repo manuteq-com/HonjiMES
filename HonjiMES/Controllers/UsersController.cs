@@ -90,7 +90,7 @@ namespace HonjiMES.Controllers
 
             var Msg = MyFun.MappingData(ref Osupplier, user);
             Osupplier.UpdateTime = DateTime.Now;
-            Osupplier.UpdateUser = 1;
+            Osupplier.UpdateUser = MyFun.GetUserID(HttpContext);
 
             try
             {
@@ -127,7 +127,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("帳戶名稱已存在!"));
             }
             creatuser.user.Password = MyFun.Encryption(creatuser.user.Password);
-            creatuser.user.CreateUser = 1;
+            creatuser.user. CreateUser = MyFun.GetUserID(HttpContext);
             var UserRoleList = MyFun.ReturnRole(creatuser.MenuList);
             foreach (var UserRole in UserRoleList)
             {
