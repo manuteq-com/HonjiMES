@@ -57,6 +57,13 @@
     <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item
+            [customizeText]="customizeText"
+            column="MachineNo"
+            summaryType="count">
+        </dxi-total-item>
+    </dxo-summary>
     <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" width="200"></dxi-column>
     <dxi-column dataField="ProductBasicId" caption="品號" width="200" editCellTemplate="ProductBasicIdEditCellTemplate">

@@ -74,4 +74,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
             }
         }, 'error', 3000);
     }
+    customizeText(e) {
+        return '總數：' + e.value + '筆';
+    }
 }
