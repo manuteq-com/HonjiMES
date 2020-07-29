@@ -54,7 +54,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="TempId" caption="品號" [width]="160" editCellTemplate="TempIdEditCellTemplate">
+       <dxi-column dataField="TempId" caption="品號" [width]="160" editCellTemplate="TempIdEditCellTemplate">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>

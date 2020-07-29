@@ -7,6 +7,8 @@ namespace HonjiMES.Models
 {
     public partial class HonjiContext : DbContext
     {
+        public virtual DbSet<AdjustDetail> AdjustDetails { get; set; }
+        public virtual DbSet<AdjustHead> AdjustHeads { get; set; }
         public virtual DbSet<AllStockLog> AllStockLogs { get; set; }
         public virtual DbSet<BillOfMaterial> BillOfMaterials { get; set; }
         public virtual DbSet<BillOfMaterialVer> BillOfMaterialVers { get; set; }
@@ -64,6 +66,87 @@ namespace HonjiMES.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AdjustDetail>(entity =>
+            {
+                entity.HasIndex(e => e.AdjustHeadId)
+                    .HasName("adjust_head_id");
+
+                entity.Property(e => e.AdjustHeadId).HasComment("調整單ID");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.ItemId).HasComment("料號ID");
+
+                entity.Property(e => e.ItemType).HasComment("料號種類(1原料2成品3半成品)");
+
+                entity.Property(e => e.Message)
+                    .HasComment("補充說明")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Original).HasComment("原始數量");
+
+                entity.Property(e => e.Price).HasComment("單價");
+
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
+                entity.Property(e => e.Quantity).HasComment("增減數量");
+
+                entity.Property(e => e.Reason)
+                    .HasComment("修改原因")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UnitCount).HasComment("單位數量");
+
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
+
+                entity.HasOne(d => d.AdjustHead)
+                    .WithMany(p => p.AdjustDetails)
+                    .HasForeignKey(d => d.AdjustHeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("adjust_detail_ibfk_1");
+            });
+
+            modelBuilder.Entity<AdjustHead>(entity =>
+            {
+                entity.Property(e => e.AdjustNo)
+                    .HasComment("調整單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.LinkOrder)
+                    .HasComment("關聯單號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+            });
+
             modelBuilder.Entity<AllStockLog>(entity =>
             {
                 entity.HasNoKey();
@@ -75,6 +158,14 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'0000-00-00 00:00:00'");
+
+                entity.Property(e => e.DataName)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DataNo)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.LinkOrder)
                     .HasCharSet("utf8mb4")
