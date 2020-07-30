@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-receivedetail-list',
@@ -23,10 +24,7 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
     WarehouseIDP: any;
     WarehouseIDM: any;
     Warehouselist: any;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.dataSourceMaterialDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
@@ -60,7 +58,6 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
     }
     setWarehouse(values: any, WarehouseIDM: number) {
         values.WarehouseID = WarehouseIDM;
-        debugger;
         return values;
     }
     ngOnInit() {

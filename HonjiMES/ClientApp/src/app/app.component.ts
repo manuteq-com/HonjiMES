@@ -47,7 +47,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         return this.http.get<APIResponse>('/api' + apiUrl);
     }
     public PostData(apiUrl: string, data: any = {}): Observable<APIResponse> {
-        debugger;
         const body = JSON.stringify(data);
         const httpOptions = {
             withCredentials: true, body,

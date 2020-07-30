@@ -8,7 +8,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',
@@ -38,7 +38,7 @@ export class BillPurchaseDetailComponent implements OnInit {
     CheckInBtnVisible: boolean;
     postval: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
         this.onCellPrepared = this.onCellPrepared.bind(this);
@@ -55,14 +55,11 @@ export class BillPurchaseDetailComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }
         );
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }

@@ -8,7 +8,7 @@ import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-inventory-list',
     templateUrl: './inventory-list.component.html',
@@ -55,7 +55,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     Warehouseval: any;
     onCellPreparedLevel: number;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -77,21 +77,21 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB = [];
-        this.GetData('/Inventory/GetAdjustNo').subscribe(
+        this.app.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
                 }
             }
         );
-        this.GetData('/Inventory/GetBasicsData').subscribe(
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
                     this.BasicDataList = s.data;
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseListAll = s.data;
             }
@@ -101,7 +101,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         data.setValue(value);
     }
     refreshAdjustNo() {
-        this.GetData('/Inventory/GetAdjustNo').subscribe(
+        this.app.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
@@ -117,7 +117,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         const dataType = basicData.DataType;
         const dataId = basicData.DataId;
         if (dataType === 1) {   // 查詢原料
-            this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {
@@ -128,7 +128,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                 }
             );
         } else if (dataType === 2) {    // 查詢成品
-            this.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {
@@ -139,7 +139,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                 }
             );
         } else if (dataType === 3) {    // 查詢半成品
-            this.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {

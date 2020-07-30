@@ -6,11 +6,12 @@ import { SendService } from '../../shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-purchase-detail',
-  templateUrl: './purchase-detail.component.html',
-  styleUrls: ['./purchase-detail.component.css']
+    selector: 'app-purchase-detail',
+    templateUrl: './purchase-detail.component.html',
+    styleUrls: ['./purchase-detail.component.css']
 })
 export class PurchaseDetailComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -27,7 +28,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     Priceval: number;
     WarehouseList: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.dataSourceDB = new CustomStore({
@@ -39,20 +40,16 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseDetail/' + key, 'DELETE')
         });
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
     ngOnInit() {
     }
     ngOnChanges() {
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }
         );
     }
     to_purchaseClick(e) {
-        debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
     QuantityValueChanged(e, data) {

@@ -8,11 +8,12 @@ import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextre
 import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-warehouse-list',
-  templateUrl: './warehouse-list.component.html',
-  styleUrls: ['./warehouse-list.component.css']
+    selector: 'app-warehouse-list',
+    templateUrl: './warehouse-list.component.html',
+    styleUrls: ['./warehouse-list.component.css']
 })
 export class WarehouseListComponent implements OnInit {
 
@@ -29,10 +30,8 @@ export class WarehouseListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     warehouselist: any;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+
+    constructor(private http: HttpClient, public app: AppComponent) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -91,12 +90,12 @@ export class WarehouseListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

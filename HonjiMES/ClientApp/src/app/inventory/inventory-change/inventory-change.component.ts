@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { InventoryChange } from 'src/app/model/viewmodels';
 import { SendService } from 'src/app/shared/mylib';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-inventory-change',
     templateUrl: './inventory-change.component.html',
@@ -53,7 +53,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         // debugger;
         this.CustomerVal = null;
         this.formData = null;
@@ -67,13 +67,10 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.colCount = 2;
         this.url = location.origin + '/api';
         this.controller = '/OrderDetails';
-        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
-        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
-        this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
+        this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
+        this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
+        this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -86,7 +83,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.itemval3 = '';
         this.minval = 0;
         debugger;
-        this.GetData('/Inventory/GetAdjustNo').subscribe(
+        this.app.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
                 if (s.success) {
                     s.data.AdjustNo = '';
@@ -95,7 +92,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
             }
         );
         if (this.modval === 'material') {
-            this.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
+            this.app.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -110,7 +107,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.modval === 'product') {
-            this.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
+            this.app.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -125,7 +122,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.modval === 'wiproduct') {
-            this.GetData('/Wiproducts/GetWiproduct/' + this.itemkeyval).subscribe(
+            this.app.GetData('/Wiproducts/GetWiproduct/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -163,7 +160,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.formData.UnitPriceAll = this.formData.UnitCount * e.value;
     }
     refreshAdjustNo() {
-        this.GetData('/Inventory/GetAdjustNo').subscribe(
+        this.app.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData.AdjustNo = s.data.AdjustNo;
@@ -185,7 +182,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

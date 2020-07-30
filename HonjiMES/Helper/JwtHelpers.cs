@@ -21,7 +21,7 @@ namespace HonjiMES.Helper
         /// 取Token
         /// </summary>
         /// <param name="User">使用者</param>
-        /// <param name="expireMinutes">到期時間</param>
+        /// <param name="expireMinutes">幾分鐘後過期</param>
         /// <returns></returns>
         public string GenerateToken(User User, int expireMinutes = 30)
         {

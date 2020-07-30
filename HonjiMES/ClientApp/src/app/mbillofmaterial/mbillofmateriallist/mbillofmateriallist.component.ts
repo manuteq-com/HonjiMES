@@ -8,11 +8,12 @@ import { SendService } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-mbillofmateriallist',
-  templateUrl: './mbillofmateriallist.component.html',
-  styleUrls: ['./mbillofmateriallist.component.css']
+    selector: 'app-mbillofmateriallist',
+    templateUrl: './mbillofmateriallist.component.html',
+    styleUrls: ['./mbillofmateriallist.component.css']
 })
 export class MbillofmateriallistComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -44,7 +45,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     DrawNo: any;
     Manpower: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
         this.editOnkeyPress = true;
@@ -81,7 +82,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
-        this.GetData('/Processes/GetProcesses').subscribe(
+        this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
                     if (s.success) {
@@ -93,9 +94,6 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
                 }
             }
         );
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -150,7 +148,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.bomNo = data.data.ProductNo;
         this.bomName = data.data.Name;
         this.saveDisabled = false;
-        this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
+        this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceDB_Process = s.data;
@@ -169,7 +167,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             this.bomName = variable.ProductName;
         }
         this.saveDisabled = false;
-        this.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
+        this.app.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
             (s) => {
                 if (s.success) {
                     debugger;

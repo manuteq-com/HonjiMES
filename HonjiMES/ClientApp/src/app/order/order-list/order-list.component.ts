@@ -10,6 +10,7 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import Swal from 'sweetalert2';
 import { Myservice } from '../../service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-order-list',
@@ -38,7 +39,7 @@ export class OrderListComponent {
     listOrderStatus: any;
     remoteOperations: boolean;
     editorOptions: any;
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
@@ -48,16 +49,13 @@ export class OrderListComponent {
         this.getdata();
         this.getProductsData();
         this.editorOptions = { onValueChanged: this.onValueChanged };
-        this.GetData('/Customers/GetCustomers').subscribe(
+        this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
                     this.Customerlist = s.data;
                 }
             }
         );
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
@@ -73,14 +71,14 @@ export class OrderListComponent {
         });
     }
     getProductsData() {
-        this.GetData('/Products/GetProducts').subscribe(
+        this.app.GetData('/Products/GetProducts').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductList = s.data;
                 }
             }
         );
-        this.GetData('/Products/GetProductBasics').subscribe(
+        this.app.GetData('/Products/GetProductBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductBasicList = s.data;
@@ -189,7 +187,7 @@ export class OrderListComponent {
         }
     }
     to_saleClick(e) {
-        this.GetData('/Customers/GetCustomers').subscribe(
+        this.app.GetData('/Customers/GetCustomers').subscribe(
             // (s) => {
             //   console.log(s);
             //   this.Customerlist = s.data;

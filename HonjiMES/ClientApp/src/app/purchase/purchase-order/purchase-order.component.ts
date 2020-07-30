@@ -7,11 +7,12 @@ import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-purchase-order',
-  templateUrl: './purchase-order.component.html',
-  styleUrls: ['./purchase-order.component.css']
+    selector: 'app-purchase-order',
+    templateUrl: './purchase-order.component.html',
+    styleUrls: ['./purchase-order.component.css']
 })
 export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -34,30 +35,27 @@ export class PurchaseOrderComponent implements OnInit {
     detailfilter = [];
     DetailsDataSourceStorage: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
                 }
             }
         );
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
                 }
             }
         );
-     }
-     public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
@@ -127,12 +125,12 @@ export class PurchaseOrderComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

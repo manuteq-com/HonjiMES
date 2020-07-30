@@ -5,11 +5,12 @@ import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-bill-purchase-return',
-  templateUrl: './bill-purchase-return.component.html',
-  styleUrls: ['./bill-purchase-return.component.css']
+    selector: 'app-bill-purchase-return',
+    templateUrl: './bill-purchase-return.component.html',
+    styleUrls: ['./bill-purchase-return.component.css']
 })
 export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -32,15 +33,12 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -54,20 +52,19 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             max: this.itemkeyval.Quantity,
             onValueChanged: this.QuantityValueChanged.bind(this)
         };
-        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
-        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
-        this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
+        this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
+        this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
+        this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
 
-        this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
+        this.app.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
             (s) => {
-                debugger;
                 if (s.success) {
                     this.selectBoxOptions = {
                         items: s.data,
@@ -107,7 +104,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
         return true;
     }
     refreshReturnNo() {
-        this.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
+        this.app.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData.ReturnNo = s.data.ReturnNo;
@@ -122,7 +119,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             return;
         }
         this.formData = this.myform.instance.option('formData');
-        this.postval =  this.formData;
+        this.postval = this.formData;
         this.postval.BillofPurchaseDetailId = this.itemkeyval.Id;
         debugger;
         try {

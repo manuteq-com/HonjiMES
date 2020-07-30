@@ -10,11 +10,12 @@ import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
 import Swal from 'sweetalert2';
 import Buttons from 'devextreme/ui/button';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-creatprocess-control',
-  templateUrl: './creatprocess-control.component.html',
-  styleUrls: ['./creatprocess-control.component.css']
+    selector: 'app-creatprocess-control',
+    templateUrl: './creatprocess-control.component.html',
+    styleUrls: ['./creatprocess-control.component.css']
 })
 export class CreatprocessControlComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
@@ -64,7 +65,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     saveCheck: boolean;
     onCellPreparedLevel: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
         // this.CustomerVal = null;
@@ -97,7 +98,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         };
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1 };
 
-        this.GetData('/Processes/GetProcesses').subscribe(
+        this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
                     if (s.success) {
@@ -109,7 +110,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/ProductBasics/GetProductBasicsAsc').subscribe(
+        this.app.GetData('/ProductBasics/GetProductBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductBasicList = s.data;
@@ -127,7 +128,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/Processes/GetWorkOrderNumber').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
@@ -136,9 +137,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
         );
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -150,7 +148,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.modVisible = true;
             this.runVisible = false;
             this.saveDisabled = true;
-            this.GetData('/Processes/GetWorkOrderNumber').subscribe(
+            this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
                         this.formData = s.data;
@@ -160,7 +158,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             );
         } else if (this.itemkeyval != null) {
             this.modVisible = false;
-            this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
+            this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
                         this.modCheck = true; // 避免製程資訊被刷新
@@ -212,7 +210,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     onFocusedCellChanging(e) {
     }
-    CreateTimeValueChange = async function(e) {
+    CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();
@@ -233,7 +231,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         } else {
             this.saveDisabled = false;
             if (e.value !== 0 && e.value !== null && e.value !== undefined) {
-                this.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
+                this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
                     (s) => {
                         if (s.success) {
                             s.data.forEach(e => {
@@ -342,7 +340,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     RunOnClick(e) {
         this.modName = 'run';
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {

@@ -6,24 +6,23 @@ import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import CustomStore from 'devextreme/data/custom_store';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
-  selector: 'app-bomverlist',
-  templateUrl: './bomverlist.component.html',
-  styleUrls: ['./bomverlist.component.css']
+    selector: 'app-bomverlist',
+    templateUrl: './bomverlist.component.html',
+    styleUrls: ['./bomverlist.component.css']
 })
 export class BomverlistComponent implements OnInit, OnChanges {
     @Input() bomverdata: any;
     Controller = '/BillOfMaterials';
     dataSourceDB: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
 
     }
     ngOnInit() {
     }
     ngOnChanges() {
-        debugger;
         this.dataSourceDB = this.bomverdata;
     }
 

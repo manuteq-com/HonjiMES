@@ -7,6 +7,7 @@ import { DxTreeListComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-bomlist',
@@ -16,7 +17,7 @@ import { APIResponse } from 'src/app/app.module';
 export class BomlistComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() bomMod: any;
-    @Output() onChangeVar  = new EventEmitter();
+    @Output() onChangeVar = new EventEmitter();
     @ViewChild(DxTreeListComponent) TreeList: DxTreeListComponent;
     Controller = '/BillOfMaterials';
     dataSourceDB: CustomStore;
@@ -25,21 +26,21 @@ export class BomlistComponent implements OnInit, OnChanges {
     ProductList: any;
     btnVisible: boolean;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.btnVisible = true;
         this.onReorder = this.onReorder.bind(this);
         this.isEditVisible = this.isEditVisible.bind(this);
         this.isDeleteVisible = this.isDeleteVisible.bind(this);
         this.isUploadVisible = this.isUploadVisible.bind(this);
         this.readBomProcess = this.readBomProcess.bind(this);
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialList = s.data;
                 }
             }
         );
-        this.GetData('/ProductBasics/GetProductBasics').subscribe(
+        this.app.GetData('/ProductBasics/GetProductBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductList = s.data;
@@ -58,9 +59,6 @@ export class BomlistComponent implements OnInit, OnChanges {
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist/' + key, 'DELETE')
         });
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -129,7 +127,7 @@ export class BomlistComponent implements OnInit, OnChanges {
         // if (e.row.data.Lv === 1) {
         //     return true;
         // } else {
-            return false;
+        return false;
         // }
     }
     isDeleteVisible(e) {

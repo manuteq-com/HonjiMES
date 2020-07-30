@@ -5,7 +5,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-bill-purchase-checkin',
     templateUrl: './bill-purchase-checkin.component.html',
@@ -31,15 +31,12 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -55,7 +52,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
             WorkPrice: 0,
             Remarks: ''
         };
-        this.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval).subscribe(
+        this.app.GetData('/ToPurchase/CanCheckIn/' + this.itemkeyval).subscribe(
             (s) => {
                 if (s.success) {
                     this.QuantityEditorOptions = {
@@ -70,16 +67,16 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/BillofPurchaseDetails/GetBillofPurchaseDetail/' + this.itemkeyval).subscribe(
+        this.app.GetData('/BillofPurchaseDetails/GetBillofPurchaseDetail/' + this.itemkeyval).subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
                 }
             }
         );
-        this.PriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this)};
-        this.UnitCountEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this)};
-        this.UnitPriceEditorOptions = {showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this)};
+        this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
+        this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
+        this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;

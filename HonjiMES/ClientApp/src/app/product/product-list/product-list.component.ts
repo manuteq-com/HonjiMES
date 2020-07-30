@@ -8,6 +8,7 @@ import ArrayStore from 'devextreme/data/array_store';
 import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-product-list',
@@ -32,10 +33,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     exceldata: any;
     mod: string;
     visible: boolean;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
@@ -47,12 +45,12 @@ export class ProductListComponent implements OnInit, OnChanges {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProduct', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProduct/' + key, 'DELETE')
         });
-        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 this.MaterialBasicList = s.data;
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }

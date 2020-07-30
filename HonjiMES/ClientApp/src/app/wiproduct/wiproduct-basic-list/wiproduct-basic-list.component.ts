@@ -6,12 +6,13 @@ import { SendService } from 'src/app/shared/mylib';
 import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import notify from 'devextreme/ui/notify';
+import { AppComponent } from 'src/app/app.component';
 
 
 @Component({
-  selector: 'app-wiproduct-basic-list',
-  templateUrl: './wiproduct-basic-list.component.html',
-  styleUrls: ['./wiproduct-basic-list.component.css']
+    selector: 'app-wiproduct-basic-list',
+    templateUrl: './wiproduct-basic-list.component.html',
+    styleUrls: ['./wiproduct-basic-list.component.css']
 })
 export class WiproductBasicListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -29,10 +30,8 @@ export class WiproductBasicListComponent implements OnInit {
     exceldata: any;
     mod: string;
     uploadUrl: string;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
@@ -44,7 +43,7 @@ export class WiproductBasicListComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutWiproductBasic', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteWiproductBasic/' + key, 'DELETE')
         });
-        this.GetData('/Materials/GetMaterials').subscribe(
+        this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 console.log(s);
                 this.MaterialList = s.data;
@@ -53,7 +52,7 @@ export class WiproductBasicListComponent implements OnInit {
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 this.WarehouseList = s.data;

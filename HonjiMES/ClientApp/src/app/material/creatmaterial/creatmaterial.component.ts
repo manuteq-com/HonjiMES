@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Material } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-creatmaterial',
     templateUrl: './creatmaterial.component.html',
@@ -32,14 +32,13 @@ export class CreatmaterialComponent implements OnInit {
     warehousesOptions: any;
     NumberBoxOptions: any;
     gridBoxValue: number[] = [1];
-    url: string;
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
         useSubmitBehavior: true,
         icon: 'save'
     };
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -49,8 +48,7 @@ export class CreatmaterialComponent implements OnInit {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.url = location.origin + '/api';
-        this.GetData(this.url + '/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -62,7 +60,7 @@ export class CreatmaterialComponent implements OnInit {
                 }
             }
         );
-        this.GetData(this.url + '/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -76,11 +74,8 @@ export class CreatmaterialComponent implements OnInit {
                 }
             }
         );
-     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
-    // tslint:disable-next-line: use-lifecycle-interface
-    }ngOnChanges() {
+    }
+    ngOnChanges() {
         // debugger;
         this.formData = this.itemdata;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
@@ -101,7 +96,7 @@ export class CreatmaterialComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
@@ -113,7 +108,7 @@ export class CreatmaterialComponent implements OnInit {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Materials/PostMaterial', 'POST', { values:  this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/Materials/PostMaterial', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             // this.myform.instance.resetValues();

@@ -6,6 +6,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from 'src/app/service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-editbom',
@@ -33,10 +34,7 @@ export class EditbomComponent implements OnInit, OnChanges {
     PostBom: { BasicType: number, BasicId: number, Quantity: number, Name: string };
     QuantityEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
 
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
@@ -53,14 +51,14 @@ export class EditbomComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        this.GetData('/BillOfMaterials/GetMaterialBasicsDrowDown').subscribe(
+        this.app.GetData('/BillOfMaterials/GetMaterialBasicsDrowDown').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialList = s.data;
                 }
             }
         );
-        this.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
+        this.app.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductList = s.data;

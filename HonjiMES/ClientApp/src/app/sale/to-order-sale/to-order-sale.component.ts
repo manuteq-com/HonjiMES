@@ -5,17 +5,17 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-to-order-sale',
-  templateUrl: './to-order-sale.component.html',
-  styleUrls: ['./to-order-sale.component.css']
+    selector: 'app-to-order-sale',
+    templateUrl: './to-order-sale.component.html',
+    styleUrls: ['./to-order-sale.component.css']
 })
-export class ToOrderSaleComponent implements OnInit {
+export class ToOrderSaleComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    url = location.origin + '/api';
     buttondisabled: boolean;
     formData: any;
     labelLocation: string;
@@ -27,7 +27,7 @@ export class ToOrderSaleComponent implements OnInit {
     buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     selectBoxOptions: any;
     NumberBoxOptions: any;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -35,17 +35,13 @@ export class ToOrderSaleComponent implements OnInit {
         this.minColWidth = 100;
         this.colCount = 1;
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
-    }
+
     ngOnChanges() {
-        debugger;
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty};
-        this.GetData(this.url + '/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.ProductBasicId).subscribe(
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty };
+        this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.ProductBasicId).subscribe(
             (s) => {
-                debugger;
                 if (s.success) {
-                    let WarehouseList = [];
+                    const WarehouseList = [];
                     s.data.forEach((element, index) => {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         WarehouseList[index] = element.Warehouse;
@@ -75,8 +71,7 @@ export class ToOrderSaleComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
-        debugger;
+    onFormSubmit = async function (e) {
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

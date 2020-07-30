@@ -8,6 +8,7 @@ import { SendService } from '../../shared/mylib';
 import { Myservice } from '../../service/myservice';
 import { Button } from 'primeng';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-creat-purchase',
@@ -65,7 +66,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     onCellPreparedLevel: number;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -76,7 +77,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 3;
-        this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.CreateTimeDateBoxOptions = {
@@ -86,7 +86,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             // displayFormat: 'yyyyMMdd',
             onValueChanged: this.PurchaseDateValueChange.bind(this)
         };
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
@@ -103,14 +103,14 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseListAll = s.data;
             }
@@ -125,9 +125,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         };
 
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
     ngOnInit() {
 
     }
@@ -138,7 +135,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         if (this.modval === 'merge') {
             this.showdisabled = true;
-            this.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
+            this.app.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -156,7 +153,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         } else {
             this.showdisabled = false;
         }
-        this.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
+        this.app.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
@@ -174,7 +171,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     onTypeSelectionChanged(e) {
         this.CreateTimeValueChange(e);
     }
-    CreateTimeValueChange = async function(e) {
+    CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();
@@ -193,7 +190,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     PurchaseDateValueChange(e) {
     }
     onSupplierSelectionChanged(e) {//依照供應商ID去進貨單查詢，可進貨的原料項目。
-        // this.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
+        // this.app.GetData('/ToPurchase/GetCanPurchase/' + e.value).subscribe(
         //     (s) => {
         //         if (s.success) {
         //             this.MaterialBasicList = s.data;
@@ -219,7 +216,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 this.Quantityval = 1;
                 this.OriginPriceval = x.Price ? x.Price : 0;
                 this.Priceval = x.Price ? x.Price : 0;
-                this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
+                this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + x.Id).subscribe(
                     (s) => {
                         this.WarehouseList = [];
                         s.data.forEach((element, index) => {
@@ -274,7 +271,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.Warehouseval = e.data.WarehouseId;
-        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
             (s) => {
                 this.WarehouseList = [];
                 s.data.forEach((element, index) => {

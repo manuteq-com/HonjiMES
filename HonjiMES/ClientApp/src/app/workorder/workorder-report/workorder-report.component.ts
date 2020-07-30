@@ -6,11 +6,12 @@ import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { workOrderReportData } from 'src/app/model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-workorder-report',
-  templateUrl: './workorder-report.component.html',
-  styleUrls: ['./workorder-report.component.css']
+    selector: 'app-workorder-report',
+    templateUrl: './workorder-report.component.html',
+    styleUrls: ['./workorder-report.component.css']
 })
 export class WorkorderReportComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -51,7 +52,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     RemarkVisible: boolean;
     DateBoxOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
@@ -63,7 +64,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             // onValueChanged: this.PurchaseDateValueChange.bind(this)
         };
 
-        this.GetData('/Processes/GetProcesses').subscribe(
+        this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
                     s.data.forEach(element => {
@@ -81,9 +82,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             }
         );
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
+
     ngOnInit() {
     }
     ngOnChanges() {
@@ -94,7 +93,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.restartedBtnVisible = false;
 
         if (this.itemkeyval != null) {
-            this.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
+            this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
                         this.itemval1 = '　　　　　　　工單號：' + s.data.WorkOrderHead.WorkOrderNo;

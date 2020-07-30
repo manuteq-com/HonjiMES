@@ -35,10 +35,11 @@ namespace HonjiMES.Controllers
             var User = ValidateUser(login);
             if (User != null)
             {
+                var expireMinutes = 10;
                 var UserRolesToken = new UserRolesToken();
-                UserRolesToken.Token = _jwt.GenerateToken(User);
+                UserRolesToken.Token = _jwt.GenerateToken(User, expireMinutes);
                 UserRolesToken.Username = User.Username;
-                UserRolesToken.Timeout = DateTime.Now.AddMonths(1);
+                UserRolesToken.Timeout = DateTime.Now.AddMinutes(expireMinutes);
                 UserRolesToken.Menu = GetMenu(User.Id);
                 return Ok(MyFun.APIResponseOK(UserRolesToken));
             }

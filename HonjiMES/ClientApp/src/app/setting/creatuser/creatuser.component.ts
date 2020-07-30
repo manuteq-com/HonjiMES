@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
@@ -8,13 +8,14 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import CustomStore from 'devextreme/data/custom_store';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-creatuser',
     templateUrl: './creatuser.component.html',
     styleUrls: ['./creatuser.component.css']
 })
-export class CreatuserComponent implements OnInit {
+export class CreatuserComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -30,7 +31,6 @@ export class CreatuserComponent implements OnInit {
     minColWidth: number;
     colCount: number;
     width: any;
-    url: string;
     listPermission: any;
     listDepartment: any;
     selectBoxOptionsPermission: any;
@@ -51,7 +51,7 @@ export class CreatuserComponent implements OnInit {
     // passwordComparison = () => {
     //     return this.myform.instance.option('formData').Password;
     // }
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -61,7 +61,6 @@ export class CreatuserComponent implements OnInit {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.url = location.origin + '/api';
         this.listPermission = myservice.getPermission();
         this.listDepartment = myservice.getDepartment();
         // MENU
@@ -69,7 +68,7 @@ export class CreatuserComponent implements OnInit {
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
         this.labelLocation = 'left';
-        this.GetData(this.url + '/Users/GetUsersMenu').subscribe(
+        this.app.GetData('/Users/GetUsersMenu').subscribe(
             (s) => {
                 debugger;
                 this.dataSourceDB = s.data;
@@ -77,10 +76,6 @@ export class CreatuserComponent implements OnInit {
         );
         //this.dataSourceDB =  SendService.sendRequest(this.http, this.Controller + '/GetUsersMenu');
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
-    }
-    // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
         this.selectBoxOptionsPermission = {
             items: this.listPermission,

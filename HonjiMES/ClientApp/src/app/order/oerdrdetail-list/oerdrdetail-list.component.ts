@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import CheckBox from 'devextreme/ui/check_box';
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-oerdrdetail-list',
     templateUrl: './oerdrdetail-list.component.html',
@@ -34,7 +35,7 @@ export class OerdrdetailListComponent implements OnInit {
     dataSource: any;
     totalcount: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
         this.disabledValues = [];
@@ -53,9 +54,6 @@ export class OerdrdetailListComponent implements OnInit {
             remove: (key) => SendService.sendRequest(http, this.controller + '/DeleteOrderDetail/' + key, 'DELETE')
         });
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
     ngOnInit() {
     }
     to_purchaseClick(e) {
@@ -65,7 +63,7 @@ export class OerdrdetailListComponent implements OnInit {
         let serial = 1;
         let tempdataSource = [];
         this.topurchasekey.forEach((x, index) => {
-            this.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
+            this.app.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
                 (s) => {
                     if (s.success) {
                         let productId = 1;
@@ -137,10 +135,10 @@ export class OerdrdetailListComponent implements OnInit {
                 if (result.value) {
                     this.mod = 'add';
                     this.popupVisiblePurchase = true;
-                } else if (result.dismiss === Swal.DismissReason.cancel)  {
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
                     this.mod = 'merge';
                     this.popupVisiblePurchase = true;
-                } else if (result.dismiss === Swal.DismissReason.close)  {
+                } else if (result.dismiss === Swal.DismissReason.close) {
                     this.popupVisiblePurchase = false;
                 }
             });
@@ -175,10 +173,10 @@ export class OerdrdetailListComponent implements OnInit {
                 if (result.value) {
                     this.mod = 'add';
                     this.popupVisibleSale = true;
-                } else if (result.dismiss === Swal.DismissReason.cancel)  {
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
                     this.mod = 'merge';
                     this.popupVisibleSale = true;
-                } else if (result.dismiss === Swal.DismissReason.close)  {
+                } else if (result.dismiss === Swal.DismissReason.close) {
                     this.popupVisibleSale = false;
                 }
             });
@@ -187,7 +185,7 @@ export class OerdrdetailListComponent implements OnInit {
 
     rowClick(e) {
         debugger;
-        this.GetData('/OrderDetails/GetStockCountByProductBasicId/' + e.key).subscribe(
+        this.app.GetData('/OrderDetails/GetStockCountByProductBasicId/' + e.key).subscribe(
             (s) => {
                 if (s.success) {
                     this.totalcount = s.data.TotalCount;
@@ -219,9 +217,9 @@ export class OerdrdetailListComponent implements OnInit {
     onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
         const disabledKeys = e.currentSelectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
         if (disabledKeys.length > 0) {
-          e.component.deselectRows(disabledKeys);
+            e.component.deselectRows(disabledKeys);
         }
-      }
+    }
     popup_result(e) {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;

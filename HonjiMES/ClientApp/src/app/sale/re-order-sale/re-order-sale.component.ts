@@ -5,6 +5,7 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from '../../shared/mylib';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-re-order-sale',
@@ -28,7 +29,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     NumberBoxOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -36,21 +37,18 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         this.minColWidth = 100;
         this.colCount = 1;
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
     ngOnInit() {
     }
     ngOnChanges() {
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty};
-        this.GetData('/ToSale/GetSaleReturnNo').subscribe(
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty };
+        this.app.GetData('/ToSale/GetSaleReturnNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
             (s) => {
                 if (s.success) {
                     this.selectBoxOptions = {
@@ -77,7 +75,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         return true;
     }
     refreshReturnNo() {
-        this.GetData('/ToSale/GetSaleReturnNo').subscribe(
+        this.app.GetData('/ToSale/GetSaleReturnNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData.ReturnNo = s.data.ReturnNo;
@@ -85,8 +83,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
             }
         );
     }
-    onFormSubmit = async function(e) {
-        debugger;
+    onFormSubmit = async function (e) {
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

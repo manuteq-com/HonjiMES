@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -9,13 +9,14 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css']
+    selector: 'app-user-list',
+    templateUrl: './user-list.component.html',
+    styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
@@ -32,7 +33,7 @@ export class UserListComponent implements OnInit {
     PermissionList: any;
     DepartmentList: any;
     UserList: any;
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -49,11 +50,9 @@ export class UserListComponent implements OnInit {
         });
         this.GetUserList();
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
+
     public GetUserList() {
-        this.GetData('/Users/GetUsers').subscribe(
+        this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
                     this.UserList = s.data;
@@ -61,6 +60,7 @@ export class UserListComponent implements OnInit {
             }
         );
     }
+    ngOnChanges() { }
     creatdata() {
         this.creatpopupVisible = true;
     }
@@ -107,12 +107,12 @@ export class UserListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

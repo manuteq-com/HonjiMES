@@ -8,6 +8,7 @@ import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { requisitionsDetailInfo } from 'src/app/model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-receive-list',
@@ -40,7 +41,7 @@ export class ReceiveListComponent implements OnInit {
     WarehouseListM: any;
     postval: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         const remote = this.remoteOperations;
 
         this.dataSourceDB = new CustomStore({
@@ -56,7 +57,7 @@ export class ReceiveListComponent implements OnInit {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition/' + key, 'DELETE')
         });
-        this.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
+        this.app.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
             (s) => {
                 if (s.success) {
                     this.selectBoxOptions = {
@@ -75,9 +76,6 @@ export class ReceiveListComponent implements OnInit {
             load: () =>
                 SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
         });
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }
@@ -120,7 +118,7 @@ export class ReceiveListComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByWarehouse', 'POST',
-                    { values: {RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDM} }),
+                    { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDM } }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
             update: (key, values) =>
@@ -133,7 +131,7 @@ export class ReceiveListComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailProductByWarehouse', 'POST',
-                    { values: {RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDP} }),
+                    { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDP } }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
             update: (key, values) =>
@@ -162,20 +160,20 @@ export class ReceiveListComponent implements OnInit {
             }
         });
         e.toolbarOptions.items.unshift(
-        {
-            text: '原料領料',
-            location: 'before'
-        },
-        {
-            location: 'after',
-            widget: 'dxSelectBox',
-            options: {
-                dataSource: this.Warehouselist,
-                displayExpr: 'Name',
-                valueExpr: 'Id',
-                onValueChanged: this.WarehouseChangedM.bind(this)
-            }
-        });
+            {
+                text: '原料領料',
+                location: 'before'
+            },
+            {
+                location: 'after',
+                widget: 'dxSelectBox',
+                options: {
+                    dataSource: this.Warehouselist,
+                    displayExpr: 'Name',
+                    valueExpr: 'Id',
+                    onValueChanged: this.WarehouseChangedM.bind(this)
+                }
+            });
     }
     onToolbarPreparingP(e) {
         const toolbarItems = e.toolbarOptions.items;
@@ -191,20 +189,20 @@ export class ReceiveListComponent implements OnInit {
             }
         });
         e.toolbarOptions.items.unshift(
-        {
-            text: '成品領料',
-            location: 'before'
-        },
-        {
-            location: 'after',
-            widget: 'dxSelectBox',
-            options: {
-                dataSource: this.Warehouselist,
-                displayExpr: 'Name',
-                valueExpr: 'Id',
-                onValueChanged: this.WarehouseChangedP.bind(this)
-            }
-        });
+            {
+                text: '成品領料',
+                location: 'before'
+            },
+            {
+                location: 'after',
+                widget: 'dxSelectBox',
+                options: {
+                    dataSource: this.Warehouselist,
+                    displayExpr: 'Name',
+                    valueExpr: 'Id',
+                    onValueChanged: this.WarehouseChangedP.bind(this)
+                }
+            });
     }
     async WarehouseChangedM(e) {
         this.WarehouseIDM = e.value;

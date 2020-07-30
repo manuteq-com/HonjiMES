@@ -9,11 +9,12 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-adjust-list',
-  templateUrl: './adjust-list.component.html',
-  styleUrls: ['./adjust-list.component.css']
+    selector: 'app-adjust-list',
+    templateUrl: './adjust-list.component.html',
+    styleUrls: ['./adjust-list.component.css']
 })
 export class AdjustListComponent implements OnInit {
 
@@ -33,10 +34,7 @@ export class AdjustListComponent implements OnInit {
     remoteOperations: boolean;
     MaterialList: any;
     listAdjustStatus: any;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         // debugger;
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
@@ -48,13 +46,13 @@ export class AdjustListComponent implements OnInit {
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
                 this.Controller + '/GetAdjustList',
-                'GET', { loadOptions, remote: this.remoteOperations}),
+                'GET', { loadOptions, remote: this.remoteOperations }),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetAdjustList', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostAdjustList', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutAdjustList', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteAdjustList/' + key, 'DELETE')
         });
-        this.GetData('/Materials/GetMaterials').subscribe(
+        this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialList = s.data;
@@ -107,12 +105,12 @@ export class AdjustListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

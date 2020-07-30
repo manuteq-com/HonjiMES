@@ -1,11 +1,12 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent} from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../app.module';
 import { SendService } from '../../shared/mylib';
 import { Product } from '../../model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-creatproduct',
@@ -31,8 +32,7 @@ export class CreatproductComponent implements OnInit {
     warehousesOptions: any;
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
-    url: string;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -42,8 +42,7 @@ export class CreatproductComponent implements OnInit {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.url = location.origin + '/api';
-        this.GetData(this.url + '/Materials/GetMaterials').subscribe(
+        this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -55,7 +54,7 @@ export class CreatproductComponent implements OnInit {
                 }
             }
         );
-        this.GetData(this.url + '/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -71,10 +70,6 @@ export class CreatproductComponent implements OnInit {
         );
 
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
-    }
-    // tslint:disable-next-line: use-lifecycle-interface
     ngOnChanges() {
         // debugger;
         this.formData = this.itemdata;

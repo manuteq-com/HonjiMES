@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-bill-purchase',
     templateUrl: './bill-purchase.component.html',
@@ -34,14 +34,14 @@ export class BillPurchaseComponent implements OnInit {
     detailfilter = [];
     DetailsDataSourceStorage: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
@@ -51,16 +51,13 @@ export class BillPurchaseComponent implements OnInit {
                 }
             }
         );
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
                 }
             }
         );
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     getdata() {
         this.dataSourceDB = new CustomStore({

@@ -1,16 +1,17 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, OnChanges } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent} from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../app.module';
 import { SendService } from '../../shared/mylib';
 import { Product } from '../../model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-creatproduct-basic',
-  templateUrl: './creatproduct-basic.component.html',
-  styleUrls: ['./creatproduct-basic.component.css']
+    selector: 'app-creatproduct-basic',
+    templateUrl: './creatproduct-basic.component.html',
+    styleUrls: ['./creatproduct-basic.component.css']
 })
 export class CreatproductBasicComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
@@ -32,7 +33,7 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -42,7 +43,7 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -55,7 +56,7 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -64,9 +65,6 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
             }
         );
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }

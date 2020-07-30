@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-user-roles',
@@ -17,7 +18,7 @@ export class UserRolesComponent implements OnInit {
     labelLocation: string;
     Controller = '/Users';
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';

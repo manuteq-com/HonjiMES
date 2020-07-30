@@ -9,6 +9,7 @@ import { OrderHead, OrderDetail, PostOrderMaster_Detail, CreateNumberInfo } from
 import CustomStore from 'devextreme/data/custom_store';
 import { NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-creatorder',
@@ -57,7 +58,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     ProductPricrErrList: any;
     btnMod: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -76,7 +77,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         };
 
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
-        // this.GetData('/Products/GetProducts').subscribe(
+        // this.app.GetData('/Products/GetProducts').subscribe(
         //     (s) => {
         //         console.log(s);
         //         debugger;
@@ -85,7 +86,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         //         }
         //     }
         // );
-        this.GetData('/Customers/GetCustomers').subscribe(
+        this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -103,7 +104,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     async ngOnChanges() {
-        this.GetData('/OrderHeads/GetOrderNumber').subscribe(
+        this.app.GetData('/OrderHeads/GetOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
@@ -116,7 +117,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
         this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'clone') {
-            this.GetData('/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
+            this.app.GetData('/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
@@ -171,10 +172,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
         }
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    CreateTimeValueChange = async function(e) {
+    CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();

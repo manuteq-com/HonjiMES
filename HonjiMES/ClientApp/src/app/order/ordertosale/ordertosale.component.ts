@@ -6,6 +6,7 @@ import notify from 'devextreme/ui/notify';
 import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-ordertosale',
@@ -31,7 +32,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     showdisabled: boolean;
     Salelist: any;
     selectBoxOptions: any;
-    buttonOptions: any =  {text: '存檔', type: 'success', useSubmitBehavior: true};
+    buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     editorOptions: any;
     ProductList: any;
     WarehouseList: any;
@@ -40,7 +41,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     ProductsAllList: any;
     CreateTimeDateBoxOptions: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -51,13 +52,10 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
     ngOnInit() {
     }
     async ngOnChanges() {
-        this.GetData('/ToSale/GetSaleNumber').subscribe(
+        this.app.GetData('/ToSale/GetSaleNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
@@ -68,11 +66,11 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             min: new Date().toDateString()
         };
         this.dataSourceDB = [];
-        this.ProductsAllList =[];
+        this.ProductsAllList = [];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
         this.dataSourceDB.forEach(async x => {
-            x.Quantity  = x.Quantity - x.SaleCount;
-            this.GetData('/Products/GetProductsById/' + x.ProductBasicId).subscribe(
+            x.Quantity = x.Quantity - x.SaleCount;
+            this.app.GetData('/Products/GetProductsById/' + x.ProductBasicId).subscribe(
                 (s) => {
                     if (s.success) {
                         s.data.forEach(element => {
@@ -91,8 +89,8 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         } else {
             this.showdisabled = true;
         }
-        this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1};
-        this.GetData('/Sales/GetSalesByStatus?status=0').subscribe(
+        this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
+        this.app.GetData('/Sales/GetSalesByStatus?status=0').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -109,7 +107,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             }
         );
     }
-    CreateTimeValueChange = async function(e) {
+    CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();
@@ -140,7 +138,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         if (e.parentType === 'dataRow' && e.dataField === 'Quantity') {
             const rowIndex = e.row.rowIndex;
             const originData = this.itemkeyval[rowIndex];
-            e.editorOptions.max  = originData.Quantity - originData.SaleCount;
+            e.editorOptions.max = originData.Quantity - originData.SaleCount;
         }
         if (e.parentType === 'dataRow' && e.dataField === 'WarehouseId') {
             const gg = this.ProductsAllList;
@@ -163,7 +161,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

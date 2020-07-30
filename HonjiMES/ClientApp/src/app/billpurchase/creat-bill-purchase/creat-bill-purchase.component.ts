@@ -7,7 +7,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import $ from 'jquery';
 import { BillofPurchaseDetail, CreateNumberInfo } from 'src/app/model/viewmodels';
-
+import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-creat-bill-purchase',
     templateUrl: './creat-bill-purchase.component.html',
@@ -67,7 +67,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     SupplierIdVal: any;
     PurchaseIdVal: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.CustomerVal = null;
@@ -89,26 +89,23 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.PurchaseTempList = [];
         this.MaterialBasicTempList = [];
 
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseListAll = s.data;
             }
         );
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
-    }
     ngOnInit() {
     }
     ngOnChanges() {
-        this.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
+        this.app.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
                 }
             }
         );
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
@@ -119,7 +116,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             }
         );
     }
-    CreateTimeValueChange = async function(e) {
+    CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             this.CreateNumberInfoVal = new CreateNumberInfo();
@@ -289,7 +286,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.GetWarehouseByMaterialBasic(e.data.DataId);
     }
     GetPurchasesBySupplier(Id) {
-        this.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
+        this.app.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
             (s) => {
                 if (s.success) {
                     this.PurchaseList = s.data;
@@ -303,7 +300,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         );
     }
     GetMaterialBasicsByPurchase(Id) {
-        this.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + Id).subscribe(
+        this.app.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + Id).subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
@@ -317,7 +314,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         );
     }
     GetWarehouseByMaterialBasic(Id) {
-        this.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
             (s) => {
                 this.WarehouseList = [];
                 s.data.forEach((element, index) => {

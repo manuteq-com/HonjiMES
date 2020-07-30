@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
@@ -6,13 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import { Warehouse } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-creatwarehouse',
-  templateUrl: './creatwarehouse.component.html',
-  styleUrls: ['./creatwarehouse.component.css']
+    selector: 'app-creatwarehouse',
+    templateUrl: './creatwarehouse.component.html',
+    styleUrls: ['./creatwarehouse.component.css']
 })
-export class CreatwarehouseComponent implements OnInit {
+export class CreatwarehouseComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -28,14 +29,13 @@ export class CreatwarehouseComponent implements OnInit {
     minColWidth: number;
     colCount: number;
     width: any;
-    url: string;
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
         useSubmitBehavior: true,
         icon: 'save'
     };
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -45,13 +45,8 @@ export class CreatwarehouseComponent implements OnInit {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 1;
-        this.url = location.origin + '/api';
-
-     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
     }
-    // tslint:disable-next-line: use-lifecycle-interface
+
     ngOnChanges() {
 
     }
@@ -71,7 +66,7 @@ export class CreatwarehouseComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
@@ -81,7 +76,7 @@ export class CreatwarehouseComponent implements OnInit {
         // this.postval = new Warehouse();
         // this.postval = this.formData as Warehouse;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Warehouses/PostWarehouse', 'POST', { values:  this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/Warehouses/PostWarehouse', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

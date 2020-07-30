@@ -12,10 +12,11 @@ import Swal from 'sweetalert2';
 import { POrderSale, ReorderSale, ToorderSale } from '../../model/viewmodels';
 import Select from 'devextreme/ui/check_box';
 import { Myservice } from '../../service/myservice';
+import { AppComponent } from 'src/app/app.component';
 @Component({
-  selector: 'app-sale-list',
-  templateUrl: './sale-list.component.html',
-  styleUrls: ['./sale-list.component.css']
+    selector: 'app-sale-list',
+    templateUrl: './sale-list.component.html',
+    styleUrls: ['./sale-list.component.css']
 })
 export class SaleListComponent implements OnInit {
 
@@ -49,7 +50,7 @@ export class SaleListComponent implements OnInit {
     detailfilter = [];
     DetailsDataSourceStorage: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
@@ -59,21 +60,21 @@ export class SaleListComponent implements OnInit {
         this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
-        this.GetData('/Customers/GetCustomers').subscribe(
+        this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
                     this.Customerlist = s.data;
                 }
             }
         );
-        this.GetData('/Products/GetProducts').subscribe(
+        this.app.GetData('/Products/GetProducts').subscribe(
             (s) => {
                 this.ProductList = s.data;
                 if (s.success) {
                 }
             }
         );
-        this.GetData('/Products/GetProductBasics').subscribe(
+        this.app.GetData('/Products/GetProductBasics').subscribe(
             (s) => {
                 this.ProductBasicList = s.data;
                 if (s.success) {
@@ -106,7 +107,7 @@ export class SaleListComponent implements OnInit {
         if (!item) {
             item = {
                 key: SaleId,
-                DetaildataSource:  new CustomStore({
+                DetaildataSource: new CustomStore({
                     key: 'Id',
                     load: () => SendService.sendRequest(this.http, DController + '/GetSaleDetailsBySaleId?SaleId=' + SaleId),
                     byKey: (key) => SendService.sendRequest(this.http, DController + '/GetSaleDetailNew', 'GET', { key }),
@@ -115,13 +116,10 @@ export class SaleListComponent implements OnInit {
                     update: (key, values) => SendService.sendRequest(this.http, DController + '/PutSaleDetailNewQty', 'PUT', { key, values }),
                     remove: (key) => SendService.sendRequest(this.http, DController + '/DeleteSaleDetailNew/' + key, 'DELETE')
                 })
-              };
+            };
             this.DetailsDataSourceStorage.push(item);
-          }
+        }
         return item.DetaildataSource;
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     completedValue(rowData) {
         // tslint:disable-next-line: triple-equals
@@ -322,7 +320,7 @@ export class SaleListComponent implements OnInit {
                 }).then(async (result) => {
                     if (result.value) {
                         // tslint:disable-next-line: new-parens
-                        const postval =  {OrderNo : response.data.OrderNo, Products : response.message};
+                        const postval = { OrderNo: response.data.OrderNo, Products: response.message };
                         // tslint:disable-next-line: max-line-length
                         const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
                         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
@@ -391,12 +389,12 @@ export class SaleListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
@@ -416,7 +414,7 @@ export class SaleListComponent implements OnInit {
         return '總數：' + e.value + '筆';
     }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

@@ -6,13 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import { Customer } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-creatprocess',
-  templateUrl: './creatprocess.component.html',
-  styleUrls: ['./creatprocess.component.css']
+    selector: 'app-creatprocess',
+    templateUrl: './creatprocess.component.html',
+    styleUrls: ['./creatprocess.component.css']
 })
-export class CreatprocessComponent implements OnInit {
+export class CreatprocessComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -35,7 +36,7 @@ export class CreatprocessComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -47,9 +48,6 @@ export class CreatprocessComponent implements OnInit {
         this.colCount = 1;
         this.url = location.origin + '/api';
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(apiUrl);
     }
     ngOnChanges() {
 

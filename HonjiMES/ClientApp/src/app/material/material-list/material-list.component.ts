@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input , OnChanges} from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -8,6 +8,7 @@ import { DxDataGridComponent, DxFormComponent, DxPopupComponent } from 'devextre
 import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-material-list',
@@ -34,10 +35,7 @@ export class MaterialListComponent implements OnInit {
     exceldata: any;
     Supplierlist: any;
     visible: boolean;
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -50,7 +48,7 @@ export class MaterialListComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
         });
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 console.log(s);
                 this.Supplierlist = s.data;
@@ -59,7 +57,7 @@ export class MaterialListComponent implements OnInit {
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 this.WarehouseList = s.data;
@@ -132,12 +130,12 @@ export class MaterialListComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

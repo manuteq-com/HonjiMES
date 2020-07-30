@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../app.module';
 import { environment } from 'src/environments/environment';
 import { LoadOptions } from 'devextreme/data/load_options';
+import { AuthService } from '../service/auth.service';
 
 export class Guid {
     static newGuid() {
@@ -103,6 +104,20 @@ export class SendService {
     constructor() { }
 
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
+        debugger;
+        const authenticationService = new AuthService(http);
+        const currentUser = authenticationService.currentUserValue;
+        if (!currentUser) {
+            const msg = '請先登入系統';
+            notify({
+                message: msg,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error');
+            throw msg;
+        }
         Date.prototype.toJSON = function () {
             return this.toLocaleDateString(); // 轉本地時間
         };
@@ -117,7 +132,7 @@ export class SendService {
         }
         const httpOptions = {
             withCredentials: true, body,
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + currentUser.Token }),
             params: null
         };
         let result;
@@ -182,6 +197,7 @@ export class SendService {
                     }
 
                 } else {
+                    debugger;
                     throw ReturnData.message;
                 }
             })
@@ -214,7 +230,7 @@ export class SendService {
 
 // export class SendRequest {
 //     apiurl = environment.apihost + '/api';
-//     constructor(private http: HttpClient) { }
+//     constructor(private http: HttpClient, public app: AppComponent) { }
 //     public   sendRequest(url: string, method: string = 'GET', data: any = {}): Observable<APIResponse> {
 //         const body = JSON.stringify(data.values);
 //         const keyurl = '/' + data.key;
