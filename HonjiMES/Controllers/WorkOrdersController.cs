@@ -26,6 +26,47 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 訂單轉工單
+        /// </summary>
+        /// <param name="OrderData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<WorkOrderData>> OrderToWorkOrder(OrderData OrderData)
+        {
+            if (OrderData.OrderDetail.Count() != 0)
+            {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                string NewResultMessage = "";
+                foreach (var item in OrderData.OrderDetail)
+                {
+                    var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).ToListAsync();
+                    if (CheckWorkOrderHeads.Count() > 0)
+                    {
+                        NewResultMessage += "";
+                    }
+                    else
+                    {
+                        NewResultMessage += await this.NewWorkOrderByOrder(item);
+                    }
+                }
+
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                if (NewResultMessage.Length == 0)
+                {
+                    return Ok(MyFun.APIResponseOK("OK"));
+                }
+                else
+                {
+                    return Ok(MyFun.APIResponseOK("OK", NewResultMessage));
+                }
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單派工失敗!"));
+            }
+        }
+
+        /// <summary>
         /// 工單派工
         /// </summary>
         /// <param name="WorkOrderData"></param>
@@ -254,6 +295,105 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("回報失敗!"));
             }
         }
+
+        public async Task<string> NewWorkOrderByOrder(OrderDetail OrderDetail)
+        {
+            string sMessage = "";
+            if (OrderDetail.ProductBasicId != 0)
+            {
+                //取得工單號
+                var key = "WO";
+                var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1)
+                {
+                    var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                    var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                    // if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                    // }
+                }
+                var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+
+                var DataType = 1;
+                var BasicDataID = 0;
+                var BasicDataNo = "";
+                var BasicDataName = "";
+                if (DataType == 0)
+                {
+
+                }
+                else if (DataType == 1)
+                {
+                    var BasicData = _context.ProductBasics.Find(OrderDetail.ProductBasicId);
+                    BasicDataID = BasicData.Id;
+                    BasicDataNo = BasicData.ProductNo;
+                    BasicDataName = BasicData.Name;
+                }
+                else if (DataType == 2)
+                {
+
+                }
+                var nWorkOrderHead = new WorkOrderHead
+                {
+                    WorkOrderNo = workOrderNo,
+                    OrderDetailId = OrderDetail.Id, // 
+                    MachineNo = OrderDetail.MachineNo,
+                    DataType = DataType,
+                    DataId = BasicDataID,
+                    DataNo = BasicDataNo,
+                    DataName = BasicDataName,
+                    Count = OrderDetail.Quantity,
+                    Status = 4, // 表示由訂單轉程的工單，需要再由人工確認該工單
+                    CreateUser = 1
+                };
+
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == OrderDetail.ProductBasicId).ToListAsync();
+                if (billOfMaterial.Count() == 0)
+                {
+                    sMessage += "該品號尚未建立MBOM資訊 [ " + BasicDataNo + " ] !<br/>";
+                }
+                foreach (var item in billOfMaterial)
+                {
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    var nWorkOrderDetail = new WorkOrderDetail
+                    {
+                        SerialNumber = item.SerialNumber,
+                        ProcessId = item.ProcessId,
+                        ProcessNo = ProcessInfo.Code,
+                        ProcessName = ProcessInfo.Name,
+                        ProcessLeadTime = item.ProcessLeadTime,
+                        ProcessTime = item.ProcessTime,
+                        ProcessCost = item.ProcessCost,
+                        Count = OrderDetail.Quantity,
+                        // PurchaseId
+                        DrawNo = item.DrawNo,
+                        Manpower = item.Manpower,
+                        ProducingMachine = item.ProducingMachine,
+                        Remarks = item.Remarks,
+                        DueStartTime = DateTime.Now,
+                        DueEndTime = DateTime.Now,
+                        ActualStartTime = null,
+                        ActualEndTime = null,
+                        CreateUser = 1
+                    };
+                    nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
+                }
+                if (sMessage.Length == 0)
+                {
+                    _context.WorkOrderHeads.Add(nWorkOrderHead);
+                    await _context.SaveChangesAsync();
+                }
+                // return Ok(MyFun.APIResponseOK("OK"));
+            }
+            else
+            {
+                sMessage += "";
+            }
+            return sMessage;
+        }
+
 
     }
 }

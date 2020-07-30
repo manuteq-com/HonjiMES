@@ -45,9 +45,9 @@
         <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
 
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.WorkOrderNo}}</td>
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.BasicDataNo}}</td>
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.BasicDataName}}</td>
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.MachineNo}}</td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" nzLeft>{{data.BasicDataNo}}</td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" nzLeft>{{data.BasicDataName}}</td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.MachineNo}} nzLeft>{{data.MachineNo}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
 
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
