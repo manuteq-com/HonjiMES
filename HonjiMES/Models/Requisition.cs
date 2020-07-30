@@ -19,6 +19,8 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]
         public int ProductBasicId { get; set; }
+        [Column("work_order_head_id", TypeName = "int(11)")]
+        public int WorkOrderHeadId { get; set; }
         [Required]
         [Column("requisition_no", TypeName = "varchar(50)")]
         public string RequisitionNo { get; set; }
@@ -51,6 +53,9 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(ProductBasicId))]
         [InverseProperty("Requisitions")]
         public virtual ProductBasic ProductBasic { get; set; }
+        [ForeignKey(nameof(WorkOrderHeadId))]
+        [InverseProperty("Requisitions")]
+        public virtual WorkOrderHead WorkOrderHead { get; set; }
         [InverseProperty(nameof(RequisitionDetail.Requisition))]
         public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
     }
