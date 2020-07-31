@@ -15,12 +15,14 @@ using LinqKit;
 using DevExtreme.AspNet.Mvc;
 using DevExtreme.AspNet.Data;
 using Microsoft.AspNetCore.Authorization;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// BOM API
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     //[Authorize]
@@ -476,7 +478,7 @@ namespace HonjiMES.Controllers
                         Group = item.Group,
                         Type = item.Type,
                         Remarks = item.Remarks,
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     };
                     _context.BillOfMaterialVers.Add(nVer);
                 }
@@ -513,7 +515,8 @@ namespace HonjiMES.Controllers
 
             /////紀錄變更版本
             var bomlist = new List<BomList>();
-            if (TempProductBasicData != null) {
+            if (TempProductBasicData != null)
+            {
                 var BomData = _context.BillOfMaterials.Where(x => x.ProductBasicId == TempProductBasicData.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToList();
                 if (BomData.Count() != 0)
                 {
@@ -546,14 +549,14 @@ namespace HonjiMES.Controllers
                             Group = item.Group,
                             Type = item.Type,
                             Remarks = item.Remarks,
-                             CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = MyFun.GetUserID(HttpContext)
                         };
                         _context.BillOfMaterialVers.Add(nVer);
                     }
                     await _context.SaveChangesAsync();
                 }
             }
-            
+
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(BillOfMaterials));
         }
@@ -695,7 +698,7 @@ namespace HonjiMES.Controllers
                         Type = item.Type,
                         Remarks = item.Remarks,
                         Version = item.Version,
-                         CreateUser = MyFun.GetUserID(HttpContext),
+                        CreateUser = MyFun.GetUserID(HttpContext),
                     };
                     _context.MBillOfMaterials.Add(nMbom);
                 }

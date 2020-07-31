@@ -7,11 +7,12 @@ import { Observable } from 'rxjs';
 import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-adjust-list',
-  templateUrl: './adjust-list.component.html',
-  styleUrls: ['./adjust-list.component.css']
+    selector: 'app-adjust-list',
+    templateUrl: './adjust-list.component.html',
+    styleUrls: ['./adjust-list.component.css']
 })
 export class AdjustListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -39,7 +40,7 @@ export class AdjustListComponent implements OnInit {
     ItemTypeList: any;
     WarehouseList: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -47,7 +48,7 @@ export class AdjustListComponent implements OnInit {
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.ItemTypeList = myservice.getlistAdjustStatus();
 
-        this.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
@@ -57,21 +58,18 @@ export class AdjustListComponent implements OnInit {
                 }
             }
         );
-        this.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data;
                 }
             }
         );
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }
         );
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     getdata() {
         this.dataSourceDB = new CustomStore({

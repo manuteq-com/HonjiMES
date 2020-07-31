@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using HonjiMES.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using HonjiMES.Filter;
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 採購API
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]

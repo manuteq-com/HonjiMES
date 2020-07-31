@@ -9,11 +9,12 @@ import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Myservice } from 'src/app/service/myservice';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-adjustdetail-list',
-  templateUrl: './adjustdetail-list.component.html',
-  styleUrls: ['./adjustdetail-list.component.css']
+    selector: 'app-adjustdetail-list',
+    templateUrl: './adjustdetail-list.component.html',
+    styleUrls: ['./adjustdetail-list.component.css']
 })
 export class AdjustdetailListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -38,7 +39,7 @@ export class AdjustdetailListComponent implements OnInit, OnChanges {
     ItemTypeList: any;
     BasicDataList: any;
 
-    constructor(private http: HttpClient, myservice: Myservice) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
         this.onCellPrepared = this.onCellPrepared.bind(this);
@@ -56,19 +57,16 @@ export class AdjustdetailListComponent implements OnInit, OnChanges {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustDetail', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustDetail', 'DELETE')
         });
-        this.GetData('/Warehouses/GetWarehouses').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseList = s.data;
             }
         );
     }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
-    }
     ngOnInit() {
     }
     ngOnChanges() {
-        this.GetData('/Inventory/GetBasicsData').subscribe(
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
                     debugger;

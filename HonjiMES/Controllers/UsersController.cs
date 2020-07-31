@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
-using System.Security.Cryptography;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 帳戶
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]

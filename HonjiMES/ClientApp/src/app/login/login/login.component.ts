@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authService: AuthService,
-        public app: AppComponent
+        private app: AppComponent
     ) {
         // 已登入的狀態下直接到首頁
         if (this.authService.currentUserValue) {

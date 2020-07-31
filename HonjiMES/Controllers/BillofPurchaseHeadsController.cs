@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using DevExtreme.AspNet.Mvc;
-using Microsoft.AspNetCore.Hosting;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -51,14 +52,17 @@ namespace HonjiMES.Controllers
 
             var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
                 var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
-            var BillofPurchaseHeadData = new BillofPurchaseHead{
+            var BillofPurchaseHeadData = new BillofPurchaseHead
+            {
                 CreateTime = dt,
                 BillofPurchaseNo = key + BillofPurchaseNo + NoCount.ToString("000")
             };
@@ -73,16 +77,19 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetBillofPurchaseNumberByInfo(CreateNumberInfo CreateNoData)
         {
-            if (CreateNoData != null) {
+            if (CreateNoData != null)
+            {
                 var key = "BOP";
                 var BillofPurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
-                
+
                 var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
+                if (NoCount != 1)
+                {
                     var LastBillofPurchaseNo = NoData.FirstOrDefault().BillofPurchaseNo;
                     var NoLast = Int32.Parse(LastBillofPurchaseNo.Substring(LastBillofPurchaseNo.Length - 3, 3));
-                    if (NoCount <= NoLast) {
+                    if (NoCount <= NoLast)
+                    {
                         NoCount = NoLast + 1;
                     }
                 }
@@ -196,7 +203,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseHeads.Add(billofPurchaseHead);
             billofPurchaseHead.CreateTime = DateTime.Now;
-            billofPurchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
+            billofPurchaseHead.CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(billofPurchaseHead));
@@ -227,11 +234,12 @@ namespace HonjiMES.Controllers
                 // }
                 // Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
                 var checkBillofPurchaseNo = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(Head.BillofPurchaseNo) && x.DeleteFlag == 0).Count();
-                if (checkBillofPurchaseNo != 0) {
+                if (checkBillofPurchaseNo != 0)
+                {
                     return Ok(MyFun.APIResponseError("[進貨單號]已存在! 請刷新單號!"));
                 }
                 Head.CreateTime = dt;
-                Head. CreateUser = MyFun.GetUserID(HttpContext);
+                Head.CreateUser = MyFun.GetUserID(HttpContext);
                 var Details = new List<BillofPurchaseDetail>();
                 foreach (var item in Detail)
                 {
@@ -242,7 +250,7 @@ namespace HonjiMES.Controllers
                     item.DataNo = MaterialBasic.MaterialNo;
                     item.Specification = MaterialBasic.Specification;
                     item.CreateTime = dt;
-                    item. CreateUser = MyFun.GetUserID(HttpContext);
+                    item.CreateUser = MyFun.GetUserID(HttpContext);
                     Details.Add(item);
                 }
                 Head.BillofPurchaseDetails = Details;

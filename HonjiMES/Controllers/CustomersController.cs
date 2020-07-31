@@ -15,6 +15,7 @@ namespace HonjiMES.Controllers
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [JWTAuthorize]
     public class CustomersController : ControllerBase
     {
         private readonly HonjiContext _context;
@@ -81,7 +82,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("客戶的的 [代號] 或 [名稱] 重複!", Ccustomer));
             }
-            
+
             var Msg = MyFun.MappingData(ref Ocustomer, customer);
             Ocustomer.UpdateTime = DateTime.Now;
             Ocustomer.UpdateUser = MyFun.GetUserID(HttpContext);

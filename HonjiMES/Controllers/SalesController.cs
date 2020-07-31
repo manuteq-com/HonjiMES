@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Hosting;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 銷貨資料
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]

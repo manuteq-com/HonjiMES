@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using DevExtreme.AspNet.Mvc;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 調整紀錄
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -53,25 +55,31 @@ namespace HonjiMES.Controllers
             var AdjustDetailData = new List<AdjustDetailData>();
             var tempId = 1;
             foreach (var item in data)
-            {   
+            {
                 var BasicData = new BasicData();
-                if (item.ItemType == 1){
+                if (item.ItemType == 1)
+                {
                     var tempInfo = _context.Materials.Find(item.ItemId);
                     BasicData.DataNo = tempInfo.MaterialNo;
                     BasicData.Name = tempInfo.Name;
                     BasicData.WarehouseId = tempInfo.WarehouseId;
-                } else if (item.ItemType == 2){
+                }
+                else if (item.ItemType == 2)
+                {
                     var tempInfo = _context.Products.Find(item.ItemId);
                     BasicData.DataNo = tempInfo.ProductNo;
                     BasicData.Name = tempInfo.Name;
                     BasicData.WarehouseId = tempInfo.WarehouseId;
-                } else if (item.ItemType == 3){
+                }
+                else if (item.ItemType == 3)
+                {
                     var tempInfo = _context.Wiproducts.Find(item.ItemId);
                     BasicData.DataNo = tempInfo.WiproductNo;
                     BasicData.Name = tempInfo.Name;
                     BasicData.WarehouseId = tempInfo.WarehouseId;
                 }
-                AdjustDetailData.Add(new AdjustDetailData{
+                AdjustDetailData.Add(new AdjustDetailData
+                {
                     TempId = tempId,
                     DataType = item.ItemType,
                     DataId = item.ItemId,
@@ -109,7 +117,7 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
- 
+
         // GET: api/Adjusts/5
         /// <summary>
         /// 查詢調整紀錄
@@ -153,7 +161,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("調整紀錄的 [調整紀錄號] 重複!", Cmateriallog));
             }
-            
+
             var Msg = MyFun.MappingData(ref Omateriallog, materiallog);
             Omateriallog.UpdateTime = DateTime.Now;
             Omateriallog.UpdateUser = MyFun.GetUserID(HttpContext);

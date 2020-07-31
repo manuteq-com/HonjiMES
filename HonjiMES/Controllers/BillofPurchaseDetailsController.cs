@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -64,16 +66,16 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(data));
         }
 
-       /// <summary>
-       /// 修改進貨單明細
-       /// </summary>
-       /// <param name="id"></param>
-       /// <param name="billofPurchaseDetail"></param>
-       /// <returns></returns>
-       // PUT: api/BillofPurchaseDetails/5
-       // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-       // more details see https://aka.ms/RazorPagesCRUD.
-       [HttpPut("{id}")]
+        /// <summary>
+        /// 修改進貨單明細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="billofPurchaseDetail"></param>
+        /// <returns></returns>
+        // PUT: api/BillofPurchaseDetails/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutBillofPurchaseDetail(int id, BillofPurchaseDetail billofPurchaseDetail)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
@@ -120,7 +122,7 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<BillofPurchaseDetail>> PostBillofPurchaseDetail(int Pid ,BillofPurchaseDetail billofPurchaseDetail)
+        public async Task<ActionResult<BillofPurchaseDetail>> PostBillofPurchaseDetail(int Pid, BillofPurchaseDetail billofPurchaseDetail)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.BillofPurchaseDetails.Add(billofPurchaseDetail);
@@ -129,7 +131,7 @@ namespace HonjiMES.Controllers
             billofPurchaseDetail.DataNo = Material.MaterialNo;
             billofPurchaseDetail.Specification = Material.Specification;
             billofPurchaseDetail.CreateTime = DateTime.Now;
-            billofPurchaseDetail. CreateUser = MyFun.GetUserID(HttpContext);
+            billofPurchaseDetail.CreateUser = MyFun.GetUserID(HttpContext);
             var BillofPurchaseHead = _context.BillofPurchaseHeads.Find(Pid);
             if (BillofPurchaseHead == null)
             {

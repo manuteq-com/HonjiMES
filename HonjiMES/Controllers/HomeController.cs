@@ -14,6 +14,7 @@ namespace HonjiMES.Controllers
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [JWTAuthorize]
     public class HomeController : ControllerBase
     {
         private readonly HonjiContext _context;
@@ -30,6 +31,7 @@ namespace HonjiMES.Controllers
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<string> SingIn(LoginViewModel login)
         {
             var User = ValidateUser(login);
@@ -115,7 +117,7 @@ namespace HonjiMES.Controllers
                 return Users;
             }
         }
-        [JWTAuthorize]
+
         [HttpGet]
         public ActionResult<string> TestToken()
         {
