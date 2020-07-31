@@ -28,7 +28,6 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
     colCount: number;
     width: any;
     ProductList: any;
-    url: string;
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
@@ -65,7 +64,6 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.url = location.origin + '/api';
         this.controller = '/OrderDetails';
         this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
         this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };

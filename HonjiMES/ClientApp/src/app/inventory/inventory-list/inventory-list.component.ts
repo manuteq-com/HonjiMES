@@ -35,7 +35,6 @@ export class InventoryListComponent implements OnInit, OnChanges {
     minColWidth: number;
     width: any;
     colCount: number;
-    url: string;
     dataSourceDB: any[];
     addRow = true;
     eformData: any;
@@ -66,12 +65,8 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 200;
         this.colCount = 3;
-        this.url = location.origin + '/api';
         this.dataSourceDB = [];
 
-    }
-    public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
     }

@@ -16,7 +16,6 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    // url = location.origin + '/api';
     buttondisabled: boolean;
     formData: any;
     labelLocation: string;

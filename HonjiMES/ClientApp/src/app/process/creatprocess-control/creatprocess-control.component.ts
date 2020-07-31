@@ -33,7 +33,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     minColWidth: number;
     width: any;
     colCount: number;
-    url: string;
     dataSourceDB: any[];
     labelLocation: string;
     editOnkeyPress: boolean;
@@ -78,7 +77,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 4;
-        this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;

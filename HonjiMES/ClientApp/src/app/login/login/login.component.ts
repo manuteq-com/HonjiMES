@@ -85,7 +85,6 @@ export class LoginComponent implements OnInit {
         }
         this.app.PostData('/api/Home/SingIn/', this.formData).toPromise()
             .then((ReturnData: any) => {
-                debugger;
                 if (ReturnData.success) {
                     this.app.UserName = ReturnData.data.Username;
                     localStorage.setItem('currentUser', JSON.stringify(ReturnData.data));

@@ -80,7 +80,6 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 4;
-        this.url = location.origin + '/api';
         this.controller = '/OrderDetails';
         this.dataSourceDB = [];
         this.CreateTimeDateBoxOptions = {

@@ -29,7 +29,6 @@ export class CreatprocessComponent implements OnInit, OnChanges {
     minColWidth: number;
     colCount: number;
     width: any;
-    url: string;
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
@@ -46,7 +45,6 @@ export class CreatprocessComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 1;
-        this.url = location.origin + '/api';
 
     }
     ngOnChanges() {

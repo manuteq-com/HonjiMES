@@ -15,7 +15,6 @@ import { AppComponent } from 'src/app/app.component';
 export class BillofmateriallistComponent implements OnInit {
     dataSourceDB: any;
     bomMod: any;
-    apiurl = location.origin + '/api';
     Controller = '/BillOfMaterials';
     remoteOperations = true;
     verpopupVisible: boolean;

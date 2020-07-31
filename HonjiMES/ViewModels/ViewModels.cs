@@ -418,8 +418,21 @@ namespace HonjiMES.Models
         /// 名稱
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 可查詢資料
+        /// </summary>
+        public bool? Query { get; set; }
+        /// <summary>
+        /// 可新增資料
+        /// </summary>
         public bool? Creat { get; set; }
+        /// <summary>
+        /// 可修改資料
+        /// </summary>
         public bool? Edit { get; set; }
+        /// <summary>
+        /// 可刪除資料
+        /// </summary>
         public bool? Delete { get; set; }
     }
     public class PostUserViewModel
@@ -446,15 +459,15 @@ namespace HonjiMES.Models
         public WorkOrderHead WorkOrderHead { get; set; }
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
-    
+
     public class WorkOrderReportData
-    { 
+    {
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
         public string Remarks { get; set; }
     }
-    
+
 
     /// <summary>
     /// 製成進度

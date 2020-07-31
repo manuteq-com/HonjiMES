@@ -20,7 +20,6 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     dataSourceDB: any;
     dataSourceDB_Process: any[];
-    apiurl = location.origin + '/api';
     Controller = '/BillOfMaterials';
     remoteOperations = true;
     bomMod: any;

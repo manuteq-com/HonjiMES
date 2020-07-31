@@ -45,7 +45,6 @@ export class CreatcustomerComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 1;
-        this.url = location.origin + '/api';
 
     }
     ngOnChanges() {

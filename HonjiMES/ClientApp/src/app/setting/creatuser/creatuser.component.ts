@@ -9,6 +9,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import CustomStore from 'devextreme/data/custom_store';
 import { AppComponent } from 'src/app/app.component';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
     selector: 'app-creatuser',
@@ -52,6 +53,7 @@ export class CreatuserComponent implements OnInit, OnChanges {
     //     return this.myform.instance.option('formData').Password;
     // }
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.asyncValidation = this.asyncValidation.bind(this);
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -70,11 +72,9 @@ export class CreatuserComponent implements OnInit, OnChanges {
         this.labelLocation = 'left';
         this.app.GetData('/Users/GetUsersMenu').subscribe(
             (s) => {
-                debugger;
                 this.dataSourceDB = s.data;
             }
         );
-        //this.dataSourceDB =  SendService.sendRequest(this.http, this.Controller + '/GetUsersMenu');
     }
     ngOnChanges() {
         this.selectBoxOptionsPermission = {
@@ -93,19 +93,22 @@ export class CreatuserComponent implements OnInit, OnChanges {
     onValueChanged(e, data) {
         data.setValue(e.value);
     }
-    passwordComparison(data): boolean {
-        if (data.Password !== data.PasswordConfirm) {
-            notify({
-                message: '輸入密碼不相符',
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-            return false;
-        }
-        return true;
+    passwordComparison = () => {
+        return this.myform.instance.option('formData').Password;
     }
+    // passwordComparison(data): boolean {
+    //     if (data.Password !== data.PasswordConfirm) {
+    //         notify({
+    //             message: '輸入密碼不相符',
+    //             position: {
+    //                 my: 'center top',
+    //                 at: 'center top'
+    //             }
+    //         }, 'error', 3000);
+    //         return false;
+    //     }
+    //     return true;
+    // }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -163,5 +166,27 @@ export class CreatuserComponent implements OnInit, OnChanges {
     }
     onEditingStart(e) {
 
+    }
+    asyncValidation(e) {
+        const promise = new Promise((resolve, reject) => {
+            this.app.GetData('/Users/GetUserIDCheck?Username=' + e.value).toPromise().then((res: APIResponse) => {
+                if (!res.success) {
+                    notify({
+                        message: res.message,
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error', 3000);
+                }
+                resolve(res.success);
+            },
+                err => {
+                    // Error
+                    reject(err);
+                }
+            );
+        });
+        return promise;
     }
 }

@@ -20,7 +20,6 @@ export class ReceiveListComponent implements OnInit {
     @ViewChild('dataGridM') dataGridM: DxDataGridComponent;
     @ViewChild('dataGridP') dataGridP: DxDataGridComponent;
     dataSourceDB: any;
-    apiurl = location.origin + '/api';
     Controller = '/Requisitions';
     remoteOperations = true;
     url: string;

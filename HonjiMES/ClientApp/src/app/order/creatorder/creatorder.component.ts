@@ -36,7 +36,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
     colCount: number;
     width: any;
     ProductList: any;
-    url: string;
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
@@ -69,7 +68,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 5;
-        this.url = location.origin + '/api';
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.CreateTimeDateBoxOptions = {

@@ -127,7 +127,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("帳戶名稱已存在!"));
             }
             creatuser.user.Password = MyFun.Encryption(creatuser.user.Password);
-            creatuser.user. CreateUser = MyFun.GetUserID(HttpContext);
+            creatuser.user.CreateUser = MyFun.GetUserID(HttpContext);
             var UserRoleList = MyFun.ReturnRole(creatuser.MenuList);
             foreach (var UserRole in UserRoleList)
             {
@@ -173,7 +173,11 @@ namespace HonjiMES.Controllers
                 MenuList.Add(new MenuListViewModel
                 {
                     Id = item.Id,
-                    Name = item.Name
+                    Name = item.Name,
+                    Query = false,
+                    Creat = false,
+                    Edit = false,
+                    Delete = false
                 });
             }
             return Ok(MyFun.APIResponseOK(MenuList));
@@ -195,6 +199,7 @@ namespace HonjiMES.Controllers
             var MenuList = new List<MenuListViewModel>();
             foreach (var item in Menus)
             {
+                var Query = false;
                 var Creat = false;
                 var Edit = false;
                 var Delete = false;
@@ -204,9 +209,10 @@ namespace HonjiMES.Controllers
                     try
                     {
                         var Rolearray = UserRolesitem.Roles.ToCharArray();
-                        Creat = Rolearray[0] == '1';
-                        Edit = Rolearray[1] == '1';
-                        Delete = Rolearray[2] == '1';
+                        Query = Rolearray[0] == '1';
+                        Creat = Rolearray[1] == '1';
+                        Edit = Rolearray[2] == '1';
+                        Delete = Rolearray[3] == '1';
                     }
                     catch
                     {
@@ -227,6 +233,7 @@ namespace HonjiMES.Controllers
                 {
                     Id = UserRolesitem.Id,
                     Name = item.Name,
+                    Query = Query,
                     Creat = Creat,
                     Edit = Edit,
                     Delete = Delete
@@ -242,27 +249,43 @@ namespace HonjiMES.Controllers
             {
 
             }
+            var Query = "0";
             var Creat = "0";
             var Edit = "0";
             var Delete = "0";
             try
             {
                 var Rolearray = UserRoles.Roles.ToCharArray();
-                Creat = Rolearray[0].ToString();
-                Edit = Rolearray[1].ToString();
-                Delete = Rolearray[2].ToString();
+                Query = Rolearray[0].ToString();
+                Creat = Rolearray[1].ToString();
+                Edit = Rolearray[2].ToString();
+                Delete = Rolearray[3].ToString();
             }
             catch
             {
 
             }
             var Roles = "";
+            Roles += MenuList.Query.HasValue ? MenuList.Query.Value ? "1" : "0" : Query;
             Roles += MenuList.Creat.HasValue ? MenuList.Creat.Value ? "1" : "0" : Creat;
             Roles += MenuList.Edit.HasValue ? MenuList.Edit.Value ? "1" : "0" : Edit;
             Roles += MenuList.Delete.HasValue ? MenuList.Delete.Value ? "1" : "0" : Delete;
             UserRoles.Roles = Roles;
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(MenuList));
+        }
+
+        public async Task<IActionResult> GetUserIDCheck(string Username)
+        {
+            var Users = await _context.Users.Where(x => x.DeleteFlag == 0 && x.Username == Username).AnyAsync();
+            if (Users)
+            {
+                return Ok(MyFun.APIResponseError("帳號重複"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseOK(null));
+            }
         }
     }
 }

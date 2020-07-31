@@ -3,6 +3,8 @@
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
         <dxi-item dataField="Username">
             <dxi-validation-rule type="required" message="帳號 必填"></dxi-validation-rule>
+            <dxi-validation-rule type="async" message="帳號 重複" [validationCallback]="asyncValidation">
+            </dxi-validation-rule>
             <dxo-label text="帳號"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Realname">
@@ -17,7 +19,8 @@
         <dxi-item dataField="PasswordConfirm" editorType="dxTextBox" [editorOptions]="{ mode: 'password' }">
             <dxi-validation-rule type="required" message="確認密碼 必填"></dxi-validation-rule>
             <dxo-label text="確認密碼"></dxo-label>
-            <!-- <dxi-validation-rule [comparisonTarget]="passwordComparison" message="輸入密碼不相符"></dxi-validation-rule> -->
+            <dxi-validation-rule type="compare" [comparisonTarget]="passwordComparison" message="輸入密碼不相符">
+            </dxi-validation-rule>
         </dxi-item>
 
         <dxi-item dataField="Permission" editorType="dxSelectBox" [editorOptions]="selectBoxOptionsPermission">
@@ -44,6 +47,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
         <dxi-column dataField="Name" caption="名稱"></dxi-column>
+        <dxi-column dataField="Query" caption="查詢" editCellTemplate="EditCellTemplate"></dxi-column>
         <dxi-column dataField="Creat" caption="新增" editCellTemplate="EditCellTemplate"></dxi-column>
         <dxi-column dataField="Edit" caption="修改" editCellTemplate="EditCellTemplate"></dxi-column>
         <dxi-column dataField="Delete" caption="刪除" editCellTemplate="EditCellTemplate"></dxi-column>

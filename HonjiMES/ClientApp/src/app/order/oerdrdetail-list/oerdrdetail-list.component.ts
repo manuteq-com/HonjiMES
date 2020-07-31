@@ -21,7 +21,6 @@ export class OerdrdetailListComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
     @Input() itemkey: number;
     @Input() ProductBasicList: any;
-    url = location.origin + '/api';
     popupVisiblePurchase: boolean;
     popupVisibleSale: boolean;
     topurchasekey: any;

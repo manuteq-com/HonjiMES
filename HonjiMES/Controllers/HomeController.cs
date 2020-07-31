@@ -35,7 +35,7 @@ namespace HonjiMES.Controllers
             var User = ValidateUser(login);
             if (User != null)
             {
-                var expireMinutes = 10;
+                var expireMinutes = 1440;//幾分鐘後timeout
                 var UserRolesToken = new UserRolesToken();
                 UserRolesToken.Token = _jwt.GenerateToken(User, expireMinutes);
                 UserRolesToken.Username = User.Username;

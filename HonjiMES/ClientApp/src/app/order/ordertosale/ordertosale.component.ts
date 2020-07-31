@@ -19,7 +19,6 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    url = location.origin + '/api';
     buttondisabled: boolean;
     formData: any;
     labelLocation: string;

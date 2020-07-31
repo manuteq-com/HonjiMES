@@ -44,13 +44,29 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>('/api' + apiUrl);
+        const authenticationService = new AuthService(this.http);
+        const currentUser = authenticationService.currentUserValue;
+        let Token = '';
+        if (currentUser != null) {
+            Token = currentUser.Token;
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + Token }),
+        };
+        return this.http.get<APIResponse>('/api' + apiUrl, httpOptions);
     }
     public PostData(apiUrl: string, data: any = {}): Observable<APIResponse> {
+        debugger;
+        const authenticationService = new AuthService(this.http);
+        const currentUser = authenticationService.currentUserValue;
+        let Token = '';
+        if (currentUser != null) {
+            Token = currentUser.Token;
+        }
         const body = JSON.stringify(data);
         const httpOptions = {
             withCredentials: true, body,
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + Token }),
             params: null
         };
         return this.http.post<APIResponse>(apiUrl, body, httpOptions);
