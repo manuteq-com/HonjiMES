@@ -14,7 +14,6 @@ namespace HonjiMES.Controllers
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [JWTAuthorize]
     public class HomeController : ControllerBase
     {
         private readonly HonjiContext _context;
