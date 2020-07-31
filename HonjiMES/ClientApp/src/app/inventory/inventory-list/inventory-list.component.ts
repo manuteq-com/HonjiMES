@@ -255,7 +255,8 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.postval = {
             AdjustNo: this.formData.AdjustNo,
             LinkOrder: this.formData.LinkOrder,
-            AdjustDataDetail: this.dataSourceDB
+            Remarks: this.formData.Remarks,
+            AdjustDetailData: this.dataSourceDB
         };
         try {
             // tslint:disable-next-line: max-line-length

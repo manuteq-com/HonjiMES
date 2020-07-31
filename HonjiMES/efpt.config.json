@@ -14,6 +14,14 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
+         "Name": "adjust_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "adjust_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "all_stock_log"
       },
       {

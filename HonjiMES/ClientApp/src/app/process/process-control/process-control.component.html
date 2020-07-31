@@ -31,13 +31,13 @@
             <th colspan="19" nzWidth="800px">加工流程</th>
         </tr> -->
         <tr>
-            <th nzWidth="130px" nzLeft>工單號</th>
-            <th nzWidth="150px" nzLeft>品號</th>
-            <th nzWidth="200px" nzLeft>名稱</th>
+            <th nzWidth="125px" nzLeft>工單號</th>
+            <th nzWidth="140px" nzLeft>品號</th>
+            <th nzWidth="170px" nzLeft>名稱</th>
             <th nzWidth="100px" nzLeft>機號</th>
             <th nzWidth="70px" nzLeft>數量</th>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <th *ngIf="col.show" nzWidth="150px">{{ col.title }}</th>
+                <th *ngIf="col.show" nzWidth="160px">{{ col.title }}</th>
             </ng-container>
         </tr>
     </thead>

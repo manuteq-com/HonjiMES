@@ -278,6 +278,7 @@ export class OrderListComponent {
         }
     }
     onRowPrepared(e) {
+        e.rowElement.style.height = '15px';
         if (e.rowType === 'data') {
         }
     }

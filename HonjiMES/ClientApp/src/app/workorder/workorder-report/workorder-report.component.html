@@ -9,11 +9,21 @@
     <label>{{itemval7}}</label><br>
     <label>{{itemval8}}</label><br>
     <label>{{itemval9}}</label><br>
+    <label>{{itemval10}}</label><br>
+    <label>{{itemval11}}</label><br>
+    <label>{{itemval12}}</label><br>
+    <label>{{itemval13}}</label><br>
+    <label>{{itemval14}}</label><br>
+    <label>{{itemval15}}</label><br>
+    <label>{{itemval16}}</label><br>
+    <label>{{itemval17}}</label><br>
+    <label>{{itemval18}}</label><br>
+    <label>{{itemval19}}</label><br>
 
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="SerialNumber" [disabled]="true">
+        <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
             <dxo-label text="製程序號"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions" [disabled]="true">
@@ -27,13 +37,16 @@
         </dxi-item>
         <dxi-item dataField="Remarks" [disabled]="true">
             <dxo-label text="備註"></dxo-label>
-        </dxi-item>
+        </dxi-item> -->
 
-        <dxi-item dataField="ProcessLeadTime" [disabled]="true">
+        <!-- <dxi-item dataField="ProcessLeadTime" [disabled]="true">
             <dxo-label text="前置時間(分)"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ProcessTime" [disabled]="true">
             <dxo-label text="標準工時(分)"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="Remark" editorType="dxTextArea" [colSpan]="3" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+            <dxo-label text="回報說明"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ProcessCost" [disabled]="true">
             <dxo-label text="成本"></dxo-label>
@@ -42,7 +55,7 @@
             <dxo-label text="機台"></dxo-label>
         </dxi-item>
 
-        <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
+        <!-- <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
             <dxo-label text="預計開工日"></dxo-label>
         </dxi-item>
         <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
@@ -53,47 +66,14 @@
         </dxi-item>
         <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
             <dxo-label text="實際完工日"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Count" [disabled]="true">
+        </dxi-item> -->
+        <!-- <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ReCount" [colSpan]="2" [visible]="ReCountVisible">
+        </dxi-item> -->
+        <dxi-item dataField="ReCount" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Remark" editorType="dxTextArea" [colSpan]="2" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
-            <dxo-label text="回報說明"></dxo-label>
-        </dxi-item>
 
-
-        <!-- <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
-            <dxi-validation-rule type="required" message="驗收數量 必填"></dxi-validation-rule>
-            <dxo-label text="驗收數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Unit">
-            <dxo-label text="單位"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
-            <dxi-validation-rule type="required" message="驗收單價 必填"></dxi-validation-rule>
-            <dxo-label text="驗收單價"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="UnitCount" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitCountEditorOptions">
-            <dxo-label text="單位數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
-            <dxo-label text="驗收總價"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitPriceEditorOptions">
-            <dxo-label text="單位單價"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="WorkPrice">
-            <dxo-label text="加工費用"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="UnitPriceAll">
-            <dxo-label text="單位總額"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Remarks">
-            <dxo-label text="備註"></dxo-label>
-        </dxi-item> -->
 
     </dx-form>
     <br>
@@ -103,11 +83,11 @@
 
     <!-- <div class="row"> -->
         <div class="col-auto-12 mt-1">
-            <dx-button horizontalAlignment="right" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true"
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true"
                 [disabled]="buttondisabled" [visible]="startBtnVisible" (onClick)="onStartClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" text='完工回報' type='default' icon='check' [useSubmitBehavior]="true"
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='完工回報' type='default' icon='check' [useSubmitBehavior]="true"
                 [disabled]="buttondisabled" [visible]="endBtnVisible" (onClick)="onEndClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true"
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true"
                 [disabled]="buttondisabled" [visible]="restartedBtnVisible" (onClick)="onRestartClick($event)"></dx-button>
         </div>
     <!-- </div> -->

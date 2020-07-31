@@ -6,21 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("all_stock_log")]
-    public partial class AllStockLog
+[Table("adjust_detail")]
+    public partial class AdjustDetail
     {
+        [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("adjust_no", TypeName = "varchar(50)")]
-        public string AdjustNo { get; set; }
-        [Column("link_order", TypeName = "varchar(50)")]
-        public string LinkOrder { get; set; }
-        [Column("data_id", TypeName = "int(11)")]
-        public int DataId { get; set; }
-        [Column("data_no", TypeName = "varchar(50)")]
-        public string DataNo { get; set; }
-        [Column("data_name", TypeName = "varchar(50)")]
-        public string DataName { get; set; }
+        [Column("adjust_head_id", TypeName = "int(11)")]
+        public int AdjustHeadId { get; set; }
+        [Column("item_type", TypeName = "int(11)")]
+        public int ItemType { get; set; }
+        [Column("item_id", TypeName = "int(11)")]
+        public int ItemId { get; set; }
         [Column("original", TypeName = "int(11)")]
         public int Original { get; set; }
         [Column("quantity", TypeName = "int(11)")]
@@ -41,18 +38,21 @@ namespace HonjiMES.Models
         public decimal? WorkPrice { get; set; }
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
-        [Column("message", TypeName = "varchar(500)")]
+        [Column("message", TypeName = "varchar(50)")]
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
-        [Required]
-        [Column("name_log", TypeName = "varchar(13)")]
-        public string NameLog { get; set; }
-        [Column("delete_flag", TypeName = "tinyint(4)")]
-        public sbyte DeleteFlag { get; set; }
-        [Column("name_type", TypeName = "int(1)")]
-        public int NameType { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime UpdateTime { get; set; }
+        [Column("update_user", TypeName = "int(11)")]
+        public int? UpdateUser { get; set; }
+        [Column("delete_flag", TypeName = "int(11)")]
+        public int DeleteFlag { get; set; }
+
+        [ForeignKey(nameof(AdjustHeadId))]
+        [InverseProperty("AdjustDetails")]
+        public virtual AdjustHead AdjustHead { get; set; }
     }
 }

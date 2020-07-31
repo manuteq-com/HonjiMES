@@ -9,9 +9,9 @@
         <dxi-item dataField="LinkOrder">
             <dxo-label text="關連單號"></dxo-label>
         </dxi-item>
-        <!-- <dxi-item dataField="Remarks" [colSpan]="colCount">
+        <dxi-item dataField="Remarks" [colSpan]="colCount">
             <dxo-label text="備註"></dxo-label>
-        </dxi-item> -->
+        </dxi-item>
 
     </dx-form>
     <br>
@@ -54,7 +54,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="TempId" caption="品號" [width]="160" editCellTemplate="TempIdEditCellTemplate">
+       <dxi-column dataField="TempId" caption="品號" [width]="160" editCellTemplate="TempIdEditCellTemplate">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
@@ -73,17 +73,15 @@
         <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Price" caption="單價" dataType="number" [width]="80" editCellTemplate="PriceEditCellTemplate">
-            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+        <!-- <dxi-column dataField="Price" caption="單價" dataType="number" [width]="80" editCellTemplate="PriceEditCellTemplate">
         </dxi-column>
         <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="80" editCellTemplate="PriceAllEditCellTemplate">
-            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
-        </dxi-column>
+        </dxi-column> -->
+        <!-- <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" editCellTemplate="UnitQuantityEditCellTemplate" [width]="100"></dxi-column>
         <dxi-column dataField="Unit" caption="單位" [width]="100"></dxi-column>
-        <dxi-column dataField="UnitCount" caption="單位數量" dataType="number" editCellTemplate="UnitQuantityEditCellTemplate" [width]="100"></dxi-column>
-        <dxi-column dataField="UnitPrice" caption="單位單價" dataType="number" editCellTemplate="UnitPriceEditCellTemplate" [width]="100"></dxi-column>
-        <dxi-column dataField="UnitPriceAll" caption="單位總額" dataType="number" editCellTemplate="UnitPriceAllEditCellTemplate" [width]="100"></dxi-column>
-        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" [width]="100"></dxi-column>
+        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" editCellTemplate="UnitPriceEditCellTemplate" [width]="100"></dxi-column>
+        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" editCellTemplate="UnitPriceAllEditCellTemplate" [width]="100"></dxi-column>
+        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" [width]="100"></dxi-column> -->
         <dxi-column dataField="Remark" caption="備註"></dxi-column>
 
         <dxi-column type="buttons">
@@ -136,9 +134,9 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button #myButton horizontalAlignment="right" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="buttondisabled"></dx-button>
-        <dx-button horizontalAlignment="right" text='更新調整單號' type='default' icon='refresh' [useSubmitBehavior]="false"
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3" text='更新調整單號' type='default' icon='refresh' [useSubmitBehavior]="false"
             (onClick)="refreshAdjustNo()"></dx-button>
         <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
