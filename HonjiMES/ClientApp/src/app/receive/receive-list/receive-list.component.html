@@ -96,7 +96,7 @@
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="100"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="70"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
                 <dx-button class="" icon="trash" type="danger" (onClick)="deleteReceiveList($event,data)"></dx-button>
                 <dx-button class="ml-1" icon="chevrondoubleright" type="default" (onClick)="readRequisitionData($event,data)"></dx-button>
