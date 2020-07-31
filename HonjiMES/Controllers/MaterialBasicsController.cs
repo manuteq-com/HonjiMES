@@ -231,6 +231,16 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
+ 
+        [HttpGet]
+        public async Task<ActionResult<MaterialBasic>> CheckMaterialNumber(string DataNo)
+        {
+            var materialBasicNo = await _context.MaterialBasics.Where(x => x.MaterialNo == DataNo && x.DeleteFlag == 0).AnyAsync();
+            if (materialBasicNo) {
+                return Ok(MyFun.APIResponseError("[原料品號]已存在!"));
+            }
+            return Ok(MyFun.APIResponseOK(""));
+        }
 
         private bool MaterialBasicExists(int id)
         {

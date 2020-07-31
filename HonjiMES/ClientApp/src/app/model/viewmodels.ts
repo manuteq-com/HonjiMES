@@ -171,3 +171,16 @@ export class requisitionsDetailInfo {
     RequisitionId: number;
     WarehouseId: number;
 }
+
+// tslint:disable-next-line: class-name
+export class basicData {
+    TempId: number;
+    DataType: number;
+    DataId: number;
+    DataNo: string;
+    Name: string;
+    Specification: string;
+    Property: string;
+    Price: number;
+    WarehouseId: number;
+}
