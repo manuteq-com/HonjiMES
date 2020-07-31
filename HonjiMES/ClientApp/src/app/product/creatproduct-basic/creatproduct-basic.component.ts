@@ -44,7 +44,7 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
         this.minColWidth = 100;
         this.colCount = 2;
         this.asyncValidation = this.asyncValidation.bind(this);
-        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
