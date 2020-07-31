@@ -175,7 +175,7 @@ export class SendService {
                                 my: 'center top',
                                 at: 'center top'
                             }
-                        }, 'success', 3000);
+                        }, 'success', 5000);
                         return (ReturnData);
                     } else {
                         return (ReturnData.data);

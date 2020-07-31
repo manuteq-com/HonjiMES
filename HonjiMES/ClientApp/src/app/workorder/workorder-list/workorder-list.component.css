@@ -67,3 +67,8 @@
 .process_end {
     background-color:#15fd0d21;
 }
+.ant-table-tbody>tr>td:hover {
+    transition: background .3s;
+    background-color: rgba(255, 145, 0, 0.589);
+    color: #000;
+}

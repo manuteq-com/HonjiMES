@@ -48,10 +48,11 @@
                     title="新增領料單"
                     [showTitle]="true"
                     [width]="700"
-                    [height]="325">
+                    [height]="275">
                 </dxo-popup>
                 <dxo-form [colCount]=1>
-                    <dxi-item dataField="Name"></dxi-item>
+                    <dxi-item dataField="WorkOrderNo"></dxi-item>
+                    <!-- <dxi-item dataField="Name"></dxi-item>
                     <dxi-item dataField="ProductBasicId" dataType="number" editorType="dxSelectBox"
                         [editorOptions]="selectBoxOptions">
                         <dxi-validation-rule type="required" message="成品名稱 必填"></dxi-validation-rule>
@@ -59,13 +60,13 @@
                     <dxi-item dataField="Quantity">
                         <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
                         <dxi-validation-rule type="range" [min]="1" message="數量 必須大於1"></dxi-validation-rule>
-                    </dxi-item>
+                    </dxi-item> -->
                 </dxo-form>
             </dxo-editing>
 
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-paging [enabled]="true" [pageSize]="15">
+            <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
                 [showNavigationButtons]="true" visible="true">
@@ -75,7 +76,11 @@
 
             <dxi-column dataField="RequisitionNo" caption="領料單號" [allowEditing]="false" [filterValue]="" dataType="string">
             </dxi-column>
-            <dxi-column dataField="Name" caption="領料單名稱" dataType="string"></dxi-column>
+            <dxi-column dataField="WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [visible]="false">
+            </dxi-column>
+            <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string">
+            </dxi-column>
+            <dxi-column dataField="Name" caption="領料單名稱" dataType="string" [visible]="false"></dxi-column>
             <dxi-column dataField="ProductNo" caption="成品號" dataType="string"></dxi-column>
             <dxi-column dataField="ProductNumber" caption="廠內成品號" dataType="string"></dxi-column>
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>

@@ -50,7 +50,8 @@ export class ReceiveListComponent implements OnInit {
             byKey: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetRequisition', 'GET', { key }),
             insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostRequisition', 'POST', { values }),
+                // SendService.sendRequest(this.http, this.Controller + '/PostRequisition', 'POST', { values }),
+                SendService.sendRequest(this.http, this.Controller + '/PostRequisitionByWorkOrderNo', 'POST', { values }),
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutRequisition', 'PUT', { key, values }),
             remove: (key) =>

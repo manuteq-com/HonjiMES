@@ -41,5 +41,10 @@ body {
 .mt-field-value {
     flex: 5;
 }
+.table_tit{
+    white-space: nowrap;  //禁止td換行
+    overflow: hidden;  //隱藏X,Y滾動條
+    text-overflow: ellipsis;//將顯示不完的以...顯示
+}
 
 // 查詢表單統一 Layout

@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import CheckBox from 'devextreme/ui/check_box';
+import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
+
 @Component({
     selector: 'app-oerdrdetail-list',
     templateUrl: './oerdrdetail-list.component.html',
@@ -57,6 +59,49 @@ export class OerdrdetailListComponent implements OnInit {
         return this.http.get<APIResponse>(location.origin + '/api' + apiUrl);
     }
     ngOnInit() {
+    }
+    async to_workClick(e) {
+        this.topurchasekey = null;
+        this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
+        if (this.topurchasekey.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何訂單項目',
+                html: '請勾選要轉工單的訂單項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            try {
+                let OrderData = new PostOrderMaster_Detail();
+                OrderData.orderDetail = this.topurchasekey;
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrder', 'POST', { values: OrderData });
+                if (sendRequest.success) {
+                    if (sendRequest.message === '') {
+                        notify({
+                            message: '工單建立完成',
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'success', 3000);
+                    } else {
+                        notify({
+                            message: sendRequest.message,
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'warning', 6000);
+                    }
+                }
+                this.dataGrid.instance.refresh();
+            } catch (error) {
+
+            }
+        }
     }
     to_purchaseClick(e) {
         this.topurchasekey = null;
