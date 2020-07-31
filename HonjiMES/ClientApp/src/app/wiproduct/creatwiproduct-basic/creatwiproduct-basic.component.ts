@@ -32,7 +32,7 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -107,4 +107,17 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
         this.buttondisabled = false;
 
     };
+    asyncValidation(e) {
+        const promise = new Promise((resolve, reject) => {
+            this.app.GetData('/WiproductBasics/CheckWiproductNumber?DataNo=' + e.value).toPromise().then((res: APIResponse) => {
+                resolve(res.success);
+            },
+                err => {
+                    // Error
+                    reject(err);
+                }
+            );
+        });
+        return promise;
+    }
 }

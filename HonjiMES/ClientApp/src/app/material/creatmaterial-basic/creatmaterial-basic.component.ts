@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
@@ -7,12 +7,13 @@ import { Material } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+
 @Component({
     selector: 'app-creatmaterial-basic',
     templateUrl: './creatmaterial-basic.component.html',
     styleUrls: ['./creatmaterial-basic.component.css']
 })
-export class CreatmaterialBasicComponent implements OnInit {
+export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -38,7 +39,8 @@ export class CreatmaterialBasicComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
-    constructor(private http: HttpClient, public app: AppComponent) {
+
+    constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -48,7 +50,8 @@ export class CreatmaterialBasicComponent implements OnInit {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+        this.asyncValidation = this.asyncValidation.bind(this);
+        this.GetData(this.url + '/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -115,6 +118,19 @@ export class CreatmaterialBasicComponent implements OnInit {
             this.childOuter.emit(true);
         }
         this.buttondisabled = false;
-
     };
+
+    asyncValidation(e) {
+        const promise = new Promise((resolve, reject) => {
+            this.app.GetData('/MaterialBasics/CheckMaterialNumber?DataNo=' + e.value).toPromise().then((res: APIResponse) => {
+                resolve(res.success);
+            },
+                err => {
+                    // Error
+                    reject(err);
+                }
+            );
+        });
+        return promise;
+    }
 }

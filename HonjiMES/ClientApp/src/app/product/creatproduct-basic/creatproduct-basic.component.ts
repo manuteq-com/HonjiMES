@@ -33,7 +33,7 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -43,7 +43,8 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
-        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        this.asyncValidation = this.asyncValidation.bind(this);
+        this.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
@@ -107,4 +108,18 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
         this.buttondisabled = false;
 
     };
+
+    asyncValidation(e) {
+        const promise = new Promise((resolve, reject) => {
+            this.app.GetData('/ProductBasics/CheckProductNumber?DataNo=' + e.value).toPromise().then((res: APIResponse) => {
+                resolve(res.success);
+            },
+                err => {
+                    // Error
+                    reject(err);
+                }
+            );
+        });
+        return promise;
+    }
 }

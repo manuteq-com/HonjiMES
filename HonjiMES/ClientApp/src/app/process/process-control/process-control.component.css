@@ -62,7 +62,10 @@
     /* background-color: #eaeaf1; */
 }
 .process_started {
-    background-color:#fdf90d21;
+    background-color:#f8f691;
+}
+.process_ended {
+    background-color:#9afd97;
 }
 .process_start {
     background-color:#fdf90d21;

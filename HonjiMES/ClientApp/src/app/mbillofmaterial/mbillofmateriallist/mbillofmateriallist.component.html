@@ -29,7 +29,7 @@
             [masterDetail]="{ enabled: true, template: 'detail' }">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-paging [enabled]="true" [pageSize]="15">
+            <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
                 [showNavigationButtons]="true" visible="true">
@@ -45,7 +45,7 @@
             <dxi-column dataField="Property" caption="廠內規格"></dxi-column>
             <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" width="70"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
                 <dx-button icon="chevrondoubleright" type="default" (onClick)="readBomProcess($event,data)"></dx-button>
             </div>

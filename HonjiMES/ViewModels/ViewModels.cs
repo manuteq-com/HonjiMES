@@ -460,6 +460,12 @@ namespace HonjiMES.Models
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }
 
+    public class OrderData
+    {
+        public OrderHead OrderHead { get; set; }
+        public List<OrderDetail> OrderDetail { get; set; }
+    }
+    
     public class WorkOrderData
     {
         public WorkOrderHead WorkOrderHead { get; set; }

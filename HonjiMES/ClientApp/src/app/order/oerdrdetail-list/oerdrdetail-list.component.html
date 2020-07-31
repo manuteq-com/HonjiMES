@@ -1,6 +1,6 @@
 <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
 <div class="row">
-    <div class="col-md-8 col-sm-8">
+    <div class="col-md-7 col-sm-8">
     </div>
     <div class="col-md-2 col-sm-2">
         <div class="input-group">
@@ -12,14 +12,25 @@
         </div> -->
     </div>
     <div class="col-md-1 col-sm-1">
+        <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)"></dx-button>
+    </div>
+    <div class="col-md-1 col-sm-1">
         <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button>
     </div>
     <div class="col-md-1 col-sm-1">
         <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onRowClick)="rowClick($event)" (onCellPrepared)="onCellPrepared($event)"
-(onSelectionChanged)="onSelectionChanged($event)" [rowAlternationEnabled]="true">
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    [showBorders]="true"
+    keyExpr="Id"
+    (onCellClick)="cellClick($event)"
+    (onRowClick)="rowClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
+    [rowAlternationEnabled]="true">
+
     <dxo-editing mode="row"
         [allowAdding]="false"
         [allowUpdating]="true"
@@ -78,13 +89,16 @@
     <dxi-column dataField="SaleCount" caption="已銷貨數量" dataType="number"  width="100"></dxi-column>
     <dxi-column dataField="Quantity" caption="數量" dataType="number"  width="70"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" width="50"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" width="80"></dxi-column>
-    <dxi-column dataField="Price" caption="價格" dataType="number" width="80"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" width="70"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number" width="70"></dxi-column>
     <dxi-column dataField="DueDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
+
     <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"  width="180"></dxi-column>
+    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2"  width="180"></dxi-column>
+
     <dxi-column type="buttons" caption="新增" cssClass="addmod">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -99,7 +113,12 @@
     </div>
     <div *dxTemplate="let d of 'diffCellTemplate'" >
         <ul style="list-style-type:none">
-            <li *ngFor ="let item of  distinct(d.value)"> {{item.Sale.SaleNo}}</li>
+            <li *ngFor ="let item of distinct(d.value)">{{item.Sale.SaleNo}}</li>
+        </ul>
+    </div>
+    <div *dxTemplate="let d of 'diffCellTemplate2'" >
+        <ul style="list-style-type:none; text-align: left;">
+            <li *ngFor ="let item of d.value">{{item.WorkOrderNo}}</li>
         </ul>
     </div>
 
