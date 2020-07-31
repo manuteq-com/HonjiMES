@@ -53,7 +53,7 @@ export class ProcessControlComponent implements OnInit {
         if (data.Status === 1) {
             return 'process_started';
         } else if (data.Status === 3) {
-            return 'process_end';
+            return 'process_ended';
         } else {
             return '';
         }

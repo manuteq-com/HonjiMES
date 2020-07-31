@@ -62,10 +62,10 @@
     /* background-color: #eaeaf1; */
 }
 .process_start {
-    background-color:#fdf90d21;
+    background-color:#f8f691;
 }
 .process_end {
-    background-color:#15fd0d21;
+    background-color:#9afd97;
 }
 .ant-table-tbody>tr>td:hover {
     transition: background .3s;

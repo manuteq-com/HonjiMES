@@ -1,6 +1,6 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" [showValidationSummary]="true">
 
         <dxi-item dataField="WiproductNo">
             <dxi-validation-rule type="required" message="主件品號 必填"></dxi-validation-rule>

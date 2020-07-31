@@ -1,12 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Material, basicData } from 'src/app/model/viewmodels';
+import { Material } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
-import { SSL_OP_ALL } from 'constants';
 import { AppComponent } from 'src/app/app.component';
 
 @Component({
@@ -14,7 +13,7 @@ import { AppComponent } from 'src/app/app.component';
     templateUrl: './creatmaterial-basic.component.html',
     styleUrls: ['./creatmaterial-basic.component.css']
 })
-export class CreatmaterialBasicComponent implements OnInit {
+export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
@@ -41,7 +40,7 @@ export class CreatmaterialBasicComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
-    MaterialNoEditorOptions: { onValueChanged: any; };
+
     constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
@@ -53,9 +52,7 @@ export class CreatmaterialBasicComponent implements OnInit {
         this.minColWidth = 100;
         this.colCount = 2;
         this.url = location.origin + '/api';
-        // this.MaterialNoEditorOptions = {
-        //     //onValueChanged: this.checkMaterialNumber.bind(this)
-        // };
+
         this.asyncValidation = this.asyncValidation.bind(this);
         this.GetData(this.url + '/Suppliers/GetSuppliers').subscribe(
             (s) => {
@@ -87,7 +84,8 @@ export class CreatmaterialBasicComponent implements OnInit {
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
         // tslint:disable-next-line: use-lifecycle-interface
-    } ngOnChanges() {
+    }
+    ngOnChanges() {
         // debugger;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }

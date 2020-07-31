@@ -57,6 +57,15 @@ export class WorkorderListComponent implements OnInit {
             this.ReportHeight = 760;
         }
     }
+    getBlueClass(data) {
+        // if (data.Status === 1) {
+        //     return 'process_started';
+        // } else if (data.Status === 3) {
+        //     return 'process_ended';
+        // } else {
+            return '';
+        // }
+    }
     getBlue2Class(data) {
         if (data === 2) {
             return 'process_start';
