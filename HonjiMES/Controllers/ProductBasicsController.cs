@@ -230,6 +230,17 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(productBasic));
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ProductBasic>> CheckProductNumber(string DataNo)
+        {
+            var productBasicNo = await _context.ProductBasics.Where(x => x.ProductNo == DataNo && x.DeleteFlag == 0).AnyAsync();
+            if (productBasicNo) {
+                return Ok(MyFun.APIResponseError("[成品品號]已存在!"));
+            }
+            return Ok(MyFun.APIResponseOK(""));
+        }
+
+
         private bool ProductBasicExists(int id)
         {
             return _context.ProductBasics.Any(e => e.Id == id);

@@ -3,14 +3,16 @@ import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Material } from 'src/app/model/viewmodels';
+import { Material, basicData } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
+import { SSL_OP_ALL } from 'constants';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-creatmaterial-basic',
-  templateUrl: './creatmaterial-basic.component.html',
-  styleUrls: ['./creatmaterial-basic.component.css']
+    selector: 'app-creatmaterial-basic',
+    templateUrl: './creatmaterial-basic.component.html',
+    styleUrls: ['./creatmaterial-basic.component.css']
 })
 export class CreatmaterialBasicComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
@@ -39,7 +41,8 @@ export class CreatmaterialBasicComponent implements OnInit {
         useSubmitBehavior: true,
         icon: 'save'
     };
-    constructor(private http: HttpClient) {
+    MaterialNoEditorOptions: { onValueChanged: any; };
+    constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -50,6 +53,10 @@ export class CreatmaterialBasicComponent implements OnInit {
         this.minColWidth = 100;
         this.colCount = 2;
         this.url = location.origin + '/api';
+        // this.MaterialNoEditorOptions = {
+        //     //onValueChanged: this.checkMaterialNumber.bind(this)
+        // };
+        this.asyncValidation = this.asyncValidation.bind(this);
         this.GetData(this.url + '/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 console.log(s);
@@ -76,11 +83,11 @@ export class CreatmaterialBasicComponent implements OnInit {
                 }
             }
         );
-     }
+    }
     public GetData(apiUrl: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(apiUrl);
-    // tslint:disable-next-line: use-lifecycle-interface
-    }ngOnChanges() {
+        // tslint:disable-next-line: use-lifecycle-interface
+    } ngOnChanges() {
         // debugger;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
@@ -100,7 +107,7 @@ export class CreatmaterialBasicComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
@@ -112,7 +119,7 @@ export class CreatmaterialBasicComponent implements OnInit {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/MaterialBasics/PostMaterial', 'POST', { values:  this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/MaterialBasics/PostMaterial', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();
@@ -120,6 +127,19 @@ export class CreatmaterialBasicComponent implements OnInit {
             this.childOuter.emit(true);
         }
         this.buttondisabled = false;
-
     };
+
+    asyncValidation(e) {
+        const promise = new Promise((resolve, reject) => {
+            this.app.GetData('/MaterialBasics/CheckMaterialNumber?DataNo=' + e.value).toPromise().then((res: APIResponse) => {
+                resolve(res.success);
+            },
+                err => {
+                    // Error
+                    reject(err);
+                }
+            );
+        });
+        return promise;
+    }
 }
