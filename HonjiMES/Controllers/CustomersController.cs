@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 顧客列表
     /// </summary>
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [JWTAuthorize]
     public class CustomersController : ControllerBase
     {
         private readonly HonjiContext _context;
