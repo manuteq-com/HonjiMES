@@ -10,20 +10,23 @@
             <dxi-item dataField="Quantity"></dxi-item>
         </dxo-form>
     </dxo-editing>
-    <dxi-column dataField="Lv" caption="階層" dataType="string" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Name" caption="名稱" dataType="string"></dxi-column>
-    <dxi-column dataField="ProductNo" caption="組成品項" dataType="string" [allowEditing]="false"></dxi-column>
+    <!-- <dxi-column dataField="Lv" caption="階層" dataType="string" [allowEditing]="false"></dxi-column> -->
+    <!-- <dxi-column dataField="Name" caption="名稱" dataType="string"></dxi-column> -->
+    <!-- <dxi-column dataField="ProductNo" caption="組成品項" dataType="string" [allowEditing]="false"></dxi-column> -->
     <!-- <dxi-column dataField="ProductName" caption="成品品名" dataType="string"></dxi-column> -->
-    <dxi-column dataField="MaterialNo" caption="組成元件" dataType="string" [allowEditing]="false"></dxi-column>
+    <!-- <dxi-column dataField="MaterialNo" caption="組成元件" dataType="string" [allowEditing]="false"></dxi-column> -->
     <!-- <dxi-column dataField="MaterialName" caption="元件品名" dataType="string"></dxi-column> -->
-    <dxi-column dataField="Quantity" caption="組成數量" dataType="number"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="成品品號" dataType="number" [visible]="false" [allowEditing]="false">
+    <!-- <dxi-column dataField="Quantity" caption="組成數量" dataType="number"></dxi-column> -->
+    <!-- <dxi-column dataField="ProductBasicId" caption="成品品號" dataType="number" [visible]="false" [allowEditing]="false">
         <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MaterialBasicId" caption="元件品號" dataType="number" [visible]="false" [allowEditing]="false">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-
+    </dxi-column> -->
+    <dxi-column dataField="Lv" caption="階層" dataType="string" [allowEditing]="false"></dxi-column>
+    <!-- <dxi-column dataField="LvName" caption="品名" dataType="string" [allowEditing]="false"></dxi-column> -->
+    <dxi-column dataField="BomType" caption="類型" dataType="string" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Quantity" caption="組成數量" dataType="number"></dxi-column>
     <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="btnVisible">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -38,8 +41,8 @@
     </div>
 
 </dx-tree-list>
-<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="35%" [width]="600"
-    [(visible)]="popupVisible">
+<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="35%"
+    [width]="600" [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval">
         </app-editbom>
