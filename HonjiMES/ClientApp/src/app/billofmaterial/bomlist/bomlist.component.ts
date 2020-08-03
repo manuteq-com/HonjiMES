@@ -15,9 +15,9 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./bomlist.component.css']
 })
 export class BomlistComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() bomMod: any;
-    @Output() onChangeVar = new EventEmitter();
     @ViewChild(DxTreeListComponent) TreeList: DxTreeListComponent;
     Controller = '/BillOfMaterials';
     dataSourceDB: CustomStore;
@@ -145,6 +145,6 @@ export class BomlistComponent implements OnInit, OnChanges {
         }
     }
     readBomProcess(e, data) {
-        this.onChangeVar.emit(data.data);
+        this.childOuter.emit(data.data);
     }
 }

@@ -465,7 +465,7 @@ namespace HonjiMES.Models
         public OrderHead OrderHead { get; set; }
         public List<OrderDetail> OrderDetail { get; set; }
     }
-    
+
     public class WorkOrderData
     {
         public WorkOrderHead WorkOrderHead { get; set; }
@@ -568,5 +568,35 @@ namespace HonjiMES.Models
         public int RequisitionId { get; set; }
         public int WarehouseId { get; set; }
     }
-
+    public class BomListVM
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// PID
+        /// </summary>
+        public int? Pid { get; set; }
+        /// <summary>
+        /// 顯示層級
+        /// </summary>
+        public string Lv { get; set; }
+        /// <summary>
+        /// 品項和元件
+        /// </summary>
+        public string LvName { get; set; }
+        /// <summary>
+        /// 名稱
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 物件類型
+        /// </summary>
+        public string BomType { get; set; }
+        /// <summary>
+        /// 組成數量
+        /// </summary>
+        public int Quantity { get; set; }
+    }
 }
