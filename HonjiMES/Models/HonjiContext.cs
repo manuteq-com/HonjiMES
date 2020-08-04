@@ -47,6 +47,7 @@ namespace HonjiMES.Models
         public virtual DbSet<SaleLog> SaleLogs { get; set; }
         public virtual DbSet<Saleold> Saleolds { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
@@ -2332,6 +2333,33 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<SupplierOfMaterial>(entity =>
+            {
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("material_basic_id");
+
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Remarks)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.SupplierOfMaterials)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("supplier_of_material_ibfk_2");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.SupplierOfMaterials)
+                    .HasForeignKey(d => d.SupplierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("supplier_of_material_ibfk_1");
             });
 
             modelBuilder.Entity<System>(entity =>
