@@ -342,7 +342,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<IEnumerable<BomList>>> GetBomlist(int id)
+        public async Task<ActionResult<IEnumerable<BomListVM>>> GetBomlist(int id)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
@@ -351,7 +351,21 @@ namespace HonjiMES.Controllers
             {
                 bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
             }
-            return Ok(MyFun.APIResponseOK(bomlist));
+            var bomlistVM = new List<BomListVM>();
+            foreach (var item in bomlist)
+            {
+                bomlistVM.Add(new BomListVM
+                {
+                    Id = item.Id,
+                    Pid = item.Pid,
+                    Lv = "(" + item.Lv + ")　 " + item.ProductNo + item.MaterialNo,
+                    LvName = item.ProductNo + item.MaterialNo,
+                    Quantity = item.Quantity,
+                    Name = item.Name,
+                    BomType = !string.IsNullOrWhiteSpace(item.MaterialNo) ? "元件" : "成品"
+                });
+            }
+            return Ok(MyFun.APIResponseOK(bomlistVM));
         }
         /// <summary>
         /// 更新BOM表
