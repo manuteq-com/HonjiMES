@@ -399,7 +399,7 @@ namespace HonjiMES.Controllers
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
                     Count = WorkOrderData.WorkOrderHead.Count,
-                     CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = MyFun.GetUserID(HttpContext)
                 };
 
                 foreach (var item in WorkOrderData.WorkOrderDetail)
@@ -424,7 +424,7 @@ namespace HonjiMES.Controllers
                         DueEndTime = item.DueEndTime,
                         ActualStartTime = item.ActualStartTime,
                         ActualEndTime = item.ActualEndTime,
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     };
                     nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
                 }
@@ -501,7 +501,7 @@ namespace HonjiMES.Controllers
                             DueEndTime = item.DueEndTime,
                             ActualStartTime = item.ActualStartTime,
                             ActualEndTime = item.ActualEndTime,
-                             CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = MyFun.GetUserID(HttpContext),
                             UpdateUser = MyFun.GetUserID(HttpContext)
                         };
                         OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
@@ -573,5 +573,54 @@ namespace HonjiMES.Controllers
         {
             return _context.Processes.Any(e => e.Id == id);
         }
+
+        /// <summary>
+        /// 取工單列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<ProcessesData>>> GetWorkOrderList(int id)
+        {
+            var ProcessesDataList = new List<ProcessesData>();
+            var WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            foreach (var item in WorkOrderHeads)
+            {
+                var BasicDataNo = "";
+                var BasicDataName = "";
+                if (item.DataType == 0)
+                {
+                    var BasicData = _context.MaterialBasics.Find(item.DataId);
+                    BasicDataNo = BasicData.MaterialNo;
+                    BasicDataName = BasicData.Name;
+                }
+                else if (item.DataType == 1)
+                {
+                    var BasicData = _context.ProductBasics.Find(item.DataId);
+                    BasicDataNo = BasicData.ProductNo;
+                    BasicDataName = BasicData.Name;
+                }
+                else if (item.DataType == 2)
+                {
+                    var BasicData = _context.WiproductBasics.Find(item.DataId);
+                    BasicDataNo = BasicData.WiproductNo;
+                    BasicDataName = BasicData.Name;
+                }
+
+                ProcessesDataList.Add(new ProcessesData
+                {
+                    Key = item.Id,
+                    WorkOrderNo = item.WorkOrderNo,
+                    BasicDataName = BasicDataName,
+                    BasicDataNo = BasicDataNo,
+                    MachineNo = item.MachineNo,
+                    Count = item.Count,
+                    Status = item.Status
+                });
+
+            }
+            return Ok(MyFun.APIResponseOK(ProcessesDataList));
+        }
+
     }
 }

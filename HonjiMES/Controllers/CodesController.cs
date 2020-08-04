@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HonjiMES.Helper;
+using HonjiMES.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,13 @@ namespace HonjiMES.Controllers
     [ApiController]
     public class CodesController : Controller
     {
+        private readonly HonjiContext _context;
+
+        public CodesController(HonjiContext context)
+        {
+            _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+        }
         public IActionResult Index()
         {
             return View();
@@ -28,14 +36,34 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public IActionResult GetQrCode()
         {
+            var idlist = new List<int>();
+            var Querylist = Request.Query["id"];
+            if (!Querylist.Any())
+            {
+                return new BadRequestResult();
+            }
+            else
+            {
+                foreach (var item in Querylist[0].Split(','))
+                {
+                    var id = 0;
+                    if (int.TryParse(item, out id))
+                    {
+                        idlist.Add(id);
+                    }
+                }
+            }
             using (var ms = new MemoryStream())
             {
                 Document document = new Document(PageSize.A4);//產一個A4的PDF
                 PdfWriter pdfWriter = PdfWriter.GetInstance(document, ms);  //實例化
                 PdfPTable table = new PdfPTable(4);//產4個欄位
-                for (int i = 0; i < 40; i++)//由左到右，由上到下照順序填滿表格
+                var count = 0;
+                foreach (var item in idlist)
                 {
-                    var txt = "Hello .NET Core" + i;
+                    //由左到右，由上到下照順序填滿表格
+                    var WorkOrderHeads = _context.WorkOrderHeads.Find(item);
+                    var txt = WorkOrderHeads.WorkOrderNo;
                     var bQrCode = BarcodeHelper.CreateQrCode(txt, 50, 50);
                     var QrCodeimg = iTextSharp.text.Image.GetInstance(bQrCode);
                     PdfPTable itemtable = new PdfPTable(1);
@@ -52,6 +80,13 @@ namespace HonjiMES.Controllers
                     borderCell1.FixedHeight = 10;
                     itemtable.AddCell(borderCell2);
                     table.AddCell(itemtable);
+                    count++;
+                }
+                var len = 4 - (count % 4);
+                len = len == 4 ? 0 : len;
+                for (int i = 0; i < len; i++)
+                {
+                    table.AddCell("");//補上空的，沒補會有錯誤
                 }
                 document.Open();                         //打開文件  
                 document.Add(table);

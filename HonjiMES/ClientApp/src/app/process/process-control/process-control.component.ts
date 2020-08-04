@@ -12,12 +12,14 @@ export class ProcessControlComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     dataSourceDB: any = {};
     creatpopupVisible: any;
+    qrcodepopupVisible: any;
     itemkey: number;
     mod: string;
     loadingVisible = false;
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
+        this.qrcodepopupVisible = false;
         this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
@@ -71,6 +73,9 @@ export class ProcessControlComponent implements OnInit {
         this.creatpopupVisible = true;
         this.itemkey = null;
         this.mod = 'new';
+    }
+    qrcodedata() {
+        this.qrcodepopupVisible = true;
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;

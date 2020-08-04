@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
-  selector: 'app-workorder-list',
-  templateUrl: './workorder-list.component.html',
-  styleUrls: ['./workorder-list.component.css']
+    selector: 'app-workorder-list',
+    templateUrl: './workorder-list.component.html',
+    styleUrls: ['./workorder-list.component.css']
 })
 export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
@@ -17,7 +17,23 @@ export class WorkorderListComponent implements OnInit {
     mod: string;
     loadingVisible = false;
     ReportHeight: any;
+    keyup = '';
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            notify({
+                message: this.keyup,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
+            this.keyup = '';
+        } else if (e.key === 'Shift') {
 
+        } else {
+            this.keyup += e.key.toLocaleUpperCase();
+        }
+    }
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
@@ -44,6 +60,7 @@ export class WorkorderListComponent implements OnInit {
         // this.mod = 'report';
     }
     tdclick(e, colData) {
+        debugger;
         this.itemkey = e.Key;
         this.serialkey = Number(colData.key.substring(4)) + 1;
         this.mod = 'report';
@@ -63,7 +80,7 @@ export class WorkorderListComponent implements OnInit {
         // } else if (data.Status === 3) {
         //     return 'process_ended';
         // } else {
-            return '';
+        return '';
         // }
     }
     getBlue2Class(data) {
