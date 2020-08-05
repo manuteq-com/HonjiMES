@@ -1,0 +1,192 @@
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">報工記錄查詢</div>
+    <div class="buttongroup">
+    </div>
+</div>
+
+
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    [focusedRowEnabled]="true"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations"
+    [columnAutoWidth]="true"
+>
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[5, 10, 15, 20, 100]"
+        [showInfo]="true"
+    >
+    </dxo-pager>
+    <dxo-editing
+        mode="row"
+        [allowAdding]="false"
+        [allowUpdating]="false"
+        [allowDeleting]="false"
+    >
+        <dxo-form>
+            <dxi-item dataField="WorkOrderDetail.WorkOrderHead.WorkOrderNo"></dxi-item>
+            <dxi-item dataField="ReportType"></dxi-item>
+            <dxi-item dataField="PurchaseId"></dxi-item>
+            <dxi-item dataField="PurchaseNo"></dxi-item>
+            <dxi-item dataField="DrawNo"></dxi-item>
+            <dxi-item dataField="Manpower"></dxi-item>
+            <dxi-item dataField="ProducingMachine"></dxi-item>
+            <dxi-item dataField="ReCount"></dxi-item>
+            <dxi-item dataField="Remarks"></dxi-item>
+            <dxi-item dataField="StatusO"></dxi-item>
+            <dxi-item dataField="StatusN"></dxi-item>
+            <dxi-item dataField="DueStartTime"></dxi-item>
+            <dxi-item dataField="DueEndTime"></dxi-item>
+            <dxi-item dataField="ActualStartTime"></dxi-item>
+            <dxi-item dataField="ActualEndTime"></dxi-item>
+            <dxi-item dataField="CreateTime"></dxi-item>
+            <dxi-item dataField="CreateUser"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item
+                toolbar="bottom"
+                location="after"
+                widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }"
+            >
+            </dxi-toolbar-item>
+            <dxi-toolbar-item
+                toolbar="bottom"
+                location="after"
+                widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }"
+            >
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+
+    <dxi-column
+        dataField="WorkOrderDetail.WorkOrderHead.WorkOrderNo"
+        caption="工單號"
+        [width]="150"
+    >
+    </dxi-column>
+    <dxi-column
+        dataField="ReportType"
+        caption="回報種類"
+        [width]="120"
+    >
+        <dxo-lookup
+            [dataSource]="ReportTypeList"
+            displayExpr="Name"
+            valueExpr="Id"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="WorkOrderDetail.WorkOrderHead.PurchaseNo"
+        caption="採購單號"
+        [width]="200"
+    ></dxi-column>
+    <dxi-column
+        dataField="DrawNo"
+        caption="圖號"
+        [width]="100"
+    ></dxi-column>
+    <dxi-column
+        dataField="Manpower"
+        caption="需求人力"
+        [width]="80"
+    ></dxi-column>
+    <dxi-column
+        dataField="ProducingMachine"
+        caption="加工機台"
+        [width]="100"
+    ></dxi-column>
+    <dxi-column
+        dataField="ReCount"
+        caption="回報數量"
+        [width]="80"
+    ></dxi-column>
+    <dxi-column
+        dataField="Remarks"
+        caption="備註"
+        [width]="100"
+    ></dxi-column>
+    <dxi-column
+        dataField="StatusO"
+        caption="上一個狀態"
+        [width]="100"
+    >
+        <dxo-lookup
+            [dataSource]="WorkOrderTypeList"
+            displayExpr="Name"
+            valueExpr="Id"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="StatusN"
+        caption="更新狀態"
+        [width]="100"
+    >
+        <dxo-lookup
+            [dataSource]="WorkOrderTypeList"
+            displayExpr="Name"
+            valueExpr="Id"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="DueStartTime"
+        caption="預計開工日"
+        [width]="180"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        dataField="DueEndTime"
+        caption="預計完工日"
+        [width]="180"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        dataField="ActualStartTime"
+        caption="實際開工日"
+        [width]="180"
+        dataType="datetime"
+    ></dxi-column>
+    <dxi-column
+        dataField="ActualEndTime"
+        caption="預計完工日"
+        [width]="180"
+        dataType="datetime"
+    ></dxi-column>
+    <dxi-column
+        dataField="CreateTime"
+        caption="建立日期"
+        [width]="180"
+        sortOrder="desc"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        dataField="CreateUser"
+        caption="使用者"
+    ></dxi-column>
+</dx-data-grid>

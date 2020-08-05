@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
+using DevExtreme.AspNet.Mvc;
 
 namespace HonjiMES.Controllers
 {
@@ -396,6 +397,19 @@ namespace HonjiMES.Controllers
             return sMessage;
         }
 
-
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// 報工紀錄列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderReportLog(
+            [FromQuery] DataSourceLoadOptions FromQuery)
+        {
+            var data = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0).Include(x=>x.WorkOrderDetail).ThenInclude(x=>x.WorkOrderHead);
+            // data.FirstOrDefault().WorkOrderDetail.WorkOrderHead.WorkOrderNo 單獨抓取WorkOrderNo
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }

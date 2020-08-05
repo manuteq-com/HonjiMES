@@ -14,6 +14,7 @@ namespace HonjiMES.Models
             BillOfMaterials = new HashSet<BillOfMaterial>();
             Materials = new HashSet<Material>();
             RequisitionDetails = new HashSet<RequisitionDetail>();
+            SupplierOfMaterials = new HashSet<SupplierOfMaterial>();
         }
 
         [Key]
@@ -53,5 +54,7 @@ namespace HonjiMES.Models
         public virtual ICollection<Material> Materials { get; set; }
         [InverseProperty(nameof(RequisitionDetail.MaterialBasic))]
         public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
+        [InverseProperty(nameof(SupplierOfMaterial.MaterialBasic))]
+        public virtual ICollection<SupplierOfMaterial> SupplierOfMaterials { get; set; }
     }
 }

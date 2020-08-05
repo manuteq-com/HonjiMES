@@ -93,6 +93,7 @@ import { WorkorderListComponent } from './workorder/workorder-list/workorder-lis
 import { WorkorderReportComponent } from './workorder/workorder-report/workorder-report.component';
 import { AdjustLogComponent } from './inventory/adjust-log/adjust-log.component';
 import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustdetail-list.component';
+import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -201,6 +202,7 @@ export function tokenGetter() {
         WorkorderReportComponent,
         AdjustLogComponent,
         AdjustdetailListComponent,
+        WorkorderLogComponent,
         QrcodeComponent,
     ],
     providers: [

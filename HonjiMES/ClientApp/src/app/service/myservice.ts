@@ -31,6 +31,12 @@ export class Myservice {
     getlistAdjustStatus(): Selectitem[] {
         return adjusttypes;
     }
+    getWorkOrderType(): Selectitem[] {
+        return workordertype;
+    }
+    getReportType(): Selectitem[] {
+        return reporttype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -69,4 +75,18 @@ const adjusttypes: Selectitem[] = [
     { Id: 1, Name: '原料' },
     { Id: 2, Name: '成品' },
     { Id: 3, Name: '半成品' },
+];
+
+const workordertype: Selectitem[] = [
+    { Id: 0, Name: '新建' },
+    { Id: 1, Name: '派工' },
+    { Id: 2, Name: '開工' },
+    { Id: 3, Name: '完工' },
+    { Id: 4, Name: '轉單' },
+];
+
+const reporttype: Selectitem[] = [
+    { Id: 1, Name: '開工回報' },
+    { Id: 2, Name: '完工回報' },
+    { Id: 3, Name: '再開工回報' },
 ];

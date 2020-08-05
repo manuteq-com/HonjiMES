@@ -16,6 +16,7 @@ var adjust_list_component_1 = require("./inventory/adjust-list/adjust-list.compo
 var adjust_log_component_1 = require("./inventory/adjust-log/adjust-log.component");
 var warehouse_list_component_1 = require("./warehouse/warehouse-list/warehouse-list.component");
 var user_list_component_1 = require("./setting/user-list/user-list.component");
+var work_order_log_component_1 = require("./workorder/workorder-log/workorder-log.component");
 
 exports.routes = [
     { path: '', component: homepage_component_1.HomepageComponent },
@@ -33,6 +34,7 @@ exports.routes = [
     { path: 'adjustlog', component: adjust_log_component_1.AdjustLogComponent },
     { path: 'warehouselist', component: warehouse_list_component_1.WarehouseListComponent },
     { path: 'userlist', component: user_list_component_1.UserListComponent },
+    { path: 'workorderlog', component: work_order_log_component_1.WorkorderLogComponent },
 ];
 exports.AppRoutes = router_1.RouterModule.forRoot(exports.routes, { scrollPositionRestoration: 'enabled' });
 //# sourceMappingURL=app.routes.js.map
