@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HonjiMES.Controllers
 {
-    [JWTAuthorize]
+    // [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]

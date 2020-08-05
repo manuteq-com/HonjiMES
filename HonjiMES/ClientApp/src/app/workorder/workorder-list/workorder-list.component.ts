@@ -1,3 +1,4 @@
+import { first } from 'rxjs/operators';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
@@ -19,19 +20,31 @@ export class WorkorderListComponent implements OnInit {
     ReportHeight: any;
     keyup = '';
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
-            notify({
-                message: this.keyup,
-                position: {
-                    my: 'center top',
-                    at: 'center top'
+        if (!this.creatpopupVisible) {
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (ss) {
+                    this.itemkey = ss.Key;
+                    this.serialkey = 1;
+                    this.mod = 'report';
+                    this.creatpopupVisible = true;
+                    this.ReportHeight = 710;
+                } else {
+                    notify({
+                        message: this.keyup + ':查無資料',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'warning', 3000);
                 }
-            }, 'success', 3000);
-            this.keyup = '';
-        } else if (e.key === 'Shift') {
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
 
-        } else {
-            this.keyup += e.key.toLocaleUpperCase();
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
         }
     }
     constructor(public app: AppComponent) {
