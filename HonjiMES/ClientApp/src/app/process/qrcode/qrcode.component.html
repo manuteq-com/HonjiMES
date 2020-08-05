@@ -1,0 +1,28 @@
+<div class="buttongroup">
+    <a>
+    </a>
+    <dx-button class="insertbtn" stylingMode="contained" text="產出QrCode" type="success" [width]="120"
+        (onClick)="download()"></dx-button>
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Key" [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+    (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false">
+
+    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20]" [showInfo]="true" [visible]="visible">
+    </dxo-pager>
+    <dxi-column dataField="WorkOrderNo" caption="工單號"></dxi-column>
+    <dxi-column dataField="BasicDataNo" caption="品號"></dxi-column>
+    <dxi-column dataField="BasicDataName" caption="名稱"></dxi-column>
+    <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
+    <dxi-column dataField="Count" caption="數量"></dxi-column>
+</dx-data-grid>
