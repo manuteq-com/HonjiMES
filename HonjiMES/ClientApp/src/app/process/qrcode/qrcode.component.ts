@@ -5,6 +5,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-qrcode',
@@ -18,10 +19,12 @@ export class QrcodeComponent implements OnInit, OnChanges {
     idlist: any;
     dataSourceDB: any;
     visible: boolean;
-    constructor(private http: HttpClient, public app: AppComponent) {
+    listStatus: any;
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.PrintQrCode = this.PrintQrCode.bind(this);
+        this.listStatus = myservice.getWorkOrderType();
         this.dataSourceDB = new CustomStore({
-            key: 'Key',
+            key: 'Id',
             load: () => SendService.sendRequest(http, '/Processes/GetWorkOrderList/0'),
         });
     }

@@ -32,7 +32,7 @@ export class WorkorderListComponent implements OnInit {
                     this.ReportHeight = 710;
                 } else {
                     notify({
-                        message: this.keyup + ':查無資料',
+                        message: '[ ' + this.keyup + ' ]　查無資料!',
                         position: {
                             my: 'center top',
                             at: 'center top'
