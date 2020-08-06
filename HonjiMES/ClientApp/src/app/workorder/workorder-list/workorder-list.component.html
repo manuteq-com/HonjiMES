@@ -77,6 +77,13 @@
             [modval]="mod"> </app-workorder-report>
     </div>
 </dx-popup>
+<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="editpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
+        </app-editworkorder>
+    </div>
+</dx-popup>
 <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
     [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>

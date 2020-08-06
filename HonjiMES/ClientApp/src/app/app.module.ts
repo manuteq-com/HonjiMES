@@ -95,6 +95,7 @@ import { AdjustLogComponent } from './inventory/adjust-log/adjust-log.component'
 import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustdetail-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
+import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -204,6 +205,7 @@ export function tokenGetter() {
         AdjustdetailListComponent,
         WorkorderLogComponent,
         QrcodeComponent,
+        EditworkorderComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

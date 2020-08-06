@@ -42,7 +42,6 @@
     </thead>
     <tbody>
         <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
-
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.WorkOrderNo}}</td>
             <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataNo}} nzLeft>{{data.BasicDataNo}}
             </td>

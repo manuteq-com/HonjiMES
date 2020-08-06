@@ -1,3 +1,4 @@
+import { Warehouse } from './../../model/viewmodels';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Observable } from 'rxjs';
@@ -31,6 +32,7 @@ export class ReceiveListComponent implements OnInit {
     requisitionId: any;
 
 
+    // 源料和成品 拆開
     dataSourceMaterialDB: CustomStore;
     dataSourceProductDB: CustomStore;
     popupVisible: boolean;
@@ -39,10 +41,13 @@ export class ReceiveListComponent implements OnInit {
     Warehouselist: any;
     WarehouseListM: any;
     postval: any;
+    // 目前用新的 源料和成品一起
 
+    dataSourceAllDB: any;
+    WarehouseIDAll: any;
+    WarehouselistAll: any;
     constructor(private http: HttpClient, public app: AppComponent) {
         const remote = this.remoteOperations;
-
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
@@ -50,7 +55,6 @@ export class ReceiveListComponent implements OnInit {
             byKey: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetRequisition', 'GET', { key }),
             insert: (values) =>
-                // SendService.sendRequest(this.http, this.Controller + '/PostRequisition', 'POST', { values }),
                 SendService.sendRequest(this.http, this.Controller + '/PostRequisitionByWorkOrderNo', 'POST', { values }),
             update: (key, values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PutRequisition', 'PUT', { key, values }),
@@ -113,38 +117,68 @@ export class ReceiveListComponent implements OnInit {
         });
     }
     readRequisitionData(e, data) {
+        debugger;
         this.requisitionId = data.data.Id;
-        this.dataSourceMaterialDB = new CustomStore({
+        this.dataSourceAllDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByWarehouse', 'POST',
-                    { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDM } }),
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAll', 'POST',
+                    { values: { RequisitionId: this.requisitionId } }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
-                    { key, values: this.setWarehouse(values, this.WarehouseIDM) }),
+                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetailAll', 'PUT',
+                    { key, values }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
-        this.dataSourceProductDB = new CustomStore({
-            key: 'Id',
-            load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailProductByWarehouse', 'POST',
-                    { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDP } }),
-            insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
-            update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
-                    // { key, values, WarehouseID: this.WarehouseIDP }),
-                    { key, values: this.setWarehouse(values, this.WarehouseIDP) }),
-            remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
-        });
+
+
+        // this.dataSourceMaterialDB = new CustomStore({
+        //     key: 'Id',
+        //     load: (loadOptions) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByWarehouse', 'POST',
+        //             { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDM } }),
+        //     insert: (values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+        //     update: (key, values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+        //             { key, values: this.setWarehouse(values, this.WarehouseIDM) }),
+        //     remove: (key) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        // });
+        // this.dataSourceProductDB = new CustomStore({
+        //     key: 'Id',
+        //     load: (loadOptions) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailProductByWarehouse', 'POST',
+        //             { values: { RequisitionId: this.requisitionId, WarehouseId: this.WarehouseIDP } }),
+        //     insert: (values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+        //     update: (key, values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetail', 'PUT',
+        //             // { key, values, WarehouseID: this.WarehouseIDP }),
+        //             { key, values: this.setWarehouse(values, this.WarehouseIDP) }),
+        //     remove: (key) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        // });
     }
     setWarehouse(values: any, WarehouseID: number) {
         values.WarehouseID = WarehouseID;
         return values;
+    }
+    onToolbarPreparingAll(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '領料';
+                item.showText = 'always';
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });;
     }
     onToolbarPreparingM(e) {
         const toolbarItems = e.toolbarOptions.items;
@@ -249,5 +283,43 @@ export class ReceiveListComponent implements OnInit {
     }
     onEditingStart(e) {
 
+    }
+    WarehouseselectvalueChanged(e, data) {
+
+        data.data.StockQty = data.data.WarehouseList.find(x => x.ID === e.value).StockQty;
+        data.setValue(e.value);
+    }
+    GetWarehouselistbyNo(data) {
+        return data.data.WarehouseList;
+    }
+    RQtyValidation(e) {
+        debugger;
+        let msg = '';
+        if (e.data.WarehouseId > 0) {
+            if (e.data.RQty == null || e.data.RQty < 1) {
+                msg = e.data.NameNo + '領取數量 必須大於0';
+                e.rule.message = msg;
+                notify({
+                    message: msg,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                return false;
+            } else if (e.data.RQty > e.data.StockQty) {
+                msg = e.data.NameNo + ' 庫存數不足';
+                e.rule.message = msg;
+                notify({
+                    message: msg,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                return false;
+            }
+        }
+        return true;
     }
 }

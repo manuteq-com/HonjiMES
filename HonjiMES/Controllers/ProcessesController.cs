@@ -323,7 +323,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用WorkOrderID取得製程資料
+        /// 用WorkOrderID取得製程資料 Head + Detail 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -344,6 +344,39 @@ namespace HonjiMES.Controllers
                 return NotFound();
             }
             return Ok(MyFun.APIResponseOK(WorkOrderData));
+        }
+
+        /// <summary>
+        /// 用WorkOrderID取得製程資料 Head
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderHead(int id)
+        {
+            var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);      
+            if (WorkOrderHeads == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrderHeads));
+        }
+        /// <summary>
+        /// 用WorkOrderID取得製程資料 Detail 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderDetail(int id)
+        {
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToListAsync();
+            if (WorkOrderDetails == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrderDetails));
         }
 
         /// <summary>

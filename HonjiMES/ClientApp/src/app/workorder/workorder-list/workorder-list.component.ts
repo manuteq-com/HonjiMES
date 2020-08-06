@@ -19,8 +19,9 @@ export class WorkorderListComponent implements OnInit {
     loadingVisible = false;
     ReportHeight: any;
     keyup = '';
+    editpopupVisible: boolean;
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
-        if (!this.creatpopupVisible) {
+        if (!this.creatpopupVisible && !this.editpopupVisible) {
             if (e.key === 'Enter') {
                 const key = this.keyup;
                 const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
@@ -50,7 +51,7 @@ export class WorkorderListComponent implements OnInit {
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
-
+        this.editpopupVisible = false;
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
@@ -67,10 +68,14 @@ export class WorkorderListComponent implements OnInit {
     ngOnInit() {
     }
     trclick(e) {
-        // debugger;
-        // this.creatpopupVisible = true;
-        // this.itemkey = e.Key;
-        // this.mod = 'report';
+        debugger;
+        if (!this.creatpopupVisible) {
+            this.itemkey = e;
+            this.serialkey = 1;
+            this.mod = 'report';
+            this.editpopupVisible = true;
+            this.ReportHeight = 710;
+        }
     }
     tdclick(e, colData) {
         debugger;
