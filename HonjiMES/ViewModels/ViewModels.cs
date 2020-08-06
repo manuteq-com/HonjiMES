@@ -599,4 +599,8 @@ namespace HonjiMES.Models
         /// </summary>
         public int Quantity { get; set; }
     }
+    public class PostSupplierMaterial
+    {
+        public int MaterialBasicId { get; set; }
+    }
 }

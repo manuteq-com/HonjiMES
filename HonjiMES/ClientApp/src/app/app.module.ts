@@ -94,6 +94,7 @@ import { WorkorderReportComponent } from './workorder/workorder-report/workorder
 import { AdjustLogComponent } from './inventory/adjust-log/adjust-log.component';
 import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustdetail-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
+import { SupplierMaterialComponent } from './supplier/supplier-material/supplier-material.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -202,6 +203,7 @@ export function tokenGetter() {
         AdjustLogComponent,
         AdjustdetailListComponent,
         WorkorderLogComponent,
+        SupplierMaterialComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
