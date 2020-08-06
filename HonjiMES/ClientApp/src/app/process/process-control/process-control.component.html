@@ -79,7 +79,7 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="建立工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">

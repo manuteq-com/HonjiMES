@@ -69,25 +69,34 @@
 
         <div class="row">
 
-            <div class="col-5">
+            <div class="col-4">
                 <div class="input-group">
                   <label class="pt-2">編號：{{bomNo}}</label>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-4">
                 <div class="input-group">
                   <label class="pt-2">名稱：{{bomName}}</label>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 <dx-button
-                    class="savebtn"
+                    class="toolbtn"
                     stylingMode="contained"
                     text="更新"
                     type="success"
-                    [width]="120"
+                    [width]="80"
                     [disabled]="saveDisabled"
                     (onClick)="savedata()">
+                </dx-button>
+                <dx-button
+                    class="toolbtn"
+                    stylingMode="contained"
+                    text="模型"
+                    type="default"
+                    [width]="80"
+                    [disabled]="saveDisabled"
+                    (onClick)="popup_model()">
                 </dx-button>
             </div>
         </div>
@@ -198,6 +207,14 @@
             </div>
 
         </dx-data-grid>
+
+        <dx-popup [showTitle]="true" title="模型資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1000"
+            [(visible)]="modelpopupVisible">
+            <div *dxTemplate="let data of 'content'">
+                <app-mbillofmaterial-model (childOuter)="modelpopup_result($event)" [itemkeyval]="itemkey">
+                </app-mbillofmaterial-model>
+            </div>
+        </dx-popup>
 
     </div>
 
