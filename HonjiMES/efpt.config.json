@@ -74,6 +74,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "mbom_model_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "mbom_model_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "menu"
       },
       {

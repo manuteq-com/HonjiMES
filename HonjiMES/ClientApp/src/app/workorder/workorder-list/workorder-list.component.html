@@ -18,12 +18,12 @@
     </div>
 </div>
 
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" [nzFrontPagination]="false"
-    [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
+<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed"
+    [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
     <thead>
 
         <tr>
-            <th nzWidth="135px" nzLeft>工單號</th>
+            <th nzWidth="140px" nzLeft>工單號</th>
             <th nzWidth="160px" nzLeft>品號</th>
             <th nzWidth="170px" nzLeft>名稱</th>
             <th nzWidth="130px" nzLeft>機號</th>
@@ -36,12 +36,16 @@
     <tbody>
         <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.WorkOrderNo}}</td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataNo}} nzLeft>{{data.BasicDataNo}}</td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataName}} nzLeft>{{data.BasicDataName}}</td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.MachineNo}} nzLeft>{{data.MachineNo}}</td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataNo}} nzLeft>{{data.BasicDataNo}}
+            </td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataName}} nzLeft>{{data.BasicDataName}}
+            </td>
+            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.MachineNo}} nzLeft nzEllipsis>
+                {{data.MachineNo}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)">
+                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)"
+                    nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
                             {{data[col.key]?.value0}}
@@ -66,10 +70,11 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="ReportHeight"
-    [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+    [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [modval]="mod"> </app-workorder-report>
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey"
+            [modval]="mod"> </app-workorder-report>
     </div>
 </dx-popup>
 <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"

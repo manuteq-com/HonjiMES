@@ -52,7 +52,9 @@
     position: absolute;
     right: 10px;
 }
-.savebtn {
+.toolbtn {
+    float: right;
+    margin-left: 4px;
     margin-top: 6px;
     border-radius: 2px;
 }

@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
-  selector: 'app-workorder-list',
-  templateUrl: './workorder-list.component.html',
-  styleUrls: ['./workorder-list.component.css']
+    selector: 'app-workorder-list',
+    templateUrl: './workorder-list.component.html',
+    styleUrls: ['./workorder-list.component.css']
 })
 export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
@@ -17,7 +18,35 @@ export class WorkorderListComponent implements OnInit {
     mod: string;
     loadingVisible = false;
     ReportHeight: any;
+    keyup = '';
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (!this.creatpopupVisible) {
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (ss) {
+                    this.itemkey = ss.Key;
+                    this.serialkey = 1;
+                    this.mod = 'report';
+                    this.creatpopupVisible = true;
+                    this.ReportHeight = 710;
+                } else {
+                    notify({
+                        message: '[ ' + this.keyup + ' ]　查無資料!',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'warning', 3000);
+                }
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
 
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
+        }
+    }
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
@@ -44,6 +73,7 @@ export class WorkorderListComponent implements OnInit {
         // this.mod = 'report';
     }
     tdclick(e, colData) {
+        debugger;
         this.itemkey = e.Key;
         this.serialkey = Number(colData.key.substring(4)) + 1;
         this.mod = 'report';
@@ -63,7 +93,7 @@ export class WorkorderListComponent implements OnInit {
         // } else if (data.Status === 3) {
         //     return 'process_ended';
         // } else {
-            return '';
+        return '';
         // }
     }
     getBlue2Class(data) {

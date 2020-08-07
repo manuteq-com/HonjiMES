@@ -472,6 +472,12 @@ namespace HonjiMES.Models
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
 
+    public class MbomModelData
+    {
+        public MbomModelHead MbomModelHead { get; set; }
+        public List<MbomModelDetail> MbomModelDetail { get; set; }
+    }
+
     public class WorkOrderReportData
     {
         public int WorkOrderID { get; set; }

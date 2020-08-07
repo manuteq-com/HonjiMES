@@ -22,6 +22,8 @@ namespace HonjiMES.Models
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
+        public virtual DbSet<MbomModelDetail> MbomModelDetails { get; set; }
+        public virtual DbSet<MbomModelHead> MbomModelHeads { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
@@ -972,6 +974,91 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.MaterialId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_material_log_material1");
+            });
+
+            modelBuilder.Entity<MbomModelDetail>(entity =>
+            {
+                entity.HasIndex(e => e.MbomModelHeadId)
+                    .HasName("mbom_model_head_id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Manpower).HasComment("所需人力");
+
+                entity.Property(e => e.ProcessCost).HasComment("成本");
+
+                entity.Property(e => e.ProcessLeadTime).HasComment("前置時間");
+
+                entity.Property(e => e.ProcessName)
+                    .HasComment("工序名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessNo)
+                    .HasComment("工序代號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ProcessTime).HasComment("標準工時");
+
+                entity.Property(e => e.ProducingMachine)
+                    .HasComment("機台")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.SerialNumber).HasComment("工序順序");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.Type)
+                    .HasDefaultValueSql("'0'")
+                    .HasComment("種類")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.MbomModelHead)
+                    .WithMany(p => p.MbomModelDetails)
+                    .HasForeignKey(d => d.MbomModelHeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("mbom_model_detail_ibfk_1");
+            });
+
+            modelBuilder.Entity<MbomModelHead>(entity =>
+            {
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.ModelCode)
+                    .HasComment("代號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ModelName)
+                    .HasComment("名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ModelRemarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
             });
 
             modelBuilder.Entity<Menu>(entity =>
