@@ -136,11 +136,10 @@ export class ProductListComponent implements OnInit, OnChanges {
             if (e.data.QuantityLimit > e.data.Quantity) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
-                // this.childOuter.emit(true);
             }
         }
     }
-    onRowUpdated(e){
+    onRowUpdated(e) {
         this.childOuter.emit(true);
     }
     cellClick(e) {
@@ -150,7 +149,6 @@ export class ProductListComponent implements OnInit, OnChanges {
                     // tslint:disable-next-line: deprecation
                     this.itemdata = this.itemval.data;
                     this.creatdata();
-                    // this.dataGrid.instance.refresh();
                 }
             }
         }
@@ -171,16 +169,12 @@ export class ProductListComponent implements OnInit, OnChanges {
         }, 'error', 3000);
     }
     onEditingStart(e) { }
-    onEditorPrepared(e) {
-        // this.childOuter.emit(true);
-    }
 
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-
                 e.cellElement.style.backgroundColor = '#d9534f';
                 e.cellElement.style.color = '#fff';
             }
