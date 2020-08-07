@@ -44,9 +44,10 @@
             <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Count" caption="數量" [width]="80"></dxi-column>
+            <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
+            <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
             <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
-            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120"></dxi-column>
+            <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120"></dxi-column> -->
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -80,17 +81,17 @@
                 </div>
             </div>
             <div class="col-4">
-                <dx-button class="toolbtn" stylingMode="contained" text="更新" type="success" [width]="80"
-                    [disabled]="true" (onClick)="savedata()">
+                <dx-button class="toolbtn" stylingMode="contained" text="結案" type="success" [width]="80"
+                    [disabled]="btnDisabled" (onClick)="overdata()">
                 </dx-button>
-                <dx-button class="toolbtn" stylingMode="contained" text="模型" type="default" [width]="80"
-                    [disabled]="true" (onClick)="savedata()">
+                <dx-button class="toolbtn" stylingMode="contained" text="入庫" type="default" [width]="80"
+                    [disabled]="btnDisabled" (onClick)="stockdata()">
                 </dx-button>
             </div>
         </div>
 
         <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
-            (onInitNewRow)="onInitNewRow($event)" (onRowRemoved)="onRowRemoved($event)">
+            [showColumnLines]="true" [showRowLines]="true">
 
             <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
             </dxo-row-dragging>
@@ -110,14 +111,6 @@
             </dxo-keyboard-navigation>
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-            <dxo-summary [recalculateWhileEditing]="true">
-                <dxi-total-item [customizeText]="customizeText1" column="ProcessLeadTime" summaryType="sum">
-                </dxi-total-item>
-                <dxi-total-item [customizeText]="customizeText2" column="ProcessTime" summaryType="sum">
-                </dxi-total-item>
-                <dxi-total-item [customizeText]="customizeText3" column="ProcessCost" summaryType="sum">
-                </dxi-total-item>
-            </dxo-summary>
 
             <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
             </dxi-column>
@@ -134,14 +127,14 @@
             </dxi-column>
             <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工" [width]="180">
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="160">
             </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" [width]="180">
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="160">
             </dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
-                <dx-button icon="chevrondoubleright" type="default" (onClick)="readProcess($event,data)"></dx-button>
+                <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
             </div>
 
             <dxi-column type="buttons" [visible]="false">
@@ -153,10 +146,10 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="false" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
-            [height]="500" [(visible)]="creatpopupVisible">
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+            [height]="700" [(visible)]="creatpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-log ></app-workorder-log>
+                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
             </div>
         </dx-popup>
 

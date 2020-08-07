@@ -484,6 +484,7 @@ namespace HonjiMES.Models
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
         public string Remarks { get; set; }
+        public string ProducingMachine { get; set; }
     }
 
 

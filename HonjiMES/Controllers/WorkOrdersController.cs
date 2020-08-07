@@ -62,6 +62,17 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢工單明細的報工紀錄
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderLogByWorkOrderDetailId(int id)
+        {
+            var data = await _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 && x.WorkOrderDetailId == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
+        /// <summary>
         /// 訂單轉工單
         /// </summary>
         /// <param name="OrderData"></param>
@@ -134,6 +145,63 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 工單入庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportData"></param>
+        /// <returns></returns>
+        // PUT: api/BillofPurchaseHeads/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> StockWorkOrder(int id, WorkOrderReportData WorkOrderReportData)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
+            OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
+            OWorkOrderHead.UpdateTime = DateTime.Now;
+            OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(MyFun.APIResponseOK(OWorkOrderHead));
+        }
+
+        /// <summary>
+        /// 工單結案
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderData"></param>
+        /// <returns></returns>
+        // PUT: api/BillofPurchaseHeads/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> CloseWorkOrder(int id, WorkOrderData WorkOrderData)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
+            if (OWorkOrderHead.Status != 5)
+            {
+                OWorkOrderHead.Status = 5;//結案
+                OWorkOrderHead.UpdateTime = DateTime.Now;
+                OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
+            } else {
+                return Ok(MyFun.APIResponseError("該工單已結案!"));
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(MyFun.APIResponseOK(OWorkOrderHead));
+        }
+
+        /// <summary>
         /// 工單開工回報
         /// </summary>
         /// <param name="WorkOrderReportData"></param>
@@ -163,7 +231,7 @@ namespace HonjiMES.Controllers
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
                             ProducingMachine = WorkOrderDetails.FirstOrDefault().ProducingMachine,
-                            ReCount = WorkOrderDetails.FirstOrDefault().ReCount,
+                            ReCount = 0,
                             Remarks = WorkOrderReportData.Remarks,
                             StatusO = 1,
                             StatusN = 2,
@@ -172,7 +240,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                             CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
@@ -224,8 +292,8 @@ namespace HonjiMES.Controllers
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
-                            ProducingMachine = WorkOrderDetails.FirstOrDefault().ProducingMachine,
-                            ReCount = WorkOrderDetails.FirstOrDefault().ReCount,
+                            ProducingMachine = WorkOrderReportData.ProducingMachine,
+                            ReCount = WorkOrderReportData.ReCount,
                             Remarks = WorkOrderReportData.Remarks,
                             StatusO = 2,
                             StatusN = 3,
@@ -234,7 +302,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                             CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = MyFun.GetUserID(HttpContext),
                         });
 
                         //檢查工單是否全數完工
@@ -300,8 +368,8 @@ namespace HonjiMES.Controllers
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
-                            ProducingMachine = WorkOrderDetails.FirstOrDefault().ProducingMachine,
-                            ReCount = WorkOrderDetails.FirstOrDefault().ReCount,
+                            ProducingMachine = WorkOrderReportData.ProducingMachine,
+                            ReCount = 0,
                             Remarks = WorkOrderReportData.Remarks,
                             StatusO = 3,
                             StatusN = 2,
@@ -310,7 +378,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                             CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
@@ -439,7 +507,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderReportLog(
             [FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var data = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0).Include(x=>x.WorkOrderDetail).ThenInclude(x=>x.WorkOrderHead);
+            var data = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead);
             // data.FirstOrDefault().WorkOrderDetail.WorkOrderHead.WorkOrderNo 單獨抓取WorkOrderNo
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));

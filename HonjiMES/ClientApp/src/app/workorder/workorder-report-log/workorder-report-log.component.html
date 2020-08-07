@@ -1,0 +1,54 @@
+<dx-data-grid [dataSource]="dataSourceDB" [showColumnLines]="true" [showRowLines]="true"
+[showBorders]="true" height="580">
+
+    <!-- <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder" [showDragIcons]="false"></dxo-row-dragging> -->
+
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+        <dxo-form colCount=4>
+            <dxi-item dataField="SerialNumber"></dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+        [enterKeyDirection]="enterKeyDirection">
+    </dxo-keyboard-navigation>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item [customizeText]="customizeText1" column="CreateTime" summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item [customizeText]="customizeText2" column="ReCount" summaryType="sum">
+        </dxi-total-item>
+    </dxo-summary>
+
+    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime"
+        [allowEditing]="false" [width]="160"></dxi-column>
+    <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
+        <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="機台" [width]="80">
+    </dxi-column>
+    <dxi-column dataField="ReCount" caption="回報數量" [width]="100">
+    </dxi-column>
+    <dxi-column dataField="DrawNo" caption="圖號" [width]="120">
+    </dxi-column>
+    <dxi-column dataField="Remarks" caption="備註">
+    </dxi-column>
+
+    <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date">
+    </dxi-column>
+    <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date">
+    </dxi-column>
+    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
+        [allowEditing]="false"></dxi-column> -->
+
+    <dxi-column type="buttons" [visible]="false">
+        <dxi-button name="save" text="存檔"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
+</dx-data-grid>

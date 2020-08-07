@@ -83,6 +83,7 @@ const workordertype: Selectitem[] = [
     { Id: 2, Name: '開工' },
     { Id: 3, Name: '完工' },
     { Id: 4, Name: '轉單' },
+    { Id: 5, Name: '結案' },
 ];
 
 const reporttype: Selectitem[] = [
