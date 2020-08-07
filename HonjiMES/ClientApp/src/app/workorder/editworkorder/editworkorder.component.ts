@@ -50,10 +50,13 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     saveCheck: boolean;
     onCellPreparedLevel: any;
     Controller = '/WorkOrders';
+    WorkStatusList: any;
+
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
+        this.validateNumber = this.validateNumber.bind(this);
         // this.CustomerVal = null;
         // this.formData = null;
         this.editOnkeyPress = true;
@@ -69,7 +72,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         this.modCheck = false;
         this.modName = 'new';
         this.saveCheck = true;
-
+        this.WorkStatusList = myservice.getWorkOrderType();
 
 
         this.CreateTimeDateBoxOptions = {
@@ -120,13 +123,18 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        // this.dataSourceDB = new CustomStore({
+        //     key: 'Id',
+        //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
+        // });
         debugger;
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/WorkOrderReportAll', 'PUT', { key, values }),
-        });
-
+        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.dataSourceDB = s.data;
+                }
+            }
+        );
         this.modVisible = false;
         this.app.GetData('/Processes/GetProcessByWorkOrderHead/' + this.itemkeyval.Key).subscribe(
             (s) => {
@@ -155,7 +163,6 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         });
     }
     onReorder(e) {
-        debugger;
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
@@ -168,9 +175,9 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     onFocusedCellChanging(e) {
     }
-    CreateTimeValueChange = async function (e) {
+    async CreateTimeValueChange(e) {
 
-    };
+    }
     onProductBasicSelectionChanged(e) {
         // debugger;
         if (this.modCheck) {
@@ -203,19 +210,83 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
     }
-    onCellPrepared(e) {
-        if (e.column.command === 'edit') {
-            if (this.onCellPreparedLevel === 1) {
-                this.onCellPreparedLevel = 2;
-            } else if (this.onCellPreparedLevel === 2) {
-                this.onCellPreparedLevel = 3;
-                this.saveCheck = true;
-            } else if (this.onCellPreparedLevel === 3) {
-                this.myButton.instance.focus();
+    editorPreparing(e) {
+        if (e.parentType === 'dataRow' && e.dataField === 'ReCount') {
+            e.editorOptions.readOnly = true;
+            const SelectedRows = this.dataGrid2.instance.getSelectedRowsData().find(x => x.Id === e.row.data.Id);
+            if (SelectedRows) {
+                e.editorOptions.readOnly = e.row.data.Status !== 2;
             }
         }
     }
+    onCellPrepared(e) {
+        // if (e.rowType === 'data') {
+        //     if (e.column.dataField === 'ReCount') {
+        //         debugger;
+        //         if (e.row.data.Status === 2) {
+        //             e.column.allowEditing = true;
+        //         } else {
+        //             e.column.allowEditing = false;
+        //         }
+        //     }
+        // }
+    }
     onSelectionChanged() {
-        this.dataGrid2.instance.getSelectedRowsData();
+
+    }
+    onToolbarPreparing(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                item.options.icon = '';
+                item.options.text = '批次報工';
+                item.showText = 'always';
+                item.visible = false;
+
+            } else if (item.name === 'revertButton') {
+                item.options.icon = '';
+                item.options.text = '取消';
+                item.showText = 'always';
+            }
+        });
+    }
+    validateNumber(e) {
+        const SelectedRows = this.dataGrid2.instance.getSelectedRowsData().find(x => x.Id === e.data.Id);
+        if (SelectedRows) {
+            if (e.data.Status === 2 && e.value < 1) {
+                this.buttondisabled = true;
+                return false;
+            } else {
+                this.buttondisabled = false;
+            }
+        }
+        return true;
+    }
+    async onFormSubmit(e) {
+        let saveok = true;
+        const saveEditData = this.dataGrid2.instance.saveEditData();
+        const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
+        // tslint:disable-next-line: forin
+        for (const x in SelectedRows) {
+            if (SelectedRows[x].Status === 2 && SelectedRows[x].ReCount < 1) {
+                return;
+            }
+            const sendRequest = await SendService.sendRequest(
+                this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
+                { key: SelectedRows[x].Id, values: SelectedRows[x] });
+            if (sendRequest) {
+                debugger;
+            }
+            else {
+                debugger;
+                saveok = false;
+            }
+        }
+        if (saveok) {
+            debugger;
+            this.dataGrid2.instance.refresh();
+            e.preventDefault();
+            this.childOuter.emit(true);
+        }
     }
 }

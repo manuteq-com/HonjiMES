@@ -21,7 +21,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
-    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule
+    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule, DxSchedulerModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -96,6 +96,7 @@ import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustd
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
 import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
+import { WorksChedulerComponent } from './workscheduler/work-scheduler/works-cheduler.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -127,6 +128,7 @@ export function tokenGetter() {
         DxCheckBoxModule,
         BreadcrumbModule,
         DxLoadPanelModule,
+        DxSchedulerModule,
         SweetAlert2Module.forRoot(),
         JwtModule.forRoot({
             config: {
@@ -206,6 +208,7 @@ export function tokenGetter() {
         WorkorderLogComponent,
         QrcodeComponent,
         EditworkorderComponent,
+        WorksChedulerComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

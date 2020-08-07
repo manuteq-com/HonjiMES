@@ -29,7 +29,7 @@
             <th nzWidth="130px" nzLeft>機號</th>
             <th nzWidth="100px" nzLeft>數量</th>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <th *ngIf="col.show" nzWidth="150px">{{ col.title }}</th>
+                <th *ngIf="col.show" nzWidth="160px">{{ col.title }}</th>
             </ng-container>
         </tr>
     </thead>
@@ -48,7 +48,10 @@
                     nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
-                            {{data[col.key]?.value0}}
+                            <span title={{data[col.key]?.value0}}>
+
+                                {{data[col.key]?.value0}}
+                            </span>
                         </ng-container>
                         <ng-container *ngIf="data[col.key]?.value1">
                             <br />

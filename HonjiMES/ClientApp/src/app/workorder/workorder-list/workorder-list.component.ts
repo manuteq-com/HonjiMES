@@ -24,12 +24,11 @@ export class WorkorderListComponent implements OnInit {
         if (!this.creatpopupVisible && !this.editpopupVisible) {
             if (e.key === 'Enter') {
                 const key = this.keyup;
-                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
-                if (ss) {
-                    this.itemkey = ss.Key;
-                    this.serialkey = 1;
+                const selectdata = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (selectdata) {
+                    this.itemkey = selectdata;
                     this.mod = 'report';
-                    this.creatpopupVisible = true;
+                    this.editpopupVisible = true;
                     this.ReportHeight = 710;
                 } else {
                     notify({
@@ -68,7 +67,6 @@ export class WorkorderListComponent implements OnInit {
     ngOnInit() {
     }
     trclick(e) {
-        debugger;
         if (!this.creatpopupVisible) {
             this.itemkey = e;
             this.serialkey = 1;
@@ -78,7 +76,6 @@ export class WorkorderListComponent implements OnInit {
         }
     }
     tdclick(e, colData) {
-        debugger;
         this.itemkey = e.Key;
         this.serialkey = Number(colData.key.substring(4)) + 1;
         this.mod = 'report';
@@ -115,7 +112,7 @@ export class WorkorderListComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.itemkey = null;
+        this.editpopupVisible = false;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(

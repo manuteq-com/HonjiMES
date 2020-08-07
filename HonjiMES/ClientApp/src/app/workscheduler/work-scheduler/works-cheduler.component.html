@@ -1,0 +1,14 @@
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">生產行事曆</div>
+    <div class="buttongroup">
+    </div>
+</div>
+<dx-scheduler [dataSource]="dataSourceDB" [remoteFiltering]="true" currentView="month" textExpr="Text" [height]="900"
+    [views]='["month"]' startDateExpr="StartDate" endDateExpr="EndDate" allDayExpr="AllDay">
+</dx-scheduler>

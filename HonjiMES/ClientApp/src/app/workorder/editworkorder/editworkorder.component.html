@@ -1,4 +1,4 @@
-<form action="">
+<form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="itemkeyval" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
@@ -36,7 +36,6 @@
         </dxi-item>
 
     </dx-form>
-
     <!-- <br> -->
     <!-- <div class="long-title">
         <h5>採購內容</h5>
@@ -44,11 +43,9 @@
     <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" height="580"
         (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
-        (onRowRemoved)="onRowRemoved($event)" (onSelectionChanged)="onSelectionChanged()">
-
-        <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder" [showDragIcons]="false"></dxo-row-dragging>
-
-        <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
+        (onRowRemoved)="onRowRemoved($event)" (onSelectionChanged)="onSelectionChanged()"
+        (onToolbarPreparing)="onToolbarPreparing($event)" (onEditorPreparing)="editorPreparing($event)">
+        <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
             <dxo-form colCount=4>
                 <dxi-item dataField="SerialNumber"></dxi-item>
                 <dxi-item dataField="ProcessId"></dxi-item>
@@ -58,13 +55,6 @@
                 <dxi-item dataField="ProducingMachine"></dxi-item>
             </dxo-form>
         </dxo-editing>
-        <dxo-filter-row [visible]="false"></dxo-filter-row>
-        <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
-            [enterKeyDirection]="enterKeyDirection">
-        </dxo-keyboard-navigation>
-        <dxo-paging [enabled]="false">
-        </dxo-paging>
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
         </dxi-column>
@@ -73,7 +63,12 @@
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
         </dxi-column>
+        <dxi-column dataField="Status" caption="目前狀態" [allowEditing]="false">
+            <dxo-lookup [dataSource]="WorkStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
         <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
+            <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="完工數量 必須大於0">
+            </dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Remarks" caption="回報說明">
         </dxi-column>
@@ -90,12 +85,17 @@
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
             [allowEditing]="false"></dxi-column>
 
-        <dxi-column type="buttons">
+        <!-- <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-        </dxi-column>
+        </dxi-column> -->
 
     </dx-data-grid>
+
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='批次報工' type='default' icon='runner'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+    </div>
 </form>
