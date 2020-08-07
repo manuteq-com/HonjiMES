@@ -105,6 +105,33 @@ namespace HonjiMES.Controllers
 
         // GET: api/Adjusts
         /// <summary>
+        /// 調整單種類列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AllStockLog>>> GetAdjustType()
+        {
+            var data = await _context.AllStockLogs.ToListAsync();
+
+            var AdjustTypes = new List<AdjustType>();
+            var index = 0;
+            AdjustTypes.Add(new AdjustType{
+                    Message = "全部資料"
+            });
+            foreach (var item in data.GroupBy(x => x.Message).ToList())
+            {
+                AdjustTypes.Add(new AdjustType{
+                    Id = index,
+                    Message = item.Key
+                });
+                index++;
+            }
+
+            return Ok(MyFun.APIResponseOK(AdjustTypes));
+        }
+
+        // GET: api/Adjusts
+        /// <summary>
         /// 調整紀錄列表
         /// </summary>
         /// <returns></returns>

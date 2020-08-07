@@ -603,4 +603,10 @@ namespace HonjiMES.Models
     {
         public int MaterialBasicId { get; set; }
     }
+
+    public class AdjustType
+    {
+        public int Id { get; set; }
+        public string Message { get; set; }
+    }
 }
