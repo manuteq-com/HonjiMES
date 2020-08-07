@@ -64,6 +64,8 @@
     background-color: #1e90ff;
 }
 .savebtn {
+    float: right;
+    margin-left: 4px;
     margin-top: 6px;
     border-radius: 2px;
 }

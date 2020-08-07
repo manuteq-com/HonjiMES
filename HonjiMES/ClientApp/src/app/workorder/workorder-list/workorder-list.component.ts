@@ -50,13 +50,7 @@ export class WorkorderListComponent implements OnInit {
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
-
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
-            (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
-            }
-        );
+        this.getWorkOrderData();
         // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
         //     (s) => {
         //         debugger;
@@ -65,6 +59,14 @@ export class WorkorderListComponent implements OnInit {
         // );
     }
     ngOnInit() {
+    }
+    getWorkOrderData() {
+        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
+            (s) => {
+                this.dataSourceDB = s.data;
+                this.loadingVisible = false;
+            }
+        );
     }
     trclick(e) {
         // debugger;
@@ -86,6 +88,7 @@ export class WorkorderListComponent implements OnInit {
         } else if (e[colData.key].value3 === 3) {
             this.ReportHeight = 760;
         }
+        this.getWorkOrderData();
     }
     getBlueClass(data) {
         // if (data.Status === 1) {
@@ -113,12 +116,7 @@ export class WorkorderListComponent implements OnInit {
         this.itemkey = null;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
-            (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
-            }
-        );
+        this.getWorkOrderData();
         notify({
             message: '更新完成',
             position: {

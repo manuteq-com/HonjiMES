@@ -37,7 +37,7 @@
             </dxo-remote-operations> -->
             <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
 
-            <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc" [width]="140"></dxi-column>
+            <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="140"></dxi-column>
             <dxi-column dataField="DataNo" caption="品號" [width]="180"></dxi-column>
             <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column>
             <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
@@ -47,7 +47,7 @@
             <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
             <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
             <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
-            <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120"></dxi-column> -->
+            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" sortOrder="desc" [width]="120" [visible]="false"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -72,7 +72,7 @@
 
             <div class="col-4">
                 <div class="input-group">
-                    <!-- <label class="pt-2">編號：{{enterKeyDirection}}</label> -->
+                    <label class="pt-2"><h5>製程明細：</h5></label>
                 </div>
             </div>
             <div class="col-4">

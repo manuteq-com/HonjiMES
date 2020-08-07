@@ -213,6 +213,9 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
+                if (WorkOrderHeads.Status == 5) {
+                    return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
+                }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
@@ -274,6 +277,9 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
+                if (WorkOrderHeads.Status == 5) {
+                    return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
+                }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
@@ -350,6 +356,9 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
+                if (WorkOrderHeads.Status == 5) {
+                    return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
+                }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
