@@ -827,6 +827,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Quantity).HasComment("庫存量");
 
+                entity.Property(e => e.QuantityLimit).HasComment("庫存極限");
+
                 entity.Property(e => e.Specification)
                     .HasComment("規格")
                     .HasCharSet("utf8mb4")
