@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
@@ -135,8 +136,12 @@ export class ProductListComponent implements OnInit, OnChanges {
             if (e.data.QuantityLimit > e.data.Quantity) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
+                // this.childOuter.emit(true);
             }
         }
+    }
+    onRowUpdated(e){
+        this.childOuter.emit(true);
     }
     cellClick(e) {
         if (e.rowType === 'header') {
@@ -145,6 +150,7 @@ export class ProductListComponent implements OnInit, OnChanges {
                     // tslint:disable-next-line: deprecation
                     this.itemdata = this.itemval.data;
                     this.creatdata();
+                    // this.dataGrid.instance.refresh();
                 }
             }
         }
@@ -164,9 +170,11 @@ export class ProductListComponent implements OnInit, OnChanges {
             }
         }, 'error', 3000);
     }
-    onEditingStart(e) {
-
+    onEditingStart(e) { }
+    onEditorPrepared(e) {
+        // this.childOuter.emit(true);
     }
+
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
