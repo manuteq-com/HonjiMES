@@ -50,8 +50,6 @@
         <dxo-form>
             <dxi-item dataField="ProductNo" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Name"></dxi-item>
-            <!-- <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item>
-            <dxi-item dataField="QuantityLimit"></dxi-item> -->
             <dxi-item dataField="Specification"></dxi-item>
             <dxi-item dataField="Property"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
@@ -95,7 +93,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-        <app-product-list [masterkey]="item.key" [itemval]="item.row"></app-product-list>
+        <app-product-list (childOuter)="onRowChanged($event)" [masterkey]="item.key" [itemval]="item.row"></app-product-list>
     </div>
 
 </dx-data-grid>
