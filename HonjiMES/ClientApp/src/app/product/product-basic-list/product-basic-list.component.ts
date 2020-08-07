@@ -157,10 +157,9 @@ export class ProductBasicListComponent implements OnInit {
         if (this.hint) {
             e.rowElement.style.backgroundColor = '#d9534f';
             e.rowElement.style.color = '#fff';
-            // this.dataGrid.instance.refresh();
         }
     }
-    onRowChanged() {
+    onReflash() {
         this.dataGrid.instance.refresh();
     }
     cancelClickHandler(e) {
@@ -186,7 +185,6 @@ export class ProductBasicListComponent implements OnInit {
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.Products.QuantityLimit > e.data.Products.Quantity) {
-
                 e.cellElement.style.backgroundColor = '#d9534f';
                 e.cellElement.style.color = '#fff';
             }

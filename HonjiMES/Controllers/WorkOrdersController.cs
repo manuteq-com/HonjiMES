@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderListRun(
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeadsRun(
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
@@ -48,6 +48,17 @@ namespace HonjiMES.Controllers
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
+        /// 查詢工單明細
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderDetailByWorkOrderHeadId(int id)
+        {
+            var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
         }
 
         /// <summary>

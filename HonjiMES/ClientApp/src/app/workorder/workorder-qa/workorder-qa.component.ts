@@ -31,6 +31,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     listStatus: any;
     ProcessBasicList: any;
     postval: any;
+    creatpopupVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
@@ -46,7 +47,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetWorkOrderListRun',
+                this.Controller + '/GetWorkOrderHeadsRun',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
 
         });
@@ -91,16 +92,15 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             element.SerialNumber = index + 1;
         });
     }
-    readBomProcess(e, data) {
-        // this.productbasicId = data.data.Id;
-
-        // this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
-        //     (s) => {
-        //         if (s.success) {
-        //             this.dataSourceDB_Process = s.data;
-        //         }
-        //     }
-        // );
+    readProcess(e, data) {
+        debugger;
+        this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.dataSourceDB_Process = s.data;
+                }
+            }
+        );
     }
     async savedata() {
         // this.dataGrid2.instance.saveEditData();

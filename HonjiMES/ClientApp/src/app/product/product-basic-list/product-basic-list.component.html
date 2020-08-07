@@ -93,7 +93,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-        <app-product-list (childOuter)="onRowChanged($event)" [masterkey]="item.key" [itemval]="item.row"></app-product-list>
+        <app-product-list (childOuter)="onReflash($event)" [masterkey]="item.key" [itemval]="item.row"></app-product-list>
     </div>
 
 </dx-data-grid>
