@@ -1,3 +1,4 @@
+import { Material } from 'src/app/model/viewmodels';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
@@ -28,6 +29,7 @@ export class MaterialBasicListComponent implements OnInit {
     exceldata: any;
     mod: string;
     uploadUrl: string;
+    hint: boolean;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -142,9 +144,19 @@ export class MaterialBasicListComponent implements OnInit {
             }
         }
     }
+    onRowChanged() {
+        this.dataGrid.instance.refresh();
+    }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
+        debugger;
+        this.hint = false;
+        if (e.data !== undefined) {
+            e.data.Materials.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
             }
@@ -171,10 +183,17 @@ export class MaterialBasicListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
+        debugger;
+        this.hint = false;
+        if (e.data !== undefined) {
+            e.data.Materials.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
         }
     }

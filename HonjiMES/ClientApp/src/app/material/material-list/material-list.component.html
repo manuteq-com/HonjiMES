@@ -12,6 +12,8 @@
     (onEditorPreparing)="onEditorPreparing($event)"
     (onSelectionChanged)="selectionChanged($event)"
     (onCellClick)="cellClick($event)"
+    (onRowUpdated)="onRowUpdated($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     hoverStateEnabled="true"
     [rowAlternationEnabled]="true">
 
@@ -27,6 +29,8 @@
         <dxo-form>
             <dxi-item dataField="MaterialNo" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Name" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Quantity" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="QuantityLimit"></dxi-item>
             <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
@@ -43,6 +47,7 @@
     <dxi-column dataField="MaterialNo" caption="元件品號" [visible]="visible"></dxi-column>
     <dxi-column dataField="Name" caption="元件品名" [visible]="visible"></dxi-column>
     <dxi-column dataField="Quantity" caption="庫存量"></dxi-column>
+    <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="屬性" [visible]="visible"></dxi-column>
     <dxi-column dataField="Price" caption="單價"></dxi-column>

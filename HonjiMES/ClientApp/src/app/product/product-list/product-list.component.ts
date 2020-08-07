@@ -139,7 +139,7 @@ export class ProductListComponent implements OnInit, OnChanges {
             }
         }
     }
-    onRowUpdated(e){
+    onRowUpdated(e) {
         this.childOuter.emit(true);
     }
     cellClick(e) {
@@ -168,10 +168,8 @@ export class ProductListComponent implements OnInit, OnChanges {
             }
         }, 'error', 3000);
     }
-    onEditingStart(e) {
-    }
-    onEditorPrepared(e) {
-    }
+    onEditingStart(e) { }
+
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {

@@ -149,14 +149,16 @@ export class ProductBasicListComponent implements OnInit {
     onRowPrepared(e) {
         // debugger;
         this.hint = false;
-        e.data.Products.forEach(element => {
-            if (element.QuantityLimit > element.Quantity) {
-                this.hint = true;
+        if (e.data !== undefined) {
+            e.data.Products.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
-        });
-        if (this.hint) {
-            e.rowElement.style.backgroundColor = '#d9534f';
-            e.rowElement.style.color = '#fff';
         }
     }
     onReflash() {
@@ -183,10 +185,16 @@ export class ProductBasicListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.Products.QuantityLimit > e.data.Products.Quantity) {
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
+        this.hint = false;
+        if (e.date !== undefined) {
+            e.data.Products.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
         }
     }
