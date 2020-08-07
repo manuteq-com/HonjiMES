@@ -29,6 +29,28 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢已派工工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderListRun(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
+
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0);
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
+            // {
+            //     data = data.Where(x => x.WorkOrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            // }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
         /// 訂單轉工單
         /// </summary>
         /// <param name="OrderData"></param>

@@ -24,6 +24,7 @@ import { LoginComponent } from './login/login/login.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
+import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 
 
 
@@ -51,6 +52,7 @@ export const routes: Routes = [
     { path: 'processcontrol', component: ProcessControlComponent },
     { path: 'workorderlist', component: WorkorderListComponent },
     { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard]},
+    { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard]},
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

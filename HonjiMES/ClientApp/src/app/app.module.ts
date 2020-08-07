@@ -97,6 +97,7 @@ import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.c
 import { SupplierMaterialComponent } from './supplier/supplier-material/supplier-material.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
 import { MbillofmaterialModelComponent } from './mbillofmaterial/mbillofmaterial-model/mbillofmaterial-model.component';
+import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -208,6 +209,7 @@ export function tokenGetter() {
         SupplierMaterialComponent,
         QrcodeComponent,
         MbillofmaterialModelComponent,
+        WorkorderQaComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
