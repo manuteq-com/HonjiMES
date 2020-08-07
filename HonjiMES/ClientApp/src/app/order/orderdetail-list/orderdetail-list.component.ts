@@ -13,11 +13,11 @@ import CheckBox from 'devextreme/ui/check_box';
 import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 @Component({
-    selector: 'app-oerdrdetail-list',
-    templateUrl: './oerdrdetail-list.component.html',
-    styleUrls: ['./oerdrdetail-list.component.css']
+    selector: 'app-orderdetail-list',
+    templateUrl: './orderdetail-list.component.html',
+    styleUrls: ['./orderdetail-list.component.css']
 })
-export class OerdrdetailListComponent implements OnInit {
+export class OrderdetailListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Output() childOuter = new EventEmitter();
     @Input() itemkey: number;

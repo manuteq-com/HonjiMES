@@ -90,7 +90,7 @@ namespace HonjiMES.Controllers
         private MenuViewModel[] GetMenuitem(int id, List<Menu> allmenu, List<int> userRoles)
         {
             var MenuViewModellist = new List<MenuViewModel>();
-            foreach (var item in allmenu.Where(x => x.Pid == id && userRoles.Contains(x.Id)))
+            foreach (var item in allmenu.Where(x => x.Pid == id && userRoles.Contains(x.Id)).OrderBy(x => x.Order))
             {
                 MenuViewModellist.Add(new MenuViewModel
                 {

@@ -37,7 +37,7 @@ import zhTW from '../assets/lang/zh-TW.json';
 import { OrderListComponent } from './order/order-list/order-list.component';
 import { CreatorderComponent } from './order/creatorder/creatorder.component';
 import { BreadcrumbModule } from 'primeng';
-import { OerdrdetailListComponent } from './order/oerdrdetail-list/oerdrdetail-list.component';
+import { OrderdetailListComponent } from './order/orderdetail-list/orderdetail-list.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { MaterialListComponent } from './material/material-list/material-list.component';
 import { CreatproductComponent } from './product/creatproduct/creatproduct.component';
@@ -151,7 +151,7 @@ export function tokenGetter() {
         // Test1Component,
         OrderListComponent,
         CreatorderComponent,
-        OerdrdetailListComponent,
+        OrderdetailListComponent,
         ProductListComponent,
         MaterialListComponent,
         CreatproductComponent,
