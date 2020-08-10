@@ -69,6 +69,10 @@
     <dxi-column dataField="Email" caption="電子郵件"></dxi-column>
     <dxi-column dataField="UniformNo" caption="統一編號" [width]="160"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column caption="原料" cellTemplate="content" width="100"></dxi-column>
+    <div *dxTemplate="let data of 'content'" class="materialbutton">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
+    </div>
     <dxi-column type="buttons">
         <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
@@ -78,6 +82,13 @@
     </dxi-column>
 
 </dx-data-grid>
+
+<dx-popup [showTitle]="true" title="供應商原料" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="verpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-supplier-material (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-supplier-material>
+    </div>
+</dx-popup>
 
 <dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="520"
     [(visible)]="creatpopupVisible">

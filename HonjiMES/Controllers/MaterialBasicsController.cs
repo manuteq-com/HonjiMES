@@ -29,7 +29,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<MaterialBasicData>>> GetMaterialBasics()
         {
              _context.ChangeTracker.LazyLoadingEnabled = true;
-            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Select(x => new MaterialBasicData
+            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -44,8 +44,10 @@ namespace HonjiMES.Controllers
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
-                DeleteFlag = x.DeleteFlag
+                DeleteFlag = x.DeleteFlag,
+                Materials = x.Materials
             }).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
 
             return Ok(MyFun.APIResponseOK(materialBasic));
         }

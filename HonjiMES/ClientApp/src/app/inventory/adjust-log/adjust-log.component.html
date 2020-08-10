@@ -17,6 +17,17 @@
         </dx-button> -->
     </div>
 </div>
+<div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="Message" [editorOptions]="selectAdjustType" editorType="dxSelectBox">
+                    <dxo-label text="調整單種類查詢"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
+    </div>
+</div>
 
 <dx-data-grid
     [dataSource]="dataSourceDB"

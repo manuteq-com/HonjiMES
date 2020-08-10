@@ -28,8 +28,8 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductBasicData>>> GetProductBasics()
         {
-             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Select(x => new ProductBasicData
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Products).Select(x => new ProductBasicData
             {
                 TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -45,8 +45,10 @@ namespace HonjiMES.Controllers
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
-                DeleteFlag = x.DeleteFlag
+                DeleteFlag = x.DeleteFlag,
+                Products = x.Products
             }).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
 
             return Ok(MyFun.APIResponseOK(productBasic));
         }

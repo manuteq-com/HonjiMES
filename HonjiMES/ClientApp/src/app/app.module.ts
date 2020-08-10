@@ -37,7 +37,7 @@ import zhTW from '../assets/lang/zh-TW.json';
 import { OrderListComponent } from './order/order-list/order-list.component';
 import { CreatorderComponent } from './order/creatorder/creatorder.component';
 import { BreadcrumbModule } from 'primeng';
-import { OerdrdetailListComponent } from './order/oerdrdetail-list/oerdrdetail-list.component';
+import { OrderdetailListComponent } from './order/orderdetail-list/orderdetail-list.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { MaterialListComponent } from './material/material-list/material-list.component';
 import { CreatproductComponent } from './product/creatproduct/creatproduct.component';
@@ -94,7 +94,11 @@ import { WorkorderReportComponent } from './workorder/workorder-report/workorder
 import { AdjustLogComponent } from './inventory/adjust-log/adjust-log.component';
 import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustdetail-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
+import { SupplierMaterialComponent } from './supplier/supplier-material/supplier-material.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
+import { MbillofmaterialModelComponent } from './mbillofmaterial/mbillofmaterial-model/mbillofmaterial-model.component';
+import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
+import { WorkorderReportLogComponent } from './workorder/workorder-report-log/workorder-report-log.component';
 import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 export function tokenGetter() {
@@ -152,7 +156,7 @@ export function tokenGetter() {
         // Test1Component,
         OrderListComponent,
         CreatorderComponent,
-        OerdrdetailListComponent,
+        OrderdetailListComponent,
         ProductListComponent,
         MaterialListComponent,
         CreatproductComponent,
@@ -206,7 +210,11 @@ export function tokenGetter() {
         AdjustLogComponent,
         AdjustdetailListComponent,
         WorkorderLogComponent,
+        SupplierMaterialComponent,
         QrcodeComponent,
+        MbillofmaterialModelComponent,
+        WorkorderQaComponent,
+        WorkorderReportLogComponent,
         EditworkorderComponent,
         WorksChedulerComponent,
     ],

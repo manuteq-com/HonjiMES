@@ -1,0 +1,185 @@
+<!-- <p>所有訂單</p> -->
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">工單入庫確認</div>
+    <div class="buttongroup">
+        <!-- <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增成品"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button> -->
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-6">
+
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-paging [enabled]="true" [pageSize]="20">
+            </dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
+                [showNavigationButtons]="true" visible="true">
+            </dxo-pager>
+            <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+            </dxo-remote-operations> -->
+            <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
+
+            <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="140"></dxi-column>
+            <dxi-column dataField="DataNo" caption="品號" [width]="180"></dxi-column>
+            <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column>
+            <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
+            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
+                <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
+            <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
+            <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
+            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" sortOrder="desc" [width]="120" [visible]="false"></dxi-column>
+
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button icon="chevrondoubleright" type="default" (onClick)="readProcess($event,data)"></dx-button>
+            </div>
+
+            <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column> -->
+
+        </dx-data-grid>
+
+    </div>
+
+
+    <div class="col-6">
+
+        <div class="row">
+
+            <div class="col-5">
+                <!-- <div class="input-group">
+                    <label class="pt-3"><h5>工單號查詢：</h5></label>
+                    <dx-text-box class="toolinput" value="" [showClearButton]="true" valueChangeEvent="keyup"
+                    (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
+                </div> -->
+            </div>
+
+            <div class="col-7">
+                <dx-button class="toolbtn" stylingMode="contained" text="結案" type="success" [width]="80"
+                    [disabled]="btnDisabled" (onClick)="overdata()">
+                </dx-button>
+                <dx-button class="toolbtn" stylingMode="contained" text="入庫" type="default" [width]="80"
+                    [disabled]="btnDisabled" (onClick)="stockdata()">
+                </dx-button>
+                <!-- <dx-button class="toolbtn" stylingMode="contained" text="查詢工單" type="default" [width]="120"
+                    [disabled]="false" (onClick)="searchdata()">
+                </dx-button> -->
+            </div>
+
+        </div>
+
+        <!-- <div class="row">
+
+            <div class="col-4">
+                <div class="input-group">
+                    <label class="pt-1">品號：{{workOrderHeadDataNo}}</label>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    <label class="pt-1">名稱：{{workOrderHeadDataName}}</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <label class="pt-1">狀態：{{workOrderHeadStatus}}</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <label class="pt-1">數量：{{workOrderHeadCount}}</label>
+                </div>
+            </div>
+
+        </div> -->
+
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
+            [showColumnLines]="true" [showRowLines]="true">
+
+            <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
+            </dxo-row-dragging>
+            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+                <dxo-form colCount=2>
+                    <dxi-item dataField="ProcessId"></dxi-item>
+                    <dxi-item dataField="ProcessLeadTime"></dxi-item>
+                    <dxi-item dataField="ProcessTime"></dxi-item>
+                    <dxi-item dataField="ProcessCost"></dxi-item>
+                    <dxi-item dataField="ProducingMachine"></dxi-item>
+                </dxo-form>
+            </dxo-editing>
+            <dxo-filter-row [visible]="false"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+                [enterKeyDirection]="enterKeyDirection">
+            </dxo-keyboard-navigation>
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="ProcessId" caption="製程名稱">
+                <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <!-- <dxi-column dataField="Remarks" caption="備註">
+            </dxi-column> -->
+
+            <dxi-column dataField="ProducingMachine" caption="加工機台" dataType="number" [width]="80">
+            </dxi-column>
+            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="60">
+                <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
+            </dxi-column>
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170">
+            </dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170">
+            </dxi-column>
+
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
+            </div>
+
+            <dxi-column type="buttons" [visible]="false">
+                <dxi-button name="save" text="存檔"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
+
+        </dx-data-grid>
+
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+            [height]="700" [(visible)]="creatpopupVisible">
+            <div *dxTemplate="let data of 'content'">
+                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
+            </div>
+        </dx-popup>
+
+    </div>
+
+</div>

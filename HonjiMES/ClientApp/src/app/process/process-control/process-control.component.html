@@ -7,7 +7,7 @@
     </div>
     <div class="headerfont font2">工單管理</div>
     <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="產出QrCode" type="normal" [width]="120"
+        <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
             (onClick)="qrcodedata()">
         </dx-button>
 
@@ -78,7 +78,7 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="建立工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">

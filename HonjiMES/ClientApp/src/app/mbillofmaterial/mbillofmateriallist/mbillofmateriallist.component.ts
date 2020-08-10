@@ -9,6 +9,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { AppComponent } from 'src/app/app.component';
+import { mBillOfMaterial } from 'src/app/model/viewmodels';
 
 @Component({
     selector: 'app-mbillofmateriallist',
@@ -43,6 +44,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     Remarks: any;
     DrawNo: any;
     Manpower: any;
+    modelpopupVisible: boolean;
+    itemkey: any;
+    OnChangeValue: number;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
@@ -147,6 +151,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.bomNo = data.data.ProductNo;
         this.bomName = data.data.Name;
         this.saveDisabled = false;
+        this.itemkey = null;
+        this.OnChangeValue = 0;
         this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
             (s) => {
                 if (s.success) {
@@ -192,6 +198,11 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             }
         });
     }
+    popup_model() {
+        this.modelpopupVisible = true;
+        this.OnChangeValue += 1;
+        this.itemkey = this.OnChangeValue;
+    }
     async savedata() {
         this.dataGrid2.instance.saveEditData();
         this.postval = {
@@ -211,6 +222,34 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
                 }
             }, 'success', 2000);
         }
+    }
+    modelpopup_result(e) {
+        this.modelpopupVisible = false;
+
+        if (e.length !== 0) {
+            e.forEach(element => {
+                this.SerialNo = this.dataSourceDB_Process.length;
+                this.SerialNo++;
+
+                // tslint:disable-next-line: new-parens
+                let tempData = new mBillOfMaterial;
+                tempData.SerialNumber = this.SerialNo;
+                tempData.ProcessId = element.ProcessId;
+                tempData.ProcessLeadTime = element.ProcessLeadTime;
+                tempData.ProcessTime = element.ProcessTime;
+                tempData.ProcessCost = element.ProcessCost;
+                tempData.Remarks = element.Remarks;
+
+                this.dataSourceDB_Process.push(tempData);
+            });
+        }
+        notify({
+            message: '完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 
     customizeText1(e) {

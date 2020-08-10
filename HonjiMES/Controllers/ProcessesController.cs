@@ -613,9 +613,9 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ProcessesData>>> GetWorkOrderList(int id)
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderList(int id)
         {
-            var ProcessesDataList = new List<ProcessesData>();
+            var ProcessesDataList = new List<WorkOrderHead>();
             var WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             foreach (var item in WorkOrderHeads)
             {
@@ -640,15 +640,17 @@ namespace HonjiMES.Controllers
                     BasicDataName = BasicData.Name;
                 }
 
-                ProcessesDataList.Add(new ProcessesData
+                ProcessesDataList.Add(new WorkOrderHead
                 {
-                    Key = item.Id,
+                    Id = item.Id,
                     WorkOrderNo = item.WorkOrderNo,
-                    BasicDataName = BasicDataName,
-                    BasicDataNo = BasicDataNo,
+                    DataNo = BasicDataNo,
+                    DataName = BasicDataName,
                     MachineNo = item.MachineNo,
                     Count = item.Count,
-                    Status = item.Status
+                    Status = item.Status,
+                    CreateTime = item.CreateTime,
+                    UpdateTime = item.UpdateTime
                 });
 
             }

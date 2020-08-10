@@ -30,6 +30,8 @@ export class SupplierListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     Supplierlist: any;
+    verpopupVisible: boolean;
+    bomverdata: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         // debugger;
@@ -100,6 +102,10 @@ export class SupplierListComponent implements OnInit {
                 });
             }
         }
+    }
+    readBomVer(e, data) {
+        this.verpopupVisible = true;
+        this.itemkey = data.data;
     }
     ngOnInit() {
     }

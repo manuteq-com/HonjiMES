@@ -190,6 +190,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.WorkOrderSerial = this.serialkeyval;
         this.postval.ReCount = this.formData.ReCount;
         this.postval.Remarks = this.formData.Remark;
+        this.postval.ProducingMachine = this.formData.ProducingMachine;
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length

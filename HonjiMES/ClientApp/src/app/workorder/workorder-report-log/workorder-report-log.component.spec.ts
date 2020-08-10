@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OerdrdetailListComponent } from './oerdrdetail-list.component';
+import { WorkorderReportLogComponent } from './workorder-report-log.component';
 
-describe('OerdrdetailListComponent', () => {
-  let component: OerdrdetailListComponent;
-  let fixture: ComponentFixture<OerdrdetailListComponent>;
+describe('WorkorderReportLogComponent', () => {
+  let component: WorkorderReportLogComponent;
+  let fixture: ComponentFixture<WorkorderReportLogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OerdrdetailListComponent ]
+      declarations: [ WorkorderReportLogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OerdrdetailListComponent);
+    fixture = TestBed.createComponent(WorkorderReportLogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

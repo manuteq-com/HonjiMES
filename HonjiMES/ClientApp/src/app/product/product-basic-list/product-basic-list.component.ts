@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Product } from './../../model/viewmodels';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -29,6 +30,7 @@ export class ProductBasicListComponent implements OnInit {
     exceldata: any;
     mod: string;
     uploadUrl: string;
+    hint: boolean;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -145,12 +147,22 @@ export class ProductBasicListComponent implements OnInit {
         }
     }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
+        // debugger;
+        this.hint = false;
+        if (e.data !== undefined) {
+            e.data.Products.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
             }
         }
+    }
+    onReflash() {
+        this.dataGrid.instance.refresh();
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();
@@ -173,11 +185,16 @@ export class ProductBasicListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
-
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
+        this.hint = false;
+        if (e.date !== undefined) {
+            e.data.Products.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
             }
         }
     }

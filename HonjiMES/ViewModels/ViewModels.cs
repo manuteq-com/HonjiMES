@@ -159,6 +159,7 @@ namespace HonjiMES.Models
         public string PurchaseNo { get; set; }
         public string SupplierCode { get; set; }
         public string MaterialNo { get; set; }
+        public string WorkOrderNo { get; set; }
     }
     /// <summary>
     /// 銷貨單銷貨
@@ -516,6 +517,12 @@ namespace HonjiMES.Models
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
 
+    public class MbomModelData
+    {
+        public MbomModelHead MbomModelHead { get; set; }
+        public List<MbomModelDetail> MbomModelDetail { get; set; }
+    }
+
     public class WorkOrderReportData
     {
         public int WorkOrderID { get; set; }
@@ -533,6 +540,7 @@ namespace HonjiMES.Models
         /// 說明
         /// </summary>
         public string Remarks { get; set; }
+        public string ProducingMachine { get; set; }
     }
     /// <summary>
     /// 製成進度
@@ -651,6 +659,16 @@ namespace HonjiMES.Models
         /// 組成數量
         /// </summary>
         public int Quantity { get; set; }
+    }
+    public class PostSupplierMaterial
+    {
+        public int MaterialBasicId { get; set; }
+    }
+
+    public class AdjustType
+    {
+        public int Id { get; set; }
+        public string Message { get; set; }
     }
     public class WorkSchedulerVM
     {

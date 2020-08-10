@@ -24,6 +24,7 @@ import { LoginComponent } from './login/login/login.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
+import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 
 
@@ -49,9 +50,11 @@ export const routes: Routes = [
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
     { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] },
-    { path: 'processcontrol', component: ProcessControlComponent },
-    { path: 'workorderlist', component: WorkorderListComponent },
+    { path: 'processcontrol', component: ProcessControlComponent, canActivate: [AuthGuard] },
+    { path: 'workorderlist', component: WorkorderListComponent, canActivate: [AuthGuard] },
     { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard] },
+    { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard] },
+
     { path: 'workscheduler', component: WorksChedulerComponent, canActivate: [AuthGuard] },
 ];
 

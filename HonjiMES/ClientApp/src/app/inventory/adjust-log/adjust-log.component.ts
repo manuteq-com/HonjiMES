@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -34,24 +34,20 @@ export class AdjustLogComponent implements OnInit {
     remoteOperations: boolean;
     MaterialList: any;
     listAdjustStatus: any;
+    editorOptions: any;
+    detailfilter: any;
+    selectAdjustType: any;
+    listAdjustType: any;
+    AdjustTypeList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
-        // debugger;
+        debugger;
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: (loadOptions) => SendService.sendRequest(
-                this.http,
-                this.Controller + '/GetAdjustLog',
-                'GET', { loadOptions, remote: this.remoteOperations }),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetAdjustLog', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostAdjustLog', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
-        });
+        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+        this.getdata();
         this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 if (s.success) {
@@ -59,7 +55,36 @@ export class AdjustLogComponent implements OnInit {
                 }
             }
         );
+        this.app.GetData(this.Controller + '/GetAdjustType').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.AdjustTypeList = s.data;
+                    // this.AdjustTypeList.forEach(x => x.Message);
+                    this.selectAdjustType = {
+                        items: this.AdjustTypeList,
+                        displayExpr: 'Message',
+                        valueExpr: 'Message',
+                        searchEnabled: true,
+                        onValueChanged: this.onValueChanged.bind(this)
+                    };
+                }
+            }
+        );
     }
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetAdjustLog',
+                'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustLog', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
+        });
+    }
+
     creatdata() {
         this.creatpopupVisible = true;
     }
@@ -114,6 +139,14 @@ export class AdjustLogComponent implements OnInit {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
+        }
+    }
+    onValueChanged(e) {
+        debugger;
+        if (e.value === '全部資料') {
+            this.dataGrid.instance.clearFilter();
+        } else {
+        this.dataGrid.instance.filter(['Message','=',e.value]);
         }
     }
     ngOnInit() {

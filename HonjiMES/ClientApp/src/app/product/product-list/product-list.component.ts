@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
@@ -138,6 +139,9 @@ export class ProductListComponent implements OnInit, OnChanges {
             }
         }
     }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
+    }
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
@@ -164,15 +168,13 @@ export class ProductListComponent implements OnInit, OnChanges {
             }
         }, 'error', 3000);
     }
-    onEditingStart(e) {
+    onEditingStart(e) { }
 
-    }
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-
                 e.cellElement.style.backgroundColor = '#d9534f';
                 e.cellElement.style.color = '#fff';
             }

@@ -164,6 +164,7 @@ export class workOrderReportData {
     WorkOrderSerial: number;
     ReCount: number;
     Remarks: string;
+    ProducingMachine: string;
 }
 
 // tslint:disable-next-line: class-name
@@ -183,6 +184,29 @@ export class basicData {
     Property: string;
     Price: number;
     WarehouseId: number;
+}
+
+export class MbomModelData {
+    MbomModelHeadId: number;
+    ModelCode: string;
+    ModelName: string;
+}
+
+// tslint:disable-next-line: class-name
+export class mBillOfMaterial {
+    SerialNumber: number;
+    ProcessId: number;
+    ProcessNo: string;
+    ProcessName: string;
+    ProcessLeadTime: number;
+    ProcessTime: number;
+    ProcessCost: number;
+    DrawNo: string;
+    Manpower: string;
+    ProducingMachine: string;
+    Status: number;
+    Type: string;
+    Remarks: string;
 }
 export class WorkSchedulerStatu {
     text: string;

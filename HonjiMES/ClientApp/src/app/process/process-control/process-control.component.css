@@ -55,7 +55,14 @@
 .insertbtn {
     margin-top: -6px;
     border-radius: 2px;
-    margin-left: 30px;
+    /* margin-left: 30px; */
+}
+.qrcodebtn {
+    margin-top: -6px;
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #1e90ff;
 }
 
 .table-hover tbody tr:hover {
@@ -67,6 +74,9 @@
 }
 .process_ended {
     background-color: #9afd97;
+}
+.process_finish {
+    background-color: #91e0f8;
 }
 .process_start {
     background-color: #fdf90d21;

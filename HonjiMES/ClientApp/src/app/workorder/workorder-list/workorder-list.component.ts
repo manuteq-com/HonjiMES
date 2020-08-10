@@ -19,20 +19,20 @@ export class WorkorderListComponent implements OnInit {
     loadingVisible = false;
     ReportHeight: any;
     keyup = '';
-    editpopupVisible: boolean;
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
-        if (!this.creatpopupVisible && !this.editpopupVisible) {
+        if (!this.creatpopupVisible) {
             if (e.key === 'Enter') {
                 const key = this.keyup;
-                const selectdata = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
-                if (selectdata) {
-                    this.itemkey = selectdata;
+                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (ss) {
+                    this.itemkey = ss.Key;
+                    this.serialkey = 1;
                     this.mod = 'report';
-                    this.editpopupVisible = true;
+                    this.creatpopupVisible = true;
                     this.ReportHeight = 710;
                 } else {
                     notify({
-                        message: this.keyup + ':查無資料',
+                        message: '[ ' + this.keyup + ' ]　查無資料!',
                         position: {
                             my: 'center top',
                             at: 'center top'
@@ -50,13 +50,7 @@ export class WorkorderListComponent implements OnInit {
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
-        this.editpopupVisible = false;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
-            (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
-            }
-        );
+        this.getWorkOrderData();
         // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
         //     (s) => {
         //         debugger;
@@ -66,16 +60,22 @@ export class WorkorderListComponent implements OnInit {
     }
     ngOnInit() {
     }
+    getWorkOrderData() {
+        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
+            (s) => {
+                this.dataSourceDB = s.data;
+                this.loadingVisible = false;
+            }
+        );
+    }
     trclick(e) {
-        if (!this.creatpopupVisible) {
-            this.itemkey = e;
-            this.serialkey = 1;
-            this.mod = 'report';
-            this.editpopupVisible = true;
-            this.ReportHeight = 710;
-        }
+        // debugger;
+        // this.creatpopupVisible = true;
+        // this.itemkey = e.Key;
+        // this.mod = 'report';
     }
     tdclick(e, colData) {
+        debugger;
         this.itemkey = e.Key;
         this.serialkey = Number(colData.key.substring(4)) + 1;
         this.mod = 'report';
@@ -88,6 +88,7 @@ export class WorkorderListComponent implements OnInit {
         } else if (e[colData.key].value3 === 3) {
             this.ReportHeight = 760;
         }
+        this.getWorkOrderData();
     }
     getBlueClass(data) {
         // if (data.Status === 1) {
@@ -112,15 +113,10 @@ export class WorkorderListComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.editpopupVisible = false;
+        this.itemkey = null;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
-            (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
-            }
-        );
+        this.getWorkOrderData();
         notify({
             message: '更新完成',
             position: {

@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -16,7 +16,7 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./material-list.component.css']
 })
 export class MaterialListComponent implements OnInit {
-
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
@@ -116,6 +116,9 @@ export class MaterialListComponent implements OnInit {
             }, 'error', 3000);
         }
     }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
+    }
     Inventory_Change_Click(e) {
         this.itemkey = e.row.key;
         this.mod = 'material';
@@ -170,7 +173,20 @@ export class MaterialListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
+                e.cellElement.style.backgroundColor = '#d9534f';
+                e.cellElement.style.color = '#fff';
+            }
+        }
+    }
+    onRowPrepared(e) {
+        if (e.rowType === 'data') {
+            if (e.data.QuantityLimit > e.data.Quantity) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
+            }
+        }
     }
     onEditorPreparing(e) {
     }
