@@ -184,3 +184,8 @@ export class basicData {
     Price: number;
     WarehouseId: number;
 }
+export class WorkSchedulerStatu {
+    text: string;
+    id: number;
+    color: string;
+}

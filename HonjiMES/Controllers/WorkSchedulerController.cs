@@ -40,15 +40,16 @@ namespace HonjiMES.Controllers
         private List<WorkSchedulerVM> GetScheduler(object data)
         {
             var newlist = new List<WorkSchedulerVM>();
-            foreach (var item in (List<WorkOrderDetail>) data)
+            foreach (var item in (List<WorkOrderDetail>)data)
             {
                 newlist.Add(new WorkSchedulerVM
                 {
                     Id = item.Id,
-                    Text = item.WorkOrderHead.WorkOrderNo,
+                    Text = item.WorkOrderHead.WorkOrderNo + " 工序：" + item.SerialNumber,
                     StartDate = item.DueStartTime.Value,
                     EndDate = item.DueEndTime ?? item.DueStartTime.Value,
-                    AllDay = true
+                    AllDay = true,
+                    Status = item.Status
                 });
             }
             return newlist;

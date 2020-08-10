@@ -24,7 +24,7 @@ import { LoginComponent } from './login/login/login.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
-import { WorksChedulerComponent } from './workscheduler/work-scheduler/works-cheduler.component';
+import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 
 
 

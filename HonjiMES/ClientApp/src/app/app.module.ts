@@ -96,7 +96,7 @@ import { AdjustdetailListComponent } from './inventory/adjustdetail-list/adjustd
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
 import { QrcodeComponent } from './process/qrcode/qrcode.component';
 import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
-import { WorksChedulerComponent } from './workscheduler/work-scheduler/works-cheduler.component';
+import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }

@@ -128,11 +128,12 @@ tr.dx-header-row > td.dx-datagrid-action > div.dx-column-indicators {
     padding: 1px;
 }
 
-tbody{
+tbody {
     line-height: 0px !important;
 }
 
-.dx-datagrid-content .dx-datagrid-table .dx-row > td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
+.dx-datagrid-content .dx-datagrid-table .dx-row > td,
+.dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
     vertical-align: inherit;
 }
 .dx-datagrid .dx-row > td {

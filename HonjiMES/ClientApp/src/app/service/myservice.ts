@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Selectitem } from '../model/viewmodels';
+import { Selectitem, WorkSchedulerStatu } from '../model/viewmodels';
 @Injectable({
     providedIn: 'root'
 })
@@ -36,6 +36,9 @@ export class Myservice {
     }
     getReportType(): Selectitem[] {
         return reporttype;
+    }
+    getWorkSchedulerStatus(): WorkSchedulerStatu[] {
+        return WorkSchedulerStatus;
     }
 }
 const purchasetypes: Selectitem[] = [
@@ -89,4 +92,28 @@ const reporttype: Selectitem[] = [
     { Id: 1, Name: '開工回報' },
     { Id: 2, Name: '完工回報' },
     { Id: 3, Name: '再開工回報' },
+];
+const WorkSchedulerStatus: WorkSchedulerStatu[] = [
+    {
+        text: '新建',
+        id: 0,
+        color: '#929292'
+    },
+    {
+        text: '派工',
+        id: 1,
+        color: '#FFC300'
+    }, {
+        text: '開工',
+        id: 2,
+        color: '#FFC300'
+    }, {
+        text: '完工',
+        id: 3,
+        color: '#0B9500'
+    }, {
+        text: '轉單',
+        id: 4,
+        color: '#929292'
+    }
 ];

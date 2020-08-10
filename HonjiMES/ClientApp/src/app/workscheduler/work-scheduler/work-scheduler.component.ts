@@ -3,17 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
-    selector: 'app-works-cheduler',
-    templateUrl: './works-cheduler.component.html',
-    styleUrls: ['./works-cheduler.component.css']
+    selector: 'app-work-scheduler',
+    templateUrl: './work-scheduler.component.html',
+    styleUrls: ['./work-scheduler.component.css']
 })
 export class WorksChedulerComponent implements OnInit {
     dataSourceDB: CustomStore;
     Controller = '/WorkScheduler';
+    WorkSchedulerStatus: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.WorkSchedulerStatus = myservice.getWorkSchedulerStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetWorkScheduler/'),

@@ -661,7 +661,7 @@ namespace HonjiMES.Models
         public string Text { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Color { get; set; }
+        public int Status { get; set; }
         public bool AllDay { get; set; }
     }
 }
