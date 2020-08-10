@@ -21,7 +21,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
-    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule
+    DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule, DxSchedulerModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -100,6 +100,8 @@ import { MbillofmaterialModelComponent } from './mbillofmaterial/mbillofmaterial
 import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 import { WorkorderReportLogComponent } from './workorder/workorder-report-log/workorder-report-log.component';
 import { ProcessControlViewComponent } from './process/process-control-view/process-control-view.component';
+import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
+import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -131,6 +133,7 @@ export function tokenGetter() {
         DxCheckBoxModule,
         BreadcrumbModule,
         DxLoadPanelModule,
+        DxSchedulerModule,
         SweetAlert2Module.forRoot(),
         JwtModule.forRoot({
             config: {
@@ -214,6 +217,8 @@ export function tokenGetter() {
         WorkorderQaComponent,
         WorkorderReportLogComponent,
         ProcessControlViewComponent,
+        EditworkorderComponent,
+        WorksChedulerComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

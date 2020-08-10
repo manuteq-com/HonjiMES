@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
 using DevExtreme.AspNet.Mvc;
+using NPOI.SS.Formula.Functions;
 
 namespace HonjiMES.Controllers
 {
@@ -460,7 +461,39 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("回報失敗!"));
             }
         }
-
+        /// <summary>
+        /// 工單批次作業
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportDataAll"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<WorkOrderData>> WorkOrderReportAll(int id, [FromBody] WorkOrderReportDataAll WorkOrderReportDataAll)
+        {
+            var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
+            if (WorkOrderDetails != null)
+            {
+                var WorkOrderReportData = new WorkOrderReportData
+                {
+                    ReCount = WorkOrderReportDataAll.ReCount,
+                    Remarks = WorkOrderReportDataAll.Remarks,
+                    WorkOrderID = WorkOrderDetails.WorkOrderHeadId,
+                    WorkOrderSerial = WorkOrderDetails.SerialNumber
+                };
+                if (WorkOrderDetails.Status == 1)
+                    return await WorkOrderReportStart(WorkOrderReportData);
+                else if(WorkOrderDetails.Status == 2)
+                    return await WorkOrderReportEnd(WorkOrderReportData);
+                else if (WorkOrderDetails.Status == 3)
+                    return await WorkOrderReportRestart(WorkOrderReportData);
+                else
+                    return Ok(MyFun.APIResponseError("工單狀態異常!"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單異常!"));
+            }
+        }
         public async Task<string> NewWorkOrderByOrder(OrderDetail OrderDetail)
         {
             string sMessage = "";
