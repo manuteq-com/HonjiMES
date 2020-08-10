@@ -49,10 +49,10 @@ export const routes: Routes = [
     { path: 'wiproductbasiclist', component: WiproductBasicListComponent, canActivate: [AuthGuard] },
     { path: 'processlist', component: ProcessListComponent, canActivate: [AuthGuard] },
     { path: 'receiveList', component: ReceiveListComponent, canActivate: [AuthGuard] },
-    { path: 'processcontrol', component: ProcessControlComponent },
-    { path: 'workorderlist', component: WorkorderListComponent },
-    { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard]},
-    { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard]},
+    { path: 'processcontrol', component: ProcessControlComponent, canActivate: [AuthGuard] },
+    { path: 'workorderlist', component: WorkorderListComponent, canActivate: [AuthGuard] },
+    { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard] },
+    { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
