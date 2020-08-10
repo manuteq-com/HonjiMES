@@ -19,16 +19,16 @@ export class WorkorderListComponent implements OnInit {
     loadingVisible = false;
     ReportHeight: any;
     keyup = '';
+    editpopupVisible: boolean;
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible) {
             if (e.key === 'Enter') {
                 const key = this.keyup;
-                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
-                if (ss) {
-                    this.itemkey = ss.Key;
-                    this.serialkey = 1;
+                const selectdata = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (selectdata) {
+                    this.itemkey = selectdata;
                     this.mod = 'report';
-                    this.creatpopupVisible = true;
+                    this.editpopupVisible = true;
                     this.ReportHeight = 710;
                 } else {
                     notify({
@@ -69,10 +69,13 @@ export class WorkorderListComponent implements OnInit {
         );
     }
     trclick(e) {
-        // debugger;
-        // this.creatpopupVisible = true;
-        // this.itemkey = e.Key;
-        // this.mod = 'report';
+        if (!this.creatpopupVisible) {
+            this.itemkey = e;
+            this.serialkey = 1;
+            this.mod = 'report';
+            this.editpopupVisible = true;
+            this.ReportHeight = 710;
+        }
     }
     tdclick(e, colData) {
         debugger;
@@ -113,7 +116,7 @@ export class WorkorderListComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.itemkey = null;
+        this.editpopupVisible = false;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
         this.getWorkOrderData();
