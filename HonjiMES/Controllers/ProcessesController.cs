@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using DevExtreme.AspNet.Mvc;
+using HonjiMES.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HonjiMES.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
@@ -577,51 +579,47 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 取工單列表
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderList(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderList(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var ProcessesDataList = new List<WorkOrderHead>();
-            var WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-            foreach (var item in WorkOrderHeads)
+            var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+            // var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
+            // {
+            //     data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            // }
+
+            foreach (var item in data)
             {
-                var BasicDataNo = "";
-                var BasicDataName = "";
                 if (item.DataType == 0)
                 {
-                    var BasicData = _context.MaterialBasics.Find(item.DataId);
-                    BasicDataNo = BasicData.MaterialNo;
-                    BasicDataName = BasicData.Name;
+                    var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.MaterialNo;
+                    item.DataName = BasicData.Name;
                 }
                 else if (item.DataType == 1)
                 {
-                    var BasicData = _context.ProductBasics.Find(item.DataId);
-                    BasicDataNo = BasicData.ProductNo;
-                    BasicDataName = BasicData.Name;
+                    var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.ProductNo;
+                    item.DataName = BasicData.Name;
                 }
                 else if (item.DataType == 2)
                 {
-                    var BasicData = _context.WiproductBasics.Find(item.DataId);
-                    BasicDataNo = BasicData.WiproductNo;
-                    BasicDataName = BasicData.Name;
+                    var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.WiproductNo;
+                    item.DataName = BasicData.Name;
                 }
-
-                ProcessesDataList.Add(new WorkOrderHead
-                {
-                    Id = item.Id,
-                    WorkOrderNo = item.WorkOrderNo,
-                    DataNo = BasicDataNo,
-                    DataName = BasicDataName,
-                    MachineNo = item.MachineNo,
-                    Count = item.Count,
-                    Status = item.Status,
-                    CreateTime = item.CreateTime,
-                    UpdateTime = item.UpdateTime
-                });
-
             }
-            return Ok(MyFun.APIResponseOK(ProcessesDataList));
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
     }
