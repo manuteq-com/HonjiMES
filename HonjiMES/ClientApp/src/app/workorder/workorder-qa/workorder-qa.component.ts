@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Input } from '@angular/core';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -36,6 +36,11 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     itemkey: any;
     btnDisabled: boolean;
     workOrderHeadId: any;
+    workOrderHeadDataNo: any;
+    workOrderHeadDataName: any;
+    workOrderHeadStatus: any;
+    workOrderHeadCount: any;
+    WorkOrderNoInputVal: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
@@ -70,6 +75,9 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
     }
+    valueChanged(e) {
+        this.WorkOrderNoInputVal = e.value;
+    }
     onReorder(e) {
         debugger;
         const visibleRows = e.component.getVisibleRows();
@@ -83,14 +91,17 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         });
     }
     readProcess(e, data) {
-        debugger;
         this.itemkey = 0;
         this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
             (s) => {
                 if (s.success) {
-                    this.dataSourceDB_Process = s.data;
+                    this.dataSourceDB_Process = s.data.WorkOrderDetail;
                     this.btnDisabled = false;
-                    this.workOrderHeadId = data.data.Id;
+                    this.workOrderHeadId = s.data.WorkOrderHead.Id;
+                    this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
+                    this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
+                    this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
+                    this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
                 }
             }
         );
@@ -98,6 +109,21 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     readLog(e, data) {
         this.itemkey = data.data.Id;
         this.creatpopupVisible = true;
+    }
+    async searchdata() {
+        this.itemkey = 0;
+        const SearchValue = { WorkOrderNo: this.WorkOrderNoInputVal };
+        // tslint:disable-next-line: max-line-length
+        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderDetailByWorkOrderNo', 'POST', { values: SearchValue });
+        if (sendRequest) {
+            this.dataSourceDB_Process = sendRequest.WorkOrderDetail;
+            this.btnDisabled = false;
+            this.workOrderHeadId = sendRequest.WorkOrderHead.Id;
+            this.workOrderHeadDataNo = sendRequest.WorkOrderHead.DataNo;
+            this.workOrderHeadDataName = sendRequest.WorkOrderHead.DataName;
+            this.workOrderHeadStatus = this.listStatus.find(x => x.Id === sendRequest.WorkOrderHead.Status)?.Name ?? '';
+            this.workOrderHeadCount = (sendRequest.WorkOrderHead?.ReCount ?? '0') + ' / ' + sendRequest.WorkOrderHead.Count;
+        }
     }
     async overdata() {
         Swal.fire({
@@ -177,7 +203,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                     }, 'success', 2000);
                 }
             }
-        })
+        });
     }
 
 }

@@ -159,6 +159,7 @@ namespace HonjiMES.Models
         public string PurchaseNo { get; set; }
         public string SupplierCode { get; set; }
         public string MaterialNo { get; set; }
+        public string WorkOrderNo { get; set; }
     }
     /// <summary>
     /// 銷貨單銷貨

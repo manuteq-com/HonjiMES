@@ -51,14 +51,46 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 查詢工單明細
+        /// 查詢工單明細by工單ID
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderDetailByWorkOrderHeadId(int id)
+        public async Task<ActionResult<IEnumerable<WorkOrderData>>> GetWorkOrderDetailByWorkOrderHeadId(int id)
         {
-            var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id).ToListAsync();
-            return Ok(MyFun.APIResponseOK(data));
+            // var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
+            // return Ok(MyFun.APIResponseOK(data));
+            var workOrderHead = await _context.WorkOrderHeads.Where(x => x.Id == id && x.DeleteFlag == 0).ToListAsync();
+            if(workOrderHead.Count == 1) {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToList();
+                var data = new WorkOrderData{
+                    WorkOrderHead = workOrderHead.FirstOrDefault(),
+                    WorkOrderDetail = WorkOrderDetail
+                };
+                return Ok(MyFun.APIResponseOK(data));    
+            }else{
+                return Ok(MyFun.APIResponseError("工單查詢失敗!"));
+            }
+        }
+
+        /// <summary>
+        /// 查詢工單明細by工單NO
+        /// </summary>
+        /// <param name="SearchValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<WorkOrderData>> GetWorkOrderDetailByWorkOrderNo(SearchValue SearchValue)
+        {
+            var workOrderHead = await _context.WorkOrderHeads.Where(x => x.WorkOrderNo == SearchValue.WorkOrderNo && x.DeleteFlag == 0).ToListAsync();
+            if(workOrderHead.Count == 1) {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == workOrderHead.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                var data = new WorkOrderData{
+                    WorkOrderHead = workOrderHead.FirstOrDefault(),
+                    WorkOrderDetail = WorkOrderDetail
+                };
+                return Ok(MyFun.APIResponseOK(data));    
+            }else{
+                return Ok(MyFun.APIResponseError("[ " + SearchValue.WorkOrderNo + " ] 查無資訊!"));
+            }
         }
 
         /// <summary>

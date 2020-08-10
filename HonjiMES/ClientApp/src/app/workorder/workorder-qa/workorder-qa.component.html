@@ -6,7 +6,7 @@
         <div class="lefttriangle1"></div>
         <div class="lefttriangle2"></div>
     </div>
-    <div class="headerfont font2">工單品質檢驗</div>
+    <div class="headerfont font2">工單入庫確認</div>
     <div class="buttongroup">
         <!-- <dx-button
             class="insertbtn"
@@ -70,25 +70,52 @@
 
         <div class="row">
 
-            <div class="col-4">
-                <div class="input-group">
-                    <label class="pt-2"><h5>製程明細：</h5></label>
-                </div>
+            <div class="col-5">
+                <!-- <div class="input-group">
+                    <label class="pt-3"><h5>工單號查詢：</h5></label>
+                    <dx-text-box class="toolinput" value="" [showClearButton]="true" valueChangeEvent="keyup"
+                    (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
+                </div> -->
             </div>
-            <div class="col-4">
-                <div class="input-group">
-                    <!-- <label class="pt-2">名稱：{{enterKeyDirection}}</label> -->
-                </div>
-            </div>
-            <div class="col-4">
+
+            <div class="col-7">
                 <dx-button class="toolbtn" stylingMode="contained" text="結案" type="success" [width]="80"
                     [disabled]="btnDisabled" (onClick)="overdata()">
                 </dx-button>
                 <dx-button class="toolbtn" stylingMode="contained" text="入庫" type="default" [width]="80"
                     [disabled]="btnDisabled" (onClick)="stockdata()">
                 </dx-button>
+                <!-- <dx-button class="toolbtn" stylingMode="contained" text="查詢工單" type="default" [width]="120"
+                    [disabled]="false" (onClick)="searchdata()">
+                </dx-button> -->
             </div>
+
         </div>
+
+        <!-- <div class="row">
+
+            <div class="col-4">
+                <div class="input-group">
+                    <label class="pt-1">品號：{{workOrderHeadDataNo}}</label>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    <label class="pt-1">名稱：{{workOrderHeadDataName}}</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <label class="pt-1">狀態：{{workOrderHeadStatus}}</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <label class="pt-1">數量：{{workOrderHeadCount}}</label>
+                </div>
+            </div>
+
+        </div> -->
 
         <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
             [showColumnLines]="true" [showRowLines]="true">
@@ -127,9 +154,9 @@
             </dxi-column>
             <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="160">
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170">
             </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="160">
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170">
             </dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
