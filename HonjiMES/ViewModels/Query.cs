@@ -77,6 +77,14 @@ namespace HonjiMES.Models
 
     public class QueryCollection : Collection<Query>
     {
+        private static MemberExpression GetMemberExpression(ParameterExpression parameter, string propName)
+        {
+            if (string.IsNullOrEmpty(propName)) return null;
+            var propertiesName = propName.Split('.');
+            if (propertiesName.Count() == 2)
+                return Expression.Property(Expression.Property(parameter, propertiesName[0]), propertiesName[1]);
+            return Expression.Property(parameter, propName);
+        }
         public Expression<Func<T, bool>> AsExpression<T>(Query.Condition condition = Query.Condition.AndAlso) where T : class
         {
             Type targetType = typeof(T);
@@ -94,6 +102,10 @@ namespace HonjiMES.Models
             foreach (var item in this)
             {
                 var property = typeInfo.GetProperty(item.Name);
+                if (property == null)
+                {
+                    property = GetLastProperty(item.Name, typeInfo);
+                }
                 if (property == null ||
                     !property.CanRead ||
                     (item.Operator != Query.Operators.Range && item.Value == null) ||
@@ -107,108 +119,116 @@ namespace HonjiMES.Models
                     item.Value = Convert.ChangeType(item.Value, realType);
                 }
                 Expression<Func<object>> valueLamba = () => item.Value;
-                switch (item.Operator)
+
+                try
                 {
-                    case Query.Operators.Equal:
-                        {
-                            expression = Append(expression, Expression.Equal(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.NotEqual:
-                        {
-                            expression = Append(expression, Expression.NotEqual(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.GreaterThan:
-                        {
-                            expression = Append(expression, Expression.GreaterThan(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.GreaterThanOrEqual:
-                        {
-                            expression = Append(expression, Expression.GreaterThanOrEqual(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.LessThan:
-                        {
-                            expression = Append(expression, Expression.LessThan(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.LessThanOrEqual:
-                        {
-                            expression = Append(expression, Expression.LessThanOrEqual(Expression.Property(parameter, item.Name),
-                                Expression.Convert(valueLamba.Body, property.PropertyType)));
-                            break;
-                        }
-                    case Query.Operators.Contains:
-                        {
-                            var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
-                            var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
-                            expression = Append(expression, Expression.AndAlso(nullCheck, contains));
-                            break;
-                        }
-                    case Query.Operators.NotContains:
-                        {
-                            var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
-                            var contains = Expression.Call(Expression.Property(parameter, item.Name), "Contains", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
-                            var doesNotContain = Expression.Not(contains);
-                            expression = Append(expression, Expression.AndAlso(nullCheck, doesNotContain));
-                            break;
-                        }
-                    case Query.Operators.StartWith:
-                        {
-                            var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
-                            var startsWith = Expression.Call(Expression.Property(parameter, item.Name), "StartsWith", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
-                            expression = Append(expression, Expression.AndAlso(nullCheck, startsWith));
-                            break;
-                        }
-                    case Query.Operators.EndWidth:
-                        {
-                            var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, Expression.Property(parameter, item.Name)));
-                            var endsWith = Expression.Call(Expression.Property(parameter, item.Name), "EndsWith", null,
-                                Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
-                            expression = Append(expression, Expression.AndAlso(nullCheck, endsWith));
-                            break;
-                        }
-                    case Query.Operators.Range:
-                        {
-                            Expression minExp = null, maxExp = null;
-                            if (item.ValueMin != null)
+                    switch (item.Operator)
+                    {
+                        case Query.Operators.Equal:
                             {
-                                var minValue = Convert.ChangeType(item.ValueMin, realType);
-                                Expression<Func<object>> minValueLamda = () => minValue;
-                                minExp = Expression.GreaterThanOrEqual(Expression.Property(parameter, item.Name), Expression.Convert(minValueLamda.Body, property.PropertyType));
+                                expression = Append(expression, Expression.Equal(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
                             }
-                            if (item.ValueMax != null)
+                        case Query.Operators.NotEqual:
                             {
-                                var maxValue = Convert.ChangeType(item.ValueMax, realType);
-                                Expression<Func<object>> maxValueLamda = () => maxValue;
-                                maxExp = Expression.LessThanOrEqual(Expression.Property(parameter, item.Name), Expression.Convert(maxValueLamda.Body, property.PropertyType));
+                                expression = Append(expression, Expression.NotEqual(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
                             }
+                        case Query.Operators.GreaterThan:
+                            {
+                                expression = Append(expression, Expression.GreaterThan(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
+                            }
+                        case Query.Operators.GreaterThanOrEqual:
+                            {
+                                expression = Append(expression, Expression.GreaterThanOrEqual(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
+                            }
+                        case Query.Operators.LessThan:
+                            {
+                                expression = Append(expression, Expression.LessThan(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
+                            }
+                        case Query.Operators.LessThanOrEqual:
+                            {
+                                expression = Append(expression, Expression.LessThanOrEqual(GetMemberExpression(parameter, item.Name),
+                                    Expression.Convert(valueLamba.Body, property.PropertyType)));
+                                break;
+                            }
+                        case Query.Operators.Contains:
+                            {
+                                var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, GetMemberExpression(parameter, item.Name)));
+                                var contains = Expression.Call(GetMemberExpression(parameter, item.Name), "Contains", null,
+                                    Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
+                                expression = Append(expression, Expression.AndAlso(nullCheck, contains));
+                                break;
+                            }
+                        case Query.Operators.NotContains:
+                            {
+                                var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, GetMemberExpression(parameter, item.Name)));
+                                var contains = Expression.Call(GetMemberExpression(parameter, item.Name), "Contains", null,
+                                    Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
+                                var doesNotContain = Expression.Not(contains);
+                                expression = Append(expression, Expression.AndAlso(nullCheck, doesNotContain));
+                                break;
+                            }
+                        case Query.Operators.StartWith:
+                            {
+                                var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, GetMemberExpression(parameter, item.Name)));
+                                var startsWith = Expression.Call(GetMemberExpression(parameter, item.Name), "StartsWith", null,
+                                    Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
+                                expression = Append(expression, Expression.AndAlso(nullCheck, startsWith));
+                                break;
+                            }
+                        case Query.Operators.EndWidth:
+                            {
+                                var nullCheck = Expression.Not(Expression.Call(typeof(string), "IsNullOrEmpty", null, GetMemberExpression(parameter, item.Name)));
+                                var endsWith = Expression.Call(GetMemberExpression(parameter, item.Name), "EndsWith", null,
+                                    Expression.Convert(valueLamba.Body, property.PropertyType), Expression.Constant(StringComparison.CurrentCultureIgnoreCase, typeof(StringComparison)));
+                                expression = Append(expression, Expression.AndAlso(nullCheck, endsWith));
+                                break;
+                            }
+                        case Query.Operators.Range:
+                            {
+                                Expression minExp = null, maxExp = null;
+                                if (item.ValueMin != null)
+                                {
+                                    var minValue = Convert.ChangeType(item.ValueMin, realType);
+                                    Expression<Func<object>> minValueLamda = () => minValue;
+                                    minExp = Expression.GreaterThanOrEqual(GetMemberExpression(parameter, item.Name), Expression.Convert(minValueLamda.Body, property.PropertyType));
+                                }
+                                if (item.ValueMax != null)
+                                {
+                                    var maxValue = Convert.ChangeType(item.ValueMax, realType);
+                                    Expression<Func<object>> maxValueLamda = () => maxValue;
+                                    maxExp = Expression.LessThanOrEqual(GetMemberExpression(parameter, item.Name), Expression.Convert(maxValueLamda.Body, property.PropertyType));
+                                }
 
-                            if (minExp != null && maxExp != null)
-                            {
-                                expression = Append(expression, Expression.AndAlso(minExp, maxExp));
-                            }
-                            else if (minExp != null)
-                            {
-                                expression = Append(expression, minExp);
-                            }
-                            else if (maxExp != null)
-                            {
-                                expression = Append(expression, maxExp);
-                            }
+                                if (minExp != null && maxExp != null)
+                                {
+                                    expression = Append(expression, Expression.AndAlso(minExp, maxExp));
+                                }
+                                else if (minExp != null)
+                                {
+                                    expression = Append(expression, minExp);
+                                }
+                                else if (maxExp != null)
+                                {
+                                    expression = Append(expression, maxExp);
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
+                    }
+                }
+                catch
+                {
+
                 }
             }
             if (expression == null)
@@ -216,6 +236,36 @@ namespace HonjiMES.Models
                 return null;
             }
             return ((Expression<Func<T, bool>>)Expression.Lambda(expression, parameter));
+        }
+        /// <summary>
+        /// 取最後一層的型別
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="typeInfo"></param>
+        /// <returns></returns>
+        private PropertyInfo GetLastProperty(string name, TypeInfo typeInfo)
+        {
+            var rtypeInfo = typeInfo;
+            PropertyInfo PropertyInfo = typeInfo.GetProperty(name);
+            var namearry = name.Split('.');
+            for (int i = 0; i < namearry.Length; i++)
+            {
+                if (i == namearry.Length - 1)
+                {
+                    PropertyInfo = rtypeInfo.GetProperty(namearry[i]);
+                }
+                else
+                {
+                    var ntypeInfo = rtypeInfo.GetProperty(namearry[i]);
+                    if (ntypeInfo != null)
+                    {
+                        rtypeInfo = ntypeInfo.PropertyType.GetTypeInfo();
+                    }
+
+                }
+
+            }
+            return PropertyInfo;
         }
 
         //makes expression for specific prop
@@ -232,6 +282,14 @@ namespace HonjiMES.Models
         }
         static class QueryableHelper<T>
         {
+            private static MemberExpression GetMemberExpression(ParameterExpression parameter, string propName)
+            {
+                if (string.IsNullOrEmpty(propName)) return null;
+                var propertiesName = propName.Split('.');
+                if (propertiesName.Count() == 2)
+                    return Expression.Property(Expression.Property(parameter, propertiesName[0]), propertiesName[1]);
+                return Expression.Property(parameter, propName);
+            }
             private static Dictionary<string, LambdaExpression> cache = new Dictionary<string, LambdaExpression>();
             public static IQueryable<T> OrderBy(IQueryable<T> queryable, string propertyName, bool desc)
             {
@@ -242,7 +300,7 @@ namespace HonjiMES.Models
             {
                 if (cache.ContainsKey(propertyName)) return cache[propertyName];
                 var param = Expression.Parameter(typeof(T));
-                var body = Expression.Property(param, propertyName);
+                var body = GetMemberExpression(param, propertyName);
                 var keySelector = Expression.Lambda(body, param);
                 cache[propertyName] = keySelector;
                 return keySelector;
