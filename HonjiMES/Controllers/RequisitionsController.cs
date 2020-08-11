@@ -227,6 +227,7 @@ namespace HonjiMES.Controllers
                 requisition.ProductNo = ProductBasics.ProductNo;
                 requisition.ProductNumber = ProductBasics.ProductNumber;
                 requisition.Specification = ProductBasics.Specification;
+                requisition.Quantity = WorkOrderHeadData.Count;
                 requisition.CreateTime = dt;
                 requisition.CreateUser = 1;
                 // BOM內容
