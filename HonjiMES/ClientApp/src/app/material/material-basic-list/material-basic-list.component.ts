@@ -30,13 +30,19 @@ export class MaterialBasicListComponent implements OnInit {
     mod: string;
     uploadUrl: string;
     hint: boolean;
+    remoteOperations: boolean;
+    detailfilter: any;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.remoteOperations = true;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetMaterialBasics'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetMaterialBasics',
+                'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterialBasic', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterialBasic', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterialBasic', 'PUT', { key, values }),
@@ -148,7 +154,6 @@ export class MaterialBasicListComponent implements OnInit {
         this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
-        debugger;
         this.hint = false;
         if (e.data !== undefined) {
             e.data.Materials.forEach(element => {
@@ -183,7 +188,6 @@ export class MaterialBasicListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        debugger;
         this.hint = false;
         if (e.data !== undefined) {
             e.data.Materials.forEach(element => {

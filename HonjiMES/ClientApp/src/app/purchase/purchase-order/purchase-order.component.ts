@@ -1,10 +1,12 @@
+import { PurchaseDetailComponent } from './../purchase-detail/purchase-detail.component';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from '../../shared/mylib';
 import { APIResponse } from '../../app.module';
-import { Observable } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
@@ -12,7 +14,8 @@ import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-purchase-order',
     templateUrl: './purchase-order.component.html',
-    styleUrls: ['./purchase-order.component.css']
+    styleUrls: ['./purchase-order.component.css'],
+    providers: [DatePipe]
 })
 export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -34,8 +37,10 @@ export class PurchaseOrderComponent implements OnInit {
     editorOptions: any;
     detailfilter = [];
     DetailsDataSourceStorage: any;
+    hint: boolean;
+    date: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -136,21 +141,37 @@ export class PurchaseOrderComponent implements OnInit {
             }
         }
     }
+    onRowChanged() {
+        this.dataGrid.instance.refresh();
+    }
     onValueChanged(e) {
         debugger;
         this.detailfilter = this.myform.instance.option('formData');
         this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
+        // debugger;
+        this.hint = false;
+        if (e.data.Status === 2) {
+            e.rowElement.style.backgroundColor = '#F5F5F5';
+            e.rowElement.style.color = '#000';
+        } else {
+            if (e.data !== undefined) {
+                e.data.PurchaseDetails.forEach(element => {
+                    const DeliverydateBefore = new Date(element.DeliveryTime);
+                    const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+                    if (DeliverydateBefore <= DeliverydateAfter) {
+                        e.rowElement.style.backgroundColor = '#d9534f';
+                        e.rowElement.style.color = '#fff';
+                    }
+                });
+            }
         }
     }
     onEditingStart(e) {
-
     }
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-
     }
 }

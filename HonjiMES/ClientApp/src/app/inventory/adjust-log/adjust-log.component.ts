@@ -77,7 +77,7 @@ export class AdjustLogComponent implements OnInit {
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
                 this.Controller + '/GetAdjustLog',
-                'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustLog', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
@@ -146,7 +146,7 @@ export class AdjustLogComponent implements OnInit {
         if (e.value === '全部資料') {
             this.dataGrid.instance.clearFilter();
         } else {
-        this.dataGrid.instance.filter(['Message','=',e.value]);
+            this.dataGrid.instance.filter(['Message', '=', e.value]);
         }
     }
     ngOnInit() {

@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { PurchaseOrderComponent } from './../purchase-order/purchase-order.component';
+import { Component, OnInit, ViewChild, Input, OnChanges, EventEmitter, Output } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { DxDataGridComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 import { HttpClient } from '@angular/common/http';
@@ -11,9 +13,11 @@ import { AppComponent } from 'src/app/app.component';
 @Component({
     selector: 'app-purchase-detail',
     templateUrl: './purchase-detail.component.html',
-    styleUrls: ['./purchase-detail.component.css']
+    styleUrls: ['./purchase-detail.component.css'],
+    providers: [DatePipe]
 })
 export class PurchaseDetailComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkey: number;
     @Input() SupplierList: any;
@@ -27,8 +31,9 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     OriginPriceval: number;
     Priceval: number;
     WarehouseList: any;
+    hint: boolean;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.dataSourceDB = new CustomStore({
@@ -73,5 +78,23 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     }
     customizeText(e) {
         return '總數：' + e.value + '筆';
+    }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
+    }
+    onRowPrepared(e) {
+        // debugger;
+        this.hint = false;
+        if (e.data !== undefined) {
+            const DeliverydateBefore = new Date(e.data.DeliveryTime);
+            const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+            if (DeliverydateBefore <= DeliverydateAfter) {
+                this.hint = true;
+            }
+            if (this.hint) {
+                e.rowElement.style.backgroundColor = '#d9534f';
+                e.rowElement.style.color = '#fff';
+            }
+        }
     }
 }

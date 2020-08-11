@@ -48,7 +48,7 @@
     hoverStateEnabled="true"
     [showColumnLines]="true"
     [showRowLines]="false"
-    [rowAlternationEnabled]="true"
+    [rowAlternationEnabled]="false"
     [focusedRowEnabled]="true"
     [remoteOperations]="remoteOperations">
 
@@ -95,7 +95,7 @@
     </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-purchase-detail>
+        <app-purchase-detail (childOuter)="onRowChanged($event)" [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList"></app-purchase-detail>
     </div>
 
 </dx-data-grid>
