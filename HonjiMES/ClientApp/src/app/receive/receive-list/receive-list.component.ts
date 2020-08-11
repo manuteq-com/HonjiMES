@@ -285,7 +285,6 @@ export class ReceiveListComponent implements OnInit {
 
     }
     WarehouseselectvalueChanged(e, data) {
-
         data.data.StockQty = data.data.WarehouseList.find(x => x.ID === e.value).StockQty;
         data.setValue(e.value);
     }

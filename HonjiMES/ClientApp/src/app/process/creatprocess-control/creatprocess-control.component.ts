@@ -49,6 +49,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     SerialNo: any;
     saveDisabled: boolean;
     runVisible: boolean;
+    newVisible: boolean;
     modVisible: boolean;
     modCheck: boolean;
     modName: any;
@@ -143,7 +144,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.dataSourceDB = [];
         if (this.modval === 'new') {
             this.modName = 'new';
-            this.modVisible = true;
+            this.newVisible = true;
+            this.modVisible = false;
             this.runVisible = false;
             this.saveDisabled = true;
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
@@ -155,6 +157,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.itemkeyval != null) {
+            this.newVisible = false;
             this.modVisible = false;
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
@@ -173,6 +176,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         } else {
                             this.runVisible = false;
                         }
+                        if (s.data.WorkOrderHead.Status !== 5) { // 工單為結案，不能編輯
+                            this.modVisible = true;
+                        }
                     }
                 }
             );
@@ -180,7 +186,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.onCellPreparedLevel = 0;
     }
     allowEdit(e) {
-        if (e.row.data.Status > 1) {
+        if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
             return false;
         } else {
             return true;
