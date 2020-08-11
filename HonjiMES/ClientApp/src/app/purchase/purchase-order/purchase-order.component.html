@@ -79,7 +79,7 @@
     <dxi-column dataField="Status" caption="狀態" [width]="100">
         <dxo-lookup [dataSource]="listPurchaseOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" [width]="100"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="120"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>

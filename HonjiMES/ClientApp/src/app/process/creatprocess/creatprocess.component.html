@@ -15,7 +15,7 @@
         <dxi-item dataField="WorkTime" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             <dxo-label text="標準工時(分)"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Cost" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
+        <dxi-item dataField="Cost" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="NumberBoxOptions">
             <dxo-label text="單位成本(元/分)"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Manpower" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">

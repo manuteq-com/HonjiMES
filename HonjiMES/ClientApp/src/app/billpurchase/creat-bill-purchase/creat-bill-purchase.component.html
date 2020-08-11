@@ -91,17 +91,17 @@
         <dxi-column dataField="OriginPrice" caption="原單價" [visible]="false" dataType="number" editCellTemplate="OriginPriceEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Price" caption="單價" dataType="number" editCellTemplate="PriceEditCellTemplate">
+        <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" editCellTemplate="PriceAllEditCellTemplate">
+        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceAllEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" editCellTemplate="UnitQuantityEditCellTemplate"></dxi-column>
         <dxi-column dataField="Unit" caption="單位"></dxi-column>
-        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" editCellTemplate="UnitPriceEditCellTemplate"></dxi-column>
-        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" editCellTemplate="UnitPriceAllEditCellTemplate"></dxi-column>
-        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number"></dxi-column>
+        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="UnitPriceEditCellTemplate"></dxi-column>
+        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="UnitPriceAllEditCellTemplate"></dxi-column>
+        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
 
         <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 
