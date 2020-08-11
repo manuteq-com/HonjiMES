@@ -264,29 +264,40 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     async onFormSubmit(e) {
         let saveok = true;
+        let cansave = true;
         const saveEditData = this.dataGrid2.instance.saveEditData();
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
         // tslint:disable-next-line: forin
         for (const x in SelectedRows) {
             if (SelectedRows[x].Status === 2 && SelectedRows[x].ReCount < 1) {
+                const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：數量必填';
+                notify({
+                    message: msg,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error');
+                cansave = false;
                 return;
             }
-            const sendRequest = await SendService.sendRequest(
-                this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
-                { key: SelectedRows[x].Id, values: SelectedRows[x] });
-            if (sendRequest) {
-                debugger;
+            if (cansave) {
+                const sendRequest = await SendService.sendRequest(
+                    this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
+                    { key: SelectedRows[x].Id, values: SelectedRows[x] });
+                if (sendRequest) {
+
+                } else {
+                    debugger;
+                    saveok = false;
+                }
             }
-            else {
+            if (saveok) {
                 debugger;
-                saveok = false;
+                this.dataGrid2.instance.refresh();
+                e.preventDefault();
+                this.childOuter.emit(true);
             }
-        }
-        if (saveok) {
-            debugger;
-            this.dataGrid2.instance.refresh();
-            e.preventDefault();
-            this.childOuter.emit(true);
         }
     }
 }

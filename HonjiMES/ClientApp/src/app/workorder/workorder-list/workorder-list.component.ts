@@ -125,7 +125,6 @@ export class WorkorderListComponent implements OnInit {
         this.creatpopupVisible = false;
         this.editpopupVisible = false;
         this.checkVisible = false;
-        // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
         this.getWorkOrderData();
         notify({
