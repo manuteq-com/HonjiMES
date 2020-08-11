@@ -80,7 +80,6 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         this.itemval2 = '';
         this.itemval3 = '';
         this.minval = 0;
-        debugger;
         this.app.GetData('/Inventory/GetAdjustNo').subscribe(
             (s) => {
                 if (s.success) {
@@ -108,6 +107,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
+                        this.SetEditorOptions();
                     }
                 }
             );
@@ -123,6 +123,7 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
+                        this.SetEditorOptions();
                     }
                 }
             );
@@ -138,10 +139,13 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                         if (s.data.Quantity >= 0) {
                             this.minval = (-s.data.Quantity);
                         }
+                        this.SetEditorOptions();
                     }
                 }
             );
         }
+    }
+    SetEditorOptions() {
         this.QuantityEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
