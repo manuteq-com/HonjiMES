@@ -529,13 +529,14 @@ namespace HonjiMES.Models
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
         public string Remarks { get; set; }
+        public string ProducingMachine { get; internal set; }
     }
     public class WorkOrderReportDataAll
     {
         /// <summary>
         /// 完工數量
         /// </summary>
-        public int ReCount { get; set; }
+        public int? ReCount { get; set; }
         /// <summary>
         /// 說明
         /// </summary>
