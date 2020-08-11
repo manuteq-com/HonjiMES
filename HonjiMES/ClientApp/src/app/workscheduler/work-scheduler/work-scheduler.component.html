@@ -9,9 +9,17 @@
     <div class="buttongroup">
     </div>
 </div>
+<div class="container">
+    <div class="row" style="text-align: center;">
+        <div class="col-xs-1" *ngFor="let Status of WorkSchedulerStatus" [style.backgroundColor]="Status.color"
+            style="width:50px;height:40px;margin:10px;line-height:40px;">
+            <span style="color: aliceblue;">{{Status.text}}</span>
+        </div>
+    </div>
+</div>
 <dx-scheduler [dataSource]="dataSourceDB" [remoteFiltering]="true" currentView="month" textExpr="Text" [height]="1900"
-    [width]="1870" [views]='["day", "week", "month"]' startDateExpr="StartDate" endDateExpr="EndDate"
-    allDayExpr="AllDay" maxAppointmentsPerCell="15" [adaptivityEnabled]="false">
+    [width]="1870" [views]='views' startDateExpr="StartDate" endDateExpr="EndDate" allDayExpr="AllDay"
+    maxAppointmentsPerCell="15" [adaptivityEnabled]="false">
     <dxo-editing [allowAdding]="false" [allowDeleting]="false" [allowUpdating]="false" [allowResizing]="false"
         [allowDragging]="true"></dxo-editing>
     <dxi-resource fieldExpr="Status" label="狀態" [dataSource]="WorkSchedulerStatus"></dxi-resource>

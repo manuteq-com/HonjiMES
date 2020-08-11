@@ -115,12 +115,16 @@
             <dxi-column dataField="WarehouseId" caption="領料倉別" editCellTemplate="WarehouseEditCellTemplate">
                 <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="StockQty" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80">
+            <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
+                cellTemplate="StockQtyCellTemplate">
             </dxi-column>
             <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
                 <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
                     [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
                 </dx-select-box>
+            </div>
+            <div *dxTemplate="let data of 'StockQtyCellTemplate'">
+                <span>{{GetWarehouseStockQty(data)}}</span>
             </div>
         </dx-data-grid>
 

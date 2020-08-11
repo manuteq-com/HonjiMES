@@ -47,6 +47,7 @@ export class ReceiveListComponent implements OnInit {
     WarehouseIDAll: any;
     WarehouselistAll: any;
     constructor(private http: HttpClient, public app: AppComponent) {
+        this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -285,14 +286,25 @@ export class ReceiveListComponent implements OnInit {
 
     }
     WarehouseselectvalueChanged(e, data) {
-        data.data.StockQty = data.data.WarehouseList.find(x => x.ID === e.value).StockQty;
+        debugger;
+        // const StockQty = data.data.WarehouseList.find(x => x.ID === e.value).StockQty;
+        // data.data.StockQty = StockQty;
+        // data.row.data.StockQty = StockQty;
         data.setValue(e.value);
     }
     GetWarehouselistbyNo(data) {
         return data.data.WarehouseList;
     }
+    GetWarehouseStockQty(data) {
+        if (data.value) {
+            debugger;
+            return data.data.WarehouseList.find(x => x.ID === data.value).StockQty ?? 0;
+
+        } else {
+            return data.value;
+        }
+    }
     RQtyValidation(e) {
-        debugger;
         let msg = '';
         if (e.data.WarehouseId > 0) {
             if (e.data.RQty == null || e.data.RQty < 1) {
@@ -306,17 +318,20 @@ export class ReceiveListComponent implements OnInit {
                     }
                 }, 'error', 3000);
                 return false;
-            } else if (e.data.RQty > e.data.StockQty) {
-                msg = e.data.NameNo + ' 庫存數不足';
-                e.rule.message = msg;
-                notify({
-                    message: msg,
-                    position: {
-                        my: 'center top',
-                        at: 'center top'
-                    }
-                }, 'error', 3000);
-                return false;
+            } else {
+                const StockQty = e.data.WarehouseList.find(x => x.ID === e.data.WarehouseId).StockQty;
+                if (e.data.RQty > StockQty) {
+                    msg = e.data.NameNo + ' 庫存數不足';
+                    e.rule.message = msg;
+                    notify({
+                        message: msg,
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error', 3000);
+                    return false;
+                }
             }
         }
         return true;
