@@ -230,16 +230,17 @@ export class OrderListComponent {
                         const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
                         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
                         if (sendRequest) {
+                            this.uploader.instance.reset();
                             this.mod = 'excel';
                             this.creatpopupVisible = true;
                             this.exceldata = sendRequest;
                         }
                     } else {
-                        this.uploader.instance.reset();
                     }
                     this.getProductsData();
                 });
             } else {
+                this.uploader.instance.reset();
                 this.mod = 'excel';
                 this.creatpopupVisible = true;
                 this.exceldata = response.data;
