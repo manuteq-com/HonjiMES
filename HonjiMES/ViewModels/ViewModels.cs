@@ -159,6 +159,7 @@ namespace HonjiMES.Models
         public string PurchaseNo { get; set; }
         public string SupplierCode { get; set; }
         public string MaterialNo { get; set; }
+        public string WorkOrderNo { get; set; }
     }
     /// <summary>
     /// 銷貨單銷貨
@@ -350,8 +351,52 @@ namespace HonjiMES.Models
     }
     public class RequisitionDetailR : RequisitionDetail
     {
+        /// <summary>
+        /// 已領數量
+        /// </summary>
         public int ReceiveQty { get; set; }
+        /// <summary>
+        /// 庫存數量
+        /// </summary>
         public int StockQty { get; set; }
+    }
+    public class RequisitionDetailAll : RequisitionDetail
+    {
+        /// <summary>
+        /// 已領數量
+        /// </summary>
+        public int ReceiveQty { get; set; }
+        /// <summary>
+        /// 品項NO
+        /// </summary>
+        public string NameNo { get; set; }
+        /// <summary>
+        /// 品項類型
+        /// </summary>
+        public string NameType { get; set; }
+        /// <summary>
+        /// 庫存數量
+        /// </summary>
+        public decimal StockQty { get; set; }
+        /// <summary>
+        /// 品項的倉庫資料
+        /// </summary>
+        public List<ReqWarehouse> WarehouseList { get; set; }
+    }
+    public class ReqWarehouse
+    {
+        /// <summary>
+        /// 倉庫ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// 倉庫名稱
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 庫存數量
+        /// </summary>
+        public decimal StockQty { get; set; }
     }
     public class GetReceive
     {
@@ -486,8 +531,18 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
         public string ProducingMachine { get; set; }
     }
-
-
+    public class WorkOrderReportDataAll
+    {
+        /// <summary>
+        /// 完工數量
+        /// </summary>
+        public int? ReCount { get; set; }
+        /// <summary>
+        /// 說明
+        /// </summary>
+        public string Remarks { get; set; }
+        public string ProducingMachine { get; set; }
+    }
     /// <summary>
     /// 製成進度
     /// </summary>
@@ -615,5 +670,17 @@ namespace HonjiMES.Models
     {
         public int Id { get; set; }
         public string Message { get; set; }
+    }
+    public class WorkSchedulerVM
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int Status { get; set; }
+        public bool AllDay { get; set; }
     }
 }

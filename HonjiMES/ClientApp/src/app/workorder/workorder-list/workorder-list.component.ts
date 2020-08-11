@@ -19,16 +19,18 @@ export class WorkorderListComponent implements OnInit {
     loadingVisible = false;
     ReportHeight: any;
     keyup = '';
+    editpopupVisible: boolean;
+    checkVisible: boolean;
+
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
-        if (!this.creatpopupVisible) {
+        if (!this.creatpopupVisible && !this.editpopupVisible) {
             if (e.key === 'Enter') {
                 const key = this.keyup;
-                const ss = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
-                if (ss) {
-                    this.itemkey = ss.Key;
-                    this.serialkey = 1;
+                const selectdata = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
+                if (selectdata) {
+                    this.itemkey = selectdata;
                     this.mod = 'report';
-                    this.creatpopupVisible = true;
+                    this.editpopupVisible = true;
                     this.ReportHeight = 710;
                 } else {
                     notify({
@@ -68,27 +70,34 @@ export class WorkorderListComponent implements OnInit {
             }
         );
     }
+
     trclick(e) {
-        // debugger;
-        // this.creatpopupVisible = true;
-        // this.itemkey = e.Key;
-        // this.mod = 'report';
+        if (!this.checkVisible) {
+            this.itemkey = e;
+            this.serialkey = 1;
+            this.mod = 'report';
+            this.editpopupVisible = true;
+            this.ReportHeight = 710;
+        } else {
+            this.checkVisible = false;
+        }
     }
     tdclick(e, colData) {
-        debugger;
-        this.itemkey = e.Key;
-        this.serialkey = Number(colData.key.substring(4)) + 1;
-        this.mod = 'report';
-        this.creatpopupVisible = true;
+        this.checkVisible = true;
+        if (e[colData.key] != null) {
+            this.itemkey = e.Key;
+            this.serialkey = Number(colData.key.substring(4)) + 1;
+            this.mod = 'report';
+            this.creatpopupVisible = true;
 
-        if (e[colData.key].value3 === 1) {
-            this.ReportHeight = 710;
-        } else if (e[colData.key].value3 === 2) {
-            this.ReportHeight = 760;
-        } else if (e[colData.key].value3 === 3) {
-            this.ReportHeight = 760;
+            if (e[colData.key].value3 === 1) {
+                this.ReportHeight = 710;
+            } else if (e[colData.key].value3 === 2) {
+                this.ReportHeight = 760;
+            } else if (e[colData.key].value3 === 3) {
+                this.ReportHeight = 760;
+            }
         }
-        this.getWorkOrderData();
     }
     getBlueClass(data) {
         // if (data.Status === 1) {
@@ -108,12 +117,14 @@ export class WorkorderListComponent implements OnInit {
     }
     creatdata() {
         this.creatpopupVisible = true;
+        this.checkVisible = true;
         this.itemkey = null;
         this.mod = 'new';
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.itemkey = null;
+        this.editpopupVisible = false;
+        this.checkVisible = false;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
         this.getWorkOrderData();

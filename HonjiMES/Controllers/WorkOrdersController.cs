@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
 using DevExtreme.AspNet.Mvc;
+using NPOI.SS.Formula.Functions;
 
 namespace HonjiMES.Controllers
 {
@@ -26,6 +27,26 @@ namespace HonjiMES.Controllers
         {
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+        }
+
+        /// <summary>
+        /// 查詢所有工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeads(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0);
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
+            // {
+            //     data = data.Where(x => x.WorkOrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            // }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>
@@ -51,14 +72,46 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 查詢工單明細
+        /// 查詢工單明細by工單ID
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderDetailByWorkOrderHeadId(int id)
+        public async Task<ActionResult<IEnumerable<WorkOrderData>>> GetWorkOrderDetailByWorkOrderHeadId(int id)
         {
-            var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id).ToListAsync();
-            return Ok(MyFun.APIResponseOK(data));
+            // var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
+            // return Ok(MyFun.APIResponseOK(data));
+            var workOrderHead = await _context.WorkOrderHeads.Where(x => x.Id == id && x.DeleteFlag == 0).ToListAsync();
+            if(workOrderHead.Count == 1) {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
+                var data = new WorkOrderData{
+                    WorkOrderHead = workOrderHead.FirstOrDefault(),
+                    WorkOrderDetail = WorkOrderDetail
+                };
+                return Ok(MyFun.APIResponseOK(data));    
+            }else{
+                return Ok(MyFun.APIResponseError("工單查詢失敗!"));
+            }
+        }
+
+        /// <summary>
+        /// 查詢工單明細by工單NO
+        /// </summary>
+        /// <param name="SearchValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<WorkOrderData>> GetWorkOrderDetailByWorkOrderNo(SearchValue SearchValue)
+        {
+            var workOrderHead = await _context.WorkOrderHeads.Where(x => x.WorkOrderNo == SearchValue.WorkOrderNo && x.DeleteFlag == 0).ToListAsync();
+            if(workOrderHead.Count == 1) {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == workOrderHead.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                var data = new WorkOrderData{
+                    WorkOrderHead = workOrderHead.FirstOrDefault(),
+                    WorkOrderDetail = WorkOrderDetail
+                };
+                return Ok(MyFun.APIResponseOK(data));    
+            }else{
+                return Ok(MyFun.APIResponseError("[ " + SearchValue.WorkOrderNo + " ] 查無資訊!"));
+            }
         }
 
         /// <summary>
@@ -408,7 +461,39 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("回報失敗!"));
             }
         }
-
+        /// <summary>
+        /// 工單批次作業
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportDataAll"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<WorkOrderData>> WorkOrderReportAll(int id, [FromBody] WorkOrderReportDataAll WorkOrderReportDataAll)
+        {
+            var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
+            if (WorkOrderDetails != null)
+            {
+                var WorkOrderReportData = new WorkOrderReportData
+                {
+                    ReCount = WorkOrderReportDataAll.ReCount ?? 0,
+                    Remarks = WorkOrderReportDataAll.Remarks,
+                    WorkOrderID = WorkOrderDetails.WorkOrderHeadId,
+                    WorkOrderSerial = WorkOrderDetails.SerialNumber
+                };
+                if (WorkOrderDetails.Status == 1)
+                    return await WorkOrderReportStart(WorkOrderReportData);
+                else if(WorkOrderDetails.Status == 2)
+                    return await WorkOrderReportEnd(WorkOrderReportData);
+                else if (WorkOrderDetails.Status == 3)
+                    return await WorkOrderReportRestart(WorkOrderReportData);
+                else
+                    return Ok(MyFun.APIResponseError("工單狀態異常!"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單異常!"));
+            }
+        }
         public async Task<string> NewWorkOrderByOrder(OrderDetail OrderDetail)
         {
             string sMessage = "";

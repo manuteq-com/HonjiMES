@@ -15,7 +15,7 @@ import { AppComponent } from 'src/app/app.component';
     templateUrl: './material-list.component.html',
     styleUrls: ['./material-list.component.css']
 })
-export class MaterialListComponent implements OnInit {
+export class MaterialListComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;

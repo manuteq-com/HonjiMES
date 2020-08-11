@@ -208,3 +208,8 @@ export class mBillOfMaterial {
     Type: string;
     Remarks: string;
 }
+export class WorkSchedulerStatu {
+    text: string;
+    id: number;
+    color: string;
+}

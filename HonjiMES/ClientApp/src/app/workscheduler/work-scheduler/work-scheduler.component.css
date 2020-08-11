@@ -55,42 +55,26 @@
 .insertbtn {
     margin-top: -6px;
     border-radius: 2px;
-    /* margin-left: 30px; */
-}
-.editbtn {
-    background-color: #ff831e;
-}
-.qrcodebtn {
-    margin-top: -6px;
-    margin-right: 6px;
-    border-radius: 2px;
-    color: #fff;
-    background-color: #1e90ff;
-}
-.viewbtn {
-    margin-top: -6px;
-    margin-right: 6px;
-    border-radius: 2px;
-    color: #fff;
-    background-color: #1e90ff;
 }
 
 .table-hover tbody tr:hover {
     color: #ff9500;
     /* background-color: #eaeaf1; */
 }
-.process_started {
+.process_start {
     background-color: #f8f691;
 }
-.process_ended {
+.process_end {
     background-color: #9afd97;
 }
-.process_finish {
-    background-color: #91e0f8;
+.ant-table-tbody > tr > td:hover {
+    transition: background 0.3s;
+    background-color: rgba(255, 145, 0, 0.589);
+    color: #000;
 }
-.process_start {
-    background-color: #fdf90d21;
+::ng-deep tbody {
+    line-height: 30px !important;
 }
-.process_end {
-    background-color: #15fd0d21;
-}
+/* ::ng-deep .dx-scheduler-appointment {
+    border-right-width: 20px;
+} */
