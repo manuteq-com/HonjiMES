@@ -132,6 +132,15 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval18 = '　　　　　　　　　　需求數量：　' + (element?.Count ?? '0');
                                 this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0');
 
+                                this.QuantityEditorOptions = {
+                                    showSpinButtons: true,
+                                    mode: 'number',
+                                    format: '#0',
+                                    value: (element?.Count ?? '0'),
+                                    min: -(element?.ReCount ?? '0'),
+                                    // onValueChanged: this.QuantityValueChanged.bind(this)
+                                };
+
                                 this.formData = element;
                                 this.formData.ReCount = element.Count;
                                 findProcess = true;

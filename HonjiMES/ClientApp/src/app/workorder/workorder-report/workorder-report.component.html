@@ -70,7 +70,7 @@
         <!-- <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="ReCount" [visible]="ReCountVisible">
+        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
         </dxi-item>
 
