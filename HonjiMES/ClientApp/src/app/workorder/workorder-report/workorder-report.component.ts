@@ -19,6 +19,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() serialkeyval: any;
     @Input() modval: any;
+    @Input() randomkey: any;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;

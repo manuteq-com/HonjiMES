@@ -77,7 +77,7 @@
     [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey"
-            [modval]="mod"> </app-workorder-report>
+            [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
