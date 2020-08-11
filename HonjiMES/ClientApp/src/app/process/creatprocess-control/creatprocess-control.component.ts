@@ -186,8 +186,12 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.onCellPreparedLevel = 0;
     }
     allowEdit(e) {
-        if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
-            return false;
+        if (e.row.data.Status !== undefined && e.row.data.WorkOrderHead !== undefined) {
+            if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
