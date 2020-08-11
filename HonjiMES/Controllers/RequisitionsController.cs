@@ -356,27 +356,35 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailMaterialByAll(RequisitionsDetailInfo RequisitionsDetailInfo)
         {
-            var RequisitionDetails = await _context.RequisitionDetails
-            .Where(x => x.RequisitionId == RequisitionsDetailInfo.RequisitionId && x.DeleteFlag == 0 && x.Lv == 1)
-            .Select(x => new RequisitionDetailAll
+            try
             {
-                Id = x.Id,
-                Name = x.Name,
-                ProductBasicId = x.ProductBasicId,
-                ProductNo = x.ProductNo,
-                MaterialBasicId = x.MaterialBasicId,
-                MaterialNo = x.MaterialNo,
-                Quantity = x.Quantity,
-                ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
-                NameNo = x.ProductBasicId.HasValue ? x.ProductNo : x.MaterialBasicId.HasValue ? x.MaterialNo : "",
-                NameType = x.ProductBasicId.HasValue ? "成品" : x.MaterialBasicId.HasValue ? "元件" : "",
-                //  WarehouseList=GetWarehouse(x)
-            }).ToListAsync();
-            foreach (var item in RequisitionDetails.ToList())
-            {
-                item.WarehouseList = GetWarehouse(item);
+                var RequisitionDetails = await _context.RequisitionDetails
+                .Where(x => x.RequisitionId == RequisitionsDetailInfo.RequisitionId && x.DeleteFlag == 0 && x.Lv == 1)
+                .Select(x => new RequisitionDetailAll
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ProductBasicId = x.ProductBasicId,
+                    ProductNo = x.ProductNo,
+                    MaterialBasicId = x.MaterialBasicId,
+                    MaterialNo = x.MaterialNo,
+                    Quantity = x.Quantity,
+                    ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                    NameNo = x.ProductBasicId.HasValue ? x.ProductNo : x.MaterialBasicId.HasValue ? x.MaterialNo : "",
+                    NameType = x.ProductBasicId.HasValue ? "成品" : x.MaterialBasicId.HasValue ? "元件" : "",
+                    //  WarehouseList=GetWarehouse(x)
+                }).ToListAsync();
+                foreach (var item in RequisitionDetails.ToList())
+                {
+                    item.WarehouseList = GetWarehouse(item);
+                }
+                return Ok(MyFun.APIResponseOK(RequisitionDetails));
             }
-            return Ok(MyFun.APIResponseOK(RequisitionDetails));
+            catch (System.Exception e)
+            {
+                return Ok(MyFun.APIResponseError(e.Message));
+                throw;
+            }
         }
 
         private List<ReqWarehouse> GetWarehouse(RequisitionDetail Req)
