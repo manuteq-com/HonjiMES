@@ -365,18 +365,18 @@ namespace HonjiMES.Controllers
                         });
 
                         //檢查工單是否全數完工
-                        var statusCheck = true;
-                        foreach (var item in WorkOrderHeads.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToList())
-                        {
-                            if (item.Status != 3)
-                            {
-                                statusCheck = false;
-                            }
-                        }
-                        if (statusCheck)
-                        {
-                            WorkOrderHeads.Status = 3;
-                        }
+                        // var statusCheck = true;
+                        // foreach (var item in WorkOrderHeads.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToList())
+                        // {
+                        //     if (item.Status != 3)
+                        //     {
+                        //         statusCheck = false;
+                        //     }
+                        // }
+                        // if (statusCheck)
+                        // {
+                        //     WorkOrderHeads.Status = 3;
+                        // }
                     }
                     else
                     {
