@@ -25,9 +25,10 @@
 
     <div class="col-6">
 
-        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations" (onRowClick)="readProcess($event)">
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations" (onRowClick)="readProcess($event)">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
@@ -49,7 +50,8 @@
             <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
             <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
             <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
-            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false"></dxi-column>
+            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
+            </dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -74,7 +76,9 @@
 
             <div class="col-12">
                 <div class="input-group">
-                    <label class="pt-3"><h5>工單內容：{{workOrderHeadNo}}</h5></label>
+                    <label class="pt-3">
+                        <h5>工單內容：{{workOrderHeadNo}}</h5>
+                    </label>
                 </div>
             </div>
 
@@ -117,9 +121,11 @@
             </dxi-column>
             <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170">
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime"
+                [width]="170">
             </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170">
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime"
+                [width]="170">
             </dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
@@ -154,15 +160,18 @@
         </app-creatprocess-control>
     </div>
 </dx-popup>
-
-<dx-popup [showTitle]="true" title="檢視工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="860" [width]="1800"
-    [(visible)]="viewpopupVisible">
+<nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="1800" [nzStyle]="{ top: '20px' }" [nzFooter]="null"
+    (nzOnCancel)="handleCancel()">
+    <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
+</nz-modal>
+<!-- <dx-popup [showTitle]="true" title="檢視工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="860"
+    [width]="1800" [(visible)]="viewpopupVisible">
     <div *dxTemplate="let data of 'content'">
+        <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
         <div dx-scroll-view style="height: 100%">
-            <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
         </div>
     </div>
-</dx-popup>
+</dx-popup> -->
 
 <dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="830"
     [(visible)]="qrcodepopupVisible">

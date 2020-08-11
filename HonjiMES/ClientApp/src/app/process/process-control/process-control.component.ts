@@ -89,7 +89,7 @@ export class ProcessControlComponent implements OnInit {
     readProcess(e) {
         if (!this.creatpopupVisible) {
             this.itemkey = 0;
-            this.workOrderHeadId =  e.key;
+            this.workOrderHeadId = e.key;
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + e.key).subscribe(
                 (s) => {
                     if (s.success) {
@@ -135,5 +135,8 @@ export class ProcessControlComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    handleCancel() {
+        this.viewpopupVisible = false;
     }
 }
