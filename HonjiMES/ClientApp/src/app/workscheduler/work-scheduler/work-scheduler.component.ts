@@ -14,8 +14,9 @@ export class WorksChedulerComponent implements OnInit {
     dataSourceDB: CustomStore;
     Controller = '/WorkScheduler';
     WorkSchedulerStatus: any;
-
+    views = ['day', 'week', 'month'];
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.views = ['month'];
         this.WorkSchedulerStatus = myservice.getWorkSchedulerStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
