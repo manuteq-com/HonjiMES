@@ -351,6 +351,9 @@ namespace HonjiMES.Controllers
             {
                 bomlist.AddRange(MyFun.GetBomList(BillOfMaterials));
             }
+            ///// 舊的回傳結果
+            // return Ok(MyFun.APIResponseOK(bomlist));
+
             var bomlistVM = new List<BomListVM>();
             foreach (var item in bomlist)
             {
@@ -358,10 +361,30 @@ namespace HonjiMES.Controllers
                 {
                     Id = item.Id,
                     Pid = item.Pid,
-                    Lv = "(" + item.Lv + ")　 " + item.ProductNo + item.MaterialNo,
-                    LvName = item.ProductNo + item.MaterialNo,
-                    Quantity = item.Quantity,
                     Name = item.Name,
+                    Quantity = item.Quantity,
+                    Unit = item.Unit,
+                    Outsource = item.Outsource,
+                    Group = item.Group,
+                    Type = item.Type,
+                    Remarks = item.Remarks,
+                    MaterialBasicId = item.MaterialBasicId,
+                    MaterialName = item.MaterialName,
+                    MaterialNo = item.MaterialNo,
+                    MaterialSpecification = item.MaterialSpecification,
+                    MaterialPrice = item.MaterialPrice,
+                    ProductBasicId = item.ProductBasicId,
+                    ProductName = item.ProductName,
+                    ProductNo = item.ProductNo,
+                    ProductNumber = item.ProductNumber,
+                    ProductSpecification = item.ProductSpecification,
+                    ProductPrice = item.ProductPrice,
+                    Lv = item.Lv,
+                    ReceiveQty = item.ReceiveQty,
+                    Ismaterial = item.Ismaterial,
+                    
+                    LvS = "(" + item.Lv + ")　 " + item.ProductNo + item.MaterialNo,
+                    LvName = item.ProductNo + item.MaterialNo,
                     BomType = !string.IsNullOrWhiteSpace(item.MaterialNo) ? "元件" : "成品"
                 });
             }
