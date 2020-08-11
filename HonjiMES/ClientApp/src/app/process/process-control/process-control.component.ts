@@ -2,6 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
+import CustomStore from 'devextreme/data/custom_store';
+import { SendService } from 'src/app/shared/mylib';
+import { HttpClient } from '@angular/common/http';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-process-control',
@@ -10,86 +14,120 @@ import { DxDataGridComponent } from 'devextreme-angular';
 })
 export class ProcessControlComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
-    dataSourceDB: any = {};
+    @ViewChild('dataGrid1') dataGrid1: DxDataGridComponent;
+    Controller = '/WorkOrders';
+    dataSourceDB: any;
+    dataSourceDB_Process: any[];
+    detailfilter = [];
+    editOnkeyPress: boolean;
+    enterKeyAction: string;
+    enterKeyDirection: string;
     creatpopupVisible: any;
     qrcodepopupVisible: any;
     itemkey: number;
+    randomkey: number;
     mod: string;
-    loadingVisible = false;
-    constructor(public app: AppComponent) {
-        this.loadingVisible = true;
+    viewpopupVisible: boolean;
+    remoteOperations = true;
+    ProcessBasicList: any;
+    listStatus: any;
+    btnDisabled: boolean;
+    workOrderHeadId: any;
+    workOrderHeadNo: any;
+    logpopupVisible: boolean;
+
+    constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.listStatus = myservice.getWorkOrderType();
+        this.editOnkeyPress = true;
+        this.enterKeyAction = 'moveFocus';
+        this.enterKeyDirection = 'row';
         this.creatpopupVisible = false;
         this.qrcodepopupVisible = false;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
+        this.dataSourceDB_Process = [];
+        this.btnDisabled = true;
+
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetWorkOrderHeads',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+
+        });
+        this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
+                if (s.success) {
+                    if (s.success) {
+                        this.ProcessBasicList = s.data;
+                        this.ProcessBasicList.forEach(x => {
+                            x.Name = x.Code + '_' + x.Name;
+                        });
+                    }
+                }
             }
         );
-        // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
-        //     (s) => {
-        //         debugger;
-        //         this.dataSourceDB = s.data;
-        //     }
-        // );
-
     }
     ngOnInit() {
     }
-    trclick(e) {
-        // debugger;
+    onReorder(e) {
+        debugger;
+        const visibleRows = e.component.getVisibleRows();
+        const toIndex = this.dataSourceDB_Process.indexOf(visibleRows[e.toIndex].data);
+        const fromIndex = this.dataSourceDB_Process.indexOf(e.itemData);
+
+        this.dataSourceDB_Process.splice(fromIndex, 1);
+        this.dataSourceDB_Process.splice(toIndex, 0, e.itemData);
+        this.dataSourceDB_Process.forEach((element, index) => {
+            element.SerialNumber = index + 1;
+        });
+    }
+    editProcess(e, data) {
         this.creatpopupVisible = true;
-        this.itemkey = e.Key;
+        this.itemkey = data.key;
         this.mod = 'edit';
     }
-    tdclick(e) {
-        // notify({
-        //     message: e.ProductNo,
-        //     position: {
-        //         my: 'center top',
-        //         at: 'center top'
-        //     }
-        // }, 'error', 3000);
-    }
-    getBlueClass(data) {
-        if (data.Status === 1) {
-            return 'process_started';
-        } else if (data.Status === 3) {
-            return 'process_ended';
-        } else if (data.Status === 5) {
-            return 'process_finish';
-        } else {
-            return '';
+    readProcess(e) {
+        if (!this.creatpopupVisible) {
+            this.itemkey = 0;
+            this.workOrderHeadId =  e.key;
+            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + e.key).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.dataSourceDB_Process = s.data.WorkOrderDetail;
+                        this.btnDisabled = false;
+                        this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
+                        // this.workOrderHeadId = s.data.WorkOrderHead.Id;
+                        // this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
+                        // this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
+                        // this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
+                        // this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
+                    }
+                }
+            );
         }
     }
-    getBlue2Class(data) {
-        if (data === 2) {
-            return 'process_start';
-        } else if (data === 3) {
-            return 'process_end';
-        } else {
-            return '';
-        }
+    readLog(e, data) {
+        this.itemkey = data.data.Id;
+        this.logpopupVisible = true;
     }
     creatdata() {
         this.creatpopupVisible = true;
         this.itemkey = null;
         this.mod = 'new';
     }
+    viewdata() {
+        this.viewpopupVisible = true;
+        this.randomkey = new Date().getTime();
+        // this.mod = 'view';
+    }
     qrcodedata() {
         this.qrcodepopupVisible = true;
+        this.randomkey = new Date().getTime();
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.itemkey = null;
-        // this.dataGrid.instance.refresh();
-        this.loadingVisible = true;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
-            (s) => {
-                this.dataSourceDB = s.data;
-                this.loadingVisible = false;
-            }
-        );
+        this.dataGrid1.instance.refresh();
         notify({
             message: '更新完成',
             position: {

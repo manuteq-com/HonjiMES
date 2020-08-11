@@ -99,6 +99,7 @@ import { QrcodeComponent } from './process/qrcode/qrcode.component';
 import { MbillofmaterialModelComponent } from './mbillofmaterial/mbillofmaterial-model/mbillofmaterial-model.component';
 import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 import { WorkorderReportLogComponent } from './workorder/workorder-report-log/workorder-report-log.component';
+import { ProcessControlViewComponent } from './process/process-control-view/process-control-view.component';
 import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 export function tokenGetter() {
@@ -215,6 +216,7 @@ export function tokenGetter() {
         MbillofmaterialModelComponent,
         WorkorderQaComponent,
         WorkorderReportLogComponent,
+        ProcessControlViewComponent,
         EditworkorderComponent,
         WorksChedulerComponent,
     ],

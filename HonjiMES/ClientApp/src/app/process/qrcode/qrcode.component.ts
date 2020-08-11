@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
 import CustomStore from 'devextreme/data/custom_store';
@@ -14,26 +14,54 @@ import { Myservice } from 'src/app/service/myservice';
 })
 export class QrcodeComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @Input() itemkeyval: any;
     autoNavigateToFocusedRow = true;
     qrhref = location.origin + '/api/Codes/GetQrCode';
+    remoteOperations: boolean;
+    detailfilter = [];
     idlist: any;
     dataSourceDB: any;
     visible: boolean;
     listStatus: any;
+    selectedFilterOperation: any;
+    filterValue: any;
+
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.remoteOperations = true;
         this.PrintQrCode = this.PrintQrCode.bind(this);
         this.listStatus = myservice.getWorkOrderType();
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(http, '/Processes/GetWorkOrderList/0'),
-        });
+        this.dataSourceDB = [];
     }
     ngOnInit() {
     }
     ngOnChanges() {
-
+        const oldDay = new Date(new Date(new Date().setHours(0, 0, 0, 0)).toISOString());
+        const toDay = new Date(new Date(new Date().setHours(23, 59, 59, 999)).toISOString());
+        this.selectedFilterOperation = 'between';
+        this.filterValue = [new Date(oldDay.setDate(oldDay.getDate() - 30)), new Date(toDay.setDate(toDay.getDate() + 1))];
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            // load: () => SendService.sendRequest(this.http, '/Processes/GetWorkOrderList/0'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                '/Processes/GetWorkOrderList',
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+        });
     }
-
+    calculateFilterExpression(filterValue, selectedFilterOperation) {
+        const column = this as any;
+        // Implementation for the "between" comparison operator
+        if (selectedFilterOperation === 'between' && Array.isArray(filterValue)) {
+            const filterExpression = [
+                [column.dataField, '>=', filterValue[0]],
+                'and',
+                [column.dataField, '<=', filterValue[1]]
+            ];
+            return filterExpression;
+        }
+        // Invokes the default filtering behavior
+        return column.defaultCalculateFilterExpression.apply(column, arguments);
+    }
     onFocusedRowChanging(e) {
         const rowsCount = e.component.getVisibleRows().length;
         const pageCount = e.component.pageCount();

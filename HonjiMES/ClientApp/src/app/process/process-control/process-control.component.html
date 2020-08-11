@@ -7,76 +7,145 @@
     </div>
     <div class="headerfont font2">工單管理</div>
     <div class="buttongroup">
+
         <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
             (onClick)="qrcodedata()">
         </dx-button>
-
+        <dx-button class="viewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="120"
+            (onClick)="viewdata()">
+        </dx-button>
         <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
+
     </div>
 </div>
 
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed"
-    [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
-    <thead>
-        <!-- <tr>
-            <th nzLeft colspan="3" rowspan='3' nzWidth="300px">XXX BOM表</th>
-        </tr>
-        <tr>
-            <th colspan="19" nzWidth="800px">訂單編號</th>
-        </tr>
-        <tr>
-            <th colspan="19" nzWidth="800px">加工流程</th>
-        </tr> -->
-        <tr>
-            <th nzWidth="140px" nzLeft>工單號</th>
-            <th nzWidth="160px" nzLeft>品號</th>
-            <th nzWidth="170px" nzLeft>名稱</th>
-            <th nzWidth="130px" nzLeft>機號</th>
-            <th nzWidth="100px" nzLeft>數量</th>
-            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <th *ngIf="col.show" nzWidth="160px">{{ col.title }}</th>
-            </ng-container>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let data of basicTable.data" (click)="trclick(data)">
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.WorkOrderNo}}</td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataNo}} nzLeft>{{data.BasicDataNo}}
-            </td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.BasicDataName}} nzLeft>{{data.BasicDataName}}
-            </td>
-            <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.MachineNo}} nzLeft nzEllipsis>
-                {{data.MachineNo}}</td>
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
+<div class="row">
 
-            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data)"
-                    nzEllipsis>
-                    <div>
-                        <ng-container *ngIf="data[col.key]?.value0">
-                            {{data[col.key]?.value0}}
-                        </ng-container>
-                        <ng-container *ngIf="data[col.key]?.value1">
-                            <br />
-                            <hr />
-                            {{data[col.key]?.value1}}
-                        </ng-container>
-                        <ng-container *ngIf="data[col.key]?.value2">
-                            <br />
-                            <hr />
-                            {{data[col.key]?.value2}}
-                        </ng-container>
-                        <!-- {{data[col.key]}}
-                        <br />
-                        <hr />{{data[col.key]}} -->
-                    </div>
-                </td>
-            </ng-container>
-        </tr>
-    </tbody>
-</nz-table>
+    <div class="col-6">
+
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations" (onRowClick)="readProcess($event)">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-paging [enabled]="true" [pageSize]="20">
+            </dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
+                [showNavigationButtons]="true" visible="true">
+            </dxo-pager>
+            <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+            </dxo-remote-operations> -->
+            <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
+
+            <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc" [width]="140"></dxi-column>
+            <dxi-column dataField="DataNo" caption="品號" [width]="180"></dxi-column>
+            <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column>
+            <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
+            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
+                <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
+            <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
+            <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
+            <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false"></dxi-column>
+
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button class="editbtn" icon="edit" type="default" (onClick)="editProcess($event,data)"></dx-button>
+            </div>
+
+            <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column> -->
+
+        </dx-data-grid>
+
+    </div>
+
+
+    <div class="col-6">
+
+        <div class="row">
+
+            <div class="col-12">
+                <div class="input-group">
+                    <label class="pt-3"><h5>工單內容：{{workOrderHeadNo}}</h5></label>
+                </div>
+            </div>
+
+        </div>
+
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
+            [showColumnLines]="true" [showRowLines]="true">
+
+            <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
+            </dxo-row-dragging>
+            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+                <dxo-form colCount=2>
+                    <dxi-item dataField="ProcessId"></dxi-item>
+                    <dxi-item dataField="ProcessLeadTime"></dxi-item>
+                    <dxi-item dataField="ProcessTime"></dxi-item>
+                    <dxi-item dataField="ProcessCost"></dxi-item>
+                    <dxi-item dataField="ProducingMachine"></dxi-item>
+                </dxo-form>
+            </dxo-editing>
+            <dxo-filter-row [visible]="false"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+                [enterKeyDirection]="enterKeyDirection">
+            </dxo-keyboard-navigation>
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="ProcessId" caption="製程名稱">
+                <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <!-- <dxi-column dataField="Remarks" caption="備註">
+            </dxi-column> -->
+
+            <dxi-column dataField="ProducingMachine" caption="加工機台" dataType="number" [width]="80">
+            </dxi-column>
+            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="60">
+                <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
+            </dxi-column>
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170">
+            </dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170">
+            </dxi-column>
+
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
+            </div>
+
+            <dxi-column type="buttons" [visible]="false">
+                <dxi-button name="save" text="存檔"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
+
+        </dx-data-grid>
+
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+            [height]="700" [(visible)]="logpopupVisible">
+            <div *dxTemplate="let data of 'content'">
+                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
+            </div>
+        </dx-popup>
+
+    </div>
+
+</div>
 
 <dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
@@ -85,13 +154,19 @@
         </app-creatprocess-control>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="qrcodepopupVisible">
+
+<dx-popup [showTitle]="true" title="檢視工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="860" [width]="1800"
+    [(visible)]="viewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-qrcode>
-        </app-qrcode>
+        <div dx-scroll-view style="height: 100%">
+            <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
+        </div>
     </div>
 </dx-popup>
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
-    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
-</dx-load-panel>
+
+<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="830"
+    [(visible)]="qrcodepopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-qrcode [itemkeyval]="randomkey"></app-qrcode>
+    </div>
+</dx-popup>

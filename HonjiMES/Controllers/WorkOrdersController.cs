@@ -30,6 +30,26 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢所有工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeads(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0);
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
+            // {
+            //     data = data.Where(x => x.WorkOrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            // }
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
         /// 查詢已派工工單
         /// </summary>
         /// <returns></returns>
@@ -62,7 +82,7 @@ namespace HonjiMES.Controllers
             // return Ok(MyFun.APIResponseOK(data));
             var workOrderHead = await _context.WorkOrderHeads.Where(x => x.Id == id && x.DeleteFlag == 0).ToListAsync();
             if(workOrderHead.Count == 1) {
-                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToList();
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
                 var data = new WorkOrderData{
                     WorkOrderHead = workOrderHead.FirstOrDefault(),
                     WorkOrderDetail = WorkOrderDetail
