@@ -11,6 +11,7 @@ import { SendService } from '../../shared/mylib';
 import Swal from 'sweetalert2';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
     selector: 'app-order-list',
@@ -39,7 +40,13 @@ export class OrderListComponent {
     listOrderStatus: any;
     remoteOperations: boolean;
     editorOptions: any;
+    uploadHeaders: any;
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        const authenticationService = new AuthService(http);
+        const currentUser = authenticationService.currentUserValue;
+        this.uploadHeaders = {
+            Authorization: 'Bearer ' + currentUser.Token
+        };
         this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
@@ -198,6 +205,7 @@ export class OrderListComponent {
         );
     }
     onUploaded(e) {
+        debugger;
         const response = JSON.parse(e.request.response) as APIResponse;
         if (response.success) {
             if (response.message) {
