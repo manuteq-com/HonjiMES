@@ -53,6 +53,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     DataId: any;
     Warehouseval: any;
     onCellPreparedLevel: number;
+    minValue: number;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.CustomerVal = null;
@@ -119,6 +120,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
+                        this.minValue = -element.Quantity;
                     });
                 }
             );
@@ -130,6 +132,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
+                        this.minValue = -element.Quantity;
                     });
                 }
             );
@@ -141,6 +144,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
                         element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
+                        this.minValue = -element.Quantity;
                     });
                 }
             );
