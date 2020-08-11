@@ -47,6 +47,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     modelpopupVisible: boolean;
     itemkey: any;
     OnChangeValue: number;
+    allowAdding: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
@@ -63,6 +64,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.ProcessTime = null;
         this.ProcessCost = null;
         this.ProducingMachine = '';
+
+        this.allowAdding = false;
 
         const remote = this.remoteOperations;
         // this.dataSourceDB = createStore({
@@ -153,6 +156,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.saveDisabled = false;
         this.itemkey = null;
         this.OnChangeValue = 0;
+        this.allowAdding = true;
         this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
             (s) => {
                 if (s.success) {
@@ -251,15 +255,12 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             }
         }, 'success', 3000);
     }
-
     customizeText1(e) {
         return e.value + '分';
     }
-
     customizeText2(e) {
         return e.value + '分';
     }
-
     customizeText3(e) {
         return e.value + '元';
     }
