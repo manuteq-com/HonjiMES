@@ -35,6 +35,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     creatpopupVisible: boolean;
     itemkey: any;
     btnDisabled: boolean;
+    workOrderHeadNo: any;
     workOrderHeadId: any;
     workOrderHeadDataNo: any;
     workOrderHeadDataName: any;
@@ -97,6 +98,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                 if (s.success) {
                     this.dataSourceDB_Process = s.data.WorkOrderDetail;
                     this.btnDisabled = false;
+                    this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
                     this.workOrderHeadId = s.data.WorkOrderHead.Id;
                     this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
                     this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
