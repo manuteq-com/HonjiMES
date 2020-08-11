@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
+using DevExtreme.AspNet.Mvc;
 
 namespace HonjiMES.Controllers
 {
@@ -26,10 +27,11 @@ namespace HonjiMES.Controllers
 
         // GET: api/MaterialBasics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaterialBasicData>>> GetMaterialBasics()
+        public async Task<ActionResult<IEnumerable<MaterialBasicData>>> GetMaterialBasics(
+            [FromQuery] DataSourceLoadOptions FromQuery)
         {
              _context.ChangeTracker.LazyLoadingEnabled = true;
-            var materialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
+            var materialBasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -46,10 +48,10 @@ namespace HonjiMES.Controllers
                 UpdateUser = x.UpdateUser,
                 DeleteFlag = x.DeleteFlag,
                 Materials = x.Materials
-            }).ToListAsync();
+            });
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(materialBasic, FromQuery);
             _context.ChangeTracker.LazyLoadingEnabled = false;
-
-            return Ok(MyFun.APIResponseOK(materialBasic));
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         // GET: api/MaterialBasics

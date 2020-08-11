@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
+using DevExtreme.AspNet.Mvc;
 
 namespace HonjiMES.Controllers
 {
@@ -26,10 +27,11 @@ namespace HonjiMES.Controllers
 
         // GET: api/ProductBasics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductBasicData>>> GetProductBasics()
+        public async Task<ActionResult<IEnumerable<ProductBasicData>>> GetProductBasics(
+            [FromQuery] DataSourceLoadOptions FromQuery)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var productBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Products).Select(x => new ProductBasicData
+            var productBasic = _context.ProductBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Products).Select(x => new ProductBasicData
             {
                 TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -47,10 +49,10 @@ namespace HonjiMES.Controllers
                 UpdateUser = x.UpdateUser,
                 DeleteFlag = x.DeleteFlag,
                 Products = x.Products
-            }).ToListAsync();
+            });
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(productBasic, FromQuery);
             _context.ChangeTracker.LazyLoadingEnabled = false;
-
-            return Ok(MyFun.APIResponseOK(productBasic));
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         // GET: api/ProductBasics

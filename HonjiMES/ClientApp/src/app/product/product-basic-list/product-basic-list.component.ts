@@ -31,13 +31,19 @@ export class ProductBasicListComponent implements OnInit {
     mod: string;
     uploadUrl: string;
     hint: boolean;
+    remoteOperations: boolean;
+    detailfilter: any;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.remoteOperations = true;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetProductBasics'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetProductBasics',
+                'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProductBasic', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProductBasic', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProductBasic', 'PUT', { key, values }),
