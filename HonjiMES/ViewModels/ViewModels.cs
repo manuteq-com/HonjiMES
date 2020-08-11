@@ -630,36 +630,21 @@ namespace HonjiMES.Models
         public int RequisitionId { get; set; }
         public int WarehouseId { get; set; }
     }
-    public class BomListVM
+    public class BomListVM : BomList
     {
-        /// <summary>
-        /// ID
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// PID
-        /// </summary>
-        public int? Pid { get; set; }
         /// <summary>
         /// 顯示層級
         /// </summary>
-        public string Lv { get; set; }
+        public string LvS { get; set; }
         /// <summary>
         /// 品項和元件
         /// </summary>
         public string LvName { get; set; }
-        /// <summary>
-        /// 名稱
-        /// </summary>
-        public string Name { get; set; }
+
         /// <summary>
         /// 物件類型
         /// </summary>
         public string BomType { get; set; }
-        /// <summary>
-        /// 組成數量
-        /// </summary>
-        public int Quantity { get; set; }
     }
     public class PostSupplierMaterial
     {
