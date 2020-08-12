@@ -482,6 +482,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
+
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.Delivered).HasComment("實際交貨數");
@@ -1710,6 +1712,8 @@ namespace HonjiMES.Models
                     .HasComment("採購內容編號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 

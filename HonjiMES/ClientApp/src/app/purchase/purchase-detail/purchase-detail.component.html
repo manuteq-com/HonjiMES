@@ -19,15 +19,14 @@
         </dxi-total-item>
     </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
-    <dxi-column dataField="DataId" caption="品號" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+
+    <dxi-column dataField="DataType" caption="產品別" alignment="center" [allowEditing]="false" [width]="70">
+        <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="DataId" caption="品名" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="DataId" caption="規格" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
+    <dxi-column dataField="DataNo" caption="品號" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="DataName" caption="品名" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
     <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
