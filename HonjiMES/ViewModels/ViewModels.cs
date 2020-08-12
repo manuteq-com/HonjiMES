@@ -112,6 +112,7 @@ namespace HonjiMES.Models
         public string Specification { get; set; }
         public string Property { get; set; }
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
         public int WarehouseId { get; set; }
     }
 
