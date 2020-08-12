@@ -9,23 +9,23 @@
         <dxi-item dataField="UnitCount" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitCountEditorOptions">
             <dxo-label text="計價數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="PriceEditorOptions">
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions">
             <dxi-validation-rule type="required" message="驗收單價 必填"></dxi-validation-rule>
             <dxo-label text="驗收單價"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Unit">
             <dxo-label text="單位"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="PriceAll" [editorOptions]="{disabled: true }">
+        <dxi-item dataField="PriceAll" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="{disabled: true }">
             <dxo-label text="驗收總價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" [editorOptions]="UnitPriceEditorOptions">
+        <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="UnitPriceEditorOptions">
             <dxo-label text="計價單價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="WorkPrice">
+        <dxi-item dataField="WorkPrice" format="$ #,##0.##;($ #,##0.##)">
             <dxo-label text="加工費用"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="UnitPriceAll">
+        <dxi-item dataField="UnitPriceAll" format="$ #,##0.##;($ #,##0.##)">
             <dxo-label text="計價總額"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">
