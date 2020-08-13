@@ -141,6 +141,19 @@ namespace HonjiMES.Controllers
         }
         
         /// <summary>
+        /// 用No取採購單
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<PurchaseHead>> GetPurchasesByPurchaseNo(string DataNo)
+        {
+            var PurchaseHead = await _context.PurchaseHeads.Where(x => x.PurchaseNo == DataNo && x.DeleteFlag == 0).ToListAsync();
+            if (PurchaseHead.Count == 0) {
+                return Ok(MyFun.APIResponseError("查無採購單號 [ " + DataNo + " ]"));
+            }
+            return Ok(MyFun.APIResponseOK(PurchaseHead.FirstOrDefault().Id));
+        }
+
+        /// <summary>
         /// 採購單列表
         /// </summary>
         /// <param name="status">0:未完成，1:已結案</param>
@@ -160,7 +173,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ID取採購單
+        /// 用供應商取採購單
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -179,13 +192,13 @@ namespace HonjiMES.Controllers
             //return purchaseHead;
             return Ok(MyFun.APIResponseOK(purchaseHead));
         }
+
         /// <summary>
         /// 修改採購單
         /// </summary>
         /// <param name="id"></param>
         /// <param name="purchaseHead"></param>
         /// <returns></returns>
-
         // PUT: api/PurchaseHeads/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

@@ -38,7 +38,7 @@ export class WorkorderLogComponent implements OnInit {
     ReportTypeList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         // debugger;
-        this.WorkOrderTypeList = myservice.getWorkOrderType();
+        this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.ReportTypeList = myservice.getReportType();
         this.remoteOperations = true;
         this.dataSourceDB = new CustomStore({

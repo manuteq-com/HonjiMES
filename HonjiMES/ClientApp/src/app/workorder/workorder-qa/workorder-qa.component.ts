@@ -48,7 +48,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
-        this.listStatus = myservice.getWorkOrderType();
+        this.listStatus = myservice.getWorkOrderStatus();
         this.btnDisabled = true;
         this.dataSourceDB_Process = [];
         this.dataSourceDB = new CustomStore({

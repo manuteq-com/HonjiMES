@@ -64,8 +64,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     DueEndTime: any;
     saveCheck: boolean;
     onCellPreparedLevel: any;
+    allowReordering: boolean;
+    listWorkOrderTypes: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
         // this.CustomerVal = null;
@@ -84,6 +87,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.modCheck = false;
         this.modName = 'new';
         this.saveCheck = true;
+        this.allowReordering = true;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -148,6 +152,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.modVisible = false;
             this.runVisible = false;
             this.saveDisabled = true;
+            this.allowReordering = true;
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
@@ -159,6 +164,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         } else if (this.itemkeyval != null) {
             this.newVisible = false;
             this.modVisible = false;
+            this.allowReordering = false;
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
@@ -178,6 +184,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         }
                         if (s.data.WorkOrderHead.Status !== 5) { // 工單為結案，不能編輯
                             this.modVisible = true;
+                            this.allowReordering = true;
                         }
                     }
                 }

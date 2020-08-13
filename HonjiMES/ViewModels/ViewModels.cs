@@ -531,6 +531,8 @@ namespace HonjiMES.Models
         public int ReCount { get; set; }
         public string Remarks { get; set; }
         public string ProducingMachine { get; set; }
+        public int PurchaseId { get; set; }
+        public string PurchaseNo { get; set; }
     }
     public class WorkOrderReportDataAll
     {
@@ -620,6 +622,7 @@ namespace HonjiMES.Models
         public string value1 { get; set; }
         public string value2 { get; set; }
         public int value3 { get; set; }
+        public string value4 { get; set; }
     }
     public class BillOfMaterialVerLv : BillOfMaterialVer
     {
