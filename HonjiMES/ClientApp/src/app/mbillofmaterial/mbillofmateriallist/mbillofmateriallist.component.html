@@ -120,11 +120,12 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             <dxo-summary [recalculateWhileEditing]="true">
-                <dxi-total-item [customizeText]="customizeText1" column="ProcessLeadTime" summaryType="sum">
+                <dxi-total-item displayFormat="{0}分" column="ProcessLeadTime" summaryType="sum">
                 </dxi-total-item>
-                <dxi-total-item [customizeText]="customizeText2" column="ProcessTime" summaryType="sum">
+                <dxi-total-item displayFormat="{0}分" column="ProcessTime" summaryType="sum">
                 </dxi-total-item>
-                <dxi-total-item [customizeText]="customizeText3" column="ProcessCost" summaryType="sum">
+                <dxi-total-item column="ProcessCost" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)"
+                    displayFormat="{0}元">
                 </dxi-total-item>
             </dxo-summary>
 
@@ -142,7 +143,7 @@
                 cellTemplate="cProcessTimeTemplate" [width]="80">
             </dxi-column>
             <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate"
-                cellTemplate="cProcessCostTemplate" [width]="80">
+                cellTemplate="cProcessCostTemplate" [width]="120">
             </dxi-column>
             <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
                 cellTemplate="cProducingMachineTemplate" [visible]="false">
@@ -211,7 +212,7 @@
                 {{showcell(data)}}
             </div>
             <div *dxTemplate="let data of 'cProcessCostTemplate'">
-                {{showcell(data)}}
+                $ {{showcell(data)|number:'1.0-0'}}
             </div>
             <div *dxTemplate="let data of 'cProducingMachineTemplate'">
                 {{showcell(data)}}

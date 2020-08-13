@@ -303,15 +303,6 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             }
         }, 'success', 3000);
     }
-    customizeText1(e) {
-        return e.value + '分';
-    }
-    customizeText2(e) {
-        return e.value + '分';
-    }
-    customizeText3(e) {
-        return e.value + '元';
-    }
     showcell(data) {
         if (data.row.isNewRow) {
             const dProcess = this.nProcess.find(x => x.SerialNumber === data.data.SerialNumber);
@@ -325,7 +316,6 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         }
     }
     onEditorPreparing(e) {
-        debugger
         if (e.parentType === 'dataRow') {
 
         }
@@ -334,11 +324,10 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
 
     }
     onRowUpdating(e) {
-        debugger
 
     }
     onRowInserting(e) {
-        //this.nProcess = [];
+
     }
     onFocusedCellChanging(e) {
         if (e.rows[0].isNewRow) {
