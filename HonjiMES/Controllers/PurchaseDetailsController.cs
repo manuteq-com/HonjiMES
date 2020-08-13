@@ -75,7 +75,8 @@ namespace HonjiMES.Controllers
             // MaterialBasic materialBasic = new MaterialBasic();
             var materialBasic = await _context.PurchaseDetails.AsQueryable()
             .Where(x => x.DeleteFlag == 0 && x.PurchaseId == id)
-            .Join(_context.MaterialBasics, x => x.DataId, materialBasic => materialBasic.Id, (x, materialBasic) => new {
+            .Join(_context.MaterialBasics, x => x.DataId, materialBasic => materialBasic.Id, (x, materialBasic) => new
+            {
                 Id = materialBasic.Id,
                 MaterialNo = materialBasic.MaterialNo,
                 MaterialName = x.DataName,
@@ -94,15 +95,54 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(materialBasic));
         }
 
+        // GET: api/MaterialBasics/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseDetail>> GetBasicsDataByPurchase(int id)
+        {
+            var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var PurchaseDetails = await _context.PurchaseDetails.Where(x => x.DeleteFlag == 0 && x.PurchaseId == id).ToListAsync();
+            foreach (var item in PurchaseDetails)
+            {
+                if (item.DataType == 1)
+                {
+                    var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.MaterialNo;
+                    item.DataName = BasicData.Name;
+                }
+                else if (item.DataType == 2)
+                {
+                    var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.ProductNo;
+                    item.DataName = BasicData.Name;
+                }
+                else if (item.DataType == 3)
+                {
+                    var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                    item.DataNo = BasicData.WiproductNo;
+                    item.DataName = BasicData.Name;
+                }
+                item.Quantity = item.Quantity - item.PurchaseCount;
+                item.Price = item.OriginPrice * (item.Quantity - item.PurchaseCount);
+            }
+
+            if (PurchaseDetails == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(PurchaseDetails));
+        }
+
         /// <summary>
         /// 修改採購明細
         /// </summary>
         /// <param name="id"></param>
         /// <param name="purchaseDetail"></param>
         /// <returns></returns>
-            // PUT: api/PurchaseDetails/5
-            // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-            // more details see https://aka.ms/RazorPagesCRUD.
+        // PUT: api/PurchaseDetails/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseDetail(int id, PurchaseDetail purchaseDetail)
         {
@@ -149,7 +189,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseDetails.Add(purchaseDetail);
             purchaseDetail.CreateTime = DateTime.Now;
-            purchaseDetail. CreateUser = MyFun.GetUserID(HttpContext);
+            purchaseDetail.CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseDetail));

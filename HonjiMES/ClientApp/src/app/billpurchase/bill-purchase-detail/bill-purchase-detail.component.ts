@@ -9,6 +9,7 @@ import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 @Component({
     selector: 'app-bill-purchase-detail',
     templateUrl: './bill-purchase-detail.component.html',
@@ -37,11 +38,13 @@ export class BillPurchaseDetailComponent implements OnInit {
     WarehouseList: any;
     CheckInBtnVisible: boolean;
     postval: any;
+    ItemTypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
         this.checkOutOnClick = this.checkOutOnClick.bind(this);
         this.onCellPrepared = this.onCellPrepared.bind(this);
+        this.ItemTypeList = myservice.getlistAdjustStatus();
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.CheckInBtnVisible = false;

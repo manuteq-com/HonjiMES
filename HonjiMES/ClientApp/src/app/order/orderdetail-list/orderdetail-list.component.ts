@@ -103,54 +103,13 @@ export class OrderdetailListComponent implements OnInit {
         this.topurchasekey = null;
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
 
-        let serial = 1;
-        let tempdataSource = [];
-        this.topurchasekey.forEach((x, index) => {
-            this.app.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        let productId = 1;
-                        let productQuantity = 1;
-                        s.data.forEach(element => {
-                            if (element.MaterialBasicId == null) {
-                                if (element.Pid === productId) {
-                                    productId = element.Id;
-                                    productQuantity = productQuantity * element.Quantity;
-                                } else {
-                                    productId = element.Id;
-                                    productQuantity = element.Quantity;
-                                }
-                            }
-                            let tempQuantity = element.Quantity;
-                            if (element.Pid !== 0 && element.Pid === productId) {
-                                tempQuantity = element.Quantity * productQuantity;
-                            }
-
-                            const index = tempdataSource.findIndex(z => z.DataId === element.MaterialBasicId);
-                            if (~index) {
-                                tempdataSource[index].Quantity += x.Quantity * tempQuantity;
-                                tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
-                            } else if (element.MaterialBasicId != null) {
-                                tempdataSource.push({
-                                    Serial: serial,
-                                    DataId: element.MaterialBasicId,
-                                    WarehouseId: null,
-                                    Quantity: x.Quantity * tempQuantity,
-                                    OriginPrice: element.MaterialPrice,
-                                    Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
-                                    DeliveryTime: new Date()
-                                });
-                            }
-                        });
-                        serial++;
-                    }
-                    if (index === this.topurchasekey.length - 1) {
-                        this.dataSource = [];
-                        this.dataSource = tempdataSource;
-                    }
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.GetBomData(s.data);
                 }
-            );
-        });
+            }
+        );
 
         if (this.topurchasekey.length === 0) {
             Swal.fire({
@@ -225,7 +184,77 @@ export class OrderdetailListComponent implements OnInit {
             });
         }
     }
+    GetBomData(BasicData) {
+        let indexVal = 0;
+        let serial = 1;
+        const tempdataSource = [];
+        this.topurchasekey.forEach(x => {
+            // 取得BOM原料清單
+            this.app.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        let productId = 1;
+                        let productQuantity = 1;
+                        s.data.forEach(element => {
+                            if (element.MaterialBasicId == null) {
+                                if (element.Pid === productId) {
+                                    productId = element.Id;
+                                    productQuantity = productQuantity * element.Quantity;
+                                } else {
+                                    productId = element.Id;
+                                    productQuantity = element.Quantity;
+                                }
+                            }
+                            let tempQuantity = element.Quantity;
+                            if (element.Pid !== 0 && element.Pid === productId) {
+                                tempQuantity = element.Quantity * productQuantity;
+                            }
 
+                            const index = tempdataSource.findIndex(z => z.DataType === 1 && z.DataId === element.MaterialBasicId);
+                            if (~index) {
+                                tempdataSource[index].Quantity += x.Quantity * tempQuantity;
+                                tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
+                            } else if (element.MaterialBasicId != null) { // 只取得料號為[原料]的項目
+                                const result = BasicData.find(x => x.DataType === 1 && x.DataId === element.MaterialBasicId);
+                                if (result) {
+                                    tempdataSource.push({
+                                        Serial: serial,
+                                        TempId: result.TempId,
+                                        DataType: 1,
+                                        DataId: element.MaterialBasicId,
+                                        WarehouseId: null,
+                                        Quantity: x.Quantity * tempQuantity,
+                                        OriginPrice: element.MaterialPrice,
+                                        Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
+                                        DeliveryTime: new Date()
+                                    });
+                                }
+                            }
+                        });
+                        serial++;
+                    }
+                    if (indexVal === this.topurchasekey.length - 1) {
+                        this.dataSource = [];
+                        // 檢查庫存量，過濾需要採購項目
+                        this.dataSource = this.CheckStockQuantity(tempdataSource, BasicData);
+                    }
+                    indexVal++;
+                }
+            );
+        });
+    }
+    CheckStockQuantity(data, BasicData) {
+        const resultArray = [];
+        data.forEach(element => {
+            const result = BasicData.find(x => x.TempId === element.TempId);
+            if (result.Quantity < element.Quantity) {
+                element.Quantity = element.Quantity - result.Quantity;
+                element.Price = element.Quantity * element.OriginPrice;
+                resultArray.push(element);
+            }
+        });
+        return resultArray;
+    }
     rowClick(e) {
         debugger;
         this.app.GetData('/OrderDetails/GetStockCountByProductBasicId/' + e.key).subscribe(
@@ -236,7 +265,6 @@ export class OrderdetailListComponent implements OnInit {
             }
         );
     }
-
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {

@@ -106,8 +106,8 @@
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
-            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
             <!-- <dxi-column type="buttons">
                 <dxi-button hint="單筆銷貨" text="銷貨" [onClick]="to_dsaleClick"></dxi-button>
                 <dxi-button hint="單筆銷貨退回" text="銷貨退回" [onClick]="to_dsaleClick"></dxi-button>

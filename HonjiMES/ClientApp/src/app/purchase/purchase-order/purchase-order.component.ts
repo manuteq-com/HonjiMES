@@ -57,7 +57,7 @@ export class PurchaseOrderComponent implements OnInit {
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialBasicList = s.data;
+                    this.MaterialBasicList = s.data.data;
                 }
             }
         );
@@ -151,20 +151,22 @@ export class PurchaseOrderComponent implements OnInit {
     }
     onRowPrepared(e) {
         // debugger;
-        this.hint = false;
-        if (e.data.Status === 2) {
-            e.rowElement.style.backgroundColor = '#F5F5F5';
-            e.rowElement.style.color = '#000';
-        } else {
-            if (e.data !== undefined) {
-                e.data.PurchaseDetails.forEach(element => {
-                    const DeliverydateBefore = new Date(element.DeliveryTime);
-                    const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
-                    if (DeliverydateBefore <= DeliverydateAfter) {
-                        e.rowElement.style.backgroundColor = '#d9534f';
-                        e.rowElement.style.color = '#fff';
-                    }
-                });
+        if (e.data !== undefined) {
+            this.hint = false;
+            if (e.data.Status === 2) {
+                e.rowElement.style.backgroundColor = '#F5F5F5';
+                e.rowElement.style.color = '#000';
+            } else {
+                if (e.data !== undefined) {
+                    e.data.PurchaseDetails.forEach(element => {
+                        const DeliverydateBefore = new Date(element.DeliveryTime);
+                        const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+                        if (DeliverydateBefore <= DeliverydateAfter) {
+                            e.rowElement.style.backgroundColor = '#d9534f';
+                            e.rowElement.style.color = '#fff';
+                        }
+                    });
+                }
             }
         }
     }

@@ -59,7 +59,7 @@
     </dxi-column>
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="廠內規格" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Price" caption="單價"></dxi-column>
+    <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
     <!-- <dxi-column dataField="MaterialId" caption="元件品號">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id">
         </dxo-lookup>

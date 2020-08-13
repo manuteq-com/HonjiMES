@@ -19,6 +19,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() serialkeyval: any;
     @Input() modval: any;
+    @Input() randomkey: any;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;
@@ -131,6 +132,15 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval17 = '　　　　　　　　　實際完工日：　' + (element?.ActualEndTime ?? '');
                                 this.itemval18 = '　　　　　　　　　　需求數量：　' + (element?.Count ?? '0');
                                 this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0');
+
+                                this.QuantityEditorOptions = {
+                                    showSpinButtons: true,
+                                    mode: 'number',
+                                    format: '#0',
+                                    value: (element?.Count ?? '0'),
+                                    min: -(element?.ReCount ?? '0'),
+                                    // onValueChanged: this.QuantityValueChanged.bind(this)
+                                };
 
                                 this.formData = element;
                                 this.formData.ReCount = element.Count;

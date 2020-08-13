@@ -630,19 +630,19 @@ namespace HonjiMES.Controllers
 
             foreach (var item in data)
             {
-                if (item.DataType == 0)
+                if (item.DataType == 1)
                 {
                     var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.MaterialNo;
                     item.DataName = BasicData.Name;
                 }
-                else if (item.DataType == 1)
+                else if (item.DataType == 2)
                 {
                     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.ProductNo;
                     item.DataName = BasicData.Name;
                 }
-                else if (item.DataType == 2)
+                else if (item.DataType == 3)
                 {
                     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.WiproductNo;

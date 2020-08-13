@@ -43,37 +43,63 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        this.QuantityEditorOptions = {
-            showSpinButtons: true,
-            mode: 'number',
-            format: '#0',
-            value: this.itemkeyval.CheckCountIn,
-            min: 1,
-            max: this.itemkeyval.Quantity,
-            onValueChanged: this.QuantityValueChanged.bind(this)
-        };
-        this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
-        this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
-        this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
-
         this.app.GetData('/ToPurchase/GetBillofPurchaseReturnNo').subscribe(
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
-                }
-            }
-        );
-        this.app.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.selectBoxOptions = {
-                        items: s.data,
-                        displayExpr: 'Name',
-                        valueExpr: 'Id',
+                    this.QuantityEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        format: '#0',
+                        value: this.itemkeyval.CheckCountIn - this.itemkeyval.CheckCountOut,
+                        min: 1,
+                        max: this.itemkeyval.Quantity,
+                        onValueChanged: this.QuantityValueChanged.bind(this)
                     };
+                    this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
+                    this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
+                    this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
                 }
             }
         );
+
+        if (this.itemkeyval.DataType === 1) {
+            this.app.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.selectBoxOptions = {
+                            items: s.data,
+                            displayExpr: 'Name',
+                            valueExpr: 'Id',
+                        };
+                    }
+                }
+            );
+        } else if (this.itemkeyval.DataType === 2) {
+            this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.DataId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.selectBoxOptions = {
+                            items: s.data,
+                            displayExpr: 'Name',
+                            valueExpr: 'Id',
+                        };
+                    }
+                }
+            );
+        } else if (this.itemkeyval.DataType === 3) {
+            this.app.GetData('/Warehouses/GetWarehouseByWiproduct/' + this.itemkeyval.DataId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.selectBoxOptions = {
+                            items: s.data,
+                            displayExpr: 'Name',
+                            valueExpr: 'Id',
+                        };
+                    }
+                }
+            );
+        }
 
     }
     QuantityValueChanged(e) {

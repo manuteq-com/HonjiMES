@@ -41,10 +41,10 @@
     <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="70" editCellTemplate="QuantityEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Price" caption="單價" dataType="number" [width]="70" editCellTemplate="PriceEditCellTemplate">
+    <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="70" editCellTemplate="PriceAllEditCellTemplate">
+    <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceAllEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Unit" caption="單位">
@@ -53,13 +53,13 @@
     <dxi-column dataField="UnitCount" caption="#數量" dataType="number" [width]="70">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="UnitPrice" caption="#單價" dataType="number" [width]="70">
+    <dxi-column dataField="UnitPrice" caption="#單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="#總額" dataType="number" [width]="70">
+    <dxi-column dataField="UnitPriceAll" caption="#總額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="WorkPrice" caption="加工費" dataType="number" [width]="70">
+    <dxi-column dataField="WorkPrice" caption="加工費" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
 

@@ -176,9 +176,9 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BasicData>>> GetBasicsData()
         {
-            var MaterialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.MaterialNo).ToListAsync();
-            var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.ProductNo).ToListAsync();
-            var WiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.WiproductNo).ToListAsync();
+            var MaterialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Materials).OrderBy(x => x.MaterialNo).ToListAsync();
+            var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Products).OrderBy(x => x.ProductNo).ToListAsync();
+            var WiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Wiproducts).OrderBy(x => x.WiproductNo).ToListAsync();
             var AdjustData = new List<BasicData>();
             var TempId = 1;
 
@@ -193,7 +193,8 @@ namespace HonjiMES.Controllers
                     Name = item.Name,
                     Specification = item.Specification,
                     Property = item.Property,
-                    Price = item.Price
+                    Price = item.Price,
+                    Quantity = item.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
                 };
                 AdjustData.Add(tempData);
             }
@@ -208,7 +209,8 @@ namespace HonjiMES.Controllers
                     Name = item.Name,
                     Specification = item.Specification,
                     Property = item.Property,
-                    Price = item.Price
+                    Price = item.Price,
+                    Quantity = item.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
                 };
                 AdjustData.Add(tempData);
             }
@@ -223,7 +225,8 @@ namespace HonjiMES.Controllers
                     Name = item.Name,
                     Specification = item.Specification,
                     Property = item.Property,
-                    Price = item.Price
+                    Price = item.Price,
+                    Quantity = item.Materials.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
                 };
                 AdjustData.Add(tempData);
             }

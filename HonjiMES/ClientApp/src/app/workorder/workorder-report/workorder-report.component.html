@@ -48,7 +48,7 @@
         <dxi-item dataField="Remark" editorType="dxTextArea" [colSpan]="3" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
             <dxo-label text="回報說明"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProcessCost" [disabled]="true">
+        <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [disabled]="true">
             <dxo-label text="成本"></dxo-label>
         </dxi-item>
         <dxi-item dataField="ProducingMachine">
@@ -70,7 +70,7 @@
         <!-- <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="ReCount" [visible]="ReCountVisible">
+        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
         </dxi-item>
 

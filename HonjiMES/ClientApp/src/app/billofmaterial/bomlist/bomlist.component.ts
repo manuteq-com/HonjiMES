@@ -36,14 +36,14 @@ export class BomlistComponent implements OnInit, OnChanges {
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialList = s.data;
+                    this.MaterialList = s.data.data;
                 }
             }
         );
         this.app.GetData('/ProductBasics/GetProductBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.ProductList = s.data;
+                    this.ProductList = s.data.data;
                 }
             }
         );

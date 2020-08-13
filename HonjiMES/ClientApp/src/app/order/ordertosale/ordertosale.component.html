@@ -23,7 +23,7 @@
             <dxo-label text="銷貨單號"></dxo-label>
         </dxi-item>
         <dxi-item itemType="button" alignment="left" [buttonOptions]="buttonOptions" [disabled]="buttondisabled"></dxi-item>
-        
+
     </dx-form>
     <!-- <dx-button  text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button> -->
     <br/>
@@ -44,7 +44,7 @@
                 <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column> -->
             <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions"></dxi-column>
-            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="Price" caption="金額" dataType="number" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
         </dx-data-grid>
 </form>

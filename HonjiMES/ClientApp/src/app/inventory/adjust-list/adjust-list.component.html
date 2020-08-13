@@ -179,10 +179,10 @@
             <dxi-column dataField="AftQuantity" caption="更新後數量" [allowEditing]="false" [width]="100">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="Price" caption="單價" dataType="number" [width]="70">
+            <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="PriceAll" caption="總金額" dataType="number" [width]="70">
+            <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
             <!-- <dxi-column dataField="Unit" caption="單位">

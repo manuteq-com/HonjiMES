@@ -61,7 +61,7 @@ export class AdjustListComponent implements OnInit {
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialBasicList = s.data;
+                    this.MaterialBasicList = s.data.data;
                 }
             }
         );

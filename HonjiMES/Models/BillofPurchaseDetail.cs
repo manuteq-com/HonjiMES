@@ -30,6 +30,8 @@ namespace HonjiMES.Models
         public int SupplierId { get; set; }
         [Column("order_id", TypeName = "int(11)")]
         public int? OrderId { get; set; }
+        [Column("data_type", TypeName = "int(11)")]
+        public int DataType { get; set; }
         [Column("data_id", TypeName = "int(11)")]
         public int DataId { get; set; }
         [Required]

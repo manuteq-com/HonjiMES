@@ -9,6 +9,7 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-purchase-detail',
@@ -32,10 +33,12 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     Priceval: number;
     WarehouseList: any;
     hint: boolean;
+    ItemTypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent, public datepipe: DatePipe) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
+        this.ItemTypeList = myservice.getlistAdjustStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseDetailByPId?PId=' + this.itemkey),

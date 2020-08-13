@@ -21,6 +21,7 @@ export class WorkorderListComponent implements OnInit {
     keyup = '';
     editpopupVisible: boolean;
     checkVisible: boolean;
+    randomkey: number;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.editpopupVisible) {
@@ -88,6 +89,7 @@ export class WorkorderListComponent implements OnInit {
             this.itemkey = e.Key;
             this.serialkey = Number(colData.key.substring(4)) + 1;
             this.mod = 'report';
+            this.randomkey = new Date().getTime();
             this.creatpopupVisible = true;
 
             if (e[colData.key].value3 === 1) {
