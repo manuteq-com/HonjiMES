@@ -17,6 +17,7 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
     itemkey: number;
     mod: string;
     loadingVisible = false;
+    scrollValue = { x: '1800', y: '700px' };
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
@@ -29,6 +30,9 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
         // );
     }
     ngOnInit() {
+
+        this.scrollValue.y = (window.innerHeight - 200) + 'px';
+        this.scrollValue.x = (window.innerWidth - 0) + 'px';
     }
     ngOnChanges() {
         this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
