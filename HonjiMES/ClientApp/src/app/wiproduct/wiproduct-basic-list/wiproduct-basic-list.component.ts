@@ -30,6 +30,7 @@ export class WiproductBasicListComponent implements OnInit {
     exceldata: any;
     mod: string;
     uploadUrl: string;
+    hint: boolean;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -146,9 +147,18 @@ export class WiproductBasicListComponent implements OnInit {
             }
         }
     }
+    onRowChanged() {
+        this.dataGrid.instance.refresh();
+    }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
+        this.hint = false;
+        if (e.data !== undefined) {
+            e.data.Wiproducts.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
                 e.rowElement.style.backgroundColor = '#d9534f';
                 e.rowElement.style.color = '#fff';
             }

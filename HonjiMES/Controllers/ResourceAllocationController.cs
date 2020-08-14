@@ -46,12 +46,12 @@ namespace HonjiMES.Controllers
                 Resource.Add(new ResoureAllocation
                 {
                     ProducingMachine = item.Key,
-                    New = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 0).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Assign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 1).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Start = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 2).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Ready = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 3).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    ToNew = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 4).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Finish = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.WorkOrderHead.Status == 5).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    New = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 0).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Assign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 1).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Start = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 2).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Ready = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 3).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    ToNew = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 4).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Finish = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 5).Sum(y => y.ProcessTime + y.ProcessLeadTime),
                 });
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;

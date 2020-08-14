@@ -36,7 +36,7 @@
     (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
     (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
-    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true">
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="false">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -95,7 +95,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-        <app-wiproduct-list [masterkey]="item.key" [itemval]="item.row"></app-wiproduct-list>
+        <app-wiproduct-list (childOuter)="onRowChanged($event)" [masterkey]="item.key" [itemval]="item.row"></app-wiproduct-list>
     </div>
 
 </dx-data-grid>

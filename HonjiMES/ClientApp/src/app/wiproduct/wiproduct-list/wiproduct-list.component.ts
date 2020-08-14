@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./wiproduct-list.component.css']
 })
 export class WiproductListComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
@@ -130,6 +131,9 @@ export class WiproductListComponent implements OnInit, OnChanges {
                 });
             }
         }
+    }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
     }
     onRowPrepared(e) {
         if (e.rowType === 'data') {
