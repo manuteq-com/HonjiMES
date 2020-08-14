@@ -95,8 +95,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
                 this.hint = true;
             }
             if (this.hint) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }
