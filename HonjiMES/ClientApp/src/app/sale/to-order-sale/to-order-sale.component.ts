@@ -43,7 +43,7 @@ export class ToOrderSaleComponent implements OnInit, OnChanges {
                 if (s.success) {
                     const WarehouseList = [];
                     s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         WarehouseList[index] = element.Warehouse;
                     });
                     this.selectBoxOptions = {

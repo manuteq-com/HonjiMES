@@ -20,7 +20,7 @@
     </dxo-editing>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
-    <dxi-column dataField="DataType" caption="產品別" [allowEditing]="false" editCellTemplate="ItemTypeEditCellTemplate">
+    <dxi-column dataField="DataType" caption="類別" [allowEditing]="false" editCellTemplate="ItemTypeEditCellTemplate">
         <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
