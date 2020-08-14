@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from 'src/app/shared/mylib';
+import { SendService, Guid } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
@@ -115,9 +115,11 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.SerialNo = this.dataSourceDB_Process.length;
         this.SerialNo++;
         // this.newRow = this.SerialNo;
-        e.data.SerialNumber = this.SerialNo;
 
-        const commentData = { SerialNumber: this.SerialNo };
+        const key = Guid.newGuid();
+        e.data.SerialNumber = this.SerialNo;
+        e.data.key = key;
+        const commentData = { SerialNumber: this.SerialNo, key };
         this.nProcess.push(commentData);
         // e.data.ProcessLeadTime = null;
         // e.data.ProcessTime = null;
@@ -186,15 +188,11 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
 
     }
     TemplatesetValue(e, data) {
-        debugger;
-        if (data.row.isNewRow) {
-            this.nProcess.forEach(x => {
-                if (x.SerialNumber === data.data.SerialNumber) {
-                    x[data.column.dataField] = e.value;
-                }
-            });
-        }
-        debugger;
+        this.nProcess.forEach(x => {
+            if (x.key === data.data.key) {
+                x[data.column.dataField] = e.value;
+            }
+        });
         data.setValue(e.value);
     }
     selectvalueChanged(e, data) {
@@ -217,7 +215,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             data.data.Remark = ProcessBasic.Remark;
 
             this.nProcess.forEach(x => {
-                if (x.SerialNumber === data.row.data.SerialNumber) {
+                if (x.key === data.row.data.key) {
                     x.DrawNo = ProcessBasic.DrawNo;
                     x.Manpower = ProcessBasic.Manpower;
                     x.ProcessCost = ProcessBasic.Cost;
@@ -256,6 +254,19 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     async savedata() {
         debugger;
         this.dataGrid2.instance.saveEditData();
+        this.dataSourceDB_Process.forEach(x => {
+            this.nProcess.forEach(y => {
+                if (x.key === y.key) {
+                    x.DrawNo = y.DrawNo;
+                    x.Manpower = y.Manpower;
+                    x.ProcessCost = y.ProcessCost;
+                    x.ProcessLeadTime = y.ProcessLeadTime;
+                    x.ProcessTime = y.ProcessTime;
+                    x.ProducingMachine = y.ProducingMachine;
+                    x.Remark = y.Remark;
+                }
+            });
+        });
         this.postval = {
             ProductBasicId: this.productbasicId,
             BomId: this.bomId,
@@ -304,16 +315,14 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         }, 'success', 3000);
     }
     showcell(data) {
-        if (data.row.isNewRow) {
-            const dProcess = this.nProcess.find(x => x.SerialNumber === data.data.SerialNumber);
+        if (data.row.isNewRow || !data.value) {
+            const dProcess = this.nProcess.find(x => x.key === data.data.key);
             if (dProcess) {
-                return dProcess[data.column.dataField];
-            } else {
-                return '';
+                data.value = dProcess[data.column.dataField];
+                // return dProcess[data.column.dataField];
             }
-        } else {
-            return data.value;
         }
+        return data.value;
     }
     onEditorPreparing(e) {
         if (e.parentType === 'dataRow') {
@@ -343,10 +352,10 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     onFocusedCellChanged(e) {
         if (e.rowIndex === -1) {
             if (this.nProcess) {
-                this.dataGrid2.instance.saveEditData();
+                // this.dataGrid2.instance.saveEditData();
                 this.dataSourceDB_Process.forEach(x => {
                     this.nProcess.forEach(y => {
-                        if (x.SerialNumber === y.SerialNumber) {
+                        if (x.key === y.key) {
                             x.DrawNo = y.DrawNo;
                             x.Manpower = y.Manpower;
                             x.ProcessCost = y.ProcessCost;
