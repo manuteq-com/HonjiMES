@@ -59,7 +59,7 @@
             </dxi-column> -->
 
             <div *dxTemplate="let item of 'detail'">
-                <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (onChangeVar)="onChangeVar($event)">
+                <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (childOuter)="onChangeVar($event)">
                 </app-bomlist>
             </div>
         </dx-data-grid>
