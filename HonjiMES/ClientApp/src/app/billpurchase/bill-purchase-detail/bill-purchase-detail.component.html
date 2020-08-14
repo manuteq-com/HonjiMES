@@ -16,7 +16,7 @@
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
         <dxo-form>
             <dxi-item dataField="SupplierId"></dxi-item>
-            <dxi-item dataField="DataId"></dxi-item>
+            <!-- <dxi-item dataField="DataId"></dxi-item> -->
             <dxi-item dataField="Quantity"></dxi-item>
             <dxi-item dataField="Price"></dxi-item>
             <dxi-item dataField="PriceAll"></dxi-item>
@@ -36,29 +36,33 @@
         </dxi-total-item>
     </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
-    <dxi-column dataField="SupplierId" caption="供應商名稱" [allowEditing]="false" [width]="100">
-        <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-        <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
     <dxi-column dataField="SupplierId" caption="供應商代號" [allowEditing]="false" [width]="100">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Code" valueExpr="Id"></dxo-lookup>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="SupplierId" caption="供應商名稱" [allowEditing]="false" [width]="100">
+        <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Purchase.PurchaseNo" caption="採購單號" [allowEditing]="false" [width]="120">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="DataId" caption="品號" [allowEditing]="false" editCellTemplate="MaterialEditCellTemplate">
-        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+
+    <dxi-column dataField="DataType" caption="產品別" alignment="center" [allowEditing]="false" [width]="70">
+        <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="DataId" caption="品名" [allowEditing]="false">
-        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="DataNo" caption="品號" [allowEditing]="false" editCellTemplate="MaterialEditCellTemplate">
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="DataName" caption="品名" [allowEditing]="false">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <!-- <dxi-column dataField="DataId" caption="規格" [allowEditing]="false">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column> -->
-    <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="70" editCellTemplate="QuantityEditCellTemplate">
+
+    <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="50" editCellTemplate="QuantityEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceEditCellTemplate">

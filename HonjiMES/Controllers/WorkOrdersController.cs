@@ -224,6 +224,60 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 工單回報by採購單
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportData"></param>
+        /// <returns></returns>
+        // PUT: api/BillofPurchaseHeads/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ReportWorkOrderByPurchase(int id, WorkOrderReportData WorkOrderReportData)
+        {
+            var OWorkOrderHead = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).FirstAsync();
+            foreach (var item in OWorkOrderHead.WorkOrderDetails)
+            {
+                if (item.SerialNumber == WorkOrderReportData.WorkOrderSerial) {
+                    item.Status = 3; // 綁定採購單後即完成。
+                    item.PurchaseId = WorkOrderReportData.PurchaseId;
+                    item.UpdateTime = DateTime.Now;
+                    item.UpdateUser = MyFun.GetUserID(HttpContext);
+                    item.ActualStartTime = DateTime.Now;
+                    item.ActualEndTime = DateTime.Now;
+                    item.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                    {
+                        WorkOrderDetailId = item.Id,
+                        ReportType = 2, // 完工回報
+                        PurchaseId = item.PurchaseId,
+                        PurchaseNo = WorkOrderReportData.PurchaseNo,
+                        DrawNo = item.DrawNo,
+                        Manpower = item.Manpower,
+                        // ProducingMachineId = item.,
+                        ProducingMachine = item.ProducingMachine,
+                        ReCount = 0,
+                        Remarks = WorkOrderReportData.Remarks,
+                        StatusO = 1,
+                        StatusN = 3,
+                        DueStartTime = item.DueStartTime,
+                        DueEndTime = item.DueEndTime,
+                        ActualStartTime = item.ActualStartTime,
+                        ActualEndTime = item.ActualEndTime,
+                        CreateTime = DateTime.Now,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                    });
+                }
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(MyFun.APIResponseOK(OWorkOrderHead));
+        }
+
+        /// <summary>
         /// 工單結案
         /// </summary>
         /// <param name="id"></param>

@@ -1,15 +1,16 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ɵangular_packages_core_core_y } from '@angular/core';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
-import { SendService } from 'src/app/shared/mylib';
+import { SendService, Guid } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { AppComponent } from 'src/app/app.component';
 import { mBillOfMaterial } from 'src/app/model/viewmodels';
+import { ɵangular_packages_forms_forms_y } from '@angular/forms';
 
 @Component({
     selector: 'app-mbillofmateriallist',
@@ -36,22 +37,25 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     bomName: any;
     postval: any;
     saveDisabled: boolean;
+    // newRow: number;
 
-    ProcessLeadTime: any;
-    ProcessTime: any;
-    ProcessCost: any;
-    ProducingMachine: any;
-    Remarks: any;
-    DrawNo: any;
-    Manpower: any;
+    // ProcessLeadTime: any;
+    // ProcessTime: any;
+    // ProcessCost: any;
+    // ProducingMachine: any;
+    // Remarks: any;
+    // DrawNo: any;
+    // Manpower: any;
+
     modelpopupVisible: boolean;
     itemkey: any;
     OnChangeValue: number;
     allowAdding: any;
-
+    nProcess = [];
     constructor(private http: HttpClient, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
+        this.onInitNewRow = this.onInitNewRow.bind(this);
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
@@ -60,10 +64,10 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
 
         this.dataSourceDB_Process = [];
 
-        this.ProcessLeadTime = null;
-        this.ProcessTime = null;
-        this.ProcessCost = null;
-        this.ProducingMachine = '';
+        // this.ProcessLeadTime = null;
+        // this.ProcessTime = null;
+        // this.ProcessCost = null;
+        // this.ProducingMachine = '';
 
         this.allowAdding = false;
 
@@ -105,27 +109,25 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB_Process = [];
+
     }
     onInitNewRow(e) {
-        // debugger;
         this.SerialNo = this.dataSourceDB_Process.length;
         this.SerialNo++;
-        e.data.SerialNumber = this.SerialNo;
-        e.data.ProcessLeadTime = null;
-        e.data.ProcessTime = null;
-        e.data.ProcessCost = null;
-        e.data.ProducingMachine = '';
-        e.data.Remark = '';
-        e.data.DrawNo = '';
-        e.data.Manpower = 1;
+        // this.newRow = this.SerialNo;
 
-        this.ProcessLeadTime = null;
-        this.ProcessTime = null;
-        this.ProcessCost = null;
-        this.ProducingMachine = '';
-        this.Remarks = '';
-        this.DrawNo = '';
-        this.Manpower = 0;
+        const key = Guid.newGuid();
+        e.data.SerialNumber = this.SerialNo;
+        e.data.key = key;
+        const commentData = { SerialNumber: this.SerialNo, key };
+        this.nProcess.push(commentData);
+        // e.data.ProcessLeadTime = null;
+        // e.data.ProcessTime = null;
+        // e.data.ProcessCost = null;
+        // e.data.ProducingMachine = '';
+        // e.data.Remark = '';
+        // e.data.DrawNo = '';
+        // e.data.Manpower = 1;
     }
     onInitialized(value, e) {
         // data.setValue(value);
@@ -137,7 +139,6 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         });
     }
     onReorder(e) {
-        debugger;
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB_Process.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB_Process.indexOf(e.itemData);
@@ -161,6 +162,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.dataSourceDB_Process = s.data;
+                    this.nProcess = [];
                 }
             }
         );
@@ -179,28 +181,70 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.app.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
             (s) => {
                 if (s.success) {
-                    debugger;
                     this.dataSourceDB_Process = s.data;
                 }
             }
         );
 
     }
-    selectvalueChanged(e, data) {
-        // debugger;
-        data.setValue(e.value);
-        const today = new Date();
-        this.ProcessBasicList.forEach(x => {
-            if (x.Id === e.value) {
-                this.ProcessLeadTime = x?.LeadTime ?? 0;
-                this.ProcessTime = x?.WorkTime ?? 0;
-                this.ProcessCost = x?.Cost ?? 0;
-                this.ProducingMachine = x.ProducingMachine;
-                this.Remarks = x.Remark;
-                this.DrawNo = x.DrawNo;
-                this.Manpower = x?.Manpower ?? 1;
+    TemplatesetValue(e, data) {
+        this.nProcess.forEach(x => {
+            if (x.key === data.data.key) {
+                x[data.column.dataField] = e.value;
             }
         });
+        data.setValue(e.value);
+    }
+    selectvalueChanged(e, data) {
+
+        if (data.row.isNewRow) {
+            const ProcessBasic = this.ProcessBasicList.find(x => x.Id === e.value);
+            // data.row.data.DrawNo = ProcessBasic.DrawNo;
+            // data.row.data.Manpower = ProcessBasic.Manpower;
+            // data.row.data.ProcessCost = ProcessBasic.Cost;
+            // data.row.data.ProcessLeadTime = ProcessBasic.LeadTime;
+            // data.row.data.ProcessTime = ProcessBasic.WorkTime;
+            // data.row.data.ProducingMachine = ProcessBasic.ProducingMachine;
+            // data.row.data.Remark = ProcessBasic.Remark;
+            data.data.DrawNo = ProcessBasic.DrawNo;
+            data.data.Manpower = ProcessBasic.Manpower;
+            data.data.ProcessCost = ProcessBasic.Cost;
+            data.data.ProcessLeadTime = ProcessBasic.LeadTime;
+            data.data.ProcessTime = ProcessBasic.WorkTime;
+            data.data.ProducingMachine = ProcessBasic.ProducingMachine;
+            data.data.Remark = ProcessBasic.Remark;
+
+            this.nProcess.forEach(x => {
+                if (x.key === data.row.data.key) {
+                    x.DrawNo = ProcessBasic.DrawNo;
+                    x.Manpower = ProcessBasic.Manpower;
+                    x.ProcessCost = ProcessBasic.Cost;
+                    x.ProcessLeadTime = ProcessBasic.LeadTime;
+                    x.ProcessTime = ProcessBasic.WorkTime;
+                    x.ProducingMachine = ProcessBasic.ProducingMachine;
+                    x.Remark = ProcessBasic.Remark;
+                }
+            });
+            // data.DrawNo = ProcessBasic.DrawNo;
+            // data.Manpower = ProcessBasic.Manpower;
+            // data.ProcessCost = ProcessBasic.Cost;
+            // data.ProcessLeadTime = ProcessBasic.LeadTime;
+            // data.ProcessTime = ProcessBasic.WorkTime;
+            // data.ProducingMachine = ProcessBasic.ProducingMachine;
+            // data.Remark = ProcessBasic.Remark;
+
+            // this.ProcessLeadTime = ProcessBasic.LeadTime;
+            // this.ProcessTime = ProcessBasic.WorkTime;
+            // this.ProcessCost = ProcessBasic.Cost;
+            // this.ProducingMachine = ProcessBasic.ProducingMachine;
+            // this.Remarks = ProcessBasic.Remark;
+            // this.DrawNo = ProcessBasic.DrawNo;
+            // this.Manpower = ProcessBasic.Manpower;
+
+
+        }
+        data.setValue(e.value);
+        //this.dataGrid2.instance.saveEditData();
     }
     popup_model() {
         this.modelpopupVisible = true;
@@ -208,7 +252,21 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.itemkey = this.OnChangeValue;
     }
     async savedata() {
+        debugger;
         this.dataGrid2.instance.saveEditData();
+        this.dataSourceDB_Process.forEach(x => {
+            this.nProcess.forEach(y => {
+                if (x.key === y.key) {
+                    x.DrawNo = y.DrawNo;
+                    x.Manpower = y.Manpower;
+                    x.ProcessCost = y.ProcessCost;
+                    x.ProcessLeadTime = y.ProcessLeadTime;
+                    x.ProcessTime = y.ProcessTime;
+                    x.ProducingMachine = y.ProducingMachine;
+                    x.Remark = y.Remark;
+                }
+            });
+        });
         this.postval = {
             ProductBasicId: this.productbasicId,
             BomId: this.bomId,
@@ -218,6 +276,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         const sendRequest = await SendService.sendRequest(this.http, '/BillOfMaterials/PostMbomlist', 'POST', { values: this.postval });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
+            this.nProcess = [];
             notify({
                 message: '更新成功',
                 position: {
@@ -236,7 +295,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
                 this.SerialNo++;
 
                 // tslint:disable-next-line: new-parens
-                let tempData = new mBillOfMaterial;
+                const tempData = new mBillOfMaterial;
                 tempData.SerialNumber = this.SerialNo;
                 tempData.ProcessId = element.ProcessId;
                 tempData.ProcessLeadTime = element.ProcessLeadTime;
@@ -255,13 +314,60 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             }
         }, 'success', 3000);
     }
-    customizeText1(e) {
-        return e.value + '分';
+    showcell(data) {
+        if (data.row.isNewRow || !data.value) {
+            const dProcess = this.nProcess.find(x => x.key === data.data.key);
+            if (dProcess) {
+                data.value = dProcess[data.column.dataField];
+                // return dProcess[data.column.dataField];
+            }
+        }
+        return data.value;
     }
-    customizeText2(e) {
-        return e.value + '分';
+    onEditorPreparing(e) {
+        if (e.parentType === 'dataRow') {
+
+        }
     }
-    customizeText3(e) {
-        return e.value + '元';
+    onContentReady(e) {
+
+    }
+    onRowUpdating(e) {
+
+    }
+    onRowInserting(e) {
+
+    }
+    onFocusedCellChanging(e) {
+        if (e.rows[0].isNewRow) {
+            // e.rows[0].data.ProcessLeadTime = this.ProcessLeadTime;
+            // e.rows[0].data.ProcessTime = this.ProcessTime;
+            // e.rows[0].data.ProcessCost = this.ProcessCost;
+            // e.rows[0].data.ProducingMachine = this.ProducingMachine;
+            // e.rows[0].data.Remark = this.Remarks;
+            // e.rows[0].data.DrawNo = this.DrawNo;
+            // e.rows[0].data.Manpower = this.Manpower;
+        }
+    }
+    onFocusedCellChanged(e) {
+        if (e.rowIndex === -1) {
+            if (this.nProcess) {
+                // this.dataGrid2.instance.saveEditData();
+                this.dataSourceDB_Process.forEach(x => {
+                    this.nProcess.forEach(y => {
+                        if (x.key === y.key) {
+                            x.DrawNo = y.DrawNo;
+                            x.Manpower = y.Manpower;
+                            x.ProcessCost = y.ProcessCost;
+                            x.ProcessLeadTime = y.ProcessLeadTime;
+                            x.ProcessTime = y.ProcessTime;
+                            x.ProducingMachine = y.ProducingMachine;
+                            x.Remark = y.Remark;
+                        }
+                    });
+                });
+            }
+
+        }
     }
 }

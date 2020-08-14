@@ -73,7 +73,7 @@
     color: #000;
 }
 ::ng-deep tbody {
-    line-height: 30px !important;
+    /* line-height: 30px !important; */
 }
 /* ::ng-deep .dx-scheduler-appointment {
     border-right-width: 20px;

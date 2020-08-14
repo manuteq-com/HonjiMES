@@ -300,7 +300,8 @@ namespace HonjiMES.Controllers
                                     value0 = '[' + gitem[i].ProcessNo + ']' + gitem[i].ProcessName,
                                     value1 = gitem[i].ProcessTime.ToString(),
                                     value2 = gitem[i].ProducingMachine,
-                                    value3 = gitem[i].Status
+                                    value3 = gitem[i].Status,
+                                    value4 = gitem[i].Type
                                 };
                                 typeitem.SetValue(nProcessesData, nTempString);
                                 foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + i.ToString()))
@@ -454,6 +455,7 @@ namespace HonjiMES.Controllers
                         DrawNo = item.DrawNo,
                         Manpower = item.Manpower,
                         ProducingMachine = item.ProducingMachine,
+                        Type = item.Type,
                         Remarks = item.Remarks,
                         DueStartTime = item.DueStartTime,
                         DueEndTime = item.DueEndTime,
@@ -507,6 +509,7 @@ namespace HonjiMES.Controllers
                         OWorkOrderDetail.DrawNo = item.DrawNo;
                         OWorkOrderDetail.Manpower = item.Manpower;
                         OWorkOrderDetail.ProducingMachine = item.ProducingMachine;
+                        OWorkOrderDetail.Type = item.Type;
                         OWorkOrderDetail.Remarks = item.Remarks;
                         OWorkOrderDetail.DueStartTime = item.DueStartTime;
                         OWorkOrderDetail.DueEndTime = item.DueEndTime;
@@ -531,6 +534,7 @@ namespace HonjiMES.Controllers
                             Manpower = item.Manpower,
                             ProducingMachine = item.ProducingMachine,
                             Status = OWorkOrderHeads.Status,
+                            Type = item.Type,
                             Remarks = item.Remarks,
                             DueStartTime = item.DueStartTime,
                             DueEndTime = item.DueEndTime,
@@ -630,19 +634,19 @@ namespace HonjiMES.Controllers
 
             foreach (var item in data)
             {
-                if (item.DataType == 0)
+                if (item.DataType == 1)
                 {
                     var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.MaterialNo;
                     item.DataName = BasicData.Name;
                 }
-                else if (item.DataType == 1)
+                else if (item.DataType == 2)
                 {
                     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.ProductNo;
                     item.DataName = BasicData.Name;
                 }
-                else if (item.DataType == 2)
+                else if (item.DataType == 3)
                 {
                     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.WiproductNo;

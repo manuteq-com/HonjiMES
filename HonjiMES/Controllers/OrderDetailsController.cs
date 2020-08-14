@@ -193,10 +193,14 @@ namespace HonjiMES.Controllers
             var OrderDetails = await _context.OrderDetails.FindAsync(id);//Find OrderDetails.ProductBasicId
             var productBasic  = await _context.ProductBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.ProductBasicId).Select(x => new ProductBasicData
             {
-                TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity)
+                TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+                Products = x.Products
             }).FirstOrDefaultAsync();
-
-            return Ok(MyFun.APIResponseOK(productBasic));
+            if (productBasic.Products.Count() == 0) {
+                return Ok(MyFun.APIResponseError("尚未建立成品明細!"));
+            } else {
+                return Ok(MyFun.APIResponseOK(productBasic));
+            }
         }
 
         private bool OrderDetailExists(int id)

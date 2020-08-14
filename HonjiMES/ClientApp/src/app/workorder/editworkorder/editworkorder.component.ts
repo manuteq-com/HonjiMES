@@ -5,8 +5,10 @@ import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
+import CheckBox from 'devextreme/ui/check_box';
 import Swal from 'sweetalert2';
 import CustomStore from 'devextreme/data/custom_store';
+import { workOrderReportData } from 'src/app/model/viewmodels';
 
 @Component({
     selector: 'app-editworkorder',
@@ -35,6 +37,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     enterKeyDirection: string;
     buttondisabled = false;
 
+    disabledValues: number[];
 
     CreateTimeDateBoxOptions: any;
     ProductBasicSelectBoxOptions: any;
@@ -51,9 +54,10 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     onCellPreparedLevel: any;
     Controller = '/WorkOrders';
     WorkStatusList: any;
-
+    listWorkOrderTypes: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
         this.validateNumber = this.validateNumber.bind(this);
@@ -66,20 +70,18 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 5;
         this.dataSourceDB = [];
         this.saveDisabled = true;
         this.modCheck = false;
         this.modName = 'new';
         this.saveCheck = true;
-        this.WorkStatusList = myservice.getWorkOrderType();
-
+        this.WorkStatusList = myservice.getWorkOrderStatus();
+        this.disabledValues = [];
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1 };
-
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
@@ -110,14 +112,14 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.formData = s.data;
-                    this.formData.Count = 1;
-                }
-            }
-        );
+        // this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.formData = s.data;
+        //             this.formData.Count = 1;
+        //         }
+        //     }
+        // );
 
     }
     ngOnInit() {
@@ -127,7 +129,6 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
-        debugger;
         this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
             (s) => {
                 if (s.success) {
@@ -219,20 +220,29 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             }
         }
     }
-    onCellPrepared(e) {
-        // if (e.rowType === 'data') {
-        //     if (e.column.dataField === 'ReCount') {
-        //         debugger;
-        //         if (e.row.data.Status === 2) {
-        //             e.column.allowEditing = true;
-        //         } else {
-        //             e.column.allowEditing = false;
-        //         }
-        //     }
-        // }
+    onCellPrepared(e: any) {
+        if (e.rowType === 'data' && e.column.command === 'select') {
+            if (e.data.Type === '1') { // 種類為委外
+                const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
+                instance.option('disabled', true);
+                this.disabledValues.push(e.data.Id);
+            }
+        }
     }
-    onSelectionChanged() {
-
+    onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
+        const disabledKeys = e.currentSelectedRowKeys.filter(i => this.disabledValues.indexOf(i.Id) > -1);
+        if (disabledKeys.length > 0) {
+            e.component.deselectRows(disabledKeys);
+        }
+    }
+    onRowClick(e) {
+        if (e.data.Type === '1') {
+            if (e.data.Status === 3) {
+                this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
+            } else {
+                this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
+            }
+        }
     }
     onToolbarPreparing(e) {
         const toolbarItems = e.toolbarOptions.items;
@@ -261,6 +271,58 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             }
         }
         return true;
+    }
+    ReportByPurchaseNo(workOrderHeadId, serial) {
+        Swal.fire({
+            title: '請輸入採購單號!',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonColor: '#296293',
+            cancelButtonColor: '#CE312C',
+            confirmButtonText: '確認',
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            preConfirm: (purchaseNo) => {
+                return this.app.GetData('/PurchaseHeads/GetPurchasesByPurchaseNo?DataNo=' + purchaseNo).toPromise()
+                .then(response => {
+                    if (!response.success) {
+                        // throw new Error(response.message);
+                        Swal.showValidationMessage(response.message);
+                    }
+                    return {purchaseId: response.data, purchaseNo};
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                    );
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then(async (result) => {
+            if (result.value) {
+                const Data = new workOrderReportData();
+                Data.WorkOrderID = workOrderHeadId;
+                Data.WorkOrderSerial = serial;
+                Data.PurchaseId = result.value.purchaseId;
+                Data.PurchaseNo = result.value.purchaseNo;
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: workOrderHeadId, values: Data });
+                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                if (sendRequest) {
+                    this.dataGrid2.instance.refresh();
+                    notify({
+                        message: '更新成功',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'success', 2000);
+                }
+            }
+        });
     }
     async onFormSubmit(e) {
         let saveok = true;

@@ -28,7 +28,7 @@
             <dxi-validation-rule type="required" message="廠內規格 必填"></dxi-validation-rule>
             <dxo-label text="廠內規格"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="NumberBoxOptions">
             <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
             <dxo-label text="單價"></dxo-label>
         </dxi-item>

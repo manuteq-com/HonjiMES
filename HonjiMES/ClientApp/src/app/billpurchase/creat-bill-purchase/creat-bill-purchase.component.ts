@@ -35,16 +35,17 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     colCount: number;
     url: string;
     dataSourceDB: {
-        Id: number, SupplierId: number, PurchaseId: number,
-        DataId: number, Quantity: number, OriginPrice: number, Price: number
+        TempId: number, Id: number, SupplierId: number, PurchaseId: number,
+        DataType: number, DataId: number, Quantity: number, OriginPrice: number, Price: number
     }[] = [];
     controller: string;
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
+    SupplierListEdit: any[];
     PurchaseList: any;
     PurchaseTempList: any[];
-    MaterialBasicList: any;
-    MaterialBasicTempList: any[];
+    BasicDataList: any;
+    BasicDataListTemp: any[];
     PurchaseselectBoxOptions: any;
     changeMode: boolean;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
@@ -86,11 +87,18 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
         this.PurchaseTempList = [];
-        this.MaterialBasicTempList = [];
+        this.BasicDataListTemp = [];
 
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 this.WarehouseListAll = s.data;
+            }
+        );
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.BasicDataList = s.data;
+                }
             }
         );
     }
@@ -108,8 +116,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.SupplierList = s.data;
+                    this.SupplierListEdit = [];
                     this.SupplierList.forEach(x => {
-                        x.Name = x.Code + '_' + x.Name;
+                        x.Name = x.Name.replace('有限公司', '');
+                        this.SupplierListEdit.push({
+                            Id: x.Id,
+                            Name: x.Code + '_' + x.Name
+                        })
                     });
                 }
             }
@@ -175,7 +188,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.UnitQuantityval = null;
         this.UnitPriceval = null;
         this.UnitPriceAllval = null;
-        this.MaterialBasicList = null;
+        // this.BasicDataList = null;
+        this.BasicDataListTemp = [];
         this.WarehouseList = null;
 
         this.GetPurchasesBySupplier(e.value);
@@ -184,18 +198,18 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         data.setValue(e.value);
         this.Purchaseval = e.value;
         this.WarehouseList = null;
-        this.GetMaterialBasicsByPurchase(e.value);
+        this.GetBasicDatasByPurchase(e.value);
     }
     selectMateriaValueChanged(e, data) {
         data.setValue(e.value);
-        this.MaterialBasicList.find(x => {
-            if (x.Id === e.value) {
+        this.BasicDataListTemp.find(x => {
+            if (x.TempId === e.value) {
                 this.Quantityval = x.Quantity;
                 this.OriginPriceval = x.OriginPrice;
                 this.Priceval = x.OriginPrice;
                 this.PriceAllval = x.Quantity * x.OriginPrice;
                 this.Warehouseval = x.WarehouseId;
-                this.GetWarehouseByMaterialBasic(x.Id);
+                this.GetWarehouseByBasicData(x.DataType, x.DataId);
             }
         });
     }
@@ -245,12 +259,12 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     onRowInserting(e) {
         this.SupplierIdVal = e.data.SupplierId;
         this.PurchaseIdVal = e.data.PurchaseId;
-        const DataId = e.data.DataId;
+        const TempId = e.data.TempId;
         const datas = this.dataSourceDB;
         datas.forEach(element => {// 阻擋重複新增
             if (element.SupplierId === this.SupplierIdVal &&
                 element.PurchaseId === this.PurchaseIdVal &&
-                element.DataId === DataId) {
+                element.TempId === TempId) {
                 this.showMessage('新增項目已存在!!');
                 e.cancel = true;
             }
@@ -281,8 +295,11 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.UnitPriceAllval = e.data.UnitPriceAllval;
         this.Warehouseval = e.data.WarehouseId;
         this.GetPurchasesBySupplier(e.data.SupplierId);
-        this.GetMaterialBasicsByPurchase(e.data.PurchaseId);
-        this.GetWarehouseByMaterialBasic(e.data.DataId);
+        this.GetBasicDatasByPurchase(e.data.PurchaseId);
+        const result = this.BasicDataList.find(x => x.TempId === e.data.TempId);
+        if (result) {
+            this.GetWarehouseByBasicData(result.DataType, result.DataId);
+        }
     }
     GetPurchasesBySupplier(Id) {
         this.app.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
@@ -298,39 +315,102 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             }
         );
     }
-    GetMaterialBasicsByPurchase(Id) {
-        this.app.GetData('/PurchaseDetails/GetMaterialBasicsByPurchase/' + Id).subscribe(
+    GetBasicDatasByPurchase(Id) {
+        this.app.GetData('/PurchaseDetails/GetBasicsDataByPurchase/' + Id).subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialBasicList = s.data;
+                    // this.BasicDataList = s.data;
+                    this.BasicDataListTemp = [];
                     s.data.forEach(element => {
-                        if (!this.MaterialBasicTempList.some(x => x.MaterialNo === element.MaterialNo)) {
-                            this.MaterialBasicTempList.push(element);
+                        const result = this.BasicDataList.find(x => x.DataType === element.DataType && x.DataId === element.DataId);
+                        if (result && element.Quantity !== 0) {
+                            this.BasicDataListTemp.push({
+                                TempId: result.TempId,
+                                DataId: element.DataId,
+                                DataName: element.DataName,
+                                DataNo: element.DataNo,
+                                DataType: element.DataType,
+                                DeleteFlag: element.DeleteFlag,
+                                DeliveryTime: element.DeliveryTime,
+                                Id: element.Id,
+                                OrderId: element.OrderId,
+                                OriginPrice: element.OriginPrice,
+                                Price: element.Price,
+                                Purchase: element.Purchase,
+                                PurchaseCount: element.PurchaseCount,
+                                PurchaseId: element.PurchaseId,
+                                PurchaseType: element.PurchaseType,
+                                Quantity: element.Quantity,
+                                Remarks: element.Remarks,
+                                Specification: element.Specification,
+                                SupplierId: element.SupplierId,
+                                WarehouseId: element.WarehouseId
+                            });
                         }
                     });
                 }
             }
         );
     }
-    GetWarehouseByMaterialBasic(Id) {
-        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
-            (s) => {
-                this.WarehouseList = [];
-                s.data.forEach((element, index) => {
-                    element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                    this.WarehouseList[index] = element.Warehouse;
-                });
-                this.MaterialBasicTempList.forEach(element => {
-                    if (element.Id === Id) {
-                        if (element.WarehouseId !== null) {
-                            this.Warehouseval = element.WarehouseId;
-                        } else {
-                            this.Warehouseval = this.WarehouseList[0].Id;
+    GetWarehouseByBasicData(Type, Id) {
+        if (Type === 1) {
+            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                    this.BasicDataListTemp.forEach(element => {
+                        if (element.Id === Id) {
+                            if (element.WarehouseId !== null) {
+                                this.Warehouseval = element.WarehouseId;
+                            } else {
+                                this.Warehouseval = this.WarehouseList[0].Id;
+                            }
                         }
-                    }
-                });
-            }
-        );
+                    });
+                }
+            );
+        } else if (Type === 2) {
+            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + Id).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                    this.BasicDataListTemp.forEach(element => {
+                        if (element.Id === Id) {
+                            if (element.WarehouseId !== null) {
+                                this.Warehouseval = element.WarehouseId;
+                            } else {
+                                this.Warehouseval = this.WarehouseList[0].Id;
+                            }
+                        }
+                    });
+                }
+            );
+        } else if (Type === 3) {
+            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + Id).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                    this.BasicDataListTemp.forEach(element => {
+                        if (element.Id === Id) {
+                            if (element.WarehouseId !== null) {
+                                this.Warehouseval = element.WarehouseId;
+                            } else {
+                                this.Warehouseval = this.WarehouseList[0].Id;
+                            }
+                        }
+                    });
+                }
+            );
+        }
     }
     onDataErrorOccurred(e) {
         notify({
@@ -373,9 +453,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
+        this.dataSourceDB.forEach(element => {
+            const basicData = this.BasicDataList.find(z => z.TempId === element.TempId);
+            element.DataType = basicData.DataType;
+            element.DataId = basicData.DataId;
+        });
         this.postval = {
             BillofPurchaseHead: this.formData,
-            BillofPurchaseDetail: this.dataSourceDB as BillofPurchaseDetail[]
+            BillofPurchaseDetail: this.dataSourceDB
         };
         this.buttondisabled = false;
         // tslint:disable-next-line: max-line-length

@@ -56,6 +56,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
     CreateTimeDateBoxOptions: any;
     ProductPricrErrList: any;
     btnMod: any;
+    Quantity: number;
+    DBOriginPrice: number;
+    OriginPrice: number;
+    DBPrice: number;
+    Price: number;
+    dataGridRowIndex: number;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.CustomerVal = null;
@@ -70,6 +76,13 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.colCount = 5;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
+        this.Quantity = 0;
+        this.DBOriginPrice = 0;
+        this.OriginPrice = 0;
+        this.DBPrice = 0;
+        this.Price = 0;
+        this.dataGridRowIndex = 0;
+
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
@@ -138,12 +151,15 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 this.exceldata.Customer = null;
             }
 
+            this.SerialNo = 0;
             this.ProductPricrErrList = [];
             this.exceldata.OrderDetails.forEach(item => {
                 this.SerialNo++;
                 if (item.ProductBasicId === 0) {
                     item.ProductBasicId = null;
                 } else {
+                    this.dataGridRowIndex++;
+                    item.RowIndex = this.dataGridRowIndex;
                     const Product = this.ProductBasicList.filter(x => x.Id === item.ProductBasicId)[0];
                     item.DBOriginPrice = Product.Price;
                     item.DBPrice = Product.Price * item.Quantity;
@@ -184,6 +200,27 @@ export class CreatorderComponent implements OnInit, OnChanges {
             }
         }
     };
+    onValueChanged(e, data) {
+        data.setValue(e.value);
+        const Product = this.ProductBasicList.filter(x => x.Id === e.value)[0];
+        this.Quantity = 1;
+        this.DBOriginPrice = Product.Price;
+        this.DBPrice = this.Quantity * Product.Price;
+        this.OriginPrice = 0;
+        this.Price = this.Quantity * this.OriginPrice;
+    }
+    QuantityonValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Quantity = e.value;
+        this.DBPrice = this.Quantity * this.DBOriginPrice;
+        this.Price = this.Quantity * this.OriginPrice;
+    }
+    OriginPriceonValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OriginPrice = e.value;
+        this.DBPrice = this.Quantity * this.DBOriginPrice;
+        this.Price = this.Quantity * this.OriginPrice;
+    }
     saveBtn(e) {
         this.btnMod = 'save';
     }
@@ -194,6 +231,20 @@ export class CreatorderComponent implements OnInit, OnChanges {
         // debugger;
         this.SerialNo++;
         e.data.Serial = this.SerialNo;
+        this.dataGridRowIndex++;
+        e.data.RowIndex = this.dataGridRowIndex;
+        this.Quantity = 1;
+        this.DBOriginPrice = 0;
+        this.DBPrice = 0;
+        this.OriginPrice = 0;
+        this.Price = 0;
+    }
+    onEditingStart(e) {
+        this.Quantity = e.data.Quantity;
+        this.DBOriginPrice = e.data.DBOriginPrice;
+        this.DBPrice = e.data.DBPrice;
+        this.OriginPrice = e.data.OriginPrice;
+        this.Price = e.data.Price;
     }
     onFocusedCellChanging(e) {
     }

@@ -27,6 +27,8 @@ namespace HonjiMES.Models
         public int? OrderId { get; set; }
         [Column("delivery_time", TypeName = "timestamp")]
         public DateTime DeliveryTime { get; set; }
+        [Column("data_type", TypeName = "int(11)")]
+        public int DataType { get; set; }
         [Column("data_id", TypeName = "int(11)")]
         public int DataId { get; set; }
         [Required]

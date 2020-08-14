@@ -29,7 +29,7 @@ export class QrcodeComponent implements OnInit, OnChanges {
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.remoteOperations = true;
         this.PrintQrCode = this.PrintQrCode.bind(this);
-        this.listStatus = myservice.getWorkOrderType();
+        this.listStatus = myservice.getWorkOrderStatus();
         this.dataSourceDB = [];
     }
     ngOnInit() {

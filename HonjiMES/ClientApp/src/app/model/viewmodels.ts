@@ -165,6 +165,8 @@ export class workOrderReportData {
     ReCount: number;
     Remarks: string;
     ProducingMachine: string;
+    PurchaseId: number;
+    PurchaseNo: string;
 }
 
 // tslint:disable-next-line: class-name
