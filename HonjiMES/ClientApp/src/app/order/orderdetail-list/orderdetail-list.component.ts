@@ -261,6 +261,8 @@ export class OrderdetailListComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.totalcount = s.data.TotalCount;
+                } else {
+                    this.totalcount = s.message;
                 }
             }
         );

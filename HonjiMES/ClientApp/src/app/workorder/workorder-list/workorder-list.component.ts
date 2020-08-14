@@ -3,6 +3,11 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
+import Swal from 'sweetalert2';
+import { workOrderReportData } from 'src/app/model/viewmodels';
+import { SendService } from 'src/app/shared/mylib';
+import { HttpClient } from '@angular/common/http';
+import { APIResponse } from 'src/app/app.module';
 
 @Component({
     selector: 'app-workorder-list',
@@ -50,7 +55,7 @@ export class WorkorderListComponent implements OnInit {
             }
         }
     }
-    constructor(public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
         this.getWorkOrderData();
@@ -71,7 +76,6 @@ export class WorkorderListComponent implements OnInit {
             }
         );
     }
-
     trclick(e) {
         if (!this.checkVisible) {
             this.itemkey = e;
@@ -88,16 +92,25 @@ export class WorkorderListComponent implements OnInit {
         if (e[colData.key] != null) {
             this.itemkey = e.Key;
             this.serialkey = Number(colData.key.substring(4)) + 1;
-            this.mod = 'report';
-            this.randomkey = new Date().getTime();
-            this.creatpopupVisible = true;
-
-            if (e[colData.key].value3 === 1) {
-                this.ReportHeight = 710;
-            } else if (e[colData.key].value3 === 2) {
-                this.ReportHeight = 760;
-            } else if (e[colData.key].value3 === 3) {
-                this.ReportHeight = 760;
+            // 判斷是否為委外
+            if (e[colData.key].value4 === '1') {
+                if (e[colData.key].value3 === 3) {
+                    this.ReportByPurchaseNo(this.itemkey, this.serialkey);
+                } else {
+                    this.ReportByPurchaseNo(this.itemkey, this.serialkey);
+                }
+            } else {
+                this.mod = 'report';
+                this.randomkey = new Date().getTime();
+                this.creatpopupVisible = true;
+                // 判斷該工序目前狀態，決定顯示內容
+                if (e[colData.key].value3 === 1) {
+                    this.ReportHeight = 710;
+                } else if (e[colData.key].value3 === 2) {
+                    this.ReportHeight = 760;
+                } else if (e[colData.key].value3 === 3) {
+                    this.ReportHeight = 760;
+                }
             }
         }
     }
@@ -116,6 +129,58 @@ export class WorkorderListComponent implements OnInit {
         } else if (data === 3) {
             return 'process_end';
         }
+    }
+    ReportByPurchaseNo(workOrderHeadId, serial) {
+        Swal.fire({
+            title: '請輸入採購單號!',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonColor: '#296293',
+            cancelButtonColor: '#CE312C',
+            confirmButtonText: '確認',
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            preConfirm: (purchaseNo) => {
+                return this.app.GetData('/PurchaseHeads/GetPurchasesByPurchaseNo?DataNo=' + purchaseNo).toPromise()
+                .then(response => {
+                    if (!response.success) {
+                        // throw new Error(response.message);
+                        Swal.showValidationMessage(response.message);
+                    }
+                    return {purchaseId: response.data, purchaseNo};
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                    );
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then(async (result) => {
+            if (result.value) {
+                const Data = new workOrderReportData();
+                Data.WorkOrderID = workOrderHeadId;
+                Data.WorkOrderSerial = serial;
+                Data.PurchaseId = result.value.purchaseId;
+                Data.PurchaseNo = result.value.purchaseNo;
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: workOrderHeadId, values: Data });
+                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                if (sendRequest) {
+                    this.getWorkOrderData();
+                    notify({
+                        message: '更新成功',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'success', 2000);
+                }
+            }
+        });
     }
     creatdata() {
         this.creatpopupVisible = true;

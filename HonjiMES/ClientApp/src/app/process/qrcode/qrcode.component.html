@@ -40,10 +40,11 @@
     </dxi-column>
     <dxi-column dataField="Count" caption="數量" [width]="100"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"
-    [calculateFilterExpression]="calculateFilterExpression"
-    [(selectedFilterOperation)]="selectedFilterOperation"
-    [(filterValue)]="filterValue"
-    [width]="180"></dxi-column>
+        [calculateFilterExpression]="calculateFilterExpression"
+        [(selectedFilterOperation)]="selectedFilterOperation"
+        [(filterValue)]="filterValue"
+        [width]="180">
+    </dxi-column>
     <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column>
 
 </dx-data-grid>

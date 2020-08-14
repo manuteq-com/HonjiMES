@@ -31,13 +31,15 @@ export class ProcessControlComponent implements OnInit {
     remoteOperations = true;
     ProcessBasicList: any;
     listStatus: any;
+    listWorkOrderTypes: any;
     btnDisabled: boolean;
     workOrderHeadId: any;
     workOrderHeadNo: any;
     logpopupVisible: boolean;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent) {
-        this.listStatus = myservice.getWorkOrderType();
+        this.listStatus = myservice.getWorkOrderStatus();
+        this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
