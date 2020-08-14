@@ -382,7 +382,7 @@ namespace HonjiMES.Controllers
                     Lv = item.Lv,
                     ReceiveQty = item.ReceiveQty,
                     Ismaterial = item.Ismaterial,
-                    
+
                     LvS = "(" + item.Lv + ")　 " + item.ProductNo + item.MaterialNo,
                     LvName = item.ProductNo + item.MaterialNo,
                     BomType = !string.IsNullOrWhiteSpace(item.MaterialNo) ? "元件" : "成品"
@@ -669,7 +669,7 @@ namespace HonjiMES.Controllers
         {
             if (id != 0)
             {
-                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).ToListAsync();
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == id).OrderBy(x => x.SerialNumber).ToListAsync();
 
                 if (billOfMaterial == null)
                 {
