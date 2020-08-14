@@ -668,4 +668,19 @@ namespace HonjiMES.Models
         public int Status { get; set; }
         public bool AllDay { get; set; }
     }
+
+    /// <summary>
+    /// 成品主檔資訊
+    /// </summary>
+    public class ResoureAllocation
+    {
+        public string ProducingMachine { get; set; }
+        public decimal New { get; set; }
+        public decimal Assign { get; set; }
+        public decimal Start { get; set; }
+        public decimal Ready { get; set; }
+        public decimal ToNew { get; set; }
+        public decimal Finish { get; set; }
+
+    } 
 }

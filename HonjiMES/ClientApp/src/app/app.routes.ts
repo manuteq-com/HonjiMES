@@ -26,6 +26,7 @@ import { WorkorderListComponent } from './workorder/workorder-list/workorder-lis
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
 import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
+import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 
 
 
@@ -55,6 +56,7 @@ export const routes: Routes = [
     { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard] },
     { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard] },
 
+    { path: 'resourceallocation', component: ResourceAllocationComponent, canActivate: [AuthGuard] },
     { path: 'workscheduler', component: WorksChedulerComponent, canActivate: [AuthGuard] },
 ];
 
