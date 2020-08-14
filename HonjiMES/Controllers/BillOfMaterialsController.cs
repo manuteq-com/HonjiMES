@@ -643,7 +643,7 @@ namespace HonjiMES.Controllers
         {
             if (id != 0)
             {
-                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).ToListAsync();
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).OrderBy(x => x.SerialNumber).ToListAsync();
 
                 if (billOfMaterial == null)
                 {

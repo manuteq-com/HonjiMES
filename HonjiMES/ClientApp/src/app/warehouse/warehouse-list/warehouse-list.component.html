@@ -59,7 +59,7 @@
         </dxo-popup>
     </dxo-editing>
 
-    <!-- <dxi-column dataField="Code" caption="代號" [width]="100"></dxi-column> -->
+    <dxi-column dataField="Code" caption="代號" sortOrder="asc" [width]="100"></dxi-column>
     <dxi-column dataField="Name" caption="倉庫名稱" [width]="300"></dxi-column>
     <dxi-column dataField="Contact" caption="聯絡人" [width]="100"></dxi-column>
     <dxi-column dataField="Phone" caption="聯絡電話" [width]="160"></dxi-column>
@@ -76,7 +76,7 @@
     </dxi-column>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增倉庫" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="420"
+<dx-popup [showTitle]="true" title="新增倉庫" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="480"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatwarehouse (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

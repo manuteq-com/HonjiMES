@@ -40,7 +40,6 @@ export class AdjustLogComponent implements OnInit {
     listAdjustType: any;
     AdjustTypeList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
-        debugger;
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);

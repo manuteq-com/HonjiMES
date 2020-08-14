@@ -258,7 +258,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Warehouses.AsQueryable().Where(x => x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
+            if (_context.Warehouses.AsQueryable().Where(x => x.Code == warehouse.Code && x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("倉庫名稱已存在!", warehouse));
             }
