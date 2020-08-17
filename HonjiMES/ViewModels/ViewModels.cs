@@ -622,7 +622,7 @@ namespace HonjiMES.Models
         public string value1 { get; set; }
         public string value2 { get; set; }
         public int value3 { get; set; }
-        public string value4 { get; set; }
+        public int value4 { get; set; }
     }
     public class BillOfMaterialVerLv : BillOfMaterialVer
     {
