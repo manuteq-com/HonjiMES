@@ -6,7 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("requisition")]
+    /// <summary>
+    /// &#38936;&#26009;&#36039;&#26009;&#20027;&#27284;
+    /// </summary>
+    [Table("requisition")]
     public partial class Requisition
     {
         public Requisition()
@@ -19,26 +22,53 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]
         public int ProductBasicId { get; set; }
+        /// <summary>
+        /// &#24037;&#21934;&#20027;&#27284;ID
+        /// </summary>
         [Column("work_order_head_id", TypeName = "int(11)")]
         public int WorkOrderHeadId { get; set; }
+        /// <summary>
+        /// &#38936;&#26009;&#21934;&#34399;
+        /// </summary>
         [Required]
         [Column("requisition_no", TypeName = "varchar(50)")]
         public string RequisitionNo { get; set; }
+        /// <summary>
+        /// &#38936;&#26009;&#21934;&#21517;&#31281;
+        /// </summary>
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
+        /// <summary>
+        /// &#20027;&#20214;&#21697;&#34399;
+        /// </summary>
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
+        /// <summary>
+        /// &#24288;&#20839;&#25104;&#21697;&#34399;
+        /// </summary>
         [Required]
         [Column("product_number", TypeName = "varchar(50)")]
         public string ProductNumber { get; set; }
+        /// <summary>
+        /// &#35215;&#26684;
+        /// </summary>
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
+        /// <summary>
+        /// &#29983;&#29986;&#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#21034;&#38500;&#35387;&#35352;
+        /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]

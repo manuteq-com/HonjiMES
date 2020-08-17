@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("supplier_of_material")]
+    [Table("supplier_of_material")]
     public partial class SupplierOfMaterial
     {
         [Key]

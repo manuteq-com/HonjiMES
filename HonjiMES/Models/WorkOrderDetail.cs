@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("work_order_detail")]
+    [Table("work_order_detail")]
     public partial class WorkOrderDetail
     {
         public WorkOrderDetail()
@@ -17,51 +17,113 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#24037;&#21934;ID
+        /// </summary>
         [Column("work_order_head_id", TypeName = "int(11)")]
         public int WorkOrderHeadId { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#38918;&#24207;	
+        /// </summary>
         [Column("serial_number", TypeName = "int(11)")]
         public int SerialNumber { get; set; }
         [Column("process_id", TypeName = "int(11)")]
         public int ProcessId { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#20195;&#34399;	
+        /// </summary>
         [Required]
         [Column("process_no", TypeName = "varchar(50)")]
         public string ProcessNo { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#21517;&#31281;	
+        /// </summary>
         [Required]
         [Column("process_name", TypeName = "varchar(50)")]
         public string ProcessName { get; set; }
+        /// <summary>
+        /// &#21069;&#32622;&#26178;&#38291;	
+        /// </summary>
         [Column("process_lead_time", TypeName = "decimal(10,2)")]
         public decimal ProcessLeadTime { get; set; }
+        /// <summary>
+        /// &#27161;&#28310;&#24037;&#26178;	
+        /// </summary>
         [Column("process_time", TypeName = "decimal(10,2)")]
         public decimal ProcessTime { get; set; }
+        /// <summary>
+        /// &#25104;&#26412;	
+        /// </summary>
         [Column("process_cost", TypeName = "decimal(10,2)")]
         public decimal ProcessCost { get; set; }
+        /// <summary>
+        /// &#38656;&#27714;&#37327;
+        /// </summary>
         [Column("count", TypeName = "int(11)")]
         public int Count { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#21934;ID
+        /// </summary>
         [Column("purchase_id", TypeName = "int(11)")]
         public int? PurchaseId { get; set; }
+        /// <summary>
+        /// &#22294;&#34399;
+        /// </summary>
         [Column("draw_no", TypeName = "varchar(50)")]
         public string DrawNo { get; set; }
+        /// <summary>
+        /// &#25152;&#38656;&#20154;&#21147;	
+        /// </summary>
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
+        /// <summary>
+        /// &#27231;&#21488;	
+        /// </summary>
         [Column("producing_machine", TypeName = "varchar(50)")]
         public string ProducingMachine { get; set; }
+        /// <summary>
+        /// &#29376;&#24907;
+        /// </summary>
         [Column("status", TypeName = "int(11)")]
         public int Status { get; set; }
-        [Required]
-        [Column("type", TypeName = "varchar(50)")]
-        public string Type { get; set; }
+        /// <summary>
+        /// &#31278;&#39006;
+        /// </summary>
+        [Column("type", TypeName = "int(11)")]
+        public int Type { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;	
+        /// </summary>
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#23526;&#38555;&#23436;&#24037;&#25976;&#37327;
+        /// </summary>
         [Column("re_count", TypeName = "int(11)")]
         public int? ReCount { get; set; }
+        /// <summary>
+        /// &#32317;&#24037;&#26178;
+        /// </summary>
         [Column("total_time", TypeName = "timestamp")]
         public DateTime? TotalTime { get; set; }
+        /// <summary>
+        /// &#38928;&#35336;&#38283;&#24037;&#26085;
+        /// </summary>
         [Column("due_start_time", TypeName = "timestamp")]
         public DateTime? DueStartTime { get; set; }
+        /// <summary>
+        /// &#38928;&#35336;&#23436;&#24037;&#26085;
+        /// </summary>
         [Column("due_end_time", TypeName = "timestamp")]
         public DateTime? DueEndTime { get; set; }
+        /// <summary>
+        /// &#23526;&#38555;&#38283;&#24037;&#26085;
+        /// </summary>
         [Column("actual_start_time", TypeName = "timestamp")]
         public DateTime? ActualStartTime { get; set; }
+        /// <summary>
+        /// &#23526;&#38555;&#23436;&#24037;&#26085;
+        /// </summary>
         [Column("actual_end_time", TypeName = "timestamp")]
         public DateTime? ActualEndTime { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]

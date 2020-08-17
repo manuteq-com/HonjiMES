@@ -222,7 +222,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     onCellPrepared(e: any) {
         if (e.rowType === 'data' && e.column.command === 'select') {
-            if (e.data.Type === '1') { // 種類為委外
+            if (e.data.Type === 1) { // 種類為委外
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);
@@ -236,7 +236,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         }
     }
     onRowClick(e) {
-        if (e.data.Type === '1') {
+        if (e.data.Type === 1) {
             if (e.data.Status === 3) {
                 this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {

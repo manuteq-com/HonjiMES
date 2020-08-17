@@ -6,38 +6,80 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("adjust_detail")]
+    [Table("adjust_detail")]
     public partial class AdjustDetail
     {
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#35519;&#25972;&#21934;ID
+        /// </summary>
         [Column("adjust_head_id", TypeName = "int(11)")]
         public int AdjustHeadId { get; set; }
+        /// <summary>
+        /// &#26009;&#34399;&#31278;&#39006;(1&#21407;&#26009;2&#25104;&#21697;3&#21322;&#25104;&#21697;)
+        /// </summary>
         [Column("item_type", TypeName = "int(11)")]
         public int ItemType { get; set; }
+        /// <summary>
+        /// &#26009;&#34399;ID
+        /// </summary>
         [Column("item_id", TypeName = "int(11)")]
         public int ItemId { get; set; }
+        /// <summary>
+        /// &#21407;&#22987;&#25976;&#37327;
+        /// </summary>
         [Column("original", TypeName = "int(11)")]
         public int Original { get; set; }
+        /// <summary>
+        /// &#22686;&#28187;&#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#21934;&#20729;
+        /// </summary>
         [Column("price", TypeName = "decimal(10,2)")]
         public decimal? Price { get; set; }
+        /// <summary>
+        /// &#32317;&#37329;&#38989;
+        /// </summary>
         [Column("price_all", TypeName = "decimal(10,2)")]
         public decimal? PriceAll { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;
+        /// </summary>
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;&#25976;&#37327;
+        /// </summary>
         [Column("unit_count", TypeName = "decimal(10,2)")]
         public decimal? UnitCount { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;&#37329;&#38989;
+        /// </summary>
         [Column("unit_price", TypeName = "decimal(10,2)")]
         public decimal? UnitPrice { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;&#32317;&#38989;
+        /// </summary>
         [Column("unit_price_all", TypeName = "decimal(10,2)")]
         public decimal? UnitPriceAll { get; set; }
+        /// <summary>
+        /// &#21152;&#24037;&#36027;&#29992;
+        /// </summary>
         [Column("work_price", TypeName = "decimal(10,2)")]
         public decimal? WorkPrice { get; set; }
+        /// <summary>
+        /// &#20462;&#25913;&#21407;&#22240;
+        /// </summary>
         [Column("reason", TypeName = "varchar(50)")]
         public string Reason { get; set; }
+        /// <summary>
+        /// &#35036;&#20805;&#35498;&#26126;
+        /// </summary>
         [Column("message", TypeName = "varchar(50)")]
         public string Message { get; set; }
         [Column("create_time", TypeName = "timestamp")]

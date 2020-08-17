@@ -2962,11 +2962,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.TotalTime).HasComment("總工時");
 
-                entity.Property(e => e.Type)
-                    .HasDefaultValueSql("'0'")
-                    .HasComment("種類	")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.Type).HasComment("種類");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")

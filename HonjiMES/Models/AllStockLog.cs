@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("all_stock_log")]
+    [Table("all_stock_log")]
     public partial class AllStockLog
     {
         [Column("id", TypeName = "int(11)")]

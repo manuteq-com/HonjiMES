@@ -6,7 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("material_basic")]
+    /// <summary>
+    /// &#21407;&#26009;&#22522;&#26412;&#27284;
+    /// </summary>
+    [Table("material_basic")]
     public partial class MaterialBasic
     {
         public MaterialBasic()
@@ -17,24 +20,48 @@ namespace HonjiMES.Models
             SupplierOfMaterials = new HashSet<SupplierOfMaterial>();
         }
 
+        /// <summary>
+        /// 唯一碼
+        /// </summary>
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#20803;&#20214;&#21697;&#34399;
+        /// </summary>
         [Required]
         [Column("material_no", TypeName = "varchar(50)")]
         public string MaterialNo { get; set; }
+        /// <summary>
+        /// &#20803;&#20214;&#21697;&#21517;
+        /// </summary>
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
+        /// <summary>
+        /// &#35215;&#26684;
+        /// </summary>
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
+        /// <summary>
+        /// &#23660;&#24615;
+        /// </summary>
         [Required]
         [Column("property", TypeName = "varchar(50)")]
         public string Property { get; set; }
+        /// <summary>
+        /// &#21407;&#20729;&#26684;
+        /// </summary>
         [Column("price", TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;
+        /// </summary>
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
+        /// <summary>
+        /// &#20379;&#25033;&#21830;
+        /// </summary>
         [Column("supplier", TypeName = "int(11)")]
         public int? Supplier { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -45,6 +72,9 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
+        /// <summary>
+        /// &#21034;&#38500;&#35387;&#35352;
+        /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 

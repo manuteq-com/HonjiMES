@@ -6,32 +6,68 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("sale_detail")]
+    /// <summary>
+    /// &#37559;&#36008;&#26126;&#32048;
+    /// </summary>
+    [Table("sale_detail")]
     public partial class SaleDetail
     {
+        /// <summary>
+        /// 唯一碼
+        /// </summary>
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#37559;&#36008;&#21934;&#34399;
+        /// </summary>
         [Column("sale_id", TypeName = "int(11)")]
         public int SaleId { get; set; }
+        /// <summary>
+        /// &#35330;&#21934;&#21934;&#34399;id
+        /// </summary>
         [Column("order_id", TypeName = "int(11)")]
         public int OrderId { get; set; }
+        /// <summary>
+        /// &#20027;&#20214;&#21697;&#34399;ID
+        /// </summary>
         [Column("product_id", TypeName = "int(11)")]
         public int ProductId { get; set; }
+        /// <summary>
+        /// &#20027;&#20214;&#21697;&#34399;
+        /// </summary>
         [Required]
         [Column("product_no", TypeName = "varchar(50)")]
         public string ProductNo { get; set; }
+        /// <summary>
+        /// &#20027;&#20214;&#21697;&#21517;
+        /// </summary>
         [Required]
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
+        /// <summary>
+        /// &#35215;&#26684;
+        /// </summary>
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
+        /// <summary>
+        /// &#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#21407;&#21934;&#20729;	
+        /// </summary>
         [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
+        /// <summary>
+        /// &#20729;&#26684;
+        /// </summary>
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -42,6 +78,9 @@ namespace HonjiMES.Models
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
+        /// <summary>
+        /// &#21034;&#38500;&#35387;&#35352;
+        /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
     }
