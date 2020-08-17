@@ -164,8 +164,7 @@ export class MaterialBasicListComponent implements OnInit {
                 }
             });
             if (this.hint) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }

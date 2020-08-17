@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { PurchaseDetailComponent } from './../purchase-detail/purchase-detail.component';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -145,7 +146,7 @@ export class PurchaseOrderComponent implements OnInit {
         this.dataGrid.instance.refresh();
     }
     onValueChanged(e) {
-        debugger;
+        // debugger;
         this.detailfilter = this.myform.instance.option('formData');
         this.dataGrid.instance.refresh();
     }
@@ -154,16 +155,14 @@ export class PurchaseOrderComponent implements OnInit {
         if (e.data !== undefined) {
             this.hint = false;
             if (e.data.Status === 2) {
-                e.rowElement.style.backgroundColor = '#F5F5F5';
-                e.rowElement.style.color = '#000';
+                e.rowElement.style.color = '#008800';
             } else {
                 if (e.data !== undefined) {
                     e.data.PurchaseDetails.forEach(element => {
                         const DeliverydateBefore = new Date(element.DeliveryTime);
                         const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
                         if (DeliverydateBefore <= DeliverydateAfter) {
-                            e.rowElement.style.backgroundColor = '#d9534f';
-                            e.rowElement.style.color = '#fff';
+                            e.rowElement.style.color = '#d9534f';
                         }
                     });
                 }

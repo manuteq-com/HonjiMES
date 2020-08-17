@@ -185,8 +185,7 @@ export class MaterialListComponent implements OnInit, OnChanges {
     onRowPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }

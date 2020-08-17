@@ -141,8 +141,7 @@ export class WiproductListComponent implements OnInit, OnChanges {
     onRowPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }
@@ -180,9 +179,7 @@ export class WiproductListComponent implements OnInit, OnChanges {
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
+                e.cellElement.style.color = '#d9534f';
             }
         }
     }
