@@ -63,6 +63,18 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 成品主檔資訊
+    /// </summary>
+    public class SaleDetailNewData : SaleDetailNew
+    {
+        public int TotalCount { get; set; }
+        public string CustomerNo { get; set; }
+        public string OrderNo { get; set; }
+        public int Serial { get; set; }
+        public string MachineNo { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData
