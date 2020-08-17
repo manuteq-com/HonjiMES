@@ -27,6 +27,7 @@ import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.c
 import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
+import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
 
 
 
@@ -44,6 +45,7 @@ export const routes: Routes = [
     { path: 'supplierlist', component: SupplierListComponent, canActivate: [AuthGuard] },
     { path: 'adjustlist', component: AdjustListComponent, canActivate: [AuthGuard] },
     { path: 'adjustlog', component: AdjustLogComponent, canActivate: [AuthGuard] },
+    { path: 'inventorylog', component: InventoryLogComponent, canActivate: [AuthGuard] },
     { path: 'warehouselist', component: WarehouseListComponent, canActivate: [AuthGuard] },
     { path: 'userlist', component: UserListComponent, canActivate: [AuthGuard] },
     { path: 'billofmateriallist', component: BillofmateriallistComponent, canActivate: [AuthGuard] },

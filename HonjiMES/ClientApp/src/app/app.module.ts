@@ -103,6 +103,7 @@ import { ProcessControlViewComponent } from './process/process-control-view/proc
 import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.component';
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
+import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -221,6 +222,7 @@ export function tokenGetter() {
         EditworkorderComponent,
         WorksChedulerComponent,
         ResourceAllocationComponent,
+        InventoryLogComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

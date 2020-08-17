@@ -5,7 +5,7 @@
         <div class="lefttriangle1"></div>
         <div class="lefttriangle2"></div>
     </div>
-    <div class="headerfont font2">調整單紀錄</div>
+    <div class="headerfont font2">庫存變動紀錄</div>
     <div class="buttongroup">
         <!-- <dx-button
             class="insertbtn"
@@ -15,6 +15,17 @@
             [width]="120"
             (onClick)="creatdata()">
         </dx-button> -->
+    </div>
+</div>
+<div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="Message" [editorOptions]="selectAdjustType" editorType="dxSelectBox">
+                    <dxo-label text="調整單種類查詢"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
     </div>
 </div>
 
