@@ -45,9 +45,17 @@
         <dxi-item dataField="ProcessTime" [disabled]="true">
             <dxo-label text="標準工時(分)"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="Remark" editorType="dxTextArea" [colSpan]="3" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+        <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="3" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
             <dxo-label text="回報說明"></dxo-label>
         </dxi-item>
+
+        <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
+            <dxo-label text="委外供應商"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="RePrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions" [colSpan]="1" [visible]="NoPurchaseVisible">
+            <dxo-label text="委外金額"></dxo-label>
+        </dxi-item>
+
         <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [disabled]="true">
             <dxo-label text="成本"></dxo-label>
         </dxi-item>

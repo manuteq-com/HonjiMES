@@ -529,10 +529,12 @@ namespace HonjiMES.Models
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
-        public string Remarks { get; set; }
+        public decimal RePrice { get; set; }
+        public string Message { get; set; }
         public string ProducingMachine { get; set; }
         public int PurchaseId { get; set; }
         public string PurchaseNo { get; set; }
+        public int? SupplierId { get; set; }
     }
     public class WorkOrderReportDataAll
     {
@@ -543,7 +545,7 @@ namespace HonjiMES.Models
         /// <summary>
         /// 說明
         /// </summary>
-        public string Remarks { get; set; }
+        public string Message { get; set; }
         public string ProducingMachine { get; set; }
     }
     /// <summary>

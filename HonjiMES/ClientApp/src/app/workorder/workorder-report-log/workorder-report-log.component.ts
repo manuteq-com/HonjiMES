@@ -58,10 +58,4 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
             );
         }
     }
-    customizeText1(e) {
-        return '總共 ' + e.value + '筆';
-    }
-    customizeText2(e) {
-        return '總量 ' + e.value;
-    }
 }

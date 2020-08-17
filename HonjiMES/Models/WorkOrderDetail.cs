@@ -67,6 +67,11 @@ namespace HonjiMES.Models
         [Column("purchase_id", TypeName = "int(11)")]
         public int? PurchaseId { get; set; }
         /// <summary>
+        /// &#20379;&#25033;&#21830;id
+        /// </summary>
+        [Column("supplier_id", TypeName = "int(11)")]
+        public int? SupplierId { get; set; }
+        /// <summary>
         /// &#22294;&#34399;
         /// </summary>
         [Column("draw_no", TypeName = "varchar(50)")]
@@ -101,6 +106,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("re_count", TypeName = "int(11)")]
         public int? ReCount { get; set; }
+        /// <summary>
+        /// &#23526;&#38555;&#22238;&#22577;&#37329;&#38989;
+        /// </summary>
+        [Column("re_price", TypeName = "decimal(10,2)")]
+        public decimal? RePrice { get; set; }
         /// <summary>
         /// &#32317;&#24037;&#26178;
         /// </summary>
@@ -143,6 +153,9 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.WorkOrderDetails))]
         public virtual PurchaseHead Purchase { get; set; }
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("WorkOrderDetails")]
+        public virtual Supplier Supplier { get; set; }
         [ForeignKey(nameof(WorkOrderHeadId))]
         [InverseProperty("WorkOrderDetails")]
         public virtual WorkOrderHead WorkOrderHead { get; set; }

@@ -17,9 +17,12 @@
     </dxo-paging>
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item [customizeText]="customizeText1" column="CreateTime" summaryType="count">
+        <dxi-total-item displayFormat="總共 {0}筆" column="CreateTime" summaryType="count">
         </dxi-total-item>
-        <dxi-total-item [customizeText]="customizeText2" column="ReCount" summaryType="sum">
+        <dxi-total-item displayFormat="{0}個" column="ReCount" summaryType="sum">
+        </dxi-total-item>
+        <dxi-total-item column="RePrice" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)"
+            displayFormat="{0}元">
         </dxi-total-item>
     </dxo-summary>
 
@@ -32,11 +35,15 @@
     </dxi-column>
     <dxi-column dataField="ReCount" caption="回報數量" [width]="100">
     </dxi-column>
+    <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100">
+    </dxi-column>
     <dxi-column dataField="DrawNo" caption="圖號" [width]="120">
     </dxi-column>
     <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="120">
     </dxi-column>
-    <dxi-column dataField="Remarks" caption="備註">
+    <dxi-column dataField="Supplier.Name" caption="供應商" [width]="160">
+    </dxi-column>
+    <dxi-column dataField="Message" caption="回報說明">
     </dxi-column>
 
     <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date">

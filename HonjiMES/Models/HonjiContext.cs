@@ -2902,6 +2902,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("purchase_id");
 
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
+
                 entity.HasIndex(e => e.WorkOrderHeadId)
                     .HasName("work_order_head_id");
 
@@ -2951,6 +2954,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ReCount).HasComment("實際完工數量");
 
+                entity.Property(e => e.RePrice).HasComment("實際回報金額");
+
                 entity.Property(e => e.Remarks)
                     .HasComment("備註	")
                     .HasCharSet("utf8mb4")
@@ -2959,6 +2964,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.SerialNumber).HasComment("工序順序	");
 
                 entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.SupplierId).HasComment("供應商id");
 
                 entity.Property(e => e.TotalTime).HasComment("總工時");
 
@@ -2980,6 +2987,11 @@ namespace HonjiMES.Models
                     .WithMany(p => p.WorkOrderDetails)
                     .HasForeignKey(d => d.PurchaseId)
                     .HasConstraintName("work_order_detail_ibfk_3");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.WorkOrderDetails)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("work_order_detail_ibfk_5");
 
                 entity.HasOne(d => d.WorkOrderHead)
                     .WithMany(p => p.WorkOrderDetails)
@@ -3056,6 +3068,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("purchase_id");
 
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
+
                 entity.HasIndex(e => e.WorkOrderDetailId)
                     .HasName("work_order_detail_id");
 
@@ -3076,6 +3091,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Manpower).HasComment("需求人力");
 
+                entity.Property(e => e.Message)
+                    .HasComment("回報說明")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.ProducingMachine)
                     .HasComment("加工機台")
                     .HasCharSet("utf8mb4")
@@ -3092,10 +3112,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ReCount).HasComment("回報數量");
 
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.RePrice).HasComment("實際回報金額");
 
                 entity.Property(e => e.ReportType).HasComment("回報種類");
 
@@ -3103,12 +3120,19 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.StatusO).HasComment("上一個狀態");
 
+                entity.Property(e => e.SupplierId).HasComment("供應商id");
+
                 entity.Property(e => e.WorkOrderDetailId).HasComment("工單明細ID");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.WorkOrderReportLogs)
                     .HasForeignKey(d => d.PurchaseId)
                     .HasConstraintName("work_order_report_log_ibfk_2");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.WorkOrderReportLogs)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("work_order_report_log_ibfk_4");
 
                 entity.HasOne(d => d.WorkOrderDetail)
                     .WithMany(p => p.WorkOrderReportLogs)

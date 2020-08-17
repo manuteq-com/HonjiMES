@@ -33,6 +33,11 @@ namespace HonjiMES.Models
         [Column("purchase_no", TypeName = "varchar(50)")]
         public string PurchaseNo { get; set; }
         /// <summary>
+        /// &#20379;&#25033;&#21830;id
+        /// </summary>
+        [Column("supplier_id", TypeName = "int(11)")]
+        public int? SupplierId { get; set; }
+        /// <summary>
         /// &#22294;&#34399;
         /// </summary>
         [Column("draw_no", TypeName = "varchar(50)")]
@@ -58,10 +63,15 @@ namespace HonjiMES.Models
         [Column("re_count", TypeName = "int(11)")]
         public int? ReCount { get; set; }
         /// <summary>
-        /// &#20633;&#35387;
+        /// &#23526;&#38555;&#22238;&#22577;&#37329;&#38989;
         /// </summary>
-        [Column("remarks", TypeName = "varchar(50)")]
-        public string Remarks { get; set; }
+        [Column("re_price", TypeName = "decimal(10,2)")]
+        public decimal? RePrice { get; set; }
+        /// <summary>
+        /// &#22238;&#22577;&#35498;&#26126;
+        /// </summary>
+        [Column("message", TypeName = "varchar(50)")]
+        public string Message { get; set; }
         /// <summary>
         /// &#19978;&#19968;&#20491;&#29376;&#24907;
         /// </summary>
@@ -102,6 +112,9 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.WorkOrderReportLogs))]
         public virtual PurchaseHead Purchase { get; set; }
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("WorkOrderReportLogs")]
+        public virtual Supplier Supplier { get; set; }
         [ForeignKey(nameof(WorkOrderDetailId))]
         [InverseProperty("WorkOrderReportLogs")]
         public virtual WorkOrderDetail WorkOrderDetail { get; set; }
