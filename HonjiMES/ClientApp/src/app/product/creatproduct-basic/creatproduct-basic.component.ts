@@ -61,6 +61,9 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
             (s) => {
                 console.log(s);
                 if (s.success) {
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
                     this.warehousesOptions = s.data;
                 }
             }

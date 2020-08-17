@@ -81,7 +81,17 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
         });
 
         this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
-        this.WarehouseList = await SendService.sendRequest(this.http, '/Warehouses/GetWarehouses');
+        // this.WarehouseList = await SendService.sendRequest(this.http, '/Warehouses/GetWarehouses');
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.WarehouseList = s.data;
+                }
+            }
+        );
         this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
         if (this.modval === 'add') {
             this.showdisabled = false;
