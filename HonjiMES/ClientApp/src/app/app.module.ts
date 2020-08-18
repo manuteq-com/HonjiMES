@@ -222,6 +222,9 @@ export function tokenGetter() {
         ProcessControlViewComponent,
         EditworkorderComponent,
         WorksChedulerComponent,
+        ResourceAllocationComponent,
+        InventoryLogComponent,
+        CreatreceiveComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
