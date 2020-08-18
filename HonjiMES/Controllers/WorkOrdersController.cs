@@ -276,6 +276,10 @@ namespace HonjiMES.Controllers
                     });
 
                     ////VVVVV  將內容自動回填至採購單內容 更新2020/08/18
+                    var Warehouses = await _context.Warehouses.AsQueryable().Where(x => x.DeleteFlag == 0).ToListAsync();
+                    var warehousesM = Warehouses.Where(x => x.Code == "101").FirstOrDefault(); // 原料內定代號 101
+                    var warehousesW = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品內定代號 201
+                    var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
                     var PurchaseHeads = await _context.PurchaseHeads.Include(x => x.PurchaseDetails).Where(x => x.Id == WorkOrderReportData.PurchaseId).FirstOrDefaultAsync();
                     var PurchaseDetails = PurchaseHeads.PurchaseDetails.Where(x => 
                         x.DataType == item.WorkOrderHead.DataType &&
@@ -285,22 +289,34 @@ namespace HonjiMES.Controllers
                     if (PurchaseDetails.Count() == 0) { // 如果採購單明細沒有此成品，則回填(新增)採購單明細。
                         var BasicData = new BasicData();
                         if (item.WorkOrderHead.DataType == 1) {
-                            var Materials = await _context.Materials.Where(x => x.MaterialBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                            BasicData.Specification = Materials.Specification;
-                            BasicData.Price = Materials.Price;
-                            BasicData.WarehouseId = Materials.WarehouseId;
+                            var Materials = await _context.Materials.Where(x => x.MaterialBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
+                            if (Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) {
+                                BasicData.WarehouseId = warehousesM.Id;
+                            } else {
+                                BasicData.WarehouseId = null;
+                            }
+                            BasicData.Specification = Materials.FirstOrDefault().Specification;
+                            BasicData.Price = Materials.FirstOrDefault().Price;
                         } else if (item.WorkOrderHead.DataType == 2) {
-                            var Products = await _context.Products.Where(x => x.ProductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                            BasicData.Specification = Products.Specification;
-                            BasicData.Price = Products.Price;
-                            BasicData.WarehouseId = Products.WarehouseId;
+                            var Products = await _context.Products.Where(x => x.ProductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
+                            if (Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) {
+                                BasicData.WarehouseId = warehousesP.Id;
+                            } else {
+                                BasicData.WarehouseId = null;
+                            }
+                            BasicData.Specification = Products.FirstOrDefault().Specification;
+                            BasicData.Price = Products.FirstOrDefault().Price;
                         } else if (item.WorkOrderHead.DataType == 3) {
-                            var Wiproducts = await _context.Wiproducts.Where(x => x.WiproductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                            BasicData.Specification = Wiproducts.Specification;
-                            BasicData.Price = Wiproducts.Price;
-                            BasicData.WarehouseId = Wiproducts.WarehouseId;
+                            var Wiproducts = await _context.Wiproducts.Where(x => x.WiproductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
+                            if (Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any()) {
+                                BasicData.WarehouseId = warehousesW.Id;
+                            } else {
+                                BasicData.WarehouseId = null;
+                            }
+                            BasicData.Specification = Wiproducts.FirstOrDefault().Specification;
+                            BasicData.Price = Wiproducts.FirstOrDefault().Price;
                         }
-                        
+
                         PurchaseHeads.PurchaseDetails.Add(new PurchaseDetail{
                             PurchaseType = PurchaseHeads.Type,
                             SupplierId = PurchaseHeads.SupplierId,

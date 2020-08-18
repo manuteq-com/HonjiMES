@@ -97,7 +97,7 @@ namespace HonjiMES.Models
         public int DataId { get; set; }
         public string DataNo { get; set; }
         public string DataName { get; set; }
-        public int WarehouseId { get; set; }
+        public int? WarehouseId { get; set; }
         public int Original { get; set; }
         public int AftQuantity { get; set; }
         public int Quantity { get; set; }
@@ -125,7 +125,7 @@ namespace HonjiMES.Models
         public string Property { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
-        public int WarehouseId { get; set; }
+        public int? WarehouseId { get; set; }
     }
 
     /// <summary>

@@ -68,6 +68,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     HasPurchaseVisible: boolean;
     PurchaseHeadList: any;
     editorOptions: any;
+    creatpopupVisible: boolean;
+    itemkey: any;
+    mod: any;
+    dataSource: any[];
+    ProductBasicList: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
@@ -239,6 +244,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     onNewPurchaseClick(e) {
         this.modval = 'newpurchase';
     }
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
+        this.ShowMessage('存檔完成', 'success', 3000);
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -290,6 +299,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 } else {
                     this.ShowMessage('請選擇採購單號', 'error', 3000);
                 }
+            } else if (this.modval === 'newpurchase') {
+                this.GetPurchaseDetailData();
             }
         } catch (error) {
 
@@ -313,5 +324,32 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             }
         }, type, val);
     }
-
+    GetPurchaseDetailData() {
+        this.dataSource = [];
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    const result = s.data.find(x =>
+                        x.DataType === this.formData.WorkOrderHead.DataType &&
+                        x.DataId === this.formData.WorkOrderHead.DataId
+                    );
+                    if (result) {
+                        this.dataSource.push({
+                            Serial: 1,
+                            TempId: result.TempId,
+                            DataType: result.DataType,
+                            DataId: result.DataId,
+                            WarehouseId: result.WarehouseId,
+                            Quantity: this.postval.ReCount,
+                            OriginPrice: result.Price,
+                            Price: this.postval.ReCount * result.Price,
+                            DeliveryTime: new Date()
+                        });
+                    }
+                    this.mod = 'workorder';
+                    this.creatpopupVisible = true;
+                }
+            }
+        );
+    }
 }

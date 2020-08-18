@@ -179,11 +179,21 @@ namespace HonjiMES.Controllers
             var MaterialBasic = await _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Materials).OrderBy(x => x.MaterialNo).ToListAsync();
             var ProductBasic = await _context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Products).OrderBy(x => x.ProductNo).ToListAsync();
             var WiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.Wiproducts).OrderBy(x => x.WiproductNo).ToListAsync();
+            var Warehouses = await _context.Warehouses.AsQueryable().Where(x => x.DeleteFlag == 0).ToListAsync();
             var AdjustData = new List<BasicData>();
             var TempId = 1;
+            var WarehouseIdVal = 0;
+            var warehousesM = Warehouses.Where(x => x.Code == "101").FirstOrDefault(); // 原料內定代號 101
+            var warehousesW = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品內定代號 201
+            var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
 
             foreach (var item in ProductBasic)
             {
+                if (item.Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) {
+                    WarehouseIdVal = warehousesP.Id;
+                } else {
+                    WarehouseIdVal = 0;
+                }
                 var tempData = new BasicData
                 {
                     TempId = TempId++,
@@ -194,12 +204,18 @@ namespace HonjiMES.Controllers
                     Specification = item.Specification,
                     Property = item.Property,
                     Price = item.Price,
-                    Quantity = item.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+                    Quantity = item.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                    WarehouseId = WarehouseIdVal,
                 };
                 AdjustData.Add(tempData);
             }
             foreach (var item in WiproductBasic)
             {
+                if (item.Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any()) {
+                    WarehouseIdVal = warehousesW.Id;
+                } else {
+                    WarehouseIdVal = 0;
+                }
                 var tempData = new BasicData
                 {
                     TempId = TempId++,
@@ -210,12 +226,18 @@ namespace HonjiMES.Controllers
                     Specification = item.Specification,
                     Property = item.Property,
                     Price = item.Price,
-                    Quantity = item.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+                    Quantity = item.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                    WarehouseId = WarehouseIdVal,
                 };
                 AdjustData.Add(tempData);
             }
             foreach (var item in MaterialBasic)
             {
+                if (item.Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) {
+                    WarehouseIdVal = warehousesM.Id;
+                } else {
+                    WarehouseIdVal = 0;
+                }
                 var tempData = new BasicData
                 {
                     TempId = TempId++,
@@ -226,7 +248,8 @@ namespace HonjiMES.Controllers
                     Specification = item.Specification,
                     Property = item.Property,
                     Price = item.Price,
-                    Quantity = item.Materials.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity)
+                    Quantity = item.Materials.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                    WarehouseId = WarehouseIdVal,
                 };
                 AdjustData.Add(tempData);
             }

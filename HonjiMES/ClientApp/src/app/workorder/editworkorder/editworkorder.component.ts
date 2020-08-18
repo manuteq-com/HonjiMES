@@ -135,6 +135,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
+        this.disabledValues = [];
         this.GetProcessInfo();
         this.modVisible = false;
         this.app.GetData('/Processes/GetProcessByWorkOrderHead/' + this.itemkeyval.Key).subscribe(
@@ -248,22 +249,22 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         }
     }
     onRowClick(e) {
+        this.itemkey = e.data.WorkOrderHeadId;
+        this.serialkey = e.data.SerialNumber;
+        this.mod = 'report';
+        this.randomkey = new Date().getTime();
         if (e.data.Type === 1) { // 委外(含採購單)
+            this.creatpopupVisible = true;
             if (e.data.Status === 3) {
-                this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
+                this.ReportHeight = 710;
+                // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {
-                this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
+                this.ReportHeight = 710;
+                // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             }
-        } else if (e.data.Type === 2) { // 委外(無採購單)
-            // 判斷該工序目前狀態，決定顯示內容
-            if (e.data.Status === 2) {
-                this.itemkey = e.data.WorkOrderHeadId;
-                this.serialkey = e.data.SerialNumber;
-                this.mod = 'report';
-                this.randomkey = new Date().getTime();
-                this.creatpopupVisible = true;
-                this.ReportHeight = 810;
-            }
+        } else if (e.data.Type === 2 && e.data.Status === 2) { // 委外(無採購單)
+            this.creatpopupVisible = true;
+            this.ReportHeight = 810;
         } else {
             const arr =  this.dataGrid2.instance.getSelectedRowsData();
             if (e.isSelected) {
