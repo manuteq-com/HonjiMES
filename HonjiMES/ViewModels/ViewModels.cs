@@ -544,7 +544,7 @@ namespace HonjiMES.Models
         public decimal RePrice { get; set; }
         public string Message { get; set; }
         public string ProducingMachine { get; set; }
-        public int PurchaseId { get; set; }
+        public int? PurchaseId { get; set; }
         public string PurchaseNo { get; set; }
         public int? SupplierId { get; set; }
     }

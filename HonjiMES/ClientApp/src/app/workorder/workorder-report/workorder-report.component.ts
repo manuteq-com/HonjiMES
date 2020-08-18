@@ -65,12 +65,15 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     DateBoxOptions: any;
     NoPurchaseVisible: any;
     selectBoxOptions: any;
+    HasPurchaseVisible: boolean;
+    PurchaseHeadList: any;
+    editorOptions: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 3;
+        this.colCount = 4;
         this.labelLocation = 'left';
 
         this.DateBoxOptions = {
@@ -111,6 +114,19 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeads').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseHeadList = s.data;
+                    this.editorOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: this.PurchaseHeadList, key: 'Id' } },
+                        searchEnabled: true,
+                        displayExpr: 'PurchaseNo',
+                        valueExpr: 'Id'
+                    };
+                }
+            }
+        );
         this.PriceEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
@@ -127,6 +143,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.endBtnVisible = false;
         this.restartedBtnVisible = false;
         this.NoPurchaseVisible = false;
+        this.HasPurchaseVisible = false;
 
         if (this.itemkeyval != null) {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
@@ -171,7 +188,13 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 findProcess = true;
 
                                 if (element.Status === 1) {
-                                    this.startBtnVisible = true;
+                                    // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
+                                    if (element.Type === 1) {
+                                        this.ReCountVisible = true;
+                                        this.HasPurchaseVisible = true;
+                                    } else {
+                                        this.startBtnVisible = true;
+                                    }
                                 } else if (element.Status === 2) {
                                     this.ReCountVisible = true;
                                     this.RemarkVisible = true;
@@ -182,8 +205,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                         this.NoPurchaseVisible = true;
                                     }
                                 } else if (element.Status === 3) {
-                                    this.restartedBtnVisible = true;
-                                    this.RemarkVisible = true;
+                                    // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
+                                    if (element.Type === 1) {
+                                        this.ReCountVisible = true;
+                                        this.HasPurchaseVisible = true;
+                                    } else {
+                                        this.restartedBtnVisible = true;
+                                        this.RemarkVisible = true;
+                                    }
                                 }
                             }
                         });
@@ -191,6 +220,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             );
         }
+    }
+    PurchaseNoValueChanged(e) {
+
     }
     onStartClick(e) {
         this.modval = 'start';
@@ -201,16 +233,16 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     onRestartClick(e) {
         this.modval = 'restart';
     }
+    onPurchaseClick(e) {
+        this.modval = 'purchase';
+    }
+    onNewPurchaseClick(e) {
+        this.modval = 'newpurchase';
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
-            notify({
-                message: '請注意訂單內容必填的欄位',
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
+            this.ShowMessage('請注意訂單內容必填的欄位', 'error', 3000);
             return false;
         }
         return true;
@@ -232,6 +264,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.Message = this.formData.Message;
         this.postval.ProducingMachine = this.formData.ProducingMachine;
         this.postval.SupplierId = this.formData.SupplierId;
+        this.postval.PurchaseId = this.formData.PurchaseId;
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length
@@ -245,6 +278,18 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportRestart', 'POST', { values: this.postval });
                 this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'purchase') {
+                if (this.postval.PurchaseId != null) {
+                    const result = this.PurchaseHeadList.find(x => x.Id === this.postval.PurchaseId);
+                    if (result) {
+                        this.postval.PurchaseNo = result.PurchaseNo;
+                        // tslint:disable-next-line: max-line-length
+                        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: this.postval.WorkOrderID, values: this.postval });
+                        this.viewRefresh(e, sendRequest);
+                    }
+                } else {
+                    this.ShowMessage('請選擇採購單號', 'error', 3000);
+                }
             }
         } catch (error) {
 
@@ -258,6 +303,15 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             e.preventDefault();
             this.childOuter.emit(true);
         }
+    }
+    ShowMessage(text, type, val) {
+        notify({
+            message: text,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 
 }

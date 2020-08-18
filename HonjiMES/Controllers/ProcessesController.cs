@@ -257,19 +257,19 @@ namespace HonjiMES.Controllers
                 {
                     var BasicDataNo = "";
                     var BasicDataName = "";
-                    if (item.DataType == 0)
+                    if (item.DataType == 1)
                     {
                         var BasicData = _context.MaterialBasics.Find(item.DataId);
                         BasicDataNo = BasicData.MaterialNo;
                         BasicDataName = BasicData.Name;
                     }
-                    else if (item.DataType == 1)
+                    else if (item.DataType == 2)
                     {
                         var BasicData = _context.ProductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.ProductNo;
                         BasicDataName = BasicData.Name;
                     }
-                    else if (item.DataType == 2)
+                    else if (item.DataType == 3)
                     {
                         var BasicData = _context.WiproductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.WiproductNo;
@@ -407,22 +407,22 @@ namespace HonjiMES.Controllers
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
 
-                var DataType = 1;
+                var DataType = 2;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
-                if (DataType == 0)
+                if (DataType == 1)
                 {
 
                 }
-                else if (DataType == 1)
+                else if (DataType == 2)
                 {
                     var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.ProductNo;
                     BasicDataName = BasicData.Name;
                 }
-                else if (DataType == 2)
+                else if (DataType == 3)
                 {
 
                 }
