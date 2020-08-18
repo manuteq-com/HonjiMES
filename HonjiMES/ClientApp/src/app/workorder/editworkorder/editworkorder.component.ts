@@ -152,6 +152,9 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.forEach(e => {
+                        e.ReportCount = null;
+                    });
                     this.dataSourceDB = s.data;
                 }
             }
@@ -261,6 +264,17 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 this.creatpopupVisible = true;
                 this.ReportHeight = 810;
             }
+        } else {
+            const arr =  this.dataGrid2.instance.getSelectedRowsData();
+            if (e.isSelected) {
+                const index = arr.indexOf(e.data, 0);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+            } else {
+                arr.push(e.data);
+            }
+            e.component.selectRows(arr);
         }
     }
     onToolbarPreparing(e) {
@@ -350,8 +364,8 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
         // tslint:disable-next-line: forin
         for (const x in SelectedRows) {
-            if (SelectedRows[x].Status === 2 && SelectedRows[x].ReCount < 1) {
-                const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：數量必填';
+            if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount < 1 || SelectedRows[x].ReportCount == null)) {
+                const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量必填';
                 notify({
                     message: msg,
                     position: {
@@ -362,7 +376,10 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 cansave = false;
                 return;
             }
-            if (cansave) {
+        }
+        if (cansave) {
+            // tslint:disable-next-line: forin
+            for (const x in SelectedRows) {
                 const sendRequest = await SendService.sendRequest(
                     this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
                     { key: SelectedRows[x].Id, values: SelectedRows[x] });
@@ -373,9 +390,8 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                     saveok = false;
                 }
             }
+            this.dataGrid2.instance.refresh();
             if (saveok) {
-                debugger;
-                this.dataGrid2.instance.refresh();
                 e.preventDefault();
                 this.childOuter.emit(true);
             }

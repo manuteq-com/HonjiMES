@@ -555,6 +555,10 @@ namespace HonjiMES.Models
         /// </summary>
         public int? ReCount { get; set; }
         /// <summary>
+        /// 回報數量
+        /// </summary>
+        public int? ReportCount { get; set; }
+        /// <summary>
         /// 說明
         /// </summary>
         public string Message { get; set; }

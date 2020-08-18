@@ -537,7 +537,7 @@ namespace HonjiMES.Controllers
             {
                 var WorkOrderReportData = new WorkOrderReportData
                 {
-                    ReCount = WorkOrderReportDataAll.ReCount ?? 0,
+                    ReCount = WorkOrderReportDataAll.ReportCount ?? 0,
                     Message = WorkOrderReportDataAll.Message,
                     ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
                     WorkOrderID = WorkOrderDetails.WorkOrderHeadId,
