@@ -35,7 +35,7 @@ export class ReceiveListComponent implements OnInit {
     // 源料和成品 拆開
     dataSourceMaterialDB: CustomStore;
     dataSourceProductDB: CustomStore;
-    popupVisible: boolean;
+    creatpopupVisible: boolean;
     WarehouseIDP: any;
     WarehouseIDM: any;
     Warehouselist: any;
@@ -120,11 +120,26 @@ export class ReceiveListComponent implements OnInit {
     readRequisitionData(e, data) {
         debugger;
         this.requisitionId = data.data.Id;
+        // 2020/08/14 改成不能修改
+        // this.dataSourceAllDB = new CustomStore({
+        //     key: 'Id',
+        //     load: (loadOptions) =>
+
+        //         SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAll', 'POST',
+        //             { values: { RequisitionId: this.requisitionId } }),
+        //     insert: (values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+        //     update: (key, values) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetailAll', 'PUT',
+        //             { key, values }),
+        //     remove: (key) =>
+        //         SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+        // });
         this.dataSourceAllDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAll', 'POST',
-                    { values: { RequisitionId: this.requisitionId } }),
+
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAllShow/' + data.data.Id),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
             update: (key, values) =>
@@ -133,7 +148,6 @@ export class ReceiveListComponent implements OnInit {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
-
 
         // this.dataSourceMaterialDB = new CustomStore({
         //     key: 'Id',
@@ -179,7 +193,7 @@ export class ReceiveListComponent implements OnInit {
                 item.options.text = '取消';
                 item.showText = 'always';
             }
-        });;
+        });
     }
     onToolbarPreparingM(e) {
         const toolbarItems = e.toolbarOptions.items;
@@ -249,7 +263,8 @@ export class ReceiveListComponent implements OnInit {
     }
     creatdata() {
         // tslint:disable-next-line: deprecation
-        this.dataGrid.instance.insertRow();
+        // this.dataGrid.instance.insertRow();
+        this.creatpopupVisible = true;
     }
     cellClick(e) {
         if (e.rowType === 'header') {
@@ -335,5 +350,16 @@ export class ReceiveListComponent implements OnInit {
             }
         }
         return true;
+    }
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '更新完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 }
