@@ -29,7 +29,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<WiproductBasicData>>> GetWiproductBasics()
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var wiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Select(x => new WiproductBasicData
+            var wiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Wiproducts).Select(x => new WiproductBasicData
             {
                 TotalCount = x.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -45,9 +45,10 @@ namespace HonjiMES.Controllers
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
-                DeleteFlag = x.DeleteFlag
+                DeleteFlag = x.DeleteFlag,
+                Wiproducts = x.Wiproducts
             }).ToListAsync();
-
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(wiproductBasic));
         }
 

@@ -59,6 +59,9 @@ export class AdjustdetailListComponent implements OnInit, OnChanges {
         });
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
                 this.WarehouseList = s.data;
             }
         );

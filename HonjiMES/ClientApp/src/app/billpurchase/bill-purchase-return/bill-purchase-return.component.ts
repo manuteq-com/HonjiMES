@@ -32,6 +32,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
+    WarehouseList: any[];
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
@@ -67,11 +68,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             this.app.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.selectBoxOptions = {
-                            items: s.data,
-                            displayExpr: 'Name',
-                            valueExpr: 'Id',
-                        };
+                        this.WarehousesDataFormat(s.data);
                     }
                 }
             );
@@ -79,11 +76,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.selectBoxOptions = {
-                            items: s.data,
-                            displayExpr: 'Name',
-                            valueExpr: 'Id',
-                        };
+                        this.WarehousesDataFormat(s.data);
                     }
                 }
             );
@@ -91,16 +84,23 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             this.app.GetData('/Warehouses/GetWarehouseByWiproduct/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.selectBoxOptions = {
-                            items: s.data,
-                            displayExpr: 'Name',
-                            valueExpr: 'Id',
-                        };
+                        this.WarehousesDataFormat(s.data);
                     }
                 }
             );
         }
-
+    }
+    WarehousesDataFormat(data) {
+        this.WarehouseList = [];
+        data.forEach((element, index) => {
+            element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+            this.WarehouseList[index] = element.Warehouse;
+        });
+        this.selectBoxOptions = {
+            items: this.WarehouseList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+        };
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;

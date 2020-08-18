@@ -64,17 +64,45 @@ namespace HonjiMES.Controllers
         /// <param name="SaleId">銷貨單ID 非必填</param>
         /// <returns>訂單明細</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleDetailsBySaleId(int? SaleId)
+        public async Task<ActionResult<IEnumerable<SaleDetailNewData>>> GetSaleDetailsBySaleId(int? SaleId)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var SaleDetailNews = _context.SaleDetailNews.Include(x => x.Order).Include(x => x.OrderDetail).AsQueryable();
-            if (SaleId.HasValue)
+            // var SaleDetailNews = _context.SaleDetailNews.Include(x => x.Order).Include(x => x.OrderDetail).AsQueryable();
+            // if (SaleId.HasValue)
+            // {
+            //     SaleDetailNews = SaleDetailNews.Where(x => x.SaleId == SaleId);
+            // }
+            var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.SaleId == SaleId).Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.ProductBasic).Select(x => new SaleDetailNewData
             {
-                SaleDetailNews = SaleDetailNews.Where(x => x.SaleId == SaleId);
-            }
+                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+                Id = x.Id,
+                SaleId = x.SaleId,
+                OrderId = x.OrderId,
+                OrderDetailId = x.OrderDetailId,
+                ProductBasicId = x.ProductBasicId,
+                ProductId = x.ProductId,
+                CustomerNo = x.Order.CustomerNo,
+                OrderNo = x.Order.OrderNo,
+                Serial = x.OrderDetail.Serial,
+                MachineNo = x.OrderDetail.MachineNo,
+                ProductNo = x.ProductNo,
+                Status = x.Status,
+                Name = x.Name,
+                Specification = x.Specification,
+                Quantity = x.Quantity,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                Remarks = x.Remarks,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                DeleteFlag = x.DeleteFlag,
+            });
             var data = await SaleDetailNews.ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
+
         /// <summary>
         /// 修改銷貨明細
         /// </summary>

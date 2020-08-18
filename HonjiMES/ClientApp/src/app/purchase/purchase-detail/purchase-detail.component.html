@@ -9,8 +9,8 @@
 </div>
 
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
-(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)">
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" [rowAlternationEnabled]="true">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true" ></dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
             [customizeText]="customizeText"
@@ -20,7 +20,7 @@
     </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
-    <dxi-column dataField="DataType" caption="產品別" alignment="center" [allowEditing]="false" [width]="70">
+    <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
         <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>

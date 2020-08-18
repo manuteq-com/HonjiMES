@@ -55,6 +55,12 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     Controller = '/WorkOrders';
     WorkStatusList: any;
     listWorkOrderTypes: any;
+    ReportHeight: number;
+    mod: string;
+    serialkey: number;
+    creatpopupVisible: boolean;
+    randomkey: number;
+    itemkey: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -129,13 +135,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
-        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.dataSourceDB = s.data;
-                }
-            }
-        );
+        this.GetProcessInfo();
         this.modVisible = false;
         this.app.GetData('/Processes/GetProcessByWorkOrderHead/' + this.itemkeyval.Key).subscribe(
             (s) => {
@@ -147,6 +147,18 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         );
 
         this.onCellPreparedLevel = 0;
+    }
+    GetProcessInfo() {
+        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(e => {
+                        e.ReportCount = null;
+                    });
+                    this.dataSourceDB = s.data;
+                }
+            }
+        );
     }
     allowEdit(e) {
         if (e.row.data.Status > 1) {
@@ -222,7 +234,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     onCellPrepared(e: any) {
         if (e.rowType === 'data' && e.column.command === 'select') {
-            if (e.data.Type === '1') { // 種類為委外
+            if (e.data.Type === 1 || (e.data.Type === 2 && e.data.Status === 2)) { // 種類為委外
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);
@@ -236,12 +248,33 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         }
     }
     onRowClick(e) {
-        if (e.data.Type === '1') {
+        if (e.data.Type === 1) { // 委外(含採購單)
             if (e.data.Status === 3) {
                 this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {
                 this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             }
+        } else if (e.data.Type === 2) { // 委外(無採購單)
+            // 判斷該工序目前狀態，決定顯示內容
+            if (e.data.Status === 2) {
+                this.itemkey = e.data.WorkOrderHeadId;
+                this.serialkey = e.data.SerialNumber;
+                this.mod = 'report';
+                this.randomkey = new Date().getTime();
+                this.creatpopupVisible = true;
+                this.ReportHeight = 810;
+            }
+        } else {
+            const arr =  this.dataGrid2.instance.getSelectedRowsData();
+            if (e.isSelected) {
+                const index = arr.indexOf(e.data, 0);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+            } else {
+                arr.push(e.data);
+            }
+            e.component.selectRows(arr);
         }
     }
     onToolbarPreparing(e) {
@@ -331,8 +364,8 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
         // tslint:disable-next-line: forin
         for (const x in SelectedRows) {
-            if (SelectedRows[x].Status === 2 && SelectedRows[x].ReCount < 1) {
-                const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：數量必填';
+            if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount < 1 || SelectedRows[x].ReportCount == null)) {
+                const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量必填';
                 notify({
                     message: msg,
                     position: {
@@ -343,7 +376,10 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 cansave = false;
                 return;
             }
-            if (cansave) {
+        }
+        if (cansave) {
+            // tslint:disable-next-line: forin
+            for (const x in SelectedRows) {
                 const sendRequest = await SendService.sendRequest(
                     this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
                     { key: SelectedRows[x].Id, values: SelectedRows[x] });
@@ -354,12 +390,24 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                     saveok = false;
                 }
             }
+            this.dataGrid2.instance.refresh();
             if (saveok) {
-                debugger;
-                this.dataGrid2.instance.refresh();
                 e.preventDefault();
                 this.childOuter.emit(true);
             }
         }
+    }
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
+        // this.dataGrid2.instance.refresh();
+        this.disabledValues = [];
+        this.GetProcessInfo();
+        notify({
+            message: '更新完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 }

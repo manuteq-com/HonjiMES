@@ -89,7 +89,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> GetWarehouseByWiproduct(int id)
         {
             var wiproducts = _context.Products.Find(id);
-            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductNo == wiproducts.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductNo == wiproducts.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
             
             if (WarehouseData == null)
             {
@@ -144,7 +144,7 @@ namespace HonjiMES.Controllers
             // }
             // _context.SaveChanges();
 
-            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
             // var WarehouseData = await _context.Products.Where(x => x.ProductNo == products.ProductNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x =>new{x.Warehouse.Id,x.Warehouse.Name} ).OrderBy(x=> x.Name).ThenBy(x=>x.Id).ToListAsync();
 
             if (WarehouseData == null)
@@ -185,7 +185,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> GetWarehouseByMaterial(int id)
         {
             var materials = _context.Materials.Find(id);
-            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materials.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).Select(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materials.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
 
             if (WarehouseData == null)
             {
@@ -258,7 +258,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.Warehouses.AsQueryable().Where(x => x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
+            if (_context.Warehouses.AsQueryable().Where(x => x.Code == warehouse.Code && x.Name == warehouse.Name && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("倉庫名稱已存在!", warehouse));
             }

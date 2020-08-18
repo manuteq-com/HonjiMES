@@ -68,6 +68,9 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
                 console.log(s);
                 if (s.success) {
                     // debugger;
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
                     this.warehousesOptions = s.data;
                     // this.warehousesOptions = {
                     //     items: s.data,

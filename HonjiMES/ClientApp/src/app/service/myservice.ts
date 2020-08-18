@@ -43,6 +43,9 @@ export class Myservice {
     getWorkSchedulerStatus(): WorkSchedulerStatu[] {
         return WorkSchedulerStatus;
     }
+    getTimeType(): Selectitem[] {
+        return timetype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -92,7 +95,8 @@ const workorderstatus: Selectitem[] = [
 ];
 const workordertype: Selectitem[] = [
     { Id: 0, Name: '' },
-    { Id: 1, Name: '委外' }
+    { Id: 1, Name: '委外' },
+    { Id: 2, Name: '委外(工)' }
 ];
 const reporttype: Selectitem[] = [
     { Id: 1, Name: '開工回報' },
@@ -122,4 +126,10 @@ const WorkSchedulerStatus: WorkSchedulerStatu[] = [
         id: 4,
         color: '#929292'
     }
+];
+
+const timetype: Selectitem[] = [
+    { Id: 1, Name: '前置時間' },
+    { Id: 2, Name: '標準工時' },
+    { Id: 3, Name: '總時間' },
 ];

@@ -60,9 +60,11 @@ export class MaterialBasicListComponent implements OnInit {
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
-                this.WarehouseList = s.data;
                 if (s.success) {
-
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.WarehouseList = s.data;
                 }
             }
         );
@@ -162,8 +164,7 @@ export class MaterialBasicListComponent implements OnInit {
                 }
             });
             if (this.hint) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }

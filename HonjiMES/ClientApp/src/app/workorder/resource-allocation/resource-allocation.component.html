@@ -1,0 +1,75 @@
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">機台資源分配</div>
+</div>
+<!-- <div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="Message" [editorOptions]="selectTimeType" editorType="dxSelectBox" dataSource="listTimeStatus" displayExpr="Name" valueExpr="Id">
+                    <dxo-label text="機台查詢"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
+    </div>
+</div> -->
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [columnAutoWidth]="true">
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+        <dxo-form>
+            <dxi-item  dataField="ProducingMachine"></dxi-item>
+            <dxi-item  dataField="New"></dxi-item>
+            <dxi-item  dataField="Assign"></dxi-item>
+            <dxi-item  dataField="Start"></dxi-item>
+            <dxi-item  dataField="Ready"></dxi-item>
+            <dxi-item  dataField="ToNew"></dxi-item>
+            <dxi-item  dataField="Finish"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+
+    <dxi-column dataField="ProducingMachine" caption="機台">
+        <!-- <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup> -->
+    </dxi-column>
+    <dxi-column dataField="New" caption="新建"></dxi-column>
+    <dxi-column dataField="Assign" caption="派工"></dxi-column>
+    <dxi-column dataField="Start" caption="開工" ></dxi-column>
+    <dxi-column dataField="Ready" caption="完工"></dxi-column>
+    <dxi-column dataField="ToNew" caption="轉新"></dxi-column>
+    <dxi-column dataField="Finish" caption="結案"></dxi-column>
+</dx-data-grid>
+
+

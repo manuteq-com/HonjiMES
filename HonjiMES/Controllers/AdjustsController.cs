@@ -258,5 +258,40 @@ namespace HonjiMES.Controllers
         {
             return _context.MaterialLogs.Any(e => e.Id == id);
         }
+
+
+        // GET: api/Inventorys
+        /// <summary>
+        /// 調整紀錄列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AllStockLog>>> GetInventoryLog(
+                [FromQuery] DataSourceLoadOptions FromQuery)
+        {
+            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0 && x.Message == "庫存調整單");
+            // var MaterialLogs = await data.ToListAsync();
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        // GET: api/Inventorys/5
+        /// <summary>
+        /// 查詢調整紀錄
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AllStockLog>> GetInventoryLog(int id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var allStockLog = await _context.AllStockLogs.FindAsync(id);
+
+            if (allStockLog == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(allStockLog));
+        }
     }
 }

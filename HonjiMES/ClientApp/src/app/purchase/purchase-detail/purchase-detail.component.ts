@@ -53,6 +53,9 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     ngOnChanges() {
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
                 this.WarehouseList = s.data;
             }
         );
@@ -95,8 +98,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
                 this.hint = true;
             }
             if (this.hint) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }

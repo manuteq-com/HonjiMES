@@ -63,6 +63,18 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 成品主檔資訊
+    /// </summary>
+    public class SaleDetailNewData : SaleDetailNew
+    {
+        public int TotalCount { get; set; }
+        public string CustomerNo { get; set; }
+        public string OrderNo { get; set; }
+        public int Serial { get; set; }
+        public string MachineNo { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData
@@ -558,10 +570,12 @@ namespace HonjiMES.Models
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
-        public string Remarks { get; set; }
+        public decimal RePrice { get; set; }
+        public string Message { get; set; }
         public string ProducingMachine { get; set; }
         public int PurchaseId { get; set; }
         public string PurchaseNo { get; set; }
+        public int? SupplierId { get; set; }
     }
     public class WorkOrderReportDataAll
     {
@@ -570,9 +584,13 @@ namespace HonjiMES.Models
         /// </summary>
         public int? ReCount { get; set; }
         /// <summary>
+        /// 回報數量
+        /// </summary>
+        public int? ReportCount { get; set; }
+        /// <summary>
         /// 說明
         /// </summary>
-        public string Remarks { get; set; }
+        public string Message { get; set; }
         public string ProducingMachine { get; set; }
     }
     /// <summary>
@@ -651,7 +669,7 @@ namespace HonjiMES.Models
         public string value1 { get; set; }
         public string value2 { get; set; }
         public int value3 { get; set; }
-        public string value4 { get; set; }
+        public int value4 { get; set; }
     }
     public class BillOfMaterialVerLv : BillOfMaterialVer
     {
@@ -701,4 +719,19 @@ namespace HonjiMES.Models
         public int Status { get; set; }
         public bool AllDay { get; set; }
     }
+
+    /// <summary>
+    /// 成品主檔資訊
+    /// </summary>
+    public class ResoureAllocation
+    {
+        public string ProducingMachine { get; set; }
+        public decimal New { get; set; }
+        public decimal Assign { get; set; }
+        public decimal Start { get; set; }
+        public decimal Ready { get; set; }
+        public decimal ToNew { get; set; }
+        public decimal Finish { get; set; }
+
+    } 
 }

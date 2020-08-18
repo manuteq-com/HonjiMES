@@ -95,7 +95,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-        <app-wiproduct-list [masterkey]="item.key" [itemval]="item.row"></app-wiproduct-list>
+        <app-wiproduct-list (childOuter)="onRowChanged($event)" [masterkey]="item.key" [itemval]="item.row"></app-wiproduct-list>
     </div>
 
 </dx-data-grid>

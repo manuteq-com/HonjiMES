@@ -194,7 +194,7 @@ namespace HonjiMES.Controllers
             var productBasic  = await _context.ProductBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.ProductBasicId).Select(x => new ProductBasicData
             {
                 TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
-                Products = x.Products
+                Products = x.Products.Where(y => y.DeleteFlag == 0).ToList()
             }).FirstOrDefaultAsync();
             if (productBasic.Products.Count() == 0) {
                 return Ok(MyFun.APIResponseError("尚未建立成品明細!"));

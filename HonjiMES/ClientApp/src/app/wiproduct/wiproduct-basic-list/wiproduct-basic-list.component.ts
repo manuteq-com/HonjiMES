@@ -30,6 +30,7 @@ export class WiproductBasicListComponent implements OnInit {
     exceldata: any;
     mod: string;
     uploadUrl: string;
+    hint: boolean;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -55,9 +56,11 @@ export class WiproductBasicListComponent implements OnInit {
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
-                this.WarehouseList = s.data;
                 if (s.success) {
-
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.WarehouseList = s.data;
                 }
             }
         );
@@ -146,11 +149,19 @@ export class WiproductBasicListComponent implements OnInit {
             }
         }
     }
+    onRowChanged() {
+        this.dataGrid.instance.refresh();
+    }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+        this.hint = false;
+        if (e.data !== undefined) {
+            e.data.Wiproducts.forEach(element => {
+                if (element.QuantityLimit > element.Quantity) {
+                    this.hint = true;
+                }
+            });
+            if (this.hint) {
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }

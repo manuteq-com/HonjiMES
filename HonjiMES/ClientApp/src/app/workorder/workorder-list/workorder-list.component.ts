@@ -92,16 +92,27 @@ export class WorkorderListComponent implements OnInit {
         if (e[colData.key] != null) {
             this.itemkey = e.Key;
             this.serialkey = Number(colData.key.substring(4)) + 1;
+            this.mod = 'report';
+            this.randomkey = new Date().getTime();
             // 判斷是否為委外
-            if (e[colData.key].value4 === '1') {
+            if (e[colData.key].value4 === 1) { // 委外(含採購單)
+                // 判斷該工序目前狀態
                 if (e[colData.key].value3 === 3) {
                     this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 } else {
                     this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 }
+            } else if (e[colData.key].value4 === 2) { // 委外(無採購單)
+                this.creatpopupVisible = true;
+                // 判斷該工序目前狀態，決定顯示內容
+                if (e[colData.key].value3 === 1) {
+                    this.ReportHeight = 710;
+                } else if (e[colData.key].value3 === 2) {
+                    this.ReportHeight = 810;
+                } else if (e[colData.key].value3 === 3) {
+                    this.ReportHeight = 760;
+                }
             } else {
-                this.mod = 'report';
-                this.randomkey = new Date().getTime();
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態，決定顯示內容
                 if (e[colData.key].value3 === 1) {

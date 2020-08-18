@@ -36,17 +36,13 @@ export class AdjustLogComponent implements OnInit {
     listAdjustStatus: any;
     editorOptions: any;
     detailfilter: any;
-    selectAdjustType: any;
-    listAdjustType: any;
-    AdjustTypeList: any;
+
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
-        debugger;
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
-        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.getdata();
         this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
@@ -55,30 +51,16 @@ export class AdjustLogComponent implements OnInit {
                 }
             }
         );
-        this.app.GetData(this.Controller + '/GetAdjustType').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.AdjustTypeList = s.data;
-                    // this.AdjustTypeList.forEach(x => x.Message);
-                    this.selectAdjustType = {
-                        items: this.AdjustTypeList,
-                        displayExpr: 'Message',
-                        valueExpr: 'Message',
-                        searchEnabled: true,
-                        onValueChanged: this.onValueChanged.bind(this)
-                    };
-                }
-            }
-        );
+
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetAdjustLog',
+                this.Controller + '/GetInventoryLog',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustLog', 'GET', { key }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetInventoryLog', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
@@ -141,14 +123,7 @@ export class AdjustLogComponent implements OnInit {
             }
         }
     }
-    onValueChanged(e) {
-        debugger;
-        if (e.value === '全部資料') {
-            this.dataGrid.instance.clearFilter();
-        } else {
-            this.dataGrid.instance.filter(['Message', '=', e.value]);
-        }
-    }
+
     ngOnInit() {
     }
     cancelClickHandler(e) {

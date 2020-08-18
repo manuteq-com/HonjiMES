@@ -53,6 +53,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     PurchasetypeList: any;
     TypeselectBoxOptions: any;
     Warehouseval: any;
+    DataType: number;
     Quantityval: number;
     OriginPriceval: number;
     Priceval: number;
@@ -66,8 +67,10 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Purchaselist: any;
     selectBoxOptions: any;
     onCellPreparedLevel: number;
+    listAdjustStatus: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -120,6 +123,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         );
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
                 this.WarehouseListAll = s.data;
             }
         );
@@ -217,40 +223,40 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     selectvalueChanged(e, data) {
         data.setValue(e.value);
         const basicData = this.BasicDataList.find(z => z.TempId === e.value);
-        const dataType = basicData.DataType;
+        this.DataType = basicData.DataType;
         const dataId = basicData.DataId;
         this.Quantityvalmax = 999;
         this.Quantityval = 1;
         this.OriginPriceval = basicData.Price ? basicData.Price : 0;
         this.Priceval = basicData.Price ? basicData.Price : 0;
-        if (dataType === 1) {   // 查詢原料
+        if (this.DataType === 1) {   // 查詢原料
             this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
                     });
                 }
             );
-        } else if (dataType === 2) {    // 查詢成品
+        } else if (this.DataType === 2) {    // 查詢成品
             this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
                     });
                 }
             );
-        } else if (dataType === 3) {    // 查詢半成品
+        } else if (this.DataType === 3) {    // 查詢半成品
             this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
                 (s) => {
                     this.WarehouseList = [];
                     s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
                         this.WarehouseList[index] = element.Warehouse;
                         this.Warehouseval = this.WarehouseList[0].Id;
                     });
@@ -296,19 +302,44 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     onEditingStart(e) {
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
+        const basicData = this.BasicDataList.find(z => z.TempId === e.data.TempId);
+        this.DataType = basicData.DataType;
+        const dataId = basicData.DataId;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.Warehouseval = e.data.WarehouseId;
-        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + e.data.DataId).subscribe(
-            (s) => {
-                this.WarehouseList = [];
-                s.data.forEach((element, index) => {
-                    element.Warehouse.Name = element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                    this.WarehouseList[index] = element.Warehouse;
-                });
-            }
-        );
+        if (this.DataType === 1) {   // 查詢原料
+            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                }
+            );
+        } else if (this.DataType === 2) {    // 查詢成品
+            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                }
+            );
+        } else if (this.DataType === 3) {    // 查詢半成品
+            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
+                }
+            );
+        }
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {

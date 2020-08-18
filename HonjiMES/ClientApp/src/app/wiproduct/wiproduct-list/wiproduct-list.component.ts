@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgModule, Component, OnInit, ViewChild, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./wiproduct-list.component.css']
 })
 export class WiproductListComponent implements OnInit, OnChanges {
+    @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     @Input() masterkey: number;
@@ -53,6 +54,9 @@ export class WiproductListComponent implements OnInit, OnChanges {
         );
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
                 this.WarehouseList = s.data;
             }
         );
@@ -131,11 +135,13 @@ export class WiproductListComponent implements OnInit, OnChanges {
             }
         }
     }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
+    }
     onRowPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
+                e.rowElement.style.color = '#d9534f';
             }
         }
     }
@@ -173,9 +179,7 @@ export class WiproductListComponent implements OnInit, OnChanges {
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
+                e.cellElement.style.color = '#d9534f';
             }
         }
     }

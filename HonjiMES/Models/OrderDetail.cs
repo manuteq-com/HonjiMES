@@ -6,7 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("order_detail")]
+    /// <summary>
+    /// &#35330;&#21934;&#26126;&#32048;
+    /// </summary>
+    [Table("order_detail")]
     public partial class OrderDetail
     {
         public OrderDetail()
@@ -18,57 +21,129 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#35330;&#21934;id
+        /// </summary>
         [Column("order_id", TypeName = "int(11)")]
         public int OrderId { get; set; }
+        /// <summary>
+        /// &#23458;&#25142;&#21934;&#34399;
+        /// </summary>
         [Required]
         [Column("customer_no", TypeName = "varchar(50)")]
         public string CustomerNo { get; set; }
+        /// <summary>
+        /// &#24207;&#34399;
+        /// </summary>
         [Column("serial", TypeName = "int(11)")]
         public int Serial { get; set; }
+        /// <summary>
+        /// &#25104;&#21697;&#22522;&#26412;&#36039;&#35338;id
+        /// </summary>
         [Column("product_basic_id", TypeName = "int(11)")]
         public int ProductBasicId { get; set; }
+        /// <summary>
+        /// &#29986;&#21697;id
+        /// </summary>
         [Column("product_id", TypeName = "int(11)")]
         public int? ProductId { get; set; }
+        /// <summary>
+        /// &#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#21407;&#21934;&#20729;
+        /// </summary>
         [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
+        /// <summary>
+        /// &#25240;&#25187;&#29575;
+        /// </summary>
         [Column("discount", TypeName = "int(11)")]
         public int? Discount { get; set; }
+        /// <summary>
+        /// &#25240;&#24460;&#21934;&#20729;
+        /// </summary>
         [Column("discount_price", TypeName = "int(11)")]
         public int? DiscountPrice { get; set; }
+        /// <summary>
+        /// &#25240;&#24460;&#20729;&#26684;
+        /// </summary>
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
+        /// <summary>
+        /// &#23526;&#38555;&#20132;&#36008;&#25976;
+        /// </summary>
         [Column("delivered", TypeName = "int(11)")]
         public int? Delivered { get; set; }
+        /// <summary>
+        /// &#21934;&#20301;
+        /// </summary>
         [Required]
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
+        /// <summary>
+        /// &#38928;&#20132;&#26085;
+        /// </summary>
         [Column("due_date", TypeName = "timestamp")]
         public DateTime DueDate { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remark", TypeName = "varchar(50)")]
         public string Remark { get; set; }
+        /// <summary>
+        /// &#22238;&#24489;&#20132;&#26399;
+        /// </summary>
         [Column("reply_date", TypeName = "timestamp")]
         public DateTime ReplyDate { get; set; }
+        /// <summary>
+        /// &#22238;&#35206;&#20633;&#35387;
+        /// </summary>
         [Column("replyRemark", TypeName = "varchar(50)")]
         public string ReplyRemark { get; set; }
+        /// <summary>
+        /// &#27231;&#34399;
+        /// </summary>
         [Required]
         [Column("machine_no", TypeName = "varchar(100)")]
         public string MachineNo { get; set; }
+        /// <summary>
+        /// &#22294;&#27284;
+        /// </summary>
         [Column("drawing", TypeName = "varchar(50)")]
         public string Drawing { get; set; }
+        /// <summary>
+        /// &#22132;&#22696;
+        /// </summary>
         [Column("ink", TypeName = "varchar(50)")]
         public string Ink { get; set; }
+        /// <summary>
+        /// &#27161;&#31844;
+        /// </summary>
         [Column("label", TypeName = "varchar(50)")]
         public string Label { get; set; }
+        /// <summary>
+        /// &#21253;&#35037;&#25976;
+        /// </summary>
         [Column("package", TypeName = "int(11)")]
         public int? Package { get; set; }
+        /// <summary>
+        /// &#22238;&#35206;&#37327;
+        /// </summary>
         [Column("reply", TypeName = "int(11)")]
         public int? Reply { get; set; }
+        /// <summary>
+        /// &#24050;&#37559;&#36008;&#25976;
+        /// </summary>
         [Column("sale_count", TypeName = "int(11)")]
         public int SaleCount { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
+        /// <summary>
+        /// &#24314;&#31435;&#26085;&#26399;
+        /// </summary>
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]

@@ -88,14 +88,14 @@
             <dxo-summary [recalculateWhileEditing]="true">
                 <dxi-total-item
                     [customizeText]="customizeText"
-                    column="Order.CustomerNo"
+                    column="CustomerNo"
                     summaryType="count">
                 </dxi-total-item>
             </dxo-summary>
-            <dxi-column dataField="Order.CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="Order.OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
-            <dxi-column dataField="OrderDetail.MachineNo" caption="機號" [allowEditing]="false" width="200"></dxi-column>
+            <dxi-column dataField="CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
+            <dxi-column dataField="MachineNo" caption="機號" [allowEditing]="false" width="200"></dxi-column>
             <dxi-column dataField="ProductBasicId" caption="品號" [allowEditing]="false">
                 <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
@@ -108,6 +108,7 @@
             <dxi-column dataField="Quantity" caption="數量" dataType="number"></dxi-column>
             <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="TotalCount" caption="成品倉數量" dataType="number" [allowEditing]="false"></dxi-column>
             <!-- <dxi-column type="buttons">
                 <dxi-button hint="單筆銷貨" text="銷貨" [onClick]="to_dsaleClick"></dxi-button>
                 <dxi-button hint="單筆銷貨退回" text="銷貨退回" [onClick]="to_dsaleClick"></dxi-button>

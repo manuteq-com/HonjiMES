@@ -6,7 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("receive")]
+    /// <summary>
+    /// &#38936;&#26009;&#25976;&#37327;&#35352;&#37636;&#34920;
+    /// </summary>
+    [Table("receive")]
     public partial class Receive
     {
         [Key]
@@ -14,10 +17,19 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         [Column("requisition_detail_id", TypeName = "int(11)")]
         public int RequisitionDetailId { get; set; }
+        /// <summary>
+        /// &#38936;&#21462;&#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#21034;&#38500;&#35387;&#35352;
+        /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]

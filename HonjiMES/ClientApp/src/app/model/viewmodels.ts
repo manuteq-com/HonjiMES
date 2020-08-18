@@ -163,10 +163,12 @@ export class workOrderReportData {
     WorkOrderID: number;
     WorkOrderSerial: number;
     ReCount: number;
+    RePrice: number;
     Remarks: string;
     ProducingMachine: string;
     PurchaseId: number;
     PurchaseNo: string;
+    SupplierId: number;
 }
 
 // tslint:disable-next-line: class-name
