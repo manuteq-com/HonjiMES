@@ -34,7 +34,7 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeads(
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderHeads(
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
@@ -81,14 +81,18 @@ namespace HonjiMES.Controllers
             // var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
             // return Ok(MyFun.APIResponseOK(data));
             var workOrderHead = await _context.WorkOrderHeads.Where(x => x.Id == id && x.DeleteFlag == 0).ToListAsync();
-            if(workOrderHead.Count == 1) {
-                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
-                var data = new WorkOrderData{
+            if (workOrderHead.Count == 1)
+            {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
+                var data = new WorkOrderData
+                {
                     WorkOrderHead = workOrderHead.FirstOrDefault(),
                     WorkOrderDetail = WorkOrderDetail
                 };
-                return Ok(MyFun.APIResponseOK(data));    
-            }else{
+                return Ok(MyFun.APIResponseOK(data));
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("工單查詢失敗!"));
             }
         }
@@ -102,14 +106,18 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderData>> GetWorkOrderDetailByWorkOrderNo(SearchValue SearchValue)
         {
             var workOrderHead = await _context.WorkOrderHeads.Where(x => x.WorkOrderNo == SearchValue.WorkOrderNo && x.DeleteFlag == 0).ToListAsync();
-            if(workOrderHead.Count == 1) {
-                var WorkOrderDetail = _context.WorkOrderDetails.Where(x=>x.WorkOrderHeadId == workOrderHead.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
-                var data = new WorkOrderData{
+            if (workOrderHead.Count == 1)
+            {
+                var WorkOrderDetail = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == workOrderHead.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                var data = new WorkOrderData
+                {
                     WorkOrderHead = workOrderHead.FirstOrDefault(),
                     WorkOrderDetail = WorkOrderDetail
                 };
-                return Ok(MyFun.APIResponseOK(data));    
-            }else{
+                return Ok(MyFun.APIResponseOK(data));
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("[ " + SearchValue.WorkOrderNo + " ] 查無資訊!"));
             }
         }
@@ -236,7 +244,8 @@ namespace HonjiMES.Controllers
             var OWorkOrderHead = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).FirstAsync();
             foreach (var item in OWorkOrderHead.WorkOrderDetails)
             {
-                if (item.SerialNumber == WorkOrderReportData.WorkOrderSerial) {
+                if (item.SerialNumber == WorkOrderReportData.WorkOrderSerial)
+                {
                     item.Status = 3; // 綁定採購單後即完成。
                     item.PurchaseId = WorkOrderReportData.PurchaseId;
                     item.ReCount = (item?.ReCount ?? 0) + WorkOrderReportData.ReCount;
@@ -343,7 +352,9 @@ namespace HonjiMES.Controllers
                 OWorkOrderHead.Status = 5;//結案
                 OWorkOrderHead.UpdateTime = DateTime.Now;
                 OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("該工單已結案!"));
             }
             try
@@ -369,7 +380,8 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
-                if (WorkOrderHeads.Status == 5) {
+                if (WorkOrderHeads.Status == 5)
+                {
                     return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
                 }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
@@ -437,7 +449,8 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
-                if (WorkOrderHeads.Status == 5) {
+                if (WorkOrderHeads.Status == 5)
+                {
                     return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
                 }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
@@ -520,7 +533,8 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderReportData.WorkOrderID);
-                if (WorkOrderHeads.Status == 5) {
+                if (WorkOrderHeads.Status == 5)
+                {
                     return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
                 }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
@@ -595,7 +609,7 @@ namespace HonjiMES.Controllers
                 };
                 if (WorkOrderDetails.Status == 1)
                     return await WorkOrderReportStart(WorkOrderReportData);
-                else if(WorkOrderDetails.Status == 2)
+                else if (WorkOrderDetails.Status == 2)
                     return await WorkOrderReportEnd(WorkOrderReportData);
                 else if (WorkOrderDetails.Status == 3)
                     return await WorkOrderReportRestart(WorkOrderReportData);

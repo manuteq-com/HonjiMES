@@ -396,6 +396,26 @@ namespace HonjiMES.Models
         /// </summary>
         public List<ReqWarehouse> WarehouseList { get; set; }
     }
+    public class RequisitionDetailAllShow : RequisitionDetail
+    {
+        /// <summary>
+        /// 已領數量
+        /// </summary>
+        public int ReceiveQty { get; set; }
+        /// <summary>
+        /// 品項NO
+        /// </summary>
+        public string NameNo { get; set; }
+        /// <summary>
+        /// 品項類型
+        /// </summary>
+        public string NameType { get; set; }
+
+        /// <summary>
+        /// 品項的倉庫資料
+        /// </summary>
+        public string WarehouseName { get; set; }
+    }
     public class ReqWarehouse
     {
         /// <summary>
@@ -413,9 +433,18 @@ namespace HonjiMES.Models
     }
     public class GetReceive
     {
+        public int? ProductBasicId { get; set; }
+        public int? MaterialBasicId { get; set; }
         public int RQty { get; set; }
         public int WarehouseID { get; set; }
     }
+
+    public class PostRequisition
+    {
+        public int WorkOrderNo { get; set; }
+        public List<GetReceive> ReceiveList { get; set; }
+    }
+
     /// <summary>
     /// 登入用
     /// </summary>

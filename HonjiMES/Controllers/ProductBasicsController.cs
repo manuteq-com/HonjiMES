@@ -111,7 +111,7 @@ namespace HonjiMES.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) 
+            catch (DbUpdateConcurrencyException)
             {
                 if (!ProductBasicExists(id))
                 {
@@ -148,7 +148,8 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(ProductW product)
         {
-            if (product.wid == null) {
+            if (product.wid == null)
+            {
                 return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", product));
             }
 
@@ -166,11 +167,13 @@ namespace HonjiMES.Controllers
                     Property = product.Property,
                     Price = product.Price,
                     SubInventory = product.SubInventory,
-                     CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
                 ProductsBasicData = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == product.ProductNo && x.DeleteFlag == 0).FirstOrDefault();
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseError("[主件品號] 已存在!"));
             }
             product.ProductBasicId = ProductsBasicData.Id;
@@ -201,7 +204,7 @@ namespace HonjiMES.Controllers
                         SubInventory = product.SubInventory,
                         WarehouseId = warehouseId,
                         ProductBasicId = product.ProductBasicId,
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
             }
@@ -240,7 +243,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<ProductBasic>> CheckProductNumber(string DataNo)
         {
             var productBasicNo = await _context.ProductBasics.Where(x => x.ProductNo == DataNo && x.DeleteFlag == 0).AnyAsync();
-            if (productBasicNo) {
+            if (productBasicNo)
+            {
                 return Ok(MyFun.APIResponseError("[成品品號]已存在!"));
             }
             return Ok(MyFun.APIResponseOK(""));
