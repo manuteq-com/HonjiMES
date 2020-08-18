@@ -73,7 +73,7 @@
             <dxo-lookup [dataSource]="WorkStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" [width]="50">
+        <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" [width]="80">
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
@@ -81,7 +81,7 @@
             <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="完工數量 必須大於0">
             </dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Remarks" caption="回報說明">
+        <dxi-column dataField="Message" caption="回報說明">
         </dxi-column>
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false">
         </dxi-column>
@@ -110,3 +110,11 @@
             [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
     </div>
 </form>
+
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+    [height]="ReportHeight" [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey"
+            [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
+    </div>
+</dx-popup>

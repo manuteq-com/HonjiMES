@@ -55,6 +55,12 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     Controller = '/WorkOrders';
     WorkStatusList: any;
     listWorkOrderTypes: any;
+    ReportHeight: number;
+    mod: string;
+    serialkey: number;
+    creatpopupVisible: boolean;
+    randomkey: number;
+    itemkey: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -129,13 +135,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
-        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.dataSourceDB = s.data;
-                }
-            }
-        );
+        this.GetProcessInfo();
         this.modVisible = false;
         this.app.GetData('/Processes/GetProcessByWorkOrderHead/' + this.itemkeyval.Key).subscribe(
             (s) => {
@@ -147,6 +147,15 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         );
 
         this.onCellPreparedLevel = 0;
+    }
+    GetProcessInfo() {
+        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.dataSourceDB = s.data;
+                }
+            }
+        );
     }
     allowEdit(e) {
         if (e.row.data.Status > 1) {
@@ -222,7 +231,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     }
     onCellPrepared(e: any) {
         if (e.rowType === 'data' && e.column.command === 'select') {
-            if (e.data.Type === '1') { // 種類為委外
+            if (e.data.Type === 1 || (e.data.Type === 2 && e.data.Status === 2)) { // 種類為委外
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);
@@ -236,11 +245,21 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         }
     }
     onRowClick(e) {
-        if (e.data.Type === '1') {
+        if (e.data.Type === 1) { // 委外(含採購單)
             if (e.data.Status === 3) {
                 this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {
                 this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
+            }
+        } else if (e.data.Type === 2) { // 委外(無採購單)
+            // 判斷該工序目前狀態，決定顯示內容
+            if (e.data.Status === 2) {
+                this.itemkey = e.data.WorkOrderHeadId;
+                this.serialkey = e.data.SerialNumber;
+                this.mod = 'report';
+                this.randomkey = new Date().getTime();
+                this.creatpopupVisible = true;
+                this.ReportHeight = 810;
             }
         }
     }
@@ -361,5 +380,18 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 this.childOuter.emit(true);
             }
         }
+    }
+    creatpopup_result(e) {
+        this.creatpopupVisible = false;
+        // this.dataGrid2.instance.refresh();
+        this.disabledValues = [];
+        this.GetProcessInfo();
+        notify({
+            message: '更新完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
 }

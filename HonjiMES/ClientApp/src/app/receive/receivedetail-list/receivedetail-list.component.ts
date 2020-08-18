@@ -50,11 +50,19 @@ export class ReceiveDetailListComponent implements OnInit, OnChanges {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
-        this.Warehouselist = new CustomStore({
-            key: 'Id',
-            load: () =>
-                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
-        });
+        // this.Warehouselist = new CustomStore({
+        //     key: 'Id',
+        //     load: () =>
+        //         SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        // });
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
+                this.Warehouselist = s.data;
+            }
+        );
     }
     setWarehouse(values: any, WarehouseIDM: number) {
         values.WarehouseID = WarehouseIDM;

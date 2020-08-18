@@ -6,7 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("purchase_detail")]
+    /// <summary>
+    /// &#25505;&#36092;&#21934;&#26126;&#32048;
+    /// </summary>
+    [Table("purchase_detail")]
     public partial class PurchaseDetail
     {
         public PurchaseDetail()
@@ -17,40 +20,91 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#21934;&#34399;
+        /// </summary>
         [Column("purchase_id", TypeName = "int(11)")]
         public int PurchaseId { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#31278;&#39006;
+        /// </summary>
         [Column("purchase_type", TypeName = "int(11)")]
         public int? PurchaseType { get; set; }
+        /// <summary>
+        /// &#20379;&#25033;&#21830;id
+        /// </summary>
         [Column("supplier_id", TypeName = "int(11)")]
         public int SupplierId { get; set; }
+        /// <summary>
+        /// &#35330;&#21934;&#21934;&#34399;id
+        /// </summary>
         [Column("order_id", TypeName = "int(11)")]
         public int? OrderId { get; set; }
+        /// <summary>
+        /// &#38928;&#35336;&#20132;&#26399;
+        /// </summary>
         [Column("delivery_time", TypeName = "timestamp")]
         public DateTime DeliveryTime { get; set; }
+        /// <summary>
+        /// &#26009;&#34399;&#31278;&#39006;(1&#21407;&#26009; 2&#25104;&#21697; 3 &#21322;&#25104;&#21697;)
+        /// </summary>
         [Column("data_type", TypeName = "int(11)")]
         public int DataType { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#20839;&#23481;ID
+        /// </summary>
         [Column("data_id", TypeName = "int(11)")]
         public int DataId { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#20839;&#23481;&#32232;&#34399;
+        /// </summary>
         [Required]
         [Column("data_no", TypeName = "varchar(50)")]
         public string DataNo { get; set; }
+        /// <summary>
+        /// &#25505;&#36092;&#20839;&#23481;&#21517;&#31281;
+        /// </summary>
         [Required]
         [Column("data_name", TypeName = "varchar(50)")]
         public string DataName { get; set; }
+        /// <summary>
+        /// &#35215;&#26684;
+        /// </summary>
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
+        /// <summary>
+        /// &#25976;&#37327;
+        /// </summary>
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
+        /// <summary>
+        /// &#21407;&#21934;&#20729;	
+        /// </summary>
         [Column("originPrice", TypeName = "int(11)")]
         public int OriginPrice { get; set; }
+        /// <summary>
+        /// &#20729;&#26684;
+        /// </summary>
         [Column("price", TypeName = "int(11)")]
         public int Price { get; set; }
+        /// <summary>
+        /// &#20489;&#21029;id
+        /// </summary>
         [Column("warehouse_id", TypeName = "int(11)")]
         public int? WarehouseId { get; set; }
+        /// <summary>
+        /// &#36914;&#36008;&#37327;
+        /// </summary>
         [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#21034;&#38500;&#35387;&#35352;
+        /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]

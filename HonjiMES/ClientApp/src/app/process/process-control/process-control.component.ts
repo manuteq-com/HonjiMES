@@ -130,6 +130,17 @@ export class ProcessControlComponent implements OnInit {
         this.creatpopupVisible = false;
         this.itemkey = null;
         this.dataGrid1.instance.refresh();
+        if (this.workOrderHeadId !== undefined) {
+            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + this.workOrderHeadId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.dataSourceDB_Process = s.data.WorkOrderDetail;
+                        this.btnDisabled = false;
+                        this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
+                    }
+                }
+            );
+        }
         notify({
             message: '更新完成',
             position: {

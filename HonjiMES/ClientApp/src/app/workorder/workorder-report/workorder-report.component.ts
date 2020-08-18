@@ -63,6 +63,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     ReCountVisible: boolean;
     RemarkVisible: boolean;
     DateBoxOptions: any;
+    NoPurchaseVisible: any;
+    selectBoxOptions: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
@@ -93,16 +95,38 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(x => {
+                        x.Name = x.Code + '_' + x.Name;
+                    });
+                    this.selectBoxOptions = {
+                        items: s.data,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        searchEnabled: true,
+                        // onValueChanged: this.onSupplierSelectionChanged.bind(this)
+                    };
+                }
+            }
+        );
+        this.PriceEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            // onValueChanged: this.PriceValueChanged.bind(this)
+        };
     }
-
     ngOnInit() {
     }
     ngOnChanges() {
+        // debugger;
         this.ReCountVisible = false;
         this.RemarkVisible = false;
         this.startBtnVisible = false;
         this.endBtnVisible = false;
         this.restartedBtnVisible = false;
+        this.NoPurchaseVisible = false;
 
         if (this.itemkeyval != null) {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
@@ -152,6 +176,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     this.ReCountVisible = true;
                                     this.RemarkVisible = true;
                                     this.endBtnVisible = true;
+
+                                    // 如工序為委外(無採購單)，則需填入供應商、金額
+                                    if (element.Type === 2) {
+                                        this.NoPurchaseVisible = true;
+                                    }
                                 } else if (element.Status === 3) {
                                     this.restartedBtnVisible = true;
                                     this.RemarkVisible = true;
@@ -192,15 +221,17 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         }
-        // this.formData = this.myform.instance.option('formData');
+        this.formData = this.myform.instance.option('formData');
         // this.postval = this.formData;
         // tslint:disable-next-line: new-parens
         this.postval = new workOrderReportData;
         this.postval.WorkOrderID = this.itemkeyval;
         this.postval.WorkOrderSerial = this.serialkeyval;
         this.postval.ReCount = this.formData.ReCount;
-        this.postval.Remarks = this.formData.Remark;
+        this.postval.RePrice = this.formData?.RePrice ?? 0;
+        this.postval.Message = this.formData.Message;
         this.postval.ProducingMachine = this.formData.ProducingMachine;
+        this.postval.SupplierId = this.formData.SupplierId;
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length

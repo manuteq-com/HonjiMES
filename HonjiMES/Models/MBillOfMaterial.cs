@@ -6,49 +6,97 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("m_bill_of_material")]
+    /// <summary>
+    /// MBOM
+    /// </summary>
+    [Table("m_bill_of_material")]
     public partial class MBillOfMaterial
     {
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#29238;ID
+        /// </summary>
         [Column("pid", TypeName = "int(11)")]
         public int? Pid { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#21517;&#31281;
+        /// </summary>
         [Column("name", TypeName = "varchar(45)")]
         public string Name { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]
         public int? ProductBasicId { get; set; }
         [Column("bom_id", TypeName = "int(11)")]
         public int? BomId { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#38918;&#24207;
+        /// </summary>
         [Column("serial_number", TypeName = "int(11)")]
         public int SerialNumber { get; set; }
         [Column("process_id", TypeName = "int(11)")]
         public int ProcessId { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#20195;&#34399;
+        /// </summary>
         [Required]
         [Column("process_no", TypeName = "varchar(50)")]
         public string ProcessNo { get; set; }
+        /// <summary>
+        /// &#24037;&#24207;&#21517;&#31281;
+        /// </summary>
         [Required]
         [Column("process_name", TypeName = "varchar(100)")]
         public string ProcessName { get; set; }
+        /// <summary>
+        /// &#21069;&#32622;&#26178;&#38291;
+        /// </summary>
         [Column("process_lead_time", TypeName = "decimal(10,2)")]
         public decimal ProcessLeadTime { get; set; }
+        /// <summary>
+        /// &#27161;&#28310;&#24037;&#26178;
+        /// </summary>
         [Column("process_time", TypeName = "decimal(10,2)")]
         public decimal ProcessTime { get; set; }
+        /// <summary>
+        /// &#25104;&#26412;
+        /// </summary>
         [Column("process_cost", TypeName = "decimal(10,2)")]
         public decimal ProcessCost { get; set; }
+        /// <summary>
+        /// &#22294;&#34399;
+        /// </summary>
         [Column("draw_no", TypeName = "varchar(50)")]
         public string DrawNo { get; set; }
+        /// <summary>
+        /// &#25152;&#38656;&#20154;&#21147;
+        /// </summary>
         [Column("manpower", TypeName = "int(11)")]
         public int? Manpower { get; set; }
+        /// <summary>
+        /// &#27231;&#21488;
+        /// </summary>
         [Column("producing_machine", TypeName = "varchar(50)")]
         public string ProducingMachine { get; set; }
+        /// <summary>
+        /// &#29376;&#24907;
+        /// </summary>
         [Column("status", TypeName = "int(11)")]
         public int Status { get; set; }
+        /// <summary>
+        /// &#31278;&#39006;
+        /// </summary>
         [Required]
         [Column("type", TypeName = "varchar(50)")]
         public string Type { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#29256;&#26412;
+        /// </summary>
         [Column("version", TypeName = "decimal(10,2)")]
         public decimal Version { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]

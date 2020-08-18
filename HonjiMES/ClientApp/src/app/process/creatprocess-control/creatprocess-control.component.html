@@ -98,7 +98,7 @@
         <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [allowEditing]="false"></dxi-column>
 
-        <dxi-column dataField="Type" caption="委外" [width]="70">
+        <dxi-column dataField="Type" caption="委外" [width]="100">
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 

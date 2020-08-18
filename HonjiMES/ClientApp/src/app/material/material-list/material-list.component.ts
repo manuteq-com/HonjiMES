@@ -60,9 +60,11 @@ export class MaterialListComponent implements OnInit, OnChanges {
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
-                this.WarehouseList = s.data;
                 if (s.success) {
-
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.WarehouseList = s.data;
                 }
             }
         );

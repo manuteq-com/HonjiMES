@@ -27,6 +27,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
     buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     selectBoxOptions: any;
     NumberBoxOptions: any;
+    WarehouseList: any[];
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
@@ -50,8 +51,13 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
         this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
             (s) => {
                 if (s.success) {
+                    this.WarehouseList = [];
+                    s.data.forEach((element, index) => {
+                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+                        this.WarehouseList[index] = element.Warehouse;
+                    });
                     this.selectBoxOptions = {
-                        items: s.data,
+                        items: this.WarehouseList,
                         displayExpr: 'Name',
                         valueExpr: 'Id',
                     };

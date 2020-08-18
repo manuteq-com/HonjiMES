@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("mbom_model_head")]
+    [Table("mbom_model_head")]
     public partial class MbomModelHead
     {
         public MbomModelHead()
@@ -17,12 +17,21 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#20195;&#34399;
+        /// </summary>
         [Required]
         [Column("model_code", TypeName = "varchar(50)")]
         public string ModelCode { get; set; }
+        /// <summary>
+        /// &#21517;&#31281;
+        /// </summary>
         [Required]
         [Column("model_name", TypeName = "varchar(50)")]
         public string ModelName { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("model_remarks", TypeName = "varchar(50)")]
         public string ModelRemarks { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]

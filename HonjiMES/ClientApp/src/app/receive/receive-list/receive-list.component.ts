@@ -76,11 +76,19 @@ export class ReceiveListComponent implements OnInit {
                 }
             }
         );
-        this.Warehouselist = new CustomStore({
-            key: 'Id',
-            load: () =>
-                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
-        });
+        // this.Warehouselist = new CustomStore({
+        //     key: 'Id',
+        //     load: () =>
+        //         SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        // });
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
+                this.Warehouselist = s.data;
+            }
+        );
     }
     ngOnInit() {
     }

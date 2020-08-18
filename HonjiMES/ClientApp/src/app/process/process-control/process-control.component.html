@@ -119,7 +119,7 @@
             <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="60">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Type" caption="委外" alignment="center" [width]="50">
+            <dxi-column dataField="Type" caption="委外" alignment="center" [width]="80">
                 <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
@@ -145,7 +145,7 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1300"
             [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>

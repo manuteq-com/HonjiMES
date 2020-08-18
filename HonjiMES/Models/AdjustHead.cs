@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-[Table("adjust_head")]
+    [Table("adjust_head")]
     public partial class AdjustHead
     {
         public AdjustHead()
@@ -17,15 +17,27 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
+        /// <summary>
+        /// &#35519;&#25972;&#21934;&#34399;
+        /// </summary>
         [Required]
         [Column("adjust_no", TypeName = "varchar(50)")]
         public string AdjustNo { get; set; }
+        /// <summary>
+        /// &#38364;&#32879;&#21934;&#34399;
+        /// </summary>
         [Column("link_order", TypeName = "varchar(50)")]
         public string LinkOrder { get; set; }
         [Column("temp", TypeName = "int(11)")]
         public int? Temp { get; set; }
+        /// <summary>
+        /// &#29376;&#24907;
+        /// </summary>
         [Column("status", TypeName = "int(11)")]
         public int? Status { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
