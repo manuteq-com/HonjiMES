@@ -28,7 +28,7 @@ export class SaleListComponent implements OnInit {
     dataSourceDB: any;
     Customerlist: any;
     ProductList: any;
-    creatpopupVisible = false;
+    creatpopupVisible: any;
     resalepopupVisible = false;
     tosalepopupVisible = false;
     dataSourceDBDetails: any[];
@@ -55,6 +55,7 @@ export class SaleListComponent implements OnInit {
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
+        this.creatpopupVisible = false;
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.getdata();

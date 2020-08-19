@@ -218,6 +218,26 @@ namespace HonjiMES.Models
         public int WarehouseId { get; set; }
     }
 
+    public class Orderlist
+    {
+        public int Id { get; set; }
+        public string OrderNo { get; set; }
+        public string MachineNo { get; set; }
+        public int ProductBasicId { get; set; }
+        public string ProductNo { get; set; }
+        public string ProductName { get; set; }
+        public string Specification { get; set; }
+        public int SaleCount { get; set; }
+        public int Quantity { get; set; }
+        public string Unit { get; set; }
+        public int OriginPrice { get; set; }
+        public int Price { get; set; }
+        public DateTime DueDate { get; set; }
+        public DateTime ReplyDate { get; set; }
+        public string Remark { get; set; }
+        public string ReplyRemark { get; set; }
+    }
+
     /// <summary>
     /// 採購轉進貨單
     /// </summary>
