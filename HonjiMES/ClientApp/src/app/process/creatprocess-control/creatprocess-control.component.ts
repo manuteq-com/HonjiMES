@@ -176,6 +176,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
                         this.formData.Count = s.data.WorkOrderHead.Count;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
+                        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) {
                             this.runVisible = true;

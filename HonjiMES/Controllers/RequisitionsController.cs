@@ -439,7 +439,7 @@ namespace HonjiMES.Controllers
                     WarehouseList.Add(new ReqWarehouse
                     {
                         ID = item.Key,
-                        Name = item.FirstOrDefault()?.Warehouse.Name,
+                        Name = item.FirstOrDefault()?.Warehouse.Code + item.FirstOrDefault()?.Warehouse.Name,
                         StockQty = item.Sum(y => y.Quantity)
                     });
                 }
@@ -453,7 +453,7 @@ namespace HonjiMES.Controllers
                     WarehouseList.Add(new ReqWarehouse
                     {
                         ID = item.Key,
-                        Name = item.FirstOrDefault()?.Warehouse.Name,
+                        Name = item.FirstOrDefault()?.Warehouse.Code + item.FirstOrDefault()?.Warehouse.Name,
                         StockQty = item.Sum(y => y.Quantity)
                     });
                 }
