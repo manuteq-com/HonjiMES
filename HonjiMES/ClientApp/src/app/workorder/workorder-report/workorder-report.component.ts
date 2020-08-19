@@ -85,6 +85,23 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             displayFormat: 'yyyy/MM/dd HH:mm:ss',
             // onValueChanged: this.PurchaseDateValueChange.bind(this)
         };
+        this.PriceEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            // onValueChanged: this.PriceValueChanged.bind(this)
+        };
+    }
+    ngOnInit() {
+    }
+    ngOnChanges() {
+        // debugger;
+        this.ReCountVisible = false;
+        this.RemarkVisible = false;
+        this.startBtnVisible = false;
+        this.endBtnVisible = false;
+        this.restartedBtnVisible = false;
+        this.NoPurchaseVisible = false;
+        this.HasPurchaseVisible = false;
 
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
@@ -132,23 +149,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.PriceEditorOptions = {
-            showSpinButtons: true,
-            mode: 'number',
-            // onValueChanged: this.PriceValueChanged.bind(this)
-        };
-    }
-    ngOnInit() {
-    }
-    ngOnChanges() {
-        // debugger;
-        this.ReCountVisible = false;
-        this.RemarkVisible = false;
-        this.startBtnVisible = false;
-        this.endBtnVisible = false;
-        this.restartedBtnVisible = false;
-        this.NoPurchaseVisible = false;
-        this.HasPurchaseVisible = false;
 
         if (this.itemkeyval != null) {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(

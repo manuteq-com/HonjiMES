@@ -497,7 +497,6 @@ namespace HonjiMES.Controllers
                         updataCheck.Add(item.Id);
                         var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == item.Id).FirstOrDefault();
                         OWorkOrderDetail.SerialNumber = item.SerialNumber;
-                        OWorkOrderDetail.SerialNumber = item.SerialNumber;
                         OWorkOrderDetail.ProcessId = item.ProcessId;
                         OWorkOrderDetail.ProcessNo = ProcessInfo.Code;
                         OWorkOrderDetail.ProcessName = ProcessInfo.Name;
@@ -555,6 +554,9 @@ namespace HonjiMES.Controllers
                 }
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
+                var ProductBasic = await _context.ProductBasics.FindAsync(OWorkOrderHeads.DataId);
+                OWorkOrderHeads.DataNo = ProductBasic.ProductNo;
+                OWorkOrderHeads.DataName = ProductBasic.Name;
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
                 OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try

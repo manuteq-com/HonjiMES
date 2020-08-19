@@ -200,7 +200,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             if (sendRequest) {
                 this.formData.Type = sendRequest.Type;
                 this.formData.PurchaseNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };

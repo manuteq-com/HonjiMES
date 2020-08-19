@@ -21,6 +21,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;
+    @Input() randomkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
@@ -39,7 +40,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     enterKeyAction: string;
     enterKeyDirection: string;
     buttondisabled = false;
-
+    itemkeyTemp: any;
+    productBasicChange: boolean;
 
     CreateTimeDateBoxOptions: any;
     ProductBasicSelectBoxOptions: any;
@@ -51,6 +53,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     runVisible: boolean;
     newVisible: boolean;
     modVisible: boolean;
+    editVisible: boolean;
     modCheck: boolean;
     modName: any;
     ProcessLeadTime: any;
@@ -146,12 +149,16 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ngOnChanges() {
         // debugger;
         this.dataSourceDB = [];
+        this.newVisible = false;
+        this.modVisible = false;
+        this.runVisible = false;
+        this.editVisible = false;
+        this.saveDisabled = false;
+        this.allowReordering = false;
         if (this.modval === 'new') {
             this.modName = 'new';
             this.newVisible = true;
-            this.modVisible = false;
-            this.runVisible = false;
-            this.saveDisabled = true;
+            this.modVisible = true;
             this.allowReordering = true;
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
@@ -162,13 +169,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.itemkeyval != null) {
-            this.newVisible = false;
-            this.modVisible = false;
-            this.allowReordering = false;
+            if (this.itemkeyTemp !== this.itemkeyval || this.productBasicChange) {
+                this.modCheck = true; // 避免製程資訊被刷新
+                this.itemkeyTemp = this.itemkeyval;
+                this.productBasicChange = false;
+            }
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.modCheck = true; // 避免製程資訊被刷新
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
@@ -178,13 +186,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
-                        if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) {
+                        if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
                             this.runVisible = true;
-                        } else {
-                            this.runVisible = false;
-                        }
-                        if (s.data.WorkOrderHead.Status !== 5) { // 工單為結案，不能編輯
+                        } else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
+                            this.editVisible = true;
                             this.modVisible = true;
+                        } else {
+                            this.editVisible = true;
                             this.allowReordering = true;
                         }
                     }
@@ -236,7 +244,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             const sendRequest = await SendService.sendRequest(this.http, '/Processes/GetWorkOrderNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
             if (sendRequest) {
                 this.formData.WorkOrderNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };
@@ -250,11 +258,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
                     (s) => {
                         if (s.success) {
-                            s.data.forEach(e => {
-                                e.DueStartTime = new Date();
-                                e.DueEndTime = new Date();
+                            s.data.forEach(element => {
+                                element.Id = 0;
+                                element.DueStartTime = new Date();
+                                element.DueEndTime = new Date();
                             });
                             this.dataSourceDB = s.data;
+                            this.productBasicChange = true;
                         }
                     }
                 );
@@ -433,11 +443,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         if (result) {
             this.dataSourceDB = [];
             this.dataGrid2.instance.refresh();
-            this.formData.CreateTime = new Date();
-            this.formData.ProductBasicId = null;
-            this.formData.Count = 1;
-            this.formData.ProducingMachine = '';
-            this.formData.Remarks = '';
             this.dataSourceDB = [];
             e.preventDefault();
             this.childOuter.emit(true);
