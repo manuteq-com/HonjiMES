@@ -232,8 +232,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.ProductBasics.Remove(productBasic);
+            productBasic.DeleteFlag = 1;
+            // _context.ProductBasics.Remove(productBasic);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(productBasic));
