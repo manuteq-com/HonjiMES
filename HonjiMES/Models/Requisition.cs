@@ -71,6 +71,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+        /// <summary>
+        /// &#38936;&#26009;&#21934;&#39006;&#22411;(0:&#38936;&#20986;&#21934;,1:&#36864;&#24235;&#21934;)
+        /// </summary>
+        [Column("type", TypeName = "tinyint(4)")]
+        public sbyte Type { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]

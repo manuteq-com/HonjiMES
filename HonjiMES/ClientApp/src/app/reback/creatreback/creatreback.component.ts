@@ -1,18 +1,18 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { Customer } from 'src/app/model/viewmodels';
+import CustomStore from 'devextreme/data/custom_store';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
-import notify from 'devextreme/ui/notify';
 import { SendService } from 'src/app/shared/mylib';
-import CustomStore from 'devextreme/data/custom_store';
+import notify from 'devextreme/ui/notify';
 
 @Component({
-    selector: 'app-creatreceive',
-    templateUrl: './creatreceive.component.html',
-    styleUrls: ['./creatreceive.component.css']
+    selector: 'app-creatreback',
+    templateUrl: './creatreback.component.html',
+    styleUrls: ['./creatreback.component.css']
 })
-export class CreatreceiveComponent implements OnInit, OnChanges {
+export class CreatrebackComponent implements OnInit, OnChanges {
 
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -26,7 +26,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     minColWidth: number;
     colCount: number;
     width: any;
-    Controller = '/Requisitions';
+    Controller = '/Rebacks';
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
@@ -38,7 +38,6 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     dataSourceAllDB: any;
     Warehouselist: CustomStore;
     constructor(private http: HttpClient, public app: AppComponent) {
-        this.RQtyValidation = this.RQtyValidation.bind(this);
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -70,21 +69,11 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
 
 
         };
-        // this.Warehouselist = new CustomStore({
-        //     key: 'Id',
-        //     load: () =>
-        //         SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
-        // });
-        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
-            (s) => {
-                if (s.success) {
-                    s.data.forEach(e => {
-                        e.Name = e.Code + e.Name;
-                    });
-                    this.Warehouselist = s.data;
-                }
-            }
-        );
+        this.Warehouselist = new CustomStore({
+            key: 'Id',
+            load: () =>
+                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        });
     }
     ngOnChanges() {
 
@@ -110,6 +99,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         let msg = '';
         this.buttondisabled = true;
         if (this.validate_before() === false) {
+            this.buttondisabled = false;
             return;
         }
         this.dataGrid.instance.saveEditData();
@@ -142,7 +132,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         const postdata = this.formData;
         postdata.ReceiveList = this.dataSourceAllDB;
         this.buttondisabled = true;
-        this.app.PostData(this.Controller + '/PostRequisitionsDetailAll', postdata).toPromise()
+        this.app.PostData(this.Controller + '/PostRebacksDetailAll', postdata).toPromise()
             .then((ReturnData: any) => {
                 if (ReturnData.success) {
                     this.myform.instance.resetValues();
@@ -174,7 +164,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     }
     async onValueChanged(e) {
         this.buttondisabled = false;
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + e.value).subscribe(
+        this.app.GetData(this.Controller + '/GetRebacksDetailMaterialByWorkOrderNo/' + e.value).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceAllDB = s.data;
@@ -201,13 +191,14 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     GetWarehouseStockQty(data) {
         if (data.value) {
             return data.data.WarehouseList.find(x => x.ID === data.value).StockQty ?? 0;
+
         } else {
             return data.value;
         }
     }
     WarehouseValidation(e) {
-        let msg = '';
         this.buttondisabled = true;
+        let msg = '';
         if (e.data.RQty > 0) {
             if (!e.data.WarehouseId || e.data.WarehouseId < 1) {
                 msg = '請選擇倉庫';
@@ -242,34 +233,8 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 }, 'error', 3000);
 
                 return false;
-            } else {
-                const StockQty = e.data.WarehouseList.find(x => x.ID === e.data.WarehouseId).StockQty;
-                if (e.data.RQty > StockQty) {
-                    msg = e.data.NameNo + ' 庫存數不足';
-                    e.rule.message = msg;
-                    notify({
-                        message: msg,
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'error', 3000);
-
-                    return false;
-                }
             }
         }
-        //  else if (e.data.RQty > 0) {
-        //     msg = '請選擇倉庫';
-        //     notify({
-        //         message: msg,
-        //         position: {
-        //             my: 'center top',
-        //             at: 'center top'
-        //         }
-        //     }, 'error', 3000);
-        //     return false;
-        // }
         this.buttondisabled = false;
         return true;
     }
@@ -278,7 +243,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         toolbarItems.forEach(item => {
             if (item.name === 'saveButton') {
                 item.options.icon = '';
-                item.options.text = '領料';
+                item.options.text = '退料';
                 item.showText = 'always';
                 item.visible = false;
 

@@ -57,9 +57,21 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                         max: this.itemkeyval.Quantity,
                         onValueChanged: this.QuantityValueChanged.bind(this)
                     };
-                    this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
-                    this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
-                    this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
+                    this.PriceEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        onValueChanged: this.PriceValueChanged.bind(this)
+                    };
+                    this.UnitCountEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        onValueChanged: this.UnitCountValueChanged.bind(this)
+                    };
+                    this.UnitPriceEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        onValueChanged: this.UnitPriceValueChanged.bind(this)
+                    };
                 }
             }
         );

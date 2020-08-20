@@ -380,6 +380,10 @@ namespace HonjiMES.Models
         /// </summary>
         public int ReceiveQty { get; set; }
         /// <summary>
+        /// 已退數量
+        /// </summary>
+        public int RbackQty { get; set; }
+        /// <summary>
         /// 品項NO
         /// </summary>
         public string NameNo { get; set; }
@@ -402,6 +406,10 @@ namespace HonjiMES.Models
         /// 已領數量
         /// </summary>
         public int ReceiveQty { get; set; }
+        /// <summary>
+        /// 已退數量
+        /// </summary>
+        public int RbackQty { get; set; }
         /// <summary>
         /// 品項NO
         /// </summary>
@@ -435,8 +443,8 @@ namespace HonjiMES.Models
     {
         public int? ProductBasicId { get; set; }
         public int? MaterialBasicId { get; set; }
-        public int RQty { get; set; }
-        public int WarehouseID { get; set; }
+        public int? RQty { get; set; }
+        public int? WarehouseID { get; set; }
     }
 
     public class PostRequisition
@@ -733,5 +741,5 @@ namespace HonjiMES.Models
         public decimal ToNew { get; set; }
         public decimal Finish { get; set; }
 
-    } 
+    }
 }

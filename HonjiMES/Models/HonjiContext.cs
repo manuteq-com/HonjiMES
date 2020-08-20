@@ -1864,6 +1864,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.Type).HasComment("領料單類型(0:領出單,1:退庫單)");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
