@@ -196,7 +196,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             const sendRequest = await SendService.sendRequest(this.http, '/OrderHeads/GetOrderNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
             if (sendRequest) {
                 this.formData.OrderNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };

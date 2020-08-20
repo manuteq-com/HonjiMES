@@ -141,7 +141,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/GetBillofPurchaseNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
             if (sendRequest) {
                 this.formData.BillofPurchaseNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };

@@ -166,8 +166,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.BillofPurchaseDetails.Remove(billofPurchaseDetail);
+            billofPurchaseDetail.DeleteFlag = 1;
+            // _context.BillofPurchaseDetails.Remove(billofPurchaseDetail);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(billofPurchaseDetail));

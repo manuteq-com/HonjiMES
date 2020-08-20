@@ -237,7 +237,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-            _context.SaleDetailNews.Remove(saleDetailNew);
+            saleDetailNew.DeleteFlag = 1;
+            // _context.SaleDetailNews.Remove(saleDetailNew);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(saleDetailNew));
         }

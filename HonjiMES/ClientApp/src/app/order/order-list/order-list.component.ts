@@ -224,8 +224,8 @@ export class OrderListComponent {
                     confirmButtonText: '確認新增'
                 }).then(async (result) => {
                     if (result.value) {
-                        // tslint:disable-next-line: new-parens
-                        const postval = { OrderNo: response.data.OrderNo, Products: response.message };
+                        // tslint:disable-next-line: max-line-length
+                        const postval = { OrderNo: response.data.OrderNo, Products: response.message, CustomerNo: response.data.CustomerNo };
                         // tslint:disable-next-line: max-line-length
                         const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
                         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();

@@ -18,6 +18,7 @@ export class EditbomComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;
+    @Input() randomkeyval: any;
     buttondisabled = false;
     labelLocation: string;
     formData: any;
@@ -31,8 +32,9 @@ export class EditbomComponent implements OnInit, OnChanges {
     ComponentList: any;
     MaterialList: any;
     ProductList: any;
-    PostBom: { BasicType: number, BasicId: number, Quantity: number, Name: string };
+    PostBom: { TempId: number, BasicType: number, BasicId: number, Quantity: number, Name: string };
     QuantityEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
+    BasicDataList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.labelLocation = 'left';
@@ -51,20 +53,36 @@ export class EditbomComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        this.app.GetData('/BillOfMaterials/GetMaterialBasicsDrowDown').subscribe(
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialList = s.data;
+                    s.data.forEach(element => {
+                        element.Name = element.DataNo + '_' + element.Name;
+                    });
+                    this.BasicDataList = s.data;
+                    this.editorOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: this.BasicDataList, key: 'TempId' } },
+                        searchEnabled: true,
+                        displayExpr: 'Name',
+                        valueExpr: 'TempId',
+                    };
                 }
             }
         );
-        this.app.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.ProductList = s.data;
-                }
-            }
-        );
+        // this.app.GetData('/BillOfMaterials/GetMaterialBasicsDrowDown').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialList = s.data;
+        //         }
+        //     }
+        // );
+        // this.app.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.ProductList = s.data;
+        //         }
+        //     }
+        // );
         this.QuantityEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
@@ -83,27 +101,25 @@ export class EditbomComponent implements OnInit, OnChanges {
         // });
     }
     onComponentSelectionChanged(e) {
-        if (e.value === 1) {
-            this.editorOptions = {
-                dataSource: { paginate: true, store: { type: 'array', data: this.MaterialList, key: 'Id' } },
-                searchEnabled: true,
-                // items: this.MaterialList,
-                displayExpr: 'Name',
-                valueExpr: 'Id',
-
-            };
-        } else if (e.value === 2) {
-            this.editorOptions = {
-                dataSource: { paginate: true, store: { type: 'array', data: this.ProductList, key: 'Id' } },
-                searchEnabled: true,
-                // items: this.ProductList,
-                displayExpr: 'Name',
-                valueExpr: 'Id',
-            };
-        } else {
-            this.editorOptions.items = [];
-        }
-
+        // if (e.value === 1) {
+        //     this.editorOptions = {
+        //         dataSource: { paginate: true, store: { type: 'array', data: this.MaterialList, key: 'Id' } },
+        //         searchEnabled: true,
+        //         // items: this.MaterialList,
+        //         displayExpr: 'Name',
+        //         valueExpr: 'Id',
+        //     };
+        // } else if (e.value === 2) {
+        //     this.editorOptions = {
+        //         dataSource: { paginate: true, store: { type: 'array', data: this.ProductList, key: 'Id' } },
+        //         searchEnabled: true,
+        //         // items: this.ProductList,
+        //         displayExpr: 'Name',
+        //         valueExpr: 'Id',
+        //     };
+        // } else {
+        //     this.editorOptions.items = [];
+        // }
     }
     validate_before(): boolean {
         // 表單驗證
@@ -127,6 +143,9 @@ export class EditbomComponent implements OnInit, OnChanges {
             return;
         }
         this.PostBom = this.myform.instance.option('formData');
+        const basicData = this.BasicDataList.find(z => z.TempId === this.PostBom.TempId);
+        this.PostBom.BasicType = basicData.DataType;
+        this.PostBom.BasicId = basicData.DataId;
         this.buttondisabled = false;
         try {
             const sendRequest = await SendService.sendRequest(

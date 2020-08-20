@@ -218,8 +218,8 @@ namespace HonjiMES.Controllers
             {
                 return NotFound();
             }
-
-            _context.WiproductBasics.Remove(wiproductBasic);
+            wiproductBasic.DeleteFlag = 1;
+            // _context.WiproductBasics.Remove(wiproductBasic);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(wiproductBasic));

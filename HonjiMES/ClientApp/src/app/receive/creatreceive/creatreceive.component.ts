@@ -70,11 +70,21 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
 
 
         };
-        this.Warehouselist = new CustomStore({
-            key: 'Id',
-            load: () =>
-                SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
-        });
+        // this.Warehouselist = new CustomStore({
+        //     key: 'Id',
+        //     load: () =>
+        //         SendService.sendRequest(this.http, '/Warehouses/GetWarehouses')
+        // });
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.Warehouselist = s.data;
+                }
+            }
+        );
     }
     ngOnChanges() {
 
@@ -191,7 +201,6 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     GetWarehouseStockQty(data) {
         if (data.value) {
             return data.data.WarehouseList.find(x => x.ID === data.value).StockQty ?? 0;
-
         } else {
             return data.value;
         }
