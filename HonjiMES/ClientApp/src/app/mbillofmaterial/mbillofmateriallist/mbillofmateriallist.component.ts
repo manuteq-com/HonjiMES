@@ -181,6 +181,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.app.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
             (s) => {
                 if (s.success) {
+                    this.allowAdding = true;
                     this.dataSourceDB_Process = s.data;
                 }
             }
@@ -208,9 +209,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             // data.row.data.Remark = ProcessBasic.Remark;
             data.data.DrawNo = ProcessBasic.DrawNo;
             data.data.Manpower = ProcessBasic.Manpower;
-            data.data.ProcessCost = ProcessBasic.Cost;
-            data.data.ProcessLeadTime = ProcessBasic.LeadTime;
-            data.data.ProcessTime = ProcessBasic.WorkTime;
+            data.data.ProcessCost = ProcessBasic?.Cost ?? 0;
+            data.data.ProcessLeadTime = ProcessBasic?.LeadTime ?? 0;
+            data.data.ProcessTime = ProcessBasic?.WorkTime ?? 0;
             data.data.ProducingMachine = ProcessBasic.ProducingMachine;
             data.data.Remark = ProcessBasic.Remark;
 
@@ -218,9 +219,9 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
                 if (x.key === data.row.data.key) {
                     x.DrawNo = ProcessBasic.DrawNo;
                     x.Manpower = ProcessBasic.Manpower;
-                    x.ProcessCost = ProcessBasic.Cost;
-                    x.ProcessLeadTime = ProcessBasic.LeadTime;
-                    x.ProcessTime = ProcessBasic.WorkTime;
+                    x.ProcessCost = ProcessBasic?.Cost ?? 0;
+                    x.ProcessLeadTime = ProcessBasic?.LeadTime ?? 0;
+                    x.ProcessTime = ProcessBasic?.WorkTime ?? 0;
                     x.ProducingMachine = ProcessBasic.ProducingMachine;
                     x.Remark = ProcessBasic.Remark;
                 }
