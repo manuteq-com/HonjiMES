@@ -6,13 +6,18 @@
         <dxi-item dataField="Name">
             <dxo-label text="名稱"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="BasicType" dataType="number" editorType="dxSelectBox" [editorOptions]="ComponentList">
+        <!-- <dxi-item dataField="BasicType" dataType="number" editorType="dxSelectBox" [editorOptions]="ComponentList">
             <dxo-label text="組件類別"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="BasicId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions">
+        </dxi-item> -->
+        <!-- <dxi-item dataField="BasicId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions">
+            <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
+            <dxo-label text="品號"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="TempId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions">
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
             <dxo-label text="品號"></dxo-label>
         </dxi-item>
+
         <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
             <dxi-validation-rule type="required" message="組成數量 必填"></dxi-validation-rule>
             <dxi-validation-rule type="range" [min]="1" message="組成數量 必須大於1"></dxi-validation-rule>
