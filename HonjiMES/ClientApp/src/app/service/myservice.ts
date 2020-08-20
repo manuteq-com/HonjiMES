@@ -96,7 +96,7 @@ const workorderstatus: Selectitem[] = [
 const workordertype: Selectitem[] = [
     { Id: 0, Name: '' },
     { Id: 1, Name: '委外' },
-    { Id: 2, Name: '委外(工)' }
+    // { Id: 2, Name: '委外(工)' }
 ];
 const reporttype: Selectitem[] = [
     { Id: 1, Name: '開工回報' },
