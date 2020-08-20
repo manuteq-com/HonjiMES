@@ -621,7 +621,7 @@ namespace HonjiMES.Controllers
                     DataName = BasicDataName,
                     Count = OrderDetail.Quantity,
                     Status = 4, // 表示由訂單轉程的工單，需要再由人工確認該工單
-                    CreateUser = 1
+                    CreateUser = MyFun.GetUserID(HttpContext)
                 };
 
                 var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == OrderDetail.ProductBasicId).ToListAsync();
@@ -651,7 +651,7 @@ namespace HonjiMES.Controllers
                         DueEndTime = DateTime.Now,
                         ActualStartTime = null,
                         ActualEndTime = null,
-                        CreateUser = 1
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     };
                     nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
                 }

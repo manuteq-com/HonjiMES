@@ -106,6 +106,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
+
     }
     ngOnChanges() {
         this.dataSourceDB_Process = [];
@@ -251,6 +252,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.OnChangeValue += 1;
         this.itemkey = this.OnChangeValue;
     }
+
+    // inline  editing
     async savedata() {
         debugger;
         this.dataGrid2.instance.saveEditData();

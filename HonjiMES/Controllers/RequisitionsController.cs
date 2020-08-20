@@ -35,7 +35,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Requisition>>> GetRequisitions([FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.Requisitions.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderHead), FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.Requisitions.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Type == 0).Include(x => x.WorkOrderHead), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
@@ -104,7 +104,7 @@ namespace HonjiMES.Controllers
             var dt = DateTime.Now;
             var RequisitionNo = dt.ToString("yyMMdd");
 
-            var NoData = await _context.Requisitions.AsQueryable().Where(x => x.RequisitionNo.Contains(key + RequisitionNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var NoData = await _context.Requisitions.AsQueryable().Where(x => x.RequisitionNo.Contains(key + RequisitionNo) && x.DeleteFlag == 0 && x.Type == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1)
             {
@@ -123,6 +123,7 @@ namespace HonjiMES.Controllers
             requisition.Specification = ProductBasics.Specification;
             requisition.CreateTime = dt;
             requisition.CreateUser = MyFun.GetUserID(HttpContext);
+            requisition.Type = 0;
             // BOM內容
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
@@ -217,7 +218,7 @@ namespace HonjiMES.Controllers
                 var dt = DateTime.Now;
                 var RequisitionNo = dt.ToString("yyMMdd");
 
-                var NoData = await _context.Requisitions.AsQueryable().Where(x => x.RequisitionNo.Contains(key + RequisitionNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoData = await _context.Requisitions.AsQueryable().Where(x => x.RequisitionNo.Contains(key + RequisitionNo) && x.DeleteFlag == 0 && x.Type == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1)
                 {
@@ -229,6 +230,7 @@ namespace HonjiMES.Controllers
                     }
                 }
                 var requisition = new Requisition();
+                requisition.Type = 0;
                 requisition.ProductBasicId = WorkOrderHeadData.DataId;
                 requisition.WorkOrderHeadId = WorkOrderHeadData.Id;
                 requisition.RequisitionNo = key + RequisitionNo + NoCount.ToString("000");
@@ -238,7 +240,7 @@ namespace HonjiMES.Controllers
                 requisition.Specification = ProductBasics.Specification;
                 requisition.Quantity = WorkOrderHeadData.Count;
                 requisition.CreateTime = dt;
-                requisition.CreateUser = 1;
+                requisition.CreateUser = MyFun.GetUserID(HttpContext);
                 // BOM內容
                 var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
                 foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
@@ -291,7 +293,7 @@ namespace HonjiMES.Controllers
                             Ismaterial = item.Ismaterial,
                             Quantity = item.ReceiveQty,
                             CreateTime = dt,
-                            CreateUser = 1
+                            CreateUser = MyFun.GetUserID(HttpContext)
                         });
                     }
 
@@ -373,7 +375,8 @@ namespace HonjiMES.Controllers
                     MaterialBasicId = x.MaterialBasicId,
                     MaterialNo = x.MaterialNo,
                     Quantity = x.Quantity,
-                    ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                    ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity > 0).Sum(x => x.Quantity),
+                    RbackQty = Math.Abs(x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity < 0).Sum(x => x.Quantity)),
                     NameNo = x.ProductBasicId.HasValue ? x.ProductNo : x.MaterialBasicId.HasValue ? x.MaterialNo : "",
                     NameType = x.ProductBasicId.HasValue ? "成品" : x.MaterialBasicId.HasValue ? "元件" : "",
                     //  WarehouseList=GetWarehouse(x)
@@ -425,7 +428,11 @@ namespace HonjiMES.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 取出品項所在的所有倉
+        /// </summary>
+        /// <param name="Req"></param>
+        /// <returns></returns>
         private List<ReqWarehouse> GetWarehouse(RequisitionDetail Req)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
@@ -556,18 +563,18 @@ namespace HonjiMES.Controllers
                             var dt = DateTime.Now;
                             RequisitionDetail.Receives.Add(new Receive
                             {
-                                Quantity = Receive.RQty,
+                                Quantity = Receive.RQty ?? 0,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Material.Quantity;
-                            Material.Quantity = Original - Receive.RQty;
+                            Material.Quantity = Original - Receive.RQty ?? 0;
                             Material.UpdateTime = dt;
                             Material.UpdateUser = MyFun.GetUserID(HttpContext);
                             Material.MaterialLogs.Add(new MaterialLog
                             {
                                 Original = Original,
-                                Quantity = -Receive.RQty,
+                                Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
@@ -594,18 +601,18 @@ namespace HonjiMES.Controllers
                             var dt = DateTime.Now;
                             RequisitionDetail.Receives.Add(new Receive
                             {
-                                Quantity = Receive.RQty,
+                                Quantity = Receive.RQty ?? 0,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Product.Quantity;
-                            Product.Quantity = Original - Receive.RQty;
+                            Product.Quantity = Original - Receive.RQty ?? 0;
                             Product.UpdateTime = dt;
                             Product.UpdateUser = MyFun.GetUserID(HttpContext);
                             Product.ProductLogs.Add(new ProductLog
                             {
                                 Original = Original,
-                                Quantity = -Receive.RQty,
+                                Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
@@ -664,18 +671,18 @@ namespace HonjiMES.Controllers
                             var dt = DateTime.Now;
                             RequisitionDetail.Receives.Add(new Receive
                             {
-                                Quantity = Receive.RQty,
+                                Quantity = Receive.RQty ?? 0,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Material.Quantity;
-                            Material.Quantity = Original - Receive.RQty;
+                            Material.Quantity = Original - Receive.RQty ?? 0;
                             Material.UpdateTime = dt;
                             Material.UpdateUser = MyFun.GetUserID(HttpContext);
                             Material.MaterialLogs.Add(new MaterialLog
                             {
                                 Original = Original,
-                                Quantity = -Receive.RQty,
+                                Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
@@ -702,18 +709,18 @@ namespace HonjiMES.Controllers
                             var dt = DateTime.Now;
                             RequisitionDetail.Receives.Add(new Receive
                             {
-                                Quantity = Receive.RQty,
+                                Quantity = Receive.RQty ?? 0,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             var Original = Product.Quantity;
-                            Product.Quantity = Original - Receive.RQty;
+                            Product.Quantity = Original - Receive.RQty ?? 0;
                             Product.UpdateTime = dt;
                             Product.UpdateUser = MyFun.GetUserID(HttpContext);
                             Product.ProductLogs.Add(new ProductLog
                             {
                                 Original = Original,
-                                Quantity = -Receive.RQty,
+                                Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
@@ -732,9 +739,15 @@ namespace HonjiMES.Controllers
                 return MyFun.APIResponseOK(RequisitionDetail);
             }
         }
+        /// <summary>
+        /// 用工單號取出可領的料號 一階
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailMaterialByWorkOrderNo(int id)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var RequisitionDetailAllList = new List<RequisitionDetailAll>();
             try
             {
@@ -750,11 +763,12 @@ namespace HonjiMES.Controllers
                        MaterialBasicId = x.MaterialBasicId,
                        MaterialNo = x.MaterialNo,
                        Quantity = x.Quantity,
-                       ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
+                       ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity > 0).Sum(x => x.Quantity),
+                       RbackQty = x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity < 0).Sum(x => x.Quantity),
                        NameNo = x.ProductBasicId.HasValue ? x.ProductNo : x.MaterialBasicId.HasValue ? x.MaterialNo : "",
                        NameType = x.ProductBasicId.HasValue ? "成品" : x.MaterialBasicId.HasValue ? "元件" : "",
                        // WarehouseList = GetWarehouse(x)
-                   }).ToList().GroupBy(x=>x.NameNo);
+                   }).ToList().GroupBy(x => x.NameNo);
                 foreach (var item in GRequisitionDetailAllList)
                 {
                     RequisitionDetailAllList.Add(new RequisitionDetailAll
@@ -767,6 +781,7 @@ namespace HonjiMES.Controllers
                         MaterialNo = item.FirstOrDefault().MaterialNo,
                         Quantity = item.FirstOrDefault().Quantity,
                         ReceiveQty = item.Sum(x => x.ReceiveQty),
+                        RbackQty = Math.Abs(item.Sum(x => x.RbackQty)),
                         NameNo = item.FirstOrDefault().NameNo,
                         NameType = item.FirstOrDefault().NameType,
                     });
@@ -830,6 +845,36 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<IActionResult> PostRequisitionsDetailAll(PostRequisition PostRequisition)
         {
+            if (PostRequisition.WorkOrderNo == 0)
+            {
+                return Ok(MyFun.APIResponseError("沒有工單資訊!"));
+            }
+            if (!PostRequisition.ReceiveList.Any())
+            {
+                return Ok(MyFun.APIResponseError("沒有領料資料"));
+            }
+            else
+            {
+                if (PostRequisition.ReceiveList.Where(x => (x.RQty.HasValue && !x.WarehouseID.HasValue) || !x.RQty.HasValue && x.WarehouseID.HasValue).Any())
+                {
+                    return Ok(MyFun.APIResponseError("數量錯誤或倉庫錯誤"));
+                }
+                else if (!PostRequisition.ReceiveList.Where(x => x.RQty.HasValue && x.WarehouseID.HasValue).Any())
+                {
+                    return Ok(MyFun.APIResponseError("請輸入要領料的倉別和數量"));
+                }
+            }
+            if (!PostRequisition.ReceiveList.Any())
+            {
+                return Ok(MyFun.APIResponseError("沒有領料資料"));
+            }
+            else
+            {
+                if (PostRequisition.ReceiveList.Where(x => (x.RQty.HasValue && !x.WarehouseID.HasValue) || !x.RQty.HasValue && x.WarehouseID.HasValue).Any())
+                {
+                    return Ok(MyFun.APIResponseError("數量錯誤或倉庫錯誤"));
+                }
+            }
             var WorkOrderHead = _context.WorkOrderHeads.Find(PostRequisition.WorkOrderNo);
             var head = PostRequisitionByWorkOrderNoFun(WorkOrderHead);
             if (head.Result.success)
@@ -837,19 +882,23 @@ namespace HonjiMES.Controllers
                 var Requisition = (Requisition)head.Result.data;
                 foreach (var item in PostRequisition.ReceiveList)
                 {
-                    var id = 0;
-                    if (item.ProductBasicId.HasValue)
+                    if (item.RQty.HasValue && item.WarehouseID.HasValue)
                     {
-                        id = Requisition.RequisitionDetails.Where(x => x.ProductBasicId == item.ProductBasicId).FirstOrDefault().Id;
-                    }
-                    if (item.MaterialBasicId.HasValue)
-                    {
-                        id = Requisition.RequisitionDetails.Where(x => x.MaterialBasicId == item.MaterialBasicId).FirstOrDefault().Id;
-                    }
-                    var Detail = PutRequisitionsDetailAllFun(id, item);
-                    if (!Detail.Result.success)
-                    {
-                        return Ok(await Detail);
+
+                        var id = 0;
+                        if (item.ProductBasicId.HasValue)
+                        {
+                            id = Requisition.RequisitionDetails.Where(x => x.ProductBasicId == item.ProductBasicId).FirstOrDefault().Id;
+                        }
+                        if (item.MaterialBasicId.HasValue)
+                        {
+                            id = Requisition.RequisitionDetails.Where(x => x.MaterialBasicId == item.MaterialBasicId).FirstOrDefault().Id;
+                        }
+                        var Detail = PutRequisitionsDetailAllFun(id, item);
+                        if (!Detail.Result.success)
+                        {
+                            return Ok(await Detail);
+                        }
                     }
                 }
                 return Ok(await head);

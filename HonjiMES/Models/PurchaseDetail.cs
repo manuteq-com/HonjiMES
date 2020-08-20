@@ -80,13 +80,13 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#21407;&#21934;&#20729;	
         /// </summary>
-        [Column("originPrice", TypeName = "int(11)")]
-        public int OriginPrice { get; set; }
+        [Column("originPrice", TypeName = "decimal(10,2)")]
+        public decimal OriginPrice { get; set; }
         /// <summary>
         /// &#20729;&#26684;
         /// </summary>
-        [Column("price", TypeName = "int(11)")]
-        public int Price { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
         /// <summary>
         /// &#20489;&#21029;id
         /// </summary>

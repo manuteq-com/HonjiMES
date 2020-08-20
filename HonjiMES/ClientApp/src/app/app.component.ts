@@ -69,7 +69,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
             headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + Token }),
             params: null
         };
-        return this.http.post<APIResponse>(apiUrl, body, httpOptions);
+        return this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
     }
     ngOnInit() {
         this.listenRouting();

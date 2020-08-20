@@ -28,6 +28,7 @@ import { WorkorderQaComponent } from './workorder/workorder-qa/workorder-qa.comp
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
+import { RebackListComponent } from './reback/reback-list/reback-list.component';
 
 
 
@@ -57,9 +58,9 @@ export const routes: Routes = [
     { path: 'workorderlist', component: WorkorderListComponent, canActivate: [AuthGuard] },
     { path: 'workorderlog', component: WorkorderLogComponent, canActivate: [AuthGuard] },
     { path: 'workorderqa', component: WorkorderQaComponent, canActivate: [AuthGuard] },
-
     { path: 'resourceallocation', component: ResourceAllocationComponent, canActivate: [AuthGuard] },
     { path: 'workscheduler', component: WorksChedulerComponent, canActivate: [AuthGuard] },
+    { path: 'rebackList', component: RebackListComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

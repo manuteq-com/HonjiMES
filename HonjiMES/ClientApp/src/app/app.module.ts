@@ -105,6 +105,8 @@ import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-sche
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
 import { CreatreceiveComponent } from './receive/creatreceive/creatreceive.component';
+import { RebackListComponent } from './reback/reback-list/reback-list.component';
+import { CreatrebackComponent } from './reback/creatreback/creatreback.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -225,6 +227,8 @@ export function tokenGetter() {
         ResourceAllocationComponent,
         InventoryLogComponent,
         CreatreceiveComponent,
+        RebackListComponent,
+        CreatrebackComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

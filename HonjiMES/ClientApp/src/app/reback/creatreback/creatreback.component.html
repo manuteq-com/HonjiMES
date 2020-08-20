@@ -11,7 +11,7 @@
             </dx-form>
         </div>
         <div class="col">
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='建立領料單' type='success' icon='save'
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='建立退料單' type='success' icon='save'
                 [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
         </div>
     </div>
@@ -22,26 +22,26 @@
     (onToolbarPreparing)="onToolbarPreparing($event)">
 
     <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
-        <dxo-texts saveAllChanges="領料"></dxo-texts>
+        <dxo-texts saveAllChanges="退料"></dxo-texts>
     </dxo-editing>
 
     <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="NameType" caption="類型" dataType="string" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
-    <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
+    <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
-    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
+    <dxi-column dataField="RQty" caption="退庫數量" dataType="number" [width]="80">
+        <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
         </dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="領料倉別" editCellTemplate="WarehouseEditCellTemplate">
+    <dxi-column dataField="WarehouseId" caption="退料倉別" editCellTemplate="WarehouseEditCellTemplate">
         <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation">
+        <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation">
         </dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
-        cellTemplate="StockQtyCellTemplate">
+        cellTemplate="StockQtyCellTemplate" [visible]="false">
     </dxi-column>
     <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"

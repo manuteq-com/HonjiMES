@@ -1864,6 +1864,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.Type).HasComment("領料單類型(0:領出單,1:退庫單)");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
@@ -3025,7 +3027,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.DataType).HasComment("料號種類(0原料,1成品,2半成品)");
+                entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
 
                 entity.Property(e => e.DispatchTime).HasComment("派工時間");
 
