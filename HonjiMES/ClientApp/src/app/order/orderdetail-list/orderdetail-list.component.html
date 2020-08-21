@@ -136,3 +136,9 @@
         <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
     </div>
 </dx-popup>
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="popupVisibleWork">
+    <div *dxTemplate="let data of 'content'">
+        <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork>
+    </div>
+</dx-popup>

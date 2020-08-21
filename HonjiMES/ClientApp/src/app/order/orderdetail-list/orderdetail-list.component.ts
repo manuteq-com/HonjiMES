@@ -24,8 +24,10 @@ export class OrderdetailListComponent implements OnInit {
     @Input() ProductBasicList: any;
     popupVisiblePurchase: boolean;
     popupVisibleSale: boolean;
+    popupVisibleWork: boolean;
     topurchasekey: any;
     tosalekey: any;
+    toworkkey: any;
     mod: string;
     dataSourceDB: any;
     controller: string;
@@ -34,6 +36,7 @@ export class OrderdetailListComponent implements OnInit {
     disabledValues: number[];
     dataSource: any;
     totalcount: any;
+    Otoworkkey: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.popupVisiblePurchase = false;
@@ -70,30 +73,16 @@ export class OrderdetailListComponent implements OnInit {
             });
         } else {
             try {
-                let OrderData = new PostOrderMaster_Detail();
+                const OrderData = new PostOrderMaster_Detail();
                 OrderData.orderDetail = this.topurchasekey;
+
                 // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrder', 'POST', { values: OrderData });
-                if (sendRequest.success) {
-                    if (sendRequest.message === '') {
-                        notify({
-                            message: '工單建立完成',
-                            position: {
-                                my: 'center top',
-                                at: 'center top'
-                            }
-                        }, 'success', 3000);
-                    } else {
-                        notify({
-                            message: sendRequest.message,
-                            position: {
-                                my: 'center top',
-                                at: 'center top'
-                            }
-                        }, 'warning', 6000);
-                    }
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST', { values: OrderData });
+                if (sendRequest.length !== 0) {
+                    this.toworkkey = sendRequest;
+                    this.Otoworkkey = this.topurchasekey;
+                    this.popupVisibleWork = true;
                 }
-                this.dataGrid.instance.refresh();
             } catch (error) {
 
             }
@@ -296,6 +285,7 @@ export class OrderdetailListComponent implements OnInit {
     popup_result(e) {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
+        this.popupVisibleWork = false;
         this.childOuter.emit(true);
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();

@@ -34,6 +34,9 @@ export class Myservice {
     getWorkOrderStatus(): Selectitem[] {
         return workorderstatus;
     }
+    getOrderToWorkOrderStatus(): Selectitem[] {
+        return orderToWorkOrderStatus;
+    }
     getWorkOrderTypes(): Selectitem[] {
         return workordertype;
     }
@@ -92,6 +95,11 @@ const workorderstatus: Selectitem[] = [
     { Id: 3, Name: '完工' },
     { Id: 4, Name: '轉單' },
     { Id: 5, Name: '結案' },
+];
+const orderToWorkOrderStatus: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '工單已建立' },
+    { Id: 2, Name: '無MBOM資訊' }
 ];
 const workordertype: Selectitem[] = [
     { Id: 0, Name: '' },

@@ -598,8 +598,14 @@ namespace HonjiMES.Models
     {
         public OrderHead OrderHead { get; set; }
         public List<OrderDetail> OrderDetail { get; set; }
+        public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
 
+    public class OrderToWorkCheckData
+    {
+        public OrderDetail OrderDetail { get; set; }
+        public List<WorkOrderHead> WorkOrderHead { get; set; }
+    }
     public class WorkOrderData
     {
         public WorkOrderHead WorkOrderHead { get; set; }

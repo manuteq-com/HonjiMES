@@ -108,6 +108,7 @@ import { CreatreceiveComponent } from './receive/creatreceive/creatreceive.compo
 import { RebackListComponent } from './reback/reback-list/reback-list.component';
 import { CreatrebackComponent } from './reback/creatreback/creatreback.component';
 import { ReceiveInfoComponent } from './receive/receive-info/receive-info.component';
+import { OrdertoworkComponent } from './order/ordertowork/ordertowork.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -231,6 +232,7 @@ export function tokenGetter() {
         RebackListComponent,
         CreatrebackComponent,
         ReceiveInfoComponent,
+        OrdertoworkComponent,
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#

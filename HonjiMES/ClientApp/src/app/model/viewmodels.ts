@@ -30,10 +30,30 @@ export class OrderDetail {
     replyRemark: string;
     createDate: Date;
 }
+export class WorkOrderHead {
+    Id: number;
+    WorkOrderNo: string;
+    OrderDetailId: number;
+    MachineNo: string;
+    DataType: number;
+    DataId: number;
+    DataNo: string;
+    DataName: string;
+    Count: number;
+    ReCount: number;
+    Status: number;
+    TotalTime: number;
+    DispatchTime: Date;
+    DueStartTime: Date;
+    DueEndTime: Date;
+    ActualStartTime: Date;
+    ActualEndTime: Date;
+}
 // tslint:disable-next-line: class-name
 export class PostOrderMaster_Detail {
     orderHead: OrderHead;
     orderDetail: OrderDetail[];
+    workOrderHead: WorkOrderHead[];
 }
 
 export class InventoryChange {
