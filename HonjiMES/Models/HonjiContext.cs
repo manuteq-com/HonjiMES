@@ -1822,6 +1822,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.RequisitionDetailId)
                     .HasName("fk_receive_requisition_detail1_idx");
 
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("warehouse_id");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
@@ -1837,11 +1840,18 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.Property(e => e.WarehouseId).HasComment("使用倉別");
+
                 entity.HasOne(d => d.RequisitionDetail)
                     .WithMany(p => p.Receives)
                     .HasForeignKey(d => d.RequisitionDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_receive_requisition_detail1");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Receives)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .HasConstraintName("receive_ibfk_1");
             });
 
             modelBuilder.Entity<Requisition>(entity =>

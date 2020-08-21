@@ -71,6 +71,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
+        this.PurchasetypeList = myservice.getpurchasetypes();
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -129,7 +130,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 this.WarehouseListAll = s.data;
             }
         );
-        this.PurchasetypeList = myservice.getpurchasetypes();
         this.TypeselectBoxOptions = {
             items: this.PurchasetypeList,
             displayExpr: 'Name',
@@ -173,6 +173,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     this.formData = s.data;
                     this.formData.Id = 0;
                     this.formData.SupplierId = null;
+                    if (this.modval === 'workorder') {
+                        this.formData.Type = 20;
+                    }
                 }
             }
         );
@@ -197,7 +200,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             if (sendRequest) {
                 this.formData.Type = sendRequest.Type;
                 this.formData.PurchaseNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };

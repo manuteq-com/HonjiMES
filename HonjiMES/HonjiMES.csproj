@@ -13,6 +13,7 @@
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <RunPostBuildEvent></RunPostBuildEvent>
+    <UserSecretsId>1a52d020-c05c-4e1e-a478-f485c2259572</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +28,7 @@
     <PackageReference Include="iTextSharp" Version="5.5.13.1" />
     <PackageReference Include="jose-jwt" Version="2.5.0" />
     <PackageReference Include="LINQKit.Core" Version="1.1.17" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />

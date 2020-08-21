@@ -381,7 +381,7 @@ namespace HonjiMES.Controllers
             }
             foreach (var Headitem in OrderHeadlist.ToList())
             {
-                var len = ("000-000000000").Length;
+                var len = ("000-000000000").Length; // 客戶單號格式
                 Headitem.OrderNo = DirName;
                 if (!string.IsNullOrWhiteSpace(Headitem.CustomerNo) && Headitem.CustomerNo.Length > len)
                     Headitem.CustomerNo = Headitem.CustomerNo.Substring(0, len);
@@ -429,25 +429,30 @@ namespace HonjiMES.Controllers
                             CreateUser = MyFun.GetUserID(HttpContext),
                         };
 
-                        // 暫時停用，自動新增Product資料。
-                        // var  nProduct = new Product
-                        // {
-                        //     ProductNo = Productitemlist[0].Trim(),
-                        //     ProductNumber = Productitemlist[0].Trim(),
-                        //     Name = Productitemlist[1].Trim(),
-                        //     Quantity = 0,
-                        //     Specification = Productitemlist[2].Trim(),
-                        //     Property = "",
-                        //     MaterialId = 0,
-                        //     MaterialRequire = 1,
-                        //     CreateTime = dt,
-                        //      CreateUser = MyFun.GetUserID(HttpContext),
-                        //     WarehouseId  = 2
-                        // };
-                        // nProduct.ProductLogs.Add(new ProductLog{
-
-                        // })
-                        // nProductBasics.Products.Add(nProduct);
+                        // 自動新增Product資料。(2020/08/20 確認自動新增)
+                        var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301").FirstAsync();// 固定新增301成品倉
+                        var  nProduct = new Product
+                        {
+                            ProductNo = Productitemlist[0].Trim(),
+                            ProductNumber = Productitemlist[0].Trim(),
+                            Name = Productitemlist[1].Trim(),
+                            Quantity = 0,
+                            Specification = Productitemlist[2].Trim(),
+                            Property = "",
+                            MaterialRequire = 1,
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            WarehouseId  = Warehouses.Id 
+                        };
+                        nProduct.ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = ProductByExcel.CustomerNo,
+                            Reason = "Excel匯入新增",
+                            Message = "成品新增",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        nProductBasics.Products.Add(nProduct);
                         nProductBasicslist.Add(nProductBasics);
                     }
                 }

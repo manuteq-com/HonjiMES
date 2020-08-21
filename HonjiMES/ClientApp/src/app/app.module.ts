@@ -106,6 +106,10 @@ import { ResourceAllocationComponent } from './workorder/resource-allocation/res
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
 import { CreateSaleComponent } from './sale/create-sale/create-sale.component';
 import { BillPurchaseSupplierComponent } from './billpurchase/bill-purchase-supplier/bill-purchase-supplier.component';
+import { CreatreceiveComponent } from './receive/creatreceive/creatreceive.component';
+import { RebackListComponent } from './reback/reback-list/reback-list.component';
+import { CreatrebackComponent } from './reback/creatreback/creatreback.component';
+import { ReceiveInfoComponent } from './receive/receive-info/receive-info.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -225,11 +229,10 @@ export function tokenGetter() {
         WorksChedulerComponent,
         ResourceAllocationComponent,
         InventoryLogComponent,
-        CreateSaleComponent,
-        BillPurchaseSupplierComponent
+        CreatrebackComponent,
+        ReceiveInfoComponent,
     ],
     providers: [
-        // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: NZ_I18N, useValue: zh_TW }
     ],

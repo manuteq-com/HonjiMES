@@ -38,6 +38,10 @@ namespace HonjiMES.Models
         /// </summary>
         public string OrderNo { get; set; }
         /// <summary>
+        /// 客戶單號
+        /// </summary>
+        public string CustomerNo { get; set; }
+        /// <summary>
         /// 少的Product
         /// </summary>
         public string Products { get; set; }

@@ -179,7 +179,7 @@ export class SupplierMaterialComponent implements OnInit {
             const sendRequest = await SendService.sendRequest(this.http, '/Processes/GetWorkOrderNumberByInfo', 'POST', { values: this.CreateNumberInfoVal });
             if (sendRequest) {
                 this.formData.WorkOrderNo = sendRequest.CreateNumber;
-                this.formData.CreateTime = sendRequest.CreateTime;
+                // this.formData.CreateTime = sendRequest.CreateTime;
             }
         }
     };

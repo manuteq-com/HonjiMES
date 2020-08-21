@@ -23,6 +23,11 @@ namespace HonjiMES.Models
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         /// <summary>
+        /// &#20351;&#29992;&#20489;&#21029;
+        /// </summary>
+        [Column("warehouse_id", TypeName = "int(11)")]
+        public int? WarehouseId { get; set; }
+        /// <summary>
         /// &#20633;&#35387;
         /// </summary>
         [Column("remarks", TypeName = "varchar(100)")]
@@ -44,5 +49,8 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(RequisitionDetailId))]
         [InverseProperty("Receives")]
         public virtual RequisitionDetail RequisitionDetail { get; set; }
+        [ForeignKey(nameof(WarehouseId))]
+        [InverseProperty("Receives")]
+        public virtual Warehouse Warehouse { get; set; }
     }
 }

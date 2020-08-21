@@ -159,7 +159,7 @@ namespace HonjiMES.Controllers
             var dt = DateTime.Now;
             var WorkOrderNo = dt.ToString("yyMMdd");
 
-            var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1)
             {
@@ -190,7 +190,7 @@ namespace HonjiMES.Controllers
                 var key = "WO";
                 var WorkOrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
-                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1)
                 {
@@ -257,19 +257,19 @@ namespace HonjiMES.Controllers
                 {
                     var BasicDataNo = "";
                     var BasicDataName = "";
-                    if (item.DataType == 0)
+                    if (item.DataType == 1)
                     {
                         var BasicData = _context.MaterialBasics.Find(item.DataId);
                         BasicDataNo = BasicData.MaterialNo;
                         BasicDataName = BasicData.Name;
                     }
-                    else if (item.DataType == 1)
+                    else if (item.DataType == 2)
                     {
                         var BasicData = _context.ProductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.ProductNo;
                         BasicDataName = BasicData.Name;
                     }
-                    else if (item.DataType == 2)
+                    else if (item.DataType == 3)
                     {
                         var BasicData = _context.WiproductBasics.Find(item.DataId);
                         BasicDataNo = BasicData.WiproductNo;
@@ -395,7 +395,7 @@ namespace HonjiMES.Controllers
                 //取得工單號
                 var key = "WO";
                 var WorkOrderNo = WorkOrderData.WorkOrderHead.CreateTime.ToString("yyMMdd");
-                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1)
                 {
@@ -407,22 +407,22 @@ namespace HonjiMES.Controllers
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
 
-                var DataType = 1;
+                var DataType = 2;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
-                if (DataType == 0)
+                if (DataType == 1)
                 {
 
                 }
-                else if (DataType == 1)
+                else if (DataType == 2)
                 {
                     var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.ProductNo;
                     BasicDataName = BasicData.Name;
                 }
-                else if (DataType == 2)
+                else if (DataType == 3)
                 {
 
                 }
@@ -497,7 +497,6 @@ namespace HonjiMES.Controllers
                         updataCheck.Add(item.Id);
                         var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == item.Id).FirstOrDefault();
                         OWorkOrderDetail.SerialNumber = item.SerialNumber;
-                        OWorkOrderDetail.SerialNumber = item.SerialNumber;
                         OWorkOrderDetail.ProcessId = item.ProcessId;
                         OWorkOrderDetail.ProcessNo = ProcessInfo.Code;
                         OWorkOrderDetail.ProcessName = ProcessInfo.Name;
@@ -555,6 +554,9 @@ namespace HonjiMES.Controllers
                 }
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
+                var ProductBasic = await _context.ProductBasics.FindAsync(OWorkOrderHeads.DataId);
+                OWorkOrderHeads.DataNo = ProductBasic.ProductNo;
+                OWorkOrderHeads.DataName = ProductBasic.Name;
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
                 OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try

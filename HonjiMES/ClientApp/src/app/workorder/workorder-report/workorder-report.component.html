@@ -45,21 +45,21 @@
         <dxi-item dataField="ProcessTime" [disabled]="true">
             <dxo-label text="標準工時(分)"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="3" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+        <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="4" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
             <dxo-label text="回報說明"></dxo-label>
         </dxi-item>
 
         <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
             <dxo-label text="委外供應商"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="RePrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions" [colSpan]="1" [visible]="NoPurchaseVisible">
+        <dxi-item dataField="RePrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
             <dxo-label text="委外金額"></dxo-label>
         </dxi-item>
 
-        <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [disabled]="true">
+        <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [colSpan]="1" [disabled]="true" [visible]="false">
             <dxo-label text="成本"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ProducingMachine">
+        <dxi-item dataField="ProducingMachine" [colSpan]="1">
             <dxo-label text="機台"></dxo-label>
         </dxi-item>
 
@@ -78,12 +78,16 @@
         <!-- <dxi-item dataField="Count" [disabled]="true">
             <dxo-label text="需求數量"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [visible]="ReCountVisible">
+        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
             <dxo-label text="完工數量"></dxo-label>
         </dxi-item>
 
+        <dxi-item dataField="PurchaseId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions" [colSpan]="2" [visible]="HasPurchaseVisible">
+            <dxo-label text="採購單號"></dxo-label>
+        </dxi-item>
 
     </dx-form>
+
     <br>
     <!-- <div class="long-title">
         <h5>訂單內容</h5>
@@ -97,9 +101,19 @@
                 [disabled]="buttondisabled" [visible]="endBtnVisible" (onClick)="onEndClick($event)"></dx-button>
             <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true"
                 [disabled]="buttondisabled" [visible]="restartedBtnVisible" (onClick)="onRestartClick($event)"></dx-button>
+
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='採購單回報' type='default' icon='check' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onPurchaseClick($event)"></dx-button>
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增採購單' type='success' icon='plus' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onNewPurchaseClick($event)"></dx-button>
         </div>
     <!-- </div> -->
 
 </form>
 
-
+<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+    </div>
+</dx-popup>

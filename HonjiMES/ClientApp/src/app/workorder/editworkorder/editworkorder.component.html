@@ -50,7 +50,9 @@
         (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
         (onRowRemoved)="onRowRemoved($event)" (onSelectionChanged)="onSelectionChanged($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)" (onEditorPreparing)="editorPreparing($event)"
-        (onRowClick)="onRowClick($event)">
+        (onRowClick)="onRowClick($event)" [showColumnLines]="true" [showRowLines]="true"
+        hoverStateEnabled="true">
+
         <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
             <dxo-form colCount=4>
                 <dxi-item dataField="SerialNumber"></dxi-item>
@@ -61,6 +63,7 @@
                 <dxi-item dataField="ProducingMachine"></dxi-item>
             </dxo-form>
         </dxo-editing>
+
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="false">
         </dxi-column>
@@ -77,13 +80,15 @@
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
+        <dxi-column dataField="ReCount" caption="完工數量" [allowEditing]="false" [width]="80">
+        </dxi-column>
+        <dxi-column dataField="ReportCount" caption="回報數量" dataType="number" [width]="80">
             <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="完工數量 必須大於0">
             </dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Message" caption="回報說明">
         </dxi-column>
-        <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false">
+        <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false" [visible]="false">
         </dxi-column>
         <dxi-column dataField="ProducingMachine" caption="機台" [width]="80"></dxi-column>
 

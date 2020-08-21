@@ -25,6 +25,7 @@ export class BomlistComponent implements OnInit, OnChanges {
     MaterialList: any;
     ProductList: any;
     btnVisible: boolean;
+    randomkey: number;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.btnVisible = true;
@@ -72,6 +73,7 @@ export class BomlistComponent implements OnInit, OnChanges {
             if (e.column.type === 'buttons') {
                 if (e.column.cssClass === 'addmod') {
                     this.popupVisible = true;
+                    this.randomkey = new Date().getTime();
                     // this.TreeList.instance.addRow();
                 }
             }

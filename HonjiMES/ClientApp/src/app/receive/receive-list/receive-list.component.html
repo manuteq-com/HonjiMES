@@ -8,15 +8,34 @@
     </div>
     <div class="headerfont font2">領料資料</div>
     <div class="buttongroup">
+        <dx-button class="infobtn" stylingMode="contained" text="紀錄查詢" type="normal" [width]="120"
+            (onClick)="infodata()">
+        </dx-button>
         <dx-button class="insertbtn" stylingMode="contained" text="新增領料單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
     </div>
 </div>
 
+<dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1000" [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatreceive (childOuter)="creatpopup_result($event)">
+        </app-creatreceive>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1700" [(visible)]="infopopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
+        </app-receive-info>
+    </div>
+</dx-popup>
+
 <div class="row">
 
-    <div class="col-7">
+    <div class="col-8">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
@@ -66,8 +85,7 @@
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
             <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false">
-            </dxi-column>
+            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
 
             <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
             <dxi-column type="buttons" [visible]="false">
@@ -92,23 +110,21 @@
 
     </div>
 
-    <div class="col-5">
+    <div class="col-4">
         <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id"
             hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
-            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="360"
+            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="740"
             (onCellClick)="cellClick($event)" (onToolbarPreparing)="onToolbarPreparingAll($event)">
-
+            <!--
             <dxo-editing mode="batch" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
-            </dxo-editing>
+            </dxo-editing> -->
 
-            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false" [width]="200"></dxi-column>
             <dxi-column dataField="NameType" caption="類別" dataType="string" alignment="center" [allowEditing]="false" [width]="70"></dxi-column>
-            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80">
-            </dxi-column>
-            <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
-            </dxi-column>
-            <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
+            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="ReceiveQty" caption="領用數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <!-- <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
                 <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
                 </dxi-validation-rule>
             </dxi-column>
@@ -117,7 +133,8 @@
             </dxi-column>
             <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
                 cellTemplate="StockQtyCellTemplate">
-            </dxi-column>
+            </dxi-column> -->
+
             <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
                 <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
                     [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
@@ -126,6 +143,7 @@
             <div *dxTemplate="let data of 'StockQtyCellTemplate'">
                 <span>{{GetWarehouseStockQty(data)}}</span>
             </div>
+
         </dx-data-grid>
 
         <!-- <dx-data-grid #dataGridM [dataSource]="dataSourceMaterialDB" showBorders="true" keyExpr="Id"

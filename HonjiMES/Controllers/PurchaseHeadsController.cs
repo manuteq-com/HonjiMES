@@ -153,6 +153,17 @@ namespace HonjiMES.Controllers
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
+        /// 未結案採購單列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/PurchaseHeads
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetNotEndPurchaseHeads()
+        {
+            var data = _context.PurchaseHeads.AsQueryable().Where(x => x.Status == 0 && x.DeleteFlag == 0);
+            var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
+            return Ok(MyFun.APIResponseOK(PurchaseHeads));
+        }
 
         /// <summary>
         /// 進貨單列表

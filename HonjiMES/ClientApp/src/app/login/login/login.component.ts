@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
             this.buttondisabled = false;
             return;
         }
-        this.app.PostData('/api/Home/SingIn/', this.formData).toPromise()
+        this.app.PostData('/Home/SingIn/', this.formData).toPromise()
             .then((ReturnData: any) => {
                 if (ReturnData.success) {
                     this.app.UserName = ReturnData.data.Username;

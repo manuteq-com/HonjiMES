@@ -87,6 +87,7 @@ export class ProcessControlComponent implements OnInit {
         this.creatpopupVisible = true;
         this.itemkey = data.key;
         this.mod = 'edit';
+        this.randomkey = new Date().getTime();
     }
     readProcess(e) {
         if (!this.creatpopupVisible) {
@@ -116,6 +117,7 @@ export class ProcessControlComponent implements OnInit {
         this.creatpopupVisible = true;
         this.itemkey = null;
         this.mod = 'new';
+        this.randomkey = new Date().getTime();
     }
     viewdata() {
         this.viewpopupVisible = true;

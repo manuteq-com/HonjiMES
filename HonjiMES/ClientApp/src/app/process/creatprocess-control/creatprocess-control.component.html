@@ -5,11 +5,11 @@
         <dxi-item dataField="WorkOrderHeadId" [visible]="false">
             <dxo-label text="工單主檔ID"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [visible]="modVisible">
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [visible]="newVisible">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="WorkOrderNo" [disabled]="true" [visible]="!modVisible">
+        <dxi-item dataField="WorkOrderNo" [disabled]="true" [visible]="!newVisible">
             <dxo-label text="工單號"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="OrderDetailId" dataType="number" editorType="dxSelectBox"
@@ -17,20 +17,18 @@
             <dxi-validation-rule type="required" message="訂單 必填"></dxi-validation-rule>
             <dxo-label text="訂單"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="ProductBasicId" dataType="number" editorType="dxSelectBox"
-            [editorOptions]="ProductBasicSelectBoxOptions">
+        <dxi-item dataField="ProductBasicId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProductBasicSelectBoxOptions" [disabled]="editVisible">
             <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
             <dxo-label text="成品項目"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox"
-            [editorOptions]="NumberBoxOptions">
+        <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" [disabled]="editVisible">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
             <dxo-label text="數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="MachineNo">
+        <dxi-item dataField="MachineNo" [disabled]="editVisible">
             <dxo-label text="機號"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Remarks" [visible]="false">
+        <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible">
             <dxo-label text="備註"></dxo-label>
         </dxi-item>
 
@@ -149,9 +147,9 @@
         <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="saveDisabled" [visible]="newVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除' type='danger' icon='trash' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="modVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='更新' type='success' icon='save' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="modVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button>
     </div>

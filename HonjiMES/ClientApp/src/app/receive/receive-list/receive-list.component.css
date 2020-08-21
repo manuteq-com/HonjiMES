@@ -74,3 +74,10 @@
     margin-top: 4px;
     border-radius: 2px;
 }
+.infobtn {
+    margin-top: 4px;
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #1e90ff;
+}
