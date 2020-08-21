@@ -58,7 +58,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
                     if (loadOptions.searchValue) {
                         loadOptions.filter = [loadOptions.searchExpr, loadOptions.searchOperation, loadOptions.searchValue];
                     }
-                    return SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderHeads/', 'GET', { loadOptions, remote: true });
+                    return SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderHeadsRun/', 'GET', { loadOptions, remote: true });
                 },
             }),
             valueExpr: 'Id',
