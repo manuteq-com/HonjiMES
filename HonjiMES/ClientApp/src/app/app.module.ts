@@ -104,6 +104,8 @@ import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
+import { CreateSaleComponent } from './sale/create-sale/create-sale.component';
+import { BillPurchaseSupplierComponent } from './billpurchase/bill-purchase-supplier/bill-purchase-supplier.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -223,6 +225,8 @@ export function tokenGetter() {
         WorksChedulerComponent,
         ResourceAllocationComponent,
         InventoryLogComponent,
+        CreateSaleComponent,
+        BillPurchaseSupplierComponent
     ],
     providers: [
         // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
