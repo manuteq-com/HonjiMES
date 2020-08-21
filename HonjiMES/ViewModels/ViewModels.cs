@@ -694,6 +694,18 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public string Message { get; set; }
     }
+
+    public class Suppliers
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class PuschaseList:PurchaseDetail
+    {
+        public string PurchaseNo { get; set; }
+        public string WarehouseName { get; set; }
+    }
     public class WorkSchedulerVM
     {
         /// <summary>

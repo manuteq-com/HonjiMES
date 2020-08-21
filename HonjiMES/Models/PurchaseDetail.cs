@@ -80,13 +80,13 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#21407;&#21934;&#20729;	
         /// </summary>
-        [Column("originPrice", TypeName = "int(11)")]
-        public int OriginPrice { get; set; }
+        [Column("originPrice", TypeName = "decimal(10,2)")]
+        public decimal OriginPrice { get; set; }
         /// <summary>
         /// &#20729;&#26684;
         /// </summary>
-        [Column("price", TypeName = "int(11)")]
-        public int Price { get; set; }
+        [Column("price", TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
         /// <summary>
         /// &#20489;&#21029;id
         /// </summary>
@@ -119,6 +119,12 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.PurchaseDetails))]
         public virtual PurchaseHead Purchase { get; set; }
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("PurchaseDetails")]
+        public virtual Supplier Supplier { get; set; }
+        [ForeignKey(nameof(WarehouseId))]
+        [InverseProperty("PurchaseDetails")]
+        public virtual Warehouse Warehouse { get; set; }
         [InverseProperty(nameof(BillofPurchaseDetail.PurchaseDetail))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }

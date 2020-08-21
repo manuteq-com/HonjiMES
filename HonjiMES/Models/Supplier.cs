@@ -15,6 +15,8 @@ namespace HonjiMES.Models
         public Supplier()
         {
             BillofPurchaseDetails = new HashSet<BillofPurchaseDetail>();
+            PurchaseDetails = new HashSet<PurchaseDetail>();
+            PurchaseHeads = new HashSet<PurchaseHead>();
             SupplierOfMaterials = new HashSet<SupplierOfMaterial>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
             WorkOrderReportLogs = new HashSet<WorkOrderReportLog>();
@@ -104,6 +106,10 @@ namespace HonjiMES.Models
 
         [InverseProperty(nameof(BillofPurchaseDetail.Supplier))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
+        [InverseProperty(nameof(PurchaseDetail.Supplier))]
+        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
+        [InverseProperty(nameof(PurchaseHead.Supplier))]
+        public virtual ICollection<PurchaseHead> PurchaseHeads { get; set; }
         [InverseProperty(nameof(SupplierOfMaterial.Supplier))]
         public virtual ICollection<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         [InverseProperty(nameof(WorkOrderDetail.Supplier))]

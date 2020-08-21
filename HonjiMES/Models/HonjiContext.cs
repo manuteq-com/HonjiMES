@@ -1699,6 +1699,12 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("fk_purchase_detail_purchase_head");
 
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
+
+                entity.HasIndex(e => e.WarehouseId)
+                    .HasName("warehouse_id");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DataId).HasComment("採購內容ID");
@@ -1758,11 +1764,25 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.PurchaseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_purchase_detail_purchase_head1");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.PurchaseDetails)
+                    .HasForeignKey(d => d.SupplierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("purchase_detail_ibfk_1");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.PurchaseDetails)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .HasConstraintName("purchase_detail_ibfk_2");
             });
 
             modelBuilder.Entity<PurchaseHead>(entity =>
             {
                 entity.HasComment("採購單");
+
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
@@ -1787,6 +1807,12 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.PurchaseHeads)
+                    .HasForeignKey(d => d.SupplierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("purchase_head_ibfk_1");
             });
 
             modelBuilder.Entity<Receive>(entity =>
@@ -1863,6 +1889,8 @@ namespace HonjiMES.Models
                     .HasComment("規格")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Type).HasComment("領料單類型(0:領出單,1:退庫單)");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -3025,7 +3053,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.DataType).HasComment("料號種類(0原料,1成品,2半成品)");
+                entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
 
                 entity.Property(e => e.DispatchTime).HasComment("派工時間");
 

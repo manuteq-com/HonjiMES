@@ -54,8 +54,8 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#32317;&#37329;&#38989;
         /// </summary>
-        [Column("price_all", TypeName = "int(11)")]
-        public int PriceAll { get; set; }
+        [Column("price_all", TypeName = "decimal(10,2)")]
+        public decimal PriceAll { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -67,6 +67,9 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("PurchaseHeads")]
+        public virtual Supplier Supplier { get; set; }
         [InverseProperty(nameof(BillofPurchaseDetail.Purchase))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         [InverseProperty(nameof(PurchaseDetail.Purchase))]

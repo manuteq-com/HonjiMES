@@ -35,7 +35,7 @@ namespace HonjiMES.Models
         [Column("machine_no", TypeName = "varchar(50)")]
         public string MachineNo { get; set; }
         /// <summary>
-        /// &#26009;&#34399;&#31278;&#39006;(0&#21407;&#26009;,1&#25104;&#21697;,2&#21322;&#25104;&#21697;)
+        /// &#26009;&#34399;&#31278;&#39006;(1&#21407;&#26009; 2&#25104;&#21697; 3 &#21322;&#25104;&#21697;)
         /// </summary>
         [Column("data_type", TypeName = "int(11)")]
         public int DataType { get; set; }
