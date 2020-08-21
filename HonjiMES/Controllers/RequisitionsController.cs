@@ -640,9 +640,9 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequisitionsDetailAll(int id, [FromBody] GetReceive Receive)
         {
-            return Ok(await PutRequisitionsDetailAllFun(id, Receive));
+            return Ok(await PutRequisitionsDetailAllFun(id, Receive, ""));
         }
-        private async Task<APIResponse> PutRequisitionsDetailAllFun(int id, GetReceive Receive)
+        private async Task<APIResponse> PutRequisitionsDetailAllFun(int id, GetReceive Receive, string RequisitionNo)
         {
             if (Receive.WarehouseID == 0)
             {
@@ -681,6 +681,7 @@ namespace HonjiMES.Controllers
                             Material.UpdateUser = MyFun.GetUserID(HttpContext);
                             Material.MaterialLogs.Add(new MaterialLog
                             {
+                                LinkOrder = RequisitionNo,
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
@@ -719,6 +720,7 @@ namespace HonjiMES.Controllers
                             Product.UpdateUser = MyFun.GetUserID(HttpContext);
                             Product.ProductLogs.Add(new ProductLog
                             {
+                                LinkOrder = RequisitionNo,
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
@@ -894,7 +896,7 @@ namespace HonjiMES.Controllers
                         {
                             id = Requisition.RequisitionDetails.Where(x => x.MaterialBasicId == item.MaterialBasicId).FirstOrDefault().Id;
                         }
-                        var Detail = PutRequisitionsDetailAllFun(id, item);
+                        var Detail = PutRequisitionsDetailAllFun(id, item, Requisition.RequisitionNo);
                         if (!Detail.Result.success)
                         {
                             return Ok(await Detail);
