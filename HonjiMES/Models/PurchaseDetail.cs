@@ -119,6 +119,12 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.PurchaseDetails))]
         public virtual PurchaseHead Purchase { get; set; }
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("PurchaseDetails")]
+        public virtual Supplier Supplier { get; set; }
+        [ForeignKey(nameof(WarehouseId))]
+        [InverseProperty("PurchaseDetails")]
+        public virtual Warehouse Warehouse { get; set; }
         [InverseProperty(nameof(BillofPurchaseDetail.PurchaseDetail))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
     }

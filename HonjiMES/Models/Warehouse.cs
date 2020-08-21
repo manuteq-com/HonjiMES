@@ -17,6 +17,8 @@ namespace HonjiMES.Models
             BillofPurchaseReturns = new HashSet<BillofPurchaseReturn>();
             Materials = new HashSet<Material>();
             Products = new HashSet<Product>();
+            PurchaseDetails = new HashSet<PurchaseDetail>();
+            Receives = new HashSet<Receive>();
             ReturnSales = new HashSet<ReturnSale>();
             Wiproducts = new HashSet<Wiproduct>();
         }
@@ -92,6 +94,10 @@ namespace HonjiMES.Models
         public virtual ICollection<Material> Materials { get; set; }
         [InverseProperty(nameof(Product.Warehouse))]
         public virtual ICollection<Product> Products { get; set; }
+        [InverseProperty(nameof(PurchaseDetail.Warehouse))]
+        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
+        [InverseProperty(nameof(Receive.Warehouse))]
+        public virtual ICollection<Receive> Receives { get; set; }
         [InverseProperty(nameof(ReturnSale.Warehouse))]
         public virtual ICollection<ReturnSale> ReturnSales { get; set; }
         [InverseProperty(nameof(Wiproduct.Warehouse))]

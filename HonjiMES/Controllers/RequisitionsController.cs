@@ -672,6 +672,7 @@ namespace HonjiMES.Controllers
                             RequisitionDetail.Receives.Add(new Receive
                             {
                                 Quantity = Receive.RQty ?? 0,
+                                WarehouseId = Receive.WarehouseID,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -711,6 +712,7 @@ namespace HonjiMES.Controllers
                             RequisitionDetail.Receives.Add(new Receive
                             {
                                 Quantity = Receive.RQty ?? 0,
+                                WarehouseId = Receive.WarehouseID,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -831,6 +833,41 @@ namespace HonjiMES.Controllers
                     item.WarehouseList = GetWarehouse(item);
                 }
                 return Ok(MyFun.APIResponseOK(RequisitionDetailAllList));
+            }
+            catch (System.Exception e)
+            {
+                return Ok(MyFun.APIResponseError(e.Message));
+                throw;
+            }
+        }
+        /// <summary>
+        /// 用工單號尋找領退料明細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailByWorkOrderNo(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var RequisitionDetailAllList = new List<RequisitionDetailAll>();
+            try
+            {
+                var ReceivesLog = await _context.Receives
+                    .Where(x => x.RequisitionDetail.Requisition.WorkOrderHeadId == id && x.DeleteFlag == 0)
+                    .Select(x => new RequisitionDetailLog
+                    {
+                        Id = x.Id,
+                        RequisitionNo = x.RequisitionDetail.Requisition.RequisitionNo,
+                        ReceiveQty = x.Quantity > 0 ? x.Quantity : 0,
+                        RbackQty = x.Quantity < 0 ? Math.Abs(x.Quantity) : 0,
+                        NameNo = x.RequisitionDetail.ProductBasicId.HasValue ? x.RequisitionDetail.ProductNo : x.RequisitionDetail.MaterialBasicId.HasValue ? x.RequisitionDetail.MaterialNo : "",
+                        NameType = x.RequisitionDetail.ProductBasicId.HasValue ? "成品" : x.RequisitionDetail.MaterialBasicId.HasValue ? "元件" : "",
+                        WarehouseName = x.WarehouseId.HasValue ? (x.Warehouse.Code + x.Warehouse.Name) : "",
+                        CreateTime = x.CreateTime,
+                    }).ToListAsync();
+
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK(ReceivesLog));
             }
             catch (System.Exception e)
             {

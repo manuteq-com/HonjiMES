@@ -37,6 +37,8 @@ export class RebackListComponent implements OnInit {
     dataSourceAllDB: any;
     WarehouseIDAll: any;
     WarehouselistAll: any;
+    infopopupVisible: boolean;
+    randomkey: number;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
@@ -134,6 +136,10 @@ export class RebackListComponent implements OnInit {
         // tslint:disable-next-line: deprecation
         // this.dataGrid.instance.insertRow();
         this.creatpopupVisible = true;
+    }
+    infodata() {
+        this.infopopupVisible = true;
+        this.randomkey = new Date().getTime();
     }
     cellClick(e) {
         if (e.rowType === 'header') {

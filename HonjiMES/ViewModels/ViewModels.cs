@@ -373,6 +373,45 @@ namespace HonjiMES.Models
         /// </summary>
         public int StockQty { get; set; }
     }
+    public class RequisitionDetailLog
+    {
+        /// <summary>
+        /// LogId
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 領退料單號
+        /// </summary>
+        public string RequisitionNo { get; set; }
+        /// <summary>
+        /// 已領數量
+        /// </summary>
+        public int ReceiveQty { get; set; }
+        /// <summary>
+        /// 已退數量
+        /// </summary>
+        public int RbackQty { get; set; }
+        /// <summary>
+        /// 品項NO
+        /// </summary>
+        public string NameNo { get; set; }
+        /// <summary>
+        /// 品項類型
+        /// </summary>
+        public string NameType { get; set; }
+        /// <summary>
+        /// 庫存數量
+        /// </summary>
+        public decimal StockQty { get; set; }
+        /// <summary>
+        /// 品項的倉庫名稱
+        /// </summary>
+        public string WarehouseName { get; set; }
+        /// <summary>
+        /// 建立時間
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
     public class RequisitionDetailAll : RequisitionDetail
     {
         /// <summary>

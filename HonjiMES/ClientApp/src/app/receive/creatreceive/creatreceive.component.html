@@ -25,8 +25,8 @@
         <dxo-texts saveAllChanges="領料"></dxo-texts>
     </dxo-editing>
 
+    <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
     <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="NameType" caption="類型" dataType="string" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
     <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
@@ -43,7 +43,7 @@
     <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
         cellTemplate="StockQtyCellTemplate">
     </dxi-column>
-    
+
     <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
             [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">

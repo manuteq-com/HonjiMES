@@ -1,0 +1,80 @@
+<form action="" >
+    <div class="row mb-4">
+
+        <div class="col-3">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
+                    <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
+                    <dxo-label text="工單號"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+
+    <div class="col-5">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group">
+                    <label class="pt-2">
+                        <h6>項目統計：</h6>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [height]="560">
+
+            <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
+                <dxo-texts saveAllChanges="領料"></dxo-texts>
+            </dxo-editing>
+
+            <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+
+        </dx-data-grid>
+    </div>
+
+    <div class="col-7">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group">
+                    <label class="pt-2">
+                        <h6>歷史紀錄：</h6>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <dx-data-grid #dataGrid12 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [height]="560">
+
+            <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
+                <dxo-texts saveAllChanges="領料"></dxo-texts>
+            </dxo-editing>
+
+            <dxi-column dataField="RequisitionNo" caption="領退單號" dataType="string" alignment="center" [allowEditing]="false" [width]="160"></dxi-column>
+            <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="ReceiveQty" caption="領取數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="RbackQty" caption="退還數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="WarehouseName" caption="領退倉別" dataType="string" alignment="center" [allowEditing]="false" [width]="100"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="領退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
+
+        </dx-data-grid>
+    </div>
+
+</div>
+
+

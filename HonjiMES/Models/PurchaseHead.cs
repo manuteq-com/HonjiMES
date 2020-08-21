@@ -67,6 +67,9 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("PurchaseHeads")]
+        public virtual Supplier Supplier { get; set; }
         [InverseProperty(nameof(BillofPurchaseDetail.Purchase))]
         public virtual ICollection<BillofPurchaseDetail> BillofPurchaseDetails { get; set; }
         [InverseProperty(nameof(PurchaseDetail.Purchase))]
