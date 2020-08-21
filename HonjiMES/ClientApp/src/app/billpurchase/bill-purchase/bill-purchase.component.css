@@ -48,7 +48,20 @@
     right: 0%;
 }
 .buttongroup {
-    padding-top: 4px;
+    padding-top: 10px;
     position: absolute;
     right: 10px;
+}
+
+.insertbtn {
+
+    margin-top: -6px;
+    border-radius: 2px;
+    margin-left: 30px;
+}
+
+.newbtn {
+    margin-top: -6px;
+    border-radius: 2px;
+    margin-left: 30px;
 }

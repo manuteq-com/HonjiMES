@@ -8,7 +8,9 @@
     </div>
     <div class="headerfont font2">銷貨單</div>
     <div class="buttongroup">
-        <!-- <dx-button text="新增銷貨單" type="default" (onClick)="creatdata()"></dx-button> -->
+        <dx-button class="insertbtn" stylingMode="contained" text="新增銷貨單" type="success" [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -135,7 +137,7 @@
 <dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatorder>
+        <app-create-sale (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" ></app-create-sale>
     </div>
 </dx-popup>
 
@@ -152,3 +154,6 @@
         <app-re-order-sale (childOuter)="resalepopup_result($event)" [itemkeyval]="resaleitemkey"></app-re-order-sale>
     </div>
 </dx-popup>
+
+
+

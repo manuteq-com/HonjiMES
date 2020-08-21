@@ -104,6 +104,8 @@ import { EditworkorderComponent } from './workorder/editworkorder/editworkorder.
 import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-scheduler.component';
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
+import { CreateSaleComponent } from './sale/create-sale/create-sale.component';
+import { BillPurchaseSupplierComponent } from './billpurchase/bill-purchase-supplier/bill-purchase-supplier.component';
 import { CreatreceiveComponent } from './receive/creatreceive/creatreceive.component';
 import { RebackListComponent } from './reback/reback-list/reback-list.component';
 import { CreatrebackComponent } from './reback/creatreback/creatreback.component';
@@ -228,14 +230,11 @@ export function tokenGetter() {
         WorksChedulerComponent,
         ResourceAllocationComponent,
         InventoryLogComponent,
-        CreatreceiveComponent,
-        RebackListComponent,
         CreatrebackComponent,
         ReceiveInfoComponent,
         OrdertoworkComponent,
     ],
     providers: [
-        // { provide: LocationStrategy, useClass: HashLocationStrategy }會加上#
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: NZ_I18N, useValue: zh_TW }
     ],

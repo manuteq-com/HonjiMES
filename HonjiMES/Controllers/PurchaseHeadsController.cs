@@ -24,7 +24,7 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
-        
+
         /// <summary>
         /// 採購單號
         /// </summary>
@@ -39,14 +39,17 @@ namespace HonjiMES.Controllers
 
             var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
                 var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
-            var PurchaseHeadData = new PurchaseHead{
+            var PurchaseHeadData = new PurchaseHead
+            {
                 Type = 10,
                 CreateTime = dt,
                 SupplierId = 0,
@@ -63,16 +66,19 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetPurchaseNumberByInfo(CreateNumberInfo CreateNoData)
         {
-            if (CreateNoData != null) {
+            if (CreateNoData != null)
+            {
                 var key = CreateNoData.Type == 10 ? "PI" : "PO";
                 var PurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
-                
+
                 var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
+                if (NoCount != 1)
+                {
                     var LastPurchaseNo = NoData.FirstOrDefault().PurchaseNo;
                     var NoLast = Int32.Parse(LastPurchaseNo.Substring(LastPurchaseNo.Length - 3, 3));
-                    if (NoCount <= NoLast) {
+                    if (NoCount <= NoLast)
+                    {
                         NoCount = NoLast + 1;
                     }
                 }
@@ -97,6 +103,56 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 新增採購單列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Sales
+        [HttpGet("{supplier}")]
+        public async Task<ActionResult<IEnumerable<PuschaseList>>> GetPurchaseList(int? supplier)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            var purchaselists = await _context.PurchaseDetails
+            .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier && x.DataType != 0)
+            .Include(x => x.Purchase).Include(x => x.Warehouse).Select(x => new PuschaseList
+            {
+                Id = x.Id,
+                PurchaseId = x.PurchaseId,
+                PurchaseNo = x.Purchase.PurchaseNo,
+                PurchaseType = x.PurchaseType,
+                SupplierId = x.SupplierId,
+                DeliveryTime = x.DeliveryTime,
+                DataType = x.DataType,
+                DataId = x.DataId,
+                DataNo = x.DataNo,
+                DataName = x.DataName,
+                Specification = x.Specification,
+                Quantity = x.Quantity,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                WarehouseId = x.WarehouseId,
+                WarehouseName = x.Warehouse.Name,
+                PurchaseCount = x.PurchaseCount,
+                Remarks = x.Remarks
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(purchaselists));
+        }
+
+        // GET: api/PurchaseHeads
+        /// <summary>
+        /// 調整單種類列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Suppliers>>> GetSupplier()
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            var data = await _context.Suppliers.Where(x => x.DeleteFlag == 0).Select(x => new Suppliers
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
         /// 未結案採購單列表
         /// </summary>
         /// <returns></returns>
@@ -152,7 +208,7 @@ namespace HonjiMES.Controllers
             //return purchaseHead;
             return Ok(MyFun.APIResponseOK(purchaseHead));
         }
-        
+
         /// <summary>
         /// 用No取採購單
         /// </summary>
@@ -160,7 +216,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<PurchaseHead>> GetPurchasesByPurchaseNo(string DataNo)
         {
             var PurchaseHead = await _context.PurchaseHeads.Where(x => x.PurchaseNo == DataNo && x.DeleteFlag == 0).ToListAsync();
-            if (PurchaseHead.Count == 0) {
+            if (PurchaseHead.Count == 0)
+            {
                 return Ok(MyFun.APIResponseError("查無採購單號 [ " + DataNo + " ]"));
             }
             return Ok(MyFun.APIResponseOK(PurchaseHead.FirstOrDefault().Id));
@@ -181,7 +238,7 @@ namespace HonjiMES.Controllers
             {
                 PurchaseHeads = PurchaseHeads.Where(x => x.Status == status && x.DeleteFlag == 0);
             }
-            var data = await PurchaseHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
+            var data = await PurchaseHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 
@@ -259,7 +316,7 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             _context.PurchaseHeads.Add(purchaseHead);
             purchaseHead.CreateTime = DateTime.Now;
-            purchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
+            purchaseHead.CreateUser = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseHead));

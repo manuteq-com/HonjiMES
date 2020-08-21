@@ -14,11 +14,11 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./creat-bill-purchase.component.css']
 })
 export class CreatBillPurchaseComponent implements OnInit, OnChanges {
-
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
+    @Input() DetailDataList: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -34,10 +34,11 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     url: string;
-    dataSourceDB: {
-        TempId: number, Id: number, SupplierId: number, PurchaseId: number,
-        DataType: number, DataId: number, Quantity: number, OriginPrice: number, Price: number
-    }[] = [];
+    // dataSourceDB: {
+    //     TempId: number, Id: number, SupplierId: number, PurchaseId: number,
+    //     DataType: number, DataId: number, Quantity: number, OriginPrice: number, Price: number, PriceAll: number
+    // }[] = [];
+    dataSourceDB: any;
     controller: string;
     selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; onValueChanged: any; };
     SupplierList: any;
@@ -86,6 +87,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
+        this.PurchaseList = [];
         this.PurchaseTempList = [];
         this.BasicDataListTemp = [];
 
@@ -101,6 +103,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.BasicDataList = s.data;
+                    if (this.dataSourceDB.length !== 0) {
+                        this.dataSourceDB.forEach(element => {
+                            // tslint:disable-next-line: prefer-const
+                            let BasicData = this.BasicDataList.find(x => x.DataType === element.DataType && x.DataId === element.DataId);
+                            element.TempId = BasicData.TempId;
+                        });
+                    }
                 }
             }
         );
@@ -108,6 +117,31 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+
+        if (this.DetailDataList !== undefined) {
+            this.DetailDataList.forEach(element => {
+                element.PriceAll = element.Price;
+                element.Price = element.OriginPrice;
+
+                this.dataSourceDB.push({
+                    DataId: element.DataId,
+                    DataType: element.DataType,
+                    OriginPrice: element.OriginPrice,
+                    Price: element.Price,
+                    PriceAll: element.PriceAll,
+                    PurchaseId: element.PurchaseId,
+                    Quantity: element.Quantity,
+                    SupplierId: element.SupplierId,
+                    TempId: element.TempId,
+                    UnitCount: null,
+                    UnitPrice: null,
+                    UnitPriceAll: 0,
+                    WarehouseId: element.WarehouseId,
+                });
+            });
+            // this.dataSourceDB = this.DetailDataList;
+            // this.dataSourceDB{Price} = this.DetailDataList.OringinPrice;
+        }
         this.app.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {
@@ -125,8 +159,15 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                         this.SupplierListEdit.push({
                             Id: x.Id,
                             Name: x.Code + '_' + x.Name
-                        })
+                        });
                     });
+                }
+            }
+        );
+        this.app.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseList = s.data;
                 }
             }
         );
@@ -174,6 +215,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     to_purchaseClick(e) {
         debugger;
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
+
     }
     onInitialized(value, data) {
         data.setValue(value);
@@ -308,10 +350,10 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.app.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
             (s) => {
                 if (s.success) {
-                    this.PurchaseList = s.data;
+                    this.PurchaseTempList = s.data;
                     s.data.forEach(element => {
-                        if (!this.PurchaseTempList.some(x => x.PurchaseNo === element.PurchaseNo)) {
-                            this.PurchaseTempList.push(element);
+                        if (!this.PurchaseList.some(x => x.PurchaseNo === element.PurchaseNo)) {
+                            this.PurchaseList.push(element);
                         }
                     });
                 }
@@ -466,6 +508,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             BillofPurchaseDetail: this.dataSourceDB
         };
         this.buttondisabled = false;
+
         // tslint:disable-next-line: max-line-length
         const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/PostBillofPurchaseHead_Detail', 'POST', { values: this.postval });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();

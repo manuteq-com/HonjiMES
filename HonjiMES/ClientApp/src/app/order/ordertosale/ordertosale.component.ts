@@ -54,6 +54,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     async ngOnChanges() {
+        debugger;
         this.app.GetData('/ToSale/GetSaleNumber').subscribe(
             (s) => {
                 if (s.success) {

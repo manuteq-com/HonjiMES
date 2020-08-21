@@ -30,7 +30,7 @@ namespace HonjiMES.Controllers
             _IWebHostEnvironment = environment;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
-        
+
         /// <summary>
         /// 銷貨單列表
         /// </summary>
@@ -63,6 +63,38 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 新增銷貨單之訂單列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Sales
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Orderlist>>> GetOrderList()
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
+            var orderlists = await _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Quantity > x.SaleCount && x.ProductBasic.DeleteFlag == 0).Include(x => x.Order).Include(x => x.ProductBasic).Select(x => new Orderlist
+            {
+                Id = x.Id,
+                OrderNo = x.Order.OrderNo,
+                MachineNo = x.MachineNo,
+                ProductBasicId = x.ProductBasic.Id,
+                ProductNo = x.ProductBasic.ProductNo,
+                ProductName = x.ProductBasic.Name,
+                Specification = x.ProductBasic.Specification,
+                SaleCount = x.SaleCount,
+                Quantity = x.Quantity,
+                Unit = x.Unit,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                DueDate = x.DueDate,
+                ReplyDate = x.ReplyDate,
+                Remark = x.Remark,
+                ReplyRemark = x.ReplyRemark
+            }).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            return Ok(MyFun.APIResponseOK(orderlists));
+        }
+
+        /// <summary>
         /// 銷貨單列表
         /// </summary>
         /// <param name="status">0:未銷貨，1:已銷貨</param>
@@ -77,7 +109,7 @@ namespace HonjiMES.Controllers
             {
                 SaleHeads = SaleHeads.Where(x => x.Status == status && x.DeleteFlag == 0);
             }
-            var data = await SaleHeads.OrderByDescending(x=>x.CreateTime).ToListAsync();
+            var data = await SaleHeads.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 

@@ -33,6 +33,7 @@ export class BillPurchaseComponent implements OnInit {
     editorOptions: any;
     detailfilter = [];
     DetailsDataSourceStorage: any;
+    newpopupVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
@@ -72,6 +73,20 @@ export class BillPurchaseComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseHead/' + key, 'DELETE')
         });
+    }
+    newdata() {
+        this.newpopupVisible = true;
+    }
+    newpopup_result(e) {
+        this.newpopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
     ngOnInit() {
     }

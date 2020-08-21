@@ -16,6 +16,9 @@
             [width]="120"
             (onClick)="creatdata()">
         </dx-button>
+        <dx-button class="newbtn" stylingMode="contained" text="以供應商新增" type="success" [width]="140"
+            (onClick)="newdata()">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -106,6 +109,13 @@
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creat-bill-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creat-bill-purchase>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="以供應商新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
+    [(visible)]="newpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-bill-purchase-supplier (childOuter)="newpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-bill-purchase-supplier>
     </div>
 </dx-popup>
 

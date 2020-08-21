@@ -23,6 +23,7 @@ export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
 
     creatpopupVisible: boolean;
+    newpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     SupplierList: any;
@@ -78,6 +79,20 @@ export class PurchaseOrderComponent implements OnInit {
         });
     }
     ngOnInit() {
+    }
+    newdata() {
+        this.newpopupVisible = true;
+    }
+    newpopup_result(e) {
+        this.newpopupVisible = false;
+        this.dataGrid.instance.refresh();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
     creatdata() {
         this.creatpopupVisible = true;

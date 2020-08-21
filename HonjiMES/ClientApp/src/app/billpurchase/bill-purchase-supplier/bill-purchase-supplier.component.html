@@ -1,0 +1,150 @@
+<div id="form-container">
+    <div class="mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form
+                id="form"
+                [formData]="formData"
+                [colCount]="5"
+            >
+                <dxi-item
+                    dataField="Name"
+                    [editorOptions]="SelectSupplier"
+                    editorType="dxSelectBox"
+                >
+                    <dxo-label text="選擇供應商"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
+    </div>
+    <div class="buttongroup">
+        <dx-button
+            stylingMode="contained"
+            text="確認"
+            type="success"
+            [width]="100"
+            (onClick)="to_BillPurchaseClick()"
+        ></dx-button>
+    </div>
+</div>
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="Id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellClick)="cellClick($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    [height]="700"
+>
+
+    <dxo-selection
+        mode="multiple"
+        showCheckBoxesMode="always"
+    ></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+    <dxi-column
+        dataField="PurchaseNo"
+        caption="採購單號"
+        [width]="140"
+    >
+</dxi-column>
+    <dxi-column
+        dataField="PurchaseType"
+        caption="採購種類"
+    >
+        <dxo-lookup
+            [dataSource]="PurchaseTypeList"
+            displayExpr="Name"
+            valueExpr="Id"
+        ></dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="DeliveryTime"
+        caption="預計交期"
+        [width]="120"
+        dataType="date"
+    ></dxi-column>
+    <dxi-column
+        dataField="DataType"
+        caption="料號種類"
+    ></dxi-column>
+    <dxi-column
+        dataField="DataNo"
+        caption="採購內容編號"
+        [width]="140"
+    ></dxi-column>
+    <dxi-column
+        dataField="DataName"
+        caption="採購內容名稱"
+        [width]="120"
+    ></dxi-column>
+    <dxi-column
+        dataField="Specification"
+        caption="規格"
+        [width]="220"
+    ></dxi-column>
+    <dxi-column
+        dataField="Quantity"
+        caption="數量"
+    ></dxi-column>
+    <dxi-column
+        dataField="OriginPrice"
+        caption="原單價"
+    ></dxi-column>
+    <dxi-column
+        dataField="Price"
+        caption="價格"
+    ></dxi-column>
+    <dxi-column
+        dataField="WarehouseName"
+        caption="倉別"
+        [width]="100"
+    >
+    </dxi-column>
+    <dxi-column
+        dataField="PurchaseCount"
+        caption="進貨量"
+    ></dxi-column>
+    <dxi-column
+        dataField="Remarks"
+        caption="備註"
+        [width]="120"
+    ></dxi-column>
+</dx-data-grid>
+
+<dx-popup
+    [showTitle]="true"
+    title="新增進貨單"
+    [dragEnabled]="false"
+    [closeOnOutsideClick]="false"
+    [height]="760"
+    [(visible)]="creatpopupVisible"
+>
+    <div *dxTemplate="let data of 'content'">
+        <app-creat-bill-purchase
+            (childOuter)="creatpopup_result($event)"
+            [itemkeyval]="itemkey"
+            [modval]="mod"
+            [DetailDataList]="topurchasekey"
+        ></app-creat-bill-purchase>
+    </div>
+</dx-popup>
