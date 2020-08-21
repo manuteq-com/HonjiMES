@@ -23,7 +23,7 @@
 
 <div class="row">
 
-    <div class="col-7">
+    <div class="col-8">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
@@ -63,9 +63,7 @@
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
             <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false">
-            </dxi-column>
-
+            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
 
             <dxi-column type="buttons" [visible]="false">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>
@@ -83,19 +81,17 @@
         </dx-data-grid>
     </div>
 
-    <div class="col-5">
+    <div class="col-4">
         <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id"
             hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
-            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="360"
+            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="740"
             (onCellClick)="cellClick($event)" (onToolbarPreparing)="onToolbarPreparingAll($event)">
-            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false" [width]="200">
-            </dxi-column>
-            <dxi-column dataField="NameType" caption="類別" dataType="string" alignment="center" [allowEditing]="false"
-                [width]="70"></dxi-column>
-            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80">
-            </dxi-column>
-            <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80">
-            </dxi-column>
+
+            <dxi-column dataField="NameType" caption="類別" dataType="string" alignment="center" [allowEditing]="false" [width]="70"></dxi-column>
+            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+
             <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
                 <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
                     [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
@@ -104,6 +100,7 @@
             <div *dxTemplate="let data of 'StockQtyCellTemplate'">
                 <span>{{GetWarehouseStockQty(data)}}</span>
             </div>
+
         </dx-data-grid>
     </div>
 

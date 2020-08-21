@@ -43,6 +43,7 @@
     <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
         cellTemplate="StockQtyCellTemplate">
     </dxi-column>
+    
     <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
             [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
