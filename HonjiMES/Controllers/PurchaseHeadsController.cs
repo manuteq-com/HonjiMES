@@ -137,22 +137,6 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(purchaselists));
         }
 
-        // GET: api/PurchaseHeads
-        /// <summary>
-        /// 調整單種類列表
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Suppliers>>> GetSupplier()
-        {
-            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var data = await _context.Suppliers.Where(x => x.DeleteFlag == 0).Select(x => new Suppliers
-            {
-                Id = x.Id,
-                Name = x.Name
-            }).ToListAsync();
-            return Ok(MyFun.APIResponseOK(data));
-        }
         /// 未結案採購單列表
         /// </summary>
         /// <returns></returns>

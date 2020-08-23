@@ -40,6 +40,7 @@ export class BillPurchaseSupplierComponent implements OnInit {
     PurchaseTypeList: any;
     creatpopupVisible: boolean;
     WarehouseList: any;
+
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.PrintQrCode = this.PrintQrCode.bind(this);
         this.listStatus = myservice.getWorkOrderStatus();
@@ -63,9 +64,12 @@ export class BillPurchaseSupplierComponent implements OnInit {
                 this.WarehouseList = s.data;
             }
         );
-        this.app.GetData(this.Controller + '/GetSupplier').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.forEach(element => {
+                        element.Name = element.Code + '_' + element.Name;
+                    });
                     this.SupplierList = s.data;
                     // this.AdjustTypeList.forEach(x => x.Message);
                     this.SelectSupplier = {
@@ -163,8 +167,7 @@ export class BillPurchaseSupplierComponent implements OnInit {
     }
     PrintQrCode(e) {
     }
-    to_BillPurchaseClick(e) {
-        debugger;
+    async onFormSubmit(e) {
         this.topurchasekey = null;
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
         if (this.topurchasekey.length === 0) {

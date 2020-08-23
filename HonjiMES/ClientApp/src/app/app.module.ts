@@ -230,9 +230,13 @@ export function tokenGetter() {
         WorksChedulerComponent,
         ResourceAllocationComponent,
         InventoryLogComponent,
+        CreateSaleComponent,
+        BillPurchaseSupplierComponent,
+        CreatreceiveComponent,
+        RebackListComponent,
         CreatrebackComponent,
         ReceiveInfoComponent,
-        OrdertoworkComponent,
+        OrdertoworkComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
