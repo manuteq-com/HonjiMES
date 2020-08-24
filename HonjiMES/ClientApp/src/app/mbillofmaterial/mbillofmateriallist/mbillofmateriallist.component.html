@@ -166,7 +166,7 @@
             </dxi-column>
 
             <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
-                <dx-select-box [value]="data.value" (onSelectionChanged)="selectvalueChanged($event,data)"
+                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
                     [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
                     valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
             </div>
