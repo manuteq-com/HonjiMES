@@ -26,7 +26,7 @@ export class ProductBasicListComponent implements OnInit {
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     adjustpopupVisible: boolean;
-    itemkey: string;
+    itemkey: any;
     exceldata: any;
     mod: string;
     uploadUrl: string;
@@ -73,6 +73,7 @@ export class ProductBasicListComponent implements OnInit {
     ngOnInit() {
     }
     creatdata() {
+        this.itemkey = new Date().getTime();
         this.creatpopupVisible = true;
     }
     creatAdjust() {

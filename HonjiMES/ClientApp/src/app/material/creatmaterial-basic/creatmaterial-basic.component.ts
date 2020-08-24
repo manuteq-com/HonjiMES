@@ -63,6 +63,20 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    ngOnChanges() {
+        // debugger;
+        this.gridBoxValue = [1];
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
+        this.formData = {
+            MaterialNo: '',
+            Name: '',
+            // Quantity: '',
+            Specification: '',
+            Property: '採購件',
+            Price: 0,
+            Unit: ''
+        };
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
@@ -80,10 +94,6 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
-    }
-    ngOnChanges() {
-        // debugger;
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     ngOnInit() {
     }
