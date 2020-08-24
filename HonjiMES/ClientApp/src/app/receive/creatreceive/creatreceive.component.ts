@@ -36,7 +36,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     NumberBoxOptions: { showSpinButtons: boolean; mode: string; min: number; value: number; };
     editorOptions: {};
     dataSourceAllDB: any;
-    Warehouselist: CustomStore;
+    Warehouselist: any;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         this.formData = null;
@@ -113,20 +113,28 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             return;
         }
         this.dataGrid.instance.saveEditData();
+        let allCount = 0;
         this.dataSourceAllDB.forEach(x => {
             if (x.RQty > 0 && (!x.WarehouseId || x.WarehouseId < 0)) {
                 msg += x.NameNo + ':請選擇倉庫\r\n';
                 this.buttondisabled = false;
                 cansave = false;
                 return false;
-            } else if (x.WarehouseId > 0 && (!x.RQty || x.RQty < 1)) {
+            } else if (x.WarehouseId > 0 && x.RQty < 0) {
                 msg += x.NameNo + ':請輸入數量 \r\n';
                 this.buttondisabled = false;
                 cansave = false;
                 return false;
             }
-
+            if (x.RQty) {
+                allCount += x.RQty;
+            }
         });
+        if (allCount === 0) {
+            msg += '請輸入數量! \r\n';
+            this.buttondisabled = false;
+            cansave = false;
+        }
         if (!cansave) {
             notify({
                 message: msg,
@@ -177,6 +185,15 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + e.value).subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.forEach(element => {
+                        // 注意! 預設自動帶倉別
+                        if (element.NameType === '成品') {
+                            element.WarehouseId = this.Warehouselist.find(x => x.Code === '301').Id;
+                        } else if (element.NameType === '元件') {
+                            element.WarehouseId = this.Warehouselist.find(x => x.Code === '101').Id;
+                        }
+                        element.RQty = 0;
+                    });
                     this.dataSourceAllDB = s.data;
                 }
             }
@@ -230,8 +247,8 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         let msg = '';
         this.buttondisabled = true;
         if (e.data.WarehouseId > 0) {
-            if (e.data.RQty == null || e.data.RQty < 1) {
-                msg = e.data.NameNo + '領取數量 必須大於0';
+            if (e.data.RQty == null || e.data.RQty < 0) {
+                msg = e.data.NameNo + '領取數量 必須大於等於0';
                 e.rule.message = msg;
                 notify({
                     message: msg,

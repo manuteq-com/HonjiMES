@@ -73,7 +73,11 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
-
+        if (this.formData !== null) {
+            this.formData = {
+                WorkOrderNo: 0
+            };
+        }
     }
     async onValueChanged(e) {
         this.buttondisabled = false;

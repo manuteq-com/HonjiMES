@@ -356,75 +356,79 @@ namespace HonjiMES.Controllers
                         ((item.MaterialBasicId.HasValue && x.MaterialBasicId == item.MaterialBasicId) || (item.ProductBasicId.HasValue && x.ProductBasicId == item.ProductBasicId))).FirstOrDefault();
                         if (Receive != null)
                         {
-                            //新增子表
-                            var nRequisitionDetail = new RequisitionDetail
+                            if (Receive.RQty > 0)
                             {
-                                Lv = item.Lv,
-                                // Name = item.Name,
-                                //原料
-                                MaterialBasicId = item.MaterialBasicId,
-                                MaterialNo = item.MaterialNo,
-                                MaterialName = item.MaterialName,
-                                MaterialSpecification = item.MaterialSpecification,
-                                //成品，半成品，組件
-                                ProductBasicId = item.ProductBasicId,
-                                ProductName = item.Name,
-                                ProductNo = item.ProductNo,
-                                ProductNumber = item.ProductNumber,
-                                ProductSpecification = item.ProductSpecification,
-                                Ismaterial = item.Ismaterial,
-                                Quantity = item.ReceiveQty,
-                                CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
-                            };
-                            nRequisitionDetail.Receives.Add(new Receive
-                            {
-                                Quantity = -Receive.RQty ?? 0,
-                                CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
-                            });
-                            requisition.RequisitionDetails.Add(nRequisitionDetail);
-                            //新增LOG
-                            if (Receive.MaterialBasicId.HasValue)
-                            {
-                                var Material = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == Receive.MaterialBasicId && x.DeleteFlag == 0).FirstOrDefault();
-                                if (Material == null)
+                                //新增子表
+                                var nRequisitionDetail = new RequisitionDetail
                                 {
-                                    return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + item.MaterialNo + " ]的庫存資訊!"));
-                                }
-                                var Original = Material.Quantity;
-                                Material.Quantity = Original + Receive.RQty ?? 0;
-                                Material.UpdateTime = dt;
-                                Material.UpdateUser = MyFun.GetUserID(HttpContext);
-                                Material.MaterialLogs.Add(new MaterialLog
+                                    Lv = item.Lv,
+                                    // Name = item.Name,
+                                    //原料
+                                    MaterialBasicId = item.MaterialBasicId,
+                                    MaterialNo = item.MaterialNo,
+                                    MaterialName = item.MaterialName,
+                                    MaterialSpecification = item.MaterialSpecification,
+                                    //成品，半成品，組件
+                                    ProductBasicId = item.ProductBasicId,
+                                    ProductName = item.Name,
+                                    ProductNo = item.ProductNo,
+                                    ProductNumber = item.ProductNumber,
+                                    ProductSpecification = item.ProductSpecification,
+                                    Ismaterial = item.Ismaterial,
+                                    Quantity = item.ReceiveQty,
+                                    CreateTime = dt,
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                };
+                                nRequisitionDetail.Receives.Add(new Receive
                                 {
-                                    Original = Original,
-                                    Quantity = Receive.RQty ?? 0,
-                                    Message = "退料入庫",
+                                    Quantity = -Receive.RQty ?? 0,
                                     CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 });
-                            }
-                            else if (Receive.ProductBasicId.HasValue)
-                            {
-                                var Product = _context.Products.Where(x => x.WarehouseId == Receive.WarehouseID && x.ProductBasicId == Receive.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
-                                if (Product == null)
+                                requisition.RequisitionDetails.Add(nRequisitionDetail);
+                                //新增LOG
+                                if (Receive.MaterialBasicId.HasValue)
                                 {
-                                    return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + item.ProductNo + " ]的庫存資訊!"));
+                                    var Material = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == Receive.MaterialBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                                    if (Material == null)
+                                    {
+                                        return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + item.MaterialNo + " ]的庫存資訊!"));
+                                    }
+                                    var Original = Material.Quantity;
+                                    Material.Quantity = Original + Receive.RQty ?? 0;
+                                    Material.UpdateTime = dt;
+                                    Material.UpdateUser = MyFun.GetUserID(HttpContext);
+                                    Material.MaterialLogs.Add(new MaterialLog
+                                    {
+                                        Original = Original,
+                                        Quantity = Receive.RQty ?? 0,
+                                        Message = "退料入庫",
+                                        CreateTime = dt,
+                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                    });
                                 }
-                                var Original = Product.Quantity;
-                                Product.Quantity = Original + Receive.RQty ?? 0;
-                                Product.UpdateTime = dt;
-                                Product.UpdateUser = MyFun.GetUserID(HttpContext);
-                                Product.ProductLogs.Add(new ProductLog
+                                else if (Receive.ProductBasicId.HasValue)
                                 {
-                                    Original = Original,
-                                    Quantity = Receive.RQty ?? 0,
-                                    Message = "退料入庫",
-                                    CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
-                                });
+                                    var Product = _context.Products.Where(x => x.WarehouseId == Receive.WarehouseID && x.ProductBasicId == Receive.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                                    if (Product == null)
+                                    {
+                                        return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + item.ProductNo + " ]的庫存資訊!"));
+                                    }
+                                    var Original = Product.Quantity;
+                                    Product.Quantity = Original + Receive.RQty ?? 0;
+                                    Product.UpdateTime = dt;
+                                    Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                                    Product.ProductLogs.Add(new ProductLog
+                                    {
+                                        Original = Original,
+                                        Quantity = Receive.RQty ?? 0,
+                                        Message = "退料入庫",
+                                        CreateTime = dt,
+                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                    });
+                                }
                             }
+                            
                         }
                     }
                 }
