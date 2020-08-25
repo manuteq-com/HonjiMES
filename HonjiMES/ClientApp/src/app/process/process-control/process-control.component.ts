@@ -96,6 +96,8 @@ export class ProcessControlComponent implements OnInit {
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + e.key).subscribe(
                 (s) => {
                     if (s.success) {
+                        debugger
+                        console.log(JSON.stringify(s.data));
                         this.dataSourceDB_Process = s.data.WorkOrderDetail;
                         this.btnDisabled = false;
                         this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
