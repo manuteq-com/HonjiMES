@@ -57,10 +57,28 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    ngOnInit() {
+    }
+    ngOnChanges() {
+        // debugger;
+        this.gridBoxValue = [2];
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
+        this.formData = {
+            ProductNo: '',
+            Name: '',
+            // Quantity: '',
+            Specification: '',
+            Property: '',
+            Price: 0,
+            Unit: '',
+            ProductNumber: ''
+        };
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
                 if (s.success) {
+                    // debugger;
                     s.data.forEach(e => {
                         e.Name = e.Code + e.Name;
                     });
@@ -68,13 +86,6 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
-
-    }
-    ngOnInit() {
-    }
-    ngOnChanges() {
-        // debugger;
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
     }
     validate_before(): boolean {
         // 表單驗證

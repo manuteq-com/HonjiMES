@@ -6,6 +6,7 @@ import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Myservice } from 'src/app/service/myservice';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-qrcode',
@@ -42,10 +43,20 @@ export class QrcodeComponent implements OnInit, OnChanges {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             // load: () => SendService.sendRequest(this.http, '/Processes/GetWorkOrderList/0'),
-            load: (loadOptions) => SendService.sendRequest(
-                this.http,
-                '/Processes/GetWorkOrderList',
-                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+            load: (loadOptions) => {
+                loadOptions.sort = [{ selector: 'WorkOrderNo', desc: true }];
+                // if (loadOptions.searchValue) {
+                loadOptions.filter = [
+                    ['CreateTime', '>=', oldDay],
+                    'and',
+                    ['CreateTime', '<=', toDay],
+                ];
+                // }
+                return SendService.sendRequest(
+                    this.http,
+                    '/Processes/GetWorkOrderList',
+                    'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter });
+            },
         });
     }
     calculateFilterExpression(filterValue, selectedFilterOperation) {
@@ -126,20 +137,30 @@ export class QrcodeComponent implements OnInit, OnChanges {
     download() {
         debugger;
         const rowkeys = this.dataGrid.instance.getSelectedRowKeys();
-        const url = '/Api/Codes/GetQrCode?id=' + rowkeys.toString();
-        this.http.get<any>(url, { responseType: 'blob' as 'json' }).subscribe(
-            (s) => {
-                debugger;
-                const blob = new Blob([s], { type: 'application/pdf' }); // application後面接下載的副檔名
-                const downloadURL = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = downloadURL;
-                link.download = 'QrCode.pdf'; //瀏覽器下載時的檔案名稱
-                link.click();
-            }
-        );
-        //return location.origin + '/api/Codes/GetQrCode'
-
+        if (rowkeys.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何工單項目',
+                html: '請勾選要產生QRCode的工單項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            const url = '/Api/Codes/GetQrCode?id=' + rowkeys.toString();
+            this.http.get<any>(url, { responseType: 'blob' as 'json' }).subscribe(
+                (s) => {
+                    debugger;
+                    const blob = new Blob([s], { type: 'application/pdf' }); // application後面接下載的副檔名
+                    const downloadURL = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = downloadURL;
+                    link.download = 'QrCode.pdf'; //瀏覽器下載時的檔案名稱
+                    link.click();
+                }
+            );
+            //return location.origin + '/api/Codes/GetQrCode'
+        }
     }
 }
 

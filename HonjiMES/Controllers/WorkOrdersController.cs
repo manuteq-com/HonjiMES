@@ -149,6 +149,7 @@ namespace HonjiMES.Controllers
             if (OrderData.OrderDetail.Count() != 0)
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
+                var TempNo = 0;
                 var WorkOrderHeadList = new List<WorkOrderHead>();
                 foreach (var item in OrderData.OrderDetail)
                 {
@@ -160,11 +161,12 @@ namespace HonjiMES.Controllers
                     // }
                     // else
                     // {
-                    var CheckResult = await this.NewWorkOrderByOrderCheck(item);
-                    foreach (var item2 in CheckResult)
-                    {
-                        WorkOrderHeadList.Add(item2);
-                    }
+                        var CheckResult = await this.NewWorkOrderByOrderCheck(item, TempNo);
+                        foreach (var item2 in CheckResult)
+                        {
+                            WorkOrderHeadList.Add(item2);
+                        }
+                        TempNo++;
                     // }
                 }
                 _context.ChangeTracker.LazyLoadingEnabled = false;
@@ -699,8 +701,8 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("工單異常!"));
             }
         }
-
-        public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail)
+        
+        public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail, int TempNo)
         {
             var WorkOrderHeadList = new List<WorkOrderHead>();
             if (OrderDetail.ProductBasicId != 0)
@@ -718,7 +720,7 @@ namespace HonjiMES.Controllers
                     NoCount = NoLast + 1;
                     // }
                 }
-                var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+                var workOrderNo = key + WorkOrderNo + (NoCount + TempNo).ToString("000");
 
                 var DataType = 2;
                 var BasicDataID = 0;
