@@ -256,7 +256,7 @@ namespace HonjiMES.Controllers
             var Delete = "0";
             try
             {
-                var Rolearray = UserRoles.Roles.ToCharArray();
+                var Rolearray = UserRoles.Roles.ToCharArray();// 權限順序 查詢 新增 修改 刪除，如有需要就自己往下加
                 Query = Rolearray[0].ToString();
                 Creat = Rolearray[1].ToString();
                 Edit = Rolearray[2].ToString();
