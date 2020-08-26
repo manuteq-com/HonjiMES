@@ -774,5 +774,11 @@ namespace HonjiMES.Models
             }
 
         }
+
+        internal static string ImgToBase64String(byte[] bQrCode)
+        {
+            return Convert.ToBase64String(bQrCode);
+           // return $"data:image/png;base64,{Convert.ToBase64String(bQrCode)}";
+        }
     }
 }

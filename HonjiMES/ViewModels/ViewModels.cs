@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HonjiMES.Models
 {
@@ -819,4 +817,21 @@ namespace HonjiMES.Models
         public decimal Finish { get; set; }
 
     }
+
+
+    public class ProcessReportVM
+    {
+        public int SerialNumber { get; set; }
+        public string ProcessName { get; set; }
+        public string ProducingMachine { get; set; }
+        public string Status { get; set; }
+        public string Type { get; set; }
+        public int? ReCount { get; set; }
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+        public string Img { get; set; }
+    }
+
+
+
 }

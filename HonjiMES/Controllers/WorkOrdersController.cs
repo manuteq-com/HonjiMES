@@ -12,6 +12,11 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using HonjiMES.Helper;
 using System.Drawing;
+using DevExpress.DataAccess.Json;
+using DevExpress.XtraReports.UI;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Newtonsoft.Json;
+using NPOI.POIFS.NIO;
 
 namespace HonjiMES.Controllers
 {
@@ -1012,30 +1017,55 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 產PDF
+        /// 產報工單PDF
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public IActionResult GetPackingSlipPDF()
         {
-            var txt = "WO200821001";
-            var bQrCode = BarcodeHelper.CreateQrCode(txt, 60, 60);
-
+            var qcodesize = 70;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var ProcessReportVMList = new List<ProcessReportVM>();
+            var WorkOrder = _context.WorkOrderHeads.Find(98);
+            var txt = "";
+            foreach (var item in WorkOrder.WorkOrderDetails)
+            {
+                txt = item.WorkOrderHead.WorkOrderNo;
+                var dbQrCode = BarcodeHelper.CreateQrCode(txt + "-" + item.SerialNumber, qcodesize, qcodesize);
+                ProcessReportVMList.Add(new ProcessReportVM
+                {
+                    SerialNumber = item.SerialNumber,
+                    ProcessName = item.ProcessName,
+                    ProducingMachine = item.ProducingMachine,
+                    Status = item.Status.ToString(),
+                    Type = item.Type.ToString(),
+                    ReCount = item.ReCount,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    Img = MyFun.ImgToBase64String(dbQrCode),
+                });
+            }
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            var json = JsonConvert.SerializeObject(ProcessReportVMList);
+            var bQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
             var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
-            var report = DevExpress.XtraReports.UI.XtraReport.FromFile(ReportPath);
+            var report = XtraReport.FromFile(ReportPath);
             report.RequestParameters = false;
-            report.Parameters["WorkOrderNo"].Value = "測試";
-            report.Parameters["DataName"].Value = "456";
-            report.Parameters["DataNo"].Value = "189";
-            var PictureBox = (DevExpress.XtraReports.UI.XRPictureBox)report.FindControl("GroupHeader2", true).FindControl("Qrcode", true);
+            report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
+            report.Parameters["DataName"].Value = WorkOrder.DataName;
+            report.Parameters["DataNo"].Value = WorkOrder.DataNo;
+            var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
             PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
-            //report.DataSource
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
             report.CreateDocument(true);
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", "QrCode.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + "報工單.pdf");
             }
 
         }
