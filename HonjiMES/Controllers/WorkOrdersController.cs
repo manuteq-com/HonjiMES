@@ -963,7 +963,7 @@ namespace HonjiMES.Controllers
                             DataId = BasicDataID,
                             DataNo = BasicDataNo,
                             DataName = BasicDataName,
-                            Count = WorkOrderHead.Count * item.ReceiveQty, // 注意!
+                            Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1, // 注意!
                             Status = status, // 注意!原本用於表示該工單目前狀態，這裡借來表示[該工單是否已經建立]
                             CreateUser = MyFun.GetUserID(HttpContext)
                         };
@@ -980,7 +980,7 @@ namespace HonjiMES.Controllers
                                 ProcessLeadTime = item2.ProcessLeadTime,
                                 ProcessTime = item2.ProcessTime,
                                 ProcessCost = item2.ProcessCost,
-                                Count = WorkOrderHead.Count * item.ReceiveQty,
+                                Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1,
                                 // PurchaseId
                                 DrawNo = item2.DrawNo,
                                 Manpower = item2.Manpower,

@@ -31,7 +31,7 @@
     </dxi-column>
     <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
-    <dxi-column dataField="RQty" caption="退庫數量" dataType="number" [width]="80">
+    <dxi-column dataField="RQty" caption="退庫數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
         <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
         </dxi-validation-rule>
     </dxi-column>

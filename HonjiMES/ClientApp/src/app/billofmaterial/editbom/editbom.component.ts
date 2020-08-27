@@ -86,9 +86,9 @@ export class EditbomComponent implements OnInit, OnChanges {
         this.QuantityEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            format: '#0.000',
             value: 1,
-            min: 1
+            min: 0.001
         };
         // const remote = true;
         // this.MaterialList = new CustomStore({
