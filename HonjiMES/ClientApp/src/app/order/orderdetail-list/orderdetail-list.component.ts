@@ -211,7 +211,7 @@ export class OrderdetailListComponent implements OnInit {
                                         TempId: result.TempId,
                                         DataType: 1,
                                         DataId: element.MaterialBasicId,
-                                        WarehouseId: null,
+                                        WarehouseId: result.WarehouseId,
                                         Quantity: Math.ceil(x.Quantity * tempQuantity),
                                         OriginPrice: element.MaterialPrice,
                                         Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
