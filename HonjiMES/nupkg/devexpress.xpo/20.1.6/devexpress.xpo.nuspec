@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>DevExpress.Xpo</id>
+    <version>20.1.6</version>
+    <authors>Developer Express Inc.</authors>
+    <owners>Developer Express Inc.</owners>
+    <description>eXpress Persistent Objects (XPO) is an Object-Relational Mapping (ORM) tool that handles all aspects of database creation and object persistence, allowing you to concentrate on your application's business logic. XPO supports more than a dozen database management systems and implements a common high-level API. Whether using MS SQL Server, PostgreSQL, MySQL, Oracle, or others, you will use the same code to implement data access and management operations. Should you decide to move your storage to a different database system, you’ll only need to change the connection string. For more information, see https://DevExpress.com/XPO.</description>
+    <language>en-US</language>
+    <licenseUrl>https://www.devexpress.com/Support/EULAs</licenseUrl>
+    <projectUrl>https://www.devexpress.com/go/XPO_NuGet_Landing.aspx</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <iconUrl>https://secure.gravatar.com/avatar/6b38f1e9ffd8b069bcdc2741934fdbcf?s=512&amp;r=g&amp;d=retro</iconUrl>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="DevExpress.Data" version="[20.1.6]" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="DevExpress.Data" version="[20.1.6]" />
+        <dependency id="Microsoft.Extensions.DependencyInjection" version="2.0.0" />
+        <dependency id="Microsoft.Win32.Registry" version="4.5.0" />
+        <dependency id="NETStandard.Library" version="2.0.3" />
+        <dependency id="System.Configuration.ConfigurationManager" version="4.5.0" />
+        <dependency id="System.Data.SqlClient" version="4.5.0" />
+        <dependency id="System.Drawing.Common" version="4.5.0" />
+        <dependency id="System.ServiceModel.Http" version="4.5.0" />
+        <dependency id="System.ServiceModel.NetTcp" version="4.4.0" />
+        <dependency id="System.ServiceModel.Security" version="4.4.0" />
+      </group>
+    </dependencies>
+    <repository type="git" url="https://github.com/DevExpress/XPO/" />
+  </metadata>
+</package>
