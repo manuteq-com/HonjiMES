@@ -408,7 +408,7 @@ namespace HonjiMES.Models
         /// <param name="Lv"></param>
         /// <param name="Receive">生產數量</param>
         /// <returns></returns>
-        internal static List<BomList> GetBomList(IEnumerable<BillOfMaterial> billOfMaterials, int Lv = 0, int Receive = 1)
+        internal static List<BomList> GetBomList(IEnumerable<BillOfMaterial> billOfMaterials, int Lv = 0, decimal Receive = 1)
         {
             var bomlist = new List<BomList>();
             if (Lv < 3)//目前限定3階

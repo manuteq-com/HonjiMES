@@ -382,6 +382,7 @@ namespace HonjiMES.Controllers
                                 nRequisitionDetail.Receives.Add(new Receive
                                 {
                                     Quantity = -Receive.RQty ?? 0,
+                                    WarehouseId = Receive.WarehouseID,
                                     CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 });

@@ -37,6 +37,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     editorOptions: {};
     dataSourceAllDB: any;
     Warehouselist: any;
+    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         this.formData = null;
@@ -69,6 +70,13 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             // searchMode: 'startswith',
 
 
+        };
+        this.RQtyEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 0,
+            min: 0
         };
         // this.Warehouselist = new CustomStore({
         //     key: 'Id',

@@ -31,7 +31,7 @@
     </dxi-column>
     <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
-    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
+    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
         <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
         </dxi-validation-rule>
     </dxi-column>

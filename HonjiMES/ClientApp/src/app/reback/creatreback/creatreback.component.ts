@@ -37,6 +37,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     editorOptions: {};
     dataSourceAllDB: any;
     Warehouselist: any;
+    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
     constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
@@ -68,6 +69,13 @@ export class CreatrebackComponent implements OnInit, OnChanges {
             // searchMode: 'startswith',
 
 
+        };
+        this.RQtyEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 0,
+            min: 0
         };
         // this.Warehouselist = new CustomStore({
         //     key: 'Id',
