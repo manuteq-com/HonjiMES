@@ -31,12 +31,10 @@ export class MaterialListComponent implements OnInit, OnChanges {
     itemkey: number;
     itemdata: any;
     mod: string;
-    uploadUrl: string;
     exceldata: any;
     Supplierlist: any;
     visible: boolean;
     constructor(private http: HttpClient, public app: AppComponent) {
-        this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);

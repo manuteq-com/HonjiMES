@@ -546,6 +546,10 @@ namespace HonjiMES.Models
         /// 子層
         /// </summary>
         public MenuViewModel[] items { get; set; }
+        public bool Query { get; set; }
+        public bool Creat { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
     }
     /// <summary>
     /// 使用登入權限

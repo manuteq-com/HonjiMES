@@ -11,10 +11,10 @@
         <dx-file-uploader #fileUploader selectButtonText="匯入訂單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             [width]="130" [uploadHeaders]="uploadHeaders"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-            uploadMode="instantly" (onUploaded)="onUploaded($event)">
+            uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
         </dx-file-uploader>
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130"
-            (onClick)="creatdata()">
+            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
         </dx-button>
     </div>
 </div>
@@ -54,7 +54,8 @@
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="form" [allowAdding]="app.checkAddRoles()" [allowUpdating]="app.checkUpdateRoles()"
+        [allowDeleting]="app.checkDelRoles()">
         <dxo-form colCount=4>
             <dxi-item dataField="OrderNo"></dxi-item>
             <dxi-item dataField="CustomerNo"></dxi-item>

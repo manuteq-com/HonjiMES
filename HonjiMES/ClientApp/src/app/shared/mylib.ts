@@ -104,6 +104,7 @@ export class SendService {
     constructor() { }
 
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
+        const gurl = location.pathname;
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         if (!currentUser) {
@@ -115,6 +116,8 @@ export class SendService {
                     at: 'center top'
                 }
             }, 'error');
+            authenticationService.logout();
+            window.location.href = '/login';
             throw msg;
         }
         Date.prototype.toJSON = function () {
@@ -131,7 +134,12 @@ export class SendService {
         }
         const httpOptions = {
             withCredentials: true, body,
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + currentUser.Token }),
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + currentUser.Token,
+                routerLink: location.pathname,
+                apitype: method
+            }),
             params: null
         };
         let result;
@@ -196,7 +204,10 @@ export class SendService {
                     }
 
                 } else {
-                    debugger;
+                    if (ReturnData.message === 'ReLogin') {
+                        authenticationService.logout();
+                        window.location.href = '/login';
+                    }
                     throw ReturnData.message;
                 }
             })

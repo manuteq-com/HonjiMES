@@ -6,6 +6,7 @@ import { AuthService } from './service/auth.service';
 import { LoginUser } from './model/loginuser';
 import { APIResponse } from './app.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { retry } from 'rxjs/operators';
 
 enum MenuOrientation {
     STATIC,
@@ -42,6 +43,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+        this.checkRoles = this.checkRoles.bind(this);
     }
     public GetData(apiUrl: string): Observable<APIResponse> {
         const authenticationService = new AuthService(this.http);
@@ -51,12 +53,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
             Token = currentUser.Token;
         }
         const httpOptions = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + Token }),
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + Token,
+                routerLink: location.pathname,
+                apitype: 'GET'
+            }),
         };
-        return this.http.get<APIResponse>('/api' + apiUrl, httpOptions);
+        const reget = this.http.get<APIResponse>('/api' + apiUrl, httpOptions);
+        reget.toPromise().then(ReturnData => {
+            if (!ReturnData.success) {
+                if (ReturnData.message === 'ReLogin') {
+                    this.logout();
+                }
+            }
+        });
+        return reget;
     }
     public PostData(apiUrl: string, data: any = {}): Observable<APIResponse> {
-        debugger;
         const authenticationService = new AuthService(this.http);
         const currentUser = authenticationService.currentUserValue;
         let Token = '';
@@ -66,10 +80,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         const body = JSON.stringify(data);
         const httpOptions = {
             withCredentials: true, body,
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'Bearer ' + Token }),
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + Token,
+                routerLink: location.pathname,
+                apitype: 'POST'
+            }),
             params: null
         };
-        return this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
+        const repost = this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
+        repost.toPromise().then(ReturnData => {
+            if (!ReturnData.success) {
+                if (ReturnData.message === 'ReLogin') {
+                    this.logout();
+                }
+            }
+        });
+        return repost;
     }
     ngOnInit() {
         this.listenRouting();
@@ -252,5 +279,58 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     changeToSlimMenu() {
         this.layoutMode = MenuOrientation.SLIM;
     }
-
+    checkRoles(e) {
+        let canuse = false;
+        const authenticationService = new AuthService(this.http);
+        const currentUser = authenticationService.currentUserValue;
+        currentUser.Menu.forEach(x => {
+            if (x.routerLink && x.routerLink.includes(location.pathname)) {
+                canuse = this.switchloop(e, x);
+            } else {
+                if (!canuse && x.items) {
+                    x.items.forEach(y => {
+                        if (!canuse && y.routerLink && y.routerLink.includes(location.pathname)) {
+                            canuse = this.switchloop(e, y);
+                        } else {
+                            if (!canuse && y.items) {
+                                y.items.forEach(z => {
+                                    if (z.routerLink && z.routerLink.includes(location.pathname)) {
+                                        canuse = this.switchloop(e, z);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        // location.pathname
+        return canuse;
+    }
+    checkAddRoles() {
+        return this.checkRoles('Add');
+    }
+    checkUpdateRoles() {
+        return this.checkRoles('Update');
+    }
+    checkDelRoles() {
+        return this.checkRoles('Del');
+    }
+    switchloop(val, x) {
+        let canuse = false;
+        switch (val) {
+            case 'Add':
+                canuse = x.Creat;
+                break;
+            case 'Update':
+                canuse = x.Edit;
+                break;
+            case 'Del':
+                canuse = x.Delete;
+                break;
+            default:
+                break;
+        }
+        return canuse;
+    }
 }
