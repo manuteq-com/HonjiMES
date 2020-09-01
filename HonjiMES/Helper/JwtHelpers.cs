@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using HonjiMES.Models;
+using Jose;
 
 namespace HonjiMES.Helper
 {
@@ -69,6 +70,7 @@ namespace HonjiMES.Helper
                 Expires = DateTime.Now.AddMinutes(expireMinutes),
                 SigningCredentials = signingCredentials
             };
+            //var token = JWT.Encode(claims, Encoding.UTF8.GetBytes(signKey), JwsAlgorithm.HS512);//產生token
 
             // 產出所需要的 JWT securityToken 物件，並取得序列化後的 Token 結果(字串格式)
             var tokenHandler = new JwtSecurityTokenHandler();

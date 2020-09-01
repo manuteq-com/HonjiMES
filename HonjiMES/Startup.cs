@@ -108,7 +108,7 @@ namespace HonjiMES
                     ValidateLifetime = true,
 
                     // 如果 Token 中包含 key 才需要驗證，一般都只有簽章而已
-                    ValidateIssuerSigningKey = false,
+                    ValidateIssuerSigningKey = true,
 
                     // "1234567890123456" 應該從 IConfiguration 取得
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("JwtSettings:SignKey")))
