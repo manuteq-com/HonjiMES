@@ -33,6 +33,9 @@
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
             [columnAutoWidth]="false" [showBorders]="true" [height]="560">
 
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            
             <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
             </dxo-editing>
@@ -61,6 +64,9 @@
         <dx-data-grid #dataGrid12 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
             [columnAutoWidth]="false" [showBorders]="true" [height]="560">
+
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
             <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
