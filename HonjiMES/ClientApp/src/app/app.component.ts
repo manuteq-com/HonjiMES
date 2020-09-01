@@ -45,6 +45,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
         this.checkRoles = this.checkRoles.bind(this);
     }
+    CheckToken(httpOptions: { headers: HttpHeaders; }) {
+        this.http.get<APIResponse>('/api/Home/CheckToken', httpOptions).toPromise().then(ReturnData => {
+            if (!ReturnData.success) {
+                if (ReturnData.message === 'ReLogin') {
+                    this.logout(); // 如果是登出的狀態直接導到登入頁面
+                }
+            }
+        });
+    }
     public GetData(apiUrl: string): Observable<APIResponse> {
         const authenticationService = new AuthService(this.http);
         const currentUser = authenticationService.currentUserValue;
@@ -60,15 +69,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
                 apitype: 'GET'
             }),
         };
-        const reget = this.http.get<APIResponse>('/api' + apiUrl, httpOptions);
-        reget.toPromise().then(ReturnData => {
-            if (!ReturnData.success) {
-                if (ReturnData.message === 'ReLogin') {
-                    this.logout();
-                }
-            }
-        });
-        return reget;
+        this.CheckToken(httpOptions);
+        return this.http.get<APIResponse>('/api' + apiUrl, httpOptions);
     }
     public PostData(apiUrl: string, data: any = {}): Observable<APIResponse> {
         const authenticationService = new AuthService(this.http);
@@ -88,15 +90,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
             }),
             params: null
         };
-        const repost = this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
-        // repost.toPromise().then(ReturnData => {
-        //     if (!ReturnData.success) {
-        //         if (ReturnData.message === 'ReLogin') {
-        //             this.logout();
-        //         }
-        //     }
-        // });
-        return repost;
+        this.CheckToken(httpOptions);
+        return this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
     }
     ngOnInit() {
         this.listenRouting();

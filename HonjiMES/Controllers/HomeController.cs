@@ -56,15 +56,15 @@ namespace HonjiMES.Controllers
         {
             var MenuViewModellist = new List<MenuViewModel>();
             var Allmenu = _context.Menus.Where(x => x.DeleteFlag == 0).ToList();
-            var UserRoles = new List<Tuple<int,string>>();
+            var UserRoles = new List<Tuple<int, string>>();
 
             if (Id == 1)//SUPER USER 可以使用全部的頁面，不必設權限
             {
-                UserRoles = Allmenu.Select(x => new Tuple<int, string>(x.Id,"11111")).ToList();
+                UserRoles = Allmenu.Select(x => new Tuple<int, string>(x.Id, "11111")).ToList();//SUPER USER 操作權限全開
             }
             else
             {
-                UserRoles = _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id).Select(x => new Tuple<int, string>(x.MenuId,x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
+                UserRoles = _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
             }
             foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
             {
@@ -129,6 +129,13 @@ namespace HonjiMES.Controllers
             int identity = MyFun.GetUserID(HttpContext);
             return Ok(MyFun.APIResponseOK(null, "登入中"));
 
+        }
+        [HttpGet]
+        [JWTAuthorize]
+        public ActionResult<string> CheckToken()
+        {
+            //有驗証過表示可以用
+            return Ok(MyFun.APIResponseOK("OK"));
         }
     }
 }
