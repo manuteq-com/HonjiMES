@@ -39,6 +39,7 @@ export class RebackListComponent implements OnInit {
     WarehouselistAll: any;
     infopopupVisible: boolean;
     randomkey: number;
+    itemkey: any;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
@@ -105,6 +106,11 @@ export class RebackListComponent implements OnInit {
             }
         });
     }
+    searchRequisitionData(e, data) {
+        this.itemkey = data.data.WorkOrderHeadId;
+        this.infopopupVisible = true;
+        this.randomkey = new Date().getTime();
+    }
     readRequisitionData(e, data) {
         this.requisitionId = data.data.Id;
         this.dataSourceAllDB = new CustomStore({
@@ -138,6 +144,7 @@ export class RebackListComponent implements OnInit {
         this.creatpopupVisible = true;
     }
     infodata() {
+        this.itemkey = null;
         this.infopopupVisible = true;
         this.randomkey = new Date().getTime();
     }

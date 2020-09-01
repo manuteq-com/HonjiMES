@@ -59,7 +59,7 @@ namespace HonjiMES.Filter
                     using (var _context = new HonjiContext(optionsBuilder.Options))
                     {
                         var UserID = 0;
-                        if (int.TryParse(sUserID, out UserID))
+                        if (int.TryParse(sUserID, out UserID) && UserID != 1)
                         {
                             var UserRoles = _context.UserRoles.Where(x => x.DeleteFlag == 0 && x.UsersId == UserID && x.Menu.RouterLink == routerLink).FirstOrDefault();
                             if (UserRoles == null)

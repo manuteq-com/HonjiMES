@@ -93,10 +93,9 @@ export class CreatrebackComponent implements OnInit, OnChanges {
             }
         );
     }
-    ngOnChanges() {
-
-    }
     ngOnInit() {
+    }
+    ngOnChanges() {
     }
     validate_before(): boolean {
         // 表單驗證
