@@ -38,6 +38,10 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     dataSourceAllDB: any;
     Warehouselist: any;
     RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
+    popupVisible: boolean;
+    randomkey: number;
+    popupMod: string;
+    newVisible: boolean;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         this.formData = null;
@@ -93,8 +97,10 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.newVisible = false;
     }
     ngOnChanges() {
+        this.newVisible = false;
 
     }
     ngOnInit() {
@@ -203,18 +209,30 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                         element.RQty = 0;
                     });
                     this.dataSourceAllDB = s.data;
+                    this.newVisible = true;
                 }
             }
         );
+    }
+    allowDeleting(e) {
+        if (e.row.data.Quantity !== null) {
+            return false;
+        } else {
+            return true;
+        }
     }
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
                 if (e.column.cssClass === 'addmod') {
-                    // tslint:disable-next-line: deprecation
-                    this.dataGrid.instance.insertRow();
+                    this.popupVisible = true;
+                    this.randomkey = new Date().getTime();
+                    this.popupMod = 'receive';
                 }
             }
+        } else if (e.rowType === 'header' && e.rowType === 'data') {
+            // // tslint:disable-next-line: deprecation
+            // this.dataGrid.instance.insertRow();
         }
     }
     WarehouseselectvalueChanged(e, data) {
@@ -313,5 +331,9 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 item.showText = 'always';
             }
         });
+    }
+    popup_result(e) {
+        this.dataSourceAllDB.push(e);
+        this.popupVisible = false;
     }
 }

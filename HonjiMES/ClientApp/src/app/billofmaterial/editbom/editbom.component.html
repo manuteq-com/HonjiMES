@@ -3,7 +3,7 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="Name">
+        <dxi-item dataField="Name" [visible]="NameVisible">
             <dxo-label text="名稱"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="BasicType" dataType="number" editorType="dxSelectBox" [editorOptions]="ComponentList">
