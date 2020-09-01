@@ -333,7 +333,39 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         });
     }
     popup_result(e) {
-        this.dataSourceAllDB.push(e);
+        const newData = {
+            Id: e.Id,
+            // Ismaterial: e.,
+            // Lv: e.,
+            // MaterialBasic: e.,
+            MaterialBasicId: e.MaterialBasicId,
+            // MaterialName: e.,
+            // MaterialNo: e.,
+            // MaterialSpecification: e.,
+            // Name: e.,
+            NameNo: e.NameNo,
+            NameType: e.NameType,
+            // ProductBasic: e.,
+            ProductBasicId: e.ProductBasicId,
+            // ProductName: e.,
+            // ProductNo: e.,
+            // ProductNumber: e.,
+            // ProductSpecification: e.,
+            Quantity: null,
+            RQty: e.RQty,
+            // RbackQty: e.,
+            ReceiveQty: e.ReceiveQty,
+            // Receives: e.,
+            // Remarks: e.,
+            // Requisition: e.,
+            // RequisitionId: e.,
+            // StockQty: e.,
+            // UpdateTime: e.,
+            // UpdateUser: e.,
+            WarehouseId: e.WarehouseId,
+            WarehouseList: e.WarehouseList
+        };
+        this.dataSourceAllDB.push(newData);
         this.popupVisible = false;
     }
 }
