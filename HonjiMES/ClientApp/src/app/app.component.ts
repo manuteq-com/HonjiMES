@@ -89,13 +89,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
             params: null
         };
         const repost = this.http.post<APIResponse>('/api' + apiUrl, body, httpOptions);
-        repost.toPromise().then(ReturnData => {
-            if (!ReturnData.success) {
-                if (ReturnData.message === 'ReLogin') {
-                    this.logout();
-                }
-            }
-        });
+        // repost.toPromise().then(ReturnData => {
+        //     if (!ReturnData.success) {
+        //         if (ReturnData.message === 'ReLogin') {
+        //             this.logout();
+        //         }
+        //     }
+        // });
         return repost;
     }
     ngOnInit() {
