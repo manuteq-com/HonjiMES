@@ -4,10 +4,12 @@
         <div class="col-3">
             <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
                 [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
                 <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
                     <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
                     <dxo-label text="工單號"></dxo-label>
                 </dxi-item>
+
             </dx-form>
         </div>
     </div>
@@ -31,6 +33,9 @@
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
             [columnAutoWidth]="false" [showBorders]="true" [height]="560">
 
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            
             <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
             </dxo-editing>
@@ -59,6 +64,9 @@
         <dx-data-grid #dataGrid12 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
             [columnAutoWidth]="false" [showBorders]="true" [height]="560">
+
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
             <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>

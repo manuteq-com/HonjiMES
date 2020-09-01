@@ -45,7 +45,8 @@ export class OrderListComponent {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
-            Authorization: 'Bearer ' + currentUser.Token
+            Authorization: 'Bearer ' + currentUser.Token,
+            apitype: 'POST'
         };
         this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();

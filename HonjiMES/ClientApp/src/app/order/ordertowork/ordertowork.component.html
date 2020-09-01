@@ -22,7 +22,7 @@
         <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="120">
             <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="asc"></dxi-column>
+        <dxi-column dataField="WorkOrderNo" caption="預產生之工單號" sortOrder="asc"></dxi-column>
         <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="100">
             <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>

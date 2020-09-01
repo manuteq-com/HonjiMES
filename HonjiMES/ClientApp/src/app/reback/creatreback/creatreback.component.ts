@@ -37,6 +37,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     editorOptions: {};
     dataSourceAllDB: any;
     Warehouselist: any;
+    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
     constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
@@ -69,6 +70,13 @@ export class CreatrebackComponent implements OnInit, OnChanges {
 
 
         };
+        this.RQtyEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 0,
+            min: 0
+        };
         // this.Warehouselist = new CustomStore({
         //     key: 'Id',
         //     load: () =>
@@ -85,10 +93,9 @@ export class CreatrebackComponent implements OnInit, OnChanges {
             }
         );
     }
-    ngOnChanges() {
-
-    }
     ngOnInit() {
+    }
+    ngOnChanges() {
     }
     validate_before(): boolean {
         // 表單驗證

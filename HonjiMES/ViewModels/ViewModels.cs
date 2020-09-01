@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HonjiMES.Models
 {
@@ -334,7 +332,7 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public int? Pid { get; set; }
         public string Name { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public string Unit { get; set; }
         public sbyte? Outsource { get; set; }
         public int Group { get; set; }
@@ -352,7 +350,7 @@ namespace HonjiMES.Models
         public string ProductSpecification { get; internal set; }
         public decimal ProductPrice { get; set; }
         public int Lv { get; set; }
-        public int ReceiveQty { get; internal set; }
+        public decimal ReceiveQty { get; internal set; }
         public bool? Ismaterial { get; internal set; }
     }
     public class PostBom
@@ -360,7 +358,7 @@ namespace HonjiMES.Models
         public string Name { get; set; }
         public int? BasicType { get; set; }
         public int? BasicId { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
     }
     public class DataDetailSourceLoadOptions : DataSourceLoadOptions
     {
@@ -549,6 +547,10 @@ namespace HonjiMES.Models
         /// 子層
         /// </summary>
         public MenuViewModel[] items { get; set; }
+        public bool Query { get; set; }
+        public bool Creat { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
     }
     /// <summary>
     /// 使用登入權限
@@ -820,4 +822,21 @@ namespace HonjiMES.Models
         public decimal Finish { get; set; }
 
     }
+
+
+    public class ProcessReportVM
+    {
+        public int SerialNumber { get; set; }
+        public string ProcessName { get; set; }
+        public string ProducingMachine { get; set; }
+        public string Status { get; set; }
+        public string Type { get; set; }
+        public int? ReCount { get; set; }
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+        public string Img { get; set; }
+    }
+
+
+
 }

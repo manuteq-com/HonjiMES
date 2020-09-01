@@ -201,7 +201,7 @@ export class OrderdetailListComponent implements OnInit {
 
                             const index = tempdataSource.findIndex(z => z.DataType === 1 && z.DataId === element.MaterialBasicId);
                             if (~index) {
-                                tempdataSource[index].Quantity += x.Quantity * tempQuantity;
+                                tempdataSource[index].Quantity += Math.ceil(x.Quantity * tempQuantity);
                                 tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
                             } else if (element.MaterialBasicId != null) { // 只取得料號為[原料]的項目
                                 const result = BasicData.find(x => x.DataType === 1 && x.DataId === element.MaterialBasicId);
@@ -211,8 +211,8 @@ export class OrderdetailListComponent implements OnInit {
                                         TempId: result.TempId,
                                         DataType: 1,
                                         DataId: element.MaterialBasicId,
-                                        WarehouseId: null,
-                                        Quantity: x.Quantity * tempQuantity,
+                                        WarehouseId: result.WarehouseId,
+                                        Quantity: Math.ceil(x.Quantity * tempQuantity),
                                         OriginPrice: element.MaterialPrice,
                                         Price: (x.Quantity * tempQuantity) * element.MaterialPrice,
                                         DeliveryTime: new Date()
@@ -224,6 +224,7 @@ export class OrderdetailListComponent implements OnInit {
                     }
                     if (indexVal === this.topurchasekey.length - 1) {
                         this.dataSource = [];
+                        // this.dataSource = tempdataSource;
                         // 檢查庫存量，過濾需要採購項目
                         this.dataSource = this.CheckStockQuantity(tempdataSource, BasicData);
                     }
@@ -237,7 +238,7 @@ export class OrderdetailListComponent implements OnInit {
         data.forEach(element => {
             const result = BasicData.find(x => x.TempId === element.TempId);
             if (result.Quantity < element.Quantity) {
-                element.Quantity = element.Quantity - result.Quantity;
+                element.Quantity = Math.ceil(element.Quantity) - result.Quantity;
                 element.Price = element.Quantity * element.OriginPrice;
                 resultArray.push(element);
             }

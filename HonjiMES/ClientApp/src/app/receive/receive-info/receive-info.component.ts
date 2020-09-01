@@ -15,6 +15,7 @@ import CustomStore from 'devextreme/data/custom_store';
 export class ReceiveInfoComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() randomkeyval: any;
+    @Input() itemkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -34,12 +35,12 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
         icon: 'save'
     };
     NumberBoxOptions: { showSpinButtons: boolean; mode: string; min: number; value: number; };
-    editorOptions: {};
+    editorOptions: any;
     dataSourceDB1: any;
     dataSourceDB2: any;
     Warehouselist: CustomStore;
     constructor(private http: HttpClient, public app: AppComponent) {
-        this.formData = null;
+        this.formData = {};
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
         // this.enterKeyDirection = 'row';
@@ -59,7 +60,10 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
                     if (loadOptions.searchValue) {
                         loadOptions.filter = [loadOptions.searchExpr, loadOptions.searchOperation, loadOptions.searchValue];
                     }
-                    return SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderHeadsRun/', 'GET', { loadOptions, remote: true });
+                    return SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderHeads/', 'GET', { loadOptions, remote: true });
+                },
+                byKey: (key) => {
+                    return SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderHeadskey/' + key);
                 },
             }),
             valueExpr: 'Id',
@@ -73,27 +77,33 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
 
     }
     ngOnChanges() {
-        if (this.formData !== null) {
-            this.formData = {
-                WorkOrderNo: 0
-            };
+        this.formData = {};
+        if (this.itemkeyval !== null) {
+            this.formData.WorkOrderNo = this.itemkeyval;
+            this.GetRequisitionsDetail(this.itemkeyval);
+        } else {
+            this.dataSourceDB1 = [];
+            this.dataSourceDB2 = [];
         }
     }
-    async onValueChanged(e) {
-        this.buttondisabled = false;
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + e.value).subscribe(
+    GetRequisitionsDetail(key) {
+        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + key).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceDB1 = s.data;
                 }
             }
         );
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailByWorkOrderNo/' + e.value).subscribe(
+        this.app.GetData(this.Controller + '/GetRequisitionsDetailByWorkOrderNo/' + key).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceDB2 = s.data;
                 }
             }
         );
+    }
+    async onValueChanged(e) {
+        this.buttondisabled = false;
+        this.GetRequisitionsDetail(e.value);
     }
 }

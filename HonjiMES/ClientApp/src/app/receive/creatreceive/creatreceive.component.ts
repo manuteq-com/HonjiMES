@@ -37,6 +37,11 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     editorOptions: {};
     dataSourceAllDB: any;
     Warehouselist: any;
+    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
+    popupVisible: boolean;
+    randomkey: number;
+    popupMod: string;
+    newVisible: boolean;
     constructor(private http: HttpClient, public app: AppComponent) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         this.formData = null;
@@ -70,6 +75,13 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
 
 
         };
+        this.RQtyEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: 0,
+            min: 0
+        };
         // this.Warehouselist = new CustomStore({
         //     key: 'Id',
         //     load: () =>
@@ -85,8 +97,10 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.newVisible = false;
     }
     ngOnChanges() {
+        this.newVisible = false;
 
     }
     ngOnInit() {
@@ -195,18 +209,30 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                         element.RQty = 0;
                     });
                     this.dataSourceAllDB = s.data;
+                    this.newVisible = true;
                 }
             }
         );
+    }
+    allowDeleting(e) {
+        if (e.row.data.Quantity !== null) {
+            return false;
+        } else {
+            return true;
+        }
     }
     cellClick(e) {
         if (e.rowType === 'header') {
             if (e.column.type === 'buttons') {
                 if (e.column.cssClass === 'addmod') {
-                    // tslint:disable-next-line: deprecation
-                    this.dataGrid.instance.insertRow();
+                    this.popupVisible = true;
+                    this.randomkey = new Date().getTime();
+                    this.popupMod = 'receive';
                 }
             }
+        } else if (e.rowType === 'header' && e.rowType === 'data') {
+            // // tslint:disable-next-line: deprecation
+            // this.dataGrid.instance.insertRow();
         }
     }
     WarehouseselectvalueChanged(e, data) {
@@ -305,5 +331,41 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 item.showText = 'always';
             }
         });
+    }
+    popup_result(e) {
+        const newData = {
+            Id: e.Id,
+            // Ismaterial: e.,
+            // Lv: e.,
+            // MaterialBasic: e.,
+            MaterialBasicId: e.MaterialBasicId,
+            // MaterialName: e.,
+            // MaterialNo: e.,
+            // MaterialSpecification: e.,
+            // Name: e.,
+            NameNo: e.NameNo,
+            NameType: e.NameType,
+            // ProductBasic: e.,
+            ProductBasicId: e.ProductBasicId,
+            // ProductName: e.,
+            // ProductNo: e.,
+            // ProductNumber: e.,
+            // ProductSpecification: e.,
+            Quantity: null,
+            RQty: e.RQty,
+            // RbackQty: e.,
+            ReceiveQty: e.ReceiveQty,
+            // Receives: e.,
+            // Remarks: e.,
+            // Requisition: e.,
+            // RequisitionId: e.,
+            // StockQty: e.,
+            // UpdateTime: e.,
+            // UpdateUser: e.,
+            WarehouseId: e.WarehouseId,
+            WarehouseList: e.WarehouseList
+        };
+        this.dataSourceAllDB.push(newData);
+        this.popupVisible = false;
     }
 }

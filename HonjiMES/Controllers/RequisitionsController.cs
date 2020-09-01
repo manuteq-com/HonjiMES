@@ -365,7 +365,7 @@ namespace HonjiMES.Controllers
             try
             {
                 var RequisitionDetails = await _context.RequisitionDetails
-                .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && x.Lv == 1)
+                .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && x.Lv == 1 && x.Receives.Any())
                 .Select(x => new RequisitionDetailAllShow
                 {
                     Id = x.Id,
@@ -428,6 +428,7 @@ namespace HonjiMES.Controllers
                 throw;
             }
         }
+
         /// <summary>
         /// 取出品項所在的所有倉
         /// </summary>
@@ -469,7 +470,54 @@ namespace HonjiMES.Controllers
             return WarehouseList;
         }
 
-
+        /// <summary>
+        /// 取出品項所在的所有倉ByPostBom
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetWarehouseByPostBom(PostBom PostBom)
+        {
+            try
+            {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var WarehouseList = new List<ReqWarehouse>();
+                if (PostBom.BasicType == 1)
+                {
+                    var MaterialBasicId = PostBom.BasicId;
+                    var GWarehouseList = _context.Materials.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.MaterialBasicId == MaterialBasicId).GroupBy(x => x.WarehouseId).ToList();
+                    foreach (var item in GWarehouseList)
+                    {
+                        WarehouseList.Add(new ReqWarehouse
+                        {
+                            ID = item.Key,
+                            Name = item.FirstOrDefault()?.Warehouse.Code + item.FirstOrDefault()?.Warehouse.Name,
+                            StockQty = item.Sum(y => y.Quantity)
+                        });
+                    }
+                }
+                else if (PostBom.BasicType == 2)
+                {
+                    var ProductBasicId = PostBom.BasicId;
+                    var GWarehouseList = _context.Products.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.ProductBasicId == ProductBasicId).GroupBy(x => x.WarehouseId).ToList();
+                    foreach (var item in GWarehouseList)
+                    {
+                        WarehouseList.Add(new ReqWarehouse
+                        {
+                            ID = item.Key,
+                            Name = item.FirstOrDefault()?.Warehouse.Code + item.FirstOrDefault()?.Warehouse.Name,
+                            StockQty = item.Sum(y => y.Quantity)
+                        });
+                    }
+                }
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK(WarehouseList));
+            }
+            catch (System.Exception e)
+            {
+                return Ok(MyFun.APIResponseError(e.Message));
+                throw;
+            }
+        }
 
         /// <summary>
         /// 依照倉別過濾資訊
@@ -631,6 +679,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseOK(RequisitionDetail));
             }
         }
+
         /// <summary>
         /// 同時領料
         /// </summary>
@@ -743,6 +792,37 @@ namespace HonjiMES.Controllers
                 return MyFun.APIResponseOK(RequisitionDetail);
             }
         }
+
+        private async Task<APIResponse> NewRequisitionsDetail(GetReceive Receive, string RequisitionNo)
+        {
+            var MaterialBasics = _context.MaterialBasics.Find(Receive.MaterialBasicId);
+            var ProductBasics = _context.ProductBasics.Find(Receive.ProductBasicId);
+            var Requisitions = _context.Requisitions.Where(x => x.RequisitionNo == RequisitionNo).Include(x => x.RequisitionDetails).FirstOrDefault();
+            Requisitions.RequisitionDetails.Add(new RequisitionDetail
+            {
+                Lv = 1,
+                Ismaterial = Receive.MaterialBasicId.HasValue ? true : false,
+                MaterialBasicId = MaterialBasics?.Id ?? null,
+                MaterialName = MaterialBasics?.Name ?? null,
+                MaterialNo = MaterialBasics?.MaterialNo ?? null,
+                MaterialSpecification = MaterialBasics?.Specification ?? null, 
+                ProductBasicId = ProductBasics?.Id ?? null,
+                ProductNo = ProductBasics?.ProductNo ?? null,
+                ProductNumber = ProductBasics?.ProductNumber ?? null,
+                ProductName = ProductBasics?.Name ?? null,
+                ProductSpecification = ProductBasics?.Specification ?? null,
+                Quantity = Requisitions.Quantity,
+                CreateUser = MyFun.GetUserID(HttpContext)
+            });
+            await _context.SaveChangesAsync();
+
+            var RequisitionDetailsResult = _context.RequisitionDetails.Where(x => x.RequisitionId == Requisitions.Id && x.MaterialBasicId == Receive.MaterialBasicId && x.ProductBasicId == Receive.ProductBasicId).ToList();
+            if (RequisitionDetailsResult.Count() != 1) {
+
+            }
+            return MyFun.APIResponseOK(RequisitionDetailsResult.FirstOrDefault().Id);
+        }
+
         /// <summary>
         /// 用工單號取出可領的料號 一階
         /// </summary>
@@ -840,6 +920,7 @@ namespace HonjiMES.Controllers
                 throw;
             }
         }
+
         /// <summary>
         /// 用工單號尋找領退料明細
         /// </summary>
@@ -921,22 +1002,38 @@ namespace HonjiMES.Controllers
                 var Requisition = (Requisition)head.Result.data;
                 foreach (var item in PostRequisition.ReceiveList)
                 {
-                    if (item.RQty.HasValue && item.WarehouseID.HasValue)
+                    if (item.RQty.HasValue && item.RQty > 0 && item.WarehouseID.HasValue)
                     {
-
                         var id = 0;
                         if (item.ProductBasicId.HasValue)
                         {
-                            id = Requisition.RequisitionDetails.Where(x => x.ProductBasicId == item.ProductBasicId).FirstOrDefault().Id;
+                            id = Requisition.RequisitionDetails.Where(x => x.ProductBasicId == item.ProductBasicId).FirstOrDefault()?.Id ?? 0;
                         }
                         if (item.MaterialBasicId.HasValue)
                         {
-                            id = Requisition.RequisitionDetails.Where(x => x.MaterialBasicId == item.MaterialBasicId).FirstOrDefault().Id;
+                            id = Requisition.RequisitionDetails.Where(x => x.MaterialBasicId == item.MaterialBasicId).FirstOrDefault()?.Id ?? 0;
                         }
-                        var Detail = PutRequisitionsDetailAllFun(id, item, Requisition.RequisitionNo);
-                        if (!Detail.Result.success)
+                        if (id != 0)
                         {
-                            return Ok(await Detail);
+                            var Detail = PutRequisitionsDetailAllFun(id, item, Requisition.RequisitionNo);
+                            if (!Detail.Result.success)
+                            {
+                                return Ok(await Detail);
+                            }
+                        }
+                        else
+                        {
+                            var NewDetail = NewRequisitionsDetail(item, Requisition.RequisitionNo);
+                            if (!NewDetail.Result.success)
+                            {
+                                return Ok(await NewDetail);
+                            }
+                            var NewDetailData = (int)NewDetail.Result.data;
+                            var Detail = PutRequisitionsDetailAllFun(NewDetailData, item, Requisition.RequisitionNo);
+                            if (!Detail.Result.success)
+                            {
+                                return Ok(await Detail);
+                            }
                         }
                     }
                 }

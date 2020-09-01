@@ -28,7 +28,7 @@
 <dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>
@@ -97,7 +97,8 @@
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="70"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
-                <dx-button class="" icon="trash" type="danger" (onClick)="deleteReceiveList($event,data)"></dx-button>
+                <!-- <dx-button class="" icon="trash" type="danger" (onClick)="deleteReceiveList($event,data)"></dx-button> -->
+                <dx-button class="" icon="search" type="normal" (onClick)="searchRequisitionData($event,data)"></dx-button>
                 <dx-button class="ml-1" icon="chevrondoubleright" type="default"
                     (onClick)="readRequisitionData($event,data)"></dx-button>
             </div>

@@ -21,7 +21,7 @@
     [columnAutoWidth]="false" [showBorders]="true" [height]="360" (onCellClick)="cellClick($event)"
     (onToolbarPreparing)="onToolbarPreparing($event)">
 
-    <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
+    <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="allowDeleting" useIcons="false">
         <dxo-texts saveAllChanges="領料"></dxo-texts>
     </dxo-editing>
 
@@ -31,7 +31,7 @@
     </dxi-column>
     <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
     </dxi-column>
-    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
+    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
         <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
         </dxi-validation-rule>
     </dxi-column>
@@ -44,6 +44,13 @@
         cellTemplate="StockQtyCellTemplate">
     </dxi-column>
 
+    <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="newVisible">
+        <dxi-button name="save" text="存檔"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
     <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
             [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
@@ -53,3 +60,11 @@
         <span>{{GetWarehouseStockQty(data)}}</span>
     </div>
 </dx-data-grid>
+
+<dx-popup [showTitle]="true" title="新增領料資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="24%"
+    [width]="600" [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-editbom (childOuter)="popup_result($event)" [modval]="popupMod" [randomkeyval]="randomkey">
+        </app-editbom>
+    </div>
+</dx-popup>

@@ -32,9 +32,12 @@ export class EditbomComponent implements OnInit, OnChanges {
     ComponentList: any;
     MaterialList: any;
     ProductList: any;
-    PostBom: { TempId: number, BasicType: number, BasicId: number, Quantity: number, Name: string };
+    PostBom: { Id: number, TempId: number, BasicType: number, BasicId: number, Quantity: number, Name: string,
+        NameType: string, NameNo: string, ReceiveQty: number, RQty: number, WarehouseId: number, WarehouseList: []
+        MaterialBasicId: number, ProductBasicId: number};
     QuantityEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
     BasicDataList: any;
+    NameVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.labelLocation = 'left';
@@ -53,6 +56,11 @@ export class EditbomComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        if (this.modval === 'receive') {
+            this.NameVisible = false;
+        } else {
+            this.NameVisible = true;
+        }
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
@@ -86,9 +94,9 @@ export class EditbomComponent implements OnInit, OnChanges {
         this.QuantityEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            format: '#0.000',
             value: 1,
-            min: 1
+            min: 0.001
         };
         // const remote = true;
         // this.MaterialList = new CustomStore({
@@ -147,19 +155,46 @@ export class EditbomComponent implements OnInit, OnChanges {
         this.PostBom.BasicType = basicData.DataType;
         this.PostBom.BasicId = basicData.DataId;
         this.buttondisabled = false;
-        try {
-            const sendRequest = await SendService.sendRequest(
-                this.http,
-                '/BillOfMaterials/PostBomlist/' + this.itemkeyval,
-                'POST',
-                { values: this.PostBom });
-            if (sendRequest) {
-                this.myform.instance.resetValues();
-                e.preventDefault();
-                this.childOuter.emit(true);
-            }
-        } catch (error) {
+        if (this.modval === 'receive') {
+            try {
+                const sendRequest = await SendService.sendRequest(
+                    this.http,
+                    '/Requisitions/GetWarehouseByPostBom',
+                    'POST',
+                    { values: this.PostBom });
+                if (sendRequest) {
+                    e.preventDefault();
+                    this.PostBom.Id = basicData.TempId;
+                    this.PostBom.NameType = basicData.DataType === 1 ? '元件' : basicData.DataType === 2 ? '成品' : '';
+                    this.PostBom.MaterialBasicId = basicData.DataType === 1 ? basicData.DataId : null;
+                    this.PostBom.ProductBasicId = basicData.DataType === 2 ? basicData.DataId : null;
+                    this.PostBom.NameNo = basicData.DataNo;
+                    this.PostBom.Quantity = 1;
+                    this.PostBom.ReceiveQty = 0;
+                    this.PostBom.RQty = 0;
+                    this.PostBom.WarehouseId = basicData.WarehouseId;
+                    this.PostBom.WarehouseList = sendRequest;
+                    this.childOuter.emit(this.PostBom);
+                    this.myform.instance.resetValues();
+                }
+            } catch (error) {
 
+            }
+        } else {
+            try {
+                const sendRequest = await SendService.sendRequest(
+                    this.http,
+                    '/BillOfMaterials/PostBomlist/' + this.itemkeyval,
+                    'POST',
+                    { values: this.PostBom });
+                if (sendRequest) {
+                    this.myform.instance.resetValues();
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                }
+            } catch (error) {
+
+            }
         }
 
         this.buttondisabled = false;

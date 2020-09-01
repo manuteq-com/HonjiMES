@@ -8,23 +8,33 @@ using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
 using DevExtreme.AspNet.Mvc;
-using NPOI.SS.Formula.Functions;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using HonjiMES.Helper;
+using System.Drawing;
+using DevExpress.DataAccess.Json;
+using DevExpress.XtraReports.UI;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Newtonsoft.Json;
+using NPOI.POIFS.NIO;
 
 namespace HonjiMES.Controllers
 {
     /// <summary>
     /// 產品列表
     /// </summary>
-    [JWTAuthorize]
+   // [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class WorkOrdersController : ControllerBase
     {
         private readonly HonjiContext _context;
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
 
-        public WorkOrdersController(HonjiContext context)
+        public WorkOrdersController(HonjiContext context, IWebHostEnvironment environment)
         {
+            _IWebHostEnvironment = environment;
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
@@ -47,6 +57,13 @@ namespace HonjiMES.Controllers
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeadskey(int id)
+        {
+            var data = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5 && x.Id == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
         }
 
         /// <summary>
@@ -156,12 +173,12 @@ namespace HonjiMES.Controllers
                     // }
                     // else
                     // {
-                        var CheckResult = await this.NewWorkOrderByOrderCheck(item, TempNo);
-                        foreach (var item2 in CheckResult)
-                        {
-                            WorkOrderHeadList.Add(item2);
-                        }
-                        TempNo++;
+                    var CheckResult = await this.NewWorkOrderByOrderCheck(item, TempNo);
+                    foreach (var item2 in CheckResult)
+                    {
+                        WorkOrderHeadList.Add(item2);
+                    }
+                    TempNo++;
                     // }
                 }
                 _context.ChangeTracker.LazyLoadingEnabled = false;
@@ -195,16 +212,16 @@ namespace HonjiMES.Controllers
                     // }
                     // else
                     // {
-                        var OrderToWorkCheckData = new OrderToWorkCheckData();
-                        OrderToWorkCheckData.OrderDetail = item;
-                        OrderToWorkCheckData.WorkOrderHead = OrderData.WorkOrderHead;
-                        NewResultMessage += await this.NewWorkOrderByOrder(OrderToWorkCheckData);
+                    var OrderToWorkCheckData = new OrderToWorkCheckData();
+                    OrderToWorkCheckData.OrderDetail = item;
+                    OrderToWorkCheckData.WorkOrderHead = OrderData.WorkOrderHead;
+                    NewResultMessage += await this.NewWorkOrderByOrder(OrderToWorkCheckData);
                     // }
                 }
 
                 _context.ChangeTracker.LazyLoadingEnabled = false;
                 // if (NewResultMessage.Length == 0) {
-                    return Ok(MyFun.APIResponseOK("OK"));
+                return Ok(MyFun.APIResponseOK("OK"));
                 // } else {
                 //     return Ok(MyFun.APIResponseOK("OK", NewResultMessage));
                 // }
@@ -322,43 +339,59 @@ namespace HonjiMES.Controllers
                     var warehousesW = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品內定代號 201
                     var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
                     var PurchaseHeads = await _context.PurchaseHeads.Include(x => x.PurchaseDetails).Where(x => x.Id == WorkOrderReportData.PurchaseId).FirstOrDefaultAsync();
-                    var PurchaseDetails = PurchaseHeads.PurchaseDetails.Where(x => 
+                    var PurchaseDetails = PurchaseHeads.PurchaseDetails.Where(x =>
                         x.DataType == item.WorkOrderHead.DataType &&
                         x.DataId == item.WorkOrderHead.DataId &&
                         x.DeleteFlag == 0
                     ).ToList();
-                    if (PurchaseDetails.Count() == 0) { // 如果採購單明細沒有此成品，則回填(新增)採購單明細。
+                    if (PurchaseDetails.Count() == 0)
+                    { // 如果採購單明細沒有此成品，則回填(新增)採購單明細。
                         var BasicData = new BasicData();
-                        if (item.WorkOrderHead.DataType == 1) {
+                        if (item.WorkOrderHead.DataType == 1)
+                        {
                             var Materials = await _context.Materials.Where(x => x.MaterialBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) {
+                            if (Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any())
+                            {
                                 BasicData.WarehouseId = warehousesM.Id;
-                            } else {
+                            }
+                            else
+                            {
                                 BasicData.WarehouseId = null;
                             }
                             BasicData.Specification = Materials.FirstOrDefault().Specification;
                             BasicData.Price = Materials.FirstOrDefault().Price;
-                        } else if (item.WorkOrderHead.DataType == 2) {
+                        }
+                        else if (item.WorkOrderHead.DataType == 2)
+                        {
                             var Products = await _context.Products.Where(x => x.ProductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) {
+                            if (Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any())
+                            {
                                 BasicData.WarehouseId = warehousesP.Id;
-                            } else {
+                            }
+                            else
+                            {
                                 BasicData.WarehouseId = null;
                             }
                             BasicData.Specification = Products.FirstOrDefault().Specification;
                             BasicData.Price = Products.FirstOrDefault().Price;
-                        } else if (item.WorkOrderHead.DataType == 3) {
+                        }
+                        else if (item.WorkOrderHead.DataType == 3)
+                        {
                             var Wiproducts = await _context.Wiproducts.Where(x => x.WiproductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any()) {
+                            if (Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any())
+                            {
                                 BasicData.WarehouseId = warehousesW.Id;
-                            } else {
+                            }
+                            else
+                            {
                                 BasicData.WarehouseId = null;
                             }
                             BasicData.Specification = Wiproducts.FirstOrDefault().Specification;
                             BasicData.Price = Wiproducts.FirstOrDefault().Price;
                         }
 
-                        PurchaseHeads.PurchaseDetails.Add(new PurchaseDetail{
+                        PurchaseHeads.PurchaseDetails.Add(new PurchaseDetail
+                        {
                             PurchaseType = PurchaseHeads.Type,
                             SupplierId = PurchaseHeads.SupplierId,
                             DeliveryTime = DateTime.Now,
@@ -374,7 +407,9 @@ namespace HonjiMES.Controllers
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
-                    } else { // 如果已有相同成品，則增加數量並調整金額。
+                    }
+                    else
+                    { // 如果已有相同成品，則增加數量並調整金額。
                         PurchaseDetails.FirstOrDefault().Quantity += WorkOrderReportData.ReCount;
                         PurchaseDetails.FirstOrDefault().Price += PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
                         PurchaseDetails.FirstOrDefault().UpdateUser = MyFun.GetUserID(HttpContext);
@@ -678,7 +713,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("工單異常!"));
             }
         }
-        
+
         public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail, int TempNo)
         {
             var WorkOrderHeadList = new List<WorkOrderHead>();
@@ -730,7 +765,7 @@ namespace HonjiMES.Controllers
                 {
                     status = 2;
                 }
-                
+
                 var nWorkOrderHead = new WorkOrderHead
                 {
                     WorkOrderNo = workOrderNo,
@@ -747,7 +782,7 @@ namespace HonjiMES.Controllers
 
                 //依照成品BOM內容檢查新增工序
                 var Results = this.NewWorkOrderByBOM(nWorkOrderHead);
-                
+
                 WorkOrderHeadList.Add(nWorkOrderHead);
                 foreach (var item in Results)
                 {
@@ -844,30 +879,32 @@ namespace HonjiMES.Controllers
 
                 //依照成品BOM內容檢查新增工序
                 var Results = this.NewWorkOrderByBOM(nWorkOrderHead);
-                
+
                 // if (sMessage.Length == 0)
                 // {
-                    if (OrderToWorkCheckData.WorkOrderHead.Where(x => 
-                        x.OrderDetailId == nWorkOrderHead.OrderDetailId && 
-                        x.DataType == nWorkOrderHead.DataType &&
-                        x.DataId == nWorkOrderHead.DataId &&
-                        x.Count == nWorkOrderHead.Count
-                    ).Any()) {
-                        _context.WorkOrderHeads.Add(nWorkOrderHead);
-                    }
-                    
-                    foreach (var item in Results)
+                if (OrderToWorkCheckData.WorkOrderHead.Where(x =>
+                    x.OrderDetailId == nWorkOrderHead.OrderDetailId &&
+                    x.DataType == nWorkOrderHead.DataType &&
+                    x.DataId == nWorkOrderHead.DataId &&
+                    x.Count == nWorkOrderHead.Count
+                ).Any())
+                {
+                    _context.WorkOrderHeads.Add(nWorkOrderHead);
+                }
+
+                foreach (var item in Results)
+                {
+                    if (OrderToWorkCheckData.WorkOrderHead.Where(x =>
+                        x.OrderDetailId == item.OrderDetailId &&
+                        x.DataType == item.DataType &&
+                        x.DataId == item.DataId &&
+                        x.Count == item.Count
+                    ).Any())
                     {
-                        if (OrderToWorkCheckData.WorkOrderHead.Where(x => 
-                            x.OrderDetailId == item.OrderDetailId && 
-                            x.DataType == item.DataType &&
-                            x.DataId == item.DataId &&
-                            x.Count == item.Count
-                        ).Any()) {
-                            _context.WorkOrderHeads.Add(item);
-                        }
+                        _context.WorkOrderHeads.Add(item);
                     }
-                    await _context.SaveChangesAsync();
+                }
+                await _context.SaveChangesAsync();
                 // }
                 // return Ok(MyFun.APIResponseOK("OK"));
             }
@@ -900,20 +937,23 @@ namespace HonjiMES.Controllers
                         var BasicDataID = 0;
                         var BasicDataNo = "";
                         var BasicDataName = "";
-                        if (item.MaterialBasicId != null) {
+                        if (item.MaterialBasicId != null)
+                        {
                             var BasicData = _context.MaterialBasics.Find(item.MaterialBasicId);
                             DataType = 1;
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.MaterialNo;
                             BasicDataName = BasicData.Name;
-                        } else if (item.ProductBasicId != null) {
+                        }
+                        else if (item.ProductBasicId != null)
+                        {
                             var BasicData = _context.ProductBasics.Find(item.ProductBasicId);
                             DataType = 2;
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.ProductNo;
                             BasicDataName = BasicData.Name;
                         }
-                        
+
                         var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
                         var CheckWorkOrderHeads = _context.WorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
                         if (CheckWorkOrderHeads.Count() > 0)
@@ -930,11 +970,11 @@ namespace HonjiMES.Controllers
                             DataId = BasicDataID,
                             DataNo = BasicDataNo,
                             DataName = BasicDataName,
-                            Count = WorkOrderHead.Count * item.ReceiveQty, // 注意!
+                            Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1, // 注意!
                             Status = status, // 注意!原本用於表示該工單目前狀態，這裡借來表示[該工單是否已經建立]
                             CreateUser = MyFun.GetUserID(HttpContext)
                         };
-                        
+
                         foreach (var item2 in billOfMaterial)
                         {
                             var ProcessInfo = _context.Processes.Find(item2.ProcessId);
@@ -947,7 +987,7 @@ namespace HonjiMES.Controllers
                                 ProcessLeadTime = item2.ProcessLeadTime,
                                 ProcessTime = item2.ProcessTime,
                                 ProcessCost = item2.ProcessCost,
-                                Count = WorkOrderHead.Count * item.ReceiveQty,
+                                Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1,
                                 // PurchaseId
                                 DrawNo = item2.DrawNo,
                                 Manpower = item2.Manpower,
@@ -975,13 +1015,66 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderReportLog(
-            [FromQuery] DataSourceLoadOptions FromQuery)
+        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderReportLog([FromQuery] DataSourceLoadOptions FromQuery)
         {
             var data = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead);
             // data.FirstOrDefault().WorkOrderDetail.WorkOrderHead.WorkOrderNo 單獨抓取WorkOrderNo
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
+        /// 產報工單PDF
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPackingSlipPDF()
+        {
+            var qcodesize = 70;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var ProcessReportVMList = new List<ProcessReportVM>();
+            var WorkOrder = _context.WorkOrderHeads.Find(98);
+            var txt = "";
+            foreach (var item in WorkOrder.WorkOrderDetails)
+            {
+                txt = item.WorkOrderHead.WorkOrderNo;
+                var dbQrCode = BarcodeHelper.CreateQrCode(txt + "-" + item.SerialNumber, qcodesize, qcodesize);
+                ProcessReportVMList.Add(new ProcessReportVM
+                {
+                    SerialNumber = item.SerialNumber,
+                    ProcessName = item.ProcessName,
+                    ProducingMachine = item.ProducingMachine,
+                    Status = item.Status.ToString(),
+                    Type = item.Type.ToString(),
+                    ReCount = item.ReCount,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    Img = MyFun.ImgToBase64String(dbQrCode),
+                });
+            }
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            var json = JsonConvert.SerializeObject(ProcessReportVMList);
+            var bQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
+            var webRootPath = _IWebHostEnvironment.ContentRootPath;
+            var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
+            var report = XtraReport.FromFile(ReportPath);
+            report.RequestParameters = false;
+            report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
+            report.Parameters["DataName"].Value = WorkOrder.DataName;
+            report.Parameters["DataNo"].Value = WorkOrder.DataNo;
+            var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
+            PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
+            report.CreateDocument(true);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                report.ExportToPdf(ms);
+                return File(ms.ToArray(), "application/pdf", txt + "報工單.pdf");
+            }
+
         }
     }
 }
