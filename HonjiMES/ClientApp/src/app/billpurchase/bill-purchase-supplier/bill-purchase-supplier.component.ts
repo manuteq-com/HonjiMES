@@ -138,6 +138,7 @@ export class BillPurchaseSupplierComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
+        this.childOuter.emit(true);
         this.dataGrid.instance.refresh();
         notify({
             message: '存檔完成',

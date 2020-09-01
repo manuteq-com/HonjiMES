@@ -1,51 +1,54 @@
-<div class="row">
-    <div class="col-12">
-        <div class="buttongroup">
-            <a>
-            </a>
-            <dx-button class="insertbtn" stylingMode="contained" text="產生銷貨單" type="success" [width]="140"
-                (onClick)="to_saleClick($event)"></dx-button>
+<form action="" (submit)="onFormSubmit($event)">
+    <div class="row">
+        <div class="col-12">
+
         </div>
     </div>
-</div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
-    (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-    [height]="700">
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
+        [height]="700">
 
-    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-header-filter [visible]="false"></dxo-header-filter>
-    <dxo-sorting mode="multiple"></dxo-sorting>
-    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [enabled]="false">
-    </dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
+        <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="120"></dxi-column>
-    <dxi-column dataField="MachineNo" caption="機號" [width]="150"></dxi-column>
-    <dxi-column dataField="ProductNo" caption="品號" [width]="150"></dxi-column>
-    <dxi-column dataField="ProductName" caption="品名" [width]="120"></dxi-column>
-    <dxi-column dataField="Specification" caption="規格"[width]="150"></dxi-column>
-    <dxi-column dataField="SaleCount" caption="已銷貨數量" [width]="100"></dxi-column>
-    <dxi-column dataField="Quantity" caption="數量"></dxi-column>
-    <dxi-column dataField="Unit" caption="單位"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價"></dxi-column>
-    <dxi-column dataField="Price" caption="價格"></dxi-column>
-    <dxi-column dataField="DueDate" caption="預交日"></dxi-column>
-    <dxi-column dataField="ReplyDate" caption="回覆交期" [width]="100"></dxi-column>
-    <dxi-column dataField="Remark" caption="備註"></dxi-column>
-    <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100"></dxi-column>
-</dx-data-grid>
+        <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column>
+        <dxi-column dataField="OrderNo" caption="訂單單號" [width]="120" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="MachineNo" caption="機號" [width]="150" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ProductNo" caption="品號" [width]="150" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ProductName" caption="品名" [width]="120" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Specification" caption="規格"[width]="150" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="SaleCount" caption="已銷貨數量" [width]="100" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Quantity" caption="數量" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Unit" caption="單位" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="OriginPrice" caption="原單價" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Price" caption="價格" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="100" [allowEditing]="false"></dxi-column> -->
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date"
+            [calculateFilterExpression]="calculateFilterExpression"
+            [(selectedFilterOperation)]="selectedFilterOperation"
+            [(filterValue)]="filterValue"
+            [width]="180">
+        </dxi-column>
+        <dxi-column dataField="Remark" caption="備註" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column>
+    </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="popupVisibleSale">
-    <div *dxTemplate="let data of 'content'">
-        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text="產生銷貨單" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        [disabled]="false"></dx-button>
     </div>
-</dx-popup>
+</form>

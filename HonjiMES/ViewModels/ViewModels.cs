@@ -160,6 +160,7 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
         public DateTime CreateTime { get; set; }
         public string SaleNo { get; set; }
+        public int SaleQuantity { get; set; }
     }
     /// <summary>
     /// 過濾

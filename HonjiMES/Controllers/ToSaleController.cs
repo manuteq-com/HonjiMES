@@ -25,7 +25,7 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
-        
+
         /// <summary>
         /// 銷貨單號
         /// </summary>
@@ -39,14 +39,17 @@ namespace HonjiMES.Controllers
 
             var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastSaleNo = NoData.FirstOrDefault().SaleNo;
                 var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
-            var SaleHeadData = new ToSales{
+            var SaleHeadData = new ToSales
+            {
                 CreateTime = dt,
                 SaleNo = key + SaleNo + NoCount.ToString("000"),
                 SaleDate = null
@@ -61,16 +64,19 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<CreateNumberInfo>>> GetSaleNumberByInfo(CreateNumberInfo CreateNoData)
         {
-            if (CreateNoData != null) {
+            if (CreateNoData != null)
+            {
                 var key = "S";
                 var SaleNo = CreateNoData.CreateTime.ToString("yyMMdd");
-                
+
                 var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;
-                if (NoCount != 1) {
+                if (NoCount != 1)
+                {
                     var LastSaleNo = NoData.FirstOrDefault().SaleNo;
                     var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
-                    if (NoCount <= NoLast) {
+                    if (NoCount <= NoLast)
+                    {
                         NoCount = NoLast + 1;
                     }
                 }
@@ -90,19 +96,132 @@ namespace HonjiMES.Controllers
             var ReturnNoName = "SR";
             var NoData = await _context.ReturnSales.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(ReturnNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
                 var LastLength = LastReturnNo.Length - ReturnNoName.Length;
                 var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - LastLength, LastLength));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
-            var ReturnData = new ReturnSale{
+            var ReturnData = new ReturnSale
+            {
                 ReturnNo = ReturnNoName + NoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(ReturnData));
         }
+
+        /// <summary>
+        /// 新增銷貨單
+        /// </summary>
+        /// <param name="ToSales"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<SaleHead>> OrderToSaleNew(ToSales ToSales)
+        {
+            var orderno = await ToSales.Orderlist.AsQueryable().GroupBy(x => x.Order.OrderNo).ToListAsync();
+            var sale = new List<SaleDetailNew>();
+            foreach (var item in orderno)
+            {
+                var key = "S";
+                var Num = ToSales.CreateTime.ToString("yyMMdd");
+
+                var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + Num) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1)
+                {
+                    var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                    var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                    if (NoCount <= NoLast)
+                    {
+                        NoCount = NoLast + 1;
+                    }
+                }
+                ToSales.SaleNo = key + Num + NoCount.ToString("000");
+
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var dt = DateTime.Now;
+                var OrderHeadId = 0;
+                var nlist = new List<SaleDetailNew>();
+                foreach (var PDetailitem in ToSales.Orderlist)
+                {
+                    var Detailitem = _context.OrderDetails.Find(PDetailitem.Id);//取目前的資料來使用
+                    OrderHeadId = Detailitem.OrderId;
+                    if (Detailitem.Quantity >= Detailitem.SaleCount + ToSales.SaleQuantity)//原有數量+目前數量不超過未銷貨完的可以開
+                    {
+                        var Qty = ToSales.SaleQuantity;
+                        Detailitem.SaleCount += Qty;
+
+                        nlist.Add(new SaleDetailNew
+                        {
+                            OrderId = Detailitem.OrderId,
+                            OrderDetailId = Detailitem.Id,
+                            Quantity = Qty,
+                            OriginPrice = Detailitem.OriginPrice,
+                            Price = Detailitem.Price,
+                            ProductBasicId = Detailitem.ProductBasicId,
+                            ProductNo = Detailitem.ProductBasic.ProductNo,
+                            Name = Detailitem.ProductBasic.Name,
+                            Specification = Detailitem.ProductBasic.Specification,
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            DeleteFlag = 0
+                        });
+                    }
+                    else
+                    {
+                        return Ok(MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量"));
+                    }
+                }
+                //檢查訂單明細是否都完成銷貨
+                var CheckOrderHeadStatus = true;
+                var OrderHeadData = _context.OrderHeads.Find(OrderHeadId);
+                foreach (var Detailitem in OrderHeadData.OrderDetails)
+                {
+                    if (Detailitem.SaleCount != Detailitem.Quantity)
+                    {
+                        CheckOrderHeadStatus = false;
+                    }
+                }
+                if (CheckOrderHeadStatus)
+                {
+                    OrderHeadData.Status = 1;//完成銷貨(尚未結案)
+                }
+                if (ToSales.SaleDate.HasValue)//有銷貨日期，新增銷貨單
+                {
+                    var SaleNo = dt.ToString("yyMMdd");
+                    var checkSaleNo = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(ToSales.SaleNo) && x.DeleteFlag == 0).Count();
+                    if (checkSaleNo != 0)
+                    {
+                        return Ok(MyFun.APIResponseError("[銷貨單號]已存在! 請刷新單號!"));
+                    }
+                    var nsale = new SaleHead
+                    {
+                        // SaleNo = "S" + SaleNo + NoCount.ToString("000"),
+                        SaleNo = ToSales.SaleNo,
+                        Status = 0,
+                        SaleDate = ToSales.SaleDate,
+                        PriceAll = nlist.Sum(x => x.Quantity * x.OriginPrice),
+                        Remarks = ToSales.Remarks,
+                        DeleteFlag = 0,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        SaleDetailNews = nlist
+                    };
+                    _context.SaleHeads.Add(nsale);
+                    await _context.SaveChangesAsync();
+                    _context.ChangeTracker.LazyLoadingEnabled = false;
+                }
+                else
+                {
+                    return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
+                }
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+
 
         /// <summary>
         /// 訂單轉銷貨
@@ -111,6 +230,10 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<SaleHead>> OrderToSale(ToSales ToSales)
+        {
+            return Ok(await OrderToSaleFun(ToSales));
+        }
+        public async Task<APIResponse> OrderToSaleFun(ToSales ToSales)
         {
             if (ToSales.Orderlist.Any())
             {
@@ -123,8 +246,8 @@ namespace HonjiMES.Controllers
                     //var OrderDetails = _context.OrderDetails.Where(x => ToSales.Orderlist.Contains(x.Id)).ToList();
                     foreach (var PDetailitem in ToSales.Orderlist)
                     {
-                        OrderHeadId = PDetailitem.OrderId; 
                         var Detailitem = _context.OrderDetails.Find(PDetailitem.Id);//取目前的資料來使用
+                        OrderHeadId = Detailitem.OrderId;
                         if (Detailitem.Quantity >= Detailitem.SaleCount + PDetailitem.Quantity)//原有數量+目前數量不超過未銷貨完的可以開
                         {
                             //var Qty = PDetailitem.Quantity - Detailitem.SaleCount;//剩下可開的銷貨數量
@@ -143,13 +266,13 @@ namespace HonjiMES.Controllers
                                 Name = Detailitem.ProductBasic.Name,
                                 Specification = Detailitem.ProductBasic.Specification,
                                 CreateTime = dt,
-                                 CreateUser = MyFun.GetUserID(HttpContext),
+                                CreateUser = MyFun.GetUserID(HttpContext),
                                 DeleteFlag = 0
                             });
                         }
                         else
                         {
-                            return Ok(MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量"));
+                            return MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量");
                         }
                     }
 
@@ -158,11 +281,13 @@ namespace HonjiMES.Controllers
                     var OrderHeadData = _context.OrderHeads.Find(OrderHeadId);
                     foreach (var Detailitem in OrderHeadData.OrderDetails)
                     {
-                        if (Detailitem.SaleCount != Detailitem.Quantity) {
+                        if (Detailitem.SaleCount != Detailitem.Quantity)
+                        {
                             CheckOrderHeadStatus = false;
                         }
                     }
-                    if (CheckOrderHeadStatus) {
+                    if (CheckOrderHeadStatus)
+                    {
                         OrderHeadData.Status = 1;//完成銷貨(尚未結案)
                     }
 
@@ -190,8 +315,9 @@ namespace HonjiMES.Controllers
                         // }
                         //S  20200415  001
                         var checkSaleNo = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(ToSales.SaleNo) && x.DeleteFlag == 0).Count();
-                        if (checkSaleNo != 0) {
-                            return Ok(MyFun.APIResponseError("[銷貨單號]已存在! 請刷新單號!"));
+                        if (checkSaleNo != 0)
+                        {
+                            return MyFun.APIResponseError("[銷貨單號]已存在! 請刷新單號!");
                         }
                         var nsale = new SaleHead
                         {
@@ -203,7 +329,7 @@ namespace HonjiMES.Controllers
                             Remarks = ToSales.Remarks,
                             DeleteFlag = 0,
                             CreateTime = dt,
-                             CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = MyFun.GetUserID(HttpContext),
                             SaleDetailNews = nlist
                         };
                         _context.SaleHeads.Add(nsale);
@@ -212,19 +338,19 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
+                        return MyFun.APIResponseError("銷貨資訊錯誤");
                     }
 
-                    return Ok(MyFun.APIResponseOK("OK"));
+                    return MyFun.APIResponseOK("OK");
                 }
                 catch (Exception ex)
                 {
-                    return Ok(MyFun.APIResponseError(ex.Message + ";" + ex.InnerException.Message));
+                    return MyFun.APIResponseError(ex.Message + ";" + ex.InnerException.Message);
                 }
             }
             else
             {
-                return Ok(MyFun.APIResponseError("無訂單資料"));
+                return MyFun.APIResponseError("無訂單資料");
             }
         }
         /// <summary>
@@ -249,7 +375,7 @@ namespace HonjiMES.Controllers
                 var SaleDetail = _context.SaleDetailNews.Find(OrderSale.SaleDID);
                 // var ProductId = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
                 // SaleDetail.ProductId = ProductId;
-                             
+
                 var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 SaleDetail.Product = Product;
                 // foreach (var item in ProductData)
@@ -271,14 +397,15 @@ namespace HonjiMES.Controllers
                 if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
-                    item.Product.ProductLogs.Add(new ProductLog { 
+                    item.Product.ProductLogs.Add(new ProductLog
+                    {
                         LinkOrder = item.Sale.SaleNo,
                         Original = item.Product.Quantity,
                         Quantity = -item.Quantity,
                         Price = item.Price,
                         PriceAll = item.Quantity * item.Price,
                         Message = "銷貨",
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     item.Product.Quantity -= item.Quantity;
                     item.Product.QuantityAdv -= item.Quantity;
@@ -297,12 +424,15 @@ namespace HonjiMES.Controllers
             // 檢查該銷貨單各個明細狀態，更新銷貨單(head)狀態。
             var checkStatus = true;
             var SaleHeadData = _context.SaleHeads.Find(saleId);
-            foreach (var SaleDetail in SaleHeadData.SaleDetailNews) {
-                if (SaleDetail.Status == 0) {
+            foreach (var SaleDetail in SaleHeadData.SaleDetailNews)
+            {
+                if (SaleDetail.Status == 0)
+                {
                     checkStatus = false;
                 }
             }
-            if (checkStatus == true) {
+            if (checkStatus == true)
+            {
                 SaleHeadData.Status = 1;
             }
 
@@ -366,7 +496,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("銷退數量超過銷貨數量! [已銷退數量：" + (ReturnCount - ReturnSale.Quantity) + "]"));
             }
-            
+
             var dt = DateTime.Now;
             if (SaleDetail.Status == 1)//抓已銷貨的
             {
@@ -374,7 +504,8 @@ namespace HonjiMES.Controllers
                 if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
                     var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
-                    ProductsData.ProductLogs.Add(new ProductLog { 
+                    ProductsData.ProductLogs.Add(new ProductLog
+                    {
                         LinkOrder = ReturnSale.ReturnNo,
                         Original = ProductsData.Quantity,
                         Quantity = ReturnSale.Quantity,
@@ -382,7 +513,7 @@ namespace HonjiMES.Controllers
                         PriceAll = ProductsData.Price * ReturnSale.Quantity,
                         Reason = ReturnSale.Reason,
                         Message = "銷退",
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     ProductsData.Quantity += ReturnSale.Quantity;
                     ProductsData.UpdateTime = dt;
@@ -394,7 +525,7 @@ namespace HonjiMES.Controllers
                 }
                 else
                 {
-                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
+                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
                 }
 
                 await _context.SaveChangesAsync();

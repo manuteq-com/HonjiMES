@@ -134,7 +134,7 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false"
+<dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="850"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-create-sale (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" ></app-create-sale>

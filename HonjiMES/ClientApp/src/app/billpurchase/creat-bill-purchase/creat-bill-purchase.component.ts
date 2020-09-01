@@ -139,8 +139,6 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                     WarehouseId: element.WarehouseId,
                 });
             });
-            // this.dataSourceDB = this.DetailDataList;
-            // this.dataSourceDB{Price} = this.DetailDataList.OringinPrice;
         }
         this.app.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
             (s) => {

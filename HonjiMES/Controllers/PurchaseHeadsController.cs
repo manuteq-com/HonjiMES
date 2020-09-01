@@ -112,7 +112,8 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var purchaselists = await _context.PurchaseDetails
-            .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier && x.DataType != 0)
+            .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier 
+            && x.DataType != 0 && x.Purchase.DeleteFlag == 0 && x.Purchase.Status == 0)
             .Include(x => x.Purchase).Include(x => x.Warehouse).Select(x => new PuschaseList
             {
                 Id = x.Id,
