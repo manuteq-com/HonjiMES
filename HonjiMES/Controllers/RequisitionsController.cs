@@ -365,7 +365,7 @@ namespace HonjiMES.Controllers
             try
             {
                 var RequisitionDetails = await _context.RequisitionDetails
-                .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && x.Lv == 1)
+                .Where(x => x.RequisitionId == id && x.DeleteFlag == 0 && x.Lv == 1 && x.Receives.Any())
                 .Select(x => new RequisitionDetailAllShow
                 {
                     Id = x.Id,

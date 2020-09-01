@@ -59,6 +59,13 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeadskey(int id)
+        {
+            var data = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5 && x.Id == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
         /// <summary>
         /// 查詢已派工工單
         /// </summary>
@@ -166,12 +173,12 @@ namespace HonjiMES.Controllers
                     // }
                     // else
                     // {
-                        var CheckResult = await this.NewWorkOrderByOrderCheck(item, TempNo);
-                        foreach (var item2 in CheckResult)
-                        {
-                            WorkOrderHeadList.Add(item2);
-                        }
-                        TempNo++;
+                    var CheckResult = await this.NewWorkOrderByOrderCheck(item, TempNo);
+                    foreach (var item2 in CheckResult)
+                    {
+                        WorkOrderHeadList.Add(item2);
+                    }
+                    TempNo++;
                     // }
                 }
                 _context.ChangeTracker.LazyLoadingEnabled = false;
@@ -706,7 +713,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("工單異常!"));
             }
         }
-        
+
         public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail, int TempNo)
         {
             var WorkOrderHeadList = new List<WorkOrderHead>();
