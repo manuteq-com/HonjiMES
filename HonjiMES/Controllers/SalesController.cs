@@ -58,6 +58,7 @@ namespace HonjiMES.Controllers
                 data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
+            data = data.Include(x => x.SaleDetailNews);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

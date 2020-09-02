@@ -404,7 +404,23 @@ export class SaleListComponent implements OnInit, OnChanges {
         }
     }
     onRowPrepared(e) {
-        if (e.rowType === 'data') {
+        debugger;
+        if (e.data !== undefined) {
+            let hint = false;
+            if (e.data.Status === 1) {
+                e.rowElement.style.color = '#008800';
+            } else {
+                if (e.data !== undefined) {
+                    const DeliverydateBefore = new Date(e.data.SaleDate);
+                    const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+                    if (DeliverydateBefore <= DeliverydateAfter) {
+                        hint = true;
+                    }
+                    if (hint) {
+                        e.rowElement.style.color = '#d9534f';
+                    }
+                }
+            }
         }
     }
     onEditingStart(e) {

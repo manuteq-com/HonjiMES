@@ -1,3 +1,4 @@
+import { OrderDetail } from './../../model/viewmodels';
 import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -41,6 +42,7 @@ export class OrderListComponent {
     remoteOperations: boolean;
     editorOptions: any;
     uploadHeaders: any;
+
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -288,8 +290,20 @@ export class OrderListComponent {
         }
     }
     onRowPrepared(e) {
-        e.rowElement.style.height = '15px';
-        if (e.rowType === 'data') {
+        if (e.data !== undefined) {
+            if (e.data.Status === 1) {
+                e.rowElement.style.color = '#008800';
+            } else {
+                if (e.data !== undefined) {
+                    e.data.OrderDetails.forEach(element => {
+                        const DeliverydateBefore = new Date(element.DueDate);
+                        const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+                        if (DeliverydateBefore <= DeliverydateAfter) {
+                            e.rowElement.style.color = '#d9534f';
+                        }
+                    });
+                }
+            }
         }
     }
     onEditingStart(e) {

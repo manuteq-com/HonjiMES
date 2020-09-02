@@ -27,8 +27,10 @@
     keyExpr="Id"
     (onCellClick)="cellClick($event)"
     (onRowClick)="rowClick($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
+    (onRowUpdated)="onRowUpdated($event)"
     [rowAlternationEnabled]="true">
 
     <dxo-editing mode="row"

@@ -277,11 +277,28 @@ export class OrderdetailListComponent implements OnInit {
             }
         }
     }
+    onRowPrepared(e) {
+        debugger;
+        let hint = false;
+        if (e.data !== undefined) {
+            const DeliverydateBefore = new Date(e.data.DueDate);
+            const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+            if (DeliverydateBefore <= DeliverydateAfter) {
+                hint = true;
+            }
+            if (hint) {
+                e.rowElement.style.color = '#d9534f';
+            }
+        }
+    }
     onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
         const disabledKeys = e.currentSelectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
         if (disabledKeys.length > 0) {
             e.component.deselectRows(disabledKeys);
         }
+    }
+    onRowUpdated(e) {
+        this.childOuter.emit(true);
     }
     popup_result(e) {
         this.popupVisiblePurchase = false;
