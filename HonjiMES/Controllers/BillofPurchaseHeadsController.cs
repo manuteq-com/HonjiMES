@@ -125,7 +125,7 @@ namespace HonjiMES.Controllers
             {
                 data = data.Where(x => x.BillofPurchaseDetails.Where(y => y.DataNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-
+            data = data.Include(x => x.BillofPurchaseDetails);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

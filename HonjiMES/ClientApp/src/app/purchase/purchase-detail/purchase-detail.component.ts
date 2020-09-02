@@ -32,7 +32,6 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     OriginPriceval: number;
     Priceval: number;
     WarehouseList: any;
-    hint: boolean;
     ItemTypeList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
@@ -90,14 +89,14 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     }
     onRowPrepared(e) {
         // debugger;
-        this.hint = false;
+        let hint = false;
         if (e.data !== undefined) {
             const DeliverydateBefore = new Date(e.data.DeliveryTime);
             const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
             if (DeliverydateBefore <= DeliverydateAfter) {
-                this.hint = true;
+                hint = true;
             }
-            if (this.hint) {
+            if (hint) {
                 e.rowElement.style.color = '#d9534f';
             }
         }

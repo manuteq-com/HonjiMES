@@ -115,7 +115,7 @@ namespace HonjiMES.Controllers
             {
                 data = data.Where(x => x.OrderDetails.Where(y => y.ProductBasic.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-
+            data = data.Include(x => x.OrderDetails);
             //var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             // object[] parameters = new object[] { };
             // var query = "select id,create_date,order_no from order_head";
