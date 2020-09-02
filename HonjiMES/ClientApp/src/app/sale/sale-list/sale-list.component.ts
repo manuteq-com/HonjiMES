@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent, DxFileUploaderComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -18,7 +18,7 @@ import { AppComponent } from 'src/app/app.component';
     templateUrl: './sale-list.component.html',
     styleUrls: ['./sale-list.component.css']
 })
-export class SaleListComponent implements OnInit {
+export class SaleListComponent implements OnInit, OnChanges {
 
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -49,6 +49,7 @@ export class SaleListComponent implements OnInit {
     editorOptions: any;
     detailfilter = [];
     DetailsDataSourceStorage: any;
+    randomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
@@ -98,9 +99,9 @@ export class SaleListComponent implements OnInit {
         });
 
     }
-    // tslint:disable-next-line: use-lifecycle-interface
+    ngOnInit() {
+    }
     ngOnChanges() {
-
     }
     getDetails(SaleId) {
         const DController = '/SaleDetailNews';
@@ -153,6 +154,7 @@ export class SaleListComponent implements OnInit {
         // e.event.preventDefault();
     }
     creatdata() {
+        this.randomkey = new Date().getTime();
         this.creatpopupVisible = true;
     }
     creatpopup_result(e) {
@@ -415,7 +417,5 @@ export class SaleListComponent implements OnInit {
         return '總數：' + e.value + '筆';
     }
 
-    ngOnInit() {
-    }
 
 }

@@ -69,12 +69,12 @@
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="SaleNo" caption="銷貨單號" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號" sortOrder="desc" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" width="200">
         <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
@@ -134,10 +134,10 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="850"
+<dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="850"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-create-sale (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" ></app-create-sale>
+        <app-create-sale (childOuter)="creatpopup_result($event)" [ProductBasicList]="ProductBasicList" [itemkeyval]="itemkey" [randomkeyval]="randomkey"></app-create-sale>
     </div>
 </dx-popup>
 

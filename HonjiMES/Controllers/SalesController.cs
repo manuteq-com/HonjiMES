@@ -71,67 +71,11 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<Orderlist>>> GetOrderList()
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
-            var orderlists = await _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Quantity > x.SaleCount && x.ProductBasic.DeleteFlag == 0).Include(x => x.Order).Include(x => x.ProductBasic).Select(x => new Orderlist
-            {
-                Id = x.Id,
-                OrderNo = x.Order.OrderNo,
-                MachineNo = x.MachineNo,
-                ProductBasicId = x.ProductBasic.Id,
-                ProductNo = x.ProductBasic.ProductNo,
-                ProductName = x.ProductBasic.Name,
-                Specification = x.ProductBasic.Specification,
-                SaleCount = x.SaleCount,
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-                OriginPrice = x.OriginPrice,
-                Price = x.Price,
-                DueDate = x.DueDate,
-                ReplyDate = x.ReplyDate,
-                Remark = x.Remark,
-                ReplyRemark = x.ReplyRemark
-            }).ToListAsync();
+            var orderlists = await _context.OrderDetails
+                .Where(x => x.DeleteFlag == 0 && x.Order.DeleteFlag == 0 && x.Quantity > x.SaleCount && x.ProductBasic.DeleteFlag == 0)
+                .Include(x => x.Order).ToListAsync();
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             return Ok(MyFun.APIResponseOK(orderlists));
-        }
-
-        /// <summary>
-        /// 取工單列表
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetOrderListByDate(
-            [FromQuery] DataSourceLoadOptions FromQuery,
-            [FromQuery(Name = "detailfilter")] string detailfilter)
-        {
-            _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
-            var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Quantity > x.SaleCount && x.ProductBasic.DeleteFlag == 0);
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
-
-            var OrderDetaillist = (List<OrderDetail>)FromQueryResult.data;
-            var Result = OrderDetaillist.Select(x => new Orderlist
-            {
-                Id = x.Id,
-                OrderNo = x.Order.OrderNo,
-                MachineNo = x.MachineNo,
-                ProductBasicId = x.ProductBasic.Id,
-                ProductNo = x.ProductBasic.ProductNo,
-                ProductName = x.ProductBasic.Name,
-                Specification = x.ProductBasic.Specification,
-                SaleCount = x.SaleCount,
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-                OriginPrice = x.OriginPrice,
-                Price = x.Price,
-                DueDate = x.DueDate,
-                ReplyDate = x.ReplyDate,
-                Remark = x.Remark,
-                ReplyRemark = x.ReplyRemark
-            }).ToList();
-            FromQueryResult.data = Result;
-
-            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料> x.CreateTime);
-
-            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>

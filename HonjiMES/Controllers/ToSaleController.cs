@@ -116,42 +116,27 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 新增銷貨單
         /// </summary>
-        /// <param name="ToSales"></param>
+        /// <param name="ToSalesOrderDetail"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<SaleHead>> OrderToSaleNew(ToSales ToSales)
+        public async Task<ActionResult<SaleHead>> OrderToSaleBySelected(List<ToSalesOrderDetail> ToSalesOrderDetail)
         {
-            var orderno = await ToSales.Orderlist.AsQueryable().GroupBy(x => x.Order.OrderNo).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var OrderNum = ToSalesOrderDetail.AsQueryable().GroupBy(x => x.OrderId).ToList();
             var sale = new List<SaleDetailNew>();
-            foreach (var item in orderno)
+            var NoIndex = 0;
+            foreach (var item in OrderNum)
             {
-                var key = "S";
-                var Num = ToSales.CreateTime.ToString("yyMMdd");
-
-                var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + Num) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-                var NoCount = NoData.Count() + 1;
-                if (NoCount != 1)
-                {
-                    var LastSaleNo = NoData.FirstOrDefault().SaleNo;
-                    var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
-                    if (NoCount <= NoLast)
-                    {
-                        NoCount = NoLast + 1;
-                    }
-                }
-                ToSales.SaleNo = key + Num + NoCount.ToString("000");
-
-                _context.ChangeTracker.LazyLoadingEnabled = true;
                 var dt = DateTime.Now;
                 var OrderHeadId = 0;
                 var nlist = new List<SaleDetailNew>();
-                foreach (var PDetailitem in ToSales.Orderlist)
+                foreach (var PDetailitem in item)
                 {
                     var Detailitem = _context.OrderDetails.Find(PDetailitem.Id);//取目前的資料來使用
                     OrderHeadId = Detailitem.OrderId;
-                    if (Detailitem.Quantity >= Detailitem.SaleCount + ToSales.SaleQuantity)//原有數量+目前數量不超過未銷貨完的可以開
+                    if (Detailitem.Quantity >= Detailitem.SaleCount + PDetailitem.SaleQuantity)//原有數量+目前數量不超過未銷貨完的可以開
                     {
-                        var Qty = ToSales.SaleQuantity;
+                        var Qty = PDetailitem.SaleQuantity;
                         Detailitem.SaleCount += Qty;
 
                         nlist.Add(new SaleDetailNew
@@ -172,7 +157,7 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("序號" + Detailitem.Serial + ":超過可銷貨數量"));
+                        return Ok(MyFun.APIResponseError("訂單 [ " + PDetailitem.Order.OrderNo + " ] " + Detailitem.ProductBasic.ProductNo + " 超過可銷貨數量!!"));
                     }
                 }
                 //檢查訂單明細是否都完成銷貨
@@ -189,39 +174,40 @@ namespace HonjiMES.Controllers
                 {
                     OrderHeadData.Status = 1;//完成銷貨(尚未結案)
                 }
-                if (ToSales.SaleDate.HasValue)//有銷貨日期，新增銷貨單
+
+                var key = "S";
+                var Num = DateTime.Now.ToString("yyMMdd");
+                var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + Num) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                var NoCount = NoData.Count() + 1;
+                if (NoCount != 1)
                 {
-                    var SaleNo = dt.ToString("yyMMdd");
-                    var checkSaleNo = _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(ToSales.SaleNo) && x.DeleteFlag == 0).Count();
-                    if (checkSaleNo != 0)
+                    var LastSaleNo = NoData.FirstOrDefault().SaleNo;
+                    var NoLast = Int32.Parse(LastSaleNo.Substring(LastSaleNo.Length - 3, 3));
+                    if (NoCount <= NoLast)
                     {
-                        return Ok(MyFun.APIResponseError("[銷貨單號]已存在! 請刷新單號!"));
+                        NoCount = NoLast + 1;
                     }
-                    var nsale = new SaleHead
-                    {
-                        // SaleNo = "S" + SaleNo + NoCount.ToString("000"),
-                        SaleNo = ToSales.SaleNo,
-                        Status = 0,
-                        SaleDate = ToSales.SaleDate,
-                        PriceAll = nlist.Sum(x => x.Quantity * x.OriginPrice),
-                        Remarks = ToSales.Remarks,
-                        DeleteFlag = 0,
-                        CreateTime = dt,
-                        CreateUser = MyFun.GetUserID(HttpContext),
-                        SaleDetailNews = nlist
-                    };
-                    _context.SaleHeads.Add(nsale);
-                    await _context.SaveChangesAsync();
-                    _context.ChangeTracker.LazyLoadingEnabled = false;
                 }
-                else
+                var nsale = new SaleHead
                 {
-                    return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
-                }
+                    // SaleNo = "S" + SaleNo + NoCount.ToString("000"),
+                    SaleNo = key + Num + (NoCount + NoIndex).ToString("000"),
+                    Status = 0,
+                    SaleDate = item.FirstOrDefault().SaleDate,
+                    PriceAll = nlist.Sum(x => x.Quantity * x.OriginPrice),
+                    Remarks = null,
+                    DeleteFlag = 0,
+                    CreateTime = dt,
+                    CreateUser = MyFun.GetUserID(HttpContext),
+                    SaleDetailNews = nlist
+                };
+                _context.SaleHeads.Add(nsale);
+                NoIndex++;
             }
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK("OK"));
         }
-
 
         /// <summary>
         /// 訂單轉銷貨

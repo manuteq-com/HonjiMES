@@ -158,6 +158,10 @@ namespace HonjiMES.Models
         public string Remarks { get; set; }
         public DateTime CreateTime { get; set; }
         public string SaleNo { get; set; }
+    }
+    public class ToSalesOrderDetail : OrderDetail
+    {
+        public DateTime SaleDate { get; set; }
         public int SaleQuantity { get; set; }
     }
     /// <summary>

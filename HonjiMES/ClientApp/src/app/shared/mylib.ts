@@ -103,6 +103,9 @@ export class DateTimeTool {
 export class SendService {
     constructor() { }
 
+    // public static sendNull(): any {
+    //     return [];
+    // }
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
         const gurl = location.pathname;
         const authenticationService = new AuthService(http);

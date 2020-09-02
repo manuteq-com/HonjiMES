@@ -14,12 +14,12 @@ import Swal from 'sweetalert2';
     templateUrl: './create-sale.component.html',
     styleUrls: ['./create-sale.component.css']
 })
-export class CreateSaleComponent implements OnInit {
+export class CreateSaleComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    @Input() modval: any;
     @Input() itemkeyval: any;
+    @Input() randomkeyval: any;
     @Input() ProductBasicList: any;
     autoNavigateToFocusedRow = true;
     detailfilter = [];
@@ -38,55 +38,40 @@ export class CreateSaleComponent implements OnInit {
     selectedFilterOperation: string;
     filterValue: any;
     remoteOperations: boolean;
+    loadOptions: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.remoteOperations = true;
-        this.PrintQrCode = this.PrintQrCode.bind(this);
         this.listStatus = myservice.getWorkOrderStatus();
         this.dataSourceDB = [];
         this.popupVisibleSale = false;
         this.allowEditing = false;
+        this.loadOptions = {};
+
     }
     ngOnInit() {
     }
-    // tslint:disable-next-line: use-lifecycle-interface
-    ngOnChanges() {
-        // const oldDay = new Date(new Date(new Date().setHours(0, 0, 0, 0)).toISOString());
-        // const toDay = new Date(new Date(new Date().setHours(23, 59, 59, 999)).toISOString());
-        // this.selectedFilterOperation = 'between';
-        // this.filterValue = [new Date(oldDay.setDate(oldDay.getDate() - 30)), new Date(toDay.setDate(toDay.getDate() + 1))];
-        // this.dataSourceDB = new CustomStore({
-        //     key: 'Id',
-        //     // load: () => SendService.sendRequest(this.http, '/Processes/GetWorkOrderList/0'),
-        //     load: (loadOptions) => {
-        //         loadOptions.sort = [{ selector: 'ReplyDate', desc: true }];
-        //         // if (loadOptions.searchValue) {
-        //         loadOptions.filter = [
-        //             ['ReplyDate', '>=', oldDay],
-        //             'and',
-        //             ['ReplyDate', '<=', toDay],
-        //         ];
-        //         // }
-        //         return SendService.sendRequest(
-        //             this.http,
-        //             '/Sales/GetOrderListByDate',
-        //             'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter });
-        //     },
-        // });
+    async ngOnChanges() {
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
-
-
         this.app.GetData('/Sales/GetOrderList').subscribe(
             (s) => {
                 if (s.success) {
+                    this.dataGrid.instance.clearSelection();
                     this.dataSourceDB = s.data;
+                    this.loadOptions = this.dataGrid.instance.getDataSource().loadOptions();
                 }
-            });
-
+            }
+        );
         // this.dataSourceDB = new CustomStore({
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Sales/GetOrderList'),
+        //     // update: (key, values) => SendService.sendNull()
         // });
+        // this.dataSourceDB = {
+        //     store: SendService.sendRequest(this.http, '/Sales/GetOrderList'),
+        // };
+        // let loadOptions = this.dataGrid.instance.getDataSource().loadOptions;
+
     }
     calculateFilterExpression(filterValue, selectedFilterOperation) {
         const column = this as any;
@@ -111,12 +96,12 @@ export class CreateSaleComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function () {
+                e.component.pageIndex(pageIndex + 1).done(function() {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function () {
+                e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
@@ -144,17 +129,10 @@ export class CreateSaleComponent implements OnInit {
         }, 'error', 3000);
     }
     onEditingStart(e) {
-
     }
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
-            }
-        }
     }
     onEditorPreparing(e) {
         if (e.row && e.row.isSelected === false && (e.dataField === 'SaleDate' || e.dataField === 'SaleQuantity')) {
@@ -163,12 +141,40 @@ export class CreateSaleComponent implements OnInit {
     }
     onOptionChanged(e) {
     }
-    selectionChanged(e) {
+    onSelectionChanged(e) {
+        if (e.currentDeselectedRowKeys.length !== 0) {
+            e.currentDeselectedRowKeys.forEach(element => {
+                const basicData = this.dataSourceDB.find(z => z.Id === element);
+                basicData.SaleDate = null;
+                basicData.SaleQuantity = null;
+            });
+        }
+        if (e.currentSelectedRowKeys.length !== 0) {
+            e.currentSelectedRowKeys.forEach(element => {
+                const basicData = this.dataSourceDB.find(z => z.Id === element);
+                basicData.SaleDate = new Date();
+                basicData.SaleQuantity = basicData.Quantity - basicData.SaleCount;
+            });
+        }
     }
-    PrintQrCode(e) {
+    onToolbarPreparing(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        toolbarItems.forEach(item => {
+            if (item.name === 'saveButton') {
+                // item.options.icon = '';
+                // item.options.text = '退料';
+                // item.showText = 'always';
+                item.visible = false;
+            } else if (item.name === 'revertButton') {
+                // item.options.icon = '';
+                // item.options.text = '取消';
+                // item.showText = 'always';
+                item.visible = false;
+            }
+        });
     }
     async onFormSubmit(e) {
-        debugger;
+        // this.dataGrid.instance.saveEditData();
         this.tosalekey = null;
         this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
         if (this.tosalekey.length === 0) {
@@ -181,100 +187,57 @@ export class CreateSaleComponent implements OnInit {
                 timer: 3000
             });
         } else {
-            Swal.fire({
-                showCloseButton: true,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-                title: '轉銷貨',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#71c016',
-                cancelButtonColor: '#CE312C',
-                cancelButtonText: '取消',
-                confirmButtonText: '確認'
-            }).then(async (result) => {
-                debugger;
-                if (result.value) {
-                    const tosalekeyTemp = [];
-                    if (this.tosalekey !== undefined) {
-                        this.tosalekey.forEach(element => {
-                            tosalekeyTemp.push({
-                                CreateTime: new Date(),
-                                CreateUser: element.CreateUser,
-                                CustomerNo: '330-200430041-0001',
-                                Delivered: null,
-                                Discount: null,
-                                DiscountPrice: null,
-                                Drawing: null,
-                                DueDate: element.DueDate,
-                                Id: element.Id,
-                                Ink: null,
-                                Label: null,
-                                MachineNo: element.MachineNo,
-                                Order: null,
-                                OrderId: 153,
-                                OriginPrice: element.OriginPrice,
-                                Package: null,
-                                Price: element.Price,
-                                Product: null,
-                                ProductBasic: null,
-                                ProductBasicId: element.ProductBasicId,
-                                ProductId: null,
-                                Quantity: element.Quantity,
-                                Remark: null,
-                                Reply: null,
-                                ReplyDate: element.ReplyDate,
-                                ReplyRemark: null,
-                                SaleCount: element.SaleCount,
-                                Serial: null,
-                                Unit: element.Unit,
-                            });
-                            // element.Remark = null,
-                            // element.ReplyRemark = null,
-                            // element.CreateTime = new Date(),
-                            // element.CreateUser = 1,
-                            // element.Delivered = null,
-                            // element.Discount = null,
-                            // element.DiscountPrice = null,
-                            // element.Drawing = null,
-                            // element.Ink = null,
-                            // element.Label = null,
-                            // element.Order = null,
-                            // element.ProductBasic = null;
-                            // element.Serial = null,
-                            // element.UpdateTime = new Date(),
-                            // element.UpdateUser = null;
-                        });
-                    }
-                    const tempData = {
-                        CreateTime: new Date(),
-                        Orderlist: tosalekeyTemp,
-                        Remarks: null,
-                        SaleDate: new Date(),
-                        SaleID: null,
-                        SaleNo: null,
-                        SaleQuantity: 0,
-                    };
-                    try {
-                        // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSaleNew', 'POST', { values: tempData });
-                        if (sendRequest) {
-                            // this.creatpopupVisible = false;
-                            this.dataGrid.instance.refresh();
-                            this.childOuter.emit(true);
-                            notify({
-                                message: sendRequest.message,
-                                position: {
-                                    my: 'center top',
-                                    at: 'center top'
-                                }
-                            }, 'success', 3000);
-                        }
-                    } catch (error) {
-
-                    }
+            let dataCheck = true;
+            this.tosalekey.forEach(element => {
+                if (element.SaleDate === undefined || element.SaleQuantity === undefined) {
+                    dataCheck = false;
                 }
             });
+
+            if (dataCheck) {
+                Swal.fire({
+                    showCloseButton: true,
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                    title: '確認轉銷貨?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#CE312C',
+                    cancelButtonText: '取消',
+                    confirmButtonText: '確認'
+                }).then(async (result) => {
+                    if (result.value) {
+                        try {
+                            // tslint:disable-next-line: max-line-length
+                            const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSaleBySelected', 'POST', { values: this.tosalekey });
+                            if (sendRequest) {
+                                // this.creatpopupVisible = false;
+                                this.dataGrid.instance.refresh();
+                                this.dataGrid.instance.clearSelection();
+                                this.childOuter.emit(true);
+                                notify({
+                                    message: sendRequest.message,
+                                    position: {
+                                        my: 'center top',
+                                        at: 'center top'
+                                    }
+                                }, 'success', 3000);
+                            }
+                        } catch (error) {
+
+                        }
+                    }
+                });
+            } else {
+                notify({
+                    message: '請確認勾選項目的資料是否完整!',
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+            }
         }
     }
     popup_result(e) {
