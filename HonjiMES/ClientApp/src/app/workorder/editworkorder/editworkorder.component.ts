@@ -247,6 +247,19 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         if (disabledKeys.length > 0) {
             e.component.deselectRows(disabledKeys);
         }
+        if (e.currentDeselectedRowKeys.length !== 0) {
+            e.currentDeselectedRowKeys.forEach(element => {
+                const processData = this.dataSourceDB.find(z => z.Id === element);
+                processData.ReportCount = null;
+                processData.Message = null;
+            });
+        }
+        if (e.currentSelectedRowKeys.length !== 0) {
+            e.currentSelectedRowKeys.forEach(element => {
+                const processData = this.dataSourceDB.find(z => z.Id === element && z.Status === 2);
+                processData.ReportCount = this.formData.Count - processData.ReCount;
+            });
+        }
     }
     onRowClick(e) {
         this.itemkey = e.data.WorkOrderHeadId;
@@ -266,14 +279,14 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             this.creatpopupVisible = true;
             this.ReportHeight = 810;
         } else {
-            const arr =  this.dataGrid2.instance.getSelectedRowsData();
+            const arr =  this.dataGrid2.instance.getSelectedRowKeys();
             if (e.isSelected) {
-                const index = arr.indexOf(e.data, 0);
+                const index = arr.indexOf(e.data.Id, 0);
                 if (index > -1) {
                     arr.splice(index, 1);
                 }
             } else {
-                arr.push(e.data);
+                arr.push(e.data.Id);
             }
             e.component.selectRows(arr);
         }

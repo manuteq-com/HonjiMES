@@ -45,7 +45,7 @@
     <!-- <div class="long-title">
         <h5>採購內容</h5>
     </div> -->
-    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" height="580"
+    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" height="580"
         (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
         (onRowRemoved)="onRowRemoved($event)" (onSelectionChanged)="onSelectionChanged($event)"

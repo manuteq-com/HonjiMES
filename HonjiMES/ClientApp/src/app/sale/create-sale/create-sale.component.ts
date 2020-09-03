@@ -58,7 +58,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
                 if (s.success) {
                     this.dataGrid.instance.clearSelection();
                     this.dataSourceDB = s.data;
-                    this.loadOptions = this.dataGrid.instance.getDataSource().loadOptions();
+                    // this.loadOptions = this.dataGrid.instance.getDataSource().loadOptions();
                 }
             }
         );
@@ -174,7 +174,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
         });
     }
     async onFormSubmit(e) {
-        // this.dataGrid.instance.saveEditData();
+        this.dataGrid.instance.saveEditData();
         this.tosalekey = null;
         this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
         if (this.tosalekey.length === 0) {
