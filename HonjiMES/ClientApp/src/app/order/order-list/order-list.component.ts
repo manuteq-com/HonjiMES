@@ -1,4 +1,3 @@
-import { OrderDetail } from './../../model/viewmodels';
 import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
