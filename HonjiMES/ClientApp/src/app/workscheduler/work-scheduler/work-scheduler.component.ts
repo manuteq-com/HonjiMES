@@ -4,7 +4,7 @@ import { AppComponent } from 'src/app/app.component';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
-1.import { Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-work-scheduler',
