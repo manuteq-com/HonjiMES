@@ -10,6 +10,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-adjust-log',
@@ -37,7 +38,7 @@ export class AdjustLogComponent implements OnInit {
     editorOptions: any;
     detailfilter: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -125,6 +126,7 @@ export class AdjustLogComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.titleService.setTitle('調整單紀錄');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

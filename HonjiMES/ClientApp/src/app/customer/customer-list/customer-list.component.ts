@@ -9,6 +9,7 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 @Component({
     selector: 'app-customer-list',
     templateUrl: './customer-list.component.html',
@@ -29,7 +30,7 @@ export class CustomerListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     Supplierlist: any;
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -100,6 +101,7 @@ export class CustomerListComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.titleService.setTitle('客戶資料');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

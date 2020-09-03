@@ -10,6 +10,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-resource-allocation',
@@ -37,7 +38,7 @@ export class ResourceAllocationComponent implements OnInit {
     detailfilter: any;
     selectTimeType: any;
     TimeList: any;
-  constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+  constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
     this.listTimeStatus = myservice.getTimeType();
     this.remoteOperations = true;
     this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -123,6 +124,7 @@ onValueChanged(e) {
     }
 }
 ngOnInit() {
+    this.titleService.setTitle('機台資源分配');
 }
 cancelClickHandler(e) {
     this.dataGrid.instance.cancelEditData();

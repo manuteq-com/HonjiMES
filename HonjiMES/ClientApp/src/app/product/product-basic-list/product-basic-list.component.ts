@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-product-basic-list',
@@ -33,7 +34,7 @@ export class ProductBasicListComponent implements OnInit {
     hint: boolean;
     remoteOperations: boolean;
     detailfilter: any;
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
@@ -71,6 +72,7 @@ export class ProductBasicListComponent implements OnInit {
         );
     }
     ngOnInit() {
+        this.titleService.setTitle('成品庫存');
     }
     creatdata() {
         this.itemkey = new Date().getTime();

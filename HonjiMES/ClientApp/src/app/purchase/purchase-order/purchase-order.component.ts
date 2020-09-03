@@ -11,6 +11,7 @@ import { Observable, interval } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-purchase-order',
@@ -42,7 +43,8 @@ export class PurchaseOrderComponent implements OnInit {
     hint: boolean;
     date: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent,
+                public datepipe: DatePipe, private titleService: Title) {
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -79,6 +81,7 @@ export class PurchaseOrderComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.titleService.setTitle('採購單');
     }
     newdata() {
         this.newpopupVisible = true;

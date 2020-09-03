@@ -8,6 +8,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-adjust-list',
@@ -40,7 +41,7 @@ export class AdjustListComponent implements OnInit {
     ItemTypeList: any;
     WarehouseList: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -88,6 +89,7 @@ export class AdjustListComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.titleService.setTitle('調整單管理');
     }
     creatdata() {
         this.creatpopupVisible = true;

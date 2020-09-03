@@ -8,6 +8,8 @@ import { SendService } from 'src/app/shared/mylib';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
+
 @Component({
     selector: 'app-bill-purchase',
     templateUrl: './bill-purchase.component.html',
@@ -35,7 +37,7 @@ export class BillPurchaseComponent implements OnInit {
     DetailsDataSourceStorage: any;
     newpopupVisible: boolean;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -89,6 +91,7 @@ export class BillPurchaseComponent implements OnInit {
         }, 'success', 3000);
     }
     ngOnInit() {
+        this.titleService.setTitle('進貨單');
     }
     creatdata() {
         this.creatpopupVisible = true;

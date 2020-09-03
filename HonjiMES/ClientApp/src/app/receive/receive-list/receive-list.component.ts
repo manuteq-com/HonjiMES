@@ -10,6 +10,7 @@ import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2';
 import { requisitionsDetailInfo } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-receive-list',
@@ -49,7 +50,7 @@ export class ReceiveListComponent implements OnInit {
     infopopupVisible: boolean;
     randomkey: number;
     itemkey: any;
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
         this.dataSourceDB = new CustomStore({
@@ -94,6 +95,7 @@ export class ReceiveListComponent implements OnInit {
         );
     }
     ngOnInit() {
+        this.titleService.setTitle('領料資料');
     }
     async deleteReceiveList(e, data) {
         this.requisitionId = data.data.Id;
