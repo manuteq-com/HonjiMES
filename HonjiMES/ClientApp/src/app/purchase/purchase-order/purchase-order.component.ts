@@ -172,7 +172,7 @@ export class PurchaseOrderComponent implements OnInit {
         // debugger;
         if (e.data !== undefined) {
             this.hint = false;
-            if (e.data.Status === 2) {
+            if (e.data.Status === 1) {
                 e.rowElement.style.color = '#008800';
             } else {
                 if (e.data !== undefined) {
