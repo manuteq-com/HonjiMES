@@ -6,6 +6,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { Myservice } from 'src/app/service/myservice';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-process-control',
@@ -36,6 +37,7 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadId: any;
     workOrderHeadNo: any;
     logpopupVisible: boolean;
+    postval: any;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listStatus = myservice.getWorkOrderStatus();
@@ -47,6 +49,7 @@ export class ProcessControlComponent implements OnInit {
         this.qrcodepopupVisible = false;
         this.dataSourceDB_Process = [];
         this.btnDisabled = true;
+        this.postval = {};
 
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -81,6 +84,45 @@ export class ProcessControlComponent implements OnInit {
         this.dataSourceDB_Process.splice(toIndex, 0, e.itemData);
         this.dataSourceDB_Process.forEach((element, index) => {
             element.SerialNumber = index + 1;
+        });
+    }
+    async runProcess(e, data) {
+        Swal.fire({
+            showCloseButton: true,
+            allowEnterKey: false,
+            allowOutsideClick: false,
+            title: '確認派工?',
+            html: '派工後將無法復原!',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#296293',
+            cancelButtonColor: '#CE312C',
+            confirmButtonText: '確認',
+            cancelButtonText: '取消'
+        }).then(async (result) => {
+            if (result.value) {
+                this.postval = {
+                    WorkOrderHead: {
+                        Id: data.key,
+                    }
+                };
+                try {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
+                    if (sendRequest) {
+                        this.dataGrid1.instance.refresh();
+                        notify({
+                            message: '更新完成',
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'success', 3000);
+                    }
+                } catch (error) {
+
+                }
+            }
         });
     }
     editProcess(e, data) {

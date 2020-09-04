@@ -52,8 +52,10 @@
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="70"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button class="runbtn" icon="runner" type="default" (onClick)="runProcess($event,data)"
+                [disabled]="!(data.data.Status === 0 || data.data.Status === 4)"></dx-button>
                 <dx-button class="editbtn" icon="edit" type="default" (onClick)="editProcess($event,data)"></dx-button>
             </div>
 

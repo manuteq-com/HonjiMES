@@ -60,6 +60,12 @@
 .editbtn {
     background-color: #ff831e;
 }
+.runbtn {
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #058a00;
+}
 .qrcodebtn {
     margin-top: -6px;
     margin-right: 6px;
