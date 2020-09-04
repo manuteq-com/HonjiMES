@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
             // }
             var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.SaleId == SaleId).Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.ProductBasic).Select(x => new SaleDetailNewData
             {
-                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.WarehouseId == 2).Sum(y => y.Quantity),
+                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
                 Id = x.Id,
                 SaleId = x.SaleId,
                 OrderId = x.OrderId,
