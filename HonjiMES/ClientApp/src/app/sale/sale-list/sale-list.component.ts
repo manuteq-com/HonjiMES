@@ -131,8 +131,6 @@ export class SaleListComponent implements OnInit, OnChanges {
     }
 
     onCellPrepared(e) {
-        // tslint:disable-next-line: no-debugger
-        //     debugger;
         //     if (e.rowType === 'header' && e.column.command === 'select') {
         //         alert('testheader');
         //  }
@@ -148,7 +146,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.dataGrid.instance.addRow();
     }
     cloneIconClick(e) {
-        // debugger;
         this.itemkey = e.row.key;
 
         this.mod = 'clone';
@@ -193,7 +190,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         }, 'success', 3000);
     }
     selectionChanged(e) {
-        // debugger;
         // 只開一筆Detail資料
         e.component.collapseAll(-1);
         e.component.expandRow(e.currentSelectedRowKeys[0]);
@@ -240,7 +236,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         }
     }
     async to_dsaleClick(e, item) {
-        // debugger;
         this.tosalepopupVisible = true;
         this.tosaleitemkey = new ToorderSale();
         this.tosaleitemkey.key = item.key;
@@ -264,7 +259,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         // }
     }
     async to_redsaleClick(e, item) {
-        // debugger;
         this.resalepopupVisible = true;
         this.resaleitemkey = new ReorderSale();
         this.resaleitemkey.key = item.key;
@@ -356,7 +350,6 @@ export class SaleListComponent implements OnInit, OnChanges {
 
     }
     onDataErrorOccurred(e) {
-        debugger;
         notify({
             message: e.error.message,
             position: {
@@ -366,7 +359,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         }, 'error', 3000);
     }
     onClickQuery(e) {
-        debugger;
         this.detailfilter = this.myform.instance.option('formData');
         // this.getdata();
         this.dataGrid.instance.refresh();
@@ -375,7 +367,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.onClickQuery(e);
     }
     onDetailsDataErrorOccurred(e) {
-        // debugger;
         // notify({
         //     message: e.error.message,
         //     position: {
@@ -385,7 +376,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         // }, 'error', 3000);
     }
     onFocusedRowChanging(e) {
-        // debugger;
         const rowsCount = e.component.getVisibleRows().length;
         const pageCount = e.component.pageCount();
         const pageIndex = e.component.pageIndex();
@@ -406,7 +396,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         }
     }
     onRowPrepared(e) {
-        debugger;
         if (e.data !== undefined) {
             let hint = false;
             if (e.data.Status === 1) {

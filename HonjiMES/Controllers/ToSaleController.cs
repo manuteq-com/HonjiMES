@@ -122,7 +122,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<SaleHead>> OrderToSaleBySelected(List<ToSalesOrderDetail> ToSalesOrderDetail)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var OrderNum = ToSalesOrderDetail.AsQueryable().GroupBy(x => x.OrderId).ToList();
+            // var OrderNum = ToSalesOrderDetail.AsQueryable().GroupBy(x => x.OrderId).ToList();// 2020/9/2確定取消，不用依照訂單號區分銷貨單號。
+            var OrderNum = ToSalesOrderDetail.AsQueryable().GroupBy(x => x.SaleDate).ToList();
             var sale = new List<SaleDetailNew>();
             var NoIndex = 0;
             foreach (var item in OrderNum)
