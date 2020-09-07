@@ -31,6 +31,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     colCount: number;
     labelLocation: string;
     QuantityEditorOptions: any;
+    NgEditorOptions: any;
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
@@ -61,6 +62,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     endBtnVisible: boolean;
     restartedBtnVisible: boolean;
     ReCountVisible: boolean;
+    NgCountVisible: boolean;
     RemarkVisible: boolean;
     DateBoxOptions: any;
     NoPurchaseVisible: any;
@@ -96,12 +98,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     ngOnChanges() {
         // debugger;
         this.ReCountVisible = false;
+        this.NgCountVisible = false;
         this.RemarkVisible = false;
         this.startBtnVisible = false;
         this.endBtnVisible = false;
         this.restartedBtnVisible = false;
         this.NoPurchaseVisible = false;
         this.HasPurchaseVisible = false;
+        this.PurchaseHeadList = [];
 
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
@@ -131,24 +135,32 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         displayExpr: 'Name',
                         valueExpr: 'Id',
                         searchEnabled: true,
-                        // onValueChanged: this.onSupplierSelectionChanged.bind(this)
+                        onValueChanged: this.onSupplierSelectionChanged.bind(this)
                     };
                 }
             }
         );
-        this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeads').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.PurchaseHeadList = s.data;
-                    this.editorOptions = {
-                        dataSource: { paginate: true, store: { type: 'array', data: this.PurchaseHeadList, key: 'Id' } },
-                        searchEnabled: true,
-                        displayExpr: 'PurchaseNo',
-                        valueExpr: 'Id'
-                    };
-                }
-            }
-        );
+        // this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeads').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.PurchaseHeadList = s.data;
+        this.editorOptions = {
+            dataSource: { paginate: true, store: { type: 'array', data: this.PurchaseHeadList, key: 'Id' } },
+            searchEnabled: true,
+            displayExpr: 'PurchaseNo',
+            valueExpr: 'Id'
+        };
+        //         }
+        //     }
+        // );
+        this.NgEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: '0',
+            min: '0',
+            // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
 
         if (this.itemkeyval != null) {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
@@ -177,7 +189,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval16 = '　　　　　　　　　實際開工日：　' + (element?.ActualStartTime ?? '');
                                 this.itemval17 = '　　　　　　　　　實際完工日：　' + (element?.ActualEndTime ?? '');
                                 this.itemval18 = '　　　　　　　　　　需求數量：　' + (element?.Count ?? '0');
-                                this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0');
+                                this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
                                 this.QuantityEditorOptions = {
                                     showSpinButtons: true,
@@ -190,6 +202,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
 
                                 this.formData = element;
                                 this.formData.ReCount = element.Count;
+                                this.formData.NgCount = 0;
                                 findProcess = true;
 
                                 if (element.Status === 1) {
@@ -202,6 +215,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     }
                                 } else if (element.Status === 2) {
                                     this.ReCountVisible = true;
+                                    this.NgCountVisible = true;
                                     this.RemarkVisible = true;
                                     this.endBtnVisible = true;
 
@@ -248,6 +262,21 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.creatpopupVisible = false;
         this.ShowMessage('存檔完成', 'success', 3000);
     }
+    onSupplierSelectionChanged(e) {
+        this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeadsBySupplier/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.PurchaseHeadList = s.data;
+                    this.editorOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: this.PurchaseHeadList, key: 'Id' } },
+                        searchEnabled: true,
+                        displayExpr: 'PurchaseNo',
+                        valueExpr: 'Id'
+                    };
+                }
+            }
+        );
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -270,6 +299,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.WorkOrderSerial = this.serialkeyval;
         this.postval.ReCount = this.formData.ReCount;
         this.postval.RePrice = this.formData?.RePrice ?? 0;
+        this.postval.NgCount = this.formData.NgCount;
         this.postval.Message = this.formData.Message;
         this.postval.ProducingMachine = this.formData.ProducingMachine;
         this.postval.SupplierId = this.formData.SupplierId;

@@ -52,6 +52,10 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
             this.app.GetData('/WorkOrders/GetWorkOrderLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
+                        s.data.forEach(element => {
+                            element.ReCount = element.ReCount !== 0 ? element.ReCount : null;
+                            element.NgCount = element.NgCount !== 0 ? element.NgCount : null;
+                        });
                         this.dataSourceDB = s.data;
                     }
                 }

@@ -554,6 +554,7 @@ namespace HonjiMES.Controllers
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
+                        WorkOrderDetails.FirstOrDefault().NgCount = (WorkOrderDetails.FirstOrDefault()?.NgCount ?? 0) + WorkOrderReportData.NgCount;
                         WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
@@ -569,6 +570,7 @@ namespace HonjiMES.Controllers
                             ProducingMachine = WorkOrderReportData.ProducingMachine,
                             ReCount = WorkOrderReportData.ReCount,
                             RePrice = WorkOrderReportData.RePrice,
+                            NgCount = WorkOrderReportData.NgCount,
                             Message = WorkOrderReportData.Message,
                             StatusO = 2,
                             StatusN = 3,
@@ -694,6 +696,7 @@ namespace HonjiMES.Controllers
                 var WorkOrderReportData = new WorkOrderReportData
                 {
                     ReCount = WorkOrderReportDataAll.ReportCount ?? 0,
+                    NgCount = WorkOrderReportDataAll.ReportNgCount ?? 0,
                     Message = WorkOrderReportDataAll.Message,
                     ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
                     WorkOrderID = WorkOrderDetails.WorkOrderHeadId,

@@ -650,6 +650,7 @@ namespace HonjiMES.Models
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
+        public int NgCount { get; set; }
         public decimal RePrice { get; set; }
         public string Message { get; set; }
         public string ProducingMachine { get; set; }
@@ -667,6 +668,10 @@ namespace HonjiMES.Models
         /// 回報數量
         /// </summary>
         public int? ReportCount { get; set; }
+        /// <summary>
+        /// 回報NG數量
+        /// </summary>
+        public int? ReportNgCount { get; set; }
         /// <summary>
         /// 說明
         /// </summary>

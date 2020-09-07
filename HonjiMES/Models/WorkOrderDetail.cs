@@ -112,6 +112,11 @@ namespace HonjiMES.Models
         [Column("re_price", TypeName = "decimal(10,2)")]
         public decimal? RePrice { get; set; }
         /// <summary>
+        /// NG&#25976;&#37327;
+        /// </summary>
+        [Column("ng_count", TypeName = "int(11)")]
+        public int NgCount { get; set; }
+        /// <summary>
         /// &#32317;&#24037;&#26178;
         /// </summary>
         [Column("total_time", TypeName = "timestamp")]

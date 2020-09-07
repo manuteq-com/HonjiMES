@@ -68,6 +68,11 @@ namespace HonjiMES.Models
         [Column("re_price", TypeName = "decimal(10,2)")]
         public decimal? RePrice { get; set; }
         /// <summary>
+        /// NG&#25976;&#37327;
+        /// </summary>
+        [Column("ng_count", TypeName = "int(11)")]
+        public int NgCount { get; set; }
+        /// <summary>
         /// &#22238;&#22577;&#35498;&#26126;
         /// </summary>
         [Column("message", TypeName = "varchar(50)")]
