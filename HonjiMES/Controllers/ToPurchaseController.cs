@@ -692,18 +692,8 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("採購單主檔資料有誤!"));
             }
-            var CheckBillPurchaseHeadStatus = true;
-            foreach (var item in PurchaseHead.BillofPurchaseDetails)
-            {
-                if (item.CheckCountOut != 0)
-                {
-                    CheckBillPurchaseHeadStatus = false;
-                }
-            }
-            if (!CheckBillPurchaseHeadStatus)
-            {
-                PurchaseHead.Status = 0;
-            }
+            PurchaseHead.Status = 0;
+            
 
             //檢查進貨單明細是否都完成進貨(此為驗退，訂單狀態需修改?)
             // var CheckBillofPurchaseHeadStatus = true;
