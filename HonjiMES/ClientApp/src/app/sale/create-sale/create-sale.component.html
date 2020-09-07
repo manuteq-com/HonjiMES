@@ -1,18 +1,91 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <div class="row">
-        <div class="col-12">
 
+    <div class="row">
+
+        <div class="col-6">
+            <div class="long-title">
+                <h5>銷貨內容</h5>
+            </div>
         </div>
+        <div class="col-6">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+                <dxi-item dataField="SaleDate" editorType="dxDateBox" [editorOptions]="SaleTimeDateBoxOptions">
+                    <dxi-validation-rule type="required" message="銷貨日期 必填"></dxi-validation-rule>
+                    <dxo-label text="銷貨日期"></dxo-label>
+                </dxi-item>
+
+            </dx-form>
+        </div>
+
     </div>
 
-    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
+    <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
+        [height]="290">
+
+        <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
+        <!-- <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection> -->
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
+        <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
+        <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
+
+        <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" editorType="dxDateBox" [allowEditing]="true" [visible]="false"></dxi-column>
+        <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column>
+
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [calculateFilterExpression]="calculateFilterExpression"
+            [(selectedFilterOperation)]="selectedFilterOperation"
+            [(filterValue)]="filterValue"
+            [width]="100">
+        </dxi-column>
+        <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" sortOrder="desc" [allowEditing]="false"></dxi-column> -->
+        <!-- <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ProductName" caption="品名" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column> -->
+        <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="ProductBasicId" caption="品名" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <!-- <dxi-column dataField="ProductBasicId" caption="規格" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+        </dxi-column> -->
+
+        <dxi-column dataField="Quantity" caption="數量" [width]="60" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="SaleCount" caption="已銷量" [width]="70" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Unit" caption="單位" [width]="60" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="100" [allowEditing]="false"></dxi-column> -->
+        <!-- <dxi-column dataField="Remark" caption="備註" [width]="100" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column> -->
+
+    </dx-data-grid>
+
+    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" [focusedRowEnabled]="false"
         (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
         (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
         (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="onSelectionChanged($event)"
         (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)"
         (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-        [height]="720">
+        [height]="400">
 
         <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
         <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
@@ -25,38 +98,40 @@
         <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
         <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
 
-        <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
-        <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column>
-        <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" sortOrder="desc" [allowEditing]="false"></dxi-column>
-        <!-- <dxi-column dataField="MachineNo" caption="機號" [width]="150" [allowEditing]="false"></dxi-column> -->
+        <!-- <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column> -->
+
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [calculateFilterExpression]="calculateFilterExpression"
+            [(selectedFilterOperation)]="selectedFilterOperation"
+            [(filterValue)]="filterValue"
+            [width]="100">
+        </dxi-column>
+        <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" sortOrder="desc" [allowEditing]="false"></dxi-column> -->
         <!-- <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ProductName" caption="品名" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column> -->
         <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
             <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
+        <dxi-column dataField="ProductBasicId" caption="品名" dataType="number" [allowEditing]="false">
             <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
+        <!-- <dxi-column dataField="ProductBasicId" caption="規格" dataType="number" [allowEditing]="false">
             <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-        </dxi-column>
+        </dxi-column> -->
 
-        <dxi-column dataField="SaleCount" caption="已銷貨數量" [width]="100" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Quantity" caption="數量" [width]="60" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="SaleCount" caption="已銷量" [width]="70" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Unit" caption="單位" [width]="60" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="OriginPrice" caption="原單價" [width]="60" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="Price" caption="價格" [width]="80" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false"></dxi-column>
         <!-- <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="100" [allowEditing]="false"></dxi-column> -->
-        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date"
-            [calculateFilterExpression]="calculateFilterExpression"
-            [(selectedFilterOperation)]="selectedFilterOperation"
-            [(filterValue)]="filterValue"
-            [width]="100">
-        </dxi-column>
-        <dxi-column dataField="Remark" caption="備註" [width]="100" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="Remark" caption="備註" [width]="100" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column> -->
 
     </dx-data-grid>
 

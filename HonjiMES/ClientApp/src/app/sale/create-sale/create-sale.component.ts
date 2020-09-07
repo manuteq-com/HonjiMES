@@ -17,14 +17,22 @@ import Swal from 'sweetalert2';
 export class CreateSaleComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('dataGrid1') dataGrid1: DxDataGridComponent;
+    @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     @Input() itemkeyval: any;
     @Input() randomkeyval: any;
     @Input() ProductBasicList: any;
+    labelLocation: string;
+    readOnly: boolean;
+    showColon: boolean;
+    minColWidth: number;
+    colCount: number;
+    width: number;
     autoNavigateToFocusedRow = true;
     detailfilter = [];
     idlist: any;
-    dataSourceDB: any;
+    dataSourceDB1: any;
+    dataSourceDB2: any;
     visible: boolean;
     topurchasekey: any;
     listStatus: any;
@@ -39,39 +47,42 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     filterValue: any;
     remoteOperations: boolean;
     loadOptions: any;
+    SaleTimeDateBoxOptions: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.labelLocation = 'left';
+        this.readOnly = false;
+        this.showColon = true;
+        this.minColWidth = 300;
+        this.colCount = 2;
         this.remoteOperations = true;
         this.listStatus = myservice.getWorkOrderStatus();
-        this.dataSourceDB = [];
+        this.formData = {};
+        this.dataSourceDB1 = [];
+        this.dataSourceDB2 = [];
         this.popupVisibleSale = false;
         this.allowEditing = false;
         this.loadOptions = {};
+        this.SaleTimeDateBoxOptions = {
+            onValueChanged: this.SaleTimeValueChange.bind(this)
+        };
 
     }
     ngOnInit() {
     }
     async ngOnChanges() {
+        this.formData.SaleDate = new Date();
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.app.GetData('/Sales/GetOrderList').subscribe(
             (s) => {
                 if (s.success) {
-                    this.dataGrid.instance.clearSelection();
-                    this.dataSourceDB = s.data;
-                    // this.loadOptions = this.dataGrid.instance.getDataSource().loadOptions();
+                    this.dataGrid2.instance.clearSelection();
+                    this.dataSourceDB1 = [];
+                    this.dataSourceDB2 = s.data;
+                    // this.loadOptions = this.dataGrid2.instance.getDataSource().loadOptions();
                 }
             }
         );
-        // this.dataSourceDB = new CustomStore({
-        //     key: 'Id',
-        //     load: () => SendService.sendRequest(this.http, '/Sales/GetOrderList'),
-        //     // update: (key, values) => SendService.sendNull()
-        // });
-        // this.dataSourceDB = {
-        //     store: SendService.sendRequest(this.http, '/Sales/GetOrderList'),
-        // };
-        // let loadOptions = this.dataGrid.instance.getDataSource().loadOptions;
-
     }
     calculateFilterExpression(filterValue, selectedFilterOperation) {
         const column = this as any;
@@ -135,48 +146,63 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     onCellPrepared(e) {
     }
     onEditorPreparing(e) {
-        if (e.row && e.row.isSelected === false && (e.dataField === 'SaleDate' || e.dataField === 'SaleQuantity')) {
-            e.editorOptions.readOnly = true;
-        }
+        // if (e.row && e.row.isSelected === false && (e.dataField === 'SaleDate' || e.dataField === 'SaleQuantity')) {
+        //     e.editorOptions.readOnly = true;
+        // }
     }
     onOptionChanged(e) {
     }
     onSelectionChanged(e) {
         if (e.currentDeselectedRowKeys.length !== 0) {
             e.currentDeselectedRowKeys.forEach(element => {
-                const basicData = this.dataSourceDB.find(z => z.Id === element);
+                const basicData = this.dataSourceDB2.find(z => z.Id === element);
+                const index = this.dataSourceDB1.indexOf(basicData, 0);
+                if (index > -1) {
+                    this.dataSourceDB1.splice(index, 1);
+                }
                 basicData.SaleDate = null;
                 basicData.SaleQuantity = null;
             });
         }
         if (e.currentSelectedRowKeys.length !== 0) {
             e.currentSelectedRowKeys.forEach(element => {
-                const basicData = this.dataSourceDB.find(z => z.Id === element);
-                basicData.SaleDate = new Date();
+                const basicData = this.dataSourceDB2.find(z => z.Id === element);
+                basicData.SaleDate = this.formData.SaleDate;
                 basicData.SaleQuantity = basicData.Quantity - basicData.SaleCount;
+                this.dataSourceDB1.push(basicData);
             });
         }
+        this.dataGrid1.instance.refresh();
     }
     onToolbarPreparing(e) {
-        const toolbarItems = e.toolbarOptions.items;
-        toolbarItems.forEach(item => {
-            if (item.name === 'saveButton') {
-                // item.options.icon = '';
-                // item.options.text = '退料';
-                // item.showText = 'always';
-                item.visible = false;
-            } else if (item.name === 'revertButton') {
-                // item.options.icon = '';
-                // item.options.text = '取消';
-                // item.showText = 'always';
-                item.visible = false;
-            }
-        });
+        e.toolbarOptions.visible = false;
+        // const toolbarItems = e.toolbarOptions.items;
+        // toolbarItems.forEach(item => {
+        //     if (item.name === 'saveButton') {
+        //         // item.options.icon = '';
+        //         // item.options.text = '退料';
+        //         // item.showText = 'always';
+        //         item.visible = false;
+        //     } else if (item.name === 'revertButton') {
+        //         // item.options.icon = '';
+        //         // item.options.text = '取消';
+        //         // item.showText = 'always';
+        //         item.visible = false;
+        //     }
+        // });
     }
+    SaleTimeValueChange = async function(e) {
+        this.formData = this.myform.instance.option('formData');
+        if (this.formData.SaleDate != null) {
+            this.dataSourceDB1.forEach(element => {
+                element.SaleDate = this.formData.SaleDate;
+            });
+        }
+    };
     async onFormSubmit(e) {
-        this.dataGrid.instance.saveEditData();
+        this.dataGrid1.instance.saveEditData();
         this.tosalekey = null;
-        this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
+        this.tosalekey = this.dataGrid2.instance.getSelectedRowsData();
         if (this.tosalekey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
@@ -188,7 +214,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
             });
         } else {
             let dataCheck = true;
-            this.tosalekey.forEach(element => {
+            this.dataSourceDB1.forEach(element => {
                 if (element.SaleDate === undefined || element.SaleQuantity === undefined) {
                     dataCheck = false;
                 }
@@ -210,11 +236,11 @@ export class CreateSaleComponent implements OnInit, OnChanges {
                     if (result.value) {
                         try {
                             // tslint:disable-next-line: max-line-length
-                            const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSaleBySelected', 'POST', { values: this.tosalekey });
+                            const sendRequest = await SendService.sendRequest(this.http, '/ToSale/OrderToSaleBySelected', 'POST', { values: this.dataSourceDB1 });
                             if (sendRequest) {
                                 // this.creatpopupVisible = false;
-                                this.dataGrid.instance.refresh();
-                                this.dataGrid.instance.clearSelection();
+                                this.dataGrid2.instance.refresh();
+                                this.dataGrid2.instance.clearSelection();
                                 this.childOuter.emit(true);
                                 notify({
                                     message: sendRequest.message,
@@ -244,8 +270,8 @@ export class CreateSaleComponent implements OnInit, OnChanges {
         this.popupVisiblePurchase = false;
         this.popupVisibleSale = false;
         this.childOuter.emit(true);
-        this.dataGrid.instance.refresh();
-        this.dataGrid.instance.clearSelection();
+        this.dataGrid2.instance.refresh();
+        this.dataGrid2.instance.clearSelection();
         notify({
             message: '存檔完成',
             position: {
