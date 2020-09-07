@@ -90,14 +90,16 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     onRowPrepared(e) {
         // debugger;
         let hint = false;
-        if (e.data !== undefined) {
-            const DeliverydateBefore = new Date(e.data.DeliveryTime);
-            const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
-            if (DeliverydateBefore <= DeliverydateAfter) {
-                hint = true;
-            }
-            if (hint) {
-                e.rowElement.style.color = '#d9534f';
+        if (e.data.Purchase.Status !== 1) {
+            if (e.data !== undefined) {
+                const DeliverydateBefore = new Date(e.data.DeliveryTime);
+                const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
+                if (DeliverydateBefore <= DeliverydateAfter && e.data.PurchaseCount < e.data.Quantity) {
+                    hint = true;
+                }
+                if (hint) {
+                    e.rowElement.style.color = '#d9534f';
+                }
             }
         }
     }
