@@ -13,6 +13,7 @@ import { POrderSale, ReorderSale, ToorderSale } from '../../model/viewmodels';
 import Select from 'devextreme/ui/check_box';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 @Component({
     selector: 'app-sale-list',
     templateUrl: './sale-list.component.html',
@@ -51,7 +52,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     DetailsDataSourceStorage: any;
     randomkey: number;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
@@ -100,6 +101,7 @@ export class SaleListComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
+        this.titleService.setTitle('銷貨單');
     }
     ngOnChanges() {
     }

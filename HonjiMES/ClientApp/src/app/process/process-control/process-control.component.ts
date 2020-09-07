@@ -7,6 +7,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-process-control',
@@ -39,7 +40,7 @@ export class ProcessControlComponent implements OnInit {
     logpopupVisible: boolean;
     postval: any;
 
-    constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listStatus = myservice.getWorkOrderStatus();
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.editOnkeyPress = true;
@@ -73,6 +74,7 @@ export class ProcessControlComponent implements OnInit {
         );
     }
     ngOnInit() {
+        this.titleService.setTitle('工單管理');
     }
     onReorder(e) {
         debugger;

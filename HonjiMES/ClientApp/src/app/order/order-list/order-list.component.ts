@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { AuthService } from 'src/app/service/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-order-list',
@@ -42,7 +43,7 @@ export class OrderListComponent {
     editorOptions: any;
     uploadHeaders: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
@@ -66,6 +67,10 @@ export class OrderListComponent {
             }
         );
     }
+    // tslint:disable-next-line: use-lifecycle-interface
+    ngOnInit() {
+        this.titleService.setTitle('客戶訂單');
+   }
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',

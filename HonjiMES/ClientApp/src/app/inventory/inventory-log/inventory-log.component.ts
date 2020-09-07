@@ -10,6 +10,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-inventory-log',
@@ -39,7 +40,7 @@ export class InventoryLogComponent implements OnInit {
     selectAdjustType: any;
     listAdjustType: any;
     AdjustTypeList: any;
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -149,6 +150,7 @@ export class InventoryLogComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.titleService.setTitle('庫存變動紀錄');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

@@ -17,7 +17,7 @@ export class Myservice {
         return OrderStatus;
     }
     getPurchaseOrderStatus(): Selectitem[] {
-        return OrderStatus;
+        return purchaseOrderSatatus;
     }
     getSaleOrderStatus(): Selectitem[] {
         return saleOrderStatus;
@@ -70,6 +70,10 @@ const OrderStatus: Selectitem[] = [
     { Id: 1, Name: '完成銷貨' },
     { Id: 2, Name: '完成採購' },
     { Id: 10, Name: '結案' }
+];
+const purchaseOrderSatatus: Selectitem[] = [
+    { Id: 0, Name: '未完成' },
+    { Id: 1, Name: '完成採購' }
 ];
 const saleOrderStatus: Selectitem[] = [
     { Id: 0, Name: '未完成' },

@@ -7,6 +7,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 @Component({
     selector: 'app-billofmateriallist',
     templateUrl: './billofmateriallist.component.html',
@@ -21,7 +22,7 @@ export class BillofmateriallistComponent implements OnInit {
     itemkey: number;
     bomverdata: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.bomMod = 'PBOM';
         const remote = this.remoteOperations;
         this.readBomVer = this.readBomVer.bind(this);
@@ -47,6 +48,7 @@ export class BillofmateriallistComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.titleService.setTitle('物料清單管理');
     }
     readBomVer(e, data) {
         this.app.GetData('/BillOfMaterials/GetBomVerByProductId/' + data.key).subscribe(

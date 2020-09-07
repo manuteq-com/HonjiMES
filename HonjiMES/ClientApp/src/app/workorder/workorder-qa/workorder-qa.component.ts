@@ -12,6 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 import { mBillOfMaterial, workOrderReportData } from 'src/app/model/viewmodels';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-workorder-qa',
@@ -43,7 +44,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     workOrderHeadCount: any;
     WorkOrderNoInputVal: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.onReorder = this.onReorder.bind(this);
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
@@ -73,6 +74,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
+        this.titleService.setTitle('工單入庫確認');
     }
     ngOnChanges() {
     }

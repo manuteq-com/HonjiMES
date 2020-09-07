@@ -10,6 +10,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class WorkorderLogComponent implements OnInit {
     listAdjustStatus: any;
     WorkOrderTypeList: any;
     ReportTypeList: any;
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         // debugger;
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.ReportTypeList = myservice.getReportType();
@@ -112,6 +113,7 @@ export class WorkorderLogComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.titleService.setTitle('報工記錄查詢');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

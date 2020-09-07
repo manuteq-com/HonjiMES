@@ -6,6 +6,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import Swal from 'sweetalert2';
 import notify from 'devextreme/ui/notify';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-reback-list',
@@ -40,7 +41,7 @@ export class RebackListComponent implements OnInit {
     infopopupVisible: boolean;
     randomkey: number;
     itemkey: any;
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
         this.dataSourceDB = new CustomStore({
@@ -72,6 +73,7 @@ export class RebackListComponent implements OnInit {
         );
     }
     ngOnInit() {
+        this.titleService.setTitle('退料資料');
     }
     async deleteReceiveList(e, data) {
         this.requisitionId = data.data.Id;

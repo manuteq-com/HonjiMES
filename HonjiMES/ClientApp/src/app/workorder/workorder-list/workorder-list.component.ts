@@ -8,6 +8,7 @@ import { workOrderReportData } from 'src/app/model/viewmodels';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-workorder-list',
@@ -55,7 +56,7 @@ export class WorkorderListComponent implements OnInit {
             }
         }
     }
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
         this.getWorkOrderData();
@@ -67,6 +68,7 @@ export class WorkorderListComponent implements OnInit {
         // );
     }
     ngOnInit() {
+        this.titleService.setTitle('生產看板');
     }
     getWorkOrderData() {
         this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(

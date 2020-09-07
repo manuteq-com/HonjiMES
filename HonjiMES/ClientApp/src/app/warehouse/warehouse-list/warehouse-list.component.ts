@@ -9,6 +9,7 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-warehouse-list',
@@ -31,7 +32,7 @@ export class WarehouseListComponent implements OnInit {
     exceldata: any;
     warehouselist: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -102,6 +103,7 @@ export class WarehouseListComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.titleService.setTitle('倉庫資訊管理');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

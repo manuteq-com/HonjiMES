@@ -11,6 +11,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { AppComponent } from 'src/app/app.component';
 import { mBillOfMaterial } from 'src/app/model/viewmodels';
 import { ɵangular_packages_forms_forms_y } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-mbillofmateriallist',
@@ -52,7 +53,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     OnChangeValue: number;
     allowAdding: any;
     nProcess = [];
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
         this.onInitNewRow = this.onInitNewRow.bind(this);
@@ -106,7 +107,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
-
+        this.titleService.setTitle('物料製程管理');
     }
     ngOnChanges() {
         this.dataSourceDB_Process = [];

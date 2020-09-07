@@ -35,7 +35,7 @@
 
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-            
+
             <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
             </dxo-editing>
@@ -72,13 +72,14 @@
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
             </dxo-editing>
 
+            <dxi-column dataField="CreateTime" caption="領退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
             <dxi-column dataField="RequisitionNo" caption="領退單號" dataType="string" alignment="center" [allowEditing]="false" [width]="160"></dxi-column>
             <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
             <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="ReceiveQty" caption="領取數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
             <dxi-column dataField="RbackQty" caption="退還數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
             <dxi-column dataField="WarehouseName" caption="領退倉別" dataType="string" alignment="center" [allowEditing]="false" [width]="100"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="領退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
+
 
         </dx-data-grid>
     </div>
