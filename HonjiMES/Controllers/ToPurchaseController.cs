@@ -59,15 +59,18 @@ namespace HonjiMES.Controllers
             var ReturnNoName = "BOPR";
             var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(ReturnNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
-            if (NoCount != 1) {
+            if (NoCount != 1)
+            {
                 var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
                 var LastLength = LastReturnNo.Length - ReturnNoName.Length;
                 var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - LastLength, LastLength));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
-            var ReturnData = new BillofPurchaseReturn{
+            var ReturnData = new BillofPurchaseReturn
+            {
                 ReturnNo = ReturnNoName + NoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(ReturnData));
@@ -92,7 +95,7 @@ namespace HonjiMES.Controllers
 
                 purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;
                 purchaseHead.CreateTime = dt;
-                purchaseHead. CreateUser = MyFun.GetUserID(HttpContext);
+                purchaseHead.CreateUser = MyFun.GetUserID(HttpContext);
                 var PurchaseDetail = new List<PurchaseDetail>();
                 foreach (var item in purchaseDetail)
                 {
@@ -124,7 +127,8 @@ namespace HonjiMES.Controllers
                     PurchaseDetail.Add(item);
                 }
 
-                if (purchaseHead.Id != 0) {
+                if (purchaseHead.Id != 0)
+                {
                     var PurchaseHead = _context.PurchaseHeads.Find(purchaseHead.Id);
                     foreach (var Detailitem in PurchaseDetail)
                     {
@@ -132,7 +136,9 @@ namespace HonjiMES.Controllers
                     }
                     PurchaseHead.PriceAll = PurchaseHead.PurchaseDetails.Sum(x => x.Quantity * x.OriginPrice);
                     await _context.SaveChangesAsync();
-                } else {
+                }
+                else
+                {
                     // var PurchaseNo = dt.ToString("yyMMdd");
                     // var NoData = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
                     // var NoCount = NoData.Count() + 1;
@@ -144,16 +150,18 @@ namespace HonjiMES.Controllers
                     //     }
                     // }
                     // var PurchaseNumber = key + PurchaseNo + NoCount.ToString("000");
-                    
-                    if (purchaseHead.SupplierId == 0) {
+
+                    if (purchaseHead.SupplierId == 0)
+                    {
                         return Ok(MyFun.APIResponseError("請選擇供應商!"));
                     }
                     var checkPurchaseNo = _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(purchaseHead.PurchaseNo) && x.DeleteFlag == 0).Count();
-                    if (checkPurchaseNo != 0) {
+                    if (checkPurchaseNo != 0)
+                    {
                         return Ok(MyFun.APIResponseError("[採購單號]已存在! 請重新確認!"));
                     }
 
-                    
+
                     purchaseHead.PurchaseDetails = PurchaseDetail.ToList();
                     purchaseHead.PriceAll = purchaseHead.PurchaseDetails.Sum(x => x.Quantity * x.OriginPrice);
                     _context.PurchaseHeads.Add(purchaseHead);
@@ -186,7 +194,8 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
             // BillofPurchaseDetails.BillofPurchaseCheckins.Add(BillofPurchaseCheckin);
-            BillofPurchaseDetails.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin(){
+            BillofPurchaseDetails.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin()
+            {
                 BillofPurchaseDetailId = BillofPurchaseCheckin.BillofPurchaseDetailId,
                 CheckinType = null,
                 Quantity = BillofPurchaseCheckin.Quantity,
@@ -203,13 +212,13 @@ namespace HonjiMES.Controllers
             }
             var dt = DateTime.Now;
             BillofPurchaseCheckin.CreateTime = dt;
-            BillofPurchaseCheckin. CreateUser = MyFun.GetUserID(HttpContext);
+            BillofPurchaseCheckin.CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
             BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.Price;
-            
+
             BillofPurchaseDetails.Quantity = BillofPurchaseCheckin.Quantity;
             BillofPurchaseDetails.Price = (int)BillofPurchaseCheckin.Price;
             BillofPurchaseDetails.PriceAll = BillofPurchaseCheckin.PriceAll;
@@ -230,10 +239,11 @@ namespace HonjiMES.Controllers
             PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
-            if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+            if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount)
+            {
                 return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
             }
-            
+
             //檢查該採購單是否完成
             var PurchaseHead = _context.PurchaseHeads.Find(PurchaseDetail.PurchaseId);
             if (PurchaseHead == null)
@@ -243,23 +253,26 @@ namespace HonjiMES.Controllers
             var CheckPurchaseHeadStatus = true;
             foreach (var item2 in PurchaseHead.PurchaseDetails)
             {
-                if (item2.Quantity != item2.PurchaseCount) {
+                if (item2.Quantity != item2.PurchaseCount)
+                {
                     CheckPurchaseHeadStatus = false;
                 }
             }
             if (CheckPurchaseHeadStatus)
             {
-                PurchaseHead.Status = 2;
+                PurchaseHead.Status = 1;
             }
 
             //入庫
-            if (BillofPurchaseDetails.DataType == 1) {
+            if (BillofPurchaseDetails.DataType == 1)
+            {
                 var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Material == null)
                 {
                     return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
                 }
-                Material.MaterialLogs.Add(new MaterialLog { 
+                Material.MaterialLogs.Add(new MaterialLog
+                {
                     LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Material.Quantity,
                     Quantity = BillofPurchaseCheckin.Quantity,
@@ -275,13 +288,16 @@ namespace HonjiMES.Controllers
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Material.Quantity += BillofPurchaseCheckin.Quantity;
-            } else if (BillofPurchaseDetails.DataType == 2) {
+            }
+            else if (BillofPurchaseDetails.DataType == 2)
+            {
                 var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Product == null)
                 {
                     return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
                 }
-                Product.ProductLogs.Add(new ProductLog { 
+                Product.ProductLogs.Add(new ProductLog
+                {
                     LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Product.Quantity,
                     Quantity = BillofPurchaseCheckin.Quantity,
@@ -297,13 +313,16 @@ namespace HonjiMES.Controllers
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Product.Quantity += BillofPurchaseCheckin.Quantity;
-            } else if (BillofPurchaseDetails.DataType == 3) {
+            }
+            else if (BillofPurchaseDetails.DataType == 3)
+            {
                 var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Wiproduct == null)
                 {
                     return Ok(MyFun.APIResponseError("半成品庫存資料有誤"));
                 }
-                Wiproduct.WiproductLogs.Add(new WiproductLog { 
+                Wiproduct.WiproductLogs.Add(new WiproductLog
+                {
                     LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Wiproduct.Quantity,
                     Quantity = BillofPurchaseCheckin.Quantity,
@@ -361,8 +380,10 @@ namespace HonjiMES.Controllers
             var NoUpdataCount = 0;
             foreach (var item in BillofPurchaseHeads.BillofPurchaseDetails)
             {
-                if (item.CheckStatus == 0) {
-                    item.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin(){
+                if (item.CheckStatus == 0)
+                {
+                    item.BillofPurchaseCheckins.Add(new BillofPurchaseCheckin()
+                    {
                         BillofPurchaseDetailId = item.Id,
                         CheckinType = null,
                         Quantity = item.Quantity,
@@ -373,7 +394,7 @@ namespace HonjiMES.Controllers
                         UnitPrice = item.UnitPrice,
                         Remarks = item.Remarks,
                         CreateTime = dt,
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     if (item.BillofPurchaseCheckins.Sum(x => x.Quantity) > item.Quantity)
                     {
@@ -395,7 +416,8 @@ namespace HonjiMES.Controllers
                     PurchaseDetail.PurchaseCount += item.Quantity;
                     PurchaseDetail.UpdateTime = dt;
                     PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
-                    if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount) {
+                    if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount)
+                    {
                         return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
                     }
 
@@ -408,23 +430,26 @@ namespace HonjiMES.Controllers
                     var CheckPurchaseHeadStatus = true;
                     foreach (var item2 in PurchaseHead.PurchaseDetails)
                     {
-                        if (item2.Quantity != item2.PurchaseCount) {
+                        if (item2.Quantity != item2.PurchaseCount)
+                        {
                             CheckPurchaseHeadStatus = false;
                         }
                     }
                     if (CheckPurchaseHeadStatus)
                     {
-                        PurchaseHead.Status = 2;
+                        PurchaseHead.Status = 1;
                     }
 
                     //入庫
-                    if (item.DataType == 1) {
+                    if (item.DataType == 1)
+                    {
                         var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                         if (Material == null)
                         {
                             return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
                         }
-                        Material.MaterialLogs.Add(new MaterialLog { 
+                        Material.MaterialLogs.Add(new MaterialLog
+                        {
                             LinkOrder = item.BillofPurchase.BillofPurchaseNo,
                             Original = Material.Quantity,
                             Quantity = item.Quantity,
@@ -440,13 +465,16 @@ namespace HonjiMES.Controllers
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Material.Quantity += item.Quantity;
-                    } else if (item.DataType == 2) {
+                    }
+                    else if (item.DataType == 2)
+                    {
                         var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                         if (Product == null)
                         {
                             return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
                         }
-                        Product.ProductLogs.Add(new ProductLog { 
+                        Product.ProductLogs.Add(new ProductLog
+                        {
                             LinkOrder = item.BillofPurchase.BillofPurchaseNo,
                             Original = Product.Quantity,
                             Quantity = item.Quantity,
@@ -462,13 +490,16 @@ namespace HonjiMES.Controllers
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Product.Quantity += item.Quantity;
-                    } else if (item.DataType == 3) {
+                    }
+                    else if (item.DataType == 3)
+                    {
                         var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                         if (Wiproduct == null)
                         {
                             return Ok(MyFun.APIResponseError("半成品庫存資料有誤"));
                         }
-                        Wiproduct.WiproductLogs.Add(new WiproductLog { 
+                        Wiproduct.WiproductLogs.Add(new WiproductLog
+                        {
                             LinkOrder = item.BillofPurchase.BillofPurchaseNo,
                             Original = Wiproduct.Quantity,
                             Quantity = item.Quantity,
@@ -485,21 +516,25 @@ namespace HonjiMES.Controllers
                         });
                         Wiproduct.Quantity += item.Quantity;
                     }
-                 
-                } else {
+
+                }
+                else
+                {
                     NoUpdataCount++;
                 }
             }
 
-            if (NoUpdataCount == BillofPurchaseHeads.BillofPurchaseDetails.Count()) {
+            if (NoUpdataCount == BillofPurchaseHeads.BillofPurchaseDetails.Count())
+            {
                 return Ok(MyFun.APIResponseOK("OK", "項目皆已驗收完畢!"));
             }
-            
+
             //檢查進貨單明細是否都完成進貨
             var CheckBillofPurchaseHeadStatus = true;
             foreach (var item in BillofPurchaseHeads.BillofPurchaseDetails)
             {
-                if (item.CheckStatus == 0) {
+                if (item.CheckStatus == 0)
+                {
                     CheckBillofPurchaseHeadStatus = false;
                 }
             }
@@ -532,7 +567,8 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("進貨單資料有誤!"));
             }
             // BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
-            BillofPurchaseDetails.BillofPurchaseReturns.Add(new BillofPurchaseReturn(){
+            BillofPurchaseDetails.BillofPurchaseReturns.Add(new BillofPurchaseReturn()
+            {
                 ReturnNo = BillofPurchaseReturn.ReturnNo,
                 BillofPurchaseDetailId = BillofPurchaseReturn.BillofPurchaseDetailId,
                 WarehouseId = BillofPurchaseReturn.WarehouseId,
@@ -550,10 +586,10 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("驗退數量超過採購數量! [已驗退數量：" + (ReturnCount - BillofPurchaseReturn.Quantity) + "]"));
             }
-            
+
             var dt = DateTime.Now;
             BillofPurchaseReturn.CreateTime = dt;
-            BillofPurchaseReturn. CreateUser = MyFun.GetUserID(HttpContext);
+            BillofPurchaseReturn.CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
             BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckCountOut = (int)BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
@@ -561,26 +597,28 @@ namespace HonjiMES.Controllers
 
             //更新採購單明細資訊
             var PurchaseDetail = _context.PurchaseDetails.Find(BillofPurchaseDetails.PurchaseDetailId);
-            if (PurchaseDetail == null) 
+            if (PurchaseDetail == null)
             {
                 return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
             }
-            if (PurchaseDetail.PurchaseCount < (int)BillofPurchaseReturn.Quantity) 
+            if (PurchaseDetail.PurchaseCount < (int)BillofPurchaseReturn.Quantity)
             {
                 return Ok(MyFun.APIResponseError("驗退數量超過驗收數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際已驗收數量： " + PurchaseDetail.PurchaseCount + " ]"));
             }
             PurchaseDetail.PurchaseCount = PurchaseDetail.PurchaseCount - (int)BillofPurchaseReturn.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
-            
+
             //出庫(驗退)
-            if (BillofPurchaseDetails.DataType == 1) {
-                var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+            if (BillofPurchaseDetails.DataType == 1)
+            {
+                var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseReturn.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Material == null)
                 {
                     return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
                 }
-                Material.MaterialLogs.Add(new MaterialLog { 
+                Material.MaterialLogs.Add(new MaterialLog
+                {
                     LinkOrder = BillofPurchaseReturn.ReturnNo,
                     Original = Material.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
@@ -596,13 +634,16 @@ namespace HonjiMES.Controllers
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Material.Quantity -= (int)BillofPurchaseReturn.Quantity;
-            } else if (BillofPurchaseDetails.DataType == 2) {
-                var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+            }
+            else if (BillofPurchaseDetails.DataType == 2)
+            {
+                var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseReturn.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Product == null)
                 {
                     return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
                 }
-                Product.ProductLogs.Add(new ProductLog { 
+                Product.ProductLogs.Add(new ProductLog
+                {
                     LinkOrder = BillofPurchaseReturn.ReturnNo,
                     Original = Product.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
@@ -618,13 +659,16 @@ namespace HonjiMES.Controllers
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Product.Quantity -= (int)BillofPurchaseReturn.Quantity;
-            } else if (BillofPurchaseDetails.DataType == 3) {
-                var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+            }
+            else if (BillofPurchaseDetails.DataType == 3)
+            {
+                var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseReturn.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
                 if (Wiproduct == null)
                 {
                     return Ok(MyFun.APIResponseError("半成品庫存資料有誤"));
                 }
-                Wiproduct.WiproductLogs.Add(new WiproductLog { 
+                Wiproduct.WiproductLogs.Add(new WiproductLog
+                {
                     LinkOrder = BillofPurchaseReturn.ReturnNo,
                     Original = Wiproduct.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
@@ -640,6 +684,25 @@ namespace HonjiMES.Controllers
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Wiproduct.Quantity -= (int)BillofPurchaseReturn.Quantity;
+            }
+
+            //當進貨單驗退時，採購單狀態更新為[未結案]  2020/09/07   by minja
+            var PurchaseHead = _context.PurchaseHeads.Find(BillofPurchaseDetails.PurchaseId);
+            if (PurchaseHead == null)
+            {
+                return Ok(MyFun.APIResponseError("採購單主檔資料有誤!"));
+            }
+            var CheckBillPurchaseHeadStatus = true;
+            foreach (var item in PurchaseHead.BillofPurchaseDetails)
+            {
+                if (item.CheckCountOut != 0)
+                {
+                    CheckBillPurchaseHeadStatus = false;
+                }
+            }
+            if (!CheckBillPurchaseHeadStatus)
+            {
+                PurchaseHead.Status = 0;
             }
 
             //檢查進貨單明細是否都完成進貨(此為驗退，訂單狀態需修改?)
