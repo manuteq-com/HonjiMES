@@ -67,6 +67,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<MaterialBasic>> GetMaterialBasic(int id)
         {
             var materialBasic = await _context.MaterialBasics.FindAsync(id);
+            var materials = _context.Materials.Where(x => x.MaterialBasicId == id && x.DeleteFlag == 0).ToList();
+            materialBasic.Materials = materials;
 
             if (materialBasic == null)
             {

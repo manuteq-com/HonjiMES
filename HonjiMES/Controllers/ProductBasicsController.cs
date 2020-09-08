@@ -68,6 +68,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<ProductBasic>> GetProductBasic(int id)
         {
             var productBasic = await _context.ProductBasics.FindAsync(id);
+            var products = _context.Products.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).ToList();
+            productBasic.Products = products;
 
             if (productBasic == null)
             {

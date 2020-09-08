@@ -1,0 +1,31 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <label>{{itemval1}}</label><br>
+    <label>{{itemval2}}</label><br>
+    <label>{{itemval3}}</label><br>
+    <label>{{itemval4}}</label><br>
+    <label>{{itemval5}}</label><br>
+
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="WarehouseId" dataType="number" editorType="dxSelectBox" [editorOptions]="warehousesOptions">
+            <dxi-validation-rule type="required" message="入庫倉別 必填"></dxi-validation-rule>
+            <dxo-label text="入庫倉別"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
+            <dxi-validation-rule type="required" message="增減數量 必填"></dxi-validation-rule>
+            <dxo-label text="增減數量"></dxo-label>
+        </dxi-item>
+
+    </dx-form>
+
+    <div class="current-value">
+        <span>{{CustomerVal}}</span>
+    </div>
+    <br>
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="buttondisabled"></dx-button>
+    </div>
+
+</form>

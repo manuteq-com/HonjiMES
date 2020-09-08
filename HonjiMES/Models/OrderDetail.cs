@@ -94,7 +94,7 @@ namespace HonjiMES.Models
         [Column("remark", TypeName = "varchar(50)")]
         public string Remark { get; set; }
         /// <summary>
-        /// &#22238;&#24489;&#20132;&#26399;
+        /// &#22238;&#35206;&#20132;&#26399;
         /// </summary>
         [Column("reply_date", TypeName = "timestamp")]
         public DateTime ReplyDate { get; set; }

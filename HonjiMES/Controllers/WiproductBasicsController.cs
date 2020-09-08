@@ -57,6 +57,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WiproductBasic>> GetWiproductBasic(int id)
         {
             var wiproductBasic = await _context.WiproductBasics.FindAsync(id);
+            var wiproducts = _context.Wiproducts.Where(x => x.WiproductBasicId == id && x.DeleteFlag == 0).ToList();
+            wiproductBasic.Wiproducts = wiproducts;
 
             if (wiproductBasic == null)
             {

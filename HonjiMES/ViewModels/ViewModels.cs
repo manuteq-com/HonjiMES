@@ -657,6 +657,7 @@ namespace HonjiMES.Models
         public int? PurchaseId { get; set; }
         public string PurchaseNo { get; set; }
         public int? SupplierId { get; set; }
+        public int WarehouseId { get; set; }
     }
     public class WorkOrderReportDataAll
     {

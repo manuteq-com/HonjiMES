@@ -281,48 +281,158 @@ namespace HonjiMES.Controllers
             OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
 
             //入庫
-            if (OWorkOrderHead.DataType == 1) {
-                var Material = await _context.Materials.Where(x => x.MaterialBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Material.Quantity = Material.Quantity + WorkOrderReportData.ReCount;
-                // Material.UpdateTime = dt;
-                // Material.UpdateUser = MyFun.GetUserID(HttpContext);
-                Material.MaterialLogs.Add(new MaterialLog
+            var checkInfo = false;
+            if (OWorkOrderHead.DataType == 1)
+            { // 原料
+                var MaterialBasic = await _context.MaterialBasics.Include(x => x.Materials).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in MaterialBasic.Materials)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Material.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-            } else if (OWorkOrderHead.DataType == 2) {
-                var Product = await _context.Products.Where(x => x.ProductBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Product.Quantity = Product.Quantity + WorkOrderReportData.ReCount;
-                // Product.UpdateTime = dt;
-                // Product.UpdateUser = MyFun.GetUserID(HttpContext);
-                Product.ProductLogs.Add(new ProductLog
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.MaterialLogs.Add(new MaterialLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Product.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-            } else if (OWorkOrderHead.DataType == 3) {
-                var Wiproduct = await _context.Wiproducts.Where(x => x.WiproductBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Wiproduct.Quantity = Wiproduct.Quantity + WorkOrderReportData.ReCount;
-                // Wiproduct.UpdateTime = dt;
-                // Wiproduct.UpdateUser = MyFun.GetUserID(HttpContext);
-                Wiproduct.WiproductLogs.Add(new WiproductLog
+                    MaterialBasic.Materials.Add(new Material
+                    {
+                        MaterialNo = MaterialBasic.MaterialNo,
+                        Name = MaterialBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = MaterialBasic.Specification,
+                        Property = MaterialBasic.Property,
+                        Price = MaterialBasic.Price,
+                        BaseQuantity = 2,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        MaterialLogs = {new MaterialLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }} 
+                    });
+                }
+            }
+            else if (OWorkOrderHead.DataType == 2)
+            { // 成品
+                var ProductBasic = await _context.ProductBasics.Include(x => x.Products).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in ProductBasic.Products)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Wiproduct.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
+                {
+                    ProductBasic.Products.Add(new Product
+                    {
+                        ProductNo = ProductBasic.ProductNo,
+                        ProductNumber = ProductBasic.ProductNumber,
+                        Name = ProductBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = ProductBasic.Specification,
+                        Property = ProductBasic.Property,
+                        Price = ProductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        ProductLogs = {new ProductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }} 
+                    });
+                }
+            }
+            else if (OWorkOrderHead.DataType == 3)
+            { // 半成品
+                var WiproductBasic = await _context.WiproductBasics.Include(x => x.Wiproducts).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in WiproductBasic.Wiproducts)
+                {
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.WiproductLogs.Add(new WiproductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
+                {
+                    WiproductBasic.Wiproducts.Add(new Wiproduct
+                    {
+                        WiproductNo = WiproductBasic.WiproductNo,
+                        WiproductNumber = WiproductBasic.WiproductNumber,
+                        Name = WiproductBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = WiproductBasic.Specification,
+                        Property = WiproductBasic.Property,
+                        Price = WiproductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        WiproductLogs = {new WiproductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }} 
+                    });
+                }
             }
 
             try

@@ -1246,7 +1246,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ReplyDate)
                     .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("回復交期");
+                    .HasComment("回覆交期");
 
                 entity.Property(e => e.ReplyRemark)
                     .HasComment("回覆備註")
