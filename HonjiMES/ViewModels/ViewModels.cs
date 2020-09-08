@@ -799,8 +799,9 @@ namespace HonjiMES.Models
         public string Name { get; set; }
     }
 
-    public class PuschaseList:PurchaseDetail
+    public class PuschaseList : PurchaseDetail
     {
+        public int TempId { get; set; }
         public string PurchaseNo { get; set; }
         public string WarehouseName { get; set; }
     }

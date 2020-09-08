@@ -122,6 +122,7 @@ namespace HonjiMES.Controllers
                 PurchaseType = x.PurchaseType,
                 SupplierId = x.SupplierId,
                 DeliveryTime = x.DeliveryTime,
+                TempId = 0,
                 DataType = x.DataType,
                 DataId = x.DataId,
                 DataNo = x.DataNo,
@@ -131,7 +132,7 @@ namespace HonjiMES.Controllers
                 OriginPrice = x.OriginPrice,
                 Price = x.Price,
                 WarehouseId = x.WarehouseId,
-                WarehouseName = x.Warehouse.Name,
+                WarehouseName = x.Warehouse.Code + x.Warehouse.Name,
                 PurchaseCount = x.PurchaseCount,
                 Remarks = x.Remarks
             }).ToListAsync();

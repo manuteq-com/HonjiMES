@@ -29,19 +29,21 @@
 
         <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="140">
         </dxi-column>
-        <dxi-column dataField="PurchaseType" caption="採購種類">
+        <dxi-column dataField="PurchaseType" caption="採購種類" alignment="center" [width]="60">
             <dxo-lookup [dataSource]="PurchaseTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="DeliveryTime" caption="預計交期" [width]="120" dataType="date"></dxi-column>
-        <dxi-column dataField="DataType" caption="料號種類"></dxi-column>
-        <dxi-column dataField="DataNo" caption="採購內容編號" [width]="140"></dxi-column>
-        <dxi-column dataField="DataName" caption="採購內容名稱" [width]="120"></dxi-column>
-        <dxi-column dataField="Specification" caption="規格" [width]="220"></dxi-column>
-        <dxi-column dataField="Quantity" caption="數量"></dxi-column>
-        <dxi-column dataField="OriginPrice" caption="原單價"></dxi-column>
-        <dxi-column dataField="Price" caption="價格"></dxi-column>
-        <dxi-column dataField="WarehouseName" caption="倉別" [width]="100"></dxi-column>
-        <dxi-column dataField="PurchaseCount" caption="進貨量"></dxi-column>
+        <dxi-column dataField="DataType" caption="種類" alignment="center" [width]="80">
+            <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="DataNo" caption="料號"></dxi-column>
+        <dxi-column dataField="DataName" caption="名稱"></dxi-column>
+        <dxi-column dataField="Specification" caption="規格"></dxi-column>
+        <dxi-column dataField="Quantity" caption="數量" [width]="60"></dxi-column>
+        <dxi-column dataField="OriginPrice" caption="原單價" [width]="60"></dxi-column>
+        <dxi-column dataField="Price" caption="價格" [width]="60"></dxi-column>
+        <dxi-column dataField="WarehouseName" caption="倉別" [width]="140"></dxi-column>
+        <dxi-column dataField="PurchaseCount" caption="進貨量" [width]="60"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" [width]="120"></dxi-column>
     </dx-data-grid>
 

@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   templateUrl: './bill-purchase-supplier.component.html',
   styleUrls: ['./bill-purchase-supplier.component.css']
 })
-export class BillPurchaseSupplierComponent implements OnInit {
+export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
@@ -40,22 +40,22 @@ export class BillPurchaseSupplierComponent implements OnInit {
     PurchaseTypeList: any;
     creatpopupVisible: boolean;
     WarehouseList: any;
+    DataTypeList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.PrintQrCode = this.PrintQrCode.bind(this);
         this.listStatus = myservice.getWorkOrderStatus();
-        this.dataSourceDB = [];
         this.popupVisibleSale = false;
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.remoteOperations = true;
         this.PurchaseTypeList = myservice.getpurchasetypes();
+        this.DataTypeList = myservice.getlistAdjustStatus();
     }
-
     ngOnInit() {
-    }
 
-    // tslint:disable-next-line: use-lifecycle-interface
+    }
     ngOnChanges() {
+        this.dataSourceDB = [];
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 s.data.forEach(e => {
@@ -83,15 +83,20 @@ export class BillPurchaseSupplierComponent implements OnInit {
             }
         );
     }
-
     onValueChanged(e) {
         // debugger;
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseList/' + e.value, 'GET', ),
-        });
+        // this.dataSourceDB = new CustomStore({
+        //     key: 'Id',
+        //     load: () => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseList/' + e.value, 'GET', ),
+        // });
+        this.app.GetData('/PurchaseHeads/GetPurchaseList/' + e.value).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.dataSourceDB = s.data;
+                }
+            }
+        );
     }
-
     onFocusedRowChanging(e) {
         const rowsCount = e.component.getVisibleRows().length;
         const pageCount = e.component.pageCount();
@@ -101,12 +106,12 @@ export class BillPurchaseSupplierComponent implements OnInit {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function () {
+                e.component.pageIndex(pageIndex + 1).done(function() {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function () {
+                e.component.pageIndex(pageIndex - 1).done(function() {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }
@@ -156,7 +161,6 @@ export class BillPurchaseSupplierComponent implements OnInit {
     onCellPrepared(e) {
         if (e.rowType === 'data') {
             if (e.data.QuantityLimit > e.data.Quantity) {
-
                 e.cellElement.style.backgroundColor = '#d9534f';
                 e.cellElement.style.color = '#fff';
             }
