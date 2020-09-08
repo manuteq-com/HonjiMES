@@ -41,7 +41,7 @@ namespace HonjiMES.Models
     /// </summary>
     public class MaterialBasicData : MaterialBasic
     {
-        public int TotalCount { get; set; }
+        public decimal TotalCount { get; set; }
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace HonjiMES.Models
     /// </summary>
     public class ProductBasicData : ProductBasic
     {
-        public int TotalCount { get; set; }
+        public decimal TotalCount { get; set; }
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace HonjiMES.Models
     /// </summary>
     public class WiproductBasicData : WiproductBasic
     {
-        public int TotalCount { get; set; }
+        public decimal TotalCount { get; set; }
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace HonjiMES.Models
     /// </summary>
     public class SaleDetailNewData : SaleDetailNew
     {
-        public int TotalCount { get; set; }
+        public decimal TotalCount { get; set; }
         public string CustomerNo { get; set; }
         public string OrderNo { get; set; }
         public int Serial { get; set; }
@@ -96,9 +96,9 @@ namespace HonjiMES.Models
         public string DataNo { get; set; }
         public string DataName { get; set; }
         public int? WarehouseId { get; set; }
-        public int Original { get; set; }
-        public int AftQuantity { get; set; }
-        public int Quantity { get; set; }
+        public decimal Original { get; set; }
+        public decimal AftQuantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal PriceAll { get; set; }
         public string Unit { get; set; }
@@ -122,7 +122,7 @@ namespace HonjiMES.Models
         public string Specification { get; set; }
         public string Property { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public int? WarehouseId { get; set; }
     }
 
@@ -390,11 +390,11 @@ namespace HonjiMES.Models
         /// <summary>
         /// 已領數量
         /// </summary>
-        public int ReceiveQty { get; set; }
+        public decimal ReceiveQty { get; set; }
         /// <summary>
         /// 庫存數量
         /// </summary>
-        public int StockQty { get; set; }
+        public decimal StockQty { get; set; }
     }
     public class RequisitionDetailLog
     {
@@ -409,11 +409,11 @@ namespace HonjiMES.Models
         /// <summary>
         /// 已領數量
         /// </summary>
-        public int ReceiveQty { get; set; }
+        public decimal ReceiveQty { get; set; }
         /// <summary>
         /// 已退數量
         /// </summary>
-        public int RbackQty { get; set; }
+        public decimal RbackQty { get; set; }
         /// <summary>
         /// 品項NO
         /// </summary>
@@ -440,11 +440,11 @@ namespace HonjiMES.Models
         /// <summary>
         /// 已領數量
         /// </summary>
-        public int ReceiveQty { get; set; }
+        public decimal ReceiveQty { get; set; }
         /// <summary>
         /// 已退數量
         /// </summary>
-        public int RbackQty { get; set; }
+        public decimal RbackQty { get; set; }
         /// <summary>
         /// 品項NO
         /// </summary>
@@ -467,11 +467,11 @@ namespace HonjiMES.Models
         /// <summary>
         /// 已領數量
         /// </summary>
-        public int ReceiveQty { get; set; }
+        public decimal ReceiveQty { get; set; }
         /// <summary>
         /// 已退數量
         /// </summary>
-        public int RbackQty { get; set; }
+        public decimal RbackQty { get; set; }
         /// <summary>
         /// 品項NO
         /// </summary>
@@ -505,7 +505,7 @@ namespace HonjiMES.Models
     {
         public int? ProductBasicId { get; set; }
         public int? MaterialBasicId { get; set; }
-        public int? RQty { get; set; }
+        public decimal? RQty { get; set; }
         public int? WarehouseID { get; set; }
     }
 
@@ -650,6 +650,7 @@ namespace HonjiMES.Models
         public int WorkOrderID { get; set; }
         public int WorkOrderSerial { get; set; }
         public int ReCount { get; set; }
+        public int NgCount { get; set; }
         public decimal RePrice { get; set; }
         public string Message { get; set; }
         public string ProducingMachine { get; set; }
@@ -667,6 +668,10 @@ namespace HonjiMES.Models
         /// 回報數量
         /// </summary>
         public int? ReportCount { get; set; }
+        /// <summary>
+        /// 回報NG數量
+        /// </summary>
+        public int? ReportNgCount { get; set; }
         /// <summary>
         /// 說明
         /// </summary>
@@ -794,8 +799,9 @@ namespace HonjiMES.Models
         public string Name { get; set; }
     }
 
-    public class PuschaseList:PurchaseDetail
+    public class PuschaseList : PurchaseDetail
     {
+        public int TempId { get; set; }
         public string PurchaseNo { get; set; }
         public string WarehouseName { get; set; }
     }

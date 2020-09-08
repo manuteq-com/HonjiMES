@@ -80,10 +80,10 @@
             [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1800"
     [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
+        <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey">
         </app-editworkorder>
     </div>
 </dx-popup>

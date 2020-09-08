@@ -122,6 +122,7 @@ namespace HonjiMES.Controllers
                 PurchaseType = x.PurchaseType,
                 SupplierId = x.SupplierId,
                 DeliveryTime = x.DeliveryTime,
+                TempId = 0,
                 DataType = x.DataType,
                 DataId = x.DataId,
                 DataNo = x.DataNo,
@@ -131,13 +132,14 @@ namespace HonjiMES.Controllers
                 OriginPrice = x.OriginPrice,
                 Price = x.Price,
                 WarehouseId = x.WarehouseId,
-                WarehouseName = x.Warehouse.Name,
+                WarehouseName = x.Warehouse.Code + x.Warehouse.Name,
                 PurchaseCount = x.PurchaseCount,
                 Remarks = x.Remarks
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(purchaselists));
         }
 
+        /// <summary>
         /// 未結案採購單列表
         /// </summary>
         /// <returns></returns>
@@ -146,6 +148,20 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetNotEndPurchaseHeads()
         {
             var data = _context.PurchaseHeads.AsQueryable().Where(x => x.Status == 0 && x.DeleteFlag == 0);
+            var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
+            return Ok(MyFun.APIResponseOK(PurchaseHeads));
+        }
+
+        /// <summary>
+        /// 用供應商取未結案採購單列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/PurchaseHeads/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseHead>> GetNotEndPurchaseHeadsBySupplier(int id)
+        {
+            var data = _context.PurchaseHeads.AsQueryable().Where(x => x.Status == 0 && x.DeleteFlag == 0 && x.SupplierId == id);
             var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(PurchaseHeads));
         }

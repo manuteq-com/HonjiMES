@@ -27,22 +27,16 @@
 
     <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
     <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80">
-    </dxi-column>
-    <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80">
-    </dxi-column>
+    <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+    <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
     <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">
-        </dxi-validation-rule>
+        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="WarehouseId" caption="領料倉別" editCellTemplate="WarehouseEditCellTemplate">
         <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation">
-        </dxi-validation-rule>
+        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80"
-        cellTemplate="StockQtyCellTemplate">
-    </dxi-column>
+    <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate"></dxi-column>
 
     <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="newVisible">
         <dxi-button name="save" text="存檔"></dxi-button>

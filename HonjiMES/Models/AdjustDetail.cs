@@ -30,13 +30,13 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#21407;&#22987;&#25976;&#37327;
         /// </summary>
-        [Column("original", TypeName = "int(11)")]
-        public int Original { get; set; }
+        [Column("original", TypeName = "decimal(10,1)")]
+        public decimal Original { get; set; }
         /// <summary>
         /// &#22686;&#28187;&#25976;&#37327;
         /// </summary>
-        [Column("quantity", TypeName = "int(11)")]
-        public int Quantity { get; set; }
+        [Column("quantity", TypeName = "decimal(10,1)")]
+        public decimal Quantity { get; set; }
         /// <summary>
         /// &#21934;&#20729;
         /// </summary>

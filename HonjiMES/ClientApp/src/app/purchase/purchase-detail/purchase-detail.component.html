@@ -36,7 +36,7 @@
     <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>

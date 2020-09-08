@@ -102,7 +102,7 @@
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
             <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" [min]="minValue"
-                [showSpinButtons]="true"></dx-number-box>
+            [mode]="'number'" [format]="'#0.0'" [value]="0" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceEditCellTemplate'">
             <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)"

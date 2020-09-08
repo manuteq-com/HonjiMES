@@ -73,7 +73,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
         this.RQtyEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            format: '#0.0',
             value: 0,
             min: 0
         };

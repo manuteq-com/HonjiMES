@@ -48,6 +48,7 @@ export class OrderListComponent {
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
             Authorization: 'Bearer ' + currentUser.Token,
+            routerLink: location.pathname,
             apitype: 'POST'
         };
         this.remoteOperations = true;

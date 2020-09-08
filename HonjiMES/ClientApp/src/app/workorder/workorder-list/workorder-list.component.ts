@@ -101,10 +101,10 @@ export class WorkorderListComponent implements OnInit {
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)
                 if (e[colData.key].value3 === 3) {
-                    this.ReportHeight = 710;
+                    this.ReportHeight = 730;
                     // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 } else {
-                    this.ReportHeight = 710;
+                    this.ReportHeight = 730;
                     // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 }
             } else if (e[colData.key].value4 === 2) { // 委外(無採購單)

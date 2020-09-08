@@ -364,7 +364,7 @@ namespace HonjiMES.Controllers
             else
             {
                 var tempId = 0;
-                var tempOriginalQuantity = 0;
+                decimal tempOriginalQuantity = 0;
                 var AdjustDetails = new List<AdjustDetail>();
 
                 //// 建立主檔

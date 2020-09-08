@@ -142,25 +142,21 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
-            </dxi-column>
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <!-- <dxi-column dataField="Remarks" caption="備註">
             </dxi-column> -->
 
-            <dxi-column dataField="ProducingMachine" caption="加工機台" dataType="number" [width]="80">
-            </dxi-column>
+            <dxi-column dataField="ProducingMachine" caption="加工機台" alignment="center" [width]="80"></dxi-column>
             <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="60">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80">
-            </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170">
-            </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170">
-            </dxi-column>
+            <dxi-column dataField="Count" caption="完工/NG" alignment="center" [width]="80"></dxi-column>
+            <!-- <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80"></dxi-column> -->
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">

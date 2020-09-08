@@ -20,8 +20,8 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#38936;&#21462;&#25976;&#37327;
         /// </summary>
-        [Column("quantity", TypeName = "int(11)")]
-        public int Quantity { get; set; }
+        [Column("quantity", TypeName = "decimal(10,1)")]
+        public decimal Quantity { get; set; }
         /// <summary>
         /// &#20351;&#29992;&#20489;&#21029;
         /// </summary>

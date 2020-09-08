@@ -98,6 +98,9 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.WorkOrderDetail.forEach(element => {
+                        element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
+                    });
                     this.dataSourceDB_Process = s.data.WorkOrderDetail;
                     this.btnDisabled = false;
                     this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
@@ -166,7 +169,9 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             title: '請確認入庫數量!',
             input: 'number',
             inputAttributes: {
-                autocapitalize: 'off'
+                autocapitalize: 'off',
+                min: '0',
+                step: '1'
             },
             showCancelButton: true,
             confirmButtonColor: '#296293',
@@ -189,6 +194,13 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             //     })
             // },
             // allowOutsideClick: () => !Swal.isLoading()
+            inputValidator: (value) => {
+                if (!Number.isInteger(Number(value))) {
+                    return '數量需為整數!';
+                } else if (Number(value) === 0) {
+                    return '數量不能為0!';
+                }
+            }
         }).then(async (result) => {
             if (result.value) {
                 const Data = new workOrderReportData();

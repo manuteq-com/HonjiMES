@@ -89,6 +89,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         };
         this.PurchaseList = [];
         this.PurchaseTempList = [];
+        this.BasicDataList = [];
         this.BasicDataListTemp = [];
 
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
@@ -117,7 +118,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-
+        this.dataSourceDB = [];
         if (this.DetailDataList !== undefined) {
             this.DetailDataList.forEach(element => {
                 element.PriceAll = element.Price;
@@ -130,7 +131,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                     Price: element.Price,
                     PriceAll: element.PriceAll,
                     PurchaseId: element.PurchaseId,
-                    Quantity: element.Quantity,
+                    Quantity: element.Quantity - element.PurchaseCount,
                     SupplierId: element.SupplierId,
                     TempId: element.TempId,
                     UnitCount: null,
@@ -139,6 +140,13 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                     WarehouseId: element.WarehouseId,
                 });
             });
+            if (this.BasicDataList.length !== 0 && this.dataSourceDB.length !== 0) {
+                this.dataSourceDB.forEach(element => {
+                    // tslint:disable-next-line: prefer-const
+                    let BasicData = this.BasicDataList.find(x => x.DataType === element.DataType && x.DataId === element.DataId);
+                    element.TempId = BasicData.TempId;
+                });
+            }
         }
         this.app.GetData('/BillofPurchaseHeads/GetBillofPurchaseNumber').subscribe(
             (s) => {
@@ -329,6 +337,8 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     }
     onEditingStart(e) {
         debugger;
+        this.Supplierval = e.data.SupplierId;
+        this.Purchaseval = e.data.PurchaseId;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;

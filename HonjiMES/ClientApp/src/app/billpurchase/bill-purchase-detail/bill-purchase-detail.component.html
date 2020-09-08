@@ -48,7 +48,7 @@
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
 
-    <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
+    <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="50">
         <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
@@ -62,7 +62,7 @@
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column> -->
 
-    <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="50" editCellTemplate="QuantityEditCellTemplate">
+    <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceEditCellTemplate">
@@ -90,10 +90,10 @@
     <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CheckCountIn" caption="已驗收數量" [allowEditing]="false" [width]="100">
+    <dxi-column dataField="CheckCountIn" caption="已驗收" [allowEditing]="false" [width]="60">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="CheckCountOut" caption="已驗退數量" [allowEditing]="false" [width]="100">
+    <dxi-column dataField="CheckCountOut" caption="已驗退" [allowEditing]="false" [width]="60">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Remarks" caption="備註" [allowEditing]="true">
@@ -123,7 +123,7 @@
     </div>
     <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
         <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
-            [showSpinButtons]="true"></dx-number-box>
+            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'PriceEditCellTemplate'">
         <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)"
