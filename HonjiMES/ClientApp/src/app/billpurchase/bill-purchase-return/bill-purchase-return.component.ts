@@ -77,7 +77,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
         );
 
         if (this.itemkeyval.DataType === 1) {
-            this.app.GetData('/Warehouses/GetWarehouseByMaterial/' + this.itemkeyval.DataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
                         this.WarehousesDataFormat(s.data);
@@ -85,7 +85,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.itemkeyval.DataType === 2) {
-            this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.DataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
                         this.WarehousesDataFormat(s.data);
@@ -93,7 +93,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.itemkeyval.DataType === 3) {
-            this.app.GetData('/Warehouses/GetWarehouseByWiproduct/' + this.itemkeyval.DataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + this.itemkeyval.DataId).subscribe(
                 (s) => {
                     if (s.success) {
                         this.WarehousesDataFormat(s.data);
@@ -113,6 +113,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             displayExpr: 'Name',
             valueExpr: 'Id',
         };
+        debugger;
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;

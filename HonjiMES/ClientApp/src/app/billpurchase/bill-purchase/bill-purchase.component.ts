@@ -167,7 +167,6 @@ export class BillPurchaseComponent implements OnInit {
         this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
-        debugger;
         if (e.data !== undefined) {
             let hint = false;
             if (e.data.Status === 1) {
