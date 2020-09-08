@@ -139,6 +139,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("sale_count", TypeName = "int(11)")]
         public int SaleCount { get; set; }
+        /// <summary>
+        /// &#23436;&#25104;&#37559;&#36008;&#25976;&#37327;
+        /// </summary>
+        [Column("saled_count", TypeName = "int(11)")]
+        public int SaledCount { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         /// <summary>

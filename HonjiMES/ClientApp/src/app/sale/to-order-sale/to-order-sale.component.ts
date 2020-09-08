@@ -50,6 +50,7 @@ export class ToOrderSaleComponent implements OnInit, OnChanges {
                         items: WarehouseList,
                         displayExpr: 'Name',
                         valueExpr: 'Id',
+                        value: WarehouseList.find(x => x.Code === '301')?.Id ?? null
                     };
                 }
             }
@@ -92,7 +93,6 @@ export class ToOrderSaleComponent implements OnInit, OnChanges {
                     at: 'center top'
                 }
             }, 'success', 3000);
-            this.dataGrid.instance.refresh();
         }
         this.buttondisabled = false;
 

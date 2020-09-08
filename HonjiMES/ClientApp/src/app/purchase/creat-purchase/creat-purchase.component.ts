@@ -66,7 +66,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     Serial: number;
     Purchaselist: any;
     selectBoxOptions: any;
-    onCellPreparedLevel: number;
+    // onCellPreparedLevel: number;
     listAdjustStatus: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -296,7 +296,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onInitNewRow(e) {
         this.saveCheck = false;
-        this.onCellPreparedLevel = 1;
+        // this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
@@ -304,7 +304,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onEditingStart(e) {
         this.saveCheck = false;
-        this.onCellPreparedLevel = 1;
+        // this.onCellPreparedLevel = 1;
         const basicData = this.BasicDataList.find(z => z.TempId === e.data.TempId);
         this.DataType = basicData.DataType;
         const dataId = basicData.DataId;
@@ -346,17 +346,18 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {
-            if (this.onCellPreparedLevel === 1) {
-                this.onCellPreparedLevel = 2;
-            } else if (this.onCellPreparedLevel === 2) {
-                this.onCellPreparedLevel = 3;
-                this.saveCheck = true;
-            } else if (this.onCellPreparedLevel === 3) {
-                this.myButton.instance.focus();
-            }
+            this.saveCheck = true;
+            // if (this.onCellPreparedLevel === 1) {
+            //     this.onCellPreparedLevel = 2;
+            // } else if (this.onCellPreparedLevel === 2) {
+            //     this.onCellPreparedLevel = 3;
+            //     this.saveCheck = true;
+            // } else if (this.onCellPreparedLevel === 3) {
+            //     this.myButton.instance.focus();
+            // }
         }
     }
-    onFormSubmit = async function (e) {
+    onFormSubmit = async function(e) {
         // debugger;
         this.buttondisabled = true;
         if (this.validate_before() === false) {

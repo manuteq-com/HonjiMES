@@ -1255,6 +1255,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.SaleCount).HasComment("已銷貨數");
 
+                entity.Property(e => e.SaledCount).HasComment("完成銷貨數量");
+
                 entity.Property(e => e.Serial).HasComment("序號");
 
                 entity.Property(e => e.Unit)
@@ -1453,7 +1455,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.Quantity).HasComment("實際庫存數");
+                entity.Property(e => e.Quantity).HasComment("庫存量");
 
                 entity.Property(e => e.QuantityAdv).HasComment("預先扣庫數量");
 
@@ -2758,7 +2760,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.Quantity).HasComment("實際庫存數");
+                entity.Property(e => e.Quantity).HasComment("庫存量");
 
                 entity.Property(e => e.QuantityAdv).HasComment("預先扣庫數量");
 

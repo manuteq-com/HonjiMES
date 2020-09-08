@@ -405,6 +405,10 @@ namespace HonjiMES.Controllers
                     {
                         oversale.Add(item.Product.ProductNo);
                     }
+
+                    //更新訂單完成銷貨量
+                    var OrderDetail = _context.OrderDetails.Find(item.OrderDetailId);
+                    OrderDetail.SaledCount = OrderDetail.SaledCount + item.Quantity;
                 }
             }
 

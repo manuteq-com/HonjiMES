@@ -21,10 +21,10 @@ namespace HonjiMES.Models
         public string DataNo { get; set; }
         [Column("data_name", TypeName = "varchar(50)")]
         public string DataName { get; set; }
-        [Column("original", TypeName = "int(11)")]
-        public int Original { get; set; }
-        [Column("quantity", TypeName = "int(11)")]
-        public int Quantity { get; set; }
+        [Column("original", TypeName = "decimal(10,1)")]
+        public decimal Original { get; set; }
+        [Column("quantity", TypeName = "decimal(10,1)")]
+        public decimal Quantity { get; set; }
         [Column("price", TypeName = "decimal(10,2)")]
         public decimal? Price { get; set; }
         [Column("price_all", TypeName = "decimal(10,2)")]

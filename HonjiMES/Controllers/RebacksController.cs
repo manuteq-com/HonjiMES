@@ -401,6 +401,7 @@ namespace HonjiMES.Controllers
                                     Material.UpdateUser = MyFun.GetUserID(HttpContext);
                                     Material.MaterialLogs.Add(new MaterialLog
                                     {
+                                        LinkOrder = requisition.RequisitionNo,
                                         Original = Original,
                                         Quantity = Receive.RQty ?? 0,
                                         Message = "退料入庫",
@@ -421,6 +422,7 @@ namespace HonjiMES.Controllers
                                     Product.UpdateUser = MyFun.GetUserID(HttpContext);
                                     Product.ProductLogs.Add(new ProductLog
                                     {
+                                        LinkOrder = requisition.RequisitionNo,
                                         Original = Original,
                                         Quantity = Receive.RQty ?? 0,
                                         Message = "退料入庫",

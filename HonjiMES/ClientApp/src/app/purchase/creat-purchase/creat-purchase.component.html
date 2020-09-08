@@ -119,7 +119,7 @@
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
             <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
-                [max]="Quantityvalmax" [showSpinButtons]="true"></dx-number-box>
+                [max]="Quantityvalmax" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
             <dx-number-box [value]='OriginPriceval' (onValueChanged)="OriginValueChanged($event,data)"

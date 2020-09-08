@@ -278,7 +278,6 @@ export class OrderdetailListComponent implements OnInit {
         }
     }
     onRowPrepared(e) {
-        debugger;
         let hint = false;
         if (e.data !== undefined) {
             const DeliverydateBefore = new Date(e.data.DueDate);
