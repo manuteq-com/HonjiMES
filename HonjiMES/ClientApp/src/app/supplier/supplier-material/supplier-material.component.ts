@@ -18,7 +18,7 @@ import CustomStore from 'devextreme/data/custom_store';
     templateUrl: './supplier-material.component.html',
     styleUrls: ['./supplier-material.component.css']
 })
-export class SupplierMaterialComponent implements OnInit {
+export class SupplierMaterialComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;

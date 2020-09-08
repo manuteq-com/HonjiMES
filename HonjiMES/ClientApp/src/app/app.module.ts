@@ -111,6 +111,7 @@ import { RebackListComponent } from './reback/reback-list/reback-list.component'
 import { CreatrebackComponent } from './reback/creatreback/creatreback.component';
 import { ReceiveInfoComponent } from './receive/receive-info/receive-info.component';
 import { OrdertoworkComponent } from './order/ordertowork/ordertowork.component';
+import { ResourceWorkorderComponent } from './workorder/resource-workorder/resource-workorder.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -236,7 +237,8 @@ export function tokenGetter() {
         RebackListComponent,
         CreatrebackComponent,
         ReceiveInfoComponent,
-        OrdertoworkComponent
+        OrdertoworkComponent,
+        ResourceWorkorderComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

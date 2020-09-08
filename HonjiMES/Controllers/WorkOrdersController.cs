@@ -1023,6 +1023,18 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// 報工紀錄列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderReportLogByNum(string machine)
+        {
+            var data = await _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
         /// <summary>
         /// 產報工單PDF
         /// </summary>
