@@ -36,28 +36,28 @@
             <dxi-item dataField="CreateTime"></dxi-item>
         </dxo-form>
 
+        <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
         <dxi-column dataField="ReportType" caption="回報種類" dataType="string">
             <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="WorkOrderDetail.WorkOrderHead.WorkOrderNo" caption="工單號碼" dataType="string" [width]="140"></dxi-column>
-        <dxi-column dataField="WorkOrderDetail.SerialNumber" caption="工序順序" dataType="string"></dxi-column>
-        <dxi-column dataField="WorkOrderDetail.SerialNumber" caption="工序" dataType="string"></dxi-column>
-        <dxi-column dataField="WorkOrderDetail.SerialNumber" caption="經過時間" dataType="string"></dxi-column>
+        <dxi-column dataField="WorkOrderNo" caption="工單號碼" dataType="string" [width]="140"></dxi-column>
+        <dxi-column dataField="SerialNumber" caption="工序順序" dataType="string" [width]="80"></dxi-column>
+        <dxi-column dataField="Process" caption="工序" dataType="string" [width]="200"></dxi-column>
+        <dxi-column dataField="ProcessTime" caption="經過時間" dataType="string" [width]="80"></dxi-column>
         <!-- <dxi-column dataField="PurchaseNo" caption="採購單號" dataType="string"></dxi-column>
         <dxi-column dataField="DrawNo" caption="圖號" dataType="string"></dxi-column>
         <dxi-column dataField="Manpower" caption="需求人力" dataType="string"></dxi-column> -->
-        <dxi-column dataField="ReCount" caption="回報數量" dataType="string"></dxi-column>
+        <dxi-column dataField="ReCount" caption="回報數量" dataType="string" [width]="80"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" dataType="string"></dxi-column>
-        <dxi-column dataField="StatusO" caption="上一個狀態" dataType="string">
+        <dxi-column dataField="StatusO" caption="上一個狀態" dataType="string" [width]="100">
             <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="StatusN" caption="更新狀態" dataType="string">
+        <dxi-column dataField="StatusN" caption="更新狀態" dataType="string" [width]="100">
             <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date"></dxi-column>
         <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date"></dxi-column>
         <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date"></dxi-column>
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date"></dxi-column>
-        <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     </dx-data-grid>
 </form>

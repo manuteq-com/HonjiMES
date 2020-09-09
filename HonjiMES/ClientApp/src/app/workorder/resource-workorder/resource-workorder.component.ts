@@ -31,6 +31,12 @@ export class ResourceWorkorderComponent implements OnInit, OnChanges {
     width: any;
     colCount: number;
     labelLocation: string;
+    ProcessList: any;
+    ProcessEditorOptions: {
+        dataSource: { store: { type: string; data: any; key: string; }; }; searchEnabled: boolean;
+        // items: this.MaterialList,
+        displayExpr: string; valueExpr: string;
+    };
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
@@ -41,13 +47,14 @@ export class ResourceWorkorderComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 4;
+
     }
     ngOnInit() {
     }
     ngOnChanges() {
         this.formData = this.masterkey;
         this.dataSourceDB = new CustomStore({
-            key: 'Id',
+            key: 'WorkOrderNo',
             load: () => SendService.sendRequest(this.http, this.Controller
                 + '/GetWorkOrderReportLogByNum?machine=' + this.masterkey.ProducingMachine),
         });
