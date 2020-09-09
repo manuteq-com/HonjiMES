@@ -263,7 +263,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.ShowMessage('存檔完成', 'success', 3000);
     }
     onSupplierSelectionChanged(e) {
-        this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeadsBySupplier/' + e.value).subscribe(
+        this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeadsSurfaceBySupplier/' + e.value).subscribe(
             (s) => {
                 if (s.success) {
                     this.PurchaseHeadList = s.data;
