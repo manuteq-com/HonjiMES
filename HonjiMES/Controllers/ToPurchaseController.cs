@@ -493,80 +493,181 @@ namespace HonjiMES.Controllers
             }
 
             //入庫
-            if (BillofPurchaseDetails.DataType == 1)
+            if (BillofPurchaseDetails.DataType == 1) // 原料
             {
-                var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                if (Material == null)
+                var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
+                if (Material.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
-                    return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
+                    // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                    MaterialBasic.Materials.Add(new Material
+                    {
+                        MaterialNo = MaterialBasic.MaterialNo,
+                        Name = MaterialBasic.Name,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Specification = MaterialBasic.Specification,
+                        Property = MaterialBasic.Property,
+                        Price = MaterialBasic.Price,
+                        BaseQuantity = 2,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = BillofPurchaseDetails?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                        MaterialLogs = {new MaterialLog
+                        {
+                            LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                            Original = 0,
+                            Quantity = BillofPurchaseCheckin.Quantity,
+                            Price = BillofPurchaseCheckin.Price,
+                            PriceAll = BillofPurchaseCheckin.PriceAll,
+                            Unit = BillofPurchaseCheckin.Unit,
+                            UnitCount = BillofPurchaseCheckin.UnitCount,
+                            UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                            UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                            WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                            Reason = BillofPurchaseCheckin.Remarks,
+                            Message = "進貨檢驗入庫",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
                 }
-                Material.MaterialLogs.Add(new MaterialLog
+                else
                 {
-                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
-                    Original = Material.Quantity,
-                    Quantity = BillofPurchaseCheckin.Quantity,
-                    Price = BillofPurchaseCheckin.Price,
-                    PriceAll = BillofPurchaseCheckin.PriceAll,
-                    Unit = BillofPurchaseCheckin.Unit,
-                    UnitCount = BillofPurchaseCheckin.UnitCount,
-                    UnitPrice = BillofPurchaseCheckin.UnitPrice,
-                    UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
-                    WorkPrice = BillofPurchaseCheckin.WorkPrice,
-                    Reason = BillofPurchaseCheckin.Remarks,
-                    Message = "進貨檢驗入庫",
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-                Material.Quantity += BillofPurchaseCheckin.Quantity;
+                    Material.FirstOrDefault().MaterialLogs.Add(new MaterialLog
+                    {
+                        LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                        Original = Material.FirstOrDefault().Quantity,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Price = BillofPurchaseCheckin.Price,
+                        PriceAll = BillofPurchaseCheckin.PriceAll,
+                        Unit = BillofPurchaseCheckin.Unit,
+                        UnitCount = BillofPurchaseCheckin.UnitCount,
+                        UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                        UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                        WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                        Reason = BillofPurchaseCheckin.Remarks,
+                        Message = "進貨檢驗入庫",
+                        CreateUser = MyFun.GetUserID(HttpContext)
+                    });
+                    Material.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
+                }
             }
-            else if (BillofPurchaseDetails.DataType == 2)
+            else if (BillofPurchaseDetails.DataType == 2) // 成品
             {
-                var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                if (Product == null)
+                var ProductBasic = _context.ProductBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                var Product = ProductBasic.Products.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
+                if (Product.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
-                    return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                    // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                    ProductBasic.Products.Add(new Product
+                    {
+                        ProductNo = ProductBasic.ProductNo,
+                        ProductNumber = ProductBasic.ProductNumber,
+                        Name = ProductBasic.Name,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Specification = ProductBasic.Specification,
+                        Property = ProductBasic.Property,
+                        Price = ProductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = BillofPurchaseDetails?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                        ProductLogs = {new ProductLog
+                        {
+                            LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                            Original = 0,
+                            Quantity = BillofPurchaseCheckin.Quantity,
+                            Price = BillofPurchaseCheckin.Price,
+                            PriceAll = BillofPurchaseCheckin.PriceAll,
+                            Unit = BillofPurchaseCheckin.Unit,
+                            UnitCount = BillofPurchaseCheckin.UnitCount,
+                            UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                            UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                            WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                            Reason = BillofPurchaseCheckin.Remarks,
+                            Message = "進貨檢驗入庫",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
                 }
-                Product.ProductLogs.Add(new ProductLog
+                else
                 {
-                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
-                    Original = Product.Quantity,
-                    Quantity = BillofPurchaseCheckin.Quantity,
-                    Price = BillofPurchaseCheckin.Price,
-                    PriceAll = BillofPurchaseCheckin.PriceAll,
-                    Unit = BillofPurchaseCheckin.Unit,
-                    UnitCount = BillofPurchaseCheckin.UnitCount,
-                    UnitPrice = BillofPurchaseCheckin.UnitPrice,
-                    UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
-                    WorkPrice = BillofPurchaseCheckin.WorkPrice,
-                    Reason = BillofPurchaseCheckin.Remarks,
-                    Message = "進貨檢驗入庫",
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-                Product.Quantity += BillofPurchaseCheckin.Quantity;
+                    Product.FirstOrDefault().ProductLogs.Add(new ProductLog
+                    {
+                        LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                        Original = Product.FirstOrDefault().Quantity,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Price = BillofPurchaseCheckin.Price,
+                        PriceAll = BillofPurchaseCheckin.PriceAll,
+                        Unit = BillofPurchaseCheckin.Unit,
+                        UnitCount = BillofPurchaseCheckin.UnitCount,
+                        UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                        UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                        WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                        Reason = BillofPurchaseCheckin.Remarks,
+                        Message = "進貨檢驗入庫",
+                        CreateUser = MyFun.GetUserID(HttpContext)
+                    });
+                    Product.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
+                }
             }
-            else if (BillofPurchaseDetails.DataType == 3)
+            else if (BillofPurchaseDetails.DataType == 3) // 半成品
             {
-                var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == BillofPurchaseDetails.DataId && x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                if (Wiproduct == null)
+                var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
+                if (Wiproduct.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
-                    return Ok(MyFun.APIResponseError("半成品庫存資料有誤"));
+                    // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                    WiproductBasic.Wiproducts.Add(new Wiproduct
+                    {
+                        WiproductNo = WiproductBasic.WiproductNo,
+                        WiproductNumber = WiproductBasic.WiproductNumber,
+                        Name = WiproductBasic.Name,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Specification = WiproductBasic.Specification,
+                        Property = WiproductBasic.Property,
+                        Price = WiproductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = BillofPurchaseDetails?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                        WiproductLogs = {new WiproductLog
+                        {
+                            LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                            Original = 0,
+                            Quantity = BillofPurchaseCheckin.Quantity,
+                            Price = BillofPurchaseCheckin.Price,
+                            PriceAll = BillofPurchaseCheckin.PriceAll,
+                            Unit = BillofPurchaseCheckin.Unit,
+                            UnitCount = BillofPurchaseCheckin.UnitCount,
+                            UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                            UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                            WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                            Reason = BillofPurchaseCheckin.Remarks,
+                            Message = "進貨檢驗入庫",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
                 }
-                Wiproduct.WiproductLogs.Add(new WiproductLog
+                else
                 {
-                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
-                    Original = Wiproduct.Quantity,
-                    Quantity = BillofPurchaseCheckin.Quantity,
-                    Price = BillofPurchaseCheckin.Price,
-                    PriceAll = BillofPurchaseCheckin.PriceAll,
-                    Unit = BillofPurchaseCheckin.Unit,
-                    UnitCount = BillofPurchaseCheckin.UnitCount,
-                    UnitPrice = BillofPurchaseCheckin.UnitPrice,
-                    UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
-                    WorkPrice = BillofPurchaseCheckin.WorkPrice,
-                    Reason = BillofPurchaseCheckin.Remarks,
-                    Message = "進貨檢驗入庫",
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-                Wiproduct.Quantity += BillofPurchaseCheckin.Quantity;
+                    Wiproduct.FirstOrDefault().WiproductLogs.Add(new WiproductLog
+                    {
+                        LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                        Original = Wiproduct.FirstOrDefault().Quantity,
+                        Quantity = BillofPurchaseCheckin.Quantity,
+                        Price = BillofPurchaseCheckin.Price,
+                        PriceAll = BillofPurchaseCheckin.PriceAll,
+                        Unit = BillofPurchaseCheckin.Unit,
+                        UnitCount = BillofPurchaseCheckin.UnitCount,
+                        UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                        UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                        WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                        Reason = BillofPurchaseCheckin.Remarks,
+                        Message = "進貨檢驗入庫",
+                        CreateUser = MyFun.GetUserID(HttpContext)
+                    });
+                    Wiproduct.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
+                }
             }
 
             //檢查進貨單明細是否都完成進貨
@@ -670,80 +771,181 @@ namespace HonjiMES.Controllers
                     }
 
                     //入庫
-                    if (item.DataType == 1)
+                    if (item.DataType == 1) // 原料
                     {
-                        var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Material == null)
+                        var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Material.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
-                            return Ok(MyFun.APIResponseError("原料庫存資料有誤"));
+                            // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                            MaterialBasic.Materials.Add(new Material
+                            {
+                                MaterialNo = MaterialBasic.MaterialNo,
+                                Name = MaterialBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = MaterialBasic.Specification,
+                                Property = MaterialBasic.Property,
+                                Price = MaterialBasic.Price,
+                                BaseQuantity = 2,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = item?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                                MaterialLogs = {new MaterialLog
+                                {
+                                    LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remarks,
+                                    Message = "進貨檢驗入庫",
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
                         }
-                        Material.MaterialLogs.Add(new MaterialLog
+                        else
                         {
-                            LinkOrder = item.BillofPurchase.BillofPurchaseNo,
-                            Original = Material.Quantity,
-                            Quantity = item.Quantity,
-                            Price = item.Price,
-                            PriceAll = item.PriceAll,
-                            Unit = item.Unit,
-                            UnitCount = item.UnitCount,
-                            UnitPrice = item.UnitPrice,
-                            UnitPriceAll = item.UnitPriceAll,
-                            WorkPrice = item.WorkPrice,
-                            Reason = item.Remarks,
-                            Message = "批量驗收入庫",
-                            CreateUser = MyFun.GetUserID(HttpContext)
-                        });
-                        Material.Quantity += item.Quantity;
+                            Material.FirstOrDefault().MaterialLogs.Add(new MaterialLog
+                            {
+                                LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                Original = Material.FirstOrDefault().Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remarks,
+                                Message = "進貨檢驗入庫",
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Material.FirstOrDefault().Quantity += item.Quantity;
+                        }
                     }
-                    else if (item.DataType == 2)
+                    else if (item.DataType == 2) // 成品
                     {
-                        var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Product == null)
+                        var ProductBasic = _context.ProductBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        var Product = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Product.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
-                            return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                            // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                            ProductBasic.Products.Add(new Product
+                            {
+                                ProductNo = ProductBasic.ProductNo,
+                                ProductNumber = ProductBasic.ProductNumber,
+                                Name = ProductBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = ProductBasic.Specification,
+                                Property = ProductBasic.Property,
+                                Price = ProductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = item?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                                ProductLogs = {new ProductLog
+                                {
+                                    LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remarks,
+                                    Message = "進貨檢驗入庫",
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
                         }
-                        Product.ProductLogs.Add(new ProductLog
+                        else
                         {
-                            LinkOrder = item.BillofPurchase.BillofPurchaseNo,
-                            Original = Product.Quantity,
-                            Quantity = item.Quantity,
-                            Price = item.Price,
-                            PriceAll = item.PriceAll,
-                            Unit = item.Unit,
-                            UnitCount = item.UnitCount,
-                            UnitPrice = item.UnitPrice,
-                            UnitPriceAll = item.UnitPriceAll,
-                            WorkPrice = item.WorkPrice,
-                            Reason = item.Remarks,
-                            Message = "批量驗收入庫",
-                            CreateUser = MyFun.GetUserID(HttpContext)
-                        });
-                        Product.Quantity += item.Quantity;
+                            Product.FirstOrDefault().ProductLogs.Add(new ProductLog
+                            {
+                                LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                Original = Product.FirstOrDefault().Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remarks,
+                                Message = "進貨檢驗入庫",
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Product.FirstOrDefault().Quantity += item.Quantity;
+                        }
                     }
-                    else if (item.DataType == 3)
+                    else if (item.DataType == 3) // 半成品
                     {
-                        var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Wiproduct == null)
+                        var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Wiproduct.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
-                            return Ok(MyFun.APIResponseError("半成品庫存資料有誤"));
+                            // return Ok(MyFun.APIResponseError("成品庫存資料有誤"));
+                            WiproductBasic.Wiproducts.Add(new Wiproduct
+                            {
+                                WiproductNo = WiproductBasic.WiproductNo,
+                                WiproductNumber = WiproductBasic.WiproductNumber,
+                                Name = WiproductBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = WiproductBasic.Specification,
+                                Property = WiproductBasic.Property,
+                                Price = WiproductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = item?.WarehouseId ?? 0, // 注意! 可能會重複建立
+                                WiproductLogs = {new WiproductLog
+                                {
+                                    LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remarks,
+                                    Message = "進貨檢驗入庫",
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
                         }
-                        Wiproduct.WiproductLogs.Add(new WiproductLog
+                        else
                         {
-                            LinkOrder = item.BillofPurchase.BillofPurchaseNo,
-                            Original = Wiproduct.Quantity,
-                            Quantity = item.Quantity,
-                            Price = item.Price,
-                            PriceAll = item.PriceAll,
-                            Unit = item.Unit,
-                            UnitCount = item.UnitCount,
-                            UnitPrice = item.UnitPrice,
-                            UnitPriceAll = item.UnitPriceAll,
-                            WorkPrice = item.WorkPrice,
-                            Reason = item.Remarks,
-                            Message = "批量驗收入庫",
-                            CreateUser = MyFun.GetUserID(HttpContext)
-                        });
-                        Wiproduct.Quantity += item.Quantity;
+                            Wiproduct.FirstOrDefault().WiproductLogs.Add(new WiproductLog
+                            {
+                                LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                Original = Wiproduct.FirstOrDefault().Quantity,
+                                Quantity = item.Quantity,
+                                Price = item.Price,
+                                PriceAll = item.PriceAll,
+                                Unit = item.Unit,
+                                UnitCount = item.UnitCount,
+                                UnitPrice = item.UnitPrice,
+                                UnitPriceAll = item.UnitPriceAll,
+                                WorkPrice = item.WorkPrice,
+                                Reason = item.Remarks,
+                                Message = "進貨檢驗入庫",
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Wiproduct.FirstOrDefault().Quantity += item.Quantity;
+                        }
                     }
 
                 }
