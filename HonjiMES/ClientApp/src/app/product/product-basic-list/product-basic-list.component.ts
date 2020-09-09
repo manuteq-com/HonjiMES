@@ -34,6 +34,7 @@ export class ProductBasicListComponent implements OnInit {
     hint: boolean;
     remoteOperations: boolean;
     detailfilter: any;
+
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);

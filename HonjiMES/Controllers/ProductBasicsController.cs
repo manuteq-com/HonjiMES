@@ -31,7 +31,7 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var productBasic = _context.ProductBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Products).Select(x => new ProductBasicData
+            var productBasic = _context.ProductBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Products.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime).Include(x => x.Products).Select(x => new ProductBasicData
             {
                 TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -50,6 +50,11 @@ namespace HonjiMES.Controllers
                 DeleteFlag = x.DeleteFlag,
                 Products = x.Products
             });
+            
+            // 排除預設排序 ID
+            var SortingInfoList = FromQuery.Sort.Where(x => x.Selector != "Id").ToArray();
+            FromQuery.Sort = SortingInfoList;
+
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(productBasic, FromQuery);
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(FromQueryResult));

@@ -32,14 +32,20 @@ export class WiproductBasicListComponent implements OnInit {
     mod: string;
     uploadUrl: string;
     hint: boolean;
+    remoteOperations: boolean;
+    detailfilter: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.remoteOperations = true;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetWiproductBasics'),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetWiproductBasics',
+                'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetWiproductBasic', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostWiproductBasic', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutWiproductBasic', 'PUT', { key, values }),

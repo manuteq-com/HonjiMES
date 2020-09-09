@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
 using HonjiMES.Filter;
+using DevExtreme.AspNet.Mvc;
 
 namespace HonjiMES.Controllers
 {
@@ -26,10 +27,11 @@ namespace HonjiMES.Controllers
 
         // GET: api/WiproductBasics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WiproductBasicData>>> GetWiproductBasics()
+        public async Task<ActionResult<IEnumerable<ProductBasicData>>> GetWiproductBasics(
+            [FromQuery] DataSourceLoadOptions FromQuery)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var wiproductBasic = await _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.UpdateTime).Include(x => x.Wiproducts).Select(x => new WiproductBasicData
+            var wiproductBasic = _context.WiproductBasics.AsQueryable().Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Wiproducts.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime).Include(x => x.Wiproducts).Select(x => new WiproductBasicData
             {
                 TotalCount = x.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Id = x.Id,
@@ -47,9 +49,15 @@ namespace HonjiMES.Controllers
                 UpdateUser = x.UpdateUser,
                 DeleteFlag = x.DeleteFlag,
                 Wiproducts = x.Wiproducts
-            }).ToListAsync();
+            });
+            
+            // 排除預設排序 ID
+            var SortingInfoList = FromQuery.Sort.Where(x => x.Selector != "Id").ToArray();
+            FromQuery.Sort = SortingInfoList;
+
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(wiproductBasic, FromQuery);
             _context.ChangeTracker.LazyLoadingEnabled = false;
-            return Ok(MyFun.APIResponseOK(wiproductBasic));
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         // GET: api/WiproductBasics
