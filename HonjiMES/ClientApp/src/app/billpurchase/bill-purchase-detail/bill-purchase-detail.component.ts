@@ -39,6 +39,10 @@ export class BillPurchaseDetailComponent implements OnInit {
     CheckInBtnVisible: boolean;
     postval: any;
     ItemTypeList: any;
+    UnitQuantityval: any;
+    UnitPriceAllval: number;
+    UnitPriceval: any;
+    WorkPriceval: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.checkInOnClick = this.checkInOnClick.bind(this);
@@ -186,10 +190,24 @@ export class BillPurchaseDetailComponent implements OnInit {
         this.Priceval = e.value;
         this.PriceAllval = this.Quantityval * this.Priceval;
     }
+    UnitQuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitQuantityval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
+    UnitPriceValueChanged(e, data) {
+        data.setValue(e.value);
+        this.UnitPriceval = e.value;
+        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    }
     onEditingStart(e) {
         this.Quantityval = e.data.Quantity;
         this.Priceval = e.data.OriginPrice;
         this.PriceAllval = e.data.Price;
+        this.UnitQuantityval = e.data.UnitQuantityval;
+        this.UnitPriceval = e.data.UnitPriceval;
+        this.UnitPriceAllval = e.data.UnitPriceAllval;
+        this.WorkPriceval = e.data.WorkPrice;
     }
     onDataErrorOccurred(e) {
         notify({

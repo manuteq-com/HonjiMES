@@ -16,16 +16,16 @@
         <dxi-item dataField="Unit">
             <dxo-label text="單位"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="PriceAll" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="{disabled: true }">
+        <dxi-item dataField="PriceAll" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="{disabled: true , format: '#0', min: 0}">
             <dxo-label text="驗收總價"></dxo-label>
         </dxi-item>
         <dxi-item dataField="UnitPrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="UnitPriceEditorOptions">
             <dxo-label text="計價單價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="WorkPrice" format="$ #,##0.##;($ #,##0.##)">
+        <dxi-item dataField="WorkPrice" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="{format: '#0', min: 0}">
             <dxo-label text="加工費用"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="UnitPriceAll" format="$ #,##0.##;($ #,##0.##)">
+        <dxi-item dataField="UnitPriceAll" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="UnitPriceAllEditorOptions">
             <dxo-label text="計價總額"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">
