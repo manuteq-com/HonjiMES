@@ -67,7 +67,29 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseByWiproductBasic(int id)
+        public async Task<ActionResult<Warehouse>> GetWarehouseListByWiproductBasic(int id)
+        {
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                item.Name = item.Code + item.Name;
+                var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
+                if (Data.Count() != 0) {
+                    item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                }
+            }
+            return Ok(MyFun.APIResponseOK(Warehouses));
+        }
+
+        /// <summary>
+        /// 用ID找倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseByBasic(int id)
         {
             var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
 
@@ -97,6 +119,28 @@ namespace HonjiMES.Controllers
             }
 
             return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
+        /// <summary>
+        /// 用ID找倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseListByProductBasic(int id)
+        {
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                item.Name = item.Code + item.Name;
+                var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
+                if (Data.Count() != 0) {
+                    item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                }
+            }
+            return Ok(MyFun.APIResponseOK(Warehouses));
         }
 
         /// <summary>
@@ -153,6 +197,28 @@ namespace HonjiMES.Controllers
             }
 
             return Ok(MyFun.APIResponseOK(WarehouseData));
+        }
+
+        /// <summary>
+        /// 用ID找倉庫
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Warehouses/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Warehouse>> GetWarehouseListByMaterialBasic(int id)
+        {
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                item.Name = item.Code + item.Name;
+                var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
+                if (Data.Count() != 0) {
+                    item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                }
+            }
+            return Ok(MyFun.APIResponseOK(Warehouses));
         }
 
         /// <summary>

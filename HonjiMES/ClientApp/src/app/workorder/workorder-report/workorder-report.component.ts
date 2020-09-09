@@ -370,6 +370,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                             DataType: result.DataType,
                             DataId: result.DataId,
                             WarehouseId: result.WarehouseId,
+                            WarehouseIdA: result.WarehouseIdA,
+                            WarehouseIdB: result.WarehouseIdB,
                             Quantity: this.postval.ReCount,
                             OriginPrice: result.Price,
                             Price: this.postval.ReCount * result.Price,

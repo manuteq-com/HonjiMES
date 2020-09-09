@@ -52,7 +52,8 @@ export class Myservice {
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
-    { Id: 20, Name: '外包' }
+    { Id: 20, Name: '外包' },
+    { Id: 30, Name: '表處' }
 ];
 const permissiontypes: Selectitem[] = [
     { Id: 1, Name: '系統管理員' },

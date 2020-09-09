@@ -53,6 +53,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     PurchasetypeList: any;
     TypeselectBoxOptions: any;
     Warehouseval: any;
+    WarehousevalA: any;
+    WarehousevalB: any;
     DataType: number;
     Quantityval: number;
     OriginPriceval: number;
@@ -68,6 +70,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     // onCellPreparedLevel: number;
     listAdjustStatus: any;
+    OrderTypeVisible: boolean;
+    DeliveryTime: Date;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
@@ -84,6 +88,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.colCount = 3;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
+        this.OrderTypeVisible = false;
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
@@ -144,6 +149,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB = [];
+        this.Purchaselist = [];
         if (this.dataSource !== undefined) {
             this.dataSourceDB = this.dataSource;
         }
@@ -159,7 +165,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                             searchEnabled: true,
                             items: this.Purchaselist,
                             displayExpr: 'PurchaseNo',
-                            valueExpr: 'Id'
+                            valueExpr: 'Id',
+                            onValueChanged: this.onSelectionChanged.bind(this)
                         };
                     }
                 }
@@ -173,8 +180,9 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     this.formData = s.data;
                     this.formData.Id = 0;
                     this.formData.SupplierId = null;
+                    this.formData.PurchaseDate = new Date();
                     if (this.modval === 'workorder') {
-                        this.formData.Type = 20;
+                        this.formData.Type = 30;
                     }
                 }
             }
@@ -185,12 +193,22 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     }
     onFocusedCellChanging(e) {
     }
+    onSelectionChanged(e) {
+        if (this.Purchaselist.length !== 0 && e.value !== 0) {
+            this.formData.SupplierId = this.Purchaselist.find(x => x.Id === e.value).SupplierId;
+        }
+    }
     onTypeSelectionChanged(e) {
         this.CreateTimeValueChange(e);
     }
     CreateTimeValueChange = async function (e) {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
+            if (this.formData.Type === 30) {
+                this.OrderTypeVisible = true;
+            } else {
+                this.OrderTypeVisible = false;
+            }
             this.CreateNumberInfoVal = new CreateNumberInfo();
             this.CreateNumberInfoVal.Type = this.formData.Type;
             this.CreateNumberInfoVal.CreateNumber = this.formData.PurchaseNo;
@@ -232,40 +250,34 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.Quantityval = 1;
         this.OriginPriceval = basicData.Price ? basicData.Price : 0;
         this.Priceval = basicData.Price ? basicData.Price : 0;
+
         if (this.DataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal();
                 }
             );
         } else if (this.DataType === 2) {    // 查詢成品
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal();
                 }
             );
         } else if (this.DataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal();
                 }
             );
         }
+    }
+    UpdateVal() {
+        this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+        this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
     }
     WarehousevalvalueChanged(e, data) {
         data.setValue(e.value);
@@ -301,6 +313,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.WarehouseList = null;
+        this.DeliveryTime = new Date();
     }
     onEditingStart(e) {
         this.saveCheck = false;
@@ -312,34 +325,26 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
         this.Warehouseval = e.data.WarehouseId;
+        this.WarehousevalA = e.data.WarehouseIdA;
+        this.WarehousevalB = e.data.WarehouseIdB;
+        this.DeliveryTime = e.data.DeliveryTime;
+
         if (this.DataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
+                    this.WarehouseList = s.data;
                 }
             );
         } else if (this.DataType === 2) {    // 查詢成品
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
+                    this.WarehouseList = s.data;
                 }
             );
         } else if (this.DataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
+                    this.WarehouseList = s.data;
                 }
             );
         }
@@ -370,34 +375,54 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
+        let dataCheck = true;
         this.dataSourceDB.forEach(element => {
             const basicData = this.BasicDataList.find(z => z.TempId === element.TempId);
             element.DataType = basicData.DataType;
             element.DataId = basicData.DataId;
-        });
-        if (this.formData.SupplierId == null) {
-            this.formData.SupplierId = 0;
-        }
-        this.postval = {
-            PurchaseHead: this.formData,
-            PurchaseDetails: this.dataSourceDB
-        };
-        try {
-            // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseMaster_Detail', 'POST', { values: this.postval });
-            if (sendRequest) {
-                this.dataSourceDB = [];
-                this.dataGrid.instance.refresh();
-                // this.myform.instance.resetValues();
-                this.formData.CreateTime = new Date();
-                this.formData.PurchaseDate = null;
-                this.formData.SupplierId = null;
-                this.formData.Type = 10;
-                this.formData.Remarks = '';
-                e.preventDefault();
-                this.childOuter.emit(true);
+
+            // 如採購單種類為[表處]，則需確認倉別資訊。
+            if (this.formData.Type === 30) {
+                if (element.WarehouseIdA === undefined || element.WarehouseIdB === undefined) {
+                    dataCheck = false;
+                }
             }
-        } catch (error) {
+        });
+        if (!dataCheck) {
+            notify({
+                message: '請注意訂單內容必填的欄位',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            this.buttondisabled = false;
+            return;
+        } else {
+            // if (this.formData.SupplierId == null) {
+            //     this.formData.SupplierId = 0;
+            // }
+            this.postval = {
+                PurchaseHead: this.formData,
+                PurchaseDetails: this.dataSourceDB
+            };
+            try {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseMaster_Detail', 'POST', { values: this.postval });
+                if (sendRequest) {
+                    this.dataSourceDB = [];
+                    this.dataGrid.instance.refresh();
+                    // this.myform.instance.resetValues();
+                    this.formData.CreateTime = new Date();
+                    this.formData.PurchaseDate = new Date();
+                    this.formData.SupplierId = null;
+                    this.formData.Type = 10;
+                    this.formData.Remarks = '';
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                }
+            } catch (error) {
+            }
         }
         this.buttondisabled = false;
     };

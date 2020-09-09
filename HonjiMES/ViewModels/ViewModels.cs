@@ -124,6 +124,8 @@ namespace HonjiMES.Models
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
         public int? WarehouseId { get; set; }
+        public int? WarehouseIdA { get; set; }
+        public int? WarehouseIdB { get; set; }
     }
 
     /// <summary>

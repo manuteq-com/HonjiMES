@@ -183,9 +183,12 @@ namespace HonjiMES.Controllers
             var AdjustData = new List<BasicData>();
             var TempId = 1;
             var WarehouseIdVal = 0;
+            // 注意! 意外處理 萬一無101 201 301
             var warehousesM = Warehouses.Where(x => x.Code == "101").FirstOrDefault(); // 原料內定代號 101
             var warehousesW = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品內定代號 201
             var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
+            var warehousesA = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品廠內內定代號 201
+            var warehousesB = Warehouses.Where(x => x.Code == "202").FirstOrDefault(); // 半成品廠外內定代號 202
 
             foreach (var item in ProductBasic)
             {
@@ -206,6 +209,8 @@ namespace HonjiMES.Controllers
                     Price = item.Price,
                     Quantity = item.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
                     WarehouseId = WarehouseIdVal,
+                    WarehouseIdA = warehousesA?.Id ?? 0,
+                    WarehouseIdB = warehousesB?.Id ?? 0
                 };
                 AdjustData.Add(tempData);
             }
@@ -228,6 +233,8 @@ namespace HonjiMES.Controllers
                     Price = item.Price,
                     Quantity = item.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
                     WarehouseId = WarehouseIdVal,
+                    WarehouseIdA = warehousesA?.Id ?? 0,
+                    WarehouseIdB = warehousesB?.Id ?? 0
                 };
                 AdjustData.Add(tempData);
             }
@@ -250,6 +257,8 @@ namespace HonjiMES.Controllers
                     Price = item.Price,
                     Quantity = item.Materials.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
                     WarehouseId = WarehouseIdVal,
+                    WarehouseIdA = warehousesA?.Id ?? 0,
+                    WarehouseIdB = warehousesB?.Id ?? 0
                 };
                 AdjustData.Add(tempData);
             }

@@ -200,7 +200,7 @@ export class SendService {
                                 my: 'center top',
                                 at: 'center top'
                             }
-                        }, 'success', 5000);
+                        }, 'success', 6000);
                         return (ReturnData);
                     } else {
                         return (ReturnData.data);
