@@ -512,6 +512,8 @@ namespace HonjiMES.Models
     public class PostRequisition
     {
         public int WorkOrderNo { get; set; }
+        public int? ReceiveUser { get; set; }
+        public int CreateUser { get; set; }
         public List<GetReceive> ReceiveList { get; set; }
     }
 
