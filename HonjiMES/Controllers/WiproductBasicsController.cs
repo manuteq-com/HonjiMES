@@ -52,8 +52,11 @@ namespace HonjiMES.Controllers
             });
             
             // 排除預設排序 ID
-            var SortingInfoList = FromQuery.Sort.Where(x => x.Selector != "Id").ToArray();
-            FromQuery.Sort = SortingInfoList;
+            if (FromQuery.Sort != null)
+            {
+                var SortingInfoList = FromQuery.Sort.Where(x => x.Selector != "Id").ToArray();
+                FromQuery.Sort = SortingInfoList;
+            }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(wiproductBasic, FromQuery);
             _context.ChangeTracker.LazyLoadingEnabled = false;
