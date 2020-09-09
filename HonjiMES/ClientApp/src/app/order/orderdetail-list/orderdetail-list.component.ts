@@ -59,6 +59,52 @@ export class OrderdetailListComponent implements OnInit {
     }
     ngOnInit() {
     }
+    to_outsideClick(e) {
+        this.topurchasekey = null;
+        this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.GetData(s.data, this.topurchasekey);
+                }
+            }
+        );
+
+        if (this.topurchasekey.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何訂單項目',
+                html: '請勾選要轉托工的訂單項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            Swal.fire({
+                showCloseButton: true,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '轉托工',
+                html: '如需合併托工單，請點選[輸入托工單]!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#71c016',
+                cancelButtonText: '輸入托工單',
+                confirmButtonText: '新建托工單'
+            }).then(async (result) => {
+                if (result.value) {
+                    this.mod = 'add-outside';
+                    this.popupVisiblePurchase = true;
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.mod = 'merge-outside';
+                    this.popupVisiblePurchase = true;
+                } else if (result.dismiss === Swal.DismissReason.close) {
+                    this.popupVisiblePurchase = false;
+                }
+            });
+        }
+    }
     async to_workClick(e) {
         this.topurchasekey = null;
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
@@ -173,6 +219,35 @@ export class OrderdetailListComponent implements OnInit {
             });
         }
     }
+    GetData(BasicData, SelectData) {
+        let serial = 1;
+        const tempdataSource = [];
+        SelectData.forEach(element => {
+            const index = tempdataSource.findIndex(z => z.DataType === 2 && z.DataId === element.ProductBasicId);
+            // tslint:disable-next-line: no-bitwise
+            if (~index) {
+                tempdataSource[index].Quantity += element.Quantity;
+                tempdataSource[index].Price += element.Quantity * element.OriginPrice;
+            } else {
+                const result = BasicData.find(y => y.DataType === 2 && y.DataId === element.ProductBasicId);
+                if (result) {
+                    tempdataSource.push({
+                        Serial: serial,
+                        TempId: result.TempId,
+                        DataType: 2,
+                        DataId: element.ProductBasicId,
+                        WarehouseId: result.WarehouseId,
+                        Quantity: element.Quantity,
+                        OriginPrice: element.OriginPrice,
+                        Price: element.Quantity * element.OriginPrice,
+                        DeliveryTime: new Date()
+                    });
+                }
+                serial++;
+            }
+        });
+        this.dataSource = tempdataSource;
+    }
     GetBomData(BasicData) {
         let indexVal = 0;
         let serial = 1;
@@ -204,7 +279,7 @@ export class OrderdetailListComponent implements OnInit {
                                 tempdataSource[index].Quantity += Math.ceil(x.Quantity * tempQuantity);
                                 tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
                             } else if (element.MaterialBasicId != null) { // 只取得料號為[原料]的項目
-                                const result = BasicData.find(x => x.DataType === 1 && x.DataId === element.MaterialBasicId);
+                                const result = BasicData.find(y => y.DataType === 1 && y.DataId === element.MaterialBasicId);
                                 if (result) {
                                     tempdataSource.push({
                                         Serial: serial,

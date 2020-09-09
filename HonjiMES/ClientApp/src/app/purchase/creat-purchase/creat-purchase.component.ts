@@ -171,6 +171,24 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     }
                 }
             );
+        } else if (this.modval === 'merge-outside') {
+            this.showdisabled = true;
+            this.app.GetData('/PurchaseHeads/GetPurchasesOutsideByStatus?status=0').subscribe(
+                (s) => {
+                    console.log(s);
+                    if (s.success) {
+                        this.Purchaselist = s.data;
+                        this.selectBoxOptions = {
+                            // searchMode: 'startswith',
+                            searchEnabled: true,
+                            items: this.Purchaselist,
+                            displayExpr: 'PurchaseNo',
+                            valueExpr: 'Id',
+                            onValueChanged: this.onSelectionChanged.bind(this)
+                        };
+                    }
+                }
+            );
         } else {
             this.showdisabled = false;
         }
@@ -183,6 +201,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                     this.formData.PurchaseDate = new Date();
                     if (this.modval === 'workorder') {
                         this.formData.Type = 30;
+                    } else if (this.modval === 'add-outside') {
+                        this.formData.Type = 20;
                     }
                 }
             }

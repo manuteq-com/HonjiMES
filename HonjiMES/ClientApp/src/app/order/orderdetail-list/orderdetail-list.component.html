@@ -1,6 +1,6 @@
 <!-- <div class="master-detail-caption">訂單明細:{{item.data.OrderNo}}</div> -->
 <div class="row">
-    <div class="col-md-7 col-sm-8">
+    <div class="col-md-6 col-sm-8">
     </div>
     <div class="col-md-2 col-sm-2">
         <div class="input-group">
@@ -11,14 +11,11 @@
             <div class="dx-field-value-static" dataField="TotalCount"></div>
         </div> -->
     </div>
-    <div class="col-md-1 col-sm-1">
-        <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)"></dx-button>
-    </div>
-    <div class="col-md-1 col-sm-1">
+    <div class="col-md-4 col-sm-1">
+        <dx-button text="建立銷貨單" type="default" (onClick)="to_saleClick($event)"></dx-button>
         <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button>
-    </div>
-    <div class="col-md-1 col-sm-1">
-        <dx-button text="確認銷貨項目" type="default" (onClick)="to_saleClick($event)"></dx-button>
+        <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)"></dx-button>
+        <dx-button text="建立托工單" type="default" (onClick)="to_outsideClick($event)"></dx-button>
     </div>
 </div>
 <dx-data-grid
@@ -37,7 +34,6 @@
         [allowAdding]="false"
         [allowUpdating]="true"
         [allowDeleting]="true">
-
         <dxo-form colCount=5>
             <dxi-item dataField="ProductBasicId">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -67,9 +63,11 @@
             <dxi-item dataField="ReplyRemark"></dxi-item>
         </dxo-form>
     </dxo-editing>
+
     <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
             [customizeText]="customizeText"
@@ -77,6 +75,7 @@
             summaryType="count">
         </dxi-total-item>
     </dxo-summary>
+
     <dxi-column dataField="Serial" caption="序號" width="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" width="200"></dxi-column>
     <dxi-column dataField="ProductBasicId" caption="品號" width="200" editCellTemplate="ProductBasicIdEditCellTemplate">
@@ -104,7 +103,8 @@
     <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"  width="180"></dxi-column>
     <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2"  width="180"></dxi-column>
 
-    <dxi-column type="buttons" caption="新增" cssClass="addmod">
+    <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
+    <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
