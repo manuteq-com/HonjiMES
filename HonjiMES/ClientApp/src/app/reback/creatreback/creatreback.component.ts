@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import { Customer } from 'src/app/model/viewmodels';
 import CustomStore from 'devextreme/data/custom_store';
@@ -15,6 +15,7 @@ import notify from 'devextreme/ui/notify';
 export class CreatrebackComponent implements OnInit, OnChanges {
 
     @Output() childOuter = new EventEmitter();
+    @Input() randomkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -38,6 +39,8 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     dataSourceAllDB: any;
     Warehouselist: any;
     RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
+    UserList: any;
+    selectUserDefault: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; };
     constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
         // this.editOnkeyPress = true;
@@ -47,7 +50,8 @@ export class CreatrebackComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
-        this.colCount = 1;
+        this.colCount = 3;
+        this.dataSourceAllDB = [];
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.editorOptions = {
             onValueChanged: this.onValueChanged.bind(this),
@@ -96,6 +100,20 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.UserList = s.data;
+                    this.selectUserDefault = {
+                        items: this.UserList,
+                        displayExpr: 'Username',
+                        valueExpr: 'Id',
+                        value: this.app.GetUserId(),
+                        searchEnabled: true,
+                    };
+                }
+            }
+        );
     }
     validate_before(): boolean {
         // 表單驗證

@@ -143,6 +143,7 @@ export class RebackListComponent implements OnInit {
     creatdata() {
         // tslint:disable-next-line: deprecation
         // this.dataGrid.instance.insertRow();
+        this.randomkey = new Date().getTime();
         this.creatpopupVisible = true;
     }
     infodata() {

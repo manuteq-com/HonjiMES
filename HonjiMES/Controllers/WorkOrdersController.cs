@@ -281,48 +281,158 @@ namespace HonjiMES.Controllers
             OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
 
             //入庫
-            if (OWorkOrderHead.DataType == 1) {
-                var Material = await _context.Materials.Where(x => x.MaterialBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Material.Quantity = Material.Quantity + WorkOrderReportData.ReCount;
-                // Material.UpdateTime = dt;
-                // Material.UpdateUser = MyFun.GetUserID(HttpContext);
-                Material.MaterialLogs.Add(new MaterialLog
+            var checkInfo = false;
+            if (OWorkOrderHead.DataType == 1) // 原料
+            {
+                var MaterialBasic = await _context.MaterialBasics.Include(x => x.Materials).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in MaterialBasic.Materials)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Material.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-            } else if (OWorkOrderHead.DataType == 2) {
-                var Product = await _context.Products.Where(x => x.ProductBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Product.Quantity = Product.Quantity + WorkOrderReportData.ReCount;
-                // Product.UpdateTime = dt;
-                // Product.UpdateUser = MyFun.GetUserID(HttpContext);
-                Product.ProductLogs.Add(new ProductLog
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.MaterialLogs.Add(new MaterialLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Product.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
-            } else if (OWorkOrderHead.DataType == 3) {
-                var Wiproduct = await _context.Wiproducts.Where(x => x.WiproductBasicId == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
-                Wiproduct.Quantity = Wiproduct.Quantity + WorkOrderReportData.ReCount;
-                // Wiproduct.UpdateTime = dt;
-                // Wiproduct.UpdateUser = MyFun.GetUserID(HttpContext);
-                Wiproduct.WiproductLogs.Add(new WiproductLog
+                    MaterialBasic.Materials.Add(new Material
+                    {
+                        MaterialNo = MaterialBasic.MaterialNo,
+                        Name = MaterialBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = MaterialBasic.Specification,
+                        Property = MaterialBasic.Property,
+                        Price = MaterialBasic.Price,
+                        BaseQuantity = 2,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        MaterialLogs = {new MaterialLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
+                }
+            }
+            else if (OWorkOrderHead.DataType == 2) // 成品
+            {
+                var ProductBasic = await _context.ProductBasics.Include(x => x.Products).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in ProductBasic.Products)
                 {
-                    LinkOrder = OWorkOrderHead.WorkOrderNo,
-                    Original = Wiproduct.Quantity - WorkOrderReportData.ReCount,
-                    Quantity = WorkOrderReportData.ReCount,
-                    Message = "品質檢驗入庫",
-                    CreateTime = dt,
-                    CreateUser = MyFun.GetUserID(HttpContext)
-                });
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
+                {
+                    ProductBasic.Products.Add(new Product
+                    {
+                        ProductNo = ProductBasic.ProductNo,
+                        ProductNumber = ProductBasic.ProductNumber,
+                        Name = ProductBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = ProductBasic.Specification,
+                        Property = ProductBasic.Property,
+                        Price = ProductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        ProductLogs = {new ProductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
+                }
+            }
+            else if (OWorkOrderHead.DataType == 3) // 半成品
+            {
+                var WiproductBasic = await _context.WiproductBasics.Include(x => x.Wiproducts).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                foreach (var item in WiproductBasic.Wiproducts)
+                {
+                    if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
+                    {
+                        item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
+                        // item.UpdateTime = dt;
+                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        item.WiproductLogs.Add(new WiproductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = item.Quantity - WorkOrderReportData.ReCount,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        checkInfo = true;
+                    }
+                }
+
+                // 如果沒有明細資訊，則自動新增。
+                if (!checkInfo)
+                {
+                    WiproductBasic.Wiproducts.Add(new Wiproduct
+                    {
+                        WiproductNo = WiproductBasic.WiproductNo,
+                        WiproductNumber = WiproductBasic.WiproductNumber,
+                        Name = WiproductBasic.Name,
+                        Quantity = WorkOrderReportData.ReCount,
+                        Specification = WiproductBasic.Specification,
+                        Property = WiproductBasic.Property,
+                        Price = WiproductBasic.Price,
+                        MaterialRequire = 1,
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        WarehouseId = WorkOrderReportData.WarehouseId,
+                        WiproductLogs = {new WiproductLog
+                        {
+                            LinkOrder = OWorkOrderHead.WorkOrderNo,
+                            Original = 0,
+                            Quantity = WorkOrderReportData.ReCount,
+                            Message = "品質檢驗入庫",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
+                    });
+                }
             }
 
             try
@@ -385,6 +495,8 @@ namespace HonjiMES.Controllers
                     var warehousesM = Warehouses.Where(x => x.Code == "101").FirstOrDefault(); // 原料內定代號 101
                     var warehousesW = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品內定代號 201
                     var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
+                    var warehousesA = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品廠內內定代號 201
+                    var warehousesB = Warehouses.Where(x => x.Code == "202").FirstOrDefault(); // 半成品廠外內定代號 202
                     var PurchaseHeads = await _context.PurchaseHeads.Include(x => x.PurchaseDetails).Where(x => x.Id == WorkOrderReportData.PurchaseId).FirstOrDefaultAsync();
                     var PurchaseDetails = PurchaseHeads.PurchaseDetails.Where(x =>
                         x.DataType == item.WorkOrderHead.DataType &&
@@ -394,47 +506,59 @@ namespace HonjiMES.Controllers
                     if (PurchaseDetails.Count() == 0)
                     { // 如果採購單明細沒有此成品，則回填(新增)採購單明細。
                         var BasicData = new BasicData();
-                        if (item.WorkOrderHead.DataType == 1)
+                        var Warehouse201Check = 0;
+                        decimal Warehouse201Stock = 0;
+                        if (item.WorkOrderHead.DataType == 1) // 原料
                         {
-                            var Materials = await _context.Materials.Where(x => x.MaterialBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any())
+                            var MaterialBasic = await _context.MaterialBasics.Include(x => x.Materials).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            BasicData.WarehouseId = warehousesP.Id;
+                            BasicData.Specification = MaterialBasic.Specification;
+                            BasicData.Price = MaterialBasic.Price;
+
+                            var Warehouse201 = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
                             {
-                                BasicData.WarehouseId = warehousesM.Id;
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
                             }
-                            else
-                            {
-                                BasicData.WarehouseId = null;
-                            }
-                            BasicData.Specification = Materials.FirstOrDefault().Specification;
-                            BasicData.Price = Materials.FirstOrDefault().Price;
                         }
-                        else if (item.WorkOrderHead.DataType == 2)
+                        else if (item.WorkOrderHead.DataType == 2) // 成品
                         {
-                            var Products = await _context.Products.Where(x => x.ProductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any())
+                            var ProductBasic = await _context.ProductBasics.Include(x => x.Products).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            BasicData.WarehouseId = warehousesP.Id;
+                            BasicData.Specification = ProductBasic.Specification;
+                            BasicData.Price = ProductBasic.Price;
+
+                            var Warehouse201 = ProductBasic.Products.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
                             {
-                                BasicData.WarehouseId = warehousesP.Id;
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = ProductBasic.Products.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
                             }
-                            else
-                            {
-                                BasicData.WarehouseId = null;
-                            }
-                            BasicData.Specification = Products.FirstOrDefault().Specification;
-                            BasicData.Price = Products.FirstOrDefault().Price;
                         }
-                        else if (item.WorkOrderHead.DataType == 3)
+                        else if (item.WorkOrderHead.DataType == 3) // 半成品
                         {
-                            var Wiproducts = await _context.Wiproducts.Where(x => x.WiproductBasicId == item.WorkOrderHead.DataId && x.DeleteFlag == 0).ToListAsync();
-                            if (Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any())
+                            var WiproductBasic = await _context.WiproductBasics.Include(x => x.Wiproducts).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            BasicData.WarehouseId = warehousesP.Id;
+                            BasicData.Specification = WiproductBasic.Specification;
+                            BasicData.Price = WiproductBasic.Price;
+
+                            var Warehouse201 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
                             {
-                                BasicData.WarehouseId = warehousesW.Id;
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
                             }
-                            else
+                        }
+
+                        // 如採購單種類為[表處]，需要進行轉倉的動作 2020/09/09
+                        if (PurchaseHeads.Type == 30)
+                        {
+                            var result = Warehouse201Fun(item, PurchaseHeads.PurchaseNo, Warehouse201Check, Warehouse201Stock, WorkOrderReportData, warehousesA.Id, warehousesB.Id);
+                            if (!result.Result.success)
                             {
-                                BasicData.WarehouseId = null;
+                                return Ok(await result);
                             }
-                            BasicData.Specification = Wiproducts.FirstOrDefault().Specification;
-                            BasicData.Price = Wiproducts.FirstOrDefault().Price;
                         }
 
                         PurchaseHeads.PurchaseDetails.Add(new PurchaseDetail
@@ -455,12 +579,56 @@ namespace HonjiMES.Controllers
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                     }
-                    else
-                    { // 如果已有相同成品，則增加數量並調整金額。
+                    else // 如果已有相同成品，則增加數量並調整金額。
+                    {
+                        var Warehouse201Check = 0;
+                        decimal Warehouse201Stock = 0;
+                        if (item.WorkOrderHead.DataType == 1) // 原料
+                        {
+                            var MaterialBasic = await _context.MaterialBasics.Include(x => x.Materials).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            var Warehouse201 = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
+                            {
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
+                            }
+                        }
+                        else if (item.WorkOrderHead.DataType == 2) // 成品
+                        {
+                            var ProductBasic = await _context.ProductBasics.Include(x => x.Products).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            var Warehouse201 = ProductBasic.Products.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
+                            {
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = ProductBasic.Products.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
+                            }
+                        }
+                        else if (item.WorkOrderHead.DataType == 3) // 半成品
+                        {
+                            var WiproductBasic = await _context.WiproductBasics.Include(x => x.Wiproducts).Where(x => x.Id == item.WorkOrderHead.DataId).FirstAsync();
+                            var Warehouse201 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).ToList();
+                            if (Warehouse201.Count() != 0)
+                            {
+                                Warehouse201Check = Warehouse201.Count();
+                                Warehouse201Stock = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesA.Id && x.DeleteFlag == 0).First().Quantity;
+                            }
+                        }
+
+                        // 如採購單種類為[表處]，需要進行轉倉的動作 2020/09/09
+                        if (PurchaseHeads.Type == 30)
+                        {
+                            var result = Warehouse201Fun(item, PurchaseHeads.PurchaseNo, Warehouse201Check, Warehouse201Stock, WorkOrderReportData, warehousesA.Id, warehousesB.Id);
+                            if (!result.Result.success)
+                            {
+                                return Ok(await result);
+                            }
+                        }
+
                         PurchaseDetails.FirstOrDefault().Quantity += WorkOrderReportData.ReCount;
-                        PurchaseDetails.FirstOrDefault().Price += PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
+                        PurchaseDetails.FirstOrDefault().Price = PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
                         PurchaseDetails.FirstOrDefault().UpdateUser = MyFun.GetUserID(HttpContext);
                     }
+                    PurchaseHeads.PriceAll = PurchaseHeads.PurchaseDetails.Where(x => x.DeleteFlag == 0).Sum(x => x.Quantity * x.OriginPrice);
                 }
             }
             try
@@ -472,6 +640,195 @@ namespace HonjiMES.Controllers
                 throw;
             }
             return Ok(MyFun.APIResponseOK(OWorkOrderHead));
+        }
+        private async Task<APIResponse> Warehouse201Fun(WorkOrderDetail itemData, string PurchaseNo, int Warehouse201Check, decimal Warehouse201Stock, WorkOrderReportData WorkOrderReportData, int warehousesA, int warehousesB)
+        {
+            if (Warehouse201Check == 0)
+            {
+                return MyFun.APIResponseError("品號 [ " + itemData.WorkOrderHead.DataNo + " ] 查無轉出倉別! 請重新確認!");
+            }
+            else
+            {
+                if (WorkOrderReportData.ReCount > Warehouse201Stock)
+                {
+                    return MyFun.APIResponseError("品號 [ " + itemData.WorkOrderHead.DataNo + " ] 轉出倉別庫存不足( 庫存 " + Warehouse201Stock + " / 需求 " + WorkOrderReportData.ReCount + " )! 請重新確認!");
+                }
+                else
+                {
+                    var dt = DateTime.Now;
+                    if (itemData.WorkOrderHead.DataType == 1) // 原料
+                    {
+                        var MaterialBasic = _context.MaterialBasics.Find(itemData.WorkOrderHead.DataId);
+                        var Warehouse201 = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesA && x.DeleteFlag == 0).ToList();
+                        var Warehouse202 = MaterialBasic.Materials.Where(x => x.WarehouseId == warehousesB && x.DeleteFlag == 0).ToList();
+
+                        Warehouse201.First().MaterialLogs.Add(new MaterialLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse201.First().Quantity,
+                            Quantity = -WorkOrderReportData.ReCount,
+                            Message = "表處轉倉",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
+
+                        if (Warehouse202.Count() != 0)
+                        {
+                            Warehouse201.First().MaterialLogs.Add(new MaterialLog
+                            {
+                                LinkOrder = PurchaseNo,
+                                Original = Warehouse202.First().Quantity,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Message = "表處轉倉",
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
+                        }
+                        else // 如無倉別資訊，則自動建立
+                        {
+                            MaterialBasic.Materials.Add(new Material
+                            {
+                                MaterialNo = MaterialBasic.MaterialNo,
+                                Name = MaterialBasic.Name,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Specification = MaterialBasic.Specification,
+                                Property = MaterialBasic.Property,
+                                Price = MaterialBasic.Price,
+                                BaseQuantity = 2,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = warehousesB,
+                                MaterialLogs = {new MaterialLog
+                                {
+                                    LinkOrder = PurchaseNo,
+                                    Original = 0,
+                                    Quantity = WorkOrderReportData.ReCount,
+                                    Message = "表處轉倉",
+                                    CreateTime = dt,
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
+                        }
+                    }
+                    else if (itemData.WorkOrderHead.DataType == 2) // 成品
+                    {
+                        var ProductBasic = _context.ProductBasics.Find(itemData.WorkOrderHead.DataId);
+                        var Warehouse201 = ProductBasic.Products.Where(x => x.WarehouseId == warehousesA && x.DeleteFlag == 0).ToList();
+                        var Warehouse202 = ProductBasic.Products.Where(x => x.WarehouseId == warehousesB && x.DeleteFlag == 0).ToList();
+
+                        Warehouse201.First().ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse201.First().Quantity,
+                            Quantity = -WorkOrderReportData.ReCount,
+                            Message = "表處轉倉",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
+
+                        if (Warehouse202.Count() != 0)
+                        {
+                            Warehouse201.First().ProductLogs.Add(new ProductLog
+                            {
+                                LinkOrder = PurchaseNo,
+                                Original = Warehouse202.First().Quantity,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Message = "表處轉倉",
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
+                        }
+                        else // 如無倉別資訊，則自動建立
+                        {
+                            ProductBasic.Products.Add(new Product
+                            {
+                                ProductNo = ProductBasic.ProductNo,
+                                ProductNumber = ProductBasic.ProductNumber,
+                                Name = ProductBasic.Name,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Specification = ProductBasic.Specification,
+                                Property = ProductBasic.Property,
+                                Price = ProductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = warehousesB,
+                                ProductLogs = {new ProductLog
+                                {
+                                    LinkOrder = PurchaseNo,
+                                    Original = 0,
+                                    Quantity = WorkOrderReportData.ReCount,
+                                    Message = "表處轉倉",
+                                    CreateTime = dt,
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
+                        }
+                    }
+                    else if (itemData.WorkOrderHead.DataType == 3) // 半成品
+                    {
+                        var WiproductBasic = _context.WiproductBasics.Find(itemData.WorkOrderHead.DataId);
+                        var Warehouse201 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesA && x.DeleteFlag == 0).ToList();
+                        var Warehouse202 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == warehousesB && x.DeleteFlag == 0).ToList();
+
+                        Warehouse201.First().WiproductLogs.Add(new WiproductLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse201.First().Quantity,
+                            Quantity = -WorkOrderReportData.ReCount,
+                            Message = "表處轉倉",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
+
+                        if (Warehouse202.Count() != 0)
+                        {
+                            Warehouse201.First().WiproductLogs.Add(new WiproductLog
+                            {
+                                LinkOrder = PurchaseNo,
+                                Original = Warehouse202.First().Quantity,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Message = "表處轉倉",
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
+                        }
+                        else // 如無倉別資訊，則自動建立
+                        {
+                            WiproductBasic.Wiproducts.Add(new Wiproduct
+                            {
+                                WiproductNo = WiproductBasic.WiproductNo,
+                                WiproductNumber = WiproductBasic.WiproductNumber,
+                                Name = WiproductBasic.Name,
+                                Quantity = WorkOrderReportData.ReCount,
+                                Specification = WiproductBasic.Specification,
+                                Property = WiproductBasic.Property,
+                                Price = WiproductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = warehousesB,
+                                WiproductLogs = {new WiproductLog
+                                {
+                                    LinkOrder = PurchaseNo,
+                                    Original = 0,
+                                    Quantity = WorkOrderReportData.ReCount,
+                                    Message = "表處轉倉",
+                                    CreateTime = dt,
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                }}
+                            });
+                        }
+                    }
+                    return MyFun.APIResponseOK(itemData);
+                }
+            }
         }
 
         /// <summary>
@@ -526,12 +883,19 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLog = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    if (checkLog.Count() == 0)
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
-                        WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
+                        if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
+                        {
+                            WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
+                        }
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
@@ -543,7 +907,7 @@ namespace HonjiMES.Controllers
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
-                            ProducingMachine = WorkOrderDetails.FirstOrDefault().ProducingMachine,
+                            ProducingMachine = WorkOrderReportData.ProducingMachine,
                             ReCount = 0,
                             // RePrice = WorkOrderDetails.FirstOrDefault().RePrice,
                             Message = WorkOrderReportData.Message,
@@ -551,16 +915,22 @@ namespace HonjiMES.Controllers
                             StatusN = 2,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
-                            ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 已經回報開工!"));
                     }
+
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {
@@ -595,7 +965,12 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 2)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 2)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 3;
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
@@ -623,7 +998,7 @@ namespace HonjiMES.Controllers
                             StatusN = 3,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
+                            ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
@@ -645,8 +1020,13 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 尚未回報開工!"));
                     }
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {
@@ -681,7 +1061,12 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 3)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 3)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if (checkLogStart.Count() == checkLogEnd.Count())
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
@@ -703,16 +1088,21 @@ namespace HonjiMES.Controllers
                             StatusN = 2,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
-                            ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 已經回報開工!"));
                     }
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {

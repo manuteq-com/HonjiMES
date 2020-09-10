@@ -11,10 +11,17 @@ namespace HonjiMES.Models
         public List<OrderDetail> OrderDetail { get; set; }
     }
 
+    public class PurchaseDetailData : PurchaseDetail
+    {        
+        public int WarehouseIdA { get; set; }
+        public int WarehouseIdB { get; set; }
+    }
+    
+
     public class PostPurchaseMaster_Detail
     {
         public PurchaseHead PurchaseHead { get; set; }
-        public List<PurchaseDetail> PurchaseDetails { get; set; }
+        public List<PurchaseDetailData> PurchaseDetails { get; set; }
     }
     
     public class PostBillofPurchaseHead_Detail

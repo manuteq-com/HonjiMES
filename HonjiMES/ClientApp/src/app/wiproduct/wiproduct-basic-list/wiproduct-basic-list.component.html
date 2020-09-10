@@ -36,7 +36,7 @@
     (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
     (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
-    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true">
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>

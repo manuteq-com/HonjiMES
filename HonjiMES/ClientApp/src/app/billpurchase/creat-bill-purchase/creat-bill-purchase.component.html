@@ -96,7 +96,7 @@
         <dxi-column dataField="Unit" caption="單位"></dxi-column>
         <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="UnitPriceEditCellTemplate"></dxi-column>
         <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="UnitPriceAllEditCellTemplate"></dxi-column>
-        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
+        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="WorkPriceEditCellTemplate"></dxi-column>
 
         <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 
@@ -128,27 +128,31 @@
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
-            <dx-number-box [value]='OriginPriceval' (onValueChanged)="data.setValue($event.value)" [disabled]="true"
+            <dx-number-box [value]='OriginPriceval' (onValueChanged)="data.setValue($event.value)" [disabled]="true" min="0" [format]="'#0'"
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceEditCellTemplate'">
-            <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)"
+            <dx-number-box [value]='Priceval' (onValueChanged)="PriceValueChanged($event,data)" min="0" [format]="'#0'"
                 [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'PriceAllEditCellTemplate'">
-            <dx-number-box [value]='PriceAllval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
+            <dx-number-box [value]='PriceAllval' (onValueChanged)="data.setValue($event.value)" min="0" [format]="'#0'" [showSpinButtons]="true">
             </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'UnitQuantityEditCellTemplate'">
-            <dx-number-box [value]='UnitQuantityval' (onValueChanged)="UnitQuantityValueChanged($event,data)" min="1"
-                [showSpinButtons]="true"></dx-number-box>
+            <dx-number-box [value]='UnitQuantityval' (onValueChanged)="UnitQuantityValueChanged($event,data)" min="1" [showSpinButtons]="true">
+            </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'UnitPriceEditCellTemplate'">
-            <dx-number-box [value]='UnitPriceval' (onValueChanged)="UnitPriceValueChanged($event,data)"
-                [showSpinButtons]="true"></dx-number-box>
+            <dx-number-box [value]='UnitPriceval' (onValueChanged)="UnitPriceValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true">
+            </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'UnitPriceAllEditCellTemplate'">
-            <dx-number-box [value]='UnitPriceAllval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
+            <dx-number-box [value]='UnitPriceAllval' (onValueChanged)="data.setValue($event.value)" min="0" [format]="'#0'" [showSpinButtons]="true">
+            </dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'WorkPriceEditCellTemplate'">
+            <dx-number-box [value]='WorkPriceval' (onValueChanged)="data.setValue($event.value)" min="0" [format]="'#0'" [showSpinButtons]="true">
             </dx-number-box>
         </div>
 

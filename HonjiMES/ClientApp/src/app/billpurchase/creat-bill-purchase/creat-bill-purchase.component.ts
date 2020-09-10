@@ -57,6 +57,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     UnitQuantityval: any;
     UnitPriceval: any;
     UnitPriceAllval: any;
+    WorkPriceval: any;
     allMode: string;
     checkBoxesMode: string;
     postval: any;
@@ -239,6 +240,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.UnitQuantityval = null;
         this.UnitPriceval = null;
         this.UnitPriceAllval = null;
+        this.WorkPriceval = null;
         // this.BasicDataList = null;
         this.BasicDataListTemp = [];
         this.WarehouseList = null;
@@ -297,6 +299,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.UnitQuantityval = e.data.UnitQuantityval;
         this.UnitPriceval = e.data.UnitPriceval;
         this.UnitPriceAllval = e.data.UnitPriceAllval;
+        this.WorkPriceval = e.data.WorkPrice;
         this.WarehouseList = null;
         // debugger;
         // const dataGrid = e.component;
@@ -329,6 +332,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.UnitQuantityval = null;
             this.UnitPriceval = null;
             this.UnitPriceAllval = null;
+            this.WorkPriceval = null;
             this.WarehouseList = null;
         }
     }
@@ -346,6 +350,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.UnitQuantityval = e.data.UnitQuantityval;
         this.UnitPriceval = e.data.UnitPriceval;
         this.UnitPriceAllval = e.data.UnitPriceAllval;
+        this.WorkPriceval = e.data.WorkPrice;
         this.Warehouseval = e.data.WarehouseId;
         this.GetPurchasesBySupplier(e.data.SupplierId);
         this.GetBasicDatasByPurchase(e.data.PurchaseId);

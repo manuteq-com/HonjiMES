@@ -51,6 +51,8 @@
             <dxo-form colCount=4>
                 <!-- <dxi-item dataField="DataId"></dxi-item> -->
                 <dxi-item dataField="TempId"></dxi-item>
+                <dxi-item dataField="WarehouseIdA" [visible]="OrderTypeVisible"></dxi-item>
+                <dxi-item dataField="WarehouseIdB" [visible]="OrderTypeVisible"></dxi-item>
                 <dxi-item dataField="WarehouseId"></dxi-item>
                 <dxi-item dataField="Quantity"></dxi-item>
                 <dxi-item dataField="OriginPrice"></dxi-item>
@@ -78,10 +80,20 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column> -->
-        <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate" [width]="120">
+
+        <dxi-column dataField="WarehouseIdA" caption="轉出倉別" editCellTemplate="WarehouseAEditCellTemplate" [visible]="OrderTypeVisible" [width]="120">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
+        <dxi-column dataField="WarehouseIdB" caption="轉入倉別" editCellTemplate="WarehouseBEditCellTemplate" [visible]="OrderTypeVisible" [width]="120">
+            <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="入庫倉別" editCellTemplate="WarehouseEditCellTemplate" [width]="120">
+            <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
+        </dxi-column>
+
         <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate" [width]="80">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
         </dxi-column>
@@ -92,7 +104,7 @@
         <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate" [width]="100">
             <!-- <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date" [width]="120">
+        <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date" editCellTemplate="DeliveryTimeEditCellTemplate" [width]="120">
             <dxi-validation-rule type="required" message="預交日期 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Remark" caption="備註"></dxi-column>
@@ -113,6 +125,14 @@
                 [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'TempId' } }"
                 valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
         </div>
+        <div *dxTemplate="let data of 'WarehouseAEditCellTemplate'">
+            <dx-select-box [value]="WarehousevalA" (onValueChanged)="WarehousevalvalueChanged($event,data)" (onInitialized)="onInitialized(WarehousevalA,data)"
+                [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        </div>
+        <div *dxTemplate="let data of 'WarehouseBEditCellTemplate'">
+            <dx-select-box [value]="WarehousevalB" (onValueChanged)="WarehousevalvalueChanged($event,data)" (onInitialized)="onInitialized(WarehousevalB,data)"
+                [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
             <dx-select-box [value]="Warehouseval" (onValueChanged)="WarehousevalvalueChanged($event,data)" (onInitialized)="onInitialized(Warehouseval,data)"
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
@@ -129,6 +149,10 @@
             <dx-number-box [value]='Priceval' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true">
             </dx-number-box>
         </div>
+        <div *dxTemplate="let data of 'DeliveryTimeEditCellTemplate'">
+            <dx-date-box [value]="DeliveryTime" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(DeliveryTime,data)"></dx-date-box>
+        </div>
+
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">

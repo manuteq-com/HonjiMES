@@ -71,18 +71,18 @@
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="PurchaseNo" caption="採購單號">
+    <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="160">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="SupplierId" caption="供應商">
          <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="Status" caption="狀態" [width]="100">
+    <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="listPurchaseOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="120"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="160"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="220"></dxi-column>
+    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [width]="220"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <dxi-column type="buttons">
         <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->

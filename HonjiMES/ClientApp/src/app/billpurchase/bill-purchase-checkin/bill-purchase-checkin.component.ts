@@ -30,6 +30,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
+    UnitPriceAllEditorOptions: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
@@ -74,9 +75,31 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.PriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.PriceValueChanged.bind(this) };
-        this.UnitCountEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitCountValueChanged.bind(this) };
-        this.UnitPriceEditorOptions = { showSpinButtons: true, mode: 'number', onValueChanged: this.UnitPriceValueChanged.bind(this) };
+        this.PriceEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            min: 0,
+            onValueChanged: this.PriceValueChanged.bind(this)
+        };
+        this.UnitCountEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            onValueChanged: this.UnitCountValueChanged.bind(this)
+        };
+        this.UnitPriceEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            min: 0,
+            onValueChanged: this.UnitPriceValueChanged.bind(this)
+        };
+        this.UnitPriceAllEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            min: 0,
+        };
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;

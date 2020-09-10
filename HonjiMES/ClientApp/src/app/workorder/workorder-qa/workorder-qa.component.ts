@@ -33,7 +33,8 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     listStatus: any;
     ProcessBasicList: any;
     postval: any;
-    creatpopupVisible: boolean;
+    logpopupVisible: boolean;
+    stockpopupVisible: boolean;
     itemkey: any;
     btnDisabled: boolean;
     workOrderHeadNo: any;
@@ -43,6 +44,10 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     workOrderHeadStatus: any;
     workOrderHeadCount: any;
     WorkOrderNoInputVal: any;
+    modkey: string;
+    workOrderHeadDataType: any;
+    workOrderHeadDataId: any;
+    randomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.onReorder = this.onReorder.bind(this);
@@ -109,13 +114,16 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                     this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
                     this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
                     this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
+
+                    this.workOrderHeadDataType = s.data.WorkOrderHead.DataType;
+                    this.workOrderHeadDataId = s.data.WorkOrderHead.DataId;
                 }
             }
         );
     }
     readLog(e, data) {
         this.itemkey = data.data.Id;
-        this.creatpopupVisible = true;
+        this.logpopupVisible = true;
     }
     async searchdata() {
         this.itemkey = 0;
@@ -162,9 +170,31 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                 }
             }
         });
-
     }
     stockdata() {
+        if (this.workOrderHeadDataType === 1) {
+            this.modkey = 'material';
+        } else if (this.workOrderHeadDataType === 2) {
+            this.modkey = 'product';
+        } else if (this.workOrderHeadDataType === 3) {
+            this.modkey = 'wiproduct';
+        }
+        this.randomkey = new Date().getTime();
+        this.itemkey = this.workOrderHeadDataId;
+        this.stockpopupVisible = true;
+    }
+    stockpopup_result(e) {
+        this.dataGrid.instance.refresh();
+        this.stockpopupVisible = false;
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
+    stockdataOld() {
         Swal.fire({
             title: '請確認入庫數量!',
             input: 'number',

@@ -123,7 +123,7 @@
 
             <dxi-column dataField="NameType" caption="類別" dataType="string" alignment="center" [allowEditing]="false" [width]="70"></dxi-column>
             <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+            <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80" [visible]="false"></dxi-column>
             <dxi-column dataField="ReceiveQty" caption="領用數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
             <!-- <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
                 <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation">

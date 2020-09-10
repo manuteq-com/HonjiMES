@@ -2,3 +2,7 @@
     background-color:  rgb(91, 166, 236) !important;
     color: black !important;
 }
+.dx-button {
+    float: right;
+    margin-right: 6px;
+}

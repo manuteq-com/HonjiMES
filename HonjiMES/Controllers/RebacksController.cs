@@ -345,7 +345,7 @@ namespace HonjiMES.Controllers
                 requisition.Specification = ProductBasics.Specification;
                 requisition.Quantity = WorkOrderHead.Count;
                 requisition.CreateTime = dt;
-                requisition.CreateUser = MyFun.GetUserID(HttpContext);
+                requisition.CreateUser = PostRequisition.CreateUser;
                 // BOM內容
                 var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
                 foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))

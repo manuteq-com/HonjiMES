@@ -1,7 +1,7 @@
 <form action="" (submit)="onFormSubmit($event)">
     <div class="row mb-4">
 
-        <div class="col">
+        <div class="col-12">
             <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
                 [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
                 <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
@@ -17,50 +17,54 @@
                 </dxi-item>
             </dx-form>
         </div>
-        <div class="col">
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mt-1" text='建立領料單' type='success' icon='save'
-                [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+
+    </div>
+
+    <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+        [columnAutoWidth]="false" [showBorders]="true" [height]="560" (onCellClick)="cellClick($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
+
+        <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="allowDeleting" useIcons="false">
+            <dxo-texts saveAllChanges="領料"></dxo-texts>
+        </dxo-editing>
+
+        <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
+        <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80" [visible]="false"></dxi-column>
+        <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+        <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
+            <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="領料倉別" editCellTemplate="WarehouseEditCellTemplate">
+            <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate"></dxi-column>
+
+        <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="newVisible">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        </dxi-column>
+
+        <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
+                [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
+            </dx-select-box>
         </div>
+        <div *dxTemplate="let data of 'StockQtyCellTemplate'">
+            <span>{{GetWarehouseStockQty(data)}}</span>
+        </div>
+    </dx-data-grid>
+
+    <div class="col-12">
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pt-2 pb-2 mt-2" text='建立領料單' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
     </div>
+
 </form>
-<dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-    [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" [height]="360" (onCellClick)="cellClick($event)"
-    (onToolbarPreparing)="onToolbarPreparing($event)">
-
-    <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="allowDeleting" useIcons="false">
-        <dxo-texts saveAllChanges="領料"></dxo-texts>
-    </dxo-editing>
-
-    <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="ReceiveQty" caption="已領數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="RQtyValidation"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="領料倉別" editCellTemplate="WarehouseEditCellTemplate">
-        <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-        <dxi-validation-rule message="領取數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate"></dxi-column>
-
-    <dxi-column type="buttons" caption="新增" cssClass="addmod" [visible]="newVisible">
-        <dxi-button name="save" text="存檔"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
-
-    <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-        <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
-            [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
-        </dx-select-box>
-    </div>
-    <div *dxTemplate="let data of 'StockQtyCellTemplate'">
-        <span>{{GetWarehouseStockQty(data)}}</span>
-    </div>
-</dx-data-grid>
 
 <dx-popup [showTitle]="true" title="新增領料資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="24%"
     [width]="600" [(visible)]="popupVisible">

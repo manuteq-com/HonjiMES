@@ -57,7 +57,8 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
-        this.colCount = 1;
+        this.colCount = 3;
+        this.dataSourceAllDB = [];
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.editorOptions = {
             onValueChanged: this.onValueChanged.bind(this),
@@ -389,7 +390,17 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             WarehouseId: e.WarehouseId,
             WarehouseList: e.WarehouseList
         };
-        this.dataSourceAllDB.push(newData);
-        this.popupVisible = false;
+        if (this.dataSourceAllDB.findIndex(x => x.NameNo === newData.NameNo) === -1) {
+            this.dataSourceAllDB.push(newData);
+            this.popupVisible = false;
+        } else {
+            notify({
+                message: '該料號已存在清單!',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+        }
     }
 }

@@ -711,7 +711,7 @@ Relational:Comment: 回覆量
 TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "OrderDetail.ReplyDate" Label="ReplyDate" Name="ReplyDate" Category="Property Required" Type="DateTime" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: reply_date
 Relational:ColumnType: timestamp
-Relational:Comment: 回復交期
+Relational:Comment: 回覆交期
 Relational:DefaultValueSql: 'current_timestamp()'
 TypeMapping: Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlDateTimeTypeMapping" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
 <Node Id = "OrderDetail.ReplyRemark" Label="ReplyRemark" Name="ReplyRemark" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MySql:CharSet: utf8mb4

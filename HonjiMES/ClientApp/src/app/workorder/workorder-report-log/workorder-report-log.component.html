@@ -28,7 +28,7 @@
         </dxi-total-item>
     </dxo-summary>
 
-    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="160"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
     <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -44,9 +44,9 @@
     <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date">
     </dxi-column>
     <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date">
-    </dxi-column>
-    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
-        [allowEditing]="false"></dxi-column> -->
+    </dxi-column> -->
+    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
 
     <dxi-column type="buttons" [visible]="false">
         <dxi-button name="save" text="存檔"></dxi-button>

@@ -32,6 +32,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     PriceEditorOptions: any;
     UnitCountEditorOptions: any;
     UnitPriceEditorOptions: any;
+    UnitPriceAllEditorOptions: any;
     WarehouseList: any[];
 
     constructor(private http: HttpClient, public app: AppComponent) {
@@ -60,6 +61,8 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.PriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
+                        format: '#0',
+                        min: 0,
                         onValueChanged: this.PriceValueChanged.bind(this)
                     };
                     this.UnitCountEditorOptions = {
@@ -70,7 +73,15 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.UnitPriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
+                        format: '#0',
+                        min: 0,
                         onValueChanged: this.UnitPriceValueChanged.bind(this)
+                    };
+                    this.UnitPriceAllEditorOptions = {
+                        showSpinButtons: true,
+                        mode: 'number',
+                        format: '#0',
+                        min: 0,
                     };
                 }
             }
