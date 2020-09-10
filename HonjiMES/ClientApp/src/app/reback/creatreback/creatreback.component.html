@@ -1,49 +1,57 @@
 <form action="" (submit)="onFormSubmit($event)">
     <div class="row mb-4">
 
-        <div class="col">
+        <div class="col-12">
             <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
                 [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
                 <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
                     <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
                     <dxo-label text="工單號"></dxo-label>
                 </dxi-item>
+                <dxi-item dataField="CreateUser" [editorOptions]="selectUserDefault" editorType="dxSelectBox">
+                    <dxo-label text="退料人"></dxo-label>
+                </dxi-item>
             </dx-form>
         </div>
-        <div class="col">
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mt-1" text='建立退料單' type='success' icon='save'
-                [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+
+    </div>
+
+    <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+        [columnAutoWidth]="false" [showBorders]="true" [height]="560" (onCellClick)="cellClick($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
+
+        <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
+            <dxo-texts saveAllChanges="退料"></dxo-texts>
+        </dxo-editing>
+
+        <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
+        <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80" [visible]="false"></dxi-column>
+        <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
+        <dxi-column dataField="RQty" caption="退庫數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
+            <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="RQtyValidation"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="退料倉別" editCellTemplate="WarehouseEditCellTemplate">
+            <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate" [visible]="false"></dxi-column>
+
+        <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
+                [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
+            </dx-select-box>
         </div>
+        <div *dxTemplate="let data of 'StockQtyCellTemplate'">
+            <span>{{GetWarehouseStockQty(data)}}</span>
+        </div>
+    </dx-data-grid>
+
+    <div class="col-12">
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pt-2 pb-2 mt-2" text='建立退料單' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
     </div>
+
 </form>
-<dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-    [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" [height]="360" (onCellClick)="cellClick($event)"
-    (onToolbarPreparing)="onToolbarPreparing($event)">
 
-    <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
-        <dxo-texts saveAllChanges="退料"></dxo-texts>
-    </dxo-editing>
-
-    <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="RbackQty" caption="已退數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
-    <dxi-column dataField="RQty" caption="退庫數量" dataType="number" [width]="80" [editorOptions]="RQtyEditorOptions">
-        <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="RQtyValidation"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="退料倉別" editCellTemplate="WarehouseEditCellTemplate">
-        <dxo-lookup [dataSource]="Warehouselist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-        <dxi-validation-rule message="退庫數量 必須大於0" type="custom" [validationCallback]="WarehouseValidation"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate" [visible]="false"></dxi-column>
-
-    <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-        <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
-            [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
-        </dx-select-box>
-    </div>
-    <div *dxTemplate="let data of 'StockQtyCellTemplate'">
-        <span>{{GetWarehouseStockQty(data)}}</span>
-    </div>
-</dx-data-grid>
