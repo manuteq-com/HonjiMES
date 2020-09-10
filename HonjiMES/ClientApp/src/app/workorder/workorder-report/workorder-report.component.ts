@@ -205,7 +205,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.NgCount = 0;
                                 findProcess = true;
 
-                                if (element.Status === 1) {
+                                if (element.Status === 1) { // 未開工
                                     // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
                                     if (element.Type === 1) {
                                         this.ReCountVisible = true;
@@ -213,11 +213,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     } else {
                                         this.startBtnVisible = true;
                                     }
-                                } else if (element.Status === 2) {
+                                } else if (element.Status === 2) { // 已開工
                                     this.ReCountVisible = true;
                                     this.NgCountVisible = true;
                                     this.RemarkVisible = true;
                                     this.endBtnVisible = true;
+
+                                    // 可重複報開工 2020/09/09
+                                    this.restartedBtnVisible = true;
 
                                     // 如工序為委外(無採購單)，則需填入供應商、金額
                                     if (element.Type === 2) {
@@ -231,6 +234,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     } else {
                                         this.restartedBtnVisible = true;
                                         this.RemarkVisible = true;
+
+                                        // 因重複報開工，所以重複完工 2020/09/09
+                                        this.endBtnVisible = true;
+                                        this.ReCountVisible = true;
+                                        this.NgCountVisible = true;
                                     }
                                 }
                             }

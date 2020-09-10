@@ -883,12 +883,19 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLog = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    if (checkLog.Count() == 0)
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
-                        WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
+                        if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
+                        {
+                            WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
+                        }
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
@@ -900,7 +907,7 @@ namespace HonjiMES.Controllers
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
-                            ProducingMachine = WorkOrderDetails.FirstOrDefault().ProducingMachine,
+                            ProducingMachine = WorkOrderReportData.ProducingMachine,
                             ReCount = 0,
                             // RePrice = WorkOrderDetails.FirstOrDefault().RePrice,
                             Message = WorkOrderReportData.Message,
@@ -908,16 +915,22 @@ namespace HonjiMES.Controllers
                             StatusN = 2,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
-                            ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 已經回報開工!"));
                     }
+
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {
@@ -952,7 +965,12 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 2)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 2)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 3;
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
@@ -980,7 +998,7 @@ namespace HonjiMES.Controllers
                             StatusN = 3,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
+                            ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
@@ -1002,8 +1020,13 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 尚未回報開工!"));
                     }
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {
@@ -1038,7 +1061,12 @@ namespace HonjiMES.Controllers
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
-                    if (WorkOrderDetails.FirstOrDefault().Status == 3)
+                    // if (WorkOrderDetails.FirstOrDefault().Status == 3)
+                    // {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if (checkLogStart.Count() == checkLogEnd.Count())
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
@@ -1060,16 +1088,21 @@ namespace HonjiMES.Controllers
                             StatusN = 2,
                             DueStartTime = WorkOrderDetails.FirstOrDefault().DueStartTime,
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
-                            ActualStartTime = WorkOrderDetails.FirstOrDefault().ActualStartTime,
-                            ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
                             CreateTime = DateTime.Now,
                             CreateUser = MyFun.GetUserID(HttpContext),
                         });
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 已經回報開工!"));
                     }
+                    // }
+                    // else
+                    // {
+                    //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                    // }
                 }
                 else
                 {
