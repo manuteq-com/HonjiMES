@@ -36,10 +36,10 @@ namespace HonjiMES.Models
         [Column("supplier_id", TypeName = "int(11)")]
         public int SupplierId { get; set; }
         /// <summary>
-        /// &#35330;&#21934;&#21934;&#34399;id
+        /// &#35330;&#21934;&#26126;&#32048;id
         /// </summary>
-        [Column("order_id", TypeName = "int(11)")]
-        public int? OrderId { get; set; }
+        [Column("order_detail_id", TypeName = "int(11)")]
+        public int? OrderDetailId { get; set; }
         /// <summary>
         /// &#38928;&#35336;&#20132;&#26399;
         /// </summary>
@@ -116,6 +116,9 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(OrderDetailId))]
+        [InverseProperty("PurchaseDetails")]
+        public virtual OrderDetail OrderDetail { get; set; }
         [ForeignKey(nameof(PurchaseId))]
         [InverseProperty(nameof(PurchaseHead.PurchaseDetails))]
         public virtual PurchaseHead Purchase { get; set; }
