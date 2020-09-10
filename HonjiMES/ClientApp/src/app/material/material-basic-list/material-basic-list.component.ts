@@ -33,6 +33,7 @@ export class MaterialBasicListComponent implements OnInit {
     hint: boolean;
     remoteOperations: boolean;
     detailfilter: any;
+    supplierList: any;
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -66,6 +67,13 @@ export class MaterialBasicListComponent implements OnInit {
                         e.Name = e.Code + e.Name;
                     });
                     this.WarehouseList = s.data;
+                }
+            }
+        );
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.supplierList = s.data;
                 }
             }
         );

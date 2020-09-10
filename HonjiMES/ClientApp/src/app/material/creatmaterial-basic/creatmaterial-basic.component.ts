@@ -39,6 +39,8 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         useSubmitBehavior: true,
         icon: 'save'
     };
+    supplierList: any;
+    selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
@@ -94,6 +96,19 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.supplierList = s.data;
+                    this.selectSupplier = {
+                        items: this.supplierList,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        searchEnabled: true
+                    };
+                }
+            }
+        );
     }
     ngOnInit() {
     }
@@ -123,7 +138,7 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/MaterialBasics/PostMaterial', 'POST', { values: this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/MaterialBasics/PostMaterialBasic', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

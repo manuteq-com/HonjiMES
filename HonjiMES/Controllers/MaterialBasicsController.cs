@@ -41,7 +41,7 @@ namespace HonjiMES.Controllers
                 Property = x.Property,
                 Price = x.Price,
                 Unit = x.Unit,
-                Supplier = x.Supplier,
+                SupplierId = x.SupplierId,
                 CreateTime = x.CreateTime,
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
@@ -160,7 +160,7 @@ namespace HonjiMES.Controllers
                     Property = material.Property,
                     Price = material.Price,
                     Unit = material.Unit,
-                     CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
                 MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
