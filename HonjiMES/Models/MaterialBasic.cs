@@ -62,8 +62,8 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#20379;&#25033;&#21830;
         /// </summary>
-        [Column("supplier", TypeName = "int(11)")]
-        public int? Supplier { get; set; }
+        [Column("supplier_id", TypeName = "int(11)")]
+        public int? SupplierId { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
@@ -78,6 +78,9 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("MaterialBasics")]
+        public virtual Supplier Supplier { get; set; }
         [InverseProperty(nameof(BillOfMaterial.MaterialBasic))]
         public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
         [InverseProperty(nameof(Material.MaterialBasic))]

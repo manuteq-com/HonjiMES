@@ -869,6 +869,9 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("原料基本檔");
 
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
@@ -897,7 +900,7 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.Supplier).HasComment("供應商");
+                entity.Property(e => e.SupplierId).HasComment("供應商");
 
                 entity.Property(e => e.Unit)
                     .HasComment("單位")
@@ -907,6 +910,11 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.MaterialBasics)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("material_basic_ibfk_1");
             });
 
             modelBuilder.Entity<MaterialLog>(entity =>
@@ -2820,6 +2828,9 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("半成品基本檔");
 
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -2853,6 +2864,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.SupplierId).HasComment("供應商");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
@@ -2866,6 +2879,11 @@ namespace HonjiMES.Models
                     .HasComment("廠內半成品號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.WiproductBasics)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("wiproduct_basic_ibfk_1");
             });
 
             modelBuilder.Entity<WiproductLog>(entity =>

@@ -62,6 +62,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("sub_inventory", TypeName = "varchar(50)")]
         public string SubInventory { get; set; }
+        /// <summary>
+        /// &#20379;&#25033;&#21830;
+        /// </summary>
+        [Column("supplier_id", TypeName = "int(11)")]
+        public int? SupplierId { get; set; }
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
         /// <summary>
@@ -81,6 +86,9 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(SupplierId))]
+        [InverseProperty("WiproductBasics")]
+        public virtual Supplier Supplier { get; set; }
         [InverseProperty(nameof(Wiproduct.WiproductBasic))]
         public virtual ICollection<Wiproduct> Wiproducts { get; set; }
     }
