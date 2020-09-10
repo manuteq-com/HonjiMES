@@ -514,6 +514,8 @@ namespace HonjiMES.Models
     public class PostRequisition
     {
         public int WorkOrderNo { get; set; }
+        public int? ReceiveUser { get; set; }
+        public int CreateUser { get; set; }
         public List<GetReceive> ReceiveList { get; set; }
     }
 
@@ -681,6 +683,26 @@ namespace HonjiMES.Models
         public string Message { get; set; }
         public string ProducingMachine { get; set; }
     }
+
+    public class WorkOrderLog
+    {
+        public string WorkOrderNo { get; set; }
+        public int ReportType { get; set; }
+        public int SerialNumber { get; set; }
+        public string Process { get; set; }
+        public int ProcessTime { get; set; }
+        public int? ReCount { get; set; }
+        public string Remarks { get; set; }
+        public int StatusO { get; set; }
+        public int StatusN { get; set; }
+        public DateTime? DueStartTime { get; set; }
+        public DateTime? DueEndTime { get; set; }
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+        public DateTime CreateTime { get; set; }
+    }
+
+
     /// <summary>
     /// 製成進度
     /// </summary>

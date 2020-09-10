@@ -2,11 +2,13 @@
    "ContextClassName": "HonjiContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
    "OutputPath": "Models",
    "ProjectRootNamespace": "HonjiMES",
+   "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
    "Tables": [

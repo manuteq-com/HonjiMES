@@ -39,6 +39,7 @@
         "intl": "1.2.5",
         "jquery": "^3.5.0",
         "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^3.0.0-beta.2",
         "koa-jwt": "^4.0.0",
         "ng-zorro-antd": "^9.3.0",
         "primeicons": "^1.0.0",

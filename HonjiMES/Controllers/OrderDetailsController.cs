@@ -48,7 +48,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads).AsQueryable();
+            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads).Include(x => x.PurchaseDetails).AsQueryable();
 
             if (OrderId.HasValue)
             {
@@ -76,6 +76,19 @@ namespace HonjiMES.Controllers
                     if (WorkOrderHeaditem.DeleteFlag != 0)
                     {
                         Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
+                    }
+                }
+                //取得採購單號
+                foreach (var PurchaseDetailitem in Detailitem.PurchaseDetails.ToList())
+                {
+                    var PurchaseHeads = _context.PurchaseHeads.Find(PurchaseDetailitem.PurchaseId);
+                    if (PurchaseHeads.DeleteFlag == 0)
+                    {
+                        PurchaseDetailitem.Purchase = PurchaseHeads;
+                    }
+                    else
+                    {
+                        Detailitem.PurchaseDetails.Remove(PurchaseDetailitem);
                     }
                 }
             }

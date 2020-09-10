@@ -1698,6 +1698,9 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("採購單明細");
 
+                entity.HasIndex(e => e.OrderDetailId)
+                    .HasName("order_detail_id");
+
                 entity.HasIndex(e => e.PurchaseId)
                     .HasName("fk_purchase_detail_purchase_head");
 
@@ -1729,7 +1732,7 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("預計交期");
 
-                entity.Property(e => e.OrderId).HasComment("訂單單號id");
+                entity.Property(e => e.OrderDetailId).HasComment("訂單明細id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
 
@@ -1760,6 +1763,11 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.WarehouseId).HasComment("倉別id");
+
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany(p => p.PurchaseDetails)
+                    .HasForeignKey(d => d.OrderDetailId)
+                    .HasConstraintName("purchase_detail_ibfk_3");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.PurchaseDetails)

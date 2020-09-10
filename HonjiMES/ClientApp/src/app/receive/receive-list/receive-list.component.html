@@ -20,7 +20,7 @@
 <dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1000" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatreceive (childOuter)="creatpopup_result($event)">
+        <app-creatreceive (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
         </app-creatreceive>
     </div>
 </dx-popup>

@@ -37,6 +37,7 @@ export class OrderdetailListComponent implements OnInit {
     dataSource: any;
     totalcount: any;
     Otoworkkey: any;
+    autoNavigateToFocusedRow = true;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.popupVisiblePurchase = false;

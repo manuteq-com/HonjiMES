@@ -7,6 +7,7 @@ import { LoginUser } from './model/loginuser';
 import { APIResponse } from './app.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
+import jwt_decode from 'jwt-decode';
 
 enum MenuOrientation {
     STATIC,
@@ -40,6 +41,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     menu: Array<any> = [];
     breadcrumbList: Array<any> = [];
     login$: LoginUser;
+    UserId: number;
     constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
@@ -102,6 +104,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     GetUserName() {
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
         return this.UserName;
+    }
+    GetUserId(): number {
+        let UserID = 0;
+        let Token = '';
+        this._authService.currentUser.subscribe(x => Token = x ? x.Token : '');
+        const data = this.getDecodedAccessToken(Token);
+        UserID = Number(data.UserID) ;
+        return UserID;
+    }
+    getDecodedAccessToken(token: string): any {
+        try {
+            return jwt_decode(token);
+        } catch (Error) {
+            return null;
+        }
     }
     logout() {
         this._authService.logout();

@@ -124,7 +124,6 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
             displayExpr: 'Name',
             valueExpr: 'Id',
         };
-        debugger;
     }
     QuantityValueChanged(e) {
         this.formData.PriceAll = this.formData.Price * e.value;
@@ -171,7 +170,6 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
         this.formData = this.myform.instance.option('formData');
         this.postval = this.formData;
         this.postval.BillofPurchaseDetailId = this.itemkeyval.Id;
-        debugger;
         try {
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/ToPurchase/PostPurchaseCheckReturn', 'POST', { values: this.postval });

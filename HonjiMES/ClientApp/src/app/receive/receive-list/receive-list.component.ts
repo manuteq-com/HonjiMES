@@ -283,6 +283,7 @@ export class ReceiveListComponent implements OnInit {
         // tslint:disable-next-line: deprecation
         // this.dataGrid.instance.insertRow();
         this.creatpopupVisible = true;
+        this.randomkey = new Date().getTime();
     }
     infodata() {
         this.itemkey = null;

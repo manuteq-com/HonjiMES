@@ -70,6 +70,17 @@
     <dxi-column dataField="Ready" caption="完工"></dxi-column>
     <dxi-column dataField="ToNew" caption="轉新"></dxi-column>
     <dxi-column dataField="Finish" caption="結案"></dxi-column>
+    <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
+    </div>
 </dx-data-grid>
+
+<dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="850" [width]="1600"
+    [(visible)]="verpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-resource-workorder [masterkey]="masterkey"></app-resource-workorder>
+    </div>
+</dx-popup>
 
 

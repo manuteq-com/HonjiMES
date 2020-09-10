@@ -1463,6 +1463,46 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// 報工紀錄列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderLog>> GetWorkOrderReportLogByNum(string machine)
+        {
+            // var data = await _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine)
+            // .Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
+            // return Ok(MyFun.APIResponseOK(data));
+            var data = await _context.WorkOrderReportLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine)
+            .OrderByDescending(x => x.CreateTime).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
+            var WorkOrderLog = new List<WorkOrderLog>();
+            foreach (var item in data)
+            {
+                var dt = DateTime.Now;
+                var tempData = new WorkOrderLog
+                {
+                    WorkOrderNo = item.WorkOrderDetail.WorkOrderHead.WorkOrderNo,
+                    ReportType = item.ReportType,
+                    SerialNumber = item.WorkOrderDetail.SerialNumber,
+                    Process = item.WorkOrderDetail.ProcessNo + '_' + item.WorkOrderDetail.ProcessName,
+                    ProcessTime = Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes),
+                    ReCount = item.ReCount,
+                    Remarks = item.WorkOrderDetail.Remarks,
+                    StatusO = item.StatusO,
+                    StatusN = item.StatusN,
+                    DueStartTime = item.DueStartTime,
+                    DueEndTime = item.DueEndTime,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    CreateTime = item.CreateTime
+                };
+                WorkOrderLog.Add(tempData);
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrderLog));
+        }
+        
+
         /// <summary>
         /// 產報工單PDF
         /// </summary>

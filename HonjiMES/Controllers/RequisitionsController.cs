@@ -194,14 +194,15 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Requisition>> PostRequisitionByWorkOrderNo(WorkOrderHead WorkOrderHead)
         {
-            return Ok(await PostRequisitionByWorkOrderNoFun(WorkOrderHead));
+            return Ok(await PostRequisitionByWorkOrderNoFun(WorkOrderHead, null));
         }
         /// <summary>
         /// 依照工單號建立領料單 主程式
         /// </summary>
         /// <param name="WorkOrderHead"></param>
+        /// <param name="PostRequisition"></param>
         /// <returns></returns>
-        private async Task<APIResponse> PostRequisitionByWorkOrderNoFun(WorkOrderHead WorkOrderHead)
+        private async Task<APIResponse> PostRequisitionByWorkOrderNoFun(WorkOrderHead WorkOrderHead, PostRequisition PostRequisition)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             if (string.IsNullOrEmpty(WorkOrderHead.WorkOrderNo))
@@ -240,7 +241,9 @@ namespace HonjiMES.Controllers
                 requisition.Specification = ProductBasics.Specification;
                 requisition.Quantity = WorkOrderHeadData.Count;
                 requisition.CreateTime = dt;
-                requisition.CreateUser = MyFun.GetUserID(HttpContext);
+                requisition.ReceiveUser = PostRequisition?.ReceiveUser ?? null;
+                requisition.CreateUser = PostRequisition.CreateUser;
+                // requisition.CreateUser = MyFun.GetUserID(HttpContext);
                 // BOM內容
                 var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
                 foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
@@ -996,7 +999,7 @@ namespace HonjiMES.Controllers
                 }
             }
             var WorkOrderHead = _context.WorkOrderHeads.Find(PostRequisition.WorkOrderNo);
-            var head = PostRequisitionByWorkOrderNoFun(WorkOrderHead);
+            var head = PostRequisitionByWorkOrderNoFun(WorkOrderHead, PostRequisition);
             if (head.Result.success)
             {
                 var Requisition = (Requisition)head.Result.data;
