@@ -31,6 +31,8 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
     warehousesOptions: any;
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
+    supplierList: any;
+    selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
@@ -63,6 +65,19 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
                         e.Name = e.Code + e.Name;
                     });
                     this.warehousesOptions = s.data;
+                }
+            }
+        );
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.supplierList = s.data;
+                    this.selectSupplier = {
+                        items: this.supplierList,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        searchEnabled: true
+                    };
                 }
             }
         );
@@ -100,7 +115,7 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/WiproductBasics/PostWiproduct', 'POST', { values: this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/WiproductBasics/PostWiproductBasic', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

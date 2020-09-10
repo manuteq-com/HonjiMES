@@ -32,6 +32,7 @@ export class WiproductBasicListComponent implements OnInit {
     mod: string;
     uploadUrl: string;
     hint: boolean;
+    supplierList: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -62,6 +63,13 @@ export class WiproductBasicListComponent implements OnInit {
                         e.Name = e.Code + e.Name;
                     });
                     this.WarehouseList = s.data;
+                }
+            }
+        );
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.supplierList = s.data;
                 }
             }
         );

@@ -40,6 +40,7 @@ namespace HonjiMES.Controllers
                 Property = x.Property,
                 Price = x.Price,
                 SubInventory = x.SubInventory,
+                SupplierId = x.SupplierId,
                 Remarks = x.Remarks,
                 CreateTime = x.CreateTime,
                 CreateUser = x.CreateUser,
@@ -155,7 +156,7 @@ namespace HonjiMES.Controllers
                     Property = wiproduct.Property,
                     Price = wiproduct.Price,
                     SubInventory = wiproduct.SubInventory,
-                     CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
                 WiproductsBasicData = _context.WiproductBasics.AsQueryable().Where(x => x.WiproductNo == wiproduct.WiproductNo && x.DeleteFlag == 0).FirstOrDefault();
