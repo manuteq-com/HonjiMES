@@ -246,7 +246,7 @@ namespace HonjiMES.Controllers
                 var Details = new List<BillofPurchaseDetail>();
                 foreach (var item in Detail)
                 {
-                    var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId).FirstOrDefault();
+                    var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Include(x => x.Purchase).Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
                     if (item.DataType == 1)
                     {
                         var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
@@ -272,6 +272,9 @@ namespace HonjiMES.Controllers
                     item.CreateTime = dt;
                     item.CreateUser = MyFun.GetUserID(HttpContext);
                     Details.Add(item);
+                    
+                    PurchaseDetail.PurchaseCount += item.Quantity;
+                    PurchaseDetail.Purchase.Status = 2;
                 }
                 Head.BillofPurchaseDetails = Details;
                 _context.BillofPurchaseHeads.Add(Head);

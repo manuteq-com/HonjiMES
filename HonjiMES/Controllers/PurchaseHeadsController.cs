@@ -113,7 +113,7 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var purchaselists = await _context.PurchaseDetails
             .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier 
-            && x.DataType != 0 && x.Purchase.DeleteFlag == 0 && x.Purchase.Status == 0)
+            && x.DataType != 0 && x.Purchase.DeleteFlag == 0 && x.Purchase.Status != 1)
             .Include(x => x.Purchase).Include(x => x.Warehouse).Select(x => new PuschaseList
             {
                 Id = x.Id,
@@ -134,6 +134,7 @@ namespace HonjiMES.Controllers
                 WarehouseId = x.WarehouseId,
                 WarehouseName = x.Warehouse.Code + x.Warehouse.Name,
                 PurchaseCount = x.PurchaseCount,
+                PurchasedCount = x.PurchasedCount,
                 Remarks = x.Remarks
             }).ToListAsync();
             return Ok(MyFun.APIResponseOK(purchaselists));
@@ -286,7 +287,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<PurchaseHead>> GetPurchasesBySupplier(int id)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Status == 0 && x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.SupplierId == id && y.Quantity != y.PurchaseCount).Any()).ToListAsync();
+            var purchaseHead = await _context.PurchaseHeads.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Status != 1 && x.PurchaseDetails.Where(y => y.DeleteFlag == 0 && y.DataType != 0 && y.SupplierId == id && y.Quantity != y.PurchaseCount).Any()).ToListAsync();
 
             if (purchaseHead == null)
             {
