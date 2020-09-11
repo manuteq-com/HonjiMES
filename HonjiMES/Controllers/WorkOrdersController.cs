@@ -645,7 +645,7 @@ namespace HonjiMES.Controllers
         {
             if (Warehouse201Check == 0)
             {
-                return MyFun.APIResponseError("品號 [ " + itemData.WorkOrderHead.DataNo + " ] 查無轉出倉別! 請重新確認!");
+                return MyFun.APIResponseError("品號 [ " + itemData.WorkOrderHead.DataNo + " ] 無庫存資訊(轉出)! 請重新確認!");
             }
             else
             {

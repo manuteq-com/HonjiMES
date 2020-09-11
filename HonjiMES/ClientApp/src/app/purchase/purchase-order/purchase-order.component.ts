@@ -42,9 +42,11 @@ export class PurchaseOrderComponent implements OnInit {
     DetailsDataSourceStorage: any;
     hint: boolean;
     date: any;
+    TypeList: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent,
-        public datepipe: DatePipe, private titleService: Title) {
+    // tslint:disable-next-line: max-line-length
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
+        this.TypeList = myservice.getpurchasetypes();
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];

@@ -68,7 +68,8 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = CreateNoData.Type == 10 ? "PI" : CreateNoData.Type == 20 ? "PO" : "PS";
+                // var key = CreateNoData.Type == 10 ? "PI" : CreateNoData.Type == 20 ? "PO" : "PS";
+                var key = "PI"; // 採購單號開頭一致，只用種類區分。 2020/09/11
                 var PurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.PurchaseHeads.AsQueryable().Where(x => x.PurchaseNo.Contains(key + PurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();

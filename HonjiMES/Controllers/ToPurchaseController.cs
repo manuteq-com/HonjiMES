@@ -90,7 +90,8 @@ namespace HonjiMES.Controllers
                 var purchaseHead = PostPurchaseMaster_Detail.PurchaseHead;
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
-                var key = purchaseHead.Type == 10 ? "PI" : purchaseHead.Type == 20 ? "PO" : "PS";
+                // var key = CreateNoData.Type == 10 ? "PI" : CreateNoData.Type == 20 ? "PO" : "PS";
+                var key = "PI"; // 採購單號開頭一致，只用種類區分。 2020/09/11
                 var dt = DateTime.Now;
 
                 purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;
@@ -222,7 +223,7 @@ namespace HonjiMES.Controllers
         {
             if (Warehouse201Check == 0)
             {
-                return MyFun.APIResponseError("品號 [ " + itemData.DataNo + " ] 查無轉出倉別! 請重新確認!");
+                return MyFun.APIResponseError("品號 [ " + itemData.DataNo + " ] 無庫存資訊(轉出)! 請重新確認!");
             }
             else
             {
