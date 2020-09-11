@@ -117,7 +117,8 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                         items: this.UserList,
                         displayExpr: 'Username',
                         valueExpr: 'Id',
-                        searchEnabled: true
+                        searchEnabled: true,
+                        onValueChanged: this.onSelectUserSelectionChanged.bind(this)
                     };
                     this.selectUserDefault = {
                         items: this.UserList,
@@ -129,6 +130,9 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    onSelectUserSelectionChanged(e) {
+        this.buttondisabled = false;
     }
     validate_before(): boolean {
         // 表單驗證
