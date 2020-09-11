@@ -101,6 +101,7 @@ namespace HonjiMES.Controllers
             }
 
             var Msg = MyFun.MappingData(ref OmaterialBasic, materialBasic);
+            OmaterialBasic.SupplierId = materialBasic.SupplierId;
             OmaterialBasic.UpdateTime = DateTime.Now;
             OmaterialBasic.UpdateUser = MyFun.GetUserID(HttpContext);
 
@@ -170,6 +171,7 @@ namespace HonjiMES.Controllers
                     Property = material.Property,
                     Price = material.Price,
                     Unit = material.Unit,
+                    SupplierId = material.SupplierId,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();

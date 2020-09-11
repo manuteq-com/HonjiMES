@@ -62,7 +62,7 @@
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
         <dxo-form colCount=4>
             <dxi-item dataField="SaleNo"></dxi-item>
             <dxi-item dataField="Status"></dxi-item>
@@ -70,7 +70,7 @@
     </dxo-editing>
 
     <dxi-column dataField="SaleNo" caption="銷貨單號" sortOrder="desc" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Status" caption="狀態" width="200">
+    <dxi-column dataField="Status" caption="狀態" alignment="center" width="200">
         <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>

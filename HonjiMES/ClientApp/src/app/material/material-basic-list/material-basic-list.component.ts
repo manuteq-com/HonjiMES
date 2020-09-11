@@ -39,6 +39,7 @@ export class MaterialBasicListComponent implements OnInit {
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.remoteOperations = true;
+        this.supplierList = [];
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
@@ -73,6 +74,7 @@ export class MaterialBasicListComponent implements OnInit {
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.unshift({Id: null, Name: ''}); // 加入第一行
                     this.supplierList = s.data;
                 }
             }
@@ -201,17 +203,17 @@ export class MaterialBasicListComponent implements OnInit {
     }
     onCellPrepared(e) {
         this.hint = false;
-        if (e.data !== undefined) {
-            e.data.Materials.forEach(element => {
-                if (element.QuantityLimit > element.Quantity) {
-                    this.hint = true;
-                }
-            });
-            if (this.hint) {
-                e.rowElement.style.backgroundColor = '#d9534f';
-                e.rowElement.style.color = '#fff';
-            }
-        }
+        // if (e.data !== undefined) {
+        //     e.data.Materials.forEach(element => {
+        //         if (element.QuantityLimit > element.Quantity) {
+        //             this.hint = true;
+        //         }
+        //     });
+        //     if (this.hint) {
+        //         e.rowElement.style.backgroundColor = '#d9534f';
+        //         e.rowElement.style.color = '#fff';
+        //     }
+        // }
     }
     onEditorPreparing(e) {
     }

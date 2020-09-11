@@ -77,6 +77,9 @@ export class CreateSaleComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.dataGrid2.instance.clearSelection();
+                    s.data.forEach(element => {
+                        element.UnSaleCount = element.Quantity - element.SaleCount;
+                    });
                     this.dataSourceDB1 = [];
                     this.dataSourceDB2 = s.data;
                     // this.loadOptions = this.dataGrid2.instance.getDataSource().loadOptions();

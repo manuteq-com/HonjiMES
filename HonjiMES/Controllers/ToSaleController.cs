@@ -166,7 +166,7 @@ namespace HonjiMES.Controllers
                 var OrderHeadData = _context.OrderHeads.Find(OrderHeadId);
                 foreach (var Detailitem in OrderHeadData.OrderDetails)
                 {
-                    if (Detailitem.SaleCount != Detailitem.Quantity)
+                    if (Detailitem.SaledCount != Detailitem.Quantity)
                     {
                         CheckOrderHeadStatus = false;
                     }
@@ -268,7 +268,7 @@ namespace HonjiMES.Controllers
                     var OrderHeadData = _context.OrderHeads.Find(OrderHeadId);
                     foreach (var Detailitem in OrderHeadData.OrderDetails)
                     {
-                        if (Detailitem.SaleCount != Detailitem.Quantity)
+                        if (Detailitem.SaledCount != Detailitem.Quantity)
                         {
                             CheckOrderHeadStatus = false;
                         }
@@ -424,7 +424,11 @@ namespace HonjiMES.Controllers
             }
             if (checkStatus == true)
             {
-                SaleHeadData.Status = 1;
+                SaleHeadData.Status = 2; // 完成銷貨
+            }
+            else
+            {
+                SaleHeadData.Status = 1; // 銷貨一半(未完成)
             }
 
             if (oversale.Any())

@@ -41,6 +41,7 @@ export class WiproductBasicListComponent implements OnInit {
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.remoteOperations = true;
+        this.supplierList = [];
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
@@ -75,6 +76,7 @@ export class WiproductBasicListComponent implements OnInit {
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.unshift({Id: null, Name: ''}); // 加入第一行
                     this.supplierList = s.data;
                 }
             }
@@ -202,13 +204,12 @@ export class WiproductBasicListComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-        if (e.rowType === 'data') {
-            if (e.data.QuantityLimit > e.data.Quantity) {
-
-                e.cellElement.style.backgroundColor = '#d9534f';
-                e.cellElement.style.color = '#fff';
-            }
-        }
+        // if (e.rowType === 'data') {
+        //     if (e.data.QuantityLimit > e.data.Quantity) {
+        //         e.cellElement.style.backgroundColor = '#d9534f';
+        //         e.cellElement.style.color = '#fff';
+        //     }
+        // }
     }
     onEditorPreparing(e) {
     }
