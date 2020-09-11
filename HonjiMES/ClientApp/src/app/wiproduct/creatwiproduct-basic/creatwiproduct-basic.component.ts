@@ -115,7 +115,7 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
         this.formData.wid = this.gridBoxValue;
         this.formData.warehouseData = this.warehousesOptions;
         // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/WiproductBasics/PostWiproductBasic', 'POST', { values: this.formData });
+        const sendRequest = await SendService.sendRequest(this.http, '/WiproductBasics/PostWiproduct', 'POST', { values: this.formData });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {
             this.myform.instance.resetValues();

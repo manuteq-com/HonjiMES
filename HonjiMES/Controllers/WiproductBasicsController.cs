@@ -95,6 +95,7 @@ namespace HonjiMES.Controllers
             }
 
             var Msg = MyFun.MappingData(ref OwiproductBasic, wiproductBasic);
+            OwiproductBasic.SupplierId = wiproductBasic.SupplierId;
             OwiproductBasic.UpdateTime = DateTime.Now;
             OwiproductBasic.UpdateUser = MyFun.GetUserID(HttpContext);
 
@@ -169,6 +170,7 @@ namespace HonjiMES.Controllers
                     Property = wiproduct.Property,
                     Price = wiproduct.Price,
                     SubInventory = wiproduct.SubInventory,
+                    SupplierId = wiproduct.SupplierId,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();

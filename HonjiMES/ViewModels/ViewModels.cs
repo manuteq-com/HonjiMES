@@ -273,11 +273,13 @@ namespace HonjiMES.Models
     }
     public class WiproductW : Wiproduct
     {
+        public int? SupplierId { get; set; }
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
     public class MaterialW : Material
     {
+        public int? SupplierId { get; set; }
         public List<int> wid { get; set; }
         public List<Warehouse> warehouseData { get; set; }
     }
