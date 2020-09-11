@@ -82,7 +82,7 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 銷貨單列表
         /// </summary>
-        /// <param name="status">0:未銷貨，1:已銷貨</param>
+        /// <param name="status">0:未銷貨，1:開始銷貨，2:完成銷貨</param>
         /// <returns></returns>
         // GET: api/Sales
         [HttpGet]
@@ -191,14 +191,22 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<SaleHead>> DeleteSale(int id)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var SaleHead = await _context.SaleHeads.FindAsync(id);
             if (SaleHead == null)
             {
                 return NotFound();
             }
+
             SaleHead.DeleteFlag = 1;
+            foreach (var item in SaleHead.SaleDetailNews)
+            {
+                item.DeleteFlag = 1;
+                item.OrderDetail.SaleCount -= item.Quantity;
+            }
             // _context.SaleHeads.Remove(SaleHead);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             return Ok(MyFun.APIResponseOK(SaleHead));
         }
 
