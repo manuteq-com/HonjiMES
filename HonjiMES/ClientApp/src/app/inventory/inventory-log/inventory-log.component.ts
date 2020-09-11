@@ -40,6 +40,7 @@ export class InventoryLogComponent implements OnInit {
     selectAdjustType: any;
     listAdjustType: any;
     AdjustTypeList: any;
+    WarehouseList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
@@ -68,6 +69,14 @@ export class InventoryLogComponent implements OnInit {
                         onValueChanged: this.onValueChanged.bind(this)
                     };
                 }
+            }
+        );
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
+                this.WarehouseList = s.data;
             }
         );
     }
