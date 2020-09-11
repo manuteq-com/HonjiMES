@@ -42,6 +42,8 @@ namespace HonjiMES.Controllers
                 Price = x.Price,
                 Unit = x.Unit,
                 SupplierId = x.SupplierId,
+                Weight = x.Weight,
+                Remarks = x.Remarks,
                 CreateTime = x.CreateTime,
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
@@ -172,6 +174,8 @@ namespace HonjiMES.Controllers
                     Price = material.Price,
                     Unit = material.Unit,
                     SupplierId = material.SupplierId,
+                    Weight = material.Weight,
+                    Remarks = material.Remarks,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();

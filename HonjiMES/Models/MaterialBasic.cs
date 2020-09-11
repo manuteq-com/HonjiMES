@@ -64,6 +64,16 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("supplier_id", TypeName = "int(11)")]
         public int? SupplierId { get; set; }
+        /// <summary>
+        /// &#37325;&#37327;(&#20844;&#26020;)
+        /// </summary>
+        [Column("weight", TypeName = "decimal(10,2)")]
+        public decimal? Weight { get; set; }
+        /// <summary>
+        /// &#20633;&#35387;
+        /// </summary>
+        [Column("remarks", TypeName = "varchar(50)")]
+        public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]

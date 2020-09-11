@@ -895,6 +895,11 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.Specification)
                     .HasComment("規格")
                     .HasCharSet("utf8mb4")
@@ -910,6 +915,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.Weight).HasComment("重量(公斤)");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.MaterialBasics)

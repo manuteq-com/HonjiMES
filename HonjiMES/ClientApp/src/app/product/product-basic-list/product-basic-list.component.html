@@ -57,8 +57,9 @@
             <dxi-item dataField="WarehouseId"></dxi-item> -->
             <dxi-item dataField="ProductNumber"></dxi-item>
             <dxi-item dataField="TotalCount"></dxi-item>
+            <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改成品基本資訊"  [width]="800" [height]="300">
+        <dxo-popup [showTitle]="true" title="修改成品基本資訊"  [width]="800" [height]="360">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
                 [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
@@ -84,6 +85,7 @@
     </dxi-column> -->
     <dxi-column dataField="ProductNumber" caption="廠內品號"></dxi-column>
     <dxi-column dataField="TotalCount" caption="總數量"></dxi-column>
+    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <dxi-column type="buttons">
         <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>

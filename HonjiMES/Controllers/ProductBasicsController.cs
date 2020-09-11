@@ -177,6 +177,7 @@ namespace HonjiMES.Controllers
                     Property = product.Property,
                     Price = product.Price,
                     SubInventory = product.SubInventory,
+                    Remarks = product.Remarks,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
