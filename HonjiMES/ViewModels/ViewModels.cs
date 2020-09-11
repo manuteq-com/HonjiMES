@@ -872,6 +872,11 @@ namespace HonjiMES.Models
         public string Img { get; set; }
     }
 
+    public class PurchaseHeadPut : PurchaseHead
+    {
+        public int? StatusVal { get; set; }
+    }
+
 
 
 }

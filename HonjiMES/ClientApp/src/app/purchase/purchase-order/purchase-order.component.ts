@@ -44,7 +44,7 @@ export class PurchaseOrderComponent implements OnInit {
     date: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent,
-                public datepipe: DatePipe, private titleService: Title) {
+        public datepipe: DatePipe, private titleService: Title) {
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -76,7 +76,12 @@ export class PurchaseOrderComponent implements OnInit {
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostPurchaseHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values }),
+            update: (key, values) => {
+                if (values.Status === 0) {
+                    values.StatusVal = values.Status;
+                }
+                return SendService.sendRequest(this.http, this.Controller + '/PutPurchaseHead', 'PUT', { key, values });
+            },
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseHead/' + key, 'DELETE')
         });
     }
