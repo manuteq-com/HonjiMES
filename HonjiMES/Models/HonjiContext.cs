@@ -1746,11 +1746,13 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Price).HasComment("價格");
 
-                entity.Property(e => e.PurchaseCount).HasComment("進貨量");
+                entity.Property(e => e.PurchaseCount).HasComment("進貨單數量");
 
                 entity.Property(e => e.PurchaseId).HasComment("採購單號");
 
                 entity.Property(e => e.PurchaseType).HasComment("採購種類");
+
+                entity.Property(e => e.PurchasedCount).HasComment("完成進貨量");
 
                 entity.Property(e => e.Quantity).HasComment("數量");
 

@@ -66,6 +66,9 @@ export class PurchaseOrderComponent implements OnInit {
             }
         );
     }
+    ngOnInit() {
+        this.titleService.setTitle('採購單');
+    }
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -80,8 +83,12 @@ export class PurchaseOrderComponent implements OnInit {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeletePurchaseHead/' + key, 'DELETE')
         });
     }
-    ngOnInit() {
-        this.titleService.setTitle('採購單');
+    allowEdit(e) {
+        if (e.row.data.Status === 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
     newdata() {
         this.newpopupVisible = true;

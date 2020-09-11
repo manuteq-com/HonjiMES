@@ -62,6 +62,9 @@ export class BillPurchaseComponent implements OnInit {
             }
         );
     }
+    ngOnInit() {
+        this.titleService.setTitle('進貨單');
+    }
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -90,8 +93,12 @@ export class BillPurchaseComponent implements OnInit {
             }
         }, 'success', 3000);
     }
-    ngOnInit() {
-        this.titleService.setTitle('進貨單');
+    allowEdit(e) {
+        if (e.row.data.Status === 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
     creatdata() {
         this.creatpopupVisible = true;

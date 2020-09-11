@@ -73,8 +73,9 @@ const OrderStatus: Selectitem[] = [
     { Id: 10, Name: '結案' }
 ];
 const purchaseOrderSatatus: Selectitem[] = [
-    { Id: 0, Name: '未完成' },
-    { Id: 1, Name: '完成採購' }
+    { Id: 0, Name: '新建' },
+    { Id: 1, Name: '完成採購' },
+    { Id: 2, Name: '未完成' },
 ];
 const saleOrderStatus: Selectitem[] = [
     { Id: 0, Name: '新建' },
@@ -82,8 +83,9 @@ const saleOrderStatus: Selectitem[] = [
     { Id: 2, Name: '結案' }
 ];
 const billofpurchaseOrderStatus: Selectitem[] = [
-    { Id: 0, Name: '未完成' },
-    { Id: 1, Name: '結案' }
+    { Id: 0, Name: '新建' },
+    { Id: 1, Name: '結案' },
+    { Id: 2, Name: '未完成' },
 ];
 const componenttypes: Selectitem[] = [
     { Id: 1, Name: '原料' },

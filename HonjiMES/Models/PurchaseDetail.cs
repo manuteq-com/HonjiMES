@@ -93,10 +93,15 @@ namespace HonjiMES.Models
         [Column("warehouse_id", TypeName = "int(11)")]
         public int? WarehouseId { get; set; }
         /// <summary>
-        /// &#36914;&#36008;&#37327;
+        /// &#36914;&#36008;&#21934;&#25976;&#37327;
         /// </summary>
         [Column("purchase_count", TypeName = "int(11)")]
         public int PurchaseCount { get; set; }
+        /// <summary>
+        /// &#23436;&#25104;&#36914;&#36008;&#37327;
+        /// </summary>
+        [Column("purchased_count", TypeName = "int(11)")]
+        public int PurchasedCount { get; set; }
         /// <summary>
         /// &#20633;&#35387;
         /// </summary>

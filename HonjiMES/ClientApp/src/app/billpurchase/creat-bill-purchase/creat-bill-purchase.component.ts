@@ -153,6 +153,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
+                    this.formData.BillofPurchaseDate = new Date();
                 }
             }
         );
@@ -396,6 +397,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                                 Price: element.Price,
                                 Purchase: element.Purchase,
                                 PurchaseCount: element.PurchaseCount,
+                                PurchasedCount: element.PurchasedCount,
                                 PurchaseId: element.PurchaseId,
                                 PurchaseType: element.PurchaseType,
                                 Quantity: element.Quantity,
@@ -530,6 +532,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.dataGrid.instance.refresh();
             // this.myform.instance.resetValues();
             this.formData.CreateTime = new Date();
+            this.formData.BillofPurchaseDate = new Date();
             this.formData.BillofPurchaseDate = null;
             this.formData.Remarks = '';
             this.CustomerVal = null;

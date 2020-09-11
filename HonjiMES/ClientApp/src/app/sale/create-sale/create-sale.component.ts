@@ -269,18 +269,4 @@ export class CreateSaleComponent implements OnInit, OnChanges {
             }
         }
     }
-    popup_result(e) {
-        this.popupVisiblePurchase = false;
-        this.popupVisibleSale = false;
-        this.childOuter.emit(true);
-        this.dataGrid2.instance.refresh();
-        this.dataGrid2.instance.clearSelection();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
-    }
 }

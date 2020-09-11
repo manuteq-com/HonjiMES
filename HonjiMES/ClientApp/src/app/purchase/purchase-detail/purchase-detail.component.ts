@@ -95,7 +95,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
                 if (e.data !== undefined) {
                     const DeliverydateBefore = new Date(e.data.DeliveryTime);
                     const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
-                    if (DeliverydateBefore <= DeliverydateAfter && e.data.PurchaseCount < e.data.Quantity) {
+                    if (DeliverydateBefore <= DeliverydateAfter && e.data.PurchasedCount < e.data.Quantity) {
                         hint = true;
                     }
                     if (hint) {

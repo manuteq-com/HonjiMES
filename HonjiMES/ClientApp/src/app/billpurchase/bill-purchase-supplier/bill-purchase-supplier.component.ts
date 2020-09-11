@@ -92,6 +92,9 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
         this.app.GetData('/PurchaseHeads/GetPurchaseList/' + e.value).subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.forEach(element => {
+                        element.UnPurchasedCount = element.Quantity - element.PurchasedCount;
+                    });
                     this.dataSourceDB = s.data;
                 }
             }
@@ -142,9 +145,20 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
         this.creatpopupVisible = true;
     }
     creatpopup_result(e) {
+        debugger;
         this.creatpopupVisible = false;
         this.childOuter.emit(true);
+        this.dataSourceDB = [];
         this.dataGrid.instance.refresh();
+        this.dataGrid.instance.clearSelection();
+        this.SelectSupplier = {
+            items: this.SupplierList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            value: null,
+            onValueChanged: this.onValueChanged.bind(this)
+        };
         notify({
             message: '存檔完成',
             position: {
@@ -201,23 +215,9 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
                     this.mod = 'add';
                     this.creatpopupVisible = true;
                 } else if (result.dismiss === Swal.DismissReason.close) {
-                    this.popupVisibleSale = false;
+                    this.creatpopupVisible = false;
                 }
             });
         }
-    }
-    popup_result(e) {
-        this.popupVisiblePurchase = false;
-        this.popupVisibleSale = false;
-        this.childOuter.emit(true);
-        this.dataGrid.instance.refresh();
-        this.dataGrid.instance.clearSelection();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
     }
 }

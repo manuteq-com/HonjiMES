@@ -464,13 +464,13 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
             }
-            var tempPurchaseCount = PurchaseDetail.PurchaseCount;
-            PurchaseDetail.PurchaseCount += BillofPurchaseCheckin.Quantity;
+            var tempPurchasedCount = PurchaseDetail.PurchasedCount;
+            PurchaseDetail.PurchasedCount += BillofPurchaseCheckin.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
-            if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount)
+            if (PurchaseDetail.Quantity < PurchaseDetail.PurchasedCount)
             {
-                return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
+                return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchasedCount));
             }
 
             //檢查該採購單是否完成
@@ -482,7 +482,7 @@ namespace HonjiMES.Controllers
             var CheckPurchaseHeadStatus = true;
             foreach (var item2 in PurchaseHead.PurchaseDetails)
             {
-                if (item2.Quantity != item2.PurchaseCount)
+                if (item2.Quantity != item2.PurchasedCount)
                 {
                     CheckPurchaseHeadStatus = false;
                 }
@@ -683,7 +683,11 @@ namespace HonjiMES.Controllers
             }
             if (CheckBillofPurchaseHeadStatus)
             {
-                BillofPurchaseHeadData.Status = 1;
+                BillofPurchaseHeadData.Status = 1; // 完成進貨
+            }
+            else
+            {
+                BillofPurchaseHeadData.Status = 2; // 開始進貨中
             }
 
             await _context.SaveChangesAsync();
@@ -742,13 +746,13 @@ namespace HonjiMES.Controllers
                     {
                         return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
                     }
-                    var tempPurchaseCount = PurchaseDetail.PurchaseCount;
-                    PurchaseDetail.PurchaseCount += item.Quantity;
+                    var tempPurchasedCount = PurchaseDetail.PurchasedCount;
+                    PurchaseDetail.PurchasedCount += item.Quantity;
                     PurchaseDetail.UpdateTime = dt;
                     PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
-                    if (PurchaseDetail.Quantity < PurchaseDetail.PurchaseCount)
+                    if (PurchaseDetail.Quantity < PurchaseDetail.PurchasedCount)
                     {
-                        return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchaseCount));
+                        return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchasedCount));
                     }
 
                     //檢查該採購單是否完成
@@ -760,7 +764,7 @@ namespace HonjiMES.Controllers
                     var CheckPurchaseHeadStatus = true;
                     foreach (var item2 in PurchaseHead.PurchaseDetails)
                     {
-                        if (item2.Quantity != item2.PurchaseCount)
+                        if (item2.Quantity != item2.PurchasedCount)
                         {
                             CheckPurchaseHeadStatus = false;
                         }
@@ -971,7 +975,11 @@ namespace HonjiMES.Controllers
             }
             if (CheckBillofPurchaseHeadStatus)
             {
-                BillofPurchaseHeads.Status = 1;
+                BillofPurchaseHeads.Status = 1; // 完成進貨
+            }
+            else
+            {
+                BillofPurchaseHeads.Status = 2; // 開始進貨中
             }
 
             await _context.SaveChangesAsync();
@@ -1032,11 +1040,11 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("採購單明細資料有誤!"));
             }
-            if (PurchaseDetail.PurchaseCount < (int)BillofPurchaseReturn.Quantity)
+            if (PurchaseDetail.PurchasedCount < (int)BillofPurchaseReturn.Quantity)
             {
-                return Ok(MyFun.APIResponseError("驗退數量超過驗收數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際已驗收數量： " + PurchaseDetail.PurchaseCount + " ]"));
+                return Ok(MyFun.APIResponseError("驗退數量超過驗收數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " 實際已驗收數量： " + PurchaseDetail.PurchasedCount + " ]"));
             }
-            PurchaseDetail.PurchaseCount = PurchaseDetail.PurchaseCount - (int)BillofPurchaseReturn.Quantity;
+            PurchaseDetail.PurchasedCount = PurchaseDetail.PurchasedCount - (int)BillofPurchaseReturn.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
 
@@ -1123,7 +1131,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("採購單主檔資料有誤!"));
             }
-            PurchaseHead.Status = 0;
+            PurchaseHead.Status = 2;
             
 
             //檢查進貨單明細是否都完成進貨(此為驗退，訂單狀態需修改?)
