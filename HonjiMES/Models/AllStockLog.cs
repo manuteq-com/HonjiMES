@@ -54,5 +54,7 @@ namespace HonjiMES.Models
         public sbyte DeleteFlag { get; set; }
         [Column("name_type", TypeName = "int(1)")]
         public int NameType { get; set; }
+        [Column("warehouse_id", TypeName = "int(11)")]
+        public int? WarehouseId { get; set; }
     }
 }

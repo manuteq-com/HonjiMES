@@ -308,13 +308,16 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchaseHead(int id, PurchaseHead purchaseHead)
+        public async Task<IActionResult> PutPurchaseHead(int id, PurchaseHeadPut purchaseHead)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             purchaseHead.Id = id;
             var OldPurchaseHead = _context.PurchaseHeads.Find(id);
             var Msg = MyFun.MappingData(ref OldPurchaseHead, purchaseHead);
-
+            if (purchaseHead.StatusVal.HasValue)
+            {
+                OldPurchaseHead.Status = purchaseHead.StatusVal.Value;
+            }
             OldPurchaseHead.UpdateTime = DateTime.Now;
             OldPurchaseHead.UpdateUser = MyFun.GetUserID(HttpContext);
 
