@@ -29,4 +29,9 @@ namespace HonjiMES.Models
         public BillofPurchaseHead BillofPurchaseHead { get; set; }
         public List<BillofPurchaseDetail> BillofPurchaseDetail { get; set; }
     }
+    public class PostBillofPurchaseBySupplier
+    {
+        public int? PurchaseHeadType { get; set; }
+        public List<int> PurchaseHeadIdArray { get; set; }
+    }
 }

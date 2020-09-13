@@ -201,8 +201,11 @@ namespace HonjiMES.Controllers
             SaleHead.DeleteFlag = 1;
             foreach (var item in SaleHead.SaleDetailNews)
             {
-                item.DeleteFlag = 1;
-                item.OrderDetail.SaleCount -= item.Quantity;
+                if (item.DeleteFlag == 0)
+                {
+                    item.DeleteFlag = 1;
+                    item.OrderDetail.SaleCount -= item.Quantity;
+                }
             }
             // _context.SaleHeads.Remove(SaleHead);
             await _context.SaveChangesAsync();

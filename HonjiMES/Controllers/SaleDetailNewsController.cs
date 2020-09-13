@@ -139,6 +139,7 @@ namespace HonjiMES.Controllers
 
             return Ok(MyFun.APIResponseOK(OsaleDetailNew));
         }
+        
         /// <summary>
         /// 修改銷貨明細數量
         /// </summary>
@@ -150,6 +151,51 @@ namespace HonjiMES.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSaleDetailNewQty(int id, SaleDetailNew saleDetailNew)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            saleDetailNew.Id = id;
+            var OldSaleDetailNew = _context.SaleDetailNews.Include(x => x.OrderDetail).Where(x => x.Id == id).FirstOrDefault();
+   
+            if (saleDetailNew.Quantity != 0)
+            {
+                var value = OldSaleDetailNew.Quantity - saleDetailNew.Quantity;
+                OldSaleDetailNew.OrderDetail.SaleCount -= value;
+            }
+            var Msg = MyFun.MappingData(ref OldSaleDetailNew, saleDetailNew);
+
+            OldSaleDetailNew.UpdateTime = DateTime.Now;
+            OldSaleDetailNew.UpdateUser = MyFun.GetUserID(HttpContext);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SaleDetailNewExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            //return NoContent();
+            return Ok(MyFun.APIResponseOK(saleDetailNew));
+        }
+        /// <summary>
+        /// 修改銷貨明細數量
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="saleDetailNew"></param>
+        /// <returns></returns>
+        // PUT: api/SaleDetailNews/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSaleDetailNewQtyOld(int id, SaleDetailNew saleDetailNew)
         {
             var ErrMsg = "";
             var dQty = 0;
@@ -232,14 +278,17 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<SaleDetailNew>> DeleteSaleDetailNew(int id)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var saleDetailNew = await _context.SaleDetailNews.FindAsync(id);
             if (saleDetailNew == null)
             {
                 return NotFound();
             }
             saleDetailNew.DeleteFlag = 1;
+            saleDetailNew.OrderDetail.SaleCount -= saleDetailNew.Quantity;
             // _context.SaleDetailNews.Remove(saleDetailNew);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             return Ok(MyFun.APIResponseOK(saleDetailNew));
         }
 

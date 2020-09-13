@@ -69,6 +69,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     WarehouseListAll: any;
     SupplierIdVal: any;
     PurchaseIdVal: any;
+    fromSupplier: boolean;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.allMode = 'allPages';
@@ -119,8 +120,11 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        this.fromSupplier = false;
         this.dataSourceDB = [];
+        // 如果有資料，表示來自[以供應商]產生進貨單
         if (this.DetailDataList !== undefined) {
+            this.fromSupplier = true;
             this.DetailDataList.forEach(element => {
                 element.PriceAll = element.Price;
                 element.Price = element.OriginPrice;
@@ -172,7 +176,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/PurchaseHeads/GetPurchasesByStatus?status=0').subscribe(
+        this.app.GetData('/PurchaseHeads/GetPurchasesByUnStatus?status=1').subscribe( // 排除狀態為[結案]的採購單
             (s) => {
                 if (s.success) {
                     this.PurchaseList = s.data;
@@ -524,10 +528,20 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         };
         this.buttondisabled = false;
 
-        // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/PostBillofPurchaseHead_Detail', 'POST', { values: this.postval });
-        // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-        if (sendRequest) {
+        if (this.fromSupplier) { // 如果是透過供應商產生進貨單，需要依照採購單號區分進貨單數量。
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/PostBillofPurchaseHead_DetailBySupplier', 'POST', { values: this.postval });
+            this.viewRefresh(e, sendRequest);
+        } else {
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/BillofPurchaseHeads/PostBillofPurchaseHead_Detail', 'POST', { values: this.postval });
+            this.viewRefresh(e, sendRequest);
+        }
+
+        this.buttondisabled = false;
+    }
+    viewRefresh(e, result) {
+        if (result) {
             this.dataSourceDB = [];
             this.dataGrid.instance.refresh();
             // this.myform.instance.resetValues();
@@ -539,7 +553,5 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             e.preventDefault();
             this.childOuter.emit(true);
         }
-        this.buttondisabled = false;
-
     }
 }

@@ -62,7 +62,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<BillofPurchaseDetail>> GetBillofPurchaseDetailByPId(int Pid)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.BillofPurchaseDetails.AsQueryable().Where(x => x.BillofPurchaseId == Pid).Include(x => x.Purchase).ToListAsync();
+            var data = await _context.BillofPurchaseDetails.AsQueryable().Where(x => x.BillofPurchaseId == Pid && x.DeleteFlag == 0).Include(x => x.Purchase).ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 
@@ -80,13 +80,19 @@ namespace HonjiMES.Controllers
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             billofPurchaseDetail.Id = id;
-            var OldBillofPurchaseDetail = _context.BillofPurchaseDetails.Find(id);
-            if (billofPurchaseDetail.DataId != 0 && billofPurchaseDetail.DataId != OldBillofPurchaseDetail.DataId)
+            var OldBillofPurchaseDetail = _context.BillofPurchaseDetails.Include(x => x.PurchaseDetail).Where(x => x.Id == id).FirstOrDefault();
+            // if (billofPurchaseDetail.DataId != 0 && billofPurchaseDetail.DataId != OldBillofPurchaseDetail.DataId)
+            // {
+            //     var Material = _context.Materials.Find(billofPurchaseDetail.DataId);
+            //     billofPurchaseDetail.DataName = Material.Name;
+            //     billofPurchaseDetail.DataNo = Material.MaterialNo;
+            //     billofPurchaseDetail.Specification = Material.Specification;
+            // }
+
+            if (billofPurchaseDetail.Quantity != 0)
             {
-                var Material = _context.Materials.Find(billofPurchaseDetail.DataId);
-                billofPurchaseDetail.DataName = Material.Name;
-                billofPurchaseDetail.DataNo = Material.MaterialNo;
-                billofPurchaseDetail.Specification = Material.Specification;
+                var value = OldBillofPurchaseDetail.Quantity - billofPurchaseDetail.Quantity;
+                OldBillofPurchaseDetail.PurchaseDetail.PurchaseCount -= value;
             }
             var Msg = MyFun.MappingData(ref OldBillofPurchaseDetail, billofPurchaseDetail);
 
@@ -161,16 +167,19 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<BillofPurchaseDetail>> DeleteBillofPurchaseDetail(int id)
         {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
             var billofPurchaseDetail = await _context.BillofPurchaseDetails.FindAsync(id);
             if (billofPurchaseDetail == null)
             {
                 return NotFound();
             }
             billofPurchaseDetail.DeleteFlag = 1;
+            billofPurchaseDetail.PurchaseDetail.PurchaseCount -= billofPurchaseDetail.Quantity;
             // _context.BillofPurchaseDetails.Remove(billofPurchaseDetail);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
 
-            return Ok(MyFun.APIResponseOK(billofPurchaseDetail));
+            return Ok(MyFun.APIResponseOK("OK"));
         }
 
         private bool BillofPurchaseDetailExists(int id)

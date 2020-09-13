@@ -51,6 +51,9 @@ export class SaleListComponent implements OnInit, OnChanges {
     detailfilter = [];
     DetailsDataSourceStorage: any;
     randomkey: number;
+    Quantityval: any;
+    Priceval: number;
+    OriginPriceval: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
@@ -200,7 +203,16 @@ export class SaleListComponent implements OnInit, OnChanges {
             e.component.selectRowsByIndexes(0);
         }
     }
-
+    QuantityValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Quantityval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    OriginPriceValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OriginPriceval = e.value;
+        this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
 
     // onEditingStart(e) {
     //     e.component.columnOption('OrderNo', 'allowEditing', false);
@@ -415,7 +427,11 @@ export class SaleListComponent implements OnInit, OnChanges {
         }
     }
     onEditingStart(e) {
-
+    }
+    onEditingStart2(e) {
+        this.Quantityval = e.data.Quantity;
+        this.OriginPriceval = e.data.OriginPrice;
+        this.Priceval = e.data.Price;
     }
     onFocusedRowChanged(e) {
     }
