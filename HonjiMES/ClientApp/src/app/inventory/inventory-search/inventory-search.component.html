@@ -1,0 +1,80 @@
+<form action="" >
+    <div class="row mb-4">
+
+        <div class="col-4">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+                <dxi-item dataField="DataNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
+                    <dxi-validation-rule type="required" message="料號 必填"></dxi-validation-rule>
+                    <dxo-label text="料號"></dxo-label>
+                </dxi-item>
+
+            </dx-form>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <!-- <div class="row">
+            <div class="col-12">
+                <div class="input-group">
+                    <label class="pt-2">
+                        <h6>歷史紀錄：</h6>
+                    </label>
+                </div>
+            </div>
+        </div> -->
+
+        <nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.AdjustInfoData" nzTableLayout="fixed"
+            [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="scrollValue">
+            <thead>
+
+                <tr>
+                    <th nzWidth="120px" nzLeft>時間</th>
+                    <!-- <th nzWidth="180px" nzLeft>品號</th> -->
+                    <th nzWidth="70px" nzLeft>人員</th>
+                    <th nzWidth="100px" nzLeft>事件</th>
+                    <th nzWidth="80px" nzLeft>關聯單號</th>
+                    <th nzWidth="60px" nzLeft>庫存數量</th>
+                    <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+                        <th *ngIf="col.show" nzWidth="60px">{{ col.title }}</th>
+                    </ng-container>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td nzLeft nzEllipsis>{{data.CreateTime}}</td>
+                    <!-- <td title={{data.BasicDataNo}} nzLeft>{{data.BasicDataNo}}</td> -->
+                    <td title={{data.CreateUser}} nzLeft nzEllipsis>{{data.CreateUser}}</td>
+                    <td title={{data.Message}} nzLeft nzEllipsis>{{data.Message}}</td>
+                    <td title={{data.LinkOrder}} nzLeft nzEllipsis>{{data.LinkOrder}}</td>
+                    <td nzLeft nzEllipsis>{{data.Original}}</td>
+
+                    <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+                        <td *ngIf="col.show" nzEllipsis>
+                            <div>
+                                <ng-container *ngIf="data[col.key]?.value0">
+                                    <span title={{data[col.key]?.value0}}>
+
+                                        {{data[col.key]?.value0}}
+                                    </span>
+                                </ng-container>
+                                <!-- {{data[col.key]}}
+                                <br />
+                                <hr />{{data[col.key]}} -->
+                            </div>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </nz-table>
+
+    </div>
+
+</div>
+
+

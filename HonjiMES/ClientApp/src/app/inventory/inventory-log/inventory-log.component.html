@@ -7,14 +7,14 @@
     </div>
     <div class="headerfont font2">庫存變動紀錄</div>
     <div class="buttongroup">
-        <!-- <dx-button
-            class="insertbtn"
+        <dx-button
+            class="searchbtn"
             stylingMode="contained"
-            text="新增調整單"
-            type="success"
-            [width]="120"
+            text="料號紀錄查詢"
+            type="normal"
+            [width]="140"
             (onClick)="creatdata()">
-        </dx-button> -->
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -116,4 +116,7 @@
     <dxi-column dataField="CreateUser" caption="使用者"></dxi-column>
 </dx-data-grid>
 
-
+<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="料號紀錄查詢" [nzWidth]="1800" [nzStyle]="{ top: '10px' }" [nzFooter]="null"
+    (nzOnCancel)="handleCancel()">
+    <app-inventory-search (childOuter)="creatpopup_result($event)"></app-inventory-search>
+</nz-modal>

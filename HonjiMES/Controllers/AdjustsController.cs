@@ -115,12 +115,14 @@ namespace HonjiMES.Controllers
 
             var AdjustTypes = new List<AdjustType>();
             var index = 0;
-            AdjustTypes.Add(new AdjustType{
-                    Message = "全部資料"
+            AdjustTypes.Add(new AdjustType
+            {
+                Message = "全部資料"
             });
             foreach (var item in data.GroupBy(x => x.Message).ToList())
             {
-                AdjustTypes.Add(new AdjustType{
+                AdjustTypes.Add(new AdjustType
+                {
                     Id = index,
                     Message = item.Key
                 });
@@ -162,6 +164,269 @@ namespace HonjiMES.Controllers
                 return NotFound();
             }
             return Ok(MyFun.APIResponseOK(allStockLog));
+        }
+
+        // GET: api/Adjusts/5
+        /// <summary>
+        /// 查詢調整紀錄 By ProductBasicID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AllStockLog>> GetAdjustLogByProductBasicID1(int id)
+        {
+            var allStockLog = await _context.AllStockLogs.Where(x => x.NameType == 2 && x.DataId == id).ToListAsync();
+            if (allStockLog == null)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(allStockLog));
+        }
+
+        /// <summary>
+        /// 查詢調整紀錄 By MaterialBasicID
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AdjustInfo>> GetAdjustLogByMaterialBasicID(int id)
+        {
+            var ptype = typeof(AdjustInfoData);
+            var AdjustInfo = new AdjustInfo();
+            var ColumnOptionlist = new List<ColumnOption>();
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                ColumnOptionlist.Add(new ColumnOption
+                {
+                    key = "Temp" + item.Id.ToString(),
+                    title = item.Code,
+                    show = true,
+                    Columnlock = ""
+                });
+            }
+
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var AdjustInfoDataList = new List<AdjustInfoData>();
+            try
+            {
+                var MaterialBasics = await _context.MaterialBasics.FindAsync(id);
+                var Users = await _context.Users.Where(x => x.DeleteFlag == 0).ToListAsync();
+                var AllStockLog = new List<AllStockLog>();
+                AllStockLog = await _context.AllStockLogs.Where(x => x.NameType == 1 && x.DataNo == MaterialBasics.MaterialNo && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+
+                foreach (var item in AllStockLog)
+                {
+                    var nAdjustInfoData = new AdjustInfoData
+                    {
+                        Key = item.Id,
+                        LinkOrder = item.LinkOrder,
+                        BasicDataName = item.DataName,
+                        BasicDataNo = item.DataNo,
+                        Original = item.Original,
+                        Quantity = item.Quantity,
+                        PriceAll = item?.PriceAll ?? 0,
+                        Unit = item.Unit,
+                        UnitCount = item?.UnitCount ?? 0,
+                        UnitPrice = item?.UnitPrice ?? 0,
+                        UnitPriceAll = item?.UnitPriceAll ?? 0,
+                        WorkPrice = item?.WorkPrice ?? 0,
+                        Reason = item.Reason,
+                        Message = item.Message,
+                        WarehouseId = item?.WarehouseId ?? 0,
+                        CreateUser = Users.Where(x => x.Id == item.CreateUser).FirstOrDefault().Realname,
+                        CreateTime = item.CreateTime,
+                    };
+                    foreach (var typeitem in ptype.GetProperties())
+                    {
+                        if (typeitem.Name == "Temp" + item.WarehouseId.ToString())
+                        {
+                            var nTempString = new TempString
+                            {
+                                value0 = item.Quantity.ToString(),
+                            };
+                            typeitem.SetValue(nAdjustInfoData, nTempString);
+                            // foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + item.WarehouseId.ToString()))
+                            // {
+                            //     Columnitem.show = true;
+                            // }
+                        }
+                    }
+                    AdjustInfoDataList.Add(nAdjustInfoData);
+                }
+                AdjustInfo.ColumnOptionlist = ColumnOptionlist;//顯示項目
+                AdjustInfo.AdjustInfoData = AdjustInfoDataList;
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(AdjustInfo));
+        }
+
+        /// <summary>
+        /// 查詢調整紀錄 By WiproductBasicID
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AdjustInfo>> GetAdjustLogByWiproductBasicID(int id)
+        {
+            var ptype = typeof(AdjustInfoData);
+            var AdjustInfo = new AdjustInfo();
+            var ColumnOptionlist = new List<ColumnOption>();
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                ColumnOptionlist.Add(new ColumnOption
+                {
+                    key = "Temp" + item.Id.ToString(),
+                    title = item.Code,
+                    show = true,
+                    Columnlock = ""
+                });
+            }
+
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var AdjustInfoDataList = new List<AdjustInfoData>();
+            try
+            {
+                var WiproductBasics = await _context.WiproductBasics.FindAsync(id);
+                var Users = await _context.Users.Where(x => x.DeleteFlag == 0).ToListAsync();
+                var AllStockLog = new List<AllStockLog>();
+                AllStockLog = await _context.AllStockLogs.Where(x => x.NameType == 3 && x.DataNo == WiproductBasics.WiproductNo && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+
+                foreach (var item in AllStockLog)
+                {
+                    var nAdjustInfoData = new AdjustInfoData
+                    {
+                        Key = item.Id,
+                        LinkOrder = item.LinkOrder,
+                        BasicDataName = item.DataName,
+                        BasicDataNo = item.DataNo,
+                        Original = item.Original,
+                        Quantity = item.Quantity,
+                        PriceAll = item?.PriceAll ?? 0,
+                        Unit = item.Unit,
+                        UnitCount = item?.UnitCount ?? 0,
+                        UnitPrice = item?.UnitPrice ?? 0,
+                        UnitPriceAll = item?.UnitPriceAll ?? 0,
+                        WorkPrice = item?.WorkPrice ?? 0,
+                        Reason = item.Reason,
+                        Message = item.Message,
+                        WarehouseId = item?.WarehouseId ?? 0,
+                        CreateUser = Users.Where(x => x.Id == item.CreateUser).FirstOrDefault().Realname,
+                        CreateTime = item.CreateTime,
+                    };
+                    foreach (var typeitem in ptype.GetProperties())
+                    {
+                        if (typeitem.Name == "Temp" + item.WarehouseId.ToString())
+                        {
+                            var nTempString = new TempString
+                            {
+                                value0 = item.Quantity.ToString(),
+                            };
+                            typeitem.SetValue(nAdjustInfoData, nTempString);
+                            // foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + item.WarehouseId.ToString()))
+                            // {
+                            //     Columnitem.show = true;
+                            // }
+                        }
+                    }
+                    AdjustInfoDataList.Add(nAdjustInfoData);
+                }
+                AdjustInfo.ColumnOptionlist = ColumnOptionlist;//顯示項目
+                AdjustInfo.AdjustInfoData = AdjustInfoDataList;
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(AdjustInfo));
+        }
+
+        /// <summary>
+        /// 查詢調整紀錄 By ProductBasicID
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Processes
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AdjustInfo>> GetAdjustLogByProductBasicID(int id)
+        {
+            var ptype = typeof(AdjustInfoData);
+            var AdjustInfo = new AdjustInfo();
+            var ColumnOptionlist = new List<ColumnOption>();
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
+            foreach (var item in Warehouses)
+            {
+                ColumnOptionlist.Add(new ColumnOption
+                {
+                    key = "Temp" + item.Id.ToString(),
+                    title = item.Code,
+                    show = true,
+                    Columnlock = ""
+                });
+            }
+
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var AdjustInfoDataList = new List<AdjustInfoData>();
+            try
+            {
+                var ProductBasics = await _context.ProductBasics.FindAsync(id);
+                var Users = await _context.Users.Where(x => x.DeleteFlag == 0).ToListAsync();
+                var AllStockLog = new List<AllStockLog>();
+                AllStockLog = await _context.AllStockLogs.Where(x => x.NameType == 2 && x.DataNo == ProductBasics.ProductNo && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+
+                foreach (var item in AllStockLog)
+                {
+                    var nAdjustInfoData = new AdjustInfoData
+                    {
+                        Key = item.Id,
+                        LinkOrder = item.LinkOrder,
+                        BasicDataName = item.DataName,
+                        BasicDataNo = item.DataNo,
+                        Original = item.Original,
+                        Quantity = item.Quantity,
+                        PriceAll = item?.PriceAll ?? 0,
+                        Unit = item.Unit,
+                        UnitCount = item?.UnitCount ?? 0,
+                        UnitPrice = item?.UnitPrice ?? 0,
+                        UnitPriceAll = item?.UnitPriceAll ?? 0,
+                        WorkPrice = item?.WorkPrice ?? 0,
+                        Reason = item.Reason,
+                        Message = item.Message,
+                        WarehouseId = item?.WarehouseId ?? 0,
+                        CreateUser = Users.Where(x => x.Id == item.CreateUser).FirstOrDefault().Realname,
+                        CreateTime = item.CreateTime,
+                    };
+                    foreach (var typeitem in ptype.GetProperties())
+                    {
+                        if (typeitem.Name == "Temp" + item.WarehouseId.ToString())
+                        {
+                            var nTempString = new TempString
+                            {
+                                value0 = item.Quantity.ToString(),
+                            };
+                            typeitem.SetValue(nAdjustInfoData, nTempString);
+                            // foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + item.WarehouseId.ToString()))
+                            // {
+                            //     Columnitem.show = true;
+                            // }
+                        }
+                    }
+                    AdjustInfoDataList.Add(nAdjustInfoData);
+                }
+                AdjustInfo.ColumnOptionlist = ColumnOptionlist;//顯示項目
+                AdjustInfo.AdjustInfoData = AdjustInfoDataList;
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(AdjustInfo));
         }
 
         // PUT: api/Adjusts/5
