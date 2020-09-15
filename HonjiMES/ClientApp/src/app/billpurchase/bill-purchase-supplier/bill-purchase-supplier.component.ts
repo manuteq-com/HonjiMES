@@ -41,6 +41,7 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
     creatpopupVisible: boolean;
     WarehouseList: any;
     DataTypeList: any;
+    randomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.PrintQrCode = this.PrintQrCode.bind(this);
@@ -213,6 +214,7 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
             }).then(async (result) => {
                 if (result.value) {
                     this.mod = 'add';
+                    this.randomkey = new Date().getTime();
                     this.creatpopupVisible = true;
                 } else if (result.dismiss === Swal.DismissReason.close) {
                     this.creatpopupVisible = false;

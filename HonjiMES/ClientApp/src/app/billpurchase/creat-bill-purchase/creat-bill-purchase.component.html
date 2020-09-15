@@ -31,6 +31,11 @@
         (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
         (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
         (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)">
+
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        
         <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
                 <dxi-item dataField="SupplierId"></dxi-item>
@@ -51,6 +56,7 @@
             </dxo-form>
         </dxo-editing>
         <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
+
         <dxi-column dataField="SupplierId" caption="供應商代號" editCellTemplate="SupplierEditCellTemplate" [width]="100">
             <dxo-lookup [dataSource]="SupplierList" displayExpr="Code" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
