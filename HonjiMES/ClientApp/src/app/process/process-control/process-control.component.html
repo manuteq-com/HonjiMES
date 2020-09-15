@@ -7,7 +7,6 @@
     </div>
     <div class="headerfont font2">工單管理</div>
     <div class="buttongroup">
-
         <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
             (onClick)="qrcodedata()">
         </dx-button>
@@ -81,6 +80,11 @@
                         <h5>工單內容：{{workOrderHeadNo}}</h5>
                     </label>
                 </div>
+            </div>
+            <div class="buttongroup">
+                <a class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text"
+                [href]="Url" target="_blank" (click)="downloadWorkOrder($event)">產生工單報表
+                </a>
             </div>
 
         </div>

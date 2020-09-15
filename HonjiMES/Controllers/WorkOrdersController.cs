@@ -1524,8 +1524,62 @@ namespace HonjiMES.Controllers
         /// 產報工單PDF
         /// </summary>
         /// <returns></returns>
+        [HttpGet("{id}")]
+        public IActionResult GetPackingSlipPDF(int id)
+        {
+            var qcodesize = 70;
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var ProcessReportVMList = new List<ProcessReportVM>();
+            var WorkOrder = _context.WorkOrderHeads.Find(id);
+            var txt = "";
+            foreach (var item in WorkOrder.WorkOrderDetails)
+            {
+                txt = item.WorkOrderHead.WorkOrderNo;
+                var dbQrCode = BarcodeHelper.CreateQrCode(txt + "-" + item.SerialNumber, qcodesize, qcodesize);
+                ProcessReportVMList.Add(new ProcessReportVM
+                {
+                    SerialNumber = item.SerialNumber,
+                    ProcessName = item.ProcessName,
+                    ProducingMachine = item.ProducingMachine,
+                    Status = item.Status.ToString(),
+                    Type = item.Type.ToString(),
+                    ReCount = item.ReCount,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    Img = MyFun.ImgToBase64String(dbQrCode),
+                });
+            }
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            ProcessReportVMList.AddRange(ProcessReportVMList);
+            var json = JsonConvert.SerializeObject(ProcessReportVMList);
+            var bQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
+            var webRootPath = _IWebHostEnvironment.ContentRootPath;
+            var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
+            var report = XtraReport.FromFile(ReportPath);
+            report.RequestParameters = false;
+            report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
+            report.Parameters["DataName"].Value = WorkOrder.DataName;
+            report.Parameters["DataNo"].Value = WorkOrder.DataNo;
+            var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
+            PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
+            report.CreateDocument(true);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                report.ExportToPdf(ms);
+                return File(ms.ToArray(), "application/pdf", txt + "報工單.pdf");
+            }
+
+        }
+
+        /// <summary>
+        /// 產報工單PDF
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public IActionResult GetPackingSlipPDF()
+        public IActionResult GetPackingSlipPDF2()
         {
             var qcodesize = 70;
             _context.ChangeTracker.LazyLoadingEnabled = true;
@@ -1576,5 +1630,6 @@ namespace HonjiMES.Controllers
             }
 
         }
+
     }
 }

@@ -39,6 +39,7 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadNo: any;
     logpopupVisible: boolean;
     postval: any;
+    Url = '';
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listStatus = myservice.getWorkOrderStatus();
@@ -200,5 +201,9 @@ export class ProcessControlComponent implements OnInit {
     }
     handleCancel() {
         this.viewpopupVisible = false;
+    }
+    downloadWorkOrder(e) {
+        debugger;
+        this.Url = '/Api/WorkOrders/GetPackingSlipPDF/' + this.workOrderHeadId;
     }
 }
