@@ -49,6 +49,9 @@ export class Myservice {
     getTimeType(): Selectitem[] {
         return timetype;
     }
+    getResourceWorkOrderStatus(): Selectitem[] {
+        return resourceworkorderstatus;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -102,6 +105,11 @@ const workorderstatus: Selectitem[] = [
     { Id: 2, Name: '開工' },
     { Id: 3, Name: '完工' },
     { Id: 4, Name: '轉單' },
+    { Id: 5, Name: '結案' },
+];
+const resourceworkorderstatus: Selectitem[] = [
+    { Id: 0, Name: '全部資料' },
+    { Id: 1, Name: '派工' },
     { Id: 5, Name: '結案' },
 ];
 const orderToWorkOrderStatus: Selectitem[] = [

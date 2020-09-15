@@ -647,6 +647,12 @@ namespace HonjiMES.Models
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
 
+    public class ResourceProcessData
+    {
+        public WorkOrderHead WorkOrderHead { get; set; }
+        public WorkOrderDetail WorkOrderDetail { get; set; }
+    }
+
     public class MbomModelData
     {
         public MbomModelHead MbomModelHead { get; set; }
@@ -821,7 +827,6 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public string Message { get; set; }
     }
-
     public class Suppliers
     {
         public int Id { get; set; }

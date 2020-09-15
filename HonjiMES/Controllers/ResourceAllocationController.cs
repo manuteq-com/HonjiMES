@@ -34,7 +34,7 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResoureAllocation>>> GetMachineReprt(int TimeType)
+        public async Task<ActionResult<IEnumerable<ResoureAllocation>>> GetMachineReport(int TimeType)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             // var WorkOrderHeads = await _context.WorkOrderHeads.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToListAsync();

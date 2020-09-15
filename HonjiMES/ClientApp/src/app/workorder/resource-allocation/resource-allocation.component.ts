@@ -56,8 +56,8 @@ export class ResourceAllocationComponent implements OnInit {
         // debugger;
         this.dataSourceDB = new CustomStore({
             key: 'ProducingMachine',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetMachineReprt', 'GET'),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetMachineReprt', 'GET', { key }),
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetMachineReport', 'GET'),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetMachineReport', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')

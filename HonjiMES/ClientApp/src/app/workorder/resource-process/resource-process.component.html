@@ -1,0 +1,58 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" class="mb-2" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dxi-item dataField="ProducingMachine" [disabled]="true">
+            <dxo-label text="加工機台"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Status" [editorOptions]="selectStatus" editorType="dxSelectBox">
+            <dxo-label text="工單狀態"></dxo-label>
+        </dxi-item>
+    </dx-form>
+
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+        [columnAutoWidth]="false" [showBorders]="true">
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-paging [enabled]="true" [pageSize]="20">
+        </dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
+            [showNavigationButtons]="true" visible="true">
+        </dxo-pager>
+        <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
+
+        <dxo-form>
+            <dxi-item dataField="ReportType"></dxi-item>
+            <dxi-item dataField="WorkOrderDetail.WorkOrderHead.WorkOrderNo"></dxi-item>
+            <dxi-item dataField="WorkOrderDetail.SerialNumber"></dxi-item>
+            <dxi-item dataField="PurchaseNo"></dxi-item>
+            <dxi-item dataField="DrawNo"></dxi-item>
+            <dxi-item dataField="Manpower"></dxi-item>
+            <dxi-item dataField="ReCount"></dxi-item>
+            <dxi-item dataField="Remarks"></dxi-item>
+            <dxi-item dataField="StatusO"></dxi-item>
+            <dxi-item dataField="StatusN"></dxi-item>
+            <dxi-item dataField="DueStartTime"></dxi-item>
+            <dxi-item dataField="DueEndTime"></dxi-item>
+            <dxi-item dataField="ActualStartTime"></dxi-item>
+            <dxi-item dataField="ActualEndTime"></dxi-item>
+            <dxi-item dataField="CreateTime"></dxi-item>
+        </dxo-form>
+
+        <dxi-column dataField="ProcessNo" caption="製程名稱" dataType="date" format="shortDateShortTime" [width]="150"></dxi-column>
+        <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" dataType="string"></dxi-column>
+        <dxi-column dataField="WorkOrderHead.DataNo" caption="品號" dataType="string" [width]="180"></dxi-column>
+        <dxi-column dataField="WorkOrderHead.DataName" caption="名稱" dataType="string" [width]="180"></dxi-column>
+        <dxi-column dataField="WorkOrderHead.MachineNo" caption="機號" dataType="string" [width]="150"></dxi-column>
+        <dxi-column dataField="WorkOrderHead.Status" caption="工單狀態" dataType="string" [width]="80">
+            <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="Status" caption="製程狀態" dataType="string" [width]="80">
+            <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="Count" caption="需求數量" dataType="string" [width]="80"></dxi-column>
+        <dxi-column dataField="ReCount" caption="實際完工數量" dataType="string" [width]="110"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" [width]="180"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日"  [width]="180"></dxi-column>
+    </dx-data-grid>
+</form>
