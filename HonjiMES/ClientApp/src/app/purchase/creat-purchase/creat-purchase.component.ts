@@ -72,6 +72,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     listAdjustStatus: any;
     OrderTypeVisible: boolean;
     DeliveryTime: Date;
+    TypeDisabled: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
@@ -135,14 +136,6 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                 this.WarehouseListAll = s.data;
             }
         );
-        this.TypeselectBoxOptions = {
-            items: this.PurchasetypeList,
-            displayExpr: 'Name',
-            valueExpr: 'Id',
-            searchEnabled: true,
-            onValueChanged: this.onTypeSelectionChanged.bind(this)
-        };
-
     }
     ngOnInit() {
 
@@ -195,6 +188,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.app.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
                 if (s.success) {
+                    this.TypeDisabled = false;
                     this.formData = s.data;
                     this.formData.Id = 0;
                     this.formData.SupplierId = null;
@@ -203,7 +197,16 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
                         this.formData.Type = 30;
                     } else if (this.modval === 'add-outside') {
                         this.formData.Type = 20;
+                        this.TypeDisabled = true;
                     }
+                    this.TypeselectBoxOptions = {
+                        items: this.PurchasetypeList,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id',
+                        searchEnabled: true,
+                        disabled: this.TypeDisabled,
+                        onValueChanged: this.onTypeSelectionChanged.bind(this)
+                    };
                 }
             }
         );
