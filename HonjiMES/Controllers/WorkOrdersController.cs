@@ -972,7 +972,14 @@ namespace HonjiMES.Controllers
                     var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
                     if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
                     {
-                        WorkOrderDetails.FirstOrDefault().Status = 3;
+                        // // Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes)
+                        var ActualTimeDiff = DateTime.Now - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? DateTime.Now);
+                        var Val = Convert.ToInt32(WorkOrderDetails.FirstOrDefault().ProcessTime * WorkOrderReportData.ReCount);
+                        if(Convert.ToInt32(ActualTimeDiff.TotalMinutes) > Val){
+                            WorkOrderDetails.FirstOrDefault().Status = 4;
+                        }else{
+                            WorkOrderDetails.FirstOrDefault().Status = 3;
+                        }
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
@@ -1471,9 +1478,6 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<WorkOrderLog>> GetWorkOrderReportLogByNum(string machine)
         {
-            // var data = await _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine)
-            // .Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
-            // return Ok(MyFun.APIResponseOK(data));
             var data = await _context.WorkOrderReportLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine)
             .OrderByDescending(x => x.CreateTime).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
             var WorkOrderLog = new List<WorkOrderLog>();
@@ -1501,7 +1505,20 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(WorkOrderLog));
         }
-        
+
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// 查詢機台報工紀錄 By 機台名稱
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<ResourceProcessData>> GetProcessByMachineName(string machine)
+        {
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine && 
+            x.WorkOrderHead.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || x.WorkOrderHead.Status == 5))
+            .Include(x => x.WorkOrderHead).ToListAsync();
+            return Ok(MyFun.APIResponseOK(WorkOrderDetails));
+        }    
 
         /// <summary>
         /// 產報工單PDF
@@ -1537,14 +1554,17 @@ namespace HonjiMES.Controllers
             var json = JsonConvert.SerializeObject(ProcessReportVMList);
             var bQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
-            var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
+            // var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
+            var ReportPath = Path.Combine(webRootPath, "Reports", "XtraReport1.repx");
             var report = XtraReport.FromFile(ReportPath);
             report.RequestParameters = false;
-            report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
-            report.Parameters["DataName"].Value = WorkOrder.DataName;
-            report.Parameters["DataNo"].Value = WorkOrder.DataNo;
-            var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
-            PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
+            // report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
+            // report.Parameters["DataName"].Value = WorkOrder.DataName;
+            // report.Parameters["DataNo"].Value = WorkOrder.DataNo;
+
+            report.Parameters["testa"].Value = WorkOrder.DataNo;
+            // var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
+            // PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
             var jsonDataSource = new JsonDataSource();
             jsonDataSource.JsonSource = new CustomJsonSource(json);
             report.DataSource = jsonDataSource;

@@ -100,7 +100,7 @@ export class WorkorderListComponent implements OnInit {
             if (e[colData.key].value4 === 1) { // 委外(含採購單)
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)
-                if (e[colData.key].value3 === 3) {
+                if (e[colData.key].value3 === 3 || e[colData.key].value3 === 4) {
                     this.ReportHeight = 730;
                     // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 } else {
@@ -116,6 +116,8 @@ export class WorkorderListComponent implements OnInit {
                     this.ReportHeight = 810;
                 } else if (e[colData.key].value3 === 3) {
                     this.ReportHeight = 760;
+                } else if (e[colData.key].value3 === 4) {
+                    this.ReportHeight = 810;
                 }
             } else {
                 this.creatpopupVisible = true;
@@ -125,6 +127,8 @@ export class WorkorderListComponent implements OnInit {
                 } else if (e[colData.key].value3 === 2) {
                     this.ReportHeight = 760;
                 } else if (e[colData.key].value3 === 3) {
+                    this.ReportHeight = 760;
+                } else if (e[colData.key].value3 === 4) {
                     this.ReportHeight = 760;
                 }
             }
@@ -144,6 +148,8 @@ export class WorkorderListComponent implements OnInit {
             return 'process_start';
         } else if (data === 3) {
             return 'process_end';
+        } else if (data === 4) {
+            return 'process_alarm';
         }
     }
     ReportByPurchaseNo(workOrderHeadId, serial) {
