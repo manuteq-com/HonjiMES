@@ -64,7 +64,7 @@ namespace HonjiMES.Controllers
             }
             else
             {
-                UserRoles = _context.UserRoles.AsQueryable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
+                UserRoles = _context.UserRoles.AsEnumerable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id &&x.Roles.StartsWith('1')).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
             }
             foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
             {
@@ -94,23 +94,25 @@ namespace HonjiMES.Controllers
             foreach (var item in allmenu.Where(x => x.Pid == id && userRoles.Any(y => y.Item1 == x.Id)).OrderBy(x => x.Order))
             {
                 var Rolearray = userRoles.Where(x => x.Item1 == item.Id).FirstOrDefault().Item2.ToCharArray();
-                MenuViewModellist.Add(new MenuViewModel
-                {
-                    label = item.Name,
-                    icon = item.Icon,
-                    routerLink = item.RouterLink.Split(','),
-                    Query = Rolearray[0] == '1',
-                    Creat = Rolearray[1] == '1',
-                    Edit = Rolearray[2] == '1',
-                    Delete = Rolearray[3] == '1',
-                });
+                // if (true) {
+                    MenuViewModellist.Add(new MenuViewModel
+                    {
+                        label = item.Name,
+                        icon = item.Icon,
+                        routerLink = item.RouterLink.Split(','),
+                        Query = Rolearray[0] == '1',
+                        Creat = Rolearray[1] == '1',
+                        Edit = Rolearray[2] == '1',
+                        Delete = Rolearray.Length == 4 ? Rolearray[3] == '1' : false,
+                    });
+                // }
             }
             return MenuViewModellist.ToArray();
         }
 
         private User ValidateUser(LoginViewModel login)
         {
-            return _context.Users.Find(1);
+            // return _context.Users.Find(1);
             var Password = MyFun.Encryption(login.Password);
             var Users = _context.Users.Where(x => x.DeleteFlag == 0 && x.Username == login.Username && x.Password == Password).FirstOrDefault();
             if (Users == null)
