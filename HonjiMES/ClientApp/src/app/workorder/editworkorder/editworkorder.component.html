@@ -33,8 +33,12 @@
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
             <dxo-label text="數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="MachineNo" [disabled]="true">
+        <!-- <dxi-item dataField="MachineNo" [disabled]="true">
             <dxo-label text="機號"></dxo-label>
+        </dxi-item> -->
+        <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" editorType="dxSelectBox">
+            <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
+            <dxo-label text="操作人員"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks" [visible]="false" [disabled]="true">
             <dxo-label text="備註"></dxo-label>
@@ -112,7 +116,7 @@
 <dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
     [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey"
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible"
             [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
     </div>
 </dx-popup>

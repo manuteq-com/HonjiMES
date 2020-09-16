@@ -687,6 +687,7 @@ namespace HonjiMES.Models
         /// </summary>
         public string Message { get; set; }
         public string ProducingMachine { get; set; }
+        public int CreateUser { get; set; }
     }
 
     public class WorkOrderLog

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, HostListener } from '@angular/core';
 import { DxFormComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from 'src/app/shared/mylib';
@@ -20,6 +20,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     @Input() serialkeyval: any;
     @Input() modval: any;
     @Input() randomkey: any;
+    @Input() popupkeyval: any;
     buttondisabled = false;
     CustomerVal: any;
     formData: any;
@@ -75,6 +76,69 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     mod: any;
     dataSource: any[];
     ProductBasicList: any;
+    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean; };
+    UserList: any;
+    keyup = '';
+
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (this.popupkeyval) {
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                if (key !== '') {
+                    const promise = new Promise((resolve, reject) => {
+                        this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
+                            if (res.success) {
+                                let PermissionTemp = 80; // 生產人員
+                                if (this.formData.Type === 1) {
+                                    PermissionTemp = 60; // 生管人員
+                                }
+                                if (res.data.Permission === PermissionTemp || res.data.Permission === 20) {
+                                    this.app.GetData('/Users/GetUsers').subscribe(
+                                        (s) => {
+                                            if (s.success) {
+                                                this.buttondisabled = false;
+                                                this.UserList = [];
+                                                // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                                                s.data.forEach(element => {
+                                                    if (element.Permission === 20 && element.Id === res.data.Id) {
+                                                        this.UserList.push(element);
+                                                        s.data.forEach(element2 => {
+                                                            if (element2.Permission === PermissionTemp) {
+                                                                this.UserList.push(element2);
+                                                            }
+                                                        });
+                                                    } else if (element.Permission === PermissionTemp && element.Id === res.data.Id) {
+                                                        this.UserList.push(element);
+                                                    }
+                                                });
+                                                this.SetUserEditorOptions(this.UserList, res.data.Id);
+                                            }
+                                        }
+                                    );
+                                } else {
+                                    this.UserList = [];
+                                    this.SetUserEditorOptions(this.UserList, null);
+                                    this.showMessage('warning', '請勿越權使用!', 3000);
+                                }
+                            } else {
+                                this.showMessage('error', '查無資料!', 3000);
+                            }
+                        },
+                            err => {
+                                // Error
+                                reject(err);
+                            }
+                        );
+                    });
+                }
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
+
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
+        }
+    }
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.readOnly = false;
@@ -106,6 +170,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.NoPurchaseVisible = false;
         this.HasPurchaseVisible = false;
         this.PurchaseHeadList = [];
+
+        this.UserList = [];
+        this.SetUserEditorOptions(this.UserList, null);
 
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
@@ -248,6 +315,16 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             );
         }
     }
+    SetUserEditorOptions(List, IdVal) {
+        this.UserEditorOptions = {
+            items: List,
+            displayExpr: 'Realname',
+            valueExpr: 'Id',
+            value: IdVal,
+            searchEnabled: true,
+            disable: false
+        };
+    }
     PurchaseNoValueChanged(e) {
 
     }
@@ -268,7 +345,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.ShowMessage('存檔完成', 'success', 3000);
+        this.showMessage('success', '存檔完成', 3000);
     }
     onSupplierSelectionChanged(e) {
         this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeadsSurfaceBySupplier/' + e.value).subscribe(
@@ -284,83 +361,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
-    }
-    validate_before(): boolean {
-        // 表單驗證
-        if (this.myform.instance.validate().isValid === false) {
-            this.ShowMessage('請注意訂單內容必填的欄位', 'error', 3000);
-            return false;
-        }
-        return true;
-    }
-    async onFormSubmit(e) {
-        this.buttondisabled = true;
-        if (this.validate_before() === false) {
-            this.buttondisabled = false;
-            return;
-        }
-        this.formData = this.myform.instance.option('formData');
-        // this.postval = this.formData;
-        // tslint:disable-next-line: new-parens
-        this.postval = new workOrderReportData;
-        this.postval.WorkOrderID = this.itemkeyval;
-        this.postval.WorkOrderSerial = this.serialkeyval;
-        this.postval.ReCount = this.formData.ReCount;
-        this.postval.RePrice = this.formData?.RePrice ?? 0;
-        this.postval.NgCount = this.formData.NgCount;
-        this.postval.Message = this.formData.Message;
-        this.postval.ProducingMachine = this.formData.ProducingMachine;
-        this.postval.SupplierId = this.formData.SupplierId;
-        this.postval.PurchaseId = this.formData.PurchaseId;
-        try {
-            if (this.modval === 'start') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportStart', 'POST', { values: this.postval });
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modval === 'end') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modval === 'restart') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportRestart', 'POST', { values: this.postval });
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modval === 'purchase') {
-                if (this.postval.PurchaseId != null) {
-                    const result = this.PurchaseHeadList.find(x => x.Id === this.postval.PurchaseId);
-                    if (result) {
-                        this.postval.PurchaseNo = result.PurchaseNo;
-                        // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: this.postval.WorkOrderID, values: this.postval });
-                        this.viewRefresh(e, sendRequest);
-                    }
-                } else {
-                    this.ShowMessage('請選擇採購單號', 'error', 3000);
-                }
-            } else if (this.modval === 'newpurchase') {
-                this.GetPurchaseDetailData();
-            }
-        } catch (error) {
-
-        }
-        this.buttondisabled = false;
-    }
-    viewRefresh(e, result) {
-        if (result) {
-            this.myform.instance.resetValues();
-            this.CustomerVal = null;
-            e.preventDefault();
-            this.childOuter.emit(true);
-        }
-    }
-    ShowMessage(text, type, val) {
-        notify({
-            message: text,
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, type, val);
     }
     GetPurchaseDetailData() {
         this.dataSource = [];
@@ -391,5 +391,83 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    validate_before(): boolean {
+        // 表單驗證
+        if (this.myform.instance.validate().isValid === false) {
+            this.showMessage('error', '請注意訂單內容必填的欄位', 3000);
+            return false;
+        }
+        return true;
+    }
+    async onFormSubmit(e) {
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
+        this.formData = this.myform.instance.option('formData');
+        // this.postval = this.formData;
+        // tslint:disable-next-line: new-parens
+        this.postval = new workOrderReportData;
+        this.postval.WorkOrderID = this.itemkeyval;
+        this.postval.WorkOrderSerial = this.serialkeyval;
+        this.postval.ReCount = this.formData.ReCount;
+        this.postval.RePrice = this.formData?.RePrice ?? 0;
+        this.postval.NgCount = this.formData.NgCount;
+        this.postval.Message = this.formData.Message;
+        this.postval.ProducingMachine = this.formData.ProducingMachine;
+        this.postval.SupplierId = this.formData.SupplierId;
+        this.postval.PurchaseId = this.formData.PurchaseId;
+        this.postval.CreateUser = this.formData.CreateUser;
+        try {
+            if (this.modval === 'start') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportStart', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'end') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'restart') {
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportRestart', 'POST', { values: this.postval });
+                this.viewRefresh(e, sendRequest);
+            } else if (this.modval === 'purchase') {
+                if (this.postval.SupplierId != null && this.postval.PurchaseId != null) {
+                    const result = this.PurchaseHeadList.find(x => x.Id === this.postval.PurchaseId);
+                    if (result) {
+                        this.postval.PurchaseNo = result.PurchaseNo;
+                        // tslint:disable-next-line: max-line-length
+                        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: this.postval.WorkOrderID, values: this.postval });
+                        this.viewRefresh(e, sendRequest);
+                    }
+                } else {
+                    this.showMessage('error', '請選擇[供應商]和[採購單號]!', 3000);
+                }
+            } else if (this.modval === 'newpurchase') {
+                this.GetPurchaseDetailData();
+            }
+        } catch (error) {
+
+        }
+        this.buttondisabled = false;
+    }
+    viewRefresh(e, result) {
+        if (result) {
+            this.myform.instance.resetValues();
+            this.CustomerVal = null;
+            e.preventDefault();
+            this.childOuter.emit(true);
+        }
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 }

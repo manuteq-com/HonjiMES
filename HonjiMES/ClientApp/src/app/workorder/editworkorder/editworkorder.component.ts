@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Output, Input, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, Input, ViewChild, EventEmitter, HostListener } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { Myservice } from 'src/app/service/myservice';
@@ -9,6 +9,7 @@ import CheckBox from 'devextreme/ui/check_box';
 import Swal from 'sweetalert2';
 import CustomStore from 'devextreme/data/custom_store';
 import { workOrderReportData } from 'src/app/model/viewmodels';
+import { APIResponse } from 'src/app/app.module';
 
 @Component({
     selector: 'app-editworkorder',
@@ -20,6 +21,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() modval: any;
     @Input() randomkeyval: any;
+    @Input() popupkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
@@ -63,6 +65,65 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     randomkey: number;
     itemkey: any;
     editorOptions: { showSpinButtons: boolean; mode: string; min: number; };
+    UserList: any[];
+    keyup = '';
+    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; disable: boolean; };
+
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (this.popupkeyval && !this.creatpopupVisible) {
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                if (key !== '') {
+                    const promise = new Promise((resolve, reject) => {
+                        this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
+                            if (res.success) {
+                                if (res.data.Permission === 80 || res.data.Permission === 20) {
+                                    this.app.GetData('/Users/GetUsers').subscribe(
+                                        (s) => {
+                                            if (s.success) {
+                                                this.buttondisabled = false;
+                                                this.UserList = [];
+                                                // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                                                s.data.forEach(element => {
+                                                    if (element.Permission === 20 && element.Id === res.data.Id) {
+                                                        this.UserList.push(element);
+                                                        s.data.forEach(element2 => {
+                                                            if (element2.Permission === 80) {
+                                                                this.UserList.push(element2);
+                                                            }
+                                                        });
+                                                    } else if (element.Permission === 80 && element.Id === res.data.Id) {
+                                                        this.UserList.push(element);
+                                                    }
+                                                });
+                                                this.SetUserEditorOptions(this.UserList, res.data.Id);
+                                            }
+                                        }
+                                    );
+                                } else {
+                                    this.UserList = [];
+                                    this.SetUserEditorOptions(this.UserList, null);
+                                    this.showMessage('warning', '請勿越權使用!', 3000);
+                                }
+                            } else {
+                                this.showMessage('error', '查無資料!', 3000);
+                            }
+                        },
+                            err => {
+                                // Error
+                                reject(err);
+                            }
+                        );
+                    });
+                }
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
+
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
+        }
+    }
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -150,6 +211,9 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             }
         );
 
+        this.buttondisabled = true;
+        this.UserList = [];
+        this.SetUserEditorOptions(this.UserList, null);
         this.onCellPreparedLevel = 0;
     }
     GetProcessInfo() {
@@ -164,6 +228,16 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    SetUserEditorOptions(List, IdVal) {
+        this.UserEditorOptions = {
+            items: List,
+            displayExpr: 'Realname',
+            valueExpr: 'Id',
+            value: IdVal,
+            searchEnabled: true,
+            disable: false
+        };
     }
     allowEdit(e) {
         if (e.row.data.Status > 1) {
@@ -278,15 +352,15 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         if (e.data.Type === 1) { // 委外(含採購單)
             this.creatpopupVisible = true;
             if (e.data.Status === 3) {
-                this.ReportHeight = 730;
+                this.ReportHeight = 770;
                 // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {
-                this.ReportHeight = 730;
+                this.ReportHeight = 770;
                 // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             }
         } else if (e.data.Type === 2 && e.data.Status === 2) { // 委外(無採購單)
             this.creatpopupVisible = true;
-            this.ReportHeight = 810;
+            this.ReportHeight = 850;
         } else {
             const arr =  this.dataGrid2.instance.getSelectedRowKeys();
             if (e.isSelected) {
@@ -380,7 +454,26 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             }
         });
     }
-    async onFormSubmit(e) {
+    validate_before(): boolean {
+        // 表單驗證
+        if (this.myform.instance.validate().isValid === false) {
+            notify({
+                message: '請注意訂單內容必填的欄位',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            return false;
+        }
+        return true;
+    }
+    onFormSubmit = async function(e) {
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
+        this.formData = this.myform.instance.option('formData');
         let saveok = true;
         let cansave = true;
         const saveEditData = this.dataGrid2.instance.saveEditData();
@@ -397,8 +490,8 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         } else {
             // tslint:disable-next-line: forin
             for (const x in SelectedRows) {
-                if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount < 0 || SelectedRows[x].ReportCount == null)) {
-                    const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量必填';
+                if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount <= 0 || SelectedRows[x].ReportCount == null)) {
+                    const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量 必填! (不能為 0)';
                     notify({
                         message: msg,
                         position: {
@@ -413,6 +506,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             if (cansave) {
                 // tslint:disable-next-line: forin
                 for (const x in SelectedRows) {
+                    SelectedRows[x].CreateUser = this.formData.CreateUser;
                     const sendRequest = await SendService.sendRequest(
                         this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
                         { key: SelectedRows[x].Id, values: SelectedRows[x] });
@@ -443,5 +537,14 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 }

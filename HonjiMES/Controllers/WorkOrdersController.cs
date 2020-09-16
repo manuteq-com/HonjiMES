@@ -480,7 +480,7 @@ namespace HonjiMES.Controllers
                     item.PurchaseId = WorkOrderReportData.PurchaseId;
                     item.ReCount = (item?.ReCount ?? 0) + WorkOrderReportData.ReCount;
                     item.UpdateTime = DateTime.Now;
-                    item.UpdateUser = MyFun.GetUserID(HttpContext);
+                    item.UpdateUser = WorkOrderReportData.CreateUser;
                     item.ActualStartTime = DateTime.Now;
                     item.ActualEndTime = DateTime.Now;
                     item.WorkOrderReportLogs.Add(new WorkOrderReportLog
@@ -502,7 +502,7 @@ namespace HonjiMES.Controllers
                         ActualStartTime = item.ActualStartTime,
                         ActualEndTime = item.ActualEndTime,
                         CreateTime = DateTime.Now,
-                        CreateUser = MyFun.GetUserID(HttpContext),
+                        CreateUser = WorkOrderReportData.CreateUser,
                     });
 
                     ////VVVVV  將內容自動回填至採購單內容 更新2020/08/18
@@ -591,7 +591,7 @@ namespace HonjiMES.Controllers
                             Price = WorkOrderReportData.ReCount * BasicData.Price,
                             WarehouseId = BasicData.WarehouseId,
                             CreateTime = DateTime.Now,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                     }
                     else // 如果已有相同成品，則增加數量並調整金額。
@@ -641,7 +641,7 @@ namespace HonjiMES.Controllers
 
                         PurchaseDetails.FirstOrDefault().Quantity += WorkOrderReportData.ReCount;
                         PurchaseDetails.FirstOrDefault().Price = PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
-                        PurchaseDetails.FirstOrDefault().UpdateUser = MyFun.GetUserID(HttpContext);
+                        PurchaseDetails.FirstOrDefault().UpdateUser = WorkOrderReportData.CreateUser;
                     }
                     PurchaseHeads.PriceAll = PurchaseHeads.PurchaseDetails.Where(x => x.DeleteFlag == 0).Sum(x => x.Quantity * x.OriginPrice);
                 }
@@ -683,21 +683,21 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -WorkOrderReportData.ReCount,
                             Message = "表處轉倉",
-                            CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().MaterialLogs.Add(new MaterialLog
+                            Warehouse202.First().MaterialLogs.Add(new MaterialLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
                                 Quantity = WorkOrderReportData.ReCount,
                                 Message = "表處轉倉",
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = WorkOrderReportData.CreateUser
                             });
                             Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
                         }
@@ -713,7 +713,7 @@ namespace HonjiMES.Controllers
                                 Price = MaterialBasic.Price,
                                 BaseQuantity = 2,
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext),
+                                CreateUser = WorkOrderReportData.CreateUser,
                                 WarehouseId = warehousesB,
                                 MaterialLogs = {new MaterialLog
                                 {
@@ -722,7 +722,7 @@ namespace HonjiMES.Controllers
                                     Quantity = WorkOrderReportData.ReCount,
                                     Message = "表處轉倉",
                                     CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                    CreateUser = WorkOrderReportData.CreateUser
                                 }}
                             });
                         }
@@ -739,21 +739,21 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -WorkOrderReportData.ReCount,
                             Message = "表處轉倉",
-                            CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().ProductLogs.Add(new ProductLog
+                            Warehouse202.First().ProductLogs.Add(new ProductLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
                                 Quantity = WorkOrderReportData.ReCount,
                                 Message = "表處轉倉",
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = WorkOrderReportData.CreateUser
                             });
                             Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
                         }
@@ -770,7 +770,7 @@ namespace HonjiMES.Controllers
                                 Price = ProductBasic.Price,
                                 MaterialRequire = 1,
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext),
+                                CreateUser = WorkOrderReportData.CreateUser,
                                 WarehouseId = warehousesB,
                                 ProductLogs = {new ProductLog
                                 {
@@ -779,7 +779,7 @@ namespace HonjiMES.Controllers
                                     Quantity = WorkOrderReportData.ReCount,
                                     Message = "表處轉倉",
                                     CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                    CreateUser = WorkOrderReportData.CreateUser
                                 }}
                             });
                         }
@@ -796,21 +796,21 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -WorkOrderReportData.ReCount,
                             Message = "表處轉倉",
-                            CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         Warehouse201.First().Quantity -= WorkOrderReportData.ReCount;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().WiproductLogs.Add(new WiproductLog
+                            Warehouse202.First().WiproductLogs.Add(new WiproductLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
                                 Quantity = WorkOrderReportData.ReCount,
                                 Message = "表處轉倉",
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = WorkOrderReportData.CreateUser
                             });
                             Warehouse202.First().Quantity += WorkOrderReportData.ReCount;
                         }
@@ -827,7 +827,7 @@ namespace HonjiMES.Controllers
                                 Price = WiproductBasic.Price,
                                 MaterialRequire = 1,
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext),
+                                CreateUser = WorkOrderReportData.CreateUser,
                                 WarehouseId = warehousesB,
                                 WiproductLogs = {new WiproductLog
                                 {
@@ -836,7 +836,7 @@ namespace HonjiMES.Controllers
                                     Quantity = WorkOrderReportData.ReCount,
                                     Message = "表處轉倉",
                                     CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                    CreateUser = WorkOrderReportData.CreateUser
                                 }}
                             });
                         }
@@ -933,7 +933,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = DateTime.Now,
                             ActualEndTime = null,
                             CreateTime = DateTime.Now,
-                            CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = WorkOrderReportData.CreateUser,
                         });
                     }
                     else
@@ -1016,7 +1016,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
                             CreateTime = DateTime.Now,
-                            CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = WorkOrderReportData.CreateUser,
                         });
 
                         //檢查工單是否全數完工
@@ -1106,7 +1106,7 @@ namespace HonjiMES.Controllers
                             ActualStartTime = DateTime.Now,
                             ActualEndTime = null,
                             CreateTime = DateTime.Now,
-                            CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = WorkOrderReportData.CreateUser,
                         });
                     }
                     else
@@ -1152,7 +1152,8 @@ namespace HonjiMES.Controllers
                     Message = WorkOrderReportDataAll.Message,
                     ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
                     WorkOrderID = WorkOrderDetails.WorkOrderHeadId,
-                    WorkOrderSerial = WorkOrderDetails.SerialNumber
+                    WorkOrderSerial = WorkOrderDetails.SerialNumber,
+                    CreateUser = WorkOrderReportDataAll.CreateUser,
                 };
                 if (WorkOrderDetails.Status == 1)
                     return await WorkOrderReportStart(WorkOrderReportData);

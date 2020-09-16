@@ -23,6 +23,11 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
+
+        <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="4" editorType="dxSelectBox">
+            <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
+            <dxo-label text="操作人員"></dxo-label>
+        </dxi-item>
         <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
             <dxo-label text="製程序號"></dxo-label>
         </dxi-item>
@@ -110,8 +115,8 @@
 
             <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='採購單回報' type='default' icon='check' [useSubmitBehavior]="true"
                 [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onPurchaseClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增採購單' type='success' icon='plus' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onNewPurchaseClick($event)"></dx-button>
+            <!-- <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增採購單' type='success' icon='plus' [useSubmitBehavior]="true"
+                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onNewPurchaseClick($event)"></dx-button> -->
         </div>
     <!-- </div> -->
 
