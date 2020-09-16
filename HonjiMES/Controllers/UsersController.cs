@@ -61,6 +61,20 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢帳戶 By 員工號碼
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<User>> GetUserByUserNo(string DataNo)
+        {
+            var User = await _context.Users.Where(x => x.Username == DataNo && x.DeleteFlag == 0).ToListAsync();
+            if (User.Count() == 0) {
+                return Ok(MyFun.APIResponseError("查無員工資訊! [ " + DataNo + " ]"));
+            }
+            return Ok(MyFun.APIResponseOK(User.FirstOrDefault()));
+        }
+
+        /// <summary>
         /// 新增帳戶
         /// </summary>
         /// <param name="id"></param>

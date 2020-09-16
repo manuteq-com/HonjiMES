@@ -89,6 +89,21 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢工單 By 工單號
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Sales
+        [HttpGet]
+        public async Task<ActionResult<MaterialBasic>> GetWorkOrderHeadByWorkOrderNo(string DataNo)
+        {
+            var WorkOrderHead = await _context.WorkOrderHeads.Where(x => x.WorkOrderNo == DataNo && x.DeleteFlag == 0).ToListAsync();
+            if (WorkOrderHead.Count() == 0) {
+                return Ok(MyFun.APIResponseError("查無工單號碼! [ " + DataNo + " ]"));
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrderHead.FirstOrDefault()));
+        }
+
+        /// <summary>
         /// 查詢工單明細by工單ID
         /// </summary>
         /// <returns></returns>
@@ -278,7 +293,7 @@ namespace HonjiMES.Controllers
             var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
             OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
             OWorkOrderHead.UpdateTime = DateTime.Now;
-            OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
+            OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
 
             //入庫
             var checkInfo = false;
@@ -291,7 +306,7 @@ namespace HonjiMES.Controllers
                     {
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
-                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        // item.UpdateUser = WorkOrderReportData.CreateUser;
                         item.MaterialLogs.Add(new MaterialLog
                         {
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
@@ -299,7 +314,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         checkInfo = true;
                     }
@@ -318,7 +333,7 @@ namespace HonjiMES.Controllers
                         Price = MaterialBasic.Price,
                         BaseQuantity = 2,
                         CreateTime = dt,
-                        CreateUser = MyFun.GetUserID(HttpContext),
+                        CreateUser = WorkOrderReportData.CreateUser,
                         WarehouseId = WorkOrderReportData.WarehouseId,
                         MaterialLogs = {new MaterialLog
                         {
@@ -327,7 +342,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
                 }
@@ -341,7 +356,7 @@ namespace HonjiMES.Controllers
                     {
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
-                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        // item.UpdateUser = WorkOrderReportData.CreateUser;
                         item.ProductLogs.Add(new ProductLog
                         {
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
@@ -349,7 +364,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         checkInfo = true;
                     }
@@ -369,7 +384,7 @@ namespace HonjiMES.Controllers
                         Price = ProductBasic.Price,
                         MaterialRequire = 1,
                         CreateTime = dt,
-                        CreateUser = MyFun.GetUserID(HttpContext),
+                        CreateUser = WorkOrderReportData.CreateUser,
                         WarehouseId = WorkOrderReportData.WarehouseId,
                         ProductLogs = {new ProductLog
                         {
@@ -378,7 +393,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
                 }
@@ -392,7 +407,7 @@ namespace HonjiMES.Controllers
                     {
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
-                        // item.UpdateUser = MyFun.GetUserID(HttpContext);
+                        // item.UpdateUser = WorkOrderReportData.CreateUser;
                         item.WiproductLogs.Add(new WiproductLog
                         {
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
@@ -400,7 +415,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         });
                         checkInfo = true;
                     }
@@ -420,7 +435,7 @@ namespace HonjiMES.Controllers
                         Price = WiproductBasic.Price,
                         MaterialRequire = 1,
                         CreateTime = dt,
-                        CreateUser = MyFun.GetUserID(HttpContext),
+                        CreateUser = WorkOrderReportData.CreateUser,
                         WarehouseId = WorkOrderReportData.WarehouseId,
                         WiproductLogs = {new WiproductLog
                         {
@@ -429,7 +444,7 @@ namespace HonjiMES.Controllers
                             Quantity = WorkOrderReportData.ReCount,
                             Message = "品質檢驗入庫",
                             CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
                 }
@@ -835,11 +850,11 @@ namespace HonjiMES.Controllers
         /// 工單結案
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="WorkOrderData"></param>
+        /// <param name="WorkOrderReportData"></param>
         /// <returns></returns>
         // PUT: api/BillofPurchaseHeads/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> CloseWorkOrder(int id, WorkOrderData WorkOrderData)
+        public async Task<IActionResult> CloseWorkOrder(int id, WorkOrderReportData WorkOrderReportData)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
@@ -847,7 +862,7 @@ namespace HonjiMES.Controllers
             {
                 OWorkOrderHead.Status = 5;//結案
                 OWorkOrderHead.UpdateTime = DateTime.Now;
-                OWorkOrderHead.UpdateUser = MyFun.GetUserID(HttpContext);
+                OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
             }
             else
             {
@@ -1513,7 +1528,7 @@ namespace HonjiMES.Controllers
             var qcodesize = 70;
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var ProcessReportVMList = new List<ProcessReportVM>();
-            var WorkOrder = _context.WorkOrderHeads.Find(98);
+            var WorkOrder = _context.WorkOrderHeads.Find(120);
             var txt = "";
             foreach (var item in WorkOrder.WorkOrderDetails)
             {
