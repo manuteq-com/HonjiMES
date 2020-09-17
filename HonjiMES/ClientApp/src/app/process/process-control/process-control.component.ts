@@ -204,6 +204,18 @@ export class ProcessControlComponent implements OnInit {
     }
     downloadWorkOrder(e) {
         debugger;
-        this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
+        if (this.workOrderHeadId === undefined) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有選擇任何工單項目',
+                html: '請點選需產生報表之工單項目',
+                icon: 'warning',
+                timer: 5000
+            });
+            return false;
+        } else {
+            this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
+        }
     }
 }

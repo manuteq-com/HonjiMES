@@ -148,7 +148,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public IActionResult GetWorkOrderPDF(int id)
         {
-            var qcodesize = 70;
+            var qcodesize = 100;
             _context.ChangeTracker.LazyLoadingEnabled = true;
             // var SaleOrderReport = new List<SaleOrderReportVM>();
             var WorkOrderHead = _context.WorkOrderHeads.Find(id);

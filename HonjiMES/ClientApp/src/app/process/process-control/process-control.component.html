@@ -71,9 +71,7 @@
 
 
     <div class="col-6">
-
         <div class="row">
-
             <div class="col-12">
                 <div class="input-group">
                     <label class="pt-3">
@@ -82,11 +80,10 @@
                 </div>
             </div>
             <div class="buttongroup">
-                <a class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text"
-                [href]="Url" target="_blank" (click)="downloadWorkOrder($event)">產生工單報表
+                <a style="color: dodgerblue;text-decoration:underline;font-size: medium;" [href]="Url" target="_blank"
+                (click)="downloadWorkOrder($event)">產生工單報表
                 </a>
             </div>
-
         </div>
 
         <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
