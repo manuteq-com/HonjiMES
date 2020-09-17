@@ -169,6 +169,8 @@ export class SendService {
                             params = params.set(i, JSON.stringify(data.loadOptions[i]));
                         }
                     });
+                } else {
+                    url += keyurl;
                 }
                 httpOptions.params = params;
                 result = http.get(apiurl + url, httpOptions);

@@ -20,7 +20,7 @@
 <dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1000" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatreceive (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
+        <app-creatreceive (childOuter)="creatpopup_result($event)" [itemkeyval]="itemcreatkey" [randomkeyval]="randomkey" [popupkeyval]="creatpopupVisible">
         </app-creatreceive>
     </div>
 </dx-popup>
@@ -28,7 +28,7 @@
 <dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [randomkeyval]="randomkey">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>

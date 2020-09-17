@@ -87,7 +87,7 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
         }
     }
     GetRequisitionsDetail(key) {
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + key).subscribe(
+        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNoId/' + key).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceDB1 = s.data;

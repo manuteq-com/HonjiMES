@@ -190,7 +190,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRebacksDetailMaterialByWorkOrderNo(int id)
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRebacksDetailMaterialByWorkOrderNoId(int id)
         {
             var RequisitionDetailAllList = new List<RequisitionDetailAll>();
             _context.ChangeTracker.LazyLoadingEnabled = true;
