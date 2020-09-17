@@ -44,7 +44,8 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var PurchaseOrderReport = new List<PurchaseOrderReportVM>();
             var PurchaseHead = _context.PurchaseHeads.Find(id);
-            var txt = "";
+            var Users = _context.Users.Where(x => x.DeleteFlag == 0).ToList();
+            var txt = PurchaseHead.PurchaseNo;
             var i = 0;
             foreach (var item in PurchaseHead.PurchaseDetails)
             {
@@ -81,11 +82,12 @@ namespace HonjiMES.Controllers
             report.Parameters["PurchaseDate"].Value = PurchaseHead.PurchaseDate;
             report.Parameters["PurchaseNo"].Value = PurchaseHead.PurchaseNo;
             report.Parameters["PurchaseType"].Value = PurchaseHead.Type == 10 ? "採購" : PurchaseHead.Type == 20 ? "外包" : "表處";
-            report.Parameters["PurchaseUser"].Value = PurchaseHead.CreateUser;
+            report.Parameters["PurchaseUser"].Value = Users.Where(x => x.Id == PurchaseHead.CreateUser).FirstOrDefault().Realname;
             report.Parameters["SupplierCode"].Value = PurchaseHead.Supplier.Code;
             report.Parameters["SupplierName"].Value = PurchaseHead.Supplier.Name;
             report.Parameters["SupplierFax"].Value = PurchaseHead.Supplier.Fax;
             report.Parameters["SupplierTel"].Value = PurchaseHead.Supplier.Phone;
+            report.Parameters["Total"].Value = PurchaseHead.PriceAll;
             var jsonDataSource = new JsonDataSource();
             jsonDataSource.JsonSource = new CustomJsonSource(json);
             report.DataSource = jsonDataSource;
@@ -93,7 +95,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + "採購單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_採購單.pdf");
             }
         }
 
@@ -107,7 +109,7 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var SaleOrderReport = new List<SaleOrderReportVM>();
             var SaleHead = _context.SaleHeads.Find(id);
-            var txt = "";
+            var txt = SaleHead.SaleNo;
             foreach (var item in SaleHead.SaleDetailNews)
             {
                 SaleOrderReport.Add(new SaleOrderReportVM{
@@ -135,7 +137,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + "銷貨單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt  + '_' + DateTime.Now.ToString("yyyyMMdd") + "_銷貨單.pdf");
             }
         }
 
@@ -146,38 +148,42 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public IActionResult GetWorkOrderPDF(int id)
         {
+            var qcodesize = 70;
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            var SaleOrderReport = new List<SaleOrderReportVM>();
-            var SaleHead = _context.SaleHeads.Find(id);
-            var txt = "";
-            foreach (var item in SaleHead.SaleDetailNews)
-            {
-                SaleOrderReport.Add(new SaleOrderReportVM{
-                    SaleNo = item.Sale.SaleNo,
-                    MachineNo = item.OrderDetail.MachineNo,
-                    ProductNo = item.ProductNo,
-                    ProductName = item.OrderDetail.ProductBasic.Name,
-                    Quantity = item.Quantity,
-                    Price = item.OriginPrice,
-                    Total = item.Price
-                });
-            }
-            var json = JsonConvert.SerializeObject(SaleOrderReport);
+            // var SaleOrderReport = new List<SaleOrderReportVM>();
+            var WorkOrderHead = _context.WorkOrderHeads.Find(id);
+            var txt = WorkOrderHead.WorkOrderNo;
+            var dbQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
+            // foreach (var item in SaleHead.SaleDetailNews)
+            // {
+            //     SaleOrderReport.Add(new SaleOrderReportVM{
+            //         SaleNo = item.Sale.SaleNo,
+            //         MachineNo = item.OrderDetail.MachineNo,
+            //         ProductNo = item.ProductNo,
+            //         ProductName = item.OrderDetail.ProductBasic.Name,
+            //         Quantity = item.Quantity,
+            //         Price = item.OriginPrice,
+            //         Total = item.Price
+            //     });
+            // }
+            // var json = JsonConvert.SerializeObject(SaleOrderReport);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
-            var ReportPath = Path.Combine(webRootPath, "Reports", "SaleOrderReport.repx");
+            var ReportPath = Path.Combine(webRootPath, "Reports", "WorkOrder.repx");
             var report = XtraReport.FromFile(ReportPath);
             report.RequestParameters = false;
-            report.Parameters["CreateDate"].Value = DateTime.Now;
-            report.Parameters["Address"].Value = "";
-            report.Parameters["CustomerName"].Value = "";
+            report.Parameters["WorkOrderNo"].Value = WorkOrderHead.WorkOrderNo;
+            report.Parameters["DataNo"].Value = WorkOrderHead.DataNo;
+            report.Parameters["Quantity"].Value = WorkOrderHead.Count;
+            report.Parameters["MachineNo"].Value = WorkOrderHead.MachineNo;
+            report.Parameters["QRCode"].Value = MyFun.ImgToBase64String(dbQrCode);
             var jsonDataSource = new JsonDataSource();
-            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            // jsonDataSource.JsonSource = new CustomJsonSource(json);
             report.DataSource = jsonDataSource;
             report.CreateDocument(true);
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + "銷貨單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_工單.pdf");
             }
         }
     }

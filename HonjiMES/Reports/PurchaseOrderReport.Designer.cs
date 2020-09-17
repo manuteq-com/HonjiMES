@@ -49,6 +49,7 @@ namespace HonjiMES {
             this.tableCell64 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell64");
             this.tableCell67 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell67");
             this.tableCell68 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell68");
+            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
             this.table1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table1");
             this.label2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label2");
             this.label1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label1");
@@ -155,7 +156,6 @@ namespace HonjiMES {
             this.tableCell50 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell50");
             this.tableCell48 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell48");
             this.tableCell49 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell49");
-            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
 
             // Parameters
             this.PurchaseType = reportInitializer.GetParameter("PurchaseType");
@@ -170,6 +170,7 @@ namespace HonjiMES {
             this.SupplierTel = reportInitializer.GetParameter("SupplierTel");
             this.SupplierFax = reportInitializer.GetParameter("SupplierFax");
             this.Title = reportInitializer.GetParameter("Title");
+            this.Total = reportInitializer.GetParameter("Total");
 
             // Data Sources
             this.jsonDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource1");
@@ -211,6 +212,7 @@ namespace HonjiMES {
         private DevExpress.XtraReports.UI.XRTableCell tableCell64;
         private DevExpress.XtraReports.UI.XRTableCell tableCell67;
         private DevExpress.XtraReports.UI.XRTableCell tableCell68;
+        private DevExpress.XtraReports.UI.XRLabel label3;
         private DevExpress.XtraReports.UI.XRTable table1;
         private DevExpress.XtraReports.UI.XRLabel label2;
         private DevExpress.XtraReports.UI.XRLabel label1;
@@ -331,6 +333,6 @@ namespace HonjiMES {
         private DevExpress.XtraReports.Parameters.Parameter SupplierTel;
         private DevExpress.XtraReports.Parameters.Parameter SupplierFax;
         private DevExpress.XtraReports.Parameters.Parameter Title;
-        private DevExpress.XtraReports.UI.XRLabel label3;
+        private DevExpress.XtraReports.Parameters.Parameter Total;
     }
 }
