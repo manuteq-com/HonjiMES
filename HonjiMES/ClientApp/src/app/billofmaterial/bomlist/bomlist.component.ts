@@ -26,6 +26,9 @@ export class BomlistComponent implements OnInit, OnChanges {
     ProductList: any;
     btnVisible: boolean;
     randomkey: number;
+    verpopupVisible: boolean;
+    masterkey: any;
+    WeightVisible: boolean;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.btnVisible = true;
@@ -91,6 +94,11 @@ export class BomlistComponent implements OnInit, OnChanges {
             }
             targetNode = targetNode.parent;
         }
+    }
+    readData(e, data) {
+        debugger;
+        this.verpopupVisible = true;
+        this.masterkey = data.data;
     }
     onReorder(e) {
         debugger;

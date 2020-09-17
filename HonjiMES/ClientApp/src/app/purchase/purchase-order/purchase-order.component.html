@@ -87,6 +87,12 @@
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="220"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [width]="220"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="90"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <a class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text"
+        [href]="Url" target="_blank" (click)="downloadPurchaseOrder($event,data)">產生採購單
+        </a>
+    </div>
     <dxi-column type="buttons">
         <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>

@@ -19,6 +19,7 @@ namespace HonjiMES.Reports {
             this.TopMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.TopMarginBand>("TopMargin");
             this.BottomMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.BottomMarginBand>("BottomMargin");
             this.GroupHeader1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.GroupHeaderBand>("GroupHeader1");
+            this.PageFooter = reportInitializer.GetControl<DevExpress.XtraReports.UI.PageFooterBand>("PageFooter");
             this.detailTable = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("detailTable");
             this.detailTableRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("detailTableRow");
             this.tableRow5 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow5");
@@ -32,10 +33,9 @@ namespace HonjiMES.Reports {
             this.ActualEndTime = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("ActualEndTime");
             this.tableCell2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell2");
             this.pictureBox1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPictureBox>("pictureBox1");
-            this.label1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label1");
-            this.pageInfo1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPageInfo>("pageInfo1");
-            this.table1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table1");
             this.Qrcode = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPictureBox>("Qrcode");
+            this.table1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table1");
+            this.label1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label1");
             this.tableRow2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow2");
             this.tableRow4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow4");
             this.tableRow3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow3");
@@ -55,7 +55,7 @@ namespace HonjiMES.Reports {
             this.tableCell4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell4");
             this.tableCell5 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell5");
             this.tableCell6 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell6");
-            this.PageFooter = reportInitializer.GetControl<DevExpress.XtraReports.UI.PageFooterBand>("PageFooter");
+            this.pageInfo1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPageInfo>("pageInfo1");
 
             // Parameters
             this.WorkOrderNo = reportInitializer.GetParameter("WorkOrderNo");
@@ -72,6 +72,7 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.GroupHeaderBand GroupHeader1;
+        private DevExpress.XtraReports.UI.PageFooterBand PageFooter;
         private DevExpress.XtraReports.UI.XRTable detailTable;
         private DevExpress.XtraReports.UI.XRTableRow detailTableRow;
         private DevExpress.XtraReports.UI.XRTableRow tableRow5;
@@ -85,10 +86,9 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.UI.XRTableCell ActualEndTime;
         private DevExpress.XtraReports.UI.XRTableCell tableCell2;
         private DevExpress.XtraReports.UI.XRPictureBox pictureBox1;
-        private DevExpress.XtraReports.UI.XRLabel label1;
-        private DevExpress.XtraReports.UI.XRPageInfo pageInfo1;
-        private DevExpress.XtraReports.UI.XRTable table1;
         private DevExpress.XtraReports.UI.XRPictureBox Qrcode;
+        private DevExpress.XtraReports.UI.XRTable table1;
+        private DevExpress.XtraReports.UI.XRLabel label1;
         private DevExpress.XtraReports.UI.XRTableRow tableRow2;
         private DevExpress.XtraReports.UI.XRTableRow tableRow4;
         private DevExpress.XtraReports.UI.XRTableRow tableRow3;
@@ -108,11 +108,11 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell4;
         private DevExpress.XtraReports.UI.XRTableCell tableCell5;
         private DevExpress.XtraReports.UI.XRTableCell tableCell6;
-        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource1;
+        private DevExpress.XtraReports.UI.XRPageInfo pageInfo1;
         private DevExpress.XtraReports.UI.XRControlStyle baseControlStyle;
         private DevExpress.XtraReports.Parameters.Parameter WorkOrderNo;
         private DevExpress.XtraReports.Parameters.Parameter DataNo;
         private DevExpress.XtraReports.Parameters.Parameter DataName;
-        private DevExpress.XtraReports.UI.PageFooterBand PageFooter;
+        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource1;
     }
 }

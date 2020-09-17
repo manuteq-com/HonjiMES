@@ -76,6 +76,12 @@
     </dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
+    <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="90"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <a class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text"
+        [href]="Url" target="_blank" (click)="downloadSaleOrder($event,data)">產生銷貨單
+        </a>
+    </div>
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>

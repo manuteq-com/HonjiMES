@@ -1,0 +1,184 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using HonjiMES.Models;
+using HonjiMES.Filter;
+using DevExtreme.AspNet.Mvc;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using HonjiMES.Helper;
+using System.Drawing;
+using DevExpress.DataAccess.Json;
+using DevExpress.XtraReports.UI;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Newtonsoft.Json;
+using NPOI.POIFS.NIO;
+
+namespace HonjiMES.Controllers
+{
+    [Consumes("application/json")]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class ReportController : Controller
+    {
+        private readonly HonjiContext _context;
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
+
+        public ReportController(HonjiContext context, IWebHostEnvironment environment)
+        {
+            _IWebHostEnvironment = environment;
+            _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+        }
+        /// <summary>
+        /// 匯出採購單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public IActionResult GetPurchaseOrderPDF(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var PurchaseOrderReport = new List<PurchaseOrderReportVM>();
+            var PurchaseHead = _context.PurchaseHeads.Find(id);
+            var txt = "";
+            var i = 0;
+            foreach (var item in PurchaseHead.PurchaseDetails)
+            {
+                i = i+1;
+                PurchaseOrderReport.Add(new PurchaseOrderReportVM{
+                    No = i,
+                    MaterialNo = item.DataNo,
+                    MaterialName = item.DataName,
+                    Specification = item.Specification,
+                    PurchaseQuantity = item.PurchasedCount,
+                    PurchasedQuantity = item.Quantity,
+                    // Status = 
+                    Warehouse = item.Warehouse.Name,
+                    PurchasePrice = item.OriginPrice,
+                    PurchaseTotal = item.Price,
+                    DeliveryDate = item.DeliveryTime
+                });
+            }
+            var title = "";
+            if (PurchaseHead.Type == 20) {
+                title = "《託外處理》";
+            }else{
+                title = "";
+            }
+            var json = JsonConvert.SerializeObject(PurchaseOrderReport);
+            var webRootPath = _IWebHostEnvironment.ContentRootPath;
+            var ReportPath = Path.Combine(webRootPath, "Reports", "PurchaseOrderReport.repx");
+            var report = XtraReport.FromFile(ReportPath);
+            report.RequestParameters = false;
+            report.Parameters["Title"].Value = title;
+            report.Parameters["CreateDate"].Value = DateTime.Now;            
+            report.Parameters["ContactName"].Value = PurchaseHead.Supplier.ContactName;
+            report.Parameters["Address"].Value = PurchaseHead.Supplier.Address;
+            report.Parameters["PurchaseDate"].Value = PurchaseHead.PurchaseDate;
+            report.Parameters["PurchaseNo"].Value = PurchaseHead.PurchaseNo;
+            report.Parameters["PurchaseType"].Value = PurchaseHead.Type == 10 ? "採購" : PurchaseHead.Type == 20 ? "外包" : "表處";
+            report.Parameters["PurchaseUser"].Value = PurchaseHead.CreateUser;
+            report.Parameters["SupplierCode"].Value = PurchaseHead.Supplier.Code;
+            report.Parameters["SupplierName"].Value = PurchaseHead.Supplier.Name;
+            report.Parameters["SupplierFax"].Value = PurchaseHead.Supplier.Fax;
+            report.Parameters["SupplierTel"].Value = PurchaseHead.Supplier.Phone;
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
+            report.CreateDocument(true);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                report.ExportToPdf(ms);
+                return File(ms.ToArray(), "application/pdf", txt + "採購單.pdf");
+            }
+        }
+
+        /// <summary>
+        /// 匯出採購單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public IActionResult GetSaleOrderPDF(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var SaleOrderReport = new List<SaleOrderReportVM>();
+            var SaleHead = _context.SaleHeads.Find(id);
+            var txt = "";
+            foreach (var item in SaleHead.SaleDetailNews)
+            {
+                SaleOrderReport.Add(new SaleOrderReportVM{
+                    SaleNo = item.Sale.SaleNo,
+                    MachineNo = item.OrderDetail.MachineNo,
+                    ProductNo = item.ProductNo,
+                    ProductName = item.OrderDetail.ProductBasic.Name,
+                    Quantity = item.Quantity,
+                    Price = item.OriginPrice,
+                    Total = item.Price
+                });
+            }
+            var json = JsonConvert.SerializeObject(SaleOrderReport);
+            var webRootPath = _IWebHostEnvironment.ContentRootPath;
+            var ReportPath = Path.Combine(webRootPath, "Reports", "SaleOrderReport.repx");
+            var report = XtraReport.FromFile(ReportPath);
+            report.RequestParameters = false;
+            report.Parameters["CreateDate"].Value = DateTime.Now;
+            report.Parameters["Address"].Value = "";
+            report.Parameters["CustomerName"].Value = "";
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
+            report.CreateDocument(true);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                report.ExportToPdf(ms);
+                return File(ms.ToArray(), "application/pdf", txt + "銷貨單.pdf");
+            }
+        }
+
+        /// <summary>
+        /// 匯出工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public IActionResult GetWorkOrderPDF(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var SaleOrderReport = new List<SaleOrderReportVM>();
+            var SaleHead = _context.SaleHeads.Find(id);
+            var txt = "";
+            foreach (var item in SaleHead.SaleDetailNews)
+            {
+                SaleOrderReport.Add(new SaleOrderReportVM{
+                    SaleNo = item.Sale.SaleNo,
+                    MachineNo = item.OrderDetail.MachineNo,
+                    ProductNo = item.ProductNo,
+                    ProductName = item.OrderDetail.ProductBasic.Name,
+                    Quantity = item.Quantity,
+                    Price = item.OriginPrice,
+                    Total = item.Price
+                });
+            }
+            var json = JsonConvert.SerializeObject(SaleOrderReport);
+            var webRootPath = _IWebHostEnvironment.ContentRootPath;
+            var ReportPath = Path.Combine(webRootPath, "Reports", "SaleOrderReport.repx");
+            var report = XtraReport.FromFile(ReportPath);
+            report.RequestParameters = false;
+            report.Parameters["CreateDate"].Value = DateTime.Now;
+            report.Parameters["Address"].Value = "";
+            report.Parameters["CustomerName"].Value = "";
+            var jsonDataSource = new JsonDataSource();
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
+            report.DataSource = jsonDataSource;
+            report.CreateDocument(true);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                report.ExportToPdf(ms);
+                return File(ms.ToArray(), "application/pdf", txt + "銷貨單.pdf");
+            }
+        }
+    }
+}

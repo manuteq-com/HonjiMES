@@ -54,6 +54,8 @@ export class SaleListComponent implements OnInit, OnChanges {
     Quantityval: any;
     Priceval: number;
     OriginPriceval: any;
+    saleHeadId: any;
+    Url = '';
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
@@ -439,6 +441,8 @@ export class SaleListComponent implements OnInit, OnChanges {
     customizeText(e) {
         return '總數：' + e.value + '筆';
     }
-
-
+    downloadSaleOrder(e, data) {
+        this.saleHeadId = data.key;
+        this.Url = '/Api/Report/GetSaleOrderPDF/' + this.saleHeadId;
+    }
 }

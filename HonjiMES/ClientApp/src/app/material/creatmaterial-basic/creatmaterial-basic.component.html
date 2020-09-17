@@ -66,7 +66,7 @@
         <dxi-item dataField="SupplierId" [editorOptions]="selectSupplier" editorType="dxSelectBox">
             <dxo-label text="供應商"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Weight">
+        <dxi-item dataField="Weight" [visible]="WeightVisibled">
             <dxo-label text="重量(公斤)"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">
@@ -74,7 +74,8 @@
         </dxi-item>
     </dx-form>
     <div class="col-auto-12 mt-4">
-        <dx-button  horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+        <dx-button  horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type= 'success' icon= 'save'   [useSubmitBehavior]="true"
+        [disabled]="buttondisabled" [visible]="SaveBtnVisibled"></dx-button>
     </div>
 </form>
 

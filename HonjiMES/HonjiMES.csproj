@@ -88,10 +88,22 @@
     <Compile Remove="Migrations\20200518063846_InitialCreate.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="PurchaseOrder.repx" />
     <None Remove="Reports\process.repx" />
+    <None Remove="Reports\SaleOrderReport.repx" />
+    <None Remove="Reports\SubcontractPurchaseReport.repx" />
+    <None Remove="Reports\WorkOrder.repx" />
+    <None Remove="Reports\WorkOrderReport.repx" />
+    <None Remove="Reports\XtraReport1.repx" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\SaleOrderReport.repx" />
+    <EmbeddedResource Include="Reports\SubcontractPurchaseReport.repx" />
+    <EmbeddedResource Include="Reports\PurchaseOrderReport.repx" />
     <EmbeddedResource Include="Reports\process.repx" />
+    <EmbeddedResource Include="Reports\WorkOrderReport.repx" />
+    <EmbeddedResource Include="Reports\WorkOrder.repx" />
+    <EmbeddedResource Include="Reports\XtraReport1.repx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
@@ -100,11 +112,54 @@
     <Folder Include="nupkg\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Reports\SaleOrderReport.cs">
+      <DependentUpon>SaleOrderReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\SaleOrderReport.Designer.cs">
+      <DependentUpon>SaleOrderReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\SubcontractPurchaseReport.cs">
+      <DependentUpon>SubcontractPurchaseReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\SubcontractPurchaseReport.Designer.cs">
+      <DependentUpon>SubcontractPurchaseReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\PurchaseOrderReport.cs">
+      <DependentUpon>PurchaseOrderReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\PurchaseOrderReport.Designer.cs">
+      <DependentUpon>PurchaseOrderReport.repx</DependentUpon>
+    </Compile>
     <Compile Update="Reports\process.cs">
       <DependentUpon>process.repx</DependentUpon>
     </Compile>
     <Compile Update="Reports\process.Designer.cs">
       <DependentUpon>process.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrder - 複製.cs">
+      <SubType>Component</SubType>
+      <DependentUpon>WorkOrder - 複製.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrder - 複製.Designer.cs">
+      <DependentUpon>WorkOrder - 複製.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrder.cs">
+      <DependentUpon>WorkOrder.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrder.Designer.cs">
+      <DependentUpon>WorkOrder.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrderReport.cs">
+      <DependentUpon>WorkOrderReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\WorkOrderReport.Designer.cs">
+      <DependentUpon>WorkOrderReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\XtraReport1.cs">
+      <DependentUpon>XtraReport1.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\XtraReport1.Designer.cs">
+      <DependentUpon>XtraReport1.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -126,7 +181,7 @@
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
       <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

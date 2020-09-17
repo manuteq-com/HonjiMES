@@ -15,6 +15,9 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
+    @Input() masterkey: any;
+    @Input() btnVisibled: boolean;
+    @Input() WeightVisible: boolean;
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
@@ -40,6 +43,8 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         icon: 'save'
     };
     supplierList: any;
+    SaveBtnVisibled: boolean;
+    WeightVisibled: boolean;
     selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
@@ -68,6 +73,14 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         // debugger;
+        this.SaveBtnVisibled = false;
+        if (this.btnVisibled !== null) {
+            this.SaveBtnVisibled = this.btnVisibled;
+        }
+        this.WeightVisibled = false;
+        if (this.WeightVisible !== null) {
+            this.WeightVisibled = this.WeightVisible;
+        }
         this.gridBoxValue = [1];
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.formData = {

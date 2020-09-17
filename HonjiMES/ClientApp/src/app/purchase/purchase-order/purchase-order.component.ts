@@ -43,6 +43,8 @@ export class PurchaseOrderComponent implements OnInit {
     hint: boolean;
     date: any;
     TypeList: any;
+    Url = '';
+    purchaseHeadId: any;
 
     // tslint:disable-next-line: max-line-length
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
@@ -206,5 +208,9 @@ export class PurchaseOrderComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
+    }
+    downloadPurchaseOrder(e, data) {
+        this.purchaseHeadId = data.key;
+        this.Url = '/Api/Report/GetPurchaseOrderPDF/' + this.purchaseHeadId;
     }
 }
