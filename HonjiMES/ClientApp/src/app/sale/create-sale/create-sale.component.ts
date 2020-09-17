@@ -72,6 +72,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     }
     async ngOnChanges() {
         this.formData.SaleDate = new Date();
+        this.formData.SaleDate = new Date();
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.app.GetData('/Sales/GetOrderList').subscribe(
             (s) => {

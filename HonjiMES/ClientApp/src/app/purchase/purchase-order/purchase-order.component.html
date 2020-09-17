@@ -87,6 +87,12 @@
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="220"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [width]="220"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="UpdateUser" caption="更新人員" alignment="center" [width]="120">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="90"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <a class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text"

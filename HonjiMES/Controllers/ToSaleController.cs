@@ -415,6 +415,7 @@ namespace HonjiMES.Controllers
             // 檢查該銷貨單各個明細狀態，更新銷貨單(head)狀態。
             var checkStatus = true;
             var SaleHeadData = _context.SaleHeads.Find(saleId);
+            SaleHeadData.UpdateUser = MyFun.GetUserID(HttpContext);
             foreach (var SaleDetail in SaleHeadData.SaleDetailNews)
             {
                 if (SaleDetail.Status == 0)
@@ -522,6 +523,7 @@ namespace HonjiMES.Controllers
                 {
                     SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
                 }
+                SaleDetail.Sale.UpdateUser = MyFun.GetUserID(HttpContext);
 
                 await _context.SaveChangesAsync();
                 _context.ChangeTracker.LazyLoadingEnabled = false;

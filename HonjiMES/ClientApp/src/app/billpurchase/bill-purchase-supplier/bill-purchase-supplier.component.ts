@@ -204,7 +204,7 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
                 showCloseButton: true,
                 allowEnterKey: false,
                 allowOutsideClick: false,
-                title: '轉進貨',
+                title: '編輯進貨單?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

@@ -42,6 +42,7 @@ export class OrderListComponent {
     remoteOperations: boolean;
     editorOptions: any;
     uploadHeaders: any;
+    UserList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
@@ -64,6 +65,13 @@ export class OrderListComponent {
             (s) => {
                 if (s.success) {
                     this.Customerlist = s.data;
+                }
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
                 }
             }
         );

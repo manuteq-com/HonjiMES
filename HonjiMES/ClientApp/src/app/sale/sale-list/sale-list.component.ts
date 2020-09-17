@@ -56,6 +56,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     OriginPriceval: any;
     saleHeadId: any;
     Url = '';
+    UserList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
@@ -65,7 +66,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.creatpopupVisible = false;
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
-        this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
         this.app.GetData('/Customers/GetCustomers').subscribe(
@@ -89,6 +89,14 @@ export class SaleListComponent implements OnInit, OnChanges {
                 }
             }
         );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                    this.getdata();
+                }
+            }
+        );
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
@@ -109,6 +117,7 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.titleService.setTitle('銷貨單');
     }
     ngOnChanges() {
+
     }
     getDetails(SaleId) {
         const DController = '/SaleDetailNews';
