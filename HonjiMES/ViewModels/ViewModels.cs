@@ -440,6 +440,8 @@ namespace HonjiMES.Models
         /// 建立時間
         /// </summary>
         public DateTime CreateTime { get; set; }
+        public int? ReceiveUser { get; set; }
+        public int CreateUser { get; set; }
     }
     public class RequisitionDetailAll : RequisitionDetail
     {

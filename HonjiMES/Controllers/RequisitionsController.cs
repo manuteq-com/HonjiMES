@@ -930,7 +930,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailByWorkOrderNo(int id)
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailByWorkOrderNoId(int id)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var RequisitionDetailAllList = new List<RequisitionDetailAll>();
@@ -948,6 +948,8 @@ namespace HonjiMES.Controllers
                         NameType = x.RequisitionDetail.ProductBasicId.HasValue ? "成品" : x.RequisitionDetail.MaterialBasicId.HasValue ? "元件" : "",
                         WarehouseName = x.WarehouseId.HasValue ? (x.Warehouse.Code + x.Warehouse.Name) : "",
                         CreateTime = x.CreateTime,
+                        CreateUser = x.RequisitionDetail.Requisition.CreateUser,
+                        ReceiveUser = x.RequisitionDetail.Requisition.ReceiveUser
                     }).ToListAsync();
 
                 _context.ChangeTracker.LazyLoadingEnabled = false;

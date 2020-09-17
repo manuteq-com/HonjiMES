@@ -43,6 +43,7 @@ export class RebackListComponent implements OnInit {
     itemcreatkey: any;
     iteminfokey: any;
     keyup = '';
+    UserList: any;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.infopopupVisible) {
@@ -120,6 +121,13 @@ export class RebackListComponent implements OnInit {
                     e.Name = e.Code + e.Name;
                 });
                 this.Warehouselist = s.data;
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                }
             }
         );
     }
