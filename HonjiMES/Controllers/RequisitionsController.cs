@@ -692,9 +692,9 @@ namespace HonjiMES.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequisitionsDetailAll(int id, [FromBody] GetReceive Receive)
         {
-            return Ok(await PutRequisitionsDetailAllFun(id, Receive, ""));
+            return Ok(await PutRequisitionsDetailAllFun(id, Receive, "", MyFun.GetUserID(HttpContext)));
         }
-        private async Task<APIResponse> PutRequisitionsDetailAllFun(int id, GetReceive Receive, string RequisitionNo)
+        private async Task<APIResponse> PutRequisitionsDetailAllFun(int id, GetReceive Receive, string RequisitionNo, int CreateUser)
         {
             if (Receive.WarehouseID == 0)
             {
@@ -726,12 +726,12 @@ namespace HonjiMES.Controllers
                                 Quantity = Receive.RQty ?? 0,
                                 WarehouseId = Receive.WarehouseID,
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = CreateUser
                             });
                             var Original = Material.Quantity;
                             Material.Quantity = Original - Receive.RQty ?? 0;
                             Material.UpdateTime = dt;
-                            Material.UpdateUser = MyFun.GetUserID(HttpContext);
+                            Material.UpdateUser = CreateUser;
                             Material.MaterialLogs.Add(new MaterialLog
                             {
                                 LinkOrder = RequisitionNo,
@@ -739,7 +739,7 @@ namespace HonjiMES.Controllers
                                 Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = CreateUser
                             });
                         }
                     }
@@ -766,12 +766,12 @@ namespace HonjiMES.Controllers
                                 Quantity = Receive.RQty ?? 0,
                                 WarehouseId = Receive.WarehouseID,
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = CreateUser
                             });
                             var Original = Product.Quantity;
                             Product.Quantity = Original - Receive.RQty ?? 0;
                             Product.UpdateTime = dt;
-                            Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                            Product.UpdateUser = CreateUser;
                             Product.ProductLogs.Add(new ProductLog
                             {
                                 LinkOrder = RequisitionNo,
@@ -779,7 +779,7 @@ namespace HonjiMES.Controllers
                                 Quantity = -Receive.RQty ?? 0,
                                 Message = "領料出庫",
                                 CreateTime = dt,
-                                CreateUser = MyFun.GetUserID(HttpContext)
+                                CreateUser = CreateUser
                             });
                         }
                     }
@@ -796,7 +796,7 @@ namespace HonjiMES.Controllers
             }
         }
 
-        private async Task<APIResponse> NewRequisitionsDetail(GetReceive Receive, string RequisitionNo)
+        private async Task<APIResponse> NewRequisitionsDetail(GetReceive Receive, string RequisitionNo, int CreateUser)
         {
             var MaterialBasics = _context.MaterialBasics.Find(Receive.MaterialBasicId);
             var ProductBasics = _context.ProductBasics.Find(Receive.ProductBasicId);
@@ -815,7 +815,7 @@ namespace HonjiMES.Controllers
                 ProductName = ProductBasics?.Name ?? null,
                 ProductSpecification = ProductBasics?.Specification ?? null,
                 Quantity = Requisitions.Quantity,
-                CreateUser = MyFun.GetUserID(HttpContext)
+                CreateUser = CreateUser
             });
             await _context.SaveChangesAsync();
 
@@ -1020,7 +1020,7 @@ namespace HonjiMES.Controllers
                         }
                         if (id != 0)
                         {
-                            var Detail = PutRequisitionsDetailAllFun(id, item, Requisition.RequisitionNo);
+                            var Detail = PutRequisitionsDetailAllFun(id, item, Requisition.RequisitionNo, PostRequisition.CreateUser);
                             if (!Detail.Result.success)
                             {
                                 return Ok(await Detail);
@@ -1028,13 +1028,13 @@ namespace HonjiMES.Controllers
                         }
                         else
                         {
-                            var NewDetail = NewRequisitionsDetail(item, Requisition.RequisitionNo);
+                            var NewDetail = NewRequisitionsDetail(item, Requisition.RequisitionNo, PostRequisition.CreateUser);
                             if (!NewDetail.Result.success)
                             {
                                 return Ok(await NewDetail);
                             }
                             var NewDetailData = (int)NewDetail.Result.data;
-                            var Detail = PutRequisitionsDetailAllFun(NewDetailData, item, Requisition.RequisitionNo);
+                            var Detail = PutRequisitionsDetailAllFun(NewDetailData, item, Requisition.RequisitionNo, PostRequisition.CreateUser);
                             if (!Detail.Result.success)
                             {
                                 return Ok(await Detail);

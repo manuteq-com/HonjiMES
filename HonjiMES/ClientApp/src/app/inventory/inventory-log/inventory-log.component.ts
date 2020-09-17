@@ -41,6 +41,7 @@ export class InventoryLogComponent implements OnInit {
     listAdjustType: any;
     AdjustTypeList: any;
     WarehouseList: any;
+    UserList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
@@ -79,6 +80,13 @@ export class InventoryLogComponent implements OnInit {
                 this.WarehouseList = s.data;
             }
         );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                }
+            }
+        );
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
@@ -93,7 +101,6 @@ export class InventoryLogComponent implements OnInit {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
         });
     }
-
     creatdata() {
         this.creatpopupVisible = true;
     }
