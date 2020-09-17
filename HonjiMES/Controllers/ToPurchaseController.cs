@@ -445,6 +445,7 @@ namespace HonjiMES.Controllers
             BillofPurchaseCheckin.CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
             BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
+            BillofPurchaseDetails.BillofPurchase.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckStatus = 1;
             BillofPurchaseDetails.CheckCountIn = BillofPurchaseDetails.BillofPurchaseCheckins.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceIn = BillofPurchaseDetails.CheckCountIn * BillofPurchaseDetails.Price;
@@ -469,6 +470,7 @@ namespace HonjiMES.Controllers
             PurchaseDetail.PurchasedCount += BillofPurchaseCheckin.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+            PurchaseDetail.Purchase.UpdateUser = MyFun.GetUserID(HttpContext);
             if (PurchaseDetail.Quantity < PurchaseDetail.PurchasedCount)
             {
                 return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchasedCount));
@@ -875,6 +877,7 @@ namespace HonjiMES.Controllers
                     PurchaseDetail.PurchasedCount += item.Quantity;
                     PurchaseDetail.UpdateTime = dt;
                     PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+                    PurchaseDetail.Purchase.UpdateUser = MyFun.GetUserID(HttpContext);
                     if (PurchaseDetail.Quantity < PurchaseDetail.PurchasedCount)
                     {
                         return Ok(MyFun.APIResponseError("驗收數量超過採購數量! [ " + PurchaseDetail.Purchase.PurchaseNo + " ] *實際採購數量：" + PurchaseDetail.Quantity + "  *已交貨數量：" + tempPurchasedCount));
@@ -1280,6 +1283,7 @@ namespace HonjiMES.Controllers
             BillofPurchaseReturn.CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;
             BillofPurchaseDetails.UpdateUser = MyFun.GetUserID(HttpContext);
+            BillofPurchaseDetails.BillofPurchase.UpdateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.CheckCountOut = (int)BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
             BillofPurchaseDetails.CheckPriceOut = BillofPurchaseDetails.CheckCountOut * BillofPurchaseDetails.OriginPrice;
 
@@ -1296,6 +1300,7 @@ namespace HonjiMES.Controllers
             PurchaseDetail.PurchasedCount = PurchaseDetail.PurchasedCount - (int)BillofPurchaseReturn.Quantity;
             PurchaseDetail.UpdateTime = dt;
             PurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+            PurchaseDetail.Purchase.UpdateUser = MyFun.GetUserID(HttpContext);
 
             //出庫(驗退)
             if (BillofPurchaseDetails.DataType == 1)

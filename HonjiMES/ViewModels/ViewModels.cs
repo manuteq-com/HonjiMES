@@ -576,6 +576,10 @@ namespace HonjiMES.Models
         /// </summary>
         public string Username { get; set; }
         /// <summary>
+        /// 名稱
+        /// </summary>
+        public string Realname { get; set; }
+        /// <summary>
         /// Token
         /// </summary>
         public string Token { get; set; }

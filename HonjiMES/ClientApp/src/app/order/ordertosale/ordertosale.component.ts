@@ -59,6 +59,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
+                    this.formData.SaleDate = new Date();
                 }
             }
         );

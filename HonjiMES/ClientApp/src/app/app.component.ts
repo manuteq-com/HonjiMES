@@ -44,7 +44,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     UserId: number;
     constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
-        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Realname : '');
         this.checkRoles = this.checkRoles.bind(this);
     }
     CheckToken(httpOptions: { headers: HttpHeaders; }) {
@@ -102,7 +102,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
 
     }
     GetUserName() {
-        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Username : '');
+        this._authService.currentUser.subscribe(x => this.UserName = x ? x.Realname : '');
         return this.UserName;
     }
     GetUserId(): number {

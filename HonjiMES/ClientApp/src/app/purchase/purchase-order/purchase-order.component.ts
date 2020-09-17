@@ -45,6 +45,7 @@ export class PurchaseOrderComponent implements OnInit {
     TypeList: any;
     Url = '';
     purchaseHeadId: any;
+    UserList: any;
 
     // tslint:disable-next-line: max-line-length
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
@@ -52,7 +53,6 @@ export class PurchaseOrderComponent implements OnInit {
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
-        this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
@@ -66,6 +66,14 @@ export class PurchaseOrderComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data.data;
+                }
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                    this.getdata();
                 }
             }
         );
@@ -93,7 +101,7 @@ export class PurchaseOrderComponent implements OnInit {
         });
     }
     allowEdit(e) {
-        if (e.row.data.Status === 0) {
+        if (e.row.data.Status === 0 || e.row.data.Status === 2) {
             return true;
         } else {
             return false;

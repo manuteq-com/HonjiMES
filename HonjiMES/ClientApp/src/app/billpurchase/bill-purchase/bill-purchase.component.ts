@@ -36,12 +36,12 @@ export class BillPurchaseComponent implements OnInit {
     detailfilter = [];
     DetailsDataSourceStorage: any;
     newpopupVisible: boolean;
+    UserList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
-        this.getdata();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
@@ -49,7 +49,7 @@ export class BillPurchaseComponent implements OnInit {
                 if (s.success) {
                     this.SupplierList = s.data;
                     this.SupplierList.forEach(x => {
-                        x.Name = x.Name.substring(0, 4);
+                        x.Name = x.Code + x.Name.substring(0, 4);
                     });
                 }
             }
@@ -58,6 +58,14 @@ export class BillPurchaseComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.MaterialBasicList = s.data.data;
+                }
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                    this.getdata();
                 }
             }
         );

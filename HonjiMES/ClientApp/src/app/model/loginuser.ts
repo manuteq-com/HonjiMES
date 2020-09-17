@@ -4,6 +4,7 @@ export class LoginUser {
     Token: string;
     Menu: Menu[];
     Timeout: Date;
+    Realname: string;
 }
 export class Menu {
     label: string;
