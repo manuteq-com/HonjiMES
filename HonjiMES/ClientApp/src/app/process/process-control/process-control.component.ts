@@ -204,6 +204,6 @@ export class ProcessControlComponent implements OnInit {
     }
     downloadWorkOrder(e) {
         debugger;
-        this.Url = '/Api/WorkOrders/GetPackingSlipPDF/' + this.workOrderHeadId;
+        this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
     }
 }

@@ -67,15 +67,15 @@
           <Rows>
             <Item1 Ref="33" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="34" ControlType="XRTableCell" Name="tableCell4" Weight="4.697883404276757" Multiline="true" />
+                <Item1 Ref="34" ControlType="XRTableCell" Name="tableCell4" Weight="4.697883404276757" Multiline="true" Text="台中市神岡區大富路184-12號" />
               </Cells>
             </Item1>
             <Item2 Ref="35" ControlType="XRTableRow" Name="tableRow3" Weight="1">
               <Cells>
                 <Item1 Ref="36" ControlType="XRTableCell" Name="tableCell6" Weight="0.6415986621135118" Multiline="true" Text="TEL：" />
-                <Item2 Ref="37" ControlType="XRTableCell" Name="tableCell9" Weight="1.2632567433068154" Multiline="true" />
+                <Item2 Ref="37" ControlType="XRTableCell" Name="tableCell9" Weight="1.2632567433068154" Multiline="true" Text="04-25632366" />
                 <Item3 Ref="38" ControlType="XRTableCell" Name="tableCell10" Weight="0.76681069015980319" Multiline="true" Text="FAX：" />
-                <Item4 Ref="39" ControlType="XRTableCell" Name="tableCell14" Weight="1.2350411196658651" Multiline="true" />
+                <Item4 Ref="39" ControlType="XRTableCell" Name="tableCell14" Weight="1.2350411196658651" Multiline="true" Text="0425632360" />
               </Cells>
             </Item2>
           </Rows>
