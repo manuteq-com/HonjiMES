@@ -114,6 +114,8 @@ import { OrdertoworkComponent } from './order/ordertowork/ordertowork.component'
 import { WorkorderStockComponent } from './workorder/workorder-stock/workorder-stock.component';
 import { ResourceWorkorderComponent } from './workorder/resource-workorder/resource-workorder.component';
 import { ResourceProcessComponent } from './workorder/resource-process/resource-process.component';
+import { InventorySearchComponent } from './inventory/inventory-search/inventory-search.component';
+import { WorkorderCloseComponent } from './workorder/workorder-close/workorder-close.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -242,7 +244,9 @@ export function tokenGetter() {
         OrdertoworkComponent,
         WorkorderStockComponent,
         ResourceWorkorderComponent,
-        ResourceProcessComponent
+        ResourceProcessComponent,
+        InventorySearchComponent,
+        WorkorderCloseComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

@@ -7,14 +7,14 @@
     </div>
     <div class="headerfont font2">庫存變動紀錄</div>
     <div class="buttongroup">
-        <!-- <dx-button
-            class="insertbtn"
+        <dx-button
+            class="searchbtn"
             stylingMode="contained"
-            text="新增調整單"
-            type="success"
-            [width]="120"
+            text="料號紀錄查詢"
+            type="normal"
+            [width]="140"
             (onClick)="creatdata()">
-        </dx-button> -->
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -82,8 +82,10 @@
         </dxo-popup>
     </dxo-editing>
 
-
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="170" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="Message" caption="種類" [width]="140"></dxi-column>
     <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
     <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
@@ -113,7 +115,10 @@
     <dxi-column dataField="UnitPriceAll" caption="計價總額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費用" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
-    <dxi-column dataField="CreateUser" caption="使用者"></dxi-column>
+
 </dx-data-grid>
 
-
+<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="料號紀錄查詢" [nzWidth]="1800" [nzStyle]="{ top: '10px' }" [nzFooter]="null"
+    (nzOnCancel)="handleCancel()">
+    <app-inventory-search (childOuter)="creatpopup_result($event)"></app-inventory-search>
+</nz-modal>

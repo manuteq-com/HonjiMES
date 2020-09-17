@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
@@ -7,6 +7,7 @@ import { SendService } from 'src/app/shared/mylib';
 import Swal from 'sweetalert2';
 import notify from 'devextreme/ui/notify';
 import { Title } from '@angular/platform-browser';
+import { APIResponse } from 'src/app/app.module';
 
 @Component({
     selector: 'app-reback-list',
@@ -26,7 +27,6 @@ export class RebackListComponent implements OnInit {
     };
     requisitionId: any;
 
-
     creatpopupVisible: boolean;
     WarehouseIDP: any;
     WarehouseIDM: any;
@@ -40,7 +40,59 @@ export class RebackListComponent implements OnInit {
     WarehouselistAll: any;
     infopopupVisible: boolean;
     randomkey: number;
-    itemkey: any;
+    itemcreatkey: any;
+    iteminfokey: any;
+    keyup = '';
+    UserList: any;
+
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (!this.creatpopupVisible && !this.infopopupVisible) {
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                const promise = new Promise((resolve, reject) => {
+                    this.app.GetData('/WorkOrders/GetWorkOrderHeadByWorkOrderNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
+                        if (res.success) {
+                            if (res.data.Status === 0) {
+                                this.showMessage('warning', '[ ' + res.data.WorkOrderNo + ' ]　工單尚未派工!', 3000);
+                            } else if (res.data.Status === 5) {
+                                this.showMessage('warning', '[ ' + res.data.WorkOrderNo + ' ]　工單已經結案!', 3000);
+                            } else {
+                                this.creatpopupVisible = true;
+                                this.randomkey = new Date().getTime();
+                                this.itemcreatkey = res.data.Id;
+                            }
+                        } else {
+                            const promise2 = new Promise((resolve2, reject2) => {
+                                this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res2: APIResponse) => {
+                                    if (res2.success) {
+                                        this.showMessage('warning', '請先掃描工單碼!', 3000);
+                                    } else {
+                                        this.showMessage('error', '查無資料!', 3000);
+                                    }
+                                },
+                                    err => {
+                                        // Error
+                                        reject2(err);
+                                    }
+                                );
+                            });
+                        }
+                    },
+                        err => {
+                            // Error
+                            reject(err);
+                        }
+                    );
+                });
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
+
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
+        }
+    }
+
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.RQtyValidation = this.RQtyValidation.bind(this);
         const remote = this.remoteOperations;
@@ -69,6 +121,13 @@ export class RebackListComponent implements OnInit {
                     e.Name = e.Code + e.Name;
                 });
                 this.Warehouselist = s.data;
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                }
             }
         );
     }
@@ -109,7 +168,7 @@ export class RebackListComponent implements OnInit {
         });
     }
     searchRequisitionData(e, data) {
-        this.itemkey = data.data.WorkOrderHeadId;
+        this.iteminfokey = data.data.WorkOrderHeadId;
         this.infopopupVisible = true;
         this.randomkey = new Date().getTime();
     }
@@ -144,10 +203,11 @@ export class RebackListComponent implements OnInit {
         // tslint:disable-next-line: deprecation
         // this.dataGrid.instance.insertRow();
         this.randomkey = new Date().getTime();
+        this.itemcreatkey = null;
         this.creatpopupVisible = true;
     }
     infodata() {
-        this.itemkey = null;
+        this.iteminfokey = null;
         this.infopopupVisible = true;
         this.randomkey = new Date().getTime();
     }
@@ -241,5 +301,14 @@ export class RebackListComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 }

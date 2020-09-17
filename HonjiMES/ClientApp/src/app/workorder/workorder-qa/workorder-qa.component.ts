@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Input, HostListener } from '@angular/core';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -48,6 +48,69 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     workOrderHeadDataType: any;
     workOrderHeadDataId: any;
     randomkey: number;
+    keyup = '';
+    userkey: any;
+    closepopupVisible: boolean;
+
+    @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
+        if (!this.stockpopupVisible && !this.closepopupVisible && !this.logpopupVisible) {
+            this.stockpopupVisible = false;
+            this.closepopupVisible = false;
+            if (e.key === 'Enter') {
+                const key = this.keyup;
+                const promise = new Promise((resolve, reject) => {
+                    this.app.GetData('/WorkOrders/GetWorkOrderHeadByWorkOrderNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
+                        if (res.success) {
+                            this.btnDisabled = true;
+                            this.dataSourceDB_Process = [];
+                            this.workOrderHeadNo = res.data.WorkOrderNo;
+                            if (res.data.Status === 0) {
+                                this.showMessage('warning', '[ ' + res.data.WorkOrderNo + ' ]　工單尚未派工!', 3000);
+                            } else if (res.data.Status === 5) {
+                                this.showMessage('warning', '[ ' + res.data.WorkOrderNo + ' ]　工單已經結案!', 3000);
+                            } else {
+                                this.readProcess(null, res);
+                            }
+                        } else {
+                            const promise2 = new Promise((resolve2, reject2) => {
+                                this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res2: APIResponse) => {
+                                    if (res2.success) {
+                                        if (!this.btnDisabled) {
+                                            if (res2.data.Permission === 70 || res2.data.Permission === 20) {
+                                                this.stockdata(res2.data.Id);
+                                            } else {
+                                                this.showMessage('warning', '請勿越權使用!', 3000);
+                                            }
+                                        } else {
+                                            this.showMessage('warning', '請先掃描工單碼!', 3000);
+                                        }
+                                    } else {
+                                        this.showMessage('error', '查無資料!', 3000);
+                                    }
+                                },
+                                    err => {
+                                        // Error
+                                        reject2(err);
+                                    }
+                                );
+                            });
+                            // this.showMessage('error', '[ ' + res.data.WorkOrderNo + ' ]　查無資料!', 3000);
+                        }
+                    },
+                        err => {
+                            // Error
+                            reject(err);
+                        }
+                    );
+                });
+                this.keyup = '';
+            } else if (e.key === 'Shift') {
+
+            } else {
+                this.keyup += e.key.toLocaleUpperCase();
+            }
+        }
+    }
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.onReorder = this.onReorder.bind(this);
@@ -140,38 +203,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             this.workOrderHeadCount = (sendRequest.WorkOrderHead?.ReCount ?? '0') + ' / ' + sendRequest.WorkOrderHead.Count;
         }
     }
-    async overdata() {
-        Swal.fire({
-            showCloseButton: true,
-            allowEnterKey: false,
-            allowOutsideClick: false,
-            title: '確認結案?',
-            html: '狀態將無法復原!',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#296293',
-            cancelButtonColor: '#CE312C',
-            confirmButtonText: '確認',
-            cancelButtonText: '取消'
-        }).then(async (result) => {
-            if (result.value) {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/CloseWorkOrder', 'PUT', { key: this.workOrderHeadId, values: '' });
-                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-                if (sendRequest) {
-                    this.dataGrid.instance.refresh();
-                    notify({
-                        message: '更新成功',
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'success', 2000);
-                }
-            }
-        });
-    }
-    stockdata() {
+    overdata() {
         if (this.workOrderHeadDataType === 1) {
             this.modkey = 'material';
         } else if (this.workOrderHeadDataType === 2) {
@@ -179,6 +211,50 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         } else if (this.workOrderHeadDataType === 3) {
             this.modkey = 'wiproduct';
         }
+        this.userkey = null;
+        this.randomkey = new Date().getTime();
+        this.itemkey = this.workOrderHeadDataId;
+        this.closepopupVisible = true;
+        //// 以下舊方法
+        // Swal.fire({
+        //     showCloseButton: true,
+        //     allowEnterKey: false,
+        //     allowOutsideClick: false,
+        //     title: '確認結案?',
+        //     html: '狀態將無法復原!',
+        //     icon: 'question',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#296293',
+        //     cancelButtonColor: '#CE312C',
+        //     confirmButtonText: '確認',
+        //     cancelButtonText: '取消'
+        // }).then(async (result) => {
+        //     if (result.value) {
+        //         // tslint:disable-next-line: max-line-length
+        //         const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/CloseWorkOrder', 'PUT', { key: this.workOrderHeadId, values: '' });
+        //         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+        //         if (sendRequest) {
+        //             this.dataGrid.instance.refresh();
+        //             notify({
+        //                 message: '更新成功',
+        //                 position: {
+        //                     my: 'center top',
+        //                     at: 'center top'
+        //                 }
+        //             }, 'success', 2000);
+        //         }
+        //     }
+        // });
+    }
+    stockdata(userId) {
+        if (this.workOrderHeadDataType === 1) {
+            this.modkey = 'material';
+        } else if (this.workOrderHeadDataType === 2) {
+            this.modkey = 'product';
+        } else if (this.workOrderHeadDataType === 3) {
+            this.modkey = 'wiproduct';
+        }
+        this.userkey = userId;
         this.randomkey = new Date().getTime();
         this.itemkey = this.workOrderHeadDataId;
         this.stockpopupVisible = true;
@@ -186,6 +262,20 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     stockpopup_result(e) {
         this.dataGrid.instance.refresh();
         this.stockpopupVisible = false;
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
+    closepopup_result(e) {
+        this.btnDisabled = true;
+        this.dataSourceDB_Process = [];
+        this.workOrderHeadNo = '';
+        this.dataGrid.instance.refresh();
+        this.closepopupVisible = false;
         notify({
             message: '存檔完成',
             position: {
@@ -250,6 +340,15 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                 }
             }
         });
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 
 }

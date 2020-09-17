@@ -190,7 +190,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRebacksDetailMaterialByWorkOrderNo(int id)
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRebacksDetailMaterialByWorkOrderNoId(int id)
         {
             var RequisitionDetailAllList = new List<RequisitionDetailAll>();
             _context.ChangeTracker.LazyLoadingEnabled = true;
@@ -377,14 +377,14 @@ namespace HonjiMES.Controllers
                                     Ismaterial = item.Ismaterial,
                                     Quantity = item.ReceiveQty,
                                     CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                    CreateUser = PostRequisition.CreateUser
                                 };
                                 nRequisitionDetail.Receives.Add(new Receive
                                 {
                                     Quantity = -Receive.RQty ?? 0,
                                     WarehouseId = Receive.WarehouseID,
                                     CreateTime = dt,
-                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                    CreateUser = PostRequisition.CreateUser
                                 });
                                 requisition.RequisitionDetails.Add(nRequisitionDetail);
                                 //新增LOG
@@ -398,7 +398,7 @@ namespace HonjiMES.Controllers
                                     var Original = Material.Quantity;
                                     Material.Quantity = Original + Receive.RQty ?? 0;
                                     Material.UpdateTime = dt;
-                                    Material.UpdateUser = MyFun.GetUserID(HttpContext);
+                                    Material.UpdateUser = PostRequisition.CreateUser;
                                     Material.MaterialLogs.Add(new MaterialLog
                                     {
                                         LinkOrder = requisition.RequisitionNo,
@@ -406,7 +406,7 @@ namespace HonjiMES.Controllers
                                         Quantity = Receive.RQty ?? 0,
                                         Message = "退料入庫",
                                         CreateTime = dt,
-                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                        CreateUser = PostRequisition.CreateUser
                                     });
                                 }
                                 else if (Receive.ProductBasicId.HasValue)
@@ -419,7 +419,7 @@ namespace HonjiMES.Controllers
                                     var Original = Product.Quantity;
                                     Product.Quantity = Original + Receive.RQty ?? 0;
                                     Product.UpdateTime = dt;
-                                    Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                                    Product.UpdateUser = PostRequisition.CreateUser;
                                     Product.ProductLogs.Add(new ProductLog
                                     {
                                         LinkOrder = requisition.RequisitionNo,
@@ -427,7 +427,7 @@ namespace HonjiMES.Controllers
                                         Quantity = Receive.RQty ?? 0,
                                         Message = "退料入庫",
                                         CreateTime = dt,
-                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                        CreateUser = PostRequisition.CreateUser
                                     });
                                 }
                             }

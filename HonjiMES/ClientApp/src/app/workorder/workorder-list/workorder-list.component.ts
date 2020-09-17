@@ -19,7 +19,8 @@ export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     dataSourceDB: any = {};
     creatpopupVisible: any;
-    itemkey: number;
+    itemtrkey: number;
+    itemtdkey: any;
     serialkey: number;
     mod: string;
     loadingVisible = false;
@@ -35,20 +36,36 @@ export class WorkorderListComponent implements OnInit {
                 const key = this.keyup;
                 const selectdata = this.dataSourceDB.ProcessesDataList.find((value) => key.endsWith(value.WorkOrderNo));
                 if (selectdata) {
-                    this.itemkey = selectdata;
+                    this.itemtrkey = selectdata;
                     this.mod = 'report';
                     this.editpopupVisible = true;
                     this.ReportHeight = 710;
                 } else {
-                    notify({
-                        message: '[ ' + this.keyup + ' ]　查無資料!',
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'warning', 3000);
+                    const promise2 = new Promise((resolve2, reject2) => {
+                        this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res2: APIResponse) => {
+                            if (res2.success) {
+                                if (!this.creatpopupVisible && !this.editpopupVisible) {
+                                    if (res2.data.Permission === 80 || res2.data.Permission === 20) {
+                                        this.showMessage('warning', '請先掃描工單碼!', 3000);
+                                    } else {
+                                        this.showMessage('warning', '請勿越權使用!', 3000);
+                                    }
+                                } else {
+                                    this.showMessage('warning', '請先掃描工單碼!', 3000);
+                                }
+                            } else {
+                                this.showMessage('error', '查無資料!', 3000);
+                            }
+                        },
+                            err => {
+                                // Error
+                                reject2(err);
+                            }
+                        );
+                    });
                 }
                 this.keyup = '';
+                this.getWorkOrderData();
             } else if (e.key === 'Shift') {
 
             } else {
@@ -56,6 +73,7 @@ export class WorkorderListComponent implements OnInit {
             }
         }
     }
+
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
@@ -68,6 +86,7 @@ export class WorkorderListComponent implements OnInit {
         // );
     }
     ngOnInit() {
+        // debugger;
         this.titleService.setTitle('生產看板');
     }
     getWorkOrderData() {
@@ -80,7 +99,7 @@ export class WorkorderListComponent implements OnInit {
     }
     trclick(e) {
         if (!this.checkVisible) {
-            this.itemkey = e;
+            this.itemtrkey = e;
             this.serialkey = 1;
             this.mod = 'report';
             this.editpopupVisible = true;
@@ -88,11 +107,12 @@ export class WorkorderListComponent implements OnInit {
         } else {
             this.checkVisible = false;
         }
+        this.getWorkOrderData();
     }
     tdclick(e, colData) {
         this.checkVisible = true;
         if (e[colData.key] != null) {
-            this.itemkey = e.Key;
+            this.itemtdkey = e.Key;
             this.serialkey = Number(colData.key.substring(4)) + 1;
             this.mod = 'report';
             this.randomkey = new Date().getTime();
@@ -101,38 +121,39 @@ export class WorkorderListComponent implements OnInit {
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)
                 if (e[colData.key].value3 === 3 || e[colData.key].value3 === 4) {
-                    this.ReportHeight = 730;
+                    this.ReportHeight = 770;
                     // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 } else {
-                    this.ReportHeight = 730;
-                    // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
+                    this.ReportHeight = 770;
+                    // this.ReportByPurchaseNo(this.itemtdkey, this.serialkey);
                 }
             } else if (e[colData.key].value4 === 2) { // 委外(無採購單)
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)，決定顯示內容
                 if (e[colData.key].value3 === 1) {
-                    this.ReportHeight = 710;
+                    this.ReportHeight = 750;
                 } else if (e[colData.key].value3 === 2) {
-                    this.ReportHeight = 810;
+                    this.ReportHeight = 850;
                 } else if (e[colData.key].value3 === 3) {
-                    this.ReportHeight = 760;
+                    this.ReportHeight = 800;
                 } else if (e[colData.key].value3 === 4) {
-                    this.ReportHeight = 810;
+                    this.ReportHeight = 850;
                 }
             } else {
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)，決定顯示內容
                 if (e[colData.key].value3 === 1) {
-                    this.ReportHeight = 710;
+                    this.ReportHeight = 750;
                 } else if (e[colData.key].value3 === 2) {
-                    this.ReportHeight = 760;
+                    this.ReportHeight = 800;
                 } else if (e[colData.key].value3 === 3) {
-                    this.ReportHeight = 760;
+                    this.ReportHeight = 800;
                 } else if (e[colData.key].value3 === 4) {
-                    this.ReportHeight = 760;
+                    this.ReportHeight = 800;
                 }
             }
         }
+        this.getWorkOrderData();
     }
     getBlueClass(data) {
         // if (data.Status === 1) {
@@ -205,10 +226,10 @@ export class WorkorderListComponent implements OnInit {
         });
     }
     creatdata() {
-        this.creatpopupVisible = true;
-        this.checkVisible = true;
-        this.itemkey = null;
-        this.mod = 'new';
+        // this.creatpopupVisible = true;
+        // this.checkVisible = true;
+        // this.itemtrkey = null;
+        // this.mod = 'new';
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
@@ -216,12 +237,15 @@ export class WorkorderListComponent implements OnInit {
         this.checkVisible = false;
         this.loadingVisible = true;
         this.getWorkOrderData();
+        this.showMessage('success', '更新完成', 3000);
+    }
+    showMessage(type, data, val) {
         notify({
-            message: '更新完成',
+            message: data,
             position: {
                 my: 'center top',
                 at: 'center top'
             }
-        }, 'success', 3000);
+        }, type, val);
     }
 }

@@ -8,6 +8,7 @@ import { SendService } from 'src/app/shared/mylib';
 import $ from 'jquery';
 import { BillofPurchaseDetail, CreateNumberInfo } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 @Component({
     selector: 'app-creat-bill-purchase',
     templateUrl: './creat-bill-purchase.component.html',
@@ -19,6 +20,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     @Input() exceldata: any;
     @Input() modval: any;
     @Input() DetailDataList: any;
+    @Input() randomkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -70,8 +72,10 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     SupplierIdVal: any;
     PurchaseIdVal: any;
     fromSupplier: boolean;
+    PurchasetypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.PurchasetypeList = myservice.getpurchasetypes();
         this.allMode = 'allPages';
         this.checkBoxesMode = 'always'; // 'onClick';
         this.CustomerVal = null;
@@ -179,6 +183,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.app.GetData('/PurchaseHeads/GetPurchasesByUnStatus?status=1').subscribe( // 排除狀態為[結案]的採購單
             (s) => {
                 if (s.success) {
+                    s.data.forEach(element => {
+                        element.PurchaseNo = element.PurchaseNo + '(' + this.PurchasetypeList.find(x => x.Id === element.Type).Name + ')';
+                    });
                     this.PurchaseList = s.data;
                 }
             }
@@ -368,6 +375,9 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         this.app.GetData('/PurchaseHeads/GetPurchasesBySupplier/' + Id).subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.forEach(element => {
+                        element.PurchaseNo = element.PurchaseNo + '(' + this.PurchasetypeList.find(x => x.Id === element.Type).Name + ')';
+                    });
                     this.PurchaseTempList = s.data;
                     s.data.forEach(element => {
                         if (!this.PurchaseList.some(x => x.PurchaseNo === element.PurchaseNo)) {

@@ -19,7 +19,7 @@
 <dx-popup [showTitle]="true" title="新增退料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1000" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatreback (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
+        <app-creatreback (childOuter)="creatpopup_result($event)" [itemkeyval]="itemcreatkey" [randomkeyval]="randomkey" [popupkeyval]="creatpopupVisible">
         </app-creatreback>
     </div>
 </dx-popup>
@@ -27,7 +27,7 @@
 <dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [randomkeyval]="randomkey">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>
@@ -66,7 +66,7 @@
             </dxi-column>
             <dxi-column dataField="WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [visible]="false">
             </dxi-column>
-            <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string">
+            <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [width]="140">
             </dxi-column>
             <dxi-column dataField="Name" caption="退料單名稱" dataType="string" [visible]="false"></dxi-column>
             <dxi-column dataField="ProductNo" caption="成品號" dataType="string"></dxi-column>
@@ -74,7 +74,10 @@
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
             <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
+            <dxi-column dataField="CreateUser" caption="退料人" dataType="string" alignment="center" [width]="100">
+                <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
 
             <dxi-column type="buttons" [visible]="false">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>

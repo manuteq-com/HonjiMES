@@ -20,7 +20,7 @@
 <dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1000" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatreceive (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey">
+        <app-creatreceive (childOuter)="creatpopup_result($event)" [itemkeyval]="itemcreatkey" [randomkeyval]="randomkey" [popupkeyval]="creatpopupVisible">
         </app-creatreceive>
     </div>
 </dx-popup>
@@ -28,14 +28,14 @@
 <dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [randomkeyval]="randomkey">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>
 
 <div class="row">
 
-    <div class="col-8">
+    <div class="col-9">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
@@ -77,7 +77,7 @@
             </dxi-column>
             <dxi-column dataField="WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [visible]="false">
             </dxi-column>
-            <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string">
+            <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [width]="140">
             </dxi-column>
             <dxi-column dataField="Name" caption="領料單名稱" dataType="string" [visible]="false"></dxi-column>
             <dxi-column dataField="ProductNo" caption="成品號" dataType="string"></dxi-column>
@@ -85,7 +85,13 @@
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
             <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
+            <dxi-column dataField="CreateUser" caption="發料人" dataType="string" alignment="center" [width]="100">
+                <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ReceiveUser" caption="領料人" dataType="string" alignment="center" [width]="100">
+                <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
 
             <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
             <dxi-column type="buttons" [visible]="false">
@@ -111,7 +117,7 @@
 
     </div>
 
-    <div class="col-4">
+    <div class="col-3">
         <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id"
             hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
             [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="740"

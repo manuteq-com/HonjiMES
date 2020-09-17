@@ -29,13 +29,16 @@
     </dxo-summary>
 
     <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="回報人員" alignment="center" [width]="100">
+        <!-- <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup> -->
+    </dxi-column>
     <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="80"></dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="70"></dxi-column>
     <dxi-column dataField="ReCount" caption="回報完工數量" [width]="110"></dxi-column>
     <dxi-column dataField="NgCount" caption="回報NG數量" [width]="100"></dxi-column>
-    <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100"></dxi-column>
+    <!-- <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100"></dxi-column> -->
     <dxi-column dataField="DrawNo" caption="圖號" [width]="120"></dxi-column>
     <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="120"></dxi-column>
     <dxi-column dataField="Supplier.Name" caption="供應商" [width]="160"></dxi-column>

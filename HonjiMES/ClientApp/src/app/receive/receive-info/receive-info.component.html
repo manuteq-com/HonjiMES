@@ -17,7 +17,7 @@
 
 <div class="row">
 
-    <div class="col-5">
+    <div class="col-4">
 
         <div class="row">
             <div class="col-12">
@@ -49,7 +49,7 @@
         </dx-data-grid>
     </div>
 
-    <div class="col-7">
+    <div class="col-8">
 
         <div class="row">
             <div class="col-12">
@@ -74,6 +74,8 @@
 
             <dxi-column dataField="CreateTime" caption="領退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="170"></dxi-column>
             <dxi-column dataField="RequisitionNo" caption="領退單號" dataType="string" alignment="center" [allowEditing]="false" [width]="160"></dxi-column>
+            <dxi-column dataField="CreateUser" caption="發料/退料人" dataType="string" alignment="center" [allowEditing]="false" [width]="100"></dxi-column>
+            <dxi-column dataField="ReceiveUser" caption="領料人員" dataType="string" alignment="center" [allowEditing]="false" [width]="100"></dxi-column>
             <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
             <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="ReceiveQty" caption="領取數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>

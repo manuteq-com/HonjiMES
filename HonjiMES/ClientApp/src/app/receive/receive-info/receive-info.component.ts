@@ -87,17 +87,31 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
         }
     }
     GetRequisitionsDetail(key) {
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNo/' + key).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.dataSourceDB1 = s.data;
-                }
-            }
-        );
-        this.app.GetData(this.Controller + '/GetRequisitionsDetailByWorkOrderNo/' + key).subscribe(
-            (s) => {
-                if (s.success) {
-                    this.dataSourceDB2 = s.data;
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.app.GetData(this.Controller + '/GetRequisitionsDetailMaterialByWorkOrderNoId/' + key).subscribe(
+                        (s) => {
+                            if (s.success) {
+                                this.dataSourceDB1 = s.data;
+                            }
+                        }
+                    );
+                    this.app.GetData(this.Controller + '/GetRequisitionsDetailByWorkOrderNoId/' + key).subscribe(
+                        (s) => {
+                            if (s.success) {
+                                s.data.forEach(element => {
+                                    element.CreateUser = s2.data.find(x => x.Id === element.CreateUser).Realname;
+                                    if (element.ReceiveUser) {
+                                        element.ReceiveUser = s2.data.find(x => x.Id === element.ReceiveUser).Realname;
+                                    }
+                                    element.ReceiveQty = element.ReceiveQty === 0 ? null : element.ReceiveQty;
+                                    element.RbackQty = element.RbackQty === 0 ? null : element.RbackQty;
+                                });
+                                this.dataSourceDB2 = s.data;
+                            }
+                        }
+                    );
                 }
             }
         );

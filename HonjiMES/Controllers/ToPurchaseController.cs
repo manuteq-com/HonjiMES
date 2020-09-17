@@ -246,14 +246,14 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -itemData.Quantity,
                             Message = "表處轉倉",
-                            CreateTime = dt,
+                            CreateTime = dt.AddSeconds(-1),
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Warehouse201.First().Quantity -= itemData.Quantity;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().MaterialLogs.Add(new MaterialLog
+                            Warehouse202.First().MaterialLogs.Add(new MaterialLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
@@ -302,14 +302,14 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -itemData.Quantity,
                             Message = "表處轉倉",
-                            CreateTime = dt,
+                            CreateTime = dt.AddSeconds(-1),
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Warehouse201.First().Quantity -= itemData.Quantity;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().ProductLogs.Add(new ProductLog
+                            Warehouse202.First().ProductLogs.Add(new ProductLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
@@ -359,14 +359,14 @@ namespace HonjiMES.Controllers
                             Original = Warehouse201.First().Quantity,
                             Quantity = -itemData.Quantity,
                             Message = "表處轉倉",
-                            CreateTime = dt,
+                            CreateTime = dt.AddSeconds(-1),
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Warehouse201.First().Quantity -= itemData.Quantity;
 
                         if (Warehouse202.Count() != 0)
                         {
-                            Warehouse201.First().WiproductLogs.Add(new WiproductLog
+                            Warehouse202.First().WiproductLogs.Add(new WiproductLog
                             {
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
@@ -494,9 +494,49 @@ namespace HonjiMES.Controllers
             }
 
             //入庫
+            var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).ToListAsync();
             if (BillofPurchaseDetails.DataType == 1) // 原料
             {
                 var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+
+                //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                if (PurchaseHead.Type == 30)
+                {
+                    var Material202 = MaterialBasic.Materials.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                    if (Material202.Count() == 0)
+                    {
+                        return Ok(MyFun.APIResponseError("品號 [ " + MaterialBasic.MaterialNo + " ] 查無202倉庫資訊!"));
+                    }
+                    else
+                    {
+                        if (Material202.FirstOrDefault().Quantity < BillofPurchaseCheckin.Quantity)
+                        {
+                            return Ok(MyFun.APIResponseError("品號 [ " + MaterialBasic.MaterialNo + " ] 202庫存不足! ( 庫存 " + Material202.FirstOrDefault().Quantity + " / 需求 " + BillofPurchaseCheckin.Quantity + " ) 請重新確認!"));
+                        }
+                        else
+                        {
+                            Material202.FirstOrDefault().MaterialLogs.Add(new MaterialLog
+                            {
+                                LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                                Original = Material202.FirstOrDefault().Quantity,
+                                Quantity = -BillofPurchaseCheckin.Quantity,
+                                Price = BillofPurchaseCheckin.Price,
+                                PriceAll = BillofPurchaseCheckin.PriceAll,
+                                Unit = BillofPurchaseCheckin.Unit,
+                                UnitCount = BillofPurchaseCheckin.UnitCount,
+                                UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                                UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                                WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                                Reason = "202庫存轉出",
+                                Message = "表處轉倉",
+                                CreateTime = dt.AddSeconds(-1),
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Material202.FirstOrDefault().Quantity -= BillofPurchaseCheckin.Quantity;
+                        }
+                    }
+                }
+
                 var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
                 if (Material.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
@@ -527,6 +567,7 @@ namespace HonjiMES.Controllers
                             WorkPrice = BillofPurchaseCheckin.WorkPrice,
                             Reason = BillofPurchaseCheckin.Remarks,
                             Message = "進貨檢驗入庫",
+                            CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         }}
                     });
@@ -547,6 +588,7 @@ namespace HonjiMES.Controllers
                         WorkPrice = BillofPurchaseCheckin.WorkPrice,
                         Reason = BillofPurchaseCheckin.Remarks,
                         Message = "進貨檢驗入庫",
+                        CreateTime = dt,
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     Material.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
@@ -555,6 +597,45 @@ namespace HonjiMES.Controllers
             else if (BillofPurchaseDetails.DataType == 2) // 成品
             {
                 var ProductBasic = _context.ProductBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                
+                //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                if (PurchaseHead.Type == 30)
+                {
+                    var Product202 = ProductBasic.Products.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                    if (Product202.Count() == 0)
+                    {
+                        return Ok(MyFun.APIResponseError("品號 [ " + ProductBasic.ProductNo + " ] 查無202倉庫資訊!"));
+                    }
+                    else
+                    {
+                        if (Product202.FirstOrDefault().Quantity < BillofPurchaseCheckin.Quantity)
+                        {
+                            return Ok(MyFun.APIResponseError("品號 [ " + ProductBasic.ProductNo + " ] 202庫存不足! ( 庫存 " + Product202.FirstOrDefault().Quantity + " / 需求 " + BillofPurchaseCheckin.Quantity + " ) 請重新確認!"));
+                        }
+                        else
+                        {
+                            Product202.FirstOrDefault().ProductLogs.Add(new ProductLog
+                            {
+                                LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                                Original = Product202.FirstOrDefault().Quantity,
+                                Quantity = -BillofPurchaseCheckin.Quantity,
+                                Price = BillofPurchaseCheckin.Price,
+                                PriceAll = BillofPurchaseCheckin.PriceAll,
+                                Unit = BillofPurchaseCheckin.Unit,
+                                UnitCount = BillofPurchaseCheckin.UnitCount,
+                                UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                                UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                                WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                                Reason = "202庫存轉出",
+                                Message = "表處轉倉",
+                                CreateTime = dt.AddSeconds(-1),
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Product202.FirstOrDefault().Quantity -= BillofPurchaseCheckin.Quantity;
+                        }
+                    }
+                }
+
                 var Product = ProductBasic.Products.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
                 if (Product.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
@@ -586,6 +667,7 @@ namespace HonjiMES.Controllers
                             WorkPrice = BillofPurchaseCheckin.WorkPrice,
                             Reason = BillofPurchaseCheckin.Remarks,
                             Message = "進貨檢驗入庫",
+                            CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         }}
                     });
@@ -606,6 +688,7 @@ namespace HonjiMES.Controllers
                         WorkPrice = BillofPurchaseCheckin.WorkPrice,
                         Reason = BillofPurchaseCheckin.Remarks,
                         Message = "進貨檢驗入庫",
+                        CreateTime = dt,
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     Product.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
@@ -614,6 +697,45 @@ namespace HonjiMES.Controllers
             else if (BillofPurchaseDetails.DataType == 3) // 半成品
             {
                 var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == BillofPurchaseDetails.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                
+                //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                if (PurchaseHead.Type == 30)
+                {
+                    var Wiproduct202 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                    if (Wiproduct202.Count() == 0)
+                    {
+                        return Ok(MyFun.APIResponseError("品號 [ " + WiproductBasic.WiproductNo + " ] 查無202倉庫資訊!"));
+                    }
+                    else
+                    {
+                        if (Wiproduct202.FirstOrDefault().Quantity < BillofPurchaseCheckin.Quantity)
+                        {
+                            return Ok(MyFun.APIResponseError("品號 [ " + WiproductBasic.WiproductNo + " ] 202庫存不足! ( 庫存 " + Wiproduct202.FirstOrDefault().Quantity + " / 需求 " + BillofPurchaseCheckin.Quantity + " ) 請重新確認!"));
+                        }
+                        else
+                        {
+                            Wiproduct202.FirstOrDefault().WiproductLogs.Add(new WiproductLog
+                            {
+                                LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
+                                Original = Wiproduct202.FirstOrDefault().Quantity,
+                                Quantity = -BillofPurchaseCheckin.Quantity,
+                                Price = BillofPurchaseCheckin.Price,
+                                PriceAll = BillofPurchaseCheckin.PriceAll,
+                                Unit = BillofPurchaseCheckin.Unit,
+                                UnitCount = BillofPurchaseCheckin.UnitCount,
+                                UnitPrice = BillofPurchaseCheckin.UnitPrice,
+                                UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
+                                WorkPrice = BillofPurchaseCheckin.WorkPrice,
+                                Reason = "202庫存轉出",
+                                Message = "表處轉倉",
+                                CreateTime = dt.AddSeconds(-1),
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                            Wiproduct202.FirstOrDefault().Quantity -= BillofPurchaseCheckin.Quantity;
+                        }
+                    }
+                }
+
                 var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == BillofPurchaseDetails.WarehouseId && x.DeleteFlag == 0).ToList();
                 if (Wiproduct.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                 {
@@ -645,6 +767,7 @@ namespace HonjiMES.Controllers
                             WorkPrice = BillofPurchaseCheckin.WorkPrice,
                             Reason = BillofPurchaseCheckin.Remarks,
                             Message = "進貨檢驗入庫",
+                            CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         }}
                     });
@@ -665,6 +788,7 @@ namespace HonjiMES.Controllers
                         WorkPrice = BillofPurchaseCheckin.WorkPrice,
                         Reason = BillofPurchaseCheckin.Remarks,
                         Message = "進貨檢驗入庫",
+                        CreateTime = dt,
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     Wiproduct.FirstOrDefault().Quantity += BillofPurchaseCheckin.Quantity;
@@ -776,9 +900,49 @@ namespace HonjiMES.Controllers
                     }
 
                     //入庫
+                    var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).ToListAsync();
                     if (item.DataType == 1) // 原料
                     {
                         var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        
+                        //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                        if (PurchaseHead.Type == 30)
+                        {
+                            var Material202 = MaterialBasic.Materials.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                            if (Material202.Count() == 0)
+                            {
+                                return Ok(MyFun.APIResponseError("品號 [ " + MaterialBasic.MaterialNo + " ] 查無202倉庫資訊!"));
+                            }
+                            else
+                            {
+                                if (Material202.FirstOrDefault().Quantity < item.Quantity)
+                                {
+                                    return Ok(MyFun.APIResponseError("品號 [ " + MaterialBasic.MaterialNo + " ] 202庫存不足! ( 庫存 " + Material202.FirstOrDefault().Quantity + " / 需求 " + item.Quantity + " ) 請重新確認!"));
+                                }
+                                else
+                                {
+                                    Material202.FirstOrDefault().MaterialLogs.Add(new MaterialLog
+                                    {
+                                        LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                        Original = Material202.FirstOrDefault().Quantity,
+                                        Quantity = -item.Quantity,
+                                        Price = item.Price,
+                                        PriceAll = item.PriceAll,
+                                        Unit = item.Unit,
+                                        UnitCount = item.UnitCount,
+                                        UnitPrice = item.UnitPrice,
+                                        UnitPriceAll = item.UnitPriceAll,
+                                        WorkPrice = item.WorkPrice,
+                                        Reason = "202庫存轉出",
+                                        Message = "表處轉倉",
+                                        CreateTime = dt.AddSeconds(-1),
+                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                    });
+                                    Material202.FirstOrDefault().Quantity -= item.Quantity;
+                                }
+                            }
+                        }
+
                         var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
                         if (Material.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
@@ -809,6 +973,7 @@ namespace HonjiMES.Controllers
                                     WorkPrice = item.WorkPrice,
                                     Reason = item.Remarks,
                                     Message = "進貨檢驗入庫",
+                                    CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 }}
                             });
@@ -829,6 +994,7 @@ namespace HonjiMES.Controllers
                                 WorkPrice = item.WorkPrice,
                                 Reason = item.Remarks,
                                 Message = "進貨檢驗入庫",
+                                CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             Material.FirstOrDefault().Quantity += item.Quantity;
@@ -837,6 +1003,45 @@ namespace HonjiMES.Controllers
                     else if (item.DataType == 2) // 成品
                     {
                         var ProductBasic = _context.ProductBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        
+                        //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                        if (PurchaseHead.Type == 30)
+                        {
+                            var Product202 = ProductBasic.Products.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                            if (Product202.Count() == 0)
+                            {
+                                return Ok(MyFun.APIResponseError("品號 [ " + ProductBasic.ProductNo + " ] 查無202倉庫資訊!"));
+                            }
+                            else
+                            {
+                                if (Product202.FirstOrDefault().Quantity < item.Quantity)
+                                {
+                                    return Ok(MyFun.APIResponseError("品號 [ " + ProductBasic.ProductNo + " ] 202庫存不足! ( 庫存 " + Product202.FirstOrDefault().Quantity + " / 需求 " + item.Quantity + " ) 請重新確認!"));
+                                }
+                                else
+                                {
+                                    Product202.FirstOrDefault().ProductLogs.Add(new ProductLog
+                                    {
+                                        LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                        Original = Product202.FirstOrDefault().Quantity,
+                                        Quantity = -item.Quantity,
+                                        Price = item.Price,
+                                        PriceAll = item.PriceAll,
+                                        Unit = item.Unit,
+                                        UnitCount = item.UnitCount,
+                                        UnitPrice = item.UnitPrice,
+                                        UnitPriceAll = item.UnitPriceAll,
+                                        WorkPrice = item.WorkPrice,
+                                        Reason = "202庫存轉出",
+                                        Message = "表處轉倉",
+                                        CreateTime = dt.AddSeconds(-1),
+                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                    });
+                                    Product202.FirstOrDefault().Quantity -= item.Quantity;
+                                }
+                            }
+                        }
+
                         var Product = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
                         if (Product.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
@@ -868,6 +1073,7 @@ namespace HonjiMES.Controllers
                                     WorkPrice = item.WorkPrice,
                                     Reason = item.Remarks,
                                     Message = "進貨檢驗入庫",
+                                    CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 }}
                             });
@@ -888,6 +1094,7 @@ namespace HonjiMES.Controllers
                                 WorkPrice = item.WorkPrice,
                                 Reason = item.Remarks,
                                 Message = "進貨檢驗入庫",
+                                CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             Product.FirstOrDefault().Quantity += item.Quantity;
@@ -896,6 +1103,45 @@ namespace HonjiMES.Controllers
                     else if (item.DataType == 3) // 半成品
                     {
                         var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
+                        
+                        //假如採購單類型為[表處]，則進貨驗收時需將202倉轉出。 2020/09/15
+                        if (PurchaseHead.Type == 30)
+                        {
+                            var Wiproduct202 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == Warehouses.Where(x => x.Code == "202" && x.DeleteFlag == 0).FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                            if (Wiproduct202.Count() == 0)
+                            {
+                                return Ok(MyFun.APIResponseError("品號 [ " + WiproductBasic.WiproductNo + " ] 查無202倉庫資訊!"));
+                            }
+                            else
+                            {
+                                if (Wiproduct202.FirstOrDefault().Quantity < item.Quantity)
+                                {
+                                    return Ok(MyFun.APIResponseError("品號 [ " + WiproductBasic.WiproductNo + " ] 202庫存不足! ( 庫存 " + Wiproduct202.FirstOrDefault().Quantity + " / 需求 " + item.Quantity + " ) 請重新確認!"));
+                                }
+                                else
+                                {
+                                    Wiproduct202.FirstOrDefault().WiproductLogs.Add(new WiproductLog
+                                    {
+                                        LinkOrder = item.BillofPurchase.BillofPurchaseNo,
+                                        Original = Wiproduct202.FirstOrDefault().Quantity,
+                                        Quantity = -item.Quantity,
+                                        Price = item.Price,
+                                        PriceAll = item.PriceAll,
+                                        Unit = item.Unit,
+                                        UnitCount = item.UnitCount,
+                                        UnitPrice = item.UnitPrice,
+                                        UnitPriceAll = item.UnitPriceAll,
+                                        WorkPrice = item.WorkPrice,
+                                        Reason = "202庫存轉出",
+                                        Message = "表處轉倉",
+                                        CreateTime = dt.AddSeconds(-1),
+                                        CreateUser = MyFun.GetUserID(HttpContext)
+                                    });
+                                    Wiproduct202.FirstOrDefault().Quantity -= item.Quantity;
+                                }
+                            }
+                        }
+
                         var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
                         if (Wiproduct.Count() == 0) // 無倉別資料，則自動建立 2020/09/09
                         {
@@ -927,6 +1173,7 @@ namespace HonjiMES.Controllers
                                     WorkPrice = item.WorkPrice,
                                     Reason = item.Remarks,
                                     Message = "進貨檢驗入庫",
+                                    CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 }}
                             });
@@ -947,6 +1194,7 @@ namespace HonjiMES.Controllers
                                 WorkPrice = item.WorkPrice,
                                 Reason = item.Remarks,
                                 Message = "進貨檢驗入庫",
+                                CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
                             Wiproduct.FirstOrDefault().Quantity += item.Quantity;

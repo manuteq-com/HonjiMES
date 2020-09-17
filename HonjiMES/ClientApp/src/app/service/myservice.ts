@@ -60,11 +60,15 @@ const purchasetypes: Selectitem[] = [
 ];
 const permissiontypes: Selectitem[] = [
     { Id: 1, Name: '系統管理員' },
-    { Id: 2, Name: '主管' },
-    { Id: 3, Name: '一般人員' },
-    { Id: 4, Name: '採購人員' },
-    { Id: 5, Name: '設計人員' },
-    { Id: 6, Name: '生管人員' }
+    { Id: 2, Name: '生產共用帳戶' },
+    { Id: 3, Name: '品管共用帳戶' },
+    { Id: 20, Name: '主管' },
+    { Id: 30, Name: '一般人員' },
+    { Id: 40, Name: '採購人員' },
+    { Id: 50, Name: '設計人員' },
+    { Id: 60, Name: '生管人員' },
+    { Id: 70, Name: '品管人員' },
+    { Id: 80, Name: '生產人員' }
 ];
 const departmenttypes: Selectitem[] = [
     { Id: 1, Name: '預設' }
