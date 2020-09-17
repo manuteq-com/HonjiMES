@@ -27,6 +27,7 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
     enterKeyDirection: string;
     buttondisabled = false;
     ReportTypeList: any;
+    UserList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         // this.CustomerVal = null;
@@ -48,18 +49,26 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
     ngOnChanges() {
         // debugger;
         this.dataSourceDB = [];
-        if (this.itemkeyval != null) {
-            this.app.GetData('/WorkOrders/GetWorkOrderLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
-                (s) => {
-                    if (s.success) {
-                        s.data.forEach(element => {
-                            element.ReCount = element.ReCount !== 0 ? element.ReCount : null;
-                            element.NgCount = element.NgCount !== 0 ? element.NgCount : null;
-                        });
-                        this.dataSourceDB = s.data;
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                    if (this.itemkeyval != null) {
+                        this.app.GetData('/WorkOrders/GetWorkOrderLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
+                            (s) => {
+                                if (s.success) {
+                                    s.data.forEach(element => {
+                                        element.CreateUser = s2.data.find(x => x.Id === element.CreateUser).Realname;
+                                        element.ReCount = element.ReCount !== 0 ? element.ReCount : null;
+                                        element.NgCount = element.NgCount !== 0 ? element.NgCount : null;
+                                    });
+                                    this.dataSourceDB = s.data;
+                                }
+                            }
+                        );
                     }
                 }
-            );
-        }
+            }
+        );
     }
 }
