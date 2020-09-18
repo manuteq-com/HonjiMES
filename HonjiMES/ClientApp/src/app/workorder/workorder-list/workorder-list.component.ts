@@ -66,7 +66,7 @@ export class WorkorderListComponent implements OnInit {
                 }
                 this.keyup = '';
                 this.getWorkOrderData();
-            } else if (e.key === 'Shift') {
+            } else if (e.key === 'Shift' || e.key === 'CapsLock') {
 
             } else {
                 this.keyup += e.key.toLocaleUpperCase();

@@ -103,7 +103,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                     );
                 });
                 this.keyup = '';
-            } else if (e.key === 'Shift') {
+            } else if (e.key === 'Shift' || e.key === 'CapsLock') {
 
             } else {
                 this.keyup += e.key.toLocaleUpperCase();
