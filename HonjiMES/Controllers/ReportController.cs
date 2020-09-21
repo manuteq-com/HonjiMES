@@ -49,20 +49,24 @@ namespace HonjiMES.Controllers
             var i = 0;
             foreach (var item in PurchaseHead.PurchaseDetails)
             {
-                i = i+1;
-                PurchaseOrderReport.Add(new PurchaseOrderReportVM{
-                    No = i,
-                    MaterialNo = item.DataNo,
-                    MaterialName = item.DataName,
-                    Specification = item.Specification,
-                    PurchaseQuantity = item.PurchasedCount,
-                    PurchasedQuantity = item.Quantity,
-                    // Status = 
-                    Warehouse = item.Warehouse.Name,
-                    PurchasePrice = item.OriginPrice,
-                    PurchaseTotal = item.Price,
-                    DeliveryDate = item.DeliveryTime
-                });
+                if (item.DeleteFlag == 0)
+                {
+                    i = i + 1;
+                    PurchaseOrderReport.Add(new PurchaseOrderReportVM
+                    {
+                        No = i,
+                        DataNo = item.DataNo,
+                        DataName = item.DataName,
+                        Specification = item.Specification,
+                        PurchaseQuantity = item.Quantity,
+                        PurchasedQuantity = item.PurchasedCount,
+                        // Status = 
+                        Warehouse = item.Warehouse.Code + item.Warehouse.Name,
+                        PurchasePrice = item.OriginPrice,
+                        PurchaseTotal = item.Price,
+                        DeliveryDate = item.DeliveryTime
+                    });
+                }
             }
             var title = "";
             if (PurchaseHead.Type == 20) {
@@ -112,15 +116,19 @@ namespace HonjiMES.Controllers
             var txt = SaleHead.SaleNo;
             foreach (var item in SaleHead.SaleDetailNews)
             {
-                SaleOrderReport.Add(new SaleOrderReportVM{
-                    SaleNo = item.Sale.SaleNo,
-                    MachineNo = item.OrderDetail.MachineNo,
-                    ProductNo = item.ProductNo,
-                    ProductName = item.OrderDetail.ProductBasic.Name,
-                    Quantity = item.Quantity,
-                    Price = item.OriginPrice,
-                    Total = item.Price
-                });
+                if (item.DeleteFlag == 0)
+                {
+                    SaleOrderReport.Add(new SaleOrderReportVM
+                    {
+                        SaleNo = item.Sale.SaleNo,
+                        MachineNo = item.OrderDetail.MachineNo,
+                        ProductNo = item.ProductNo,
+                        ProductName = item.OrderDetail.ProductBasic.Name,
+                        Quantity = item.Quantity,
+                        Price = item.OriginPrice,
+                        Total = item.Price
+                    });
+                }
             }
             var json = JsonConvert.SerializeObject(SaleOrderReport);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
@@ -150,23 +158,27 @@ namespace HonjiMES.Controllers
         {
             var qcodesize = 100;
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            // var SaleOrderReport = new List<SaleOrderReportVM>();
+            var WorkOrderReport = new List<WorkOrderReportVM>();
             var WorkOrderHead = _context.WorkOrderHeads.Find(id);
             var txt = WorkOrderHead.WorkOrderNo;
             var dbQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
-            // foreach (var item in SaleHead.SaleDetailNews)
-            // {
-            //     SaleOrderReport.Add(new SaleOrderReportVM{
-            //         SaleNo = item.Sale.SaleNo,
-            //         MachineNo = item.OrderDetail.MachineNo,
-            //         ProductNo = item.ProductNo,
-            //         ProductName = item.OrderDetail.ProductBasic.Name,
-            //         Quantity = item.Quantity,
-            //         Price = item.OriginPrice,
-            //         Total = item.Price
-            //     });
-            // }
-            // var json = JsonConvert.SerializeObject(SaleOrderReport);
+            foreach (var item in WorkOrderHead.WorkOrderDetails)
+            {
+                if (item.DeleteFlag == 0)
+                {
+                    WorkOrderReport.Add(new WorkOrderReportVM
+                    {
+                        No = item.SerialNumber,
+                        ProcessNo = item.ProcessNo,
+                        ProcessName = item.ProcessName,
+                        ProcessTime = item.ProcessTime,
+                        MachineName = item.ProducingMachine,
+                        DueStartTime = item.DueStartTime?.ToString("yyyy-MM-dd") ?? "",
+                        DueEndTime = item.DueEndTime?.ToString("yyyy-MM-dd") ?? "",
+                    });
+                }
+            }
+            var json = JsonConvert.SerializeObject(WorkOrderReport);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
             var ReportPath = Path.Combine(webRootPath, "Reports", "WorkOrder.repx");
             var report = XtraReport.FromFile(ReportPath);
@@ -177,7 +189,7 @@ namespace HonjiMES.Controllers
             report.Parameters["MachineNo"].Value = WorkOrderHead.MachineNo;
             report.Parameters["QRCode"].Value = MyFun.ImgToBase64String(dbQrCode);
             var jsonDataSource = new JsonDataSource();
-            // jsonDataSource.JsonSource = new CustomJsonSource(json);
+            jsonDataSource.JsonSource = new CustomJsonSource(json);
             report.DataSource = jsonDataSource;
             report.CreateDocument(true);
             using (MemoryStream ms = new MemoryStream())

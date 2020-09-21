@@ -59,6 +59,7 @@ namespace HonjiMES {
             this.tableCell8 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell8");
             this.tableCell11 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell11");
             this.tableCell12 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell12");
+            this.panel1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPanel>("panel1");
             this.table11 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table11");
             this.table10 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table10");
             this.table9 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table9");
@@ -69,6 +70,7 @@ namespace HonjiMES {
             this.table4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table4");
             this.table3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table3");
             this.table2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table2");
+            this.table13 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table13");
             this.tableRow23 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow23");
             this.tableCell45 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell45");
             this.tableCell46 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell46");
@@ -119,7 +121,6 @@ namespace HonjiMES {
             this.tableRow5 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow5");
             this.tableRow6 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow6");
             this.tableRow8 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow8");
-            this.tableRow7 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow7");
             this.tableCell1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell1");
             this.tableCell2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell2");
             this.tableCell3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell3");
@@ -130,8 +131,9 @@ namespace HonjiMES {
             this.tableCell10 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell10");
             this.tableCell15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell15");
             this.tableCell16 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell16");
-            this.tableCell13 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell13");
-            this.tableCell14 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell14");
+            this.tableRow28 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow28");
+            this.tableCell77 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell77");
+            this.tableCell78 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell78");
             this.table12 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table12");
             this.tableRow24 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow24");
             this.tableRow25 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow25");
@@ -221,6 +223,7 @@ namespace HonjiMES {
         private DevExpress.XtraReports.UI.XRTableCell tableCell8;
         private DevExpress.XtraReports.UI.XRTableCell tableCell11;
         private DevExpress.XtraReports.UI.XRTableCell tableCell12;
+        private DevExpress.XtraReports.UI.XRPanel panel1;
         private DevExpress.XtraReports.UI.XRTable table11;
         private DevExpress.XtraReports.UI.XRTable table10;
         private DevExpress.XtraReports.UI.XRTable table9;
@@ -231,6 +234,7 @@ namespace HonjiMES {
         private DevExpress.XtraReports.UI.XRTable table4;
         private DevExpress.XtraReports.UI.XRTable table3;
         private DevExpress.XtraReports.UI.XRTable table2;
+        private DevExpress.XtraReports.UI.XRTable table13;
         private DevExpress.XtraReports.UI.XRTableRow tableRow23;
         private DevExpress.XtraReports.UI.XRTableCell tableCell45;
         private DevExpress.XtraReports.UI.XRTableCell tableCell46;
@@ -281,7 +285,6 @@ namespace HonjiMES {
         private DevExpress.XtraReports.UI.XRTableRow tableRow5;
         private DevExpress.XtraReports.UI.XRTableRow tableRow6;
         private DevExpress.XtraReports.UI.XRTableRow tableRow8;
-        private DevExpress.XtraReports.UI.XRTableRow tableRow7;
         private DevExpress.XtraReports.UI.XRTableCell tableCell1;
         private DevExpress.XtraReports.UI.XRTableCell tableCell2;
         private DevExpress.XtraReports.UI.XRTableCell tableCell3;
@@ -292,8 +295,9 @@ namespace HonjiMES {
         private DevExpress.XtraReports.UI.XRTableCell tableCell10;
         private DevExpress.XtraReports.UI.XRTableCell tableCell15;
         private DevExpress.XtraReports.UI.XRTableCell tableCell16;
-        private DevExpress.XtraReports.UI.XRTableCell tableCell13;
-        private DevExpress.XtraReports.UI.XRTableCell tableCell14;
+        private DevExpress.XtraReports.UI.XRTableRow tableRow28;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell77;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell78;
         private DevExpress.XtraReports.UI.XRTable table12;
         private DevExpress.XtraReports.UI.XRTableRow tableRow24;
         private DevExpress.XtraReports.UI.XRTableRow tableRow25;

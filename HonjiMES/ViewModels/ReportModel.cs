@@ -30,12 +30,26 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 工單
+    /// </summary>
+    public class WorkOrderReportVM
+    {
+        public int No { get; set; }
+        public string ProcessNo { get; set; }
+        public string ProcessName { get; set; }
+        public decimal ProcessTime { get; set; }
+        public string MachineName { get; set; }
+        public string DueStartTime { get; set; }
+        public string DueEndTime { get; set; }
+    }
+
+    /// <summary>
     /// 採購單
     /// </summary>
     public class PurchaseOrderReportVM{
         public int No { get; set; }
-        public string MaterialNo { get; set; }
-        public string MaterialName { get; set; }
+        public string DataNo { get; set; }
+        public string DataName { get; set; }
         public string Specification { get; set; }
         public int PurchaseQuantity { get; set; }
         public int PurchasedQuantity { get; set; }
