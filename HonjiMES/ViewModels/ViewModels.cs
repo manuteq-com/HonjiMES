@@ -641,7 +641,10 @@ namespace HonjiMES.Models
         public List<OrderDetail> OrderDetail { get; set; }
         public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
-
+    public class WorkOrderHeadInfo : WorkOrderHead
+    {
+        public string StockCount { get; set; }
+    }
     public class OrderToWorkCheckData
     {
         public OrderDetail OrderDetail { get; set; }
