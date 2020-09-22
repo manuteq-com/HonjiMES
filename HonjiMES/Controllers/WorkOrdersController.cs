@@ -924,6 +924,12 @@ namespace HonjiMES.Controllers
                 {
                     return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
                 }
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderReportData.WorkOrderID).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
@@ -1181,6 +1187,12 @@ namespace HonjiMES.Controllers
             var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
             if (WorkOrderDetails != null)
             {
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderDetails.WorkOrderHeadId).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
                 var WorkOrderReportData = new WorkOrderReportData
                 {
                     ReCount = WorkOrderReportDataAll.ReportCount ?? 0,
