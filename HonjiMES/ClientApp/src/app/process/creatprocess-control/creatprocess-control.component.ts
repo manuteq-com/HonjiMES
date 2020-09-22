@@ -84,7 +84,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 22;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
@@ -175,6 +175,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     if (s.success) {
                         this.formData = s.data;
                         this.formData.Count = 1;
+                        this.formData.DueStartTime = new Date();
+                        this.formData.DueEndTime = new Date();
                     }
                 }
             );
@@ -194,6 +196,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
                         this.formData.Count = s.data.WorkOrderHead.Count;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
+                        this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
+                        this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
@@ -422,6 +426,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 DataId: this.formData.ProductBasicId,
                 Count: this.formData.Count,
                 MachineNo: this.formData.MachineNo,
+                DueStartTime: this.formData.DueStartTime,
+                DueEndTime: this.formData.DueEndTime
             },
             WorkOrderDetail: this.dataSourceDB
         };

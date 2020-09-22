@@ -767,6 +767,7 @@ namespace HonjiMES.Models
         public string Remark { get; set; }
         public int Count { get; set; }
         public int Status { get; set; }
+        public string DueEndTime { get; set; }
         /// <summary>
         ///  製成0~19 共20組
         /// </summary>

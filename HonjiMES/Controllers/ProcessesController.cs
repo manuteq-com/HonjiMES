@@ -284,7 +284,8 @@ namespace HonjiMES.Controllers
                         BasicDataNo = BasicDataNo,
                         MachineNo = item.MachineNo,
                         Count = item.Count,
-                        Status = item.Status
+                        Status = item.Status,
+                        DueEndTime = item.DueEndTime?.ToString("yyyy/MM/dd") ?? ""
                     };
 
                     var i = 0;
@@ -434,6 +435,8 @@ namespace HonjiMES.Controllers
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
+                    DueStartTime = WorkOrderData.WorkOrderHead.DueStartTime,
+                    DueEndTime = WorkOrderData.WorkOrderHead.DueEndTime,
                     Count = WorkOrderData.WorkOrderHead.Count,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 };

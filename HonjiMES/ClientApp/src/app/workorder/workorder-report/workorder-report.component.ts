@@ -249,7 +249,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         this.itemval1 = '　　　　　　　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
-                        this.itemval4 = '　　　　　　　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
+                        // this.itemval4 = '　　　　　　　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
+                        this.itemval4 = '';
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
                         this.itemval5 = '　　　　　　　　　　　　　　　';
                         this.itemval6 = '';
@@ -264,7 +265,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval11 = '　　　　　　　　　　　　備註：　' + (element?.Remarks ?? '');
                                 this.itemval12 = '　　　　　　　前置時間（分）：　' + (element?.ProcessLeadTime ?? '');
                                 this.itemval13 = '　　　　　　　標準工時（分）：　' + (element?.ProcessTime ?? '');
-                                this.itemval14 = '　　　　　　　　　預計開工日：　' + (element?.DueStartTime ?? '');
+                                // this.itemval14 = '　　　　　　　　　預計開工日：　' + (element?.DueStartTime ?? '');
+                                this.itemval14 = '';
                                 this.itemval15 = '　　　　　　　　　預計完工日：　' + (element?.DueEndTime ?? '');
                                 this.itemval16 = '　　　　　　　　　實際開工日：　' + (element?.ActualStartTime ?? '');
                                 this.itemval17 = '　　　　　　　　　實際完工日：　' + (element?.ActualEndTime ?? '');

@@ -44,9 +44,9 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
     }
     trclick(e) {
         // debugger;
-        this.creatpopupVisible = true;
-        this.itemkey = e.Key;
-        this.mod = 'edit';
+        // this.creatpopupVisible = true;
+        // this.itemkey = e.Key;
+        // this.mod = 'edit';
     }
     tdclick(e) {
         // notify({
