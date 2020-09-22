@@ -69,6 +69,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     onCellPreparedLevel: any;
     allowReordering: boolean;
     listWorkOrderTypes: any;
+    MachineList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -104,6 +105,15 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         };
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1 };
 
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        this.MachineList = s.data;
+                    }
+                }
+            }
+        );
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
@@ -286,6 +296,22 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.Manpower = x?.Manpower ?? 1;
             }
         });
+    }
+    selectMachineChanged(e, data) {
+        // debugger;
+        data.setValue(e.value);
+        // const today = new Date();
+        // this.ProcessBasicList.forEach(x => {
+        //     if (x.Id === e.value) {
+        //         this.ProcessLeadTime = x?.LeadTime ?? 0;
+        //         this.ProcessTime = x?.WorkTime ?? 0;
+        //         this.ProcessCost = x?.Cost ?? 0;
+        //         this.ProducingMachine = x.ProducingMachine;
+        //         this.Remarks = x.Remark;
+        //         this.DrawNo = x.DrawNo;
+        //         this.Manpower = x?.Manpower ?? 1;
+        //     }
+        // });
     }
     validate_before(): boolean {
         // 表單驗證

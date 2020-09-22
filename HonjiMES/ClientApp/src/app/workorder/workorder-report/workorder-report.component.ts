@@ -79,6 +79,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean; };
     UserList: any;
     keyup = '';
+    MachineEditorOptions: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -203,6 +204,18 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         valueExpr: 'Id',
                         searchEnabled: true,
                         onValueChanged: this.onSupplierSelectionChanged.bind(this)
+                    };
+                }
+            }
+        );
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.MachineEditorOptions = {
+                        items: s.data,
+                        displayExpr: 'Name',
+                        valueExpr: 'Name',
+                        searchEnabled: true
                     };
                 }
             }

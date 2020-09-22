@@ -68,6 +68,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     UserList: any[];
     keyup = '';
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; disable: boolean; };
+    MachineList: any;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -179,6 +180,15 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                         onValueChanged: this.onProductBasicSelectionChanged.bind(this)
                     };
 
+                }
+            }
+        );
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        this.MachineList = s.data;
+                    }
                 }
             }
         );

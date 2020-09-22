@@ -19,6 +19,7 @@ namespace HonjiMES.Models
         public virtual DbSet<BillofPurchaseReturn> BillofPurchaseReturns { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
+        public virtual DbSet<MachineInformation> MachineInformations { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -788,6 +789,56 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.ProcessId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("m_bill_of_material_ibfk_1");
+            });
+
+            modelBuilder.Entity<MachineInformation>(entity =>
+            {
+                entity.HasComment("機台資訊");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.ControlBrandId).HasComment("控制器種類ID");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("新增時間");
+
+                entity.Property(e => e.EnableState).HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.ModelId).HasComment("機台種類ID");
+
+                entity.Property(e => e.Name)
+                    .HasComment("機台名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.PlanSetting)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Port).HasComment("連線埠號");
+
+                entity.Property(e => e.SpecialSetting)
+                    .HasComment("特殊設定JSON")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.TransferSetting)
+                    .HasComment("檔案傳送設定JSON")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("更新時間")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.Url)
+                    .HasComment("連線地址")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UserId).HasComment("負責人ID");
             });
 
             modelBuilder.Entity<Material>(entity =>

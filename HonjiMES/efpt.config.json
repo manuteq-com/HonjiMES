@@ -62,6 +62,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "machine_informations"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "material"
       },
       {
