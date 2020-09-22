@@ -20,6 +20,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
 
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
+    @Input() randomkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
@@ -97,6 +98,10 @@ export class CreatorderComponent implements OnInit, OnChanges {
         //         }
         //     }
         // );
+    }
+    ngOnInit() {
+    }
+    async ngOnChanges() {
         this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 console.log(s);
@@ -111,10 +116,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 }
             }
         );
-    }
-    ngOnInit() {
-    }
-    async ngOnChanges() {
         this.app.GetData('/OrderHeads/GetOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
@@ -206,7 +207,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.Quantity = 1;
         this.DBOriginPrice = Product.Price;
         this.DBPrice = this.Quantity * Product.Price;
-        this.OriginPrice = 0;
+        this.OriginPrice = Product.Price;
         this.Price = this.Quantity * this.OriginPrice;
     }
     QuantityonValueChanged(e, data) {
@@ -233,11 +234,18 @@ export class CreatorderComponent implements OnInit, OnChanges {
         e.data.Serial = this.SerialNo;
         this.dataGridRowIndex++;
         e.data.RowIndex = this.dataGridRowIndex;
+        e.data.Unit = 'EA';
         this.Quantity = 1;
+        e.data.Quantity = this.Quantity;
+
         this.DBOriginPrice = 0;
         this.DBPrice = 0;
         this.OriginPrice = 0;
         this.Price = 0;
+        e.data.DBOriginPrice = this.DBOriginPrice;
+        e.data.DBPrice = this.DBPrice;
+        e.data.OriginPrice = this.OriginPrice;
+        e.data.Price = this.Price;
     }
     onEditingStart(e) {
         this.Quantity = e.data.Quantity;

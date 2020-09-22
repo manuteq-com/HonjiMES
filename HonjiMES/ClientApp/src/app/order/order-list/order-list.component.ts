@@ -43,6 +43,7 @@ export class OrderListComponent {
     editorOptions: any;
     uploadHeaders: any;
     UserList: any;
+    randomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
@@ -150,6 +151,7 @@ export class OrderListComponent {
         // e.event.preventDefault();
     }
     creatdata() {
+        this.randomkey = new Date().getTime();
         this.creatpopupVisible = true;
     }
     updatepopup_result(e) {
