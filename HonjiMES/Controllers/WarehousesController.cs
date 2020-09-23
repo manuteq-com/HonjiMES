@@ -67,10 +67,11 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseListByWiproductBasic(int id)
+        public async Task<ActionResult<WarehouseForBom>> GetWarehouseListByWiproductBasic(int id)
         {
             var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
             var WarehouseData = await _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            var data = new List<WarehouseForBom>();
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
@@ -78,8 +79,13 @@ namespace HonjiMES.Controllers
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
                 }
+                data.Add(new WarehouseForBom {
+                    Id = item.Id,
+                    Name = item.Name,
+                    HasWarehouse = Data.Count() != 0
+                });
             }
-            return Ok(MyFun.APIResponseOK(Warehouses));
+            return Ok(MyFun.APIResponseOK(data));
         }
 
         /// <summary>
@@ -128,10 +134,11 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseListByProductBasic(int id)
+        public async Task<ActionResult<WarehouseForBom>> GetWarehouseListByProductBasic(int id)
         {
             var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
             var WarehouseData = await _context.Products.AsQueryable().Where(x => x.ProductBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            var data = new List<WarehouseForBom>();
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
@@ -139,8 +146,13 @@ namespace HonjiMES.Controllers
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
                 }
+                data.Add(new WarehouseForBom {
+                    Id = item.Id,
+                    Name = item.Name,
+                    HasWarehouse = Data.Count() != 0
+                });
             }
-            return Ok(MyFun.APIResponseOK(Warehouses));
+            return Ok(MyFun.APIResponseOK(data));
         }
 
         /// <summary>
@@ -206,10 +218,11 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Warehouse>> GetWarehouseListByMaterialBasic(int id)
+        public async Task<ActionResult<WarehouseForBom>> GetWarehouseListByMaterialBasic(int id)
         {
             var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code).ToListAsync();
             var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialBasic.Id == id && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            var data = new List<WarehouseForBom>();
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
@@ -217,8 +230,13 @@ namespace HonjiMES.Controllers
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
                 }
+                data.Add(new WarehouseForBom {
+                    Id = item.Id,
+                    Name = item.Name,
+                    HasWarehouse = Data.Count() != 0
+                });
             }
-            return Ok(MyFun.APIResponseOK(Warehouses));
+            return Ok(MyFun.APIResponseOK(data));
         }
 
         /// <summary>

@@ -53,9 +53,22 @@
         </app-editbom>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="料號基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
-    [(visible)]="verpopupVisible">
+
+<dx-popup [showTitle]="true" title="原料基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
+    [(visible)]="materialpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial-basic [itemkeyval]="itemkeyval" [masterkey]="masterkey" [btnVisibled]="false" [WeightVisible]="false"></app-creatmaterial-basic>
+        <app-creatmaterial-basic [masterkey]="MaterialKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
     </div>
 </dx-popup>
+<dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
+    [(visible)]="productpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatproduct-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatproduct-basic>
+    </div>
+</dx-popup>
+<!-- <dx-popup [showTitle]="true" title="半成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
+    [(visible)]="productpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatproduct-basic [masterkey]="MaterialKey" [btnVisibled]="false" [editStatus]="true"></app-creatproduct-basic>
+    </div>
+</dx-popup> -->

@@ -954,6 +954,10 @@ namespace HonjiMES.Models
         public int? StatusVal { get; set; }
     }
 
+    public class WarehouseForBom : Warehouse
+    {
+        public bool HasWarehouse { get; set; }
+    }
 
 
 }

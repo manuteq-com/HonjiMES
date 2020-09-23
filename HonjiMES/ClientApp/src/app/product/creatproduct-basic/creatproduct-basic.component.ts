@@ -18,6 +18,9 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
+    @Input() masterkey: any;
+    @Input() editStatus: any;
+    @Input() btnVisibled: boolean;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -32,6 +35,8 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
     warehousesOptions: any;
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
+    WarehouseList: any;
+    selectType: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
         this.formData = null;
@@ -39,10 +44,10 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
         // this.enterKeyAction = 'moveFocus';
         // this.enterKeyDirection = 'row';
         this.labelLocation = 'left';
-        this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
+        this.btnVisibled = false;
         this.asyncValidation = this.asyncValidation.bind(this);
         this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
@@ -61,8 +66,12 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        // debugger;
+        this.readOnly = true;
+        if (this.editStatus !== null) {
+            this.readOnly = this.editStatus;
+        }
         this.gridBoxValue = [2];
+
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.formData = {
             ProductNo: '',
@@ -74,6 +83,31 @@ export class CreatproductBasicComponent implements OnInit, OnChanges {
             Unit: '',
             ProductNumber: ''
         };
+        if (this.masterkey !== null) {
+            debugger;
+            this.app.GetData('/ProductBasics/GetProductBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData = s.data;
+                    }
+                }
+            );
+            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.WarehouseList = s.data;
+                        if (!this.btnVisibled) {
+                            this.gridBoxValue = [];
+                            this.WarehouseList.forEach(element => {
+                                if (element.HasWarehouse) {
+                                    this.gridBoxValue.push(element.Id);
+                                }
+                            });
+                        }
+                    }
+                }
+            );
+        }
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);

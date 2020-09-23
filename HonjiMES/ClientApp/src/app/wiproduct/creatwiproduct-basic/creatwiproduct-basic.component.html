@@ -43,7 +43,7 @@
             <dxo-label text="存放庫別"></dxo-label>
         </dxi-item> -->
 
-        <dxi-item dataField="wid">
+        <dxi-item dataField="wid" [visible]="btnVisibled">
             <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
             <dxo-label text="存放庫別"></dxo-label>
             <dx-drop-down-box
@@ -56,6 +56,31 @@
                     <dx-data-grid
                         keyExpr="Id"
                         [dataSource]="warehousesOptions"
+                        [columns]="['Name']"
+                        [selection]="{ mode: 'multiple' }"
+                        [hoverStateEnabled]="true"
+                        [paging]="{ enabled: true, pageSize: 10 }"
+                        [filterRow]="{ visible: false }"
+                        [scrolling]="{ mode: 'infinite' }"
+                        [height]="245"
+                        [(selectedRowKeys)]="gridBoxValue">
+                    </dx-data-grid>
+                </div>
+            </dx-drop-down-box>
+        </dxi-item>
+        <dxi-item dataField="wid" [visible]="!btnVisibled">
+            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <dxo-label text="存放庫別"></dxo-label>
+            <dx-drop-down-box
+                [(value)]="gridBoxValue"
+                valueExpr="Id"
+                displayExpr="Name"
+                [showClearButton]="true"
+                [dataSource]="WarehouseList">
+                <div *dxTemplate="let data of 'content'">
+                    <dx-data-grid
+                        keyExpr="Id"
+                        [dataSource]="WarehouseList"
                         [columns]="['Name']"
                         [selection]="{ mode: 'multiple' }"
                         [hoverStateEnabled]="true"
@@ -81,6 +106,6 @@
     </dx-form>
     <div class="col-auto-12 mt-4">
         <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-            [disabled]="buttondisabled"></dx-button>
+            [disabled]="buttondisabled" [visible]="btnVisibled"></dx-button>
     </div>
 </form>

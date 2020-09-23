@@ -36,7 +36,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Process>>> GetProcesses()
         {
-            var data = _context.Processes.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var data = _context.Processes.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.Code);
             var Processes = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Processes));
         }
