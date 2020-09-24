@@ -40,7 +40,6 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     NumberBoxOptions: { showSpinButtons: boolean; mode: string; min: number; value: number; };
     dataSourceAllDB: any;
     Warehouselist: any;
-    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
     CreateUserList: any;
     ReceiveUserList: any;
     editorOptions: {};
@@ -49,6 +48,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
     selectUserDefault: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; inputAttr: { style: string; }; };
     AttrValue: string;
     tempCreateUserId: number;
+    RQtyEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -96,7 +96,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
                     );
                 });
                 this.keyup = '';
-            } else if (e.key === 'Shift') {
+            } else if (e.key === 'Shift' || e.key === 'CapsLock') {
 
             } else {
                 this.keyup += e.key.toLocaleUpperCase();
@@ -254,18 +254,24 @@ export class CreatrebackComponent implements OnInit, OnChanges {
         let allCount = 0;
         this.dataSourceAllDB.forEach(x => {
             if (x.RQty > 0 && (!x.WarehouseId || x.WarehouseId < 0)) {
-                msg += x.NameNo + ':請選擇倉庫\r\n';
+                msg += '[ ' + x.NameNo + ' ] 請選擇倉庫\r\n';
                 this.buttondisabled = false;
                 cansave = false;
                 return false;
             } else if (x.WarehouseId > 0 && x.RQty < 0) {
-                msg += x.NameNo + ':請輸入數量 \r\n';
+                msg += '[ ' + x.NameNo + ' ] 請輸入數量 \r\n';
                 this.buttondisabled = false;
                 cansave = false;
                 return false;
             }
             if (x.RQty) {
                 allCount += x.RQty;
+            }
+            if (x.RQty > (x.ReceiveQty - x.RbackQty)) {
+                msg += '[ ' + x.NameNo + ' ] 退庫數量不正確! ( 已領:' + x.ReceiveQty + '　 已退:' + x.RbackQty + ' )\r\n';
+                this.buttondisabled = false;
+                cansave = false;
+                return false;
             }
         });
         if (allCount === 0) {

@@ -69,6 +69,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     onCellPreparedLevel: any;
     allowReordering: boolean;
     listWorkOrderTypes: any;
+    MachineList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -83,7 +84,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 22;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
@@ -104,6 +105,15 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         };
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1 };
 
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        this.MachineList = s.data;
+                    }
+                }
+            }
+        );
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
@@ -165,6 +175,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     if (s.success) {
                         this.formData = s.data;
                         this.formData.Count = 1;
+                        this.formData.DueStartTime = new Date();
+                        this.formData.DueEndTime = new Date();
                     }
                 }
             );
@@ -184,6 +196,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
                         this.formData.Count = s.data.WorkOrderHead.Count;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
+                        this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
+                        this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
@@ -286,6 +300,22 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 this.Manpower = x?.Manpower ?? 1;
             }
         });
+    }
+    selectMachineChanged(e, data) {
+        // debugger;
+        data.setValue(e.value);
+        // const today = new Date();
+        // this.ProcessBasicList.forEach(x => {
+        //     if (x.Id === e.value) {
+        //         this.ProcessLeadTime = x?.LeadTime ?? 0;
+        //         this.ProcessTime = x?.WorkTime ?? 0;
+        //         this.ProcessCost = x?.Cost ?? 0;
+        //         this.ProducingMachine = x.ProducingMachine;
+        //         this.Remarks = x.Remark;
+        //         this.DrawNo = x.DrawNo;
+        //         this.Manpower = x?.Manpower ?? 1;
+        //     }
+        // });
     }
     validate_before(): boolean {
         // 表單驗證
@@ -396,6 +426,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 DataId: this.formData.ProductBasicId,
                 Count: this.formData.Count,
                 MachineNo: this.formData.MachineNo,
+                DueStartTime: this.formData.DueStartTime,
+                DueEndTime: this.formData.DueEndTime
             },
             WorkOrderDetail: this.dataSourceDB
         };

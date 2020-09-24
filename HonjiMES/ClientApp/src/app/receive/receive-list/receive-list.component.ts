@@ -93,7 +93,7 @@ export class ReceiveListComponent implements OnInit {
                     );
                 });
                 this.keyup = '';
-            } else if (e.key === 'Shift') {
+            } else if (e.key === 'Shift' || e.key === 'CapsLock') {
 
             } else {
                 this.keyup += e.key.toLocaleUpperCase();

@@ -39,14 +39,16 @@
             <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
 
             <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc" [width]="140"></dxi-column>
-            <dxi-column dataField="DataNo" caption="品號" [width]="180"></dxi-column>
-            <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column>
-            <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
+            <dxi-column dataField="DataNo" caption="品號"></dxi-column>
+            <!-- <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column> -->
+            <!-- <dxi-column dataField="MachineNo" caption="機號"></dxi-column> -->
             <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Count" caption="需求數量" [width]="80"></dxi-column>
-            <dxi-column dataField="ReCount" caption="實際完工數量" [width]="110"></dxi-column>
+            <dxi-column dataField="DueStartTime" caption="預計開工" dataType="date" [width]="120" [visible]="true"></dxi-column>
+            <dxi-column dataField="DueEndTime" caption="預計完工" dataType="date" [width]="120" [visible]="true"></dxi-column>
+            <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
+            <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column>
             <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>

@@ -97,13 +97,27 @@
     <None Remove="Reports\XtraReport1.repx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\SaleOrderReport.repx" />
-    <EmbeddedResource Include="Reports\SubcontractPurchaseReport.repx" />
-    <EmbeddedResource Include="Reports\PurchaseOrderReport.repx" />
-    <EmbeddedResource Include="Reports\process.repx" />
-    <EmbeddedResource Include="Reports\WorkOrderReport.repx" />
-    <EmbeddedResource Include="Reports\WorkOrder.repx" />
-    <EmbeddedResource Include="Reports\XtraReport1.repx" />
+    <EmbeddedResource Include="Reports\SaleOrderReport.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SubcontractPurchaseReport.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PurchaseOrderReport.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\process.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WorkOrderReport.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WorkOrder.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\XtraReport1.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

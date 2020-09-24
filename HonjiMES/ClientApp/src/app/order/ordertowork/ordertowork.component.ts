@@ -28,6 +28,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
     DataTypeList: any;
     modName: string;
     disabledValues: any;
+    EditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.remoteOperations = true;
@@ -35,6 +36,13 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         this.DataTypeList = myservice.getlistAdjustStatus();
         this.dataSourceDB = [];
         this.disabledValues = [];
+        this.EditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0.0',
+            value: 0,
+            min: 1
+        };
     }
     ngOnInit() {
     }
@@ -42,6 +50,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         if (this.itemkeyval !== null && this.itemkeyval !== undefined) {
             this.itemkeyval.forEach((element, index) => {
                 element.Id = index + 1;
+                element.OrderCount = element.Count;
             });
         }
         this.dataSourceDB = this.itemkeyval;
@@ -128,6 +137,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         this.modName = 'cancer';
     }
     onFormSubmit = async function(e) {
+        this.dataGrid.instance.saveEditData();
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
         if (this.topurchasekey.length === 0) {
             Swal.fire({

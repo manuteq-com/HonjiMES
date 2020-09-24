@@ -185,7 +185,18 @@ namespace HonjiMES.Controllers
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var TempNo = 0;
                 var WorkOrderHeadList = new List<WorkOrderHead>();
+                var OrderDetailList = new List<OrderDetail>();
                 foreach (var item in OrderData.OrderDetail)
+                {
+                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
+                    if (CheckProductBasic.Count() == 0) {
+                        OrderDetailList.Add(item);
+                    } else {
+                        CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
+                    }
+                }
+
+                foreach (var item in OrderDetailList)
                 {
                     // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).ToListAsync();
                     // if (CheckWorkOrderHeads.Count() > 0)
@@ -224,7 +235,18 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 string NewResultMessage = "";
+                var OrderDetailList = new List<OrderDetail>();
                 foreach (var item in OrderData.OrderDetail)
+                {
+                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
+                    if (CheckProductBasic.Count() == 0) {
+                        OrderDetailList.Add(item);
+                    } else {
+                        CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
+                    }
+                }
+
+                foreach (var item in OrderDetailList)
                 {
                     // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).ToListAsync();
                     // if (CheckWorkOrderHeads.Count() > 0)
@@ -902,6 +924,12 @@ namespace HonjiMES.Controllers
                 {
                     return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
                 }
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderReportData.WorkOrderID).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {
@@ -1159,6 +1187,12 @@ namespace HonjiMES.Controllers
             var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
             if (WorkOrderDetails != null)
             {
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderDetails.WorkOrderHeadId).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
                 var WorkOrderReportData = new WorkOrderReportData
                 {
                     ReCount = WorkOrderReportDataAll.ReportCount ?? 0,
@@ -1208,6 +1242,8 @@ namespace HonjiMES.Controllers
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
+                var StockInfo = "";
+                var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0).ToListAsync();
                 if (DataType == 1)
                 {
 
@@ -1218,6 +1254,15 @@ namespace HonjiMES.Controllers
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.ProductNo;
                     BasicDataName = BasicData.Name;
+
+                    StockInfo = "無庫存";
+                    var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301");
+                    if (WarehousesInfo.Count() != 0) {
+                        var ProductsInfo = BasicData.Products.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
+                        if (ProductsInfo.Count() != 0) {
+                            StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
+                        }
+                    }
                 }
                 else if (DataType == 3)
                 {
@@ -1236,7 +1281,7 @@ namespace HonjiMES.Controllers
                     status = 2;
                 }
 
-                var nWorkOrderHead = new WorkOrderHead
+                var nWorkOrderHead = new WorkOrderHeadInfo
                 {
                     WorkOrderNo = workOrderNo,
                     OrderDetailId = OrderDetail.Id, // 
@@ -1247,7 +1292,8 @@ namespace HonjiMES.Controllers
                     DataName = BasicDataName,
                     Count = OrderDetail.Quantity,
                     Status = status, // 注意!原本用於表示該工單目前狀態，這裡借來表示[該工單是否已經建立]
-                    CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = MyFun.GetUserID(HttpContext),
+                    StockCount = StockInfo
                 };
 
                 //依照成品BOM內容檢查新增工序
@@ -1352,25 +1398,35 @@ namespace HonjiMES.Controllers
 
                 // if (sMessage.Length == 0)
                 // {
-                if (OrderToWorkCheckData.WorkOrderHead.Where(x =>
+                var checkData = OrderToWorkCheckData.WorkOrderHead.Where(x =>
                     x.OrderDetailId == nWorkOrderHead.OrderDetailId &&
                     x.DataType == nWorkOrderHead.DataType &&
-                    x.DataId == nWorkOrderHead.DataId &&
-                    x.Count == nWorkOrderHead.Count
-                ).Any())
+                    x.DataId == nWorkOrderHead.DataId
+                ).ToList();
+                if (checkData.Count() == 1)
                 {
+                    nWorkOrderHead.Count = checkData.FirstOrDefault().Count;
+                    foreach (var item in nWorkOrderHead.WorkOrderDetails)
+                    {
+                        item.Count = checkData.FirstOrDefault().Count;
+                    }
                     _context.WorkOrderHeads.Add(nWorkOrderHead);
                 }
 
                 foreach (var item in Results)
                 {
-                    if (OrderToWorkCheckData.WorkOrderHead.Where(x =>
+                    var checkDataTemp = OrderToWorkCheckData.WorkOrderHead.Where(x =>
                         x.OrderDetailId == item.OrderDetailId &&
                         x.DataType == item.DataType &&
-                        x.DataId == item.DataId &&
-                        x.Count == item.Count
-                    ).Any())
+                        x.DataId == item.DataId
+                    ).ToList();
+                    if (checkDataTemp.Count() == 1)
                     {
+                        item.Count = checkDataTemp.FirstOrDefault().Count;
+                        foreach (var item2 in item.WorkOrderDetails)
+                        {
+                            item2.Count = checkDataTemp.FirstOrDefault().Count;
+                        }
                         _context.WorkOrderHeads.Add(item);
                     }
                 }
@@ -1407,6 +1463,8 @@ namespace HonjiMES.Controllers
                         var BasicDataID = 0;
                         var BasicDataNo = "";
                         var BasicDataName = "";
+                        var StockInfo ="";
+                        var Warehouses = _context.Warehouses.Where(x => x.DeleteFlag == 0);
                         if (item.MaterialBasicId != null)
                         {
                             var BasicData = _context.MaterialBasics.Find(item.MaterialBasicId);
@@ -1414,6 +1472,15 @@ namespace HonjiMES.Controllers
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.MaterialNo;
                             BasicDataName = BasicData.Name;
+                            
+                            StockInfo = "無庫存";
+                            var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "101");
+                            if (WarehousesInfo.Count() != 0) {
+                                var ProductsInfo = BasicData.Materials.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
+                                if (ProductsInfo.Count() != 0) {
+                                    StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
+                                }
+                            }
                         }
                         else if (item.ProductBasicId != null)
                         {
@@ -1422,6 +1489,15 @@ namespace HonjiMES.Controllers
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.ProductNo;
                             BasicDataName = BasicData.Name;
+                            
+                            StockInfo = "無庫存";
+                            var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301");
+                            if (WarehousesInfo.Count() != 0) {
+                                var ProductsInfo = BasicData.Products.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
+                                if (ProductsInfo.Count() != 0) {
+                                    StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
+                                }
+                            }
                         }
 
                         var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
@@ -1431,7 +1507,7 @@ namespace HonjiMES.Controllers
                             status = 1;
                         }
 
-                        var nWorkOrderHead = new WorkOrderHead
+                        var nWorkOrderHead = new WorkOrderHeadInfo
                         {
                             WorkOrderNo = WorkOrderHead.WorkOrderNo + "-" + index,
                             OrderDetailId = WorkOrderHead.OrderDetailId, // 
@@ -1442,7 +1518,8 @@ namespace HonjiMES.Controllers
                             DataName = BasicDataName,
                             Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1, // 注意!
                             Status = status, // 注意!原本用於表示該工單目前狀態，這裡借來表示[該工單是否已經建立]
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            StockCount = StockInfo
                         };
 
                         foreach (var item2 in billOfMaterial)

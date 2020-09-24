@@ -641,7 +641,10 @@ namespace HonjiMES.Models
         public List<OrderDetail> OrderDetail { get; set; }
         public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
-
+    public class WorkOrderHeadInfo : WorkOrderHead
+    {
+        public string StockCount { get; set; }
+    }
     public class OrderToWorkCheckData
     {
         public OrderDetail OrderDetail { get; set; }
@@ -767,6 +770,7 @@ namespace HonjiMES.Models
         public string Remark { get; set; }
         public int Count { get; set; }
         public int Status { get; set; }
+        public string DueEndTime { get; set; }
         /// <summary>
         ///  製成0~19 共20組
         /// </summary>
