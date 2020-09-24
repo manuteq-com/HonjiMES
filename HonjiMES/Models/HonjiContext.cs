@@ -1307,6 +1307,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Id).HasComment("訂單id");
 
+                entity.Property(e => e.CheckFlag).HasComment("確認欄");
+
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .HasComment("建立日期");

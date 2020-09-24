@@ -552,5 +552,37 @@ namespace HonjiMES.Controllers
             }
             return list;
         }
+
+        /// <summary>
+        /// 訂單單號
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/OrderHeads
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> CheckData(int id)
+        {
+            var orderHead = _context.OrderHeads.Find(id);
+            if(orderHead.CheckFlag == 0){
+                orderHead.CheckFlag = 1;
+            }else{
+                orderHead.CheckFlag = 0;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderHeadExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok(MyFun.APIResponseOK(orderHead));
+        }
     }
 }
