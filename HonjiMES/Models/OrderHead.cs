@@ -70,6 +70,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("remarks", TypeName = "varchar(100)")]
         public string Remarks { get; set; }
+        /// <summary>
+        /// &#30906;&#35469;&#27396;
+        /// </summary>
+        [Column("check_flag", TypeName = "int(11)")]
+        public int CheckFlag { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         /// <summary>

@@ -62,6 +62,7 @@ export class OrderListComponent {
         this.getdata();
         this.getProductsData();
         this.editorOptions = { onValueChanged: this.onValueChanged };
+        this.checkData = this.checkData.bind(this);
         this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
@@ -182,8 +183,8 @@ export class OrderListComponent {
     selectionChanged(e) {
         // debugger;
         // 只開一筆Detail資料
-        e.component.collapseAll(-1);
-        e.component.expandRow(e.currentSelectedRowKeys[0]);
+        // e.component.collapseAll(-1);
+        // e.component.expandRow(e.currentSelectedRowKeys[0]);
     }
     contentReady(e) {
         // 預設要打開的子表單
@@ -321,8 +322,13 @@ export class OrderListComponent {
             }
         }
     }
+    checkData(e, data) {
+        const sendRequest = SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: data.key});
+        if (sendRequest) {
+            this.dataGrid.instance.refresh();
+        }
+    }
     onEditingStart(e) {
-
     }
     onFocusedRowChanged(e) {
     }

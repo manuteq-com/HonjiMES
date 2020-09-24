@@ -17,14 +17,14 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() masterkey: any;
     @Input() btnVisibled: boolean;
-    @Input() WeightVisible: boolean;
+    @Input() editStatus: boolean;
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
-    formData: any;
+    formData: any = {};
     postval: Material;
     labelLocation: string;
     readOnly: boolean;
@@ -43,8 +43,7 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         icon: 'save'
     };
     supplierList: any;
-    SaveBtnVisibled: boolean;
-    WeightVisibled: boolean;
+    WarehouseList: any;
     selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
@@ -53,10 +52,10 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         // this.enterKeyAction = 'moveFocus';
         // this.enterKeyDirection = 'row';
         this.labelLocation = 'left';
-        this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
+        this.btnVisibled = false;
         this.asyncValidation = this.asyncValidation.bind(this);
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
@@ -72,14 +71,10 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         );
     }
     ngOnChanges() {
-        // debugger;
-        this.SaveBtnVisibled = false;
-        if (this.btnVisibled !== null) {
-            this.SaveBtnVisibled = this.btnVisibled;
-        }
-        this.WeightVisibled = false;
-        if (this.WeightVisible !== null) {
-            this.WeightVisibled = this.WeightVisible;
+        debugger;
+        this.readOnly = true;
+        if (this.editStatus !== null) {
+            this.readOnly = this.editStatus;
         }
         this.gridBoxValue = [1];
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
@@ -92,6 +87,30 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
             Price: 0,
             Unit: ''
         };
+        if (this.masterkey !== null) {
+            this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData = s.data;
+                    }
+                }
+            );
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.WarehouseList = s.data;
+                        if (!this.btnVisibled) {
+                            this.gridBoxValue = [];
+                            this.WarehouseList.forEach(element => {
+                                if (element.HasWarehouse) {
+                                    this.gridBoxValue.push(element.Id);
+                                }
+                            });
+                        }
+                    }
+                }
+            );
+        }
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 console.log(s);
@@ -101,11 +120,6 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
                         e.Name = e.Code + e.Name;
                     });
                     this.warehousesOptions = s.data;
-                    // this.warehousesOptions = {
-                    //     items: s.data,
-                    //     displayExpr: 'Name',
-                    //     valueExpr: 'Id',
-                    // };
                 }
             }
         );

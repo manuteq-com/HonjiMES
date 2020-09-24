@@ -26,9 +26,12 @@ export class BomlistComponent implements OnInit, OnChanges {
     ProductList: any;
     btnVisible: boolean;
     randomkey: number;
-    verpopupVisible: boolean;
+    materialpopupVisible: boolean;
+    productpopupVisible: boolean;
     masterkey: any;
     WeightVisible: boolean;
+    MaterialKey: any;
+    ProductKey: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.btnVisible = true;
@@ -96,9 +99,14 @@ export class BomlistComponent implements OnInit, OnChanges {
         }
     }
     readData(e, data) {
-        debugger;
-        this.verpopupVisible = true;
-        this.masterkey = data.data;
+        // debugger;
+        if (data.data.Ismaterial) {
+            this.materialpopupVisible = true;
+            this.MaterialKey = data.data.MaterialBasicId;
+        } else {
+            this.productpopupVisible = true;
+            this.ProductKey = data.data.ProductBasicId;
+        }
     }
     onReorder(e) {
         debugger;
@@ -119,7 +127,6 @@ export class BomlistComponent implements OnInit, OnChanges {
                     e.component.refresh();
                 });
             }
-
         }
     }
     popup_result(e) {

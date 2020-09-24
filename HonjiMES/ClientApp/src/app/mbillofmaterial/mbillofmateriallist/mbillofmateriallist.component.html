@@ -201,7 +201,7 @@
 
             <div *dxTemplate="let data of 'cProcessEditCellTemplate'">
                 <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
-                    [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
+                    [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id'} }"
                     valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
             </div>
 

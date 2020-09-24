@@ -103,7 +103,7 @@
 <dx-popup [showTitle]="true" title="新增成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
     [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatproduct-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+        <app-creatproduct-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [btnVisibled]="true"
             [exceldata]="exceldata"></app-creatproduct-basic>
     </div>
 </dx-popup>

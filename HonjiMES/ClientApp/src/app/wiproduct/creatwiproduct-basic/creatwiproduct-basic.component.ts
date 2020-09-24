@@ -17,6 +17,9 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
+    @Input() masterkey: any;
+    @Input() editStatus: any;
+    @Input() btnVisibled: boolean;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -32,6 +35,7 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
     NumberBoxOptions: any;
     gridBoxValue: number[] = [2];
     supplierList: any;
+    WarehouseList: any;
     selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
 
     constructor(private http: HttpClient, private app: AppComponent) {
@@ -44,6 +48,7 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 2;
+        this.btnVisibled = false;
         this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 console.log(s);
@@ -87,8 +92,36 @@ export class CreatwiproductBasicComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        // debugger;
+        this.readOnly = true;
+        if (this.editStatus !== null) {
+            this.readOnly = this.editStatus;
+        }
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
+        if (this.masterkey !== null) {
+            debugger;
+            this.app.GetData('/ProductBasics/GetProductBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData = s.data;
+                    }
+                }
+            );
+            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + this.masterkey).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.WarehouseList = s.data;
+                        if (!this.btnVisibled) {
+                            this.gridBoxValue = [];
+                            this.WarehouseList.forEach(element => {
+                                if (element.HasWarehouse) {
+                                    this.gridBoxValue.push(element.Id);
+                                }
+                            });
+                        }
+                    }
+                }
+            );
+        }
     }
     validate_before(): boolean {
         // 表單驗證
