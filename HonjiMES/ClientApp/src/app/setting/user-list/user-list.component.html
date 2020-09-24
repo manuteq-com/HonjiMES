@@ -60,7 +60,7 @@
     <dxi-column dataField="Department" caption="部門" [width]="160">
         <dxo-lookup [dataSource]="DepartmentList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="新增時間"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="新增時間" dataType="date" format="shortDateShortTime" sortOrder="desc"></dxi-column>
     <dxi-column dataField="CreateUser" caption="新增人員">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>

@@ -61,9 +61,15 @@ export class CreatrebackComponent implements OnInit, OnChanges {
                             this.app.GetData('/Users/GetUsers').subscribe(
                                 (s) => {
                                     if (s.success) {
-                                        this.CreateUserList = [];
-                                        this.ReceiveUserList = s.data;
+                                        const temp = [];
                                         s.data.forEach(element => {
+                                            if (element.Permission > 10) {
+                                                temp.push(element);
+                                            }
+                                        });
+                                        this.CreateUserList = [];
+                                        this.ReceiveUserList = temp;
+                                        temp.forEach(element => {
                                             // tslint:disable-next-line: max-line-length
                                             if (element.Permission === 20 && element.Id === res.data.Id || element.Id === this.tempCreateUserId) {
                                                 this.CreateUserList.push(element);
@@ -152,9 +158,15 @@ export class CreatrebackComponent implements OnInit, OnChanges {
             this.app.GetData('/Users/GetUsers').subscribe(
                 (s) => {
                     if (s.success) {
+                        const temp = [];
+                        s.data.forEach(element => {
+                            if (element.Permission > 10) {
+                                temp.push(element);
+                            }
+                        });
                         // this.CreateUserList = s.data;
                         this.CreateUserList = [];
-                        s.data.forEach(element => {
+                        temp.forEach(element => {
                             if (element.Permission === 60) {
                                 this.CreateUserList.push(element);
                             }

@@ -13,7 +13,7 @@
     <dxi-column dataField="MaterialName" caption="元件名稱" dataType="string"></dxi-column>
     <dxi-column dataField="Quantity" caption="組成數量" dataType="string"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" dataType="string" [visible]="false"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立時間" dataType="string" [visible]="false"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立時間" dataType="date" format="shortDateShortTime" [visible]="false"></dxi-column>
     <dxi-column type="buttons" [visible]="false">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>

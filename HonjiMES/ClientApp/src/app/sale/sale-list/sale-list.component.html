@@ -75,7 +75,7 @@
         </dxo-lookup>
     </dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" dataType="date"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>

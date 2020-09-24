@@ -35,7 +35,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Id != 1).OrderBy(x => x.Username);
             var Users = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Users));
         }
