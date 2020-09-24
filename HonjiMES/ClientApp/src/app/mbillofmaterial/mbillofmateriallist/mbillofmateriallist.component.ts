@@ -295,6 +295,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         this.modelpopupVisible = false;
 
         if (e.length !== 0) {
+            this.dataSourceDB_Process = [];
             e.forEach(element => {
                 this.SerialNo = this.dataSourceDB_Process.length;
                 this.SerialNo++;

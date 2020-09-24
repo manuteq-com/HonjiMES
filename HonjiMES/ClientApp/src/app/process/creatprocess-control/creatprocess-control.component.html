@@ -56,7 +56,7 @@
         (onCellPrepared)="onCellPrepared($event)"
         (onRowRemoved)="onRowRemoved($event)">
 
-        <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="false"></dxo-row-dragging>
+        <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="allowReordering"></dxo-row-dragging>
 
         <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
             <dxo-form colCount=4>
@@ -91,7 +91,7 @@
         </dxi-column>
         <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate">
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
-            <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
         <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
         </dxi-column>

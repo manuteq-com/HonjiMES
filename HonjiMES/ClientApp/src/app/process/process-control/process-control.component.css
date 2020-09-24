@@ -57,10 +57,22 @@
     border-radius: 2px;
     /* margin-left: 30px; */
 }
+.pdfbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    font-weight: bold;
+    color: #1e90ff;
+    background-color: #ebe8e8;
+}
 .editbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
     background-color: #ff831e;
 }
 .runbtn {
+    float: right;
     margin-right: 6px;
     border-radius: 2px;
     color: #fff;

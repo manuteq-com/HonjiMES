@@ -3,7 +3,7 @@
     [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
     (onCellClick)="cellClick($event)" [showColumnLines]="true">
     <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="btnVisible"
-        [allowReordering]="btnVisible" [showDragIcons]="false"></dxo-row-dragging>
+        [allowReordering]="btnVisible" [showDragIcons]="true"></dxo-row-dragging>
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false">
         <dxo-form colCount=1>
             <dxi-item dataField="Name"></dxi-item>
@@ -36,13 +36,13 @@
         <dxi-button name="upload" text="全部更新" icon="upload" [visible]="isUploadVisible"></dxi-button>
     </dxi-column>
 
+    <dxi-column caption="料號查詢" cellTemplate="DataInfoCellTemplate" alignment="center" width="80"></dxi-column>
+    <div *dxTemplate="let data of 'DataInfoCellTemplate'">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readData($event,data)"></dx-button>
+    </div>
     <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50" [visible]="!btnVisible"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button icon="chevrondoubleright" type="default" (onClick)="readBomProcess($event,data)"></dx-button>
-    </div>
-    <dxi-column caption="料號查詢" cellTemplate="cellTemplate" alignment="center" width="80"></dxi-column>
-    <div *dxTemplate="let data of 'cellTemplate'">
-        <dx-button icon="detailslayout" type="normal" (onClick)="readData($event,data)"></dx-button>
     </div>
 
 </dx-tree-list>

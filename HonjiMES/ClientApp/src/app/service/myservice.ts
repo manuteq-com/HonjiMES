@@ -106,8 +106,8 @@ const adjusttypes: Selectitem[] = [
 ];
 const workorderstatus: Selectitem[] = [
     { Id: 0, Name: '新建' },
-    { Id: 1, Name: '派工' },
-    { Id: 2, Name: '開工' },
+    { Id: 1, Name: '已派工' },
+    { Id: 2, Name: '已開工' },
     { Id: 3, Name: '完工' },
     { Id: 4, Name: '轉單' },
     { Id: 5, Name: '結案' },

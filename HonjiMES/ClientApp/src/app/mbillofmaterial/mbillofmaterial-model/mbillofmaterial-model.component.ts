@@ -62,6 +62,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
     Manpower: any;
     DueStartTime: any;
     DueEndTime: any;
+    CopyVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.onReorder = this.onReorder.bind(this);
@@ -75,8 +76,9 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 3;
         this.dataSourceDB = [];
+        this.MbomModelList = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
         this.modName = 'new';
@@ -88,6 +90,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.DeleteVisible = false;
         this.InsertVisible = false;
         this.CancelVisible = false;
+        this.CopyVisible = false;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -122,6 +125,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.DeleteVisible = false;
         this.InsertVisible = false;
         this.CancelVisible = false;
+        this.CopyVisible = false;
         this.NewVisible = true;
     }
     allowEdit(e) {
@@ -160,10 +164,15 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
             this.app.GetData('/MbomModels/GetProcessByMbomModelHeadId/' + e.value).subscribe(
                 (s) => {
                     if (s.success) {
+                        const info = this.MbomModelList.find(x => x.Id === e.value);
+                        this.formData.ModelCode = info.ModelCode;
+                        this.formData.ModelName = info.ModelName.replace(info.ModelCode + '_', '');
+
                         this.dataSourceDB = s.data;
                         this.saveVisible = false;
                         this.UpdateVisible = true;
                         this.DeleteVisible = true;
+                        this.CopyVisible = true;
                         this.InsertVisible = true;
                         this.CancelVisible = false;
                     }
@@ -258,7 +267,24 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.DeleteVisible = false;
         this.saveVisible = true;
         this.CancelVisible = true;
+        this.CopyVisible = false;
         this.dataSourceDB = [];
+        this.formData.MbomModelHeadId = 0;
+        this.formData.ModelCode = null;
+        this.formData.ModelName = null;
+    }
+    CopyOnClick(e) {
+        this.modName = 'copy';
+        this.modeVisible = true;
+        this.saveDisabled = false;
+        this.InsertVisible = false;
+        this.NewVisible = false;
+        this.UpdateVisible = false;
+        this.DeleteVisible = false;
+        this.saveVisible = true;
+        this.CancelVisible = true;
+        this.CopyVisible = false;
+        // this.dataSourceDB = [];
     }
     UpdateOnClick(e) {
         this.modName = 'update';
@@ -291,6 +317,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
     CancelOnClick(e) {
         this.modeVisible = false;
         this.NewVisible = true;
+        this.CopyVisible = false;
         this.CancelVisible = false;
         this.saveVisible = false;
         this.formData = this.myform.instance.option('formData');
@@ -319,8 +346,8 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
             }
         );
     }
-    onFormSubmit = async function (e) {
-        if (this.modName === 'new' || this.modName === 'insert') {
+    onFormSubmit = async function(e) {
+        if (this.modName === 'new' || this.modName === 'insert' || this.modName === 'copy') {
             return;
         }
         this.buttondisabled = true;

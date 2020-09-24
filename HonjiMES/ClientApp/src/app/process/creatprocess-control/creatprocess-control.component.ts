@@ -109,6 +109,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     if (s.success) {
+                        s.data.unshift({Id: null, Name: ''}); // 加入第一行
                         this.MachineList = s.data;
                     }
                 }
@@ -202,6 +203,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
                             this.runVisible = true;
+                            this.allowReordering = true;
                         } else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;

@@ -235,6 +235,12 @@ namespace HonjiMES.Reports {
             this.tableRow10 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow10");
             this.tableCell98 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell98");
             this.tableCell99 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell99");
+            this.panel1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPanel>("panel1");
+            this.tableRow15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow15");
+            this.tableCell104 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell104");
+            this.tableCell105 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell105");
+            this.tableCell106 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell106");
+            this.tableCell107 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell107");
 
             // Parameters
             this.WorkOrderNo = reportInitializer.GetParameter("WorkOrderNo");
@@ -242,6 +248,10 @@ namespace HonjiMES.Reports {
             this.DataNo = reportInitializer.GetParameter("DataNo");
             this.MachineNo = reportInitializer.GetParameter("MachineNo");
             this.QRCode = reportInitializer.GetParameter("QRCode");
+            this.DataName = reportInitializer.GetParameter("DataName");
+            this.DueEndTime = reportInitializer.GetParameter("DueEndTime");
+            this.CreateUser = reportInitializer.GetParameter("CreateUser");
+            this.CreateTime = reportInitializer.GetParameter("CreateTime");
 
             // Data Sources
             this.jsonDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource1");
@@ -476,5 +486,15 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.UI.XRTableRow tableRow10;
         private DevExpress.XtraReports.UI.XRTableCell tableCell98;
         private DevExpress.XtraReports.UI.XRTableCell tableCell99;
+        private DevExpress.XtraReports.Parameters.Parameter DataName;
+        private DevExpress.XtraReports.Parameters.Parameter DueEndTime;
+        private DevExpress.XtraReports.Parameters.Parameter CreateUser;
+        private DevExpress.XtraReports.Parameters.Parameter CreateTime;
+        private DevExpress.XtraReports.UI.XRPanel panel1;
+        private DevExpress.XtraReports.UI.XRTableRow tableRow15;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell104;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell105;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell106;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell107;
     }
 }
