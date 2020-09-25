@@ -16,6 +16,12 @@ export class Myservice {
     getOrderStatus(): Selectitem[] {
         return OrderStatus;
     }
+    getOrderType(): Selectitem[] {
+        return OrderType;
+    }
+    getOrderTypeShow(): Selectitem[] {
+        return OrderTypeShow;
+    }
     getPurchaseOrderStatus(): Selectitem[] {
         return purchaseOrderSatatus;
     }
@@ -82,6 +88,14 @@ const OrderStatus: Selectitem[] = [
     { Id: 1, Name: '完成銷貨' },
     { Id: 2, Name: '完成採購' },
     { Id: 10, Name: '結案' }
+];
+const OrderType: Selectitem[] = [
+    { Id: 0, Name: '一般訂單' },
+    { Id: 10, Name: '重製訂單' }
+];
+const OrderTypeShow: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 10, Name: '重製' }
 ];
 const purchaseOrderSatatus: Selectitem[] = [
     { Id: 0, Name: '新建' },

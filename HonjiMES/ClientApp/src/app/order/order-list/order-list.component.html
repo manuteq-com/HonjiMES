@@ -73,6 +73,9 @@
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button [icon]="data.data.CheckFlag === 1 ? 'favorites' : '' " type="normal" (onClick)="checkData($event,data)"></dx-button>
     </div>
+    <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
+        <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="180"></dxi-column>
     <dxi-column dataField="Customer" caption="客戶名稱">
         <dxo-lookup [dataSource]="Customerlist" displayExpr="Name" valueExpr="Id"></dxo-lookup>

@@ -10,6 +10,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-creatorder',
@@ -63,8 +64,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
     DBPrice: number;
     Price: number;
     dataGridRowIndex: number;
+    OrderTypeVisible: boolean;
+    OrderTypeList: any;
+    TypeSelectBoxOptions: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.OrderTypeList = myservice.getOrderType();
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -74,7 +79,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 5;
+        this.colCount = 25;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.Quantity = 0;
@@ -83,9 +88,15 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.DBPrice = 0;
         this.Price = 0;
         this.dataGridRowIndex = 0;
+        this.OrderTypeVisible = true;
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
+        };
+        this.TypeSelectBoxOptions = {
+            items: myservice.getOrderType(),
+            displayExpr: 'Name',
+            valueExpr: 'Id',
         };
 
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
@@ -102,6 +113,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     async ngOnChanges() {
+        this.TypeSelectBoxOptions = {
+            items: this.OrderTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            value: 0
+        };
         this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 console.log(s);
@@ -120,6 +137,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     this.formData = s.data;
+                    this.formData.OrderType = 0;
                     this.CreateNumberInfoVal = new CreateNumberInfo();
                     this.CreateNumberInfoVal.CreateNumber = s.data.OrderNo;
                     this.CreateNumberInfoVal.CreateTime = s.data.CreateTime;
@@ -134,6 +152,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     console.log(s);
                     if (s.success) {
                         this.formData = s.data;
+                        this.formData.OrderType = 0;
                     }
                 }
             );
@@ -174,6 +193,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
             this.formData = this.exceldata;
             this.formData.OrderNo = this.CreateNumberInfoVal.CreateNumber;
             this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;
+            this.formData.OrderType = 0;
             this.dataSourceDB = this.exceldata.OrderDetails;
             if (ProductPricrErr) {
                 Swal.fire({
