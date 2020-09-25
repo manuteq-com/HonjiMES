@@ -52,6 +52,9 @@ export class Myservice {
     getResourceWorkOrderStatus(): Selectitem[] {
         return resourceworkorderstatus;
     }
+    getMasterType(): Selectitem[] {
+        return mastertype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -131,6 +134,10 @@ const reporttype: Selectitem[] = [
     { Id: 1, Name: '開工回報' },
     { Id: 2, Name: '完工回報' },
     { Id: 3, Name: '再開工回報' },
+];
+const mastertype: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '主件' },
 ];
 const WorkSchedulerStatus: WorkSchedulerStatu[] = [
     {

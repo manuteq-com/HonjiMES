@@ -272,6 +272,10 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                             element.WarehouseId = this.Warehouselist.find(x => x.Code === '101').Id;
                         }
                         element.RQty = 0;
+
+                        if (element.Master === 1) {
+                            element.NameNo += ' (主要用料)';
+                        }
                     });
                     this.dataSourceAllDB = s.data;
                     this.newVisible = true;

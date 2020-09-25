@@ -93,7 +93,7 @@ export class ProcessControlComponent implements OnInit {
             element.SerialNumber = index + 1;
         });
     }
-    async runProcess(e, data) {
+    async runProcess() {
         Swal.fire({
             showCloseButton: true,
             allowEnterKey: false,
@@ -110,13 +110,14 @@ export class ProcessControlComponent implements OnInit {
             if (result.value) {
                 this.postval = {
                     WorkOrderHead: {
-                        Id: data.key,
+                        Id: this.workOrderHeadId,
                     }
                 };
                 try {
                     // tslint:disable-next-line: max-line-length
                     const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
                     if (sendRequest) {
+                        this.runVisible = false;
                         this.dataGrid1.instance.refresh();
                         notify({
                             message: '更新完成',
@@ -132,9 +133,9 @@ export class ProcessControlComponent implements OnInit {
             }
         });
     }
-    editProcess(e, data) {
+    editProcess() {
         this.creatpopupVisible = true;
-        this.itemkey = data.key;
+        this.itemkey = this.workOrderHeadId;
         this.mod = 'edit';
         this.randomkey = new Date().getTime();
     }

@@ -906,6 +906,7 @@ namespace HonjiMES.Controllers
                                 Quantity = item.ReceiveQty,
                                 NameNo = item.ProductBasicId.HasValue ? item.ProductNo : item.MaterialBasicId.HasValue ? item.MaterialNo : "",
                                 NameType = item.ProductBasicId.HasValue ? "成品" : item.MaterialBasicId.HasValue ? "元件" : "",
+                                Master = item.Master
                             });
                         }
                     }

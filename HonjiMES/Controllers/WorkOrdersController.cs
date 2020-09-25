@@ -942,6 +942,7 @@ namespace HonjiMES.Controllers
                         WorkOrderDetails.FirstOrDefault().Status = 2;
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
+                        WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
                         if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
                         {
                             WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
@@ -955,6 +956,7 @@ namespace HonjiMES.Controllers
                             // PurchaseNo = WorkOrderDetails.FirstOrDefault().,
                             // SupplierId = WorkOrderDetails.FirstOrDefault().SupplierId,
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
+                            CodeNo = WorkOrderReportData.CodeNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
                             ProducingMachine = WorkOrderReportData.ProducingMachine,
@@ -1035,6 +1037,7 @@ namespace HonjiMES.Controllers
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
                         WorkOrderDetails.FirstOrDefault().NgCount = (WorkOrderDetails.FirstOrDefault()?.NgCount ?? 0) + WorkOrderReportData.NgCount;
                         WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
+                        WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
@@ -1044,6 +1047,7 @@ namespace HonjiMES.Controllers
                             // PurchaseNo = WorkOrderDetails.FirstOrDefault().,
                             SupplierId = WorkOrderDetails.FirstOrDefault().SupplierId,
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
+                            CodeNo = WorkOrderReportData.CodeNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
                             ProducingMachine = WorkOrderReportData.ProducingMachine,
@@ -1126,6 +1130,7 @@ namespace HonjiMES.Controllers
                     if (checkLogStart.Count() == checkLogEnd.Count())
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2;
+                        WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         // WorkOrderDetails.FirstOrDefault().ReCount = WorkOrderReportData.ReCount;
 
@@ -1136,6 +1141,7 @@ namespace HonjiMES.Controllers
                             PurchaseId = WorkOrderDetails.FirstOrDefault().PurchaseId,
                             // PurchaseNo = WorkOrderDetails.FirstOrDefault().,
                             DrawNo = WorkOrderDetails.FirstOrDefault().DrawNo,
+                            CodeNo = WorkOrderReportData.CodeNo,
                             Manpower = WorkOrderDetails.FirstOrDefault().Manpower,
                             // ProducingMachineId = WorkOrderDetails.FirstOrDefault().,
                             ProducingMachine = WorkOrderReportData.ProducingMachine,

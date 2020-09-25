@@ -435,6 +435,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.SupplierId = this.formData.SupplierId;
         this.postval.PurchaseId = this.formData.PurchaseId;
         this.postval.CreateUser = this.formData.CreateUser;
+        this.postval.CodeNo = this.formData.CodeNo;
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length

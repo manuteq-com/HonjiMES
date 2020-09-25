@@ -24,7 +24,10 @@
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
 
-        <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="4" editorType="dxSelectBox">
+        <dxi-item dataField="CodeNo" [colSpan]="2" [disabled]="false">
+            <dxo-label text="加工程式"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="2" editorType="dxSelectBox">
             <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
             <dxo-label text="操作人員"></dxo-label>
         </dxi-item>

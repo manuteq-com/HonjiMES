@@ -247,6 +247,10 @@ export class CreatrebackComponent implements OnInit, OnChanges {
                         } else if (element.NameType === '元件') {
                             element.WarehouseId = this.Warehouselist.find(x => x.Code === '101').Id;
                         }
+
+                        if (element.Master === 1) {
+                            element.NameNo += ' (主要用料)';
+                        }
                         element.RQty = 0;
                     });
                     this.dataSourceAllDB = s.data;

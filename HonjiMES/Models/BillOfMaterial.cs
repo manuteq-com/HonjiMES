@@ -28,6 +28,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("pid", TypeName = "int(11)")]
         public int? Pid { get; set; }
+        /// <summary>
+        /// &#20027;&#20214;
+        /// </summary>
+        [Column("master", TypeName = "int(11)")]
+        public int Master { get; set; }
         [Column("product_basic_id", TypeName = "int(11)")]
         public int? ProductBasicId { get; set; }
         [Column("material_basic_id", TypeName = "int(11)")]

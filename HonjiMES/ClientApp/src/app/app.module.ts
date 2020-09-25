@@ -116,6 +116,7 @@ import { ResourceWorkorderComponent } from './workorder/resource-workorder/resou
 import { ResourceProcessComponent } from './workorder/resource-process/resource-process.component';
 import { InventorySearchComponent } from './inventory/inventory-search/inventory-search.component';
 import { WorkorderCloseComponent } from './workorder/workorder-close/workorder-close.component';
+import { UserQrcodeComponent } from './setting/user-qrcode/user-qrcode.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -246,7 +247,8 @@ export function tokenGetter() {
         ResourceWorkorderComponent,
         ResourceProcessComponent,
         InventorySearchComponent,
-        WorkorderCloseComponent
+        WorkorderCloseComponent,
+        UserQrcodeComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

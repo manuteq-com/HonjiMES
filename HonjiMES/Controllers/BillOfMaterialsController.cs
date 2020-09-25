@@ -385,11 +385,13 @@ namespace HonjiMES.Controllers
 
                     LvS = "(" + item.Lv + ")　 " + item.ProductNo + item.MaterialNo,
                     LvName = item.ProductNo + item.MaterialNo,
-                    BomType = !string.IsNullOrWhiteSpace(item.MaterialNo) ? "元件" : "成品"
+                    BomType = !string.IsNullOrWhiteSpace(item.MaterialNo) ? "元件" : "成品",
+                    Master = item.Master
                 });
             }
             return Ok(MyFun.APIResponseOK(bomlistVM));
         }
+
         /// <summary>
         /// 更新BOM表
         /// </summary>
@@ -411,9 +413,34 @@ namespace HonjiMES.Controllers
             if (PutBomlist.Pid.HasValue)
             {
                 BillOfMaterial.Pid = PutBomlist.Pid;
+                BillOfMaterial.Master = 0;
+                BillOfMaterial.Lv = 2;
             }
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(PutBomlist));
+        }
+
+        /// <summary>
+        /// 更新BOM表主件
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="PutBomlist"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IEnumerable<BomList>>> PutBomlistMaster(int id, BomList PutBomlist)
+        {
+            var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
+            if (BillOfMaterial != null) {
+                var BillOfMaterialAll = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterial.ProductBasicId && x.DeleteFlag == 0).ToList();
+                foreach (var item in BillOfMaterialAll)
+                {
+                    item.Master = 0;
+                }
+                BillOfMaterial.Master = 1;
+                await _context.SaveChangesAsync();
+            }
+            
+            return Ok(MyFun.APIResponseOK(BillOfMaterial));
         }
 
         /// <summary>
@@ -429,11 +456,13 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("請輸入名稱或品號"));
             }
+            var masterVal = _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).Any()? 0 : 1;
             var nBillOfMaterials = new BillOfMaterial
             {
                 ProductBasicId = id,
                 Name = PostBom.Name,
                 Quantity = PostBom.Quantity,
+                Master = masterVal
             };
 
             _context.ChangeTracker.LazyLoadingEnabled = true;
@@ -536,6 +565,19 @@ namespace HonjiMES.Controllers
             // var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
             if (BillOfMaterials != null)
             {
+                // 假設該刪除料號被設為主件，則另尋其他料號設為主件。
+                if (BillOfMaterials.FirstOrDefault().Master == 1) {
+                    var BillOfMaterial = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterials.FirstOrDefault().ProductBasicId && x.Lv == 1 && x.Master == 0 && x.DeleteFlag == 0).ToList();
+                    if (BillOfMaterial.Count() != 0) {
+                        BillOfMaterial.FirstOrDefault().Master = 1;
+                    }
+                } else { // 檢查是否有主件存在，否則隨機選一個當主件。
+                    var BillOfMaterial = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterials.FirstOrDefault().ProductBasicId && x.Lv == 1 && x.Id != BillOfMaterials.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
+                    if (BillOfMaterial.Where(x => x.Master == 1).ToList().Count() == 0) {
+                        BillOfMaterial.FirstOrDefault().Master = 1;
+                    }
+                }
+
                 // BillOfMaterial.DeleteFlag = 2;
                 var result = MyFun.DeleteBomList(BillOfMaterials);
                 foreach (var item in result)

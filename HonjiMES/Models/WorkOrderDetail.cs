@@ -77,6 +77,11 @@ namespace HonjiMES.Models
         [Column("draw_no", TypeName = "varchar(50)")]
         public string DrawNo { get; set; }
         /// <summary>
+        /// &#21152;&#24037;&#31243;&#24335;
+        /// </summary>
+        [Column("code_no", TypeName = "varchar(50)")]
+        public string CodeNo { get; set; }
+        /// <summary>
         /// &#25152;&#38656;&#20154;&#21147;	
         /// </summary>
         [Column("manpower", TypeName = "int(11)")]

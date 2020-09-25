@@ -69,6 +69,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     keyup = '';
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; disable: boolean; };
     MachineList: any;
+    hasUser: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -79,6 +80,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                         this.app.GetData('/Users/GetUserByUserNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
                             if (res.success) {
                                 if (res.data.Permission === 80 || res.data.Permission === 20) {
+                                    this.hasUser = true;
                                     this.app.GetData('/Users/GetUsers').subscribe(
                                         (s) => {
                                             if (s.success) {
@@ -102,6 +104,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                                         }
                                     );
                                 } else {
+                                    this.hasUser = false;
                                     this.UserList = [];
                                     this.SetUserEditorOptions(this.UserList, null);
                                     this.showMessage('warning', '請勿越權使用!', 3000);
@@ -187,6 +190,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     if (s.success) {
+                        s.data.unshift({Id: null, Name: ''}); // 加入第一行
                         this.MachineList = s.data;
                     }
                 }
@@ -209,6 +213,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
+        this.hasUser = false;
         this.disabledValues = [];
         this.GetProcessInfo();
         this.modVisible = false;
@@ -407,7 +412,9 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 this.buttondisabled = true;
                 return false;
             } else {
-                this.buttondisabled = false;
+                if (this.hasUser) {
+                    this.buttondisabled = false;
+                }
             }
         }
         return true;

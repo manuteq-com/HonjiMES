@@ -220,6 +220,8 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'1'")
                     .HasComment("層數");
 
+                entity.Property(e => e.Master).HasComment("主件");
+
                 entity.Property(e => e.Name)
                     .HasComment("名稱")
                     .HasCharSet("utf8mb4")
@@ -3040,6 +3042,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ActualStartTime).HasComment("實際開工日");
 
+                entity.Property(e => e.CodeNo)
+                    .HasComment("加工程式")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.Count)
                     .HasDefaultValueSql("'1'")
                     .HasComment("需求量");
@@ -3207,6 +3214,11 @@ namespace HonjiMES.Models
                 entity.Property(e => e.ActualEndTime).HasComment("實際完工日");
 
                 entity.Property(e => e.ActualStartTime).HasComment("實際開工日");
+
+                entity.Property(e => e.CodeNo)
+                    .HasComment("加工程式")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
