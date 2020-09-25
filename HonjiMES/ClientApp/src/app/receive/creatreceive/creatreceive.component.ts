@@ -66,9 +66,15 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                             this.app.GetData('/Users/GetUsers').subscribe(
                                 (s) => {
                                     if (s.success) {
-                                        this.CreateUserList = [];
-                                        this.ReceiveUserList = s.data;
+                                        const temp = [];
                                         s.data.forEach(element => {
+                                            if (element.Permission > 10) {
+                                                temp.push(element);
+                                            }
+                                        });
+                                        this.CreateUserList = [];
+                                        this.ReceiveUserList = temp;
+                                        temp.forEach(element => {
                                             // tslint:disable-next-line: max-line-length
                                             if (element.Permission === 20 && element.Id === res.data.Id || element.Id === this.tempCreateUserId) {
                                                 this.CreateUserList.push(element);
@@ -161,10 +167,16 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             this.app.GetData('/Users/GetUsers').subscribe(
                 (s) => {
                     if (s.success) {
-                        // this.CreateUserList = s.data;
-                        this.SetReceiveUserEditorOptions(s.data, null, '');
-                        this.CreateUserList = [];
+                        const temp = [];
                         s.data.forEach(element => {
+                            if (element.Permission > 10) {
+                                temp.push(element);
+                            }
+                        });
+                        // this.CreateUserList = s.data;
+                        this.SetReceiveUserEditorOptions(temp, null, '');
+                        this.CreateUserList = [];
+                        temp.forEach(element => {
                             if (element.Permission === 60) {
                                 this.CreateUserList.push(element);
                             }
@@ -260,6 +272,10 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                             element.WarehouseId = this.Warehouselist.find(x => x.Code === '101').Id;
                         }
                         element.RQty = 0;
+
+                        if (element.Master === 1) {
+                            element.NameNo += ' (主要用料)';
+                        }
                     });
                     this.dataSourceAllDB = s.data;
                     this.newVisible = true;

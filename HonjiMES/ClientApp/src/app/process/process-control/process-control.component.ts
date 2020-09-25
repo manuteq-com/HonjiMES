@@ -40,6 +40,8 @@ export class ProcessControlComponent implements OnInit {
     logpopupVisible: boolean;
     postval: any;
     Url = '';
+    runVisible: boolean;
+    editVisible: boolean;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listStatus = myservice.getWorkOrderStatus();
@@ -76,6 +78,8 @@ export class ProcessControlComponent implements OnInit {
     }
     ngOnInit() {
         this.titleService.setTitle('工單管理');
+        this.runVisible = false;
+        this.editVisible = false;
     }
     onReorder(e) {
         debugger;
@@ -89,7 +93,7 @@ export class ProcessControlComponent implements OnInit {
             element.SerialNumber = index + 1;
         });
     }
-    async runProcess(e, data) {
+    async runProcess() {
         Swal.fire({
             showCloseButton: true,
             allowEnterKey: false,
@@ -106,13 +110,14 @@ export class ProcessControlComponent implements OnInit {
             if (result.value) {
                 this.postval = {
                     WorkOrderHead: {
-                        Id: data.key,
+                        Id: this.workOrderHeadId,
                     }
                 };
                 try {
                     // tslint:disable-next-line: max-line-length
                     const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
                     if (sendRequest) {
+                        this.runVisible = false;
                         this.dataGrid1.instance.refresh();
                         notify({
                             message: '更新完成',
@@ -128,19 +133,26 @@ export class ProcessControlComponent implements OnInit {
             }
         });
     }
-    editProcess(e, data) {
+    editProcess() {
         this.creatpopupVisible = true;
-        this.itemkey = data.key;
+        this.itemkey = this.workOrderHeadId;
         this.mod = 'edit';
         this.randomkey = new Date().getTime();
     }
-    readProcess(e) {
+    readProcess(e, data) {
         if (!this.creatpopupVisible) {
             this.itemkey = 0;
-            this.workOrderHeadId = e.key;
-            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + e.key).subscribe(
+            this.workOrderHeadId = data.data.Id;
+            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
                 (s) => {
                     if (s.success) {
+                        this.editVisible = true;
+                        if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) {
+                            this.runVisible = true;
+                        } else {
+                            this.runVisible = false;
+                        }
+
                         s.data.WorkOrderDetail.forEach(element => {
                             element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
                         });
@@ -216,6 +228,7 @@ export class ProcessControlComponent implements OnInit {
             return false;
         } else {
             this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
+            window.open(this.Url, '_blank');
         }
     }
 }

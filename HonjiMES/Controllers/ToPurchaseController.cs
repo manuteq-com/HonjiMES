@@ -156,6 +156,15 @@ namespace HonjiMES.Controllers
                             return Ok(await result);
                         }
                     }
+                    // 如採購單種類為[傳統銑床]，需要進行轉倉的動作 2020/09/23
+                    if (purchaseHead.Type == 40)
+                    {
+                        var result = Warehouse100Fun(item, purchaseHead.PurchaseNo, Warehouse201Check, Warehouse201Stock);
+                        if (!result.Result.success)
+                        {
+                            return Ok(await result);
+                        }
+                    }
                 }
 
                 if (purchaseHead.Id != 0) // 合併採購單
@@ -403,6 +412,74 @@ namespace HonjiMES.Controllers
                                 }}
                             });
                         }
+                    }
+                    return MyFun.APIResponseOK(itemData);
+                }
+            }
+        }
+
+        private async Task<APIResponse> Warehouse100Fun(PurchaseDetailData itemData, string PurchaseNo, int Warehouse100Check, decimal Warehouse100Stock)
+        {
+            if (Warehouse100Check == 0)
+            {
+                return MyFun.APIResponseError("品號 [ " + itemData.DataNo + " ] 無庫存資訊(轉出)! 請重新確認!");
+            }
+            else
+            {
+                if (itemData.Quantity > Warehouse100Stock)
+                {
+                    return MyFun.APIResponseError("品號 [ " + itemData.DataNo + " ] 轉出倉別庫存不足( 庫存 " + Warehouse100Stock + " / 需求 " + itemData.Quantity + " )! 請重新確認!");
+                }
+                else
+                {
+                    var dt = DateTime.Now;
+                    if (itemData.DataType == 1) // 原料
+                    {
+                        var MaterialBasic = _context.MaterialBasics.Find(itemData.DataId);
+                        var Warehouse100 = MaterialBasic.Materials.Where(x => x.WarehouseId == itemData.WarehouseIdA && x.DeleteFlag == 0).ToList();
+
+                        Warehouse100.First().MaterialLogs.Add(new MaterialLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse100.First().Quantity,
+                            Quantity = -itemData.Quantity,
+                            Message = "原料銑平面轉出",
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse100.First().Quantity -= itemData.Quantity;
+                    }
+                    else if (itemData.DataType == 2) // 成品
+                    {
+                        var ProductBasic = _context.ProductBasics.Find(itemData.DataId);
+                        var Warehouse100 = ProductBasic.Products.Where(x => x.WarehouseId == itemData.WarehouseIdA && x.DeleteFlag == 0).ToList();
+
+                        Warehouse100.First().ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse100.First().Quantity,
+                            Quantity = -itemData.Quantity,
+                            Message = "原料銑平面轉出",
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse100.First().Quantity -= itemData.Quantity;
+                    }
+                    else if (itemData.DataType == 3) // 半成品
+                    {
+                        var WiproductBasic = _context.WiproductBasics.Find(itemData.DataId);
+                        var Warehouse100 = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == itemData.WarehouseIdA && x.DeleteFlag == 0).ToList();
+
+                        Warehouse100.First().WiproductLogs.Add(new WiproductLog
+                        {
+                            LinkOrder = PurchaseNo,
+                            Original = Warehouse100.First().Quantity,
+                            Quantity = -itemData.Quantity,
+                            Message = "原料銑平面轉出",
+                            CreateTime = dt.AddSeconds(-1),
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Warehouse100.First().Quantity -= itemData.Quantity;
                     }
                     return MyFun.APIResponseOK(itemData);
                 }

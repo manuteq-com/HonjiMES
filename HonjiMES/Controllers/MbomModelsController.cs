@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MbomModelHead>>> GetMbomModelHeads()
         {
-            var data = _context.MbomModelHeads.Where(x => x.DeleteFlag == 0);
+            var data = _context.MbomModelHeads.Where(x => x.DeleteFlag == 0).OrderBy(x => x.ModelCode);
             var MbomModels = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(MbomModels));
         }

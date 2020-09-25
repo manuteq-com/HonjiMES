@@ -181,9 +181,10 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderReport = new List<WorkOrderReportVM>();
             var WorkOrderHead = _context.WorkOrderHeads.Find(id);
+            var Users = _context.Users.Where(x => x.DeleteFlag == 0).ToList();
             var txt = WorkOrderHead.WorkOrderNo;
             var dbQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
-            foreach (var item in WorkOrderHead.WorkOrderDetails)
+            foreach (var item in WorkOrderHead.WorkOrderDetails.OrderBy(x => x.SerialNumber))
             {
                 if (item.DeleteFlag == 0)
                 {
@@ -205,9 +206,13 @@ namespace HonjiMES.Controllers
             var report = XtraReport.FromFile(ReportPath);
             report.RequestParameters = false;
             report.Parameters["WorkOrderNo"].Value = WorkOrderHead.WorkOrderNo;
-            report.Parameters["DataNo"].Value = WorkOrderHead.DataNo;
+            report.Parameters["DataNo"].Value = "　" + WorkOrderHead.DataNo;
+            report.Parameters["DataName"].Value = "　" + WorkOrderHead.DataName;
             report.Parameters["Quantity"].Value = WorkOrderHead.Count;
             report.Parameters["MachineNo"].Value = WorkOrderHead.MachineNo;
+            report.Parameters["DueEndTime"].Value = WorkOrderHead.DueEndTime?.ToString("MM/dd") ?? "";
+            report.Parameters["CreateUser"].Value = Users.Where(x => x.Id == WorkOrderHead.CreateUser).FirstOrDefault().Realname;
+            report.Parameters["CreateTime"].Value = "　" + DateTime.Now;
             report.Parameters["QRCode"].Value = MyFun.ImgToBase64String(dbQrCode);
             var jsonDataSource = new JsonDataSource();
             jsonDataSource.JsonSource = new CustomJsonSource(json);

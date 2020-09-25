@@ -37,7 +37,7 @@
         <dxo-row-dragging
             [allowReordering]="true"
             [onReorder]="onReorder"
-            [showDragIcons]="false"
+            [showDragIcons]="true"
         ></dxo-row-dragging>
 
         <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
@@ -126,6 +126,8 @@
             class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="DeleteVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='更新模型' type='success' icon='save' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="UpdateVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='複製模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="CopyOnClick($event)" [visible]="CopyVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='新增模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="NewOnClick($event)" [visible]="NewVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='插入' type='default' icon='download' [useSubmitBehavior]="true"

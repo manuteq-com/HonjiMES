@@ -52,11 +52,15 @@ export class Myservice {
     getResourceWorkOrderStatus(): Selectitem[] {
         return resourceworkorderstatus;
     }
+    getMasterType(): Selectitem[] {
+        return mastertype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
     { Id: 20, Name: '外包' },
-    { Id: 30, Name: '表處' }
+    { Id: 30, Name: '表處' },
+    { Id: 40, Name: '傳統銑床' }
 ];
 const permissiontypes: Selectitem[] = [
     { Id: 1, Name: '系統管理員' },
@@ -105,8 +109,8 @@ const adjusttypes: Selectitem[] = [
 ];
 const workorderstatus: Selectitem[] = [
     { Id: 0, Name: '新建' },
-    { Id: 1, Name: '派工' },
-    { Id: 2, Name: '開工' },
+    { Id: 1, Name: '已派工' },
+    { Id: 2, Name: '已開工' },
     { Id: 3, Name: '完工' },
     { Id: 4, Name: '轉單' },
     { Id: 5, Name: '結案' },
@@ -130,6 +134,10 @@ const reporttype: Selectitem[] = [
     { Id: 1, Name: '開工回報' },
     { Id: 2, Name: '完工回報' },
     { Id: 3, Name: '再開工回報' },
+];
+const mastertype: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '主件' },
 ];
 const WorkSchedulerStatus: WorkSchedulerStatu[] = [
     {

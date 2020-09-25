@@ -70,7 +70,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     // onCellPreparedLevel: number;
     listAdjustStatus: any;
-    OrderTypeVisible: boolean;
+    WarehouseIdAVisible: boolean;
+    WarehouseIdBVisible: boolean;
     DeliveryTime: Date;
     TypeDisabled: boolean;
 
@@ -89,7 +90,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.colCount = 3;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
-        this.OrderTypeVisible = false;
+        this.WarehouseIdAVisible = false;
+        this.WarehouseIdBVisible = false;
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
@@ -228,9 +230,14 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             if (this.formData.Type === 30) {
-                this.OrderTypeVisible = true;
+                this.WarehouseIdAVisible = true;
+                this.WarehouseIdBVisible = true;
+            } else if (this.formData.Type === 40) {
+                this.WarehouseIdAVisible = true;
+                this.WarehouseIdBVisible = false;
             } else {
-                this.OrderTypeVisible = false;
+                this.WarehouseIdAVisible = false;
+                this.WarehouseIdBVisible = false;
             }
             this.CreateNumberInfoVal = new CreateNumberInfo();
             this.CreateNumberInfoVal.Type = this.formData.Type;
@@ -298,9 +305,20 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
     }
     UpdateVal() {
-        this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
-        this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
-        this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        if (this.DataType === 1 && this.formData.Type === 10) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
+        } else if (this.DataType === 1) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+        } else {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        }
+
+        if (this.formData.Type === 30) { // 表處採購
+            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+            this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        } else if (this.formData.Type === 40) { // 傳統銑床採購
+            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
+        }
     }
     WarehousevalvalueChanged(e, data) {
         data.setValue(e.value);
@@ -337,6 +355,11 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.Priceval = e.data.Price;
         this.WarehouseList = null;
         this.DeliveryTime = new Date();
+    }
+    onRowInserted(e) {
+        if (this.dataSourceDB.length !== 0) {
+            this.TypeDisabled = true;
+        }
     }
     onEditingStart(e) {
         this.saveCheck = false;

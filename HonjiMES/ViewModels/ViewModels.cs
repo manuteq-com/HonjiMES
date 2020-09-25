@@ -348,6 +348,7 @@ namespace HonjiMES.Models
         public int Group { get; set; }
         public sbyte? Type { get; set; }
         public string Remarks { get; set; }
+        public int Master  { get; set; }
         public int? MaterialBasicId { get; set; }
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
@@ -465,6 +466,10 @@ namespace HonjiMES.Models
         /// 庫存數量
         /// </summary>
         public decimal StockQty { get; set; }
+        /// <summary>
+        /// 主要用料
+        /// </summary>
+        public int Master { get; set; }
         /// <summary>
         /// 品項的倉庫資料
         /// </summary>
@@ -681,6 +686,7 @@ namespace HonjiMES.Models
         public string PurchaseNo { get; set; }
         public int? SupplierId { get; set; }
         public int WarehouseId { get; set; }
+        public string CodeNo { get; set; }
         public int CreateUser { get; set; }
     }
     public class WorkOrderReportDataAll
@@ -888,6 +894,11 @@ namespace HonjiMES.Models
         /// 物件類型
         /// </summary>
         public string BomType { get; set; }
+        
+        /// <summary>
+        /// 主件
+        /// </summary>
+        public int Master { get; set; }
     }
     public class PostSupplierMaterial
     {

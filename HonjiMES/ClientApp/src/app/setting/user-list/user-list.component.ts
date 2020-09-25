@@ -34,6 +34,8 @@ export class UserListComponent implements OnInit, OnChanges {
     PermissionList: any;
     DepartmentList: any;
     UserList: any;
+    qrcodepopupVisible: boolean;
+    randomkey: number;
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -43,7 +45,7 @@ export class UserListComponent implements OnInit, OnChanges {
         this.DepartmentList = myservice.getDepartment();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetUsers'),
+            load: () => SendService.sendRequest(http, this.Controller + '/GetUsersNoSuper'),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetUser', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostUser', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutUser', 'PUT', { key, values }),
@@ -118,6 +120,10 @@ export class UserListComponent implements OnInit, OnChanges {
                 });
             }
         }
+    }
+    qrcodedata() {
+        this.qrcodepopupVisible = true;
+        this.randomkey = new Date().getTime();
     }
     ngOnInit() {
         this.titleService.setTitle('使用者帳戶管理');

@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using DevExtreme.AspNet.Mvc;
+using HonjiMES.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HonjiMES.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
@@ -26,6 +28,7 @@ namespace HonjiMES.Controllers
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
+
         /// <summary>
         ///  帳戶列表
         /// </summary>
@@ -35,9 +38,38 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0).OrderBy(x => x.Username);
             var Users = await data.ToListAsync();
             return Ok(MyFun.APIResponseOK(Users));
+        }
+
+        /// <summary>
+        ///  帳戶列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersNoSuper()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.Users.AsQueryable().Where(x => x.DeleteFlag == 0 && x.Id != 1).OrderBy(x => x.Username);
+            var Users = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(Users));
+        }
+
+        /// <summary>
+        /// 取帳戶列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetUsersNoSuperByFilter(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.Users.Where(x => x.DeleteFlag == 0 && x.Id != 1 && x.Permission > 10).OrderBy(x => x.Username);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>
