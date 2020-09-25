@@ -69,9 +69,12 @@ namespace HonjiMES.Controllers
                 }
             }
             var title = "";
-            if (PurchaseHead.Type == 20) {
+            if (PurchaseHead.Type == 20)
+            {
                 title = "《託外處理》";
-            }else{
+            }
+            else
+            {
                 title = "";
             }
             var json = JsonConvert.SerializeObject(PurchaseOrderReport);
@@ -80,7 +83,7 @@ namespace HonjiMES.Controllers
             var report = XtraReport.FromFile(ReportPath);
             report.RequestParameters = false;
             report.Parameters["Title"].Value = title;
-            report.Parameters["CreateDate"].Value = DateTime.Now;            
+            report.Parameters["CreateDate"].Value = DateTime.Now;
             report.Parameters["ContactName"].Value = PurchaseHead.Supplier.ContactName;
             report.Parameters["Address"].Value = PurchaseHead.Supplier.Address;
             report.Parameters["PurchaseDate"].Value = PurchaseHead.PurchaseDate;
@@ -114,6 +117,7 @@ namespace HonjiMES.Controllers
             var SaleOrderReport = new List<SaleOrderReportVM>();
             var SaleHead = _context.SaleHeads.Find(id);
             var txt = SaleHead.SaleNo;
+            var dataCount = SaleHead.SaleDetailNews.Count();
             foreach (var item in SaleHead.SaleDetailNews)
             {
                 if (item.DeleteFlag == 0)
@@ -130,6 +134,23 @@ namespace HonjiMES.Controllers
                     });
                 }
             }
+            if (dataCount % 10 != 0)
+            {
+                for (int i = 0; i < 10 - dataCount % 10; i++)
+                {
+                    SaleOrderReport.Add(new SaleOrderReportVM
+                    {
+                        SaleNo = null,
+                        MachineNo = null,
+                        ProductNo = null,
+                        ProductName = null,
+                        Quantity = null,
+                        Price = null,
+                        Total = null
+                    });
+                }
+            }
+
             var json = JsonConvert.SerializeObject(SaleOrderReport);
             var webRootPath = _IWebHostEnvironment.ContentRootPath;
             var ReportPath = Path.Combine(webRootPath, "Reports", "SaleOrderReport.repx");
@@ -145,7 +166,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt  + '_' + DateTime.Now.ToString("yyyyMMdd") + "_銷貨單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_銷貨單.pdf");
             }
         }
 
