@@ -9,6 +9,7 @@ using HonjiMES.Helper;
 using HonjiMES.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonjiMES.Controllers
 {
@@ -140,5 +141,31 @@ namespace HonjiMES.Controllers
             //有驗証過表示可以用
             return Ok(MyFun.APIResponseOK("OK"));
         }
+
+        // PUT: api/PutPassword/5
+        /// <summary>
+        /// 修改密碼
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="UserPasswordSet"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IEnumerable<User>>> PutPassword(int id, UserPasswordSet UserPasswordSet)
+        {
+            var user = await _context.Users.FindAsync(MyFun.GetUserID(HttpContext));
+            if(user.DeleteFlag == 0 && UserPasswordSet.Password != null){
+               user.Password = MyFun.Encryption(UserPasswordSet.Password);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
+            return Ok(MyFun.APIResponseOK(user));
+        }
+
     }
 }

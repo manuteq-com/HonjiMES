@@ -19,6 +19,7 @@ var warehouse_list_component_1 = require("./warehouse/warehouse-list/warehouse-l
 var user_list_component_1 = require("./setting/user-list/user-list.component");
 var work_order_log_component_1 = require("./workorder/workorder-log/workorder-log.component");
 var resource_allocation_component_1 = require("./workorder/resource_allocation/resource_allocation.component");
+var user_password_1 = require("./setting/user_password/user_password.component");
 
 exports.routes = [
     { path: '', component: homepage_component_1.HomepageComponent },
@@ -39,6 +40,7 @@ exports.routes = [
     { path: 'userlist', component: user_list_component_1.UserListComponent },
     { path: 'workorderlog', component: work_order_log_component_1.WorkorderLogComponent },
     { path: 'resourceallocation', component: resource_allocation_component_1.ResourceAllocationComponent },
+    { path: 'userpassword', component: user_password_1.UserPasswordComponent },
 ];
 exports.AppRoutes = router_1.RouterModule.forRoot(exports.routes, { scrollPositionRestoration: 'enabled' });
 //# sourceMappingURL=app.routes.js.map

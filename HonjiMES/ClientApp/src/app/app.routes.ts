@@ -29,6 +29,7 @@ import { WorksChedulerComponent } from './workscheduler/work-scheduler/work-sche
 import { ResourceAllocationComponent } from './workorder/resource-allocation/resource-allocation.component';
 import { InventoryLogComponent } from './inventory/inventory-log/inventory-log.component';
 import { RebackListComponent } from './reback/reback-list/reback-list.component';
+import { UserPasswordComponent } from './setting/user-password/user-password.component';
 
 
 
@@ -61,6 +62,7 @@ export const routes: Routes = [
     { path: 'resourceallocation', component: ResourceAllocationComponent, canActivate: [AuthGuard] },
     { path: 'workscheduler', component: WorksChedulerComponent, canActivate: [AuthGuard] },
     { path: 'rebackList', component: RebackListComponent, canActivate: [AuthGuard] },
+    { path: 'userpassword', component: UserPasswordComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
