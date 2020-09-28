@@ -1230,7 +1230,7 @@ namespace HonjiMES.Controllers
             if (OrderDetail.ProductBasicId != 0)
             {
                 //取得工單號
-                var key = "WO";
+                var key = "HJ";
                 var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
@@ -1320,7 +1320,7 @@ namespace HonjiMES.Controllers
             if (OrderToWorkCheckData.OrderDetail.ProductBasicId != 0)
             {
                 //取得工單號
-                var key = "WO";
+                var key = "HJ";
                 var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;

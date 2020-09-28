@@ -31,7 +31,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<AdjustData>> GetAdjustNo()
         {
-            var key = "AJ";
+            var key = "AD";
             var dt = DateTime.Now.ToString("yyMMdd");
 
             var MaterialNoData = await _context.MaterialLogs.AsQueryable().Where(x => x.AdjustNo.Contains(key + dt) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();

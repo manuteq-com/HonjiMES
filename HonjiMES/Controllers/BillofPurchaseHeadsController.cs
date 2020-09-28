@@ -46,7 +46,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseNumber()
         {
-            var key = "BOP";
+            var key = "PO";
             var dt = DateTime.Now;
             var BillofPurchaseNo = dt.ToString("yyMMdd");
 
@@ -79,7 +79,7 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = "BOP";
+                var key = "PO";
                 var BillofPurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();

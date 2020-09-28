@@ -33,7 +33,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToSales>>> GetSaleNumber()
         {
-            var key = "S";
+            var key = "SN";
             var dt = DateTime.Now;
             var SaleNo = dt.ToString("yyMMdd");
 
@@ -66,7 +66,7 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = "S";
+                var key = "SN";
                 var SaleNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + SaleNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
@@ -176,7 +176,7 @@ namespace HonjiMES.Controllers
                     OrderHeadData.Status = 1;//完成銷貨(尚未結案)
                 }
 
-                var key = "S";
+                var key = "SN";
                 var Num = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.SaleHeads.AsQueryable().Where(x => x.SaleNo.Contains(key + Num) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 var NoCount = NoData.Count() + 1;

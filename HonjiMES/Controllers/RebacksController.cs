@@ -97,7 +97,7 @@ namespace HonjiMES.Controllers
             }
             var ProductBasics = _context.ProductBasics.Find(requisition.ProductBasicId);
 
-            var key = "RK";
+            var key = "MR";
             var dt = DateTime.Now;
             var RequisitionNo = dt.ToString("yyMMdd");
 
@@ -320,7 +320,7 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var ProductBasics = _context.ProductBasics.Find(WorkOrderHead.DataId);
-                var key = "RK";
+                var key = "MR";
                 var dt = DateTime.Now;
                 var RequisitionNo = dt.ToString("yyMMdd");
 

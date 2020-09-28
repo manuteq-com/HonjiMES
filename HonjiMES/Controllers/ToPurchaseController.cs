@@ -91,7 +91,7 @@ namespace HonjiMES.Controllers
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
                 // var key = CreateNoData.Type == 10 ? "PI" : CreateNoData.Type == 20 ? "PO" : "PS";
-                var key = "PI"; // 採購單號開頭一致，只用種類區分。 2020/09/11
+                var key = "BC"; // 採購單號開頭一致，只用種類區分。 2020/09/11
                 var dt = DateTime.Now;
 
                 purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;

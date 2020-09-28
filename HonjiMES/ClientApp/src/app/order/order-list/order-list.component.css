@@ -82,3 +82,6 @@
 .style {
     height:auto;
 }
+.dx-button-mode-contained .dx-icon {
+    color: #ffdd1e !important;
+}
