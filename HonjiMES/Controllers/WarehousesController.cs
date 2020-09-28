@@ -81,6 +81,7 @@ namespace HonjiMES.Controllers
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
+                    Code = item.Code,
                     Name = item.Name,
                     HasWarehouse = Data.Count() != 0
                 });
@@ -148,6 +149,7 @@ namespace HonjiMES.Controllers
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
+                    Code = item.Code,
                     Name = item.Name,
                     HasWarehouse = Data.Count() != 0
                 });
@@ -232,6 +234,7 @@ namespace HonjiMES.Controllers
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
+                    Code = item.Code,
                     Name = item.Name,
                     HasWarehouse = Data.Count() != 0
                 });

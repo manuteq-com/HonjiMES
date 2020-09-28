@@ -93,13 +93,13 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<ReturnSale>> GetSaleReturnNo()
         {
-            var ReturnNoName = "SR";
-            var NoData = await _context.ReturnSales.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(ReturnNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var key = "SR";
+            var NoData = await _context.ReturnSales.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(key)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1)
             {
                 var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
-                var LastLength = LastReturnNo.Length - ReturnNoName.Length;
+                var LastLength = LastReturnNo.Length - key.Length;
                 var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - LastLength, LastLength));
                 if (NoCount <= NoLast)
                 {
@@ -108,7 +108,7 @@ namespace HonjiMES.Controllers
             }
             var ReturnData = new ReturnSale
             {
-                ReturnNo = ReturnNoName + NoCount.ToString("000000")
+                ReturnNo = key + NoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(ReturnData));
         }
@@ -502,7 +502,8 @@ namespace HonjiMES.Controllers
                     var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
                     ProductsData.ProductLogs.Add(new ProductLog
                     {
-                        LinkOrder = ReturnSale.ReturnNo,
+                        // LinkOrder = ReturnSale.ReturnNo,
+                        LinkOrder = SaleDetail.Sale.SaleNo,
                         Original = ProductsData.Quantity,
                         Quantity = ReturnSale.Quantity,
                         Price = ProductsData.Price,
