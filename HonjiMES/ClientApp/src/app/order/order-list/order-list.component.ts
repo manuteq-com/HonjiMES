@@ -44,6 +44,7 @@ export class OrderListComponent {
     uploadHeaders: any;
     UserList: any;
     randomkey: number;
+    OrderTypeList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
@@ -55,6 +56,7 @@ export class OrderListComponent {
         };
         this.remoteOperations = true;
         this.listOrderStatus = myservice.getOrderStatus();
+        this.OrderTypeList = myservice.getOrderTypeShow();
         this.uploadUrl = location.origin + '/api/OrderHeads/PostOrdeByExcel';
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.onValueChanged = this.onValueChanged.bind(this);
@@ -85,10 +87,20 @@ export class OrderListComponent {
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: (loadOptions) => SendService.sendRequest(
-                this.http,
-                this.Controller + '/GetOrderHeads',
-                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
+            load: (loadOptions) => {
+                // loadOptions.sort = [{ selector: 'WorkOrderNo', desc: true }];
+                // if (loadOptions.searchValue) {
+                // loadOptions.filter = [
+                //     ['CreateTime', '>=', oldDay],
+                //     'and',
+                //     ['CreateTime', '<=', toDay],
+                // ];
+                // }
+                return SendService.sendRequest(
+                    this.http,
+                    this.Controller + '/GetOrderHeads',
+                    'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter });
+            },
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetOrderHead', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostOrderHead', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),

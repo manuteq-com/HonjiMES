@@ -39,7 +39,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderNumber()
         {
-            var key = "";
+            var key = "HJ";
             var dt = DateTime.Now;
             var OrderNo = dt.ToString("yyMMdd");
 
@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = "";
+                var key = "HJ";
                 var OrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.Contains(key + OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
@@ -266,8 +266,9 @@ namespace HonjiMES.Controllers
                             }
                             var dt = DateTime.Now;
                             // var OrderNo = dt.ToString("yyMMdd");
+                            var key = "HJ";
                             var OrderNo = PostOrderMaster_Detail.OrderHead.CreateTime.ToString("yyMMdd");
-                            var NoData = _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.StartsWith(OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                            var NoData = await _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.Contains(key + OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                             var NoCount = NoData.Count() + 1;
                             if (NoCount != 1)
                             {
@@ -289,11 +290,12 @@ namespace HonjiMES.Controllers
                                 OrderNo = PostOrderMaster_Detail.OrderHead.OrderNo,
                                 OrderDate = PostOrderMaster_Detail.OrderHead.OrderDate,
                                 ReplyDate = PostOrderMaster_Detail.OrderHead.ReplyDate,
-                                Customer = PostOrderMaster_Detail.OrderHead.Customer
+                                Customer = PostOrderMaster_Detail.OrderHead.Customer,
+                                OrderType = PostOrderMaster_Detail.OrderHead.OrderType
                             };
                             var DirName = orderHead.OrderNo;
                             orderHead.CustomerNo = OrderHeadData.CustomerNo;//替換客戶單號
-                            orderHead.OrderNo = OrderNo + NoCount.ToString("000");
+                            orderHead.OrderNo = key + OrderNo + NoCount.ToString("000");
                             orderHead.CreateTime = dt;
                             orderHead.CreateUser = MyFun.GetUserID(HttpContext);
                             var OrderDetails = new List<OrderDetail>();
