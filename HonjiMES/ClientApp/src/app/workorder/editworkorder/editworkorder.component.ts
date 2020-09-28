@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Output, Input, ViewChild, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, Input, ViewChild, EventEmitter, HostListener, AfterViewInit } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { Myservice } from 'src/app/service/myservice';
@@ -16,7 +16,7 @@ import { APIResponse } from 'src/app/app.module';
     templateUrl: './editworkorder.component.html',
     styleUrls: ['./editworkorder.component.css']
 })
-export class EditworkorderComponent implements OnInit, OnChanges {
+export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;
@@ -26,6 +26,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
+    @ViewChild(DxButtonComponent, { static: false }) button: DxButtonComponent;
 
     formData: any;
     readOnly: boolean;
@@ -70,6 +71,9 @@ export class EditworkorderComponent implements OnInit, OnChanges {
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; disable: boolean; };
     MachineList: any;
     hasUser: boolean;
+    stopVisible: boolean;
+    SubmitVal: string;
+    keyupEnter: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -89,13 +93,15 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                                                 // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
                                                 s.data.forEach(element => {
                                                     if (element.Permission === 20 && element.Id === res.data.Id) {
+                                                        this.stopVisible = true;
                                                         this.UserList.push(element);
-                                                        s.data.forEach(element2 => {
-                                                            if (element2.Permission === 80) {
-                                                                this.UserList.push(element2);
-                                                            }
-                                                        });
+                                                        // s.data.forEach(element2 => {
+                                                        //     if (element2.Permission === 80) {
+                                                        //         this.UserList.push(element2);
+                                                        //     }
+                                                        // });
                                                     } else if (element.Permission === 80 && element.Id === res.data.Id) {
+                                                        this.stopVisible = false;
                                                         this.UserList.push(element);
                                                     }
                                                 });
@@ -136,6 +142,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         this.validateNumber = this.validateNumber.bind(this);
         // this.CustomerVal = null;
         // this.formData = null;
+        this.stopVisible = false;
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
@@ -213,6 +220,7 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
         // });
+        this.stopVisible = false;
         this.hasUser = false;
         this.disabledValues = [];
         this.GetProcessInfo();
@@ -230,6 +238,12 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         this.UserList = [];
         this.SetUserEditorOptions(this.UserList, null);
         this.onCellPreparedLevel = 0;
+    }
+    ngAfterViewInit() {
+        this.button.instance.registerKeyHandler('enter', function(e) {
+            // console.log(this.keyupEnter);
+            this.keyupEnter = true;
+        });
     }
     GetProcessInfo() {
         this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
@@ -419,6 +433,15 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         }
         return true;
     }
+    onStartClick(e) {
+        this.SubmitVal = 'start';
+    }
+    onStopClick(e) {
+        this.SubmitVal = 'stop';
+    }
+    onReportClick(e) {
+        this.SubmitVal = 'report';
+    }
     ReportByPurchaseNo(workOrderHeadId, serial) {
         Swal.fire({
             title: '請輸入採購單號!',
@@ -486,6 +509,11 @@ export class EditworkorderComponent implements OnInit, OnChanges {
         return true;
     }
     onFormSubmit = async function(e) {
+        // console.log(this.keyupEnter);
+        // if (this.keyupEnter) {
+        //     this.keyupEnter = false;
+        //     return;
+        // }
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
@@ -505,39 +533,48 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 timer: 3000
             });
         } else {
-            // tslint:disable-next-line: forin
-            for (const x in SelectedRows) {
-                if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount <= 0 || SelectedRows[x].ReportCount == null)) {
-                    const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量 必填! (不能為 0)';
-                    notify({
-                        message: msg,
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'error');
-                    cansave = false;
-                    return;
-                }
-            }
-            if (cansave) {
-                // tslint:disable-next-line: forin
-                for (const x in SelectedRows) {
-                    SelectedRows[x].CreateUser = this.formData.CreateUser;
-                    const sendRequest = await SendService.sendRequest(
-                        this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
-                        { key: SelectedRows[x].Id, values: SelectedRows[x] });
-                    if (sendRequest) {
-                        this.dataGrid2.instance.clearSelection();
-                    } else {
-                        debugger;
-                        saveok = false;
-                    }
-                }
+            if (this.SubmitVal === 'stop' || this.SubmitVal === 'start') { // 回報 [工序暫停]/[回復加工]
+                const reportResult = await this.ReportStopOrStart(SelectedRows);
                 this.dataGrid2.instance.refresh();
-                if (saveok) {
+                if (reportResult) {
+                    this.dataGrid2.instance.clearSelection();
                     e.preventDefault();
                     this.childOuter.emit(true);
+                }
+            } else if (this.SubmitVal === 'report') {
+                // tslint:disable-next-line: forin
+                for (const x in SelectedRows) {
+                    if (SelectedRows[x].Status === 2 && (SelectedRows[x].ReportCount <= 0 || SelectedRows[x].ReportCount == null)) {
+                        const msg = SelectedRows[x].ProcessNo + SelectedRows[x].ProcessName + '：回報數量 必填! (不能為 0)';
+                        notify({
+                            message: msg,
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'error');
+                        cansave = false;
+                        return;
+                    }
+                }
+                if (cansave) {
+                    // tslint:disable-next-line: forin
+                    for (const x in SelectedRows) {
+                        SelectedRows[x].CreateUser = this.formData.CreateUser;
+                        const sendRequest = await SendService.sendRequest(
+                            this.http, this.Controller + '/WorkOrderReportAll', 'PUT',
+                            { key: SelectedRows[x].Id, values: SelectedRows[x] });
+                        if (sendRequest) {
+                            this.dataGrid2.instance.clearSelection();
+                        } else {
+                            saveok = false;
+                        }
+                    }
+                    this.dataGrid2.instance.refresh();
+                    if (saveok) {
+                        e.preventDefault();
+                        this.childOuter.emit(true);
+                    }
                 }
             }
         }
@@ -563,5 +600,37 @@ export class EditworkorderComponent implements OnInit, OnChanges {
                 at: 'center top'
             }
         }, type, val);
+    }
+    async ReportStopOrStart(SelectedRows) {
+        let cansave = true;
+        // tslint:disable-next-line: forin
+        for (const x in SelectedRows) {
+            if (SelectedRows[x].Status !== 2 && this.SubmitVal === 'stop') {
+                this.showMessage('warning', '[ ' + SelectedRows[x].ProcessNo + '_' + SelectedRows[x].ProcessName + ' ] 該工序尚未開工!', 3000);
+                cansave = false;
+                return false;
+            }
+            if (SelectedRows[x].Status !== 7 && this.SubmitVal === 'start') {
+                this.showMessage('warning', '[ ' + SelectedRows[x].ProcessNo + '_' + SelectedRows[x].ProcessName + ' ] 該工序不是[暫停]狀態!', 3000);
+                cansave = false;
+                return false;
+            }
+        }
+        if (cansave) {
+            let saveok = true;
+            // tslint:disable-next-line: forin
+            for (const x in SelectedRows) {
+                SelectedRows[x].CreateUser = this.formData.CreateUser;
+                const sendRequest = await SendService.sendRequest(
+                    this.http, this.Controller + '/WorkOrderReportAllStopOrStart', 'PUT',
+                    { key: SelectedRows[x].Id, values: SelectedRows[x] });
+                if (sendRequest) {
+
+                } else {
+                    saveok = false;
+                }
+            }
+            return saveok;
+        }
     }
 }

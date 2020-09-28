@@ -13,8 +13,14 @@
     background-color: #91e0f8;
 }
 .process_start {
-    background-color: #fdf90d21;
+    background-color: #fdf90d73;
 }
 .process_end {
-    background-color: #15fd0d21;
+    background-color: #15fd0d70;
+}
+.process_stop {
+    background-color:#b3b2b2;
+}
+.process_alarm {
+    background-color:#FFB5B5;
 }

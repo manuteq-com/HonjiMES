@@ -713,6 +713,7 @@ namespace HonjiMES.Models
         /// 說明
         /// </summary>
         public string Message { get; set; }
+        public string CodeNo { get; set; }
         public string ProducingMachine { get; set; }
         public int CreateUser { get; set; }
     }

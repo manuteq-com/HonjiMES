@@ -165,11 +165,13 @@ export class WorkorderListComponent implements OnInit {
         // }
     }
     getBlue2Class(data) {
-        if (data === 2) {
+        if (data === 2) { // 開工
             return 'process_start';
-        } else if (data === 3) {
+        } else if (data === 3) { // 完工
             return 'process_end';
-        } else if (data === 4) {
+        } else if (data === 7) { // 工序暫停
+            return 'process_stop';
+        } else if (data === 6) { // 超時完工
             return 'process_alarm';
         }
     }

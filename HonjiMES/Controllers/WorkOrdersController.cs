@@ -946,10 +946,11 @@ namespace HonjiMES.Controllers
                     var checkLog = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
                     if (checkLog.Count() == 0)
                     {
-                        WorkOrderDetails.FirstOrDefault().Status = 2;
+                        WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
                         if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
                         {
                             WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
@@ -1038,16 +1039,16 @@ namespace HonjiMES.Controllers
                             var ActualTimeDiff = DateTime.Now - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? DateTime.Now);
                             if (Convert.ToInt32(ActualTimeDiff.TotalMinutes) > Val)
                             {
-                                WorkOrderDetails.FirstOrDefault().Status = 4;
+                                WorkOrderDetails.FirstOrDefault().Status = 6;// 完工(超時)
                             }
                             else
                             {
-                                WorkOrderDetails.FirstOrDefault().Status = 3;
+                                WorkOrderDetails.FirstOrDefault().Status = 3;// 完工
                             }
                         }
                         else
                         {
-                            WorkOrderDetails.FirstOrDefault().Status = 3;
+                            WorkOrderDetails.FirstOrDefault().Status = 3; // 完工
                         }
 
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
@@ -1056,6 +1057,7 @@ namespace HonjiMES.Controllers
                         WorkOrderDetails.FirstOrDefault().NgCount = (WorkOrderDetails.FirstOrDefault()?.NgCount ?? 0) + WorkOrderReportData.NgCount;
                         WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
@@ -1147,8 +1149,9 @@ namespace HonjiMES.Controllers
                     var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
                     if (checkLogStart.Count() == checkLogEnd.Count())
                     {
-                        WorkOrderDetails.FirstOrDefault().Status = 2;
+                        WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         // WorkOrderDetails.FirstOrDefault().ReCount = WorkOrderReportData.ReCount;
 
@@ -1235,6 +1238,107 @@ namespace HonjiMES.Controllers
                     return await WorkOrderReportRestart(WorkOrderReportData);
                 else
                     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單異常!"));
+            }
+        }
+
+        /// <summary>
+        /// 工單批次作業 (暫停/回復)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportDataAll"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<WorkOrderData>> WorkOrderReportAllStopOrStart(int id, [FromBody] WorkOrderReportDataAll WorkOrderReportDataAll)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
+            if (WorkOrderDetails != null)
+            {
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderDetails.WorkOrderHeadId).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
+                if (WorkOrderDetails.Status == 2) // 回報[工序暫停]
+                {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    var checkLogEnd = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
+                    {
+                        WorkOrderDetails.Status = 7; // 暫停
+                        WorkOrderDetails.CodeNo = WorkOrderReportDataAll.CodeNo;
+                        WorkOrderDetails.ProducingMachine = WorkOrderReportDataAll.ProducingMachine;
+                        WorkOrderDetails.ActualEndTime = DateTime.Now;
+                        WorkOrderDetails.UpdateUser = WorkOrderReportDataAll.CreateUser;
+
+                        WorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
+                            WorkOrderDetailId = WorkOrderDetails.Id,
+                            ReportType = 4, // 工序暫停
+                            DrawNo = WorkOrderDetails.DrawNo,
+                            CodeNo = WorkOrderReportDataAll.CodeNo,
+                            ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
+                            Message = WorkOrderReportDataAll.Message,
+                            StatusO = 2,
+                            StatusN = WorkOrderDetails.Status,
+                            DueStartTime = WorkOrderDetails.DueStartTime,
+                            DueEndTime = WorkOrderDetails.DueEndTime,
+                            ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
+                            ActualEndTime = WorkOrderDetails.ActualEndTime,
+                            CreateTime = DateTime.Now,
+                            CreateUser = WorkOrderReportDataAll.CreateUser,
+                        });
+                    }
+                    else
+                    {
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 2TO7]!"));
+                    }
+                } 
+                else if (WorkOrderDetails.Status == 7) // 回報[回復加工]
+                {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    var checkLogEnd = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if (checkLogStart.Count() == checkLogEnd.Count())
+                    {
+                        WorkOrderDetails.Status = 2; // 開工
+                        WorkOrderDetails.CodeNo = WorkOrderReportDataAll.CodeNo;
+                        WorkOrderDetails.ProducingMachine = WorkOrderReportDataAll.ProducingMachine;
+                        WorkOrderDetails.UpdateUser = WorkOrderReportDataAll.CreateUser;
+
+                        WorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
+                            WorkOrderDetailId = WorkOrderDetails.Id,
+                            ReportType = 5, // 完工再開工回報
+                            DrawNo = WorkOrderDetails.DrawNo,
+                            CodeNo = WorkOrderReportDataAll.CodeNo,
+                            ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
+                            Message = WorkOrderReportDataAll.Message,
+                            StatusO = 7,
+                            StatusN = WorkOrderDetails.Status,
+                            DueStartTime = WorkOrderDetails.DueStartTime,
+                            DueEndTime = WorkOrderDetails.DueEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
+                            CreateTime = DateTime.Now,
+                            CreateUser = WorkOrderReportDataAll.CreateUser,
+                        });
+                    }
+                    else
+                    {
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 7TO2]!"));
+                    }
+                }
+                
+                await _context.SaveChangesAsync();
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK("OK"));
             }
             else
             {
