@@ -36,6 +36,12 @@ namespace HonjiMES.Models
         public ProductLog ProductLog { get; set; }
     }
 
+    public class UserPasswordSet
+    {
+        public string Password { get; set; }
+        public string CheckPassword { get; set; }
+    }
+
     /// <summary>
     /// 原料主檔資訊
     /// </summary>
