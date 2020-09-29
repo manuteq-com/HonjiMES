@@ -54,11 +54,11 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="TempId" caption="品號" [width]="180" editCellTemplate="TempIdEditCellTemplate">
+        <dxi-column dataField="TempId" caption="品號" [width]="260" editCellTemplate="TempIdEditCellTemplate">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別" [width]="200" editCellTemplate="WarehouseEditCellTemplate">
+        <dxi-column dataField="WarehouseId" caption="倉別" [width]="260" editCellTemplate="WarehouseEditCellTemplate">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
@@ -70,7 +70,7 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataId" valueExpr="TempId"></dxo-lookup>
         </dxi-column> -->
 
-        <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
+        <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="100" editCellTemplate="QuantityEditCellTemplate">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <!-- <dxi-column dataField="Price" caption="單價" dataType="number" [width]="80" editCellTemplate="PriceEditCellTemplate">
@@ -97,7 +97,7 @@
                 valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-            <dx-select-box [value]="Warehouseval" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(Warehouseval,data)"
+            <dx-select-box [value]="Warehouseval" (onValueChanged)="WarehouseIdValueChanged($event,data)" (onInitialized)="onInitialized(Warehouseval,data)"
                 [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">

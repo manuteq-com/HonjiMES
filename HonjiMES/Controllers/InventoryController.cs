@@ -391,16 +391,16 @@ namespace HonjiMES.Controllers
                     //// 產生Log
                     if (item.DataType == 1)//material
                     {
-                        var MaterialBasic = _context.MaterialBasics.Find(item.DataId);
-                        var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Material != null)
+                        var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId).Include(x => x.Materials).FirstOrDefault();
+                        var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Material.Count() != 0)
                         {
-                            Material.MaterialLogs.Add(new MaterialLog
+                            Material.First().MaterialLogs.Add(new MaterialLog
                             {
                                 AdjustNo = AdjustData.AdjustNo,
                                 LinkOrder = AdjustData.LinkOrder,
-                                MaterialId = Material.Id,
-                                Original = Material.Quantity,
+                                MaterialId = Material.First().Id,
+                                Original = Material.First().Quantity,
                                 Quantity = item.Quantity,
                                 Price = item.Price,
                                 PriceAll = item.PriceAll,
@@ -414,27 +414,59 @@ namespace HonjiMES.Controllers
                                 CreateTime = dt,
                                 CreateUser = UserID
                             });
-                            tempId = Material.Id;
-                            tempOriginalQuantity = Material.Quantity;
-                            Material.Quantity += item.Quantity;
+                            tempId = Material.First().Id;
+                            tempOriginalQuantity = Material.First().Quantity;
+                            Material.First().Quantity += item.Quantity;
                         }
-                        else
+                        else // 如無倉別資訊，則自動建立
                         {
-                            return Ok(MyFun.APIResponseError("查無 [" + MaterialBasic.MaterialNo + "] 的倉別資訊!"));
+                            MaterialBasic.Materials.Add(new Material
+                            {
+                                MaterialNo = MaterialBasic.MaterialNo,
+                                Name = MaterialBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = MaterialBasic.Specification,
+                                Property = MaterialBasic.Property,
+                                Price = MaterialBasic.Price,
+                                BaseQuantity = 2,
+                                CreateTime = dt,
+                                CreateUser = UserID,
+                                WarehouseId = item.WarehouseId,
+                                MaterialLogs = {new MaterialLog
+                                {
+                                    AdjustNo = AdjustData.AdjustNo,
+                                    LinkOrder = AdjustData.LinkOrder,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remark,
+                                    Message = "庫存調整單",
+                                    CreateTime = dt,
+                                    CreateUser = UserID
+                                }}
+                            });
+                            await _context.SaveChangesAsync();
+                            tempId = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
                         }
                     }
                     else if (item.DataType == 2)//product
                     {
-                        var ProductBasic = _context.ProductBasics.Find(item.DataId);
-                        var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Product != null)
+                        var ProductBasic = _context.ProductBasics.Where(x => x.Id == item.DataId).Include(x => x.Products).FirstOrDefault();
+                        var Product = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Product.Count() != 0)
                         {
-                            Product.ProductLogs.Add(new ProductLog
+                            Product.First().ProductLogs.Add(new ProductLog
                             {
                                 AdjustNo = AdjustData.AdjustNo,
                                 LinkOrder = AdjustData.LinkOrder,
-                                ProductId = Product.Id,
-                                Original = Product.Quantity,
+                                ProductId = Product.First().Id,
+                                Original = Product.First().Quantity,
                                 Quantity = item.Quantity,
                                 Price = item.Price,
                                 PriceAll = item.PriceAll,
@@ -448,27 +480,60 @@ namespace HonjiMES.Controllers
                                 CreateTime = dt,
                                 CreateUser = UserID
                             });
-                            tempId = Product.Id;
-                            tempOriginalQuantity = Product.Quantity;
-                            Product.Quantity += item.Quantity;
+                            tempId = Product.First().Id;
+                            tempOriginalQuantity = Product.First().Quantity;
+                            Product.First().Quantity += item.Quantity;
                         }
-                        else
+                        else // 如無倉別資訊，則自動建立
                         {
-                            return Ok(MyFun.APIResponseError("查無 [" + ProductBasic.ProductNo + "] 的倉別資訊!"));
+                            ProductBasic.Products.Add(new Product
+                            {
+                                ProductNo = ProductBasic.ProductNo,
+                                ProductNumber = ProductBasic.ProductNumber,
+                                Name = ProductBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = ProductBasic.Specification,
+                                Property = ProductBasic.Property,
+                                Price = ProductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = UserID,
+                                WarehouseId = item.WarehouseId,
+                                ProductLogs = {new ProductLog
+                                {
+                                    AdjustNo = AdjustData.AdjustNo,
+                                    LinkOrder = AdjustData.LinkOrder,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remark,
+                                    Message = "庫存調整單",
+                                    CreateTime = dt,
+                                    CreateUser = UserID
+                                }}
+                            });
+                            await _context.SaveChangesAsync();
+                            tempId = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
                         }
                     }
                     else if (item.DataType == 3)//wiproduct
                     {
-                        var WiproductBasic = _context.WiproductBasics.Find(item.DataId);
-                        var Wiproduct = _context.Wiproducts.AsQueryable().Where(x => x.WiproductBasicId == item.DataId && x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                        if (Wiproduct != null)
+                        var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == item.DataId).Include(x => x.Wiproducts).FirstOrDefault();
+                        var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                        if (Wiproduct.Count() != 0)
                         {
-                            Wiproduct.WiproductLogs.Add(new WiproductLog
+                            Wiproduct.First().WiproductLogs.Add(new WiproductLog
                             {
                                 AdjustNo = AdjustData.AdjustNo,
                                 LinkOrder = AdjustData.LinkOrder,
-                                WiproductId = Wiproduct.Id,
-                                Original = Wiproduct.Quantity,
+                                WiproductId = Wiproduct.First().Id,
+                                Original = Wiproduct.First().Quantity,
                                 Quantity = item.Quantity,
                                 Price = item.Price,
                                 PriceAll = item.PriceAll,
@@ -482,13 +547,46 @@ namespace HonjiMES.Controllers
                                 CreateTime = dt,
                                 CreateUser = UserID
                             });
-                            tempId = Wiproduct.Id;
-                            tempOriginalQuantity = Wiproduct.Quantity;
-                            Wiproduct.Quantity += item.Quantity;
+                            tempId = Wiproduct.First().Id;
+                            tempOriginalQuantity = Wiproduct.First().Quantity;
+                            Wiproduct.First().Quantity += item.Quantity;
                         }
-                        else
+                        else // 如無倉別資訊，則自動建立
                         {
-                            return Ok(MyFun.APIResponseError("查無 [" + WiproductBasic.WiproductNo + "] 的倉別資訊!"));
+                            WiproductBasic.Wiproducts.Add(new Wiproduct
+                            {
+                                WiproductNo = WiproductBasic.WiproductNo,
+                                WiproductNumber = WiproductBasic.WiproductNumber,
+                                Name = WiproductBasic.Name,
+                                Quantity = item.Quantity,
+                                Specification = WiproductBasic.Specification,
+                                Property = WiproductBasic.Property,
+                                Price = WiproductBasic.Price,
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = UserID,
+                                WarehouseId = item.WarehouseId,
+                                WiproductLogs = {new WiproductLog
+                                {
+                                    AdjustNo = AdjustData.AdjustNo,
+                                    LinkOrder = AdjustData.LinkOrder,
+                                    Original = 0,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price,
+                                    PriceAll = item.PriceAll,
+                                    Unit = item.Unit,
+                                    UnitCount = item.UnitCount,
+                                    UnitPrice = item.UnitPrice,
+                                    UnitPriceAll = item.UnitPriceAll,
+                                    WorkPrice = item.WorkPrice,
+                                    Reason = item.Remark,
+                                    Message = "庫存調整單",
+                                    CreateTime = dt,
+                                    CreateUser = UserID
+                                }}
+                            });
+                            await _context.SaveChangesAsync();
+                            tempId = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
                         }
                     }
                     else

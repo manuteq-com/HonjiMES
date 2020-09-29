@@ -606,7 +606,11 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         // tslint:disable-next-line: forin
         for (const x in SelectedRows) {
             if (SelectedRows[x].Status !== 2 && this.SubmitVal === 'stop') {
-                this.showMessage('warning', '[ ' + SelectedRows[x].ProcessNo + '_' + SelectedRows[x].ProcessName + ' ] 該工序尚未開工!', 3000);
+                if (SelectedRows[x].Status === 7) {
+                    this.showMessage('warning', '[ ' + SelectedRows[x].ProcessNo + '_' + SelectedRows[x].ProcessName + ' ] 該工序已經暫停!', 3000);
+                } else {
+                    this.showMessage('warning', '[ ' + SelectedRows[x].ProcessNo + '_' + SelectedRows[x].ProcessName + ' ] 該工序尚未開工!', 3000);
+                }
                 cansave = false;
                 return false;
             }

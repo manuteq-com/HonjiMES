@@ -75,14 +75,17 @@ namespace HonjiMES.Controllers
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
+                decimal QuantityTemp = 0;
                 var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                    QuantityTemp = Data.First().Quantity;
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
                     Code = item.Code,
                     Name = item.Name,
+                    Quantity = QuantityTemp,
                     HasWarehouse = Data.Count() != 0
                 });
             }
@@ -143,14 +146,17 @@ namespace HonjiMES.Controllers
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
+                decimal QuantityTemp = 0;
                 var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                    QuantityTemp = Data.First().Quantity;
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
                     Code = item.Code,
                     Name = item.Name,
+                    Quantity = QuantityTemp,
                     HasWarehouse = Data.Count() != 0
                 });
             }
@@ -228,14 +234,17 @@ namespace HonjiMES.Controllers
             foreach (var item in Warehouses)
             {
                 item.Name = item.Code + item.Name;
+                decimal QuantityTemp = 0;
                 var Data = WarehouseData.Where(x => x.WarehouseId == item.Id);
                 if (Data.Count() != 0) {
                     item.Name += " (庫存 " + Data.First().Quantity + ")"; 
+                    QuantityTemp = Data.First().Quantity;
                 }
                 data.Add(new WarehouseForBom {
                     Id = item.Id,
                     Code = item.Code,
                     Name = item.Name,
+                    Quantity = QuantityTemp,
                     HasWarehouse = Data.Count() != 0
                 });
             }

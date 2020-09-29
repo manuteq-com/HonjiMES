@@ -85,7 +85,7 @@ namespace HonjiMES.Controllers
                     DataId = item.ItemId,
                     DataNo = BasicData.DataNo,
                     DataName = BasicData.Name,
-                    WarehouseId = BasicData.WarehouseId,
+                    WarehouseId = BasicData?.WarehouseId ?? 0,
                     Original = item.Original,
                     AftQuantity = item.Original + item.Quantity,
                     Quantity = item.Quantity,
