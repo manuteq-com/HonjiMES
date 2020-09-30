@@ -66,6 +66,7 @@ export class OrderListComponent {
         this.getProductsData();
         this.editorOptions = { onValueChanged: this.onValueChanged };
         this.checkData = this.checkData.bind(this);
+        this.CheckFlagIconClick = this.CheckFlagIconClick.bind(this);
         this.app.GetData('/Customers/GetCustomers').subscribe(
             (s) => {
                 if (s.success) {
@@ -352,6 +353,30 @@ export class OrderListComponent {
         debugger;
         this.detailfilter = this.myform.instance.option('formData');
         this.dataGrid.instance.refresh();
+    }
+    CheckFlagVisible(e) {
+        if (e.row.data.CheckFlag === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    unCheckFlagVisible(e) {
+        if (e.row.data.CheckFlag !== 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    async CheckFlagIconClick(e) {
+        try {
+            const sendRequest = SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: e.row.key});
+            if (sendRequest) {
+                this.dataGrid.instance.refresh();
+            }
+        } catch (error) {
+
+        }
     }
     onValueChanged(e) {
         this.onClickQuery(e);
