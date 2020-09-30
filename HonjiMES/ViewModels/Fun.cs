@@ -313,10 +313,10 @@ namespace HonjiMES.Models
                 ws.GetRow(i).CreateCell(5).SetCellValue(Detailitem.Quantity);//數量
                 ws.GetRow(i).CreateCell(6).SetCellValue(Detailitem.Delivered ?? 0);//已交
                 ws.GetRow(i).CreateCell(7).SetCellValue(Detailitem.Unit);//單位
-                ws.GetRow(i).CreateCell(8).SetCellValue(Detailitem.OriginPrice);//原單價
-                ws.GetRow(i).CreateCell(9).SetCellValue(Detailitem.Discount ?? 0);//折扣率
-                ws.GetRow(i).CreateCell(10).SetCellValue(Detailitem.DiscountPrice ?? 0);//折後單價
-                ws.GetRow(i).CreateCell(11).SetCellValue(Detailitem.Price);//金額
+                ws.GetRow(i).CreateCell(8).SetCellValue((double)Detailitem.OriginPrice);//原單價
+                ws.GetRow(i).CreateCell(9).SetCellValue((double)(Detailitem.Discount ?? 0));//折扣率
+                ws.GetRow(i).CreateCell(10).SetCellValue((double)(Detailitem.DiscountPrice ?? 0));//折後單價
+                ws.GetRow(i).CreateCell(11).SetCellValue((double)Detailitem.Price);//金額
                 ws.GetRow(i).CreateCell(12).SetCellValue(Detailitem.DueDate);//預交日
                 ws.GetRow(i).CreateCell(13).SetCellValue(Detailitem.Remark);//備註
                 ws.GetRow(i).CreateCell(14).SetCellValue(Detailitem.Reply ?? 0);//回覆量
