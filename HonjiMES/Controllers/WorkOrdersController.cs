@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderHeadsRunById(int id)
         {
@@ -104,7 +104,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<MaterialBasic>> GetWorkOrderHeadByWorkOrderNo(string DataNo)
         {
             var WorkOrderHead = await _context.WorkOrderHeads.Where(x => x.WorkOrderNo == DataNo && x.DeleteFlag == 0).ToListAsync();
-            if (WorkOrderHead.Count() == 0) {
+            if (WorkOrderHead.Count() == 0)
+            {
                 return Ok(MyFun.APIResponseError("查無工單號碼! [ " + DataNo + " ]"));
             }
             return Ok(MyFun.APIResponseOK(WorkOrderHead.FirstOrDefault()));
@@ -189,9 +190,12 @@ namespace HonjiMES.Controllers
                 foreach (var item in OrderData.OrderDetail)
                 {
                     var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
-                    if (CheckProductBasic.Count() == 0) {
+                    if (CheckProductBasic.Count() == 0)
+                    {
                         OrderDetailList.Add(item);
-                    } else {
+                    }
+                    else
+                    {
                         CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
                     }
                 }
@@ -239,9 +243,12 @@ namespace HonjiMES.Controllers
                 foreach (var item in OrderData.OrderDetail)
                 {
                     var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
-                    if (CheckProductBasic.Count() == 0) {
+                    if (CheckProductBasic.Count() == 0)
+                    {
                         OrderDetailList.Add(item);
-                    } else {
+                    }
+                    else
+                    {
                         CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
                     }
                 }
@@ -939,10 +946,11 @@ namespace HonjiMES.Controllers
                     var checkLog = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
                     if (checkLog.Count() == 0)
                     {
-                        WorkOrderDetails.FirstOrDefault().Status = 2;
+                        WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
                         if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
                         {
                             WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
@@ -1024,20 +1032,32 @@ namespace HonjiMES.Controllers
                     var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
                     if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
                     {
-                        // // Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes)
-                        var ActualTimeDiff = DateTime.Now - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? DateTime.Now);
                         var Val = Convert.ToInt32(WorkOrderDetails.FirstOrDefault().ProcessTime * WorkOrderReportData.ReCount);
-                        if(Convert.ToInt32(ActualTimeDiff.TotalMinutes) > Val){
-                            WorkOrderDetails.FirstOrDefault().Status = 4;
-                        }else{
-                            WorkOrderDetails.FirstOrDefault().Status = 3;
+                        if (Val != 0)
+                        {
+                            // // Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes)
+                            var ActualTimeDiff = DateTime.Now - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? DateTime.Now);
+                            if (Convert.ToInt32(ActualTimeDiff.TotalMinutes) > Val)
+                            {
+                                WorkOrderDetails.FirstOrDefault().Status = 6;// 完工(超時)
+                            }
+                            else
+                            {
+                                WorkOrderDetails.FirstOrDefault().Status = 3;// 完工
+                            }
                         }
+                        else
+                        {
+                            WorkOrderDetails.FirstOrDefault().Status = 3; // 完工
+                        }
+
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
                         WorkOrderDetails.FirstOrDefault().NgCount = (WorkOrderDetails.FirstOrDefault()?.NgCount ?? 0) + WorkOrderReportData.NgCount;
                         WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
 
                         WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
@@ -1129,8 +1149,9 @@ namespace HonjiMES.Controllers
                     var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
                     if (checkLogStart.Count() == checkLogEnd.Count())
                     {
-                        WorkOrderDetails.FirstOrDefault().Status = 2;
+                        WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                        WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
                         // WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
                         // WorkOrderDetails.FirstOrDefault().ReCount = WorkOrderReportData.ReCount;
 
@@ -1224,13 +1245,114 @@ namespace HonjiMES.Controllers
             }
         }
 
+        /// <summary>
+        /// 工單批次作業 (暫停/回復)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderReportDataAll"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<WorkOrderData>> WorkOrderReportAllStopOrStart(int id, [FromBody] WorkOrderReportDataAll WorkOrderReportDataAll)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var WorkOrderDetails = await _context.WorkOrderDetails.FindAsync(id);
+            if (WorkOrderDetails != null)
+            {
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderDetails.WorkOrderHeadId).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
+                if (WorkOrderDetails.Status == 2) // 回報[工序暫停]
+                {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
+                    var checkLogEnd = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
+                    {
+                        WorkOrderDetails.Status = 7; // 暫停
+                        WorkOrderDetails.CodeNo = WorkOrderReportDataAll.CodeNo;
+                        WorkOrderDetails.ProducingMachine = WorkOrderReportDataAll.ProducingMachine;
+                        WorkOrderDetails.ActualEndTime = DateTime.Now;
+                        WorkOrderDetails.UpdateUser = WorkOrderReportDataAll.CreateUser;
+
+                        WorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
+                            WorkOrderDetailId = WorkOrderDetails.Id,
+                            ReportType = 4, // 工序暫停
+                            DrawNo = WorkOrderDetails.DrawNo,
+                            CodeNo = WorkOrderReportDataAll.CodeNo,
+                            ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
+                            Message = WorkOrderReportDataAll.Message,
+                            StatusO = 2,
+                            StatusN = WorkOrderDetails.Status,
+                            DueStartTime = WorkOrderDetails.DueStartTime,
+                            DueEndTime = WorkOrderDetails.DueEndTime,
+                            ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
+                            ActualEndTime = WorkOrderDetails.ActualEndTime,
+                            CreateTime = DateTime.Now,
+                            CreateUser = WorkOrderReportDataAll.CreateUser,
+                        });
+                    }
+                    else
+                    {
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 2TO7]!"));
+                    }
+                } 
+                else if (WorkOrderDetails.Status == 7) // 回報[回復加工]
+                {
+                    // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                    var checkLogStart = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                    var checkLogEnd = WorkOrderDetails.WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportDataAll.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
+                    if (checkLogStart.Count() == checkLogEnd.Count())
+                    {
+                        WorkOrderDetails.Status = 2; // 開工
+                        WorkOrderDetails.CodeNo = WorkOrderReportDataAll.CodeNo;
+                        WorkOrderDetails.ProducingMachine = WorkOrderReportDataAll.ProducingMachine;
+                        WorkOrderDetails.UpdateUser = WorkOrderReportDataAll.CreateUser;
+
+                        WorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
+                            WorkOrderDetailId = WorkOrderDetails.Id,
+                            ReportType = 5, // 完工再開工回報
+                            DrawNo = WorkOrderDetails.DrawNo,
+                            CodeNo = WorkOrderReportDataAll.CodeNo,
+                            ProducingMachine = WorkOrderReportDataAll.ProducingMachine,
+                            Message = WorkOrderReportDataAll.Message,
+                            StatusO = 7,
+                            StatusN = WorkOrderDetails.Status,
+                            DueStartTime = WorkOrderDetails.DueStartTime,
+                            DueEndTime = WorkOrderDetails.DueEndTime,
+                            ActualStartTime = DateTime.Now,
+                            ActualEndTime = null,
+                            CreateTime = DateTime.Now,
+                            CreateUser = WorkOrderReportDataAll.CreateUser,
+                        });
+                    }
+                    else
+                    {
+                        return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 7TO2]!"));
+                    }
+                }
+                
+                await _context.SaveChangesAsync();
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK("OK"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單異常!"));
+            }
+        }
+
         public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail, int TempNo)
         {
             var WorkOrderHeadList = new List<WorkOrderHead>();
             if (OrderDetail.ProductBasicId != 0)
             {
                 //取得工單號
-                var key = "WO";
+                var key = "HJ";
                 var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
@@ -1263,9 +1385,11 @@ namespace HonjiMES.Controllers
 
                     StockInfo = "無庫存";
                     var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301");
-                    if (WarehousesInfo.Count() != 0) {
+                    if (WarehousesInfo.Count() != 0)
+                    {
                         var ProductsInfo = BasicData.Products.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
-                        if (ProductsInfo.Count() != 0) {
+                        if (ProductsInfo.Count() != 0)
+                        {
                             StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
                         }
                     }
@@ -1320,7 +1444,7 @@ namespace HonjiMES.Controllers
             if (OrderToWorkCheckData.OrderDetail.ProductBasicId != 0)
             {
                 //取得工單號
-                var key = "WO";
+                var key = "HJ";
                 var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
@@ -1469,7 +1593,7 @@ namespace HonjiMES.Controllers
                         var BasicDataID = 0;
                         var BasicDataNo = "";
                         var BasicDataName = "";
-                        var StockInfo ="";
+                        var StockInfo = "";
                         var Warehouses = _context.Warehouses.Where(x => x.DeleteFlag == 0);
                         if (item.MaterialBasicId != null)
                         {
@@ -1478,12 +1602,14 @@ namespace HonjiMES.Controllers
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.MaterialNo;
                             BasicDataName = BasicData.Name;
-                            
+
                             StockInfo = "無庫存";
                             var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "101");
-                            if (WarehousesInfo.Count() != 0) {
+                            if (WarehousesInfo.Count() != 0)
+                            {
                                 var ProductsInfo = BasicData.Materials.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
-                                if (ProductsInfo.Count() != 0) {
+                                if (ProductsInfo.Count() != 0)
+                                {
                                     StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
                                 }
                             }
@@ -1495,12 +1621,14 @@ namespace HonjiMES.Controllers
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.ProductNo;
                             BasicDataName = BasicData.Name;
-                            
+
                             StockInfo = "無庫存";
                             var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301");
-                            if (WarehousesInfo.Count() != 0) {
+                            if (WarehousesInfo.Count() != 0)
+                            {
                                 var ProductsInfo = BasicData.Products.Where(x => x.DeleteFlag == 0 && x.WarehouseId == WarehousesInfo.FirstOrDefault().Id).ToList();
-                                if (ProductsInfo.Count() != 0) {
+                                if (ProductsInfo.Count() != 0)
+                                {
                                     StockInfo = WarehousesInfo.FirstOrDefault().Code + WarehousesInfo.FirstOrDefault().Name + " " + ProductsInfo.FirstOrDefault().Quantity;
                                 }
                             }
@@ -1620,11 +1748,11 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<ResourceProcessData>> GetProcessByMachineName(string machine)
         {
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine && 
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine &&
             x.WorkOrderHead.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || x.WorkOrderHead.Status == 5))
             .Include(x => x.WorkOrderHead).ToListAsync();
             return Ok(MyFun.APIResponseOK(WorkOrderDetails));
-        }    
+        }
 
         /// <summary>
         /// 產報工單PDF

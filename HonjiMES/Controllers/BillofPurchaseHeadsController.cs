@@ -46,7 +46,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BillofPurchaseHead>>> GetBillofPurchaseNumber()
         {
-            var key = "BOP";
+            var key = "PO";
             var dt = DateTime.Now;
             var BillofPurchaseNo = dt.ToString("yyMMdd");
 
@@ -79,7 +79,7 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = "BOP";
+                var key = "PO";
                 var BillofPurchaseNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(key + BillofPurchaseNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
@@ -226,6 +226,7 @@ namespace HonjiMES.Controllers
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
 
                 var dt = DateTime.Now;
+                // var key = "PO";
                 // var No = dt.ToString("yyMMdd");
                 // var NoData = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(No) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
                 // var NoCount = NoData.Count() + 1;
@@ -236,7 +237,7 @@ namespace HonjiMES.Controllers
                 //         NoCount = NoLast + 1;
                 //     }
                 // }
-                // Head.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
+                // Head.BillofPurchaseNo = key + No + NoCount.ToString("000");//進貨單  key + 年月日(西元年後2碼) + 001(當日流水號)
                 var checkBillofPurchaseNo = _context.BillofPurchaseHeads.AsQueryable().Where(x => x.BillofPurchaseNo.Contains(Head.BillofPurchaseNo) && x.DeleteFlag == 0).Count();
                 if (checkBillofPurchaseNo != 0)
                 {
@@ -343,8 +344,9 @@ namespace HonjiMES.Controllers
                             NoCount = NoLast + 1;
                         }
                     }
+                    var key = "PO";
                     var BillofPurchaseHead = new BillofPurchaseHead();
-                    BillofPurchaseHead.BillofPurchaseNo = "BOP" + No + NoCount.ToString("000");//進貨單  BOP + 年月日(西元年後2碼) + 001(當日流水號)
+                    BillofPurchaseHead.BillofPurchaseNo = key + No + NoCount.ToString("000");//進貨單  key + 年月日(西元年後2碼) + 001(當日流水號)
                     BillofPurchaseHead.BillofPurchaseDate = dt;
                     BillofPurchaseHead.CreateTime = dt;
                     BillofPurchaseHead.CreateUser = MyFun.GetUserID(HttpContext);

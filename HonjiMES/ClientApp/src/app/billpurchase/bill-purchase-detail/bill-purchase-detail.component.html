@@ -148,7 +148,7 @@
         </app-bill-purchase-checkin>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="進貨單驗退" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="460"
+<dx-popup [showTitle]="true" title="進貨單驗退" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="430"
     [(visible)]="popupVisibleRe">
     <div *dxTemplate="let data of 'content'">
         <app-bill-purchase-return (childOuter)="popup_result($event)" [itemkeyval]="bopData" [modval]="mod">

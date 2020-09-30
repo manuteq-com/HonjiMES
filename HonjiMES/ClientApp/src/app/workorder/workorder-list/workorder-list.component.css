@@ -67,6 +67,9 @@
 .process_end {
     background-color:#9afd97;
 }
+.process_stop {
+    background-color:#b3b2b2;
+}
 .process_alarm {
     background-color:#FFB5B5;
 }

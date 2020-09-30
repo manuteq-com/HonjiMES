@@ -2,9 +2,9 @@
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="ReturnNo">
+        <!-- <dxi-item dataField="ReturnNo">
             <dxo-label text="銷退單號"></dxo-label>
-        </dxi-item>
+        </dxi-item> -->
         <dxi-item dataField="WarehouseId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
             <dxi-validation-rule type="required" message="銷退倉 必填"></dxi-validation-rule>
             <dxo-label text="銷退倉"></dxo-label>
@@ -24,8 +24,8 @@
     <div class="col-auto-12 mt-1">
         <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="buttondisabled"></dx-button>
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='更新銷退單號' type='default' icon='refresh' [useSubmitBehavior]="false"
-            (onClick)="refreshReturnNo()"></dx-button>
+        <!-- <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='更新銷退單號' type='default' icon='refresh' [useSubmitBehavior]="false"
+            (onClick)="refreshReturnNo()"></dx-button> -->
     </div>
 
 </form>

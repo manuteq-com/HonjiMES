@@ -103,7 +103,7 @@ namespace HonjiMES.Models
         public int DataId { get; set; }
         public string DataNo { get; set; }
         public string DataName { get; set; }
-        public int? WarehouseId { get; set; }
+        public int WarehouseId { get; set; }
         public decimal Original { get; set; }
         public decimal AftQuantity { get; set; }
         public decimal Quantity { get; set; }
@@ -715,6 +715,7 @@ namespace HonjiMES.Models
         /// 說明
         /// </summary>
         public string Message { get; set; }
+        public string CodeNo { get; set; }
         public string ProducingMachine { get; set; }
         public int CreateUser { get; set; }
     }
@@ -981,6 +982,7 @@ namespace HonjiMES.Models
     public class WarehouseForBom : Warehouse
     {
         public bool HasWarehouse { get; set; }
+        public decimal Quantity { get; set; }
     }
 
 

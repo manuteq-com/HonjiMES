@@ -39,7 +39,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderHead>>> GetOrderNumber()
         {
-            var key = "HJ";
+            var key = "ON";
             var dt = DateTime.Now;
             var OrderNo = dt.ToString("yyMMdd");
 
@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
         {
             if (CreateNoData != null)
             {
-                var key = "HJ";
+                var key = "ON";
                 var OrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
                 var NoData = await _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.Contains(key + OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
@@ -266,7 +266,7 @@ namespace HonjiMES.Controllers
                             }
                             var dt = DateTime.Now;
                             // var OrderNo = dt.ToString("yyMMdd");
-                            var key = "HJ";
+                            var key = "ON";
                             var OrderNo = PostOrderMaster_Detail.OrderHead.CreateTime.ToString("yyMMdd");
                             var NoData = await _context.OrderHeads.AsQueryable().Where(x => x.OrderNo.Contains(key + OrderNo) && x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                             var NoCount = NoData.Count() + 1;

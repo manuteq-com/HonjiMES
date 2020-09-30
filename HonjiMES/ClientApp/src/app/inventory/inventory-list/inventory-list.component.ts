@@ -116,45 +116,55 @@ export class InventoryListComponent implements OnInit, OnChanges {
         const dataType = basicData.DataType;
         const dataId = basicData.DataId;
         if (dataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                        this.minValue = -element.Quantity;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal(dataType);
                 }
             );
         } else if (dataType === 2) {    // 查詢成品
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+            // this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
+            //     (s) => {
+            //         this.WarehouseList = [];
+            //         s.data.forEach((element, index) => {
+            //             element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+            //             this.WarehouseList[index] = element.Warehouse;
+            //             this.Warehouseval = this.WarehouseList[0].Id;
+            //             this.minValue = -element.Quantity;
+            //         });
+            //     }
+            // );
+            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                        this.minValue = -element.Quantity;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal(dataType);
                 }
             );
         } else if (dataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + dataId).subscribe(
+            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                        this.minValue = -element.Quantity;
-                    });
+                    this.WarehouseList = s.data;
+                    this.UpdateVal(dataType);
                 }
             );
         }
         // const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         // this.DataType = basicData.DataType;
         // this.DataId = basicData.DataId;
+    }
+    UpdateVal(dataType) {
+        if (dataType === 1) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+        } else if (dataType === 2) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        } else {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null;
+        }
+    }
+    WarehouseIdValueChanged(e, data) {
+        // debugger;
+        data.setValue(e.value);
+        this.minValue = -this.WarehouseList.find(x => x.Id === e.value).Quantity;
     }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);

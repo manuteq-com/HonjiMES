@@ -100,7 +100,7 @@ namespace HonjiMES.Controllers
             }
             var ProductBasics = _context.ProductBasics.Find(requisition.ProductBasicId);
 
-            var key = "PK";
+            var key = "MS";
             var dt = DateTime.Now;
             var RequisitionNo = dt.ToString("yyMMdd");
 
@@ -215,7 +215,7 @@ namespace HonjiMES.Controllers
                 var WorkOrderHeadData = WorkOrderHeads.FirstOrDefault();
                 var ProductBasics = _context.ProductBasics.Find(WorkOrderHeadData.DataId);
 
-                var key = "PK";
+                var key = "MS";
                 var dt = DateTime.Now;
                 var RequisitionNo = dt.ToString("yyMMdd");
 

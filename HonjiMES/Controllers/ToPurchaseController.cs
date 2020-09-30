@@ -56,13 +56,13 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<BillofPurchaseReturn>> GetBillofPurchaseReturnNo()
         {
-            var ReturnNoName = "BOPR";
-            var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(ReturnNoName)).OrderByDescending(x => x.CreateTime).ToListAsync();
+            var key = "POR";
+            var NoData = await _context.BillofPurchaseReturns.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ReturnNo.Contains(key)).OrderByDescending(x => x.CreateTime).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1)
             {
                 var LastReturnNo = NoData.FirstOrDefault().ReturnNo;
-                var LastLength = LastReturnNo.Length - ReturnNoName.Length;
+                var LastLength = LastReturnNo.Length - key.Length;
                 var NoLast = Int32.Parse(LastReturnNo.Substring(LastReturnNo.Length - LastLength, LastLength));
                 if (NoCount <= NoLast)
                 {
@@ -71,7 +71,7 @@ namespace HonjiMES.Controllers
             }
             var ReturnData = new BillofPurchaseReturn
             {
-                ReturnNo = ReturnNoName + NoCount.ToString("000000")
+                ReturnNo = key + NoCount.ToString("000000")
             };
             return Ok(MyFun.APIResponseOK(ReturnData));
         }
@@ -91,7 +91,7 @@ namespace HonjiMES.Controllers
                 var purchaseDetail = PostPurchaseMaster_Detail.PurchaseDetails;
                 var DirName = purchaseHead.PurchaseNo;
                 // var key = CreateNoData.Type == 10 ? "PI" : CreateNoData.Type == 20 ? "PO" : "PS";
-                var key = "PI"; // 採購單號開頭一致，只用種類區分。 2020/09/11
+                var key = "BC"; // 採購單號開頭一致，只用種類區分。 2020/09/11
                 var dt = DateTime.Now;
 
                 purchaseHead.PurchaseNo = purchaseHead.PurchaseNo;
@@ -1337,7 +1337,8 @@ namespace HonjiMES.Controllers
             // BillofPurchaseDetails.BillofPurchaseReturns.Add(BillofPurchaseReturn);
             BillofPurchaseDetails.BillofPurchaseReturns.Add(new BillofPurchaseReturn()
             {
-                ReturnNo = BillofPurchaseReturn.ReturnNo,
+                // ReturnNo = BillofPurchaseReturn.ReturnNo,
+                ReturnNo = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                 BillofPurchaseDetailId = BillofPurchaseReturn.BillofPurchaseDetailId,
                 WarehouseId = BillofPurchaseReturn.WarehouseId,
                 Quantity = BillofPurchaseReturn.Quantity,
@@ -1389,7 +1390,8 @@ namespace HonjiMES.Controllers
                 }
                 Material.MaterialLogs.Add(new MaterialLog
                 {
-                    LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    // LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Material.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
                     Price = BillofPurchaseReturn.Price,
@@ -1414,7 +1416,8 @@ namespace HonjiMES.Controllers
                 }
                 Product.ProductLogs.Add(new ProductLog
                 {
-                    LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    // LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Product.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
                     Price = BillofPurchaseReturn.Price,
@@ -1439,7 +1442,8 @@ namespace HonjiMES.Controllers
                 }
                 Wiproduct.WiproductLogs.Add(new WiproductLog
                 {
-                    LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    // LinkOrder = BillofPurchaseReturn.ReturnNo,
+                    LinkOrder = BillofPurchaseDetails.BillofPurchase.BillofPurchaseNo,
                     Original = Wiproduct.Quantity,
                     Quantity = (int)BillofPurchaseReturn.Quantity,
                     Price = BillofPurchaseReturn.Price,
