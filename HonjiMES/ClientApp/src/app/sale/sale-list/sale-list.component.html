@@ -11,6 +11,8 @@
         <dx-button class="insertbtn" stylingMode="contained" text="新增銷貨單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
+        <dx-button class="insertbtn ml-4" stylingMode="contained" text="銷貨單總覽" type="success" [width]="130" (onClick)="overviewpopup($event)">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -188,6 +190,13 @@
     [(visible)]="resalepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-re-order-sale (childOuter)="resalepopup_result($event)" [itemkeyval]="resaleitemkey"></app-re-order-sale>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="銷貨單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
+    [(visible)]="overviewpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-sale-overview (childOuter)="creatpopup_result($event)"></app-sale-overview>
     </div>
 </dx-popup>
 

@@ -118,6 +118,8 @@ import { InventorySearchComponent } from './inventory/inventory-search/inventory
 import { WorkorderCloseComponent } from './workorder/workorder-close/workorder-close.component';
 import { UserQrcodeComponent } from './setting/user-qrcode/user-qrcode.component';
 import { UserPasswordComponent } from './setting/user-password/user-password.component';
+import { OrderOverviewComponent } from './order/order-overview/order-overview.component';
+import { SaleOverviewComponent } from './sale/sale-overview/sale-overview.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -250,7 +252,9 @@ export function tokenGetter() {
         InventorySearchComponent,
         WorkorderCloseComponent,
         UserQrcodeComponent,
-        UserPasswordComponent
+        UserPasswordComponent,
+        OrderOverviewComponent,
+        SaleOverviewComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

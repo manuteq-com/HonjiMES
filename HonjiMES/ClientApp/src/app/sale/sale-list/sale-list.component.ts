@@ -57,6 +57,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     saleHeadId: any;
     Url = '';
     UserList: any;
+    overviewpopupVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderStatus();
@@ -169,6 +170,9 @@ export class SaleListComponent implements OnInit, OnChanges {
     creatdata() {
         this.randomkey = new Date().getTime();
         this.creatpopupVisible = true;
+    }
+    overviewpopup(e) {
+        this.overviewpopupVisible = true;
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;

@@ -16,6 +16,8 @@
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130"
             (onClick)="creatdata()" [visible]="app.checkAddRoles()">
         </dx-button>
+        <dx-button class="insertbtn ml-4" stylingMode="contained" text="訂單總覽" type="success" [width]="130" (onClick)="overviewpopup()">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -114,5 +116,12 @@
     <div *dxTemplate="let data of 'content'">
         <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey"
             [exceldata]="exceldata"></app-creatorder>
+    </div>
+</dx-popup>
+
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="700"
+    [(visible)]="overviewpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-order-overview (childOuter)="creatpopup_result($event)"></app-order-overview>
     </div>
 </dx-popup>

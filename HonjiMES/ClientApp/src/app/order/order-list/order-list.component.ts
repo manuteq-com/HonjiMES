@@ -45,6 +45,7 @@ export class OrderListComponent {
     UserList: any;
     randomkey: number;
     OrderTypeList: any;
+    overviewpopupVisible = false;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
@@ -166,6 +167,9 @@ export class OrderListComponent {
     creatdata() {
         this.randomkey = new Date().getTime();
         this.creatpopupVisible = true;
+    }
+    overviewpopup(e) {
+        this.overviewpopupVisible = true;
     }
     updatepopup_result(e) {
         this.dataGrid.instance.refresh();

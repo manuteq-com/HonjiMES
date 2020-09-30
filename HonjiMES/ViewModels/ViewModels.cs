@@ -76,6 +76,8 @@ namespace HonjiMES.Models
         public string OrderNo { get; set; }
         public int Serial { get; set; }
         public string MachineNo { get; set; }
+        public string SaleNo { get; set; }
+        public DateTime? SaleDate { get; set; }
     }
 
     /// <summary>
@@ -916,6 +918,7 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public string Message { get; set; }
     }
+
     public class Suppliers
     {
         public int Id { get; set; }

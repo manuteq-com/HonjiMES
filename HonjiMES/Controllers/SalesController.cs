@@ -217,5 +217,52 @@ namespace HonjiMES.Controllers
         {
             return _context.Sales.Any(e => e.Id == id);
         }
+
+
+        /// <summary>
+        /// 查詢銷貨單全部資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleData(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+           _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 )
+            .Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.Sale).OrderByDescending(x => x.Sale.SaleDate)
+            .Select(x => new SaleDetailNewData
+            {
+                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                Id = x.Id,
+                SaleId = x.SaleId,
+                OrderId = x.OrderId,
+                OrderDetailId = x.OrderDetailId,
+                ProductBasicId = x.ProductBasicId,
+                ProductId = x.ProductId,
+                SaleNo = x.Sale.SaleNo,
+                SaleDate = x.Sale.SaleDate,
+                CustomerNo = x.Order.CustomerNo,
+                OrderNo = x.Order.OrderNo,
+                Serial = x.OrderDetail.Serial,
+                MachineNo = x.OrderDetail.MachineNo,
+                ProductNo = x.ProductNo,
+                Status = x.Status,
+                Name = x.Name,
+                Specification = x.Specification,
+                Quantity = x.Quantity,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                Remarks = x.Remarks,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                DeleteFlag = x.DeleteFlag,
+            });
+           // var data = SaleDetailNews.ToListAsync();
+            var FromQueryResult =await  MyFun.ExFromQueryResultAsync(SaleDetailNews, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }

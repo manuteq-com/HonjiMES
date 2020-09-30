@@ -586,5 +586,19 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(orderHead));
         }
+
+        /// <summary>
+        /// 查詢訂單全部資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderData(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0).Include(x => x.Order);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }
