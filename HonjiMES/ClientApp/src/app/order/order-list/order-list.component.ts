@@ -370,7 +370,7 @@ export class OrderListComponent {
     }
     async CheckFlagIconClick(e) {
         try {
-            const sendRequest = SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: e.row.key});
+            const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: e.row.key});
             if (sendRequest) {
                 this.dataGrid.instance.refresh();
             }
