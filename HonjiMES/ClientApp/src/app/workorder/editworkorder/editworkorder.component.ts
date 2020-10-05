@@ -74,6 +74,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     stopVisible: boolean;
     SubmitVal: string;
     keyupEnter: boolean;
+    HasPermission: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -94,6 +95,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                                                 s.data.forEach(element => {
                                                     if (element.Permission === 20 && element.Id === res.data.Id) {
                                                         this.stopVisible = true;
+                                                        this.HasPermission = true;
                                                         this.UserList.push(element);
                                                         // s.data.forEach(element2 => {
                                                         //     if (element2.Permission === 80) {
@@ -102,9 +104,13 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                                                         // });
                                                     } else if (element.Permission === 80 && element.Id === res.data.Id) {
                                                         this.stopVisible = false;
+                                                        this.HasPermission = false;
                                                         this.UserList.push(element);
                                                     }
                                                 });
+                                                this.disabledValues = [];
+                                                this.dataGrid2.instance.clearSelection();
+                                                this.dataGrid2.instance.refresh();
                                                 this.SetUserEditorOptions(this.UserList, res.data.Id);
                                             }
                                         }
@@ -234,9 +240,30 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             }
         );
 
-        this.buttondisabled = true;
-        this.UserList = [];
-        this.SetUserEditorOptions(this.UserList, null);
+        // this.buttondisabled = true;
+        // this.UserList = [];
+        // this.SetUserEditorOptions(this.UserList, null);
+
+        //// 測試用暫時加入，可選人員
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.buttondisabled = false;
+                    this.UserList = [];
+                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
+                            this.UserList.push(element);
+                        }
+                    });
+                    this.SetUserEditorOptions(this.UserList, null);
+                }
+            }
+        );
+
+        this.HasPermission = false;
         this.onCellPreparedLevel = 0;
     }
     ngAfterViewInit() {
@@ -342,7 +369,10 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     }
     onCellPrepared(e: any) {
         if (e.rowType === 'data' && e.column.command === 'select') {
-            if (e.data.Type === 1 || (e.data.Type === 2 && e.data.Status === 2)) { // 種類為委外
+            if (e.data.Type === 1 || // 種類為委外
+                (e.data.Type === 2 && e.data.Status === 2) || // 種類為委外(工單委外) // 已暫停使用
+                (e.data.Status === 7 && !this.HasPermission) // 狀態為暫停
+                ) {
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);

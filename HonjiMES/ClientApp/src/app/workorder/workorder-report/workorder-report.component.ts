@@ -175,6 +175,25 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.UserList = [];
         this.SetUserEditorOptions(this.UserList, null);
 
+        //// 測試用暫時加入，可選人員
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.buttondisabled = false;
+                    this.UserList = [];
+                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
+                            this.UserList.push(element);
+                        }
+                    });
+                    this.SetUserEditorOptions(this.UserList, null);
+                }
+            }
+        );
+
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {

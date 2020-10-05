@@ -150,6 +150,10 @@ export class WorkorderListComponent implements OnInit {
                     this.ReportHeight = 800;
                 } else if (e[colData.key].value3 === 4) {
                     this.ReportHeight = 800;
+                } else if (e[colData.key].value3 === 6) {
+                    this.ReportHeight = 750;
+                } else if (e[colData.key].value3 === 7) {
+                    this.ReportHeight = 750;
                 }
             }
         }
