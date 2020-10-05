@@ -1,0 +1,9 @@
+.insertbtn {
+    margin-top: -60px;
+    border-radius: 2px;
+    /* margin-left: 30px; */
+}
+.buttongroup {
+    position: absolute;
+    right: 20px;
+}

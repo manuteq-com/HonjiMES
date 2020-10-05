@@ -11,6 +11,7 @@ import { SendService } from 'src/app/shared/mylib';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sale-overview',
@@ -27,34 +28,38 @@ export class SaleOverviewComponent implements OnInit {
     itemkey: number;
     Supplierlist: any;
     remoteOperations: boolean;
-    OrderList: any;
+    WarehouseList: any;
     OrderTypeList: any;
     editorOptions: any;
     detailfilter: any;
     selectSaleType: any;
     SaleTypeList: any;
+    readOnly: boolean;
+    tosalekey: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-        debugger;
+        this.readOnly = true;
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
         this.selectSaleType = myservice.getSaleOrderStatus();
-        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+        this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.getdata();
-        debugger;
-        this.app.GetData('/OrderHeads/GetOrderHeads').subscribe(
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 if (s.success) {
-                    this.OrderList = s.data;
+                    s.data.forEach(element => {
+                        element.Name = element.Code + '_' + element.Name;
+                    });
+                    this.WarehouseList = s.data;
                 }
             }
         );
+
         this.selectSaleType.unshift({Id: null, Name: '全部資料'});
         this.SaleTypeList = {
             dataSource: this.selectSaleType,
             displayExpr: 'Name',
             valueExpr: 'Id',
-            searchEnabled: true,
-            onValueChanged: this.onValueChanged.bind(this)
+            searchEnabled: true
         };
     }
     getdata() {
@@ -64,10 +69,7 @@ export class SaleOverviewComponent implements OnInit {
                 this.http,
                 this.Controller + '/GetSaleData',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetSaleData', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetSaleData', 'GET', { key })
         });
     }
     onFocusedRowChanging(e) {
@@ -91,12 +93,6 @@ export class SaleOverviewComponent implements OnInit {
         }
     }
     onValueChanged(e) {
-        debugger;
-        if (e.value === null) {
-            this.dataGrid.instance.clearFilter();
-        } else {
-            this.dataGrid.instance.filter(['Status', '=', e.value]);
-        }
     }
     ngOnInit() {}
     onDataErrorOccurred(e) {
@@ -114,7 +110,37 @@ export class SaleOverviewComponent implements OnInit {
 
     }
     onEditorPreparing(e) {
+        if (e.row && (e.dataField === 'Warehouse' || e.dataField === 'SaleQuantity')) {
+            e.editorOptions.readOnly = true;
+            if (e.row.isSelected === true) {
+                // e.editorOptions = true;
+                e.editorOptions.readOnly = false;
+            }
+        }
     }
-    selectionChanged(e) {
+
+    async onFormSubmit(e) {
+        debugger;
+        this.dataGrid.instance.saveEditData();
+        this.tosalekey = null;
+        this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
+        if (this.tosalekey.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何銷貨項目',
+                html: '請勾選需銷貨的項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            let dataCheck = true;
+            this.dataSourceDB.forEach(element => {
+                if (element.SaleDate === undefined || element.SaleQuantity === undefined) {
+                    dataCheck = false;
+                }
+            });
+        }
     }
+
 }
