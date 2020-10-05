@@ -48,7 +48,35 @@ namespace HonjiMES.Controllers
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0);
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime);
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
+            {
+                Id = x.Id,
+                WorkOrderNo = x.WorkOrderNo,
+                OrderDetailId = x.OrderDetailId,
+                MachineNo = x.MachineNo,
+                DataType = x.DataType,
+                DataId = x.DataId,
+                DataNo = x.DataNo,
+                DataName = x.DataName,
+                Count = x.Count,
+                ReCount = x.ReCount,
+                Status = x.Status,
+                TotalTime = x.TotalTime,
+                DispatchTime = x.DispatchTime,
+                DueStartTime = x.DueStartTime,
+                DueEndTime = x.DueEndTime,
+                ActualStartTime = x.ActualStartTime,
+                ActualEndTime = x.ActualEndTime,
+                DeleteFlag = x.DeleteFlag,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                OrderCount = x.OrderDetail.Quantity,
+            });
+
             var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
             // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
             // {
@@ -56,6 +84,7 @@ namespace HonjiMES.Controllers
             // }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 

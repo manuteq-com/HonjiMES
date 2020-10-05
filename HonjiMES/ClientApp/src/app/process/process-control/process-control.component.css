@@ -71,6 +71,12 @@
     border-radius: 2px;
     background-color: #ff831e;
 }
+.endbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    background-color: #CE312C;
+}
 .runbtn {
     float: right;
     margin-right: 6px;

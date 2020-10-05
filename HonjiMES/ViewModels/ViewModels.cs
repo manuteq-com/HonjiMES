@@ -657,6 +657,7 @@ namespace HonjiMES.Models
     public class WorkOrderHeadInfo : WorkOrderHead
     {
         public string StockCount { get; set; }
+        public decimal OrderCount { get; set; }
     }
     public class OrderToWorkCheckData
     {

@@ -42,6 +42,11 @@ export class ProcessControlComponent implements OnInit {
     Url = '';
     runVisible: boolean;
     editVisible: boolean;
+    closepopupVisible: boolean;
+    workOrderHeadDataType: any;
+    workOrderHeadDataId: any;
+    modkey: string;
+    userkey: any;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listStatus = myservice.getWorkOrderStatus();
@@ -153,21 +158,43 @@ export class ProcessControlComponent implements OnInit {
                             this.runVisible = false;
                         }
 
+                        // 是否結案
+                        if (s.data.WorkOrderHead.Status === 5) { // 已結案
+                            this.btnDisabled = true;
+                        } else {
+                            this.btnDisabled = false;
+                        }
+
                         s.data.WorkOrderDetail.forEach(element => {
                             element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
                         });
                         this.dataSourceDB_Process = s.data.WorkOrderDetail;
-                        this.btnDisabled = false;
                         this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
                         // this.workOrderHeadId = s.data.WorkOrderHead.Id;
                         // this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
                         // this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
                         // this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
                         // this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
+
+                        this.workOrderHeadDataType = s.data.WorkOrderHead.DataType;
+                        this.workOrderHeadDataId = s.data.WorkOrderHead.DataId;
                     }
                 }
             );
         }
+    }
+    overdata() {
+        if (this.workOrderHeadDataType === 1) {
+            this.modkey = 'material';
+        } else if (this.workOrderHeadDataType === 2) {
+            this.modkey = 'product';
+        } else if (this.workOrderHeadDataType === 3) {
+            this.modkey = 'wiproduct';
+        }
+        this.userkey = null;
+        this.randomkey = new Date().getTime();
+        this.itemkey = this.workOrderHeadDataId;
+        this.closepopupVisible = true;
     }
     readLog(e, data) {
         this.itemkey = data.data.Id;
@@ -205,6 +232,20 @@ export class ProcessControlComponent implements OnInit {
         }
         notify({
             message: '更新完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
+    closepopup_result(e) {
+        this.btnDisabled = true;
+        // this.dataSourceDB_Process = [];
+        // this.workOrderHeadNo = '';
+        this.dataGrid1.instance.refresh();
+        this.closepopupVisible = false;
+        notify({
+            message: '存檔完成',
             position: {
                 my: 'center top',
                 at: 'center top'

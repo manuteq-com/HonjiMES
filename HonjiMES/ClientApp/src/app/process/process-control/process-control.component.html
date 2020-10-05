@@ -38,7 +38,7 @@
             </dxo-remote-operations> -->
             <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
 
-            <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc" [width]="140"></dxi-column>
+            <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="140"></dxi-column>
             <dxi-column dataField="DataNo" caption="品號"></dxi-column>
             <!-- <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column> -->
             <!-- <dxi-column dataField="MachineNo" caption="機號"></dxi-column> -->
@@ -47,9 +47,10 @@
             </dxi-column>
             <dxi-column dataField="DueStartTime" caption="預計開工" dataType="date" [width]="120" [visible]="true"></dxi-column>
             <dxi-column dataField="DueEndTime" caption="預計完工" dataType="date" [width]="120" [visible]="true"></dxi-column>
+            <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column>
-            <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="150"></dxi-column> -->
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false" [width]="150"></dxi-column>
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
 
@@ -86,8 +87,11 @@
                 <dx-button class="pdfbtn" stylingMode="contained" text="下載" type="default" [width]="70"
                     [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
                 </dx-button>
+                <dx-button class="endbtn" stylingMode="contained" text="結案" type="danger" [width]="80"
+                    [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">
+                </dx-button>
                 <dx-button class="editbtn" stylingMode="contained" text="編輯工單" type="default" [width]="110"
-                    [visible]="editVisible" (onClick)="editProcess()">
+                    [visible]="editVisible" [disabled]="btnDisabled" (onClick)="editProcess()">
                 </dx-button>
                 <dx-button class="runbtn" stylingMode="contained" text="派工" type="success" [width]="80"
                     [visible]="runVisible" (onClick)="runProcess()">
@@ -174,10 +178,18 @@
         </app-creatprocess-control>
     </div>
 </dx-popup>
+
 <nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="1800" [nzStyle]="{ top: '20px' }" [nzFooter]="null"
     (nzOnCancel)="handleCancel()">
     <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
 </nz-modal>
+
+<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+    </div>
+</dx-popup>
+
 <!-- <dx-popup [showTitle]="true" title="檢視工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="860"
     [width]="1800" [(visible)]="viewpopupVisible">
     <div *dxTemplate="let data of 'content'">
