@@ -71,10 +71,16 @@
     <dxi-column dataField="OrderNo" caption="訂單單號" sortOrder="desc" [width]="120">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="40"></dxi-column>
+    <!-- <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="40"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button [icon]="data.data.CheckFlag === 1 ? 'favorites' : '' " type="normal" (onClick)="checkData($event,data)"></dx-button>
-    </div>
+    </div> -->
+
+    <dxi-column type="buttons" alignment="center" [visible]="true" [width]="40">
+        <dxi-button name="upload" text=" " icon=" " [visible]="unCheckFlagVisible" [onClick]="CheckFlagIconClick"></dxi-button>
+        <dxi-button name="upload" text="標記" icon="favorites" [visible]="CheckFlagVisible" [onClick]="CheckFlagIconClick"></dxi-button>
+    </dxi-column>
+
     <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>

@@ -11,6 +11,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Globalization;
 
 
 namespace HonjiMES.Models
@@ -68,6 +69,7 @@ namespace HonjiMES.Models
         }
         internal static string MappingExtelToModel<T>(ref T Data, string Cellval, string ModelName)
         {
+            IFormatProvider provider = CultureInfo.CreateSpecificCulture("zh-TW");
             var Bbreak = false;
             if (string.IsNullOrWhiteSpace(ModelName))
             {
@@ -85,7 +87,7 @@ namespace HonjiMES.Models
                     }
                     else if (Props.PropertyType == typeof(int) || Props.PropertyType == typeof(int?))
                     {
-                        if (int.TryParse(Cellval, out int val))
+                        if (int.TryParse(Cellval, NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, provider, out int val))
                             Props.SetValue(Data, val);
                         Bbreak = true;
                     }
@@ -103,6 +105,12 @@ namespace HonjiMES.Models
                     else if (Props.PropertyType == typeof(float) || Props.PropertyType == typeof(float?))
                     {
                         if (float.TryParse(Cellval, out float val))
+                            Props.SetValue(Data, val);
+                        Bbreak = true;
+                    }
+                    else if (Props.PropertyType == typeof(decimal) || Props.PropertyType == typeof(decimal?))
+                    {
+                        if (decimal.TryParse(Cellval, NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, provider, out decimal val))
                             Props.SetValue(Data, val);
                         Bbreak = true;
                     }
