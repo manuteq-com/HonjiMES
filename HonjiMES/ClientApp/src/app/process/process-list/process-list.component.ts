@@ -125,6 +125,7 @@ export class ProcessListComponent implements OnInit {
 
     }
     onEditorPreparing(e) {
+        debugger;
         if (e.parentType === 'dataRow' && e.dataField === 'Code' ) {
             e.editorOptions.readOnly = true;
         }
