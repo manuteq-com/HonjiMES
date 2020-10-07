@@ -345,4 +345,76 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         }
         return canuse;
     }
+    headerfont() {
+        const val: any = {};
+        const authenticationService = new AuthService(this.http);
+        const currentUser = authenticationService.currentUserValue;
+        currentUser.Menu.forEach(x => {
+            if (x.routerLink && x.routerLink.includes(location.pathname)) {
+                val.font1 = x.label;
+            } else {
+                if (x.items) {
+                    x.items.forEach(y => {
+                        if (y.routerLink && y.routerLink.includes(location.pathname)) {
+                            val.font1 = x.label;
+                            val.font2 = y.label;
+                        } else {
+                            if (y.items) {
+                                y.items.forEach(z => {
+                                    if (z.routerLink && z.routerLink.includes(location.pathname)) {
+                                        val.font1 = x.label;
+                                        val.font2 = y.label;
+                                        val.font3 = z.label;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return val;
+    }
+    downloadfile(url) {
+        const apiurl = location.origin + '/api';
+        const authenticationService = new AuthService(this.http);
+        const currentUser = authenticationService.currentUserValue;
+        const anchor = document.createElement('a');
+        const headers = new Headers({
+            Authorization: 'Bearer ' + currentUser.Token,
+            routerLink: location.pathname,
+            apitype: 'GET'
+        });
+        let fileName = 'file';
+        fetch(apiurl + url, { headers })
+            .then(response => {
+                const contentDisposition = response.headers.get('Content-Disposition');
+                if (contentDisposition) {
+                    const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    const matches = fileNameRegex.exec(contentDisposition);
+                    if (matches != null && matches[1]) {
+                        fileName = decodeURIComponent(matches[1].replace(/['"]/g, ''));
+                    }
+                }
+                return response.blob();
+            })
+            .then(blobby => {
+                if (blobby.type === 'application/json') {
+                    const msg = '沒有下載權限';
+                    notify({
+                        message: msg,
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error');
+                } else {
+                    const objectUrl = window.URL.createObjectURL(blobby);
+                    anchor.href = objectUrl;
+                    anchor.download = fileName;
+                    anchor.click();
+                    window.URL.revokeObjectURL(objectUrl);
+                }
+            });
+    }
 }
