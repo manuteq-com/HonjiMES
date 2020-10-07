@@ -8,6 +8,7 @@ import { APIResponse } from 'src/app/app.module';
 import { InventoryChange, workOrderReportData } from 'src/app/model/viewmodels';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-workorder-stock',
@@ -58,6 +59,10 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
     keyup = '';
     UserList: any;
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: number; searchEnabled: boolean; disable: boolean; };
+    typeOptions: {
+        items: any; displayExpr: string; valueExpr: string; value: any; // 預設成品倉301
+    };
+    StockType: any;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -110,8 +115,9 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
         }
     }
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         // debugger;
+        this.StockType = myservice.getStockType();
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -139,6 +145,12 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
             value: 0,
             min: 0,
             // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
+        this.typeOptions = {
+            items: this.StockType,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            value: 0
         };
 
         if (this.itemkeyval !== 0) {
@@ -277,6 +289,7 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
         Data.CreateUser = this. formData.CreateUser;
         Data.ReCount = this.formData.Quantity;
         Data.WarehouseId = this.formData.WarehouseId;
+        Data.Type = this.formData.Type;
         if (Data.ReCount === 0) {
             this.showMessage('warning', '增減數量不能為 "0" !', 3000);
             return;

@@ -192,6 +192,7 @@ export class workOrderReportData {
     WarehouseId: number;
     CreateUser: number;
     CodeNo: string;
+    Type: number;
 }
 
 // tslint:disable-next-line: class-name

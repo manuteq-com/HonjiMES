@@ -49,6 +49,8 @@ namespace HonjiMES.Models
         public virtual DbSet<SaleHead> SaleHeads { get; set; }
         public virtual DbSet<SaleLog> SaleLogs { get; set; }
         public virtual DbSet<Saleold> Saleolds { get; set; }
+        public virtual DbSet<StockDetail> StockDetails { get; set; }
+        public virtual DbSet<StockHead> StockHeads { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         public virtual DbSet<System> Systems { get; set; }
@@ -2471,6 +2473,91 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
+            });
+
+            modelBuilder.Entity<StockDetail>(entity =>
+            {
+                entity.HasIndex(e => e.StockHeadId)
+                    .HasName("stock_head_id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DataNo)
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ItemId).HasComment("料號ID");
+
+                entity.Property(e => e.ItemType).HasComment("料號種類(1原料2成品3半成品)");
+
+                entity.Property(e => e.Message)
+                    .HasComment("補充說明")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Original).HasComment("原始數量");
+
+                entity.Property(e => e.Price).HasComment("單價");
+
+                entity.Property(e => e.PriceAll).HasComment("總金額");
+
+                entity.Property(e => e.Quantity).HasComment("增減數量");
+
+                entity.Property(e => e.Reason)
+                    .HasComment("修改原因")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StockHeadId).HasComment("調整單ID");
+
+                entity.Property(e => e.Unit)
+                    .HasComment("單位")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.UnitCount).HasComment("單位數量");
+
+                entity.Property(e => e.UnitPrice).HasComment("單位金額");
+
+                entity.Property(e => e.UnitPriceAll).HasComment("單位總額");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkPrice).HasComment("加工費用");
+
+                entity.HasOne(d => d.StockHead)
+                    .WithMany(p => p.StockDetails)
+                    .HasForeignKey(d => d.StockHeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("stock_detail_ibfk_1");
+            });
+
+            modelBuilder.Entity<StockHead>(entity =>
+            {
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.LinkOrder)
+                    .HasComment("關聯單號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Status).HasComment("狀態");
+
+                entity.Property(e => e.StockNo)
+                    .HasComment("調整單號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
             });
 
             modelBuilder.Entity<Supplier>(entity =>

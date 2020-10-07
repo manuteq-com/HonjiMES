@@ -431,12 +431,21 @@ namespace HonjiMES.Controllers
         {
             var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
             if (BillOfMaterial != null) {
-                var BillOfMaterialAll = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterial.ProductBasicId && x.DeleteFlag == 0).ToList();
-                foreach (var item in BillOfMaterialAll)
-                {
-                    item.Master = 0;
+                
+                if (BillOfMaterial.Master == 0) {
+                    BillOfMaterial.Master = 1;
+                } else {
+                    BillOfMaterial.Master = 0;
                 }
-                BillOfMaterial.Master = 1;
+
+                // 以下舊方法
+                // var BillOfMaterialAll = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterial.ProductBasicId && x.DeleteFlag == 0).ToList();
+                // foreach (var item in BillOfMaterialAll)
+                // {
+                //     item.Master = 0;
+                // }
+                // BillOfMaterial.Master = 1;
+
                 await _context.SaveChangesAsync();
             }
             

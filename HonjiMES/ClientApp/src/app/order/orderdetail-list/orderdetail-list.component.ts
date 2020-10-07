@@ -233,6 +233,7 @@ export class OrderdetailListComponent implements OnInit {
                 const result = BasicData.find(y => y.DataType === 2 && y.DataId === element.ProductBasicId);
                 if (result) {
                     tempdataSource.push({
+                        OrderDetailId: element.Id,
                         Serial: serial,
                         TempId: result.TempId,
                         DataType: 2,
@@ -279,10 +280,11 @@ export class OrderdetailListComponent implements OnInit {
                             if (~index) {
                                 tempdataSource[index].Quantity += Math.ceil(x.Quantity * tempQuantity);
                                 tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
-                            } else if (element.MaterialBasicId != null) { // 只取得料號為[原料]的項目
+                            } else if (element.MaterialBasicId != null && element.Master === 1) { // 只取得料號為[原料]的項目
                                 const result = BasicData.find(y => y.DataType === 1 && y.DataId === element.MaterialBasicId);
                                 if (result) {
                                     tempdataSource.push({
+                                        OrderDetailId: x.Id,
                                         Serial: serial,
                                         TempId: result.TempId,
                                         DataType: 1,

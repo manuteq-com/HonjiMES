@@ -118,6 +118,30 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 庫存入庫單
+    /// </summary>
+    public class StockDetailData
+    {
+        public int TempId { get; set; }
+        public int DataType { get; set; }
+        public int DataId { get; set; }
+        public string DataNo { get; set; }
+        public string DataName { get; set; }
+        public int WarehouseId { get; set; }
+        public decimal Original { get; set; }
+        public decimal AftQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal PriceAll { get; set; }
+        public string Unit { get; set; }
+        public decimal UnitCount { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal UnitPriceAll { get; set; }
+        public decimal WorkPrice { get; set; }
+        public string Remark { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單Basic資料(包含原料、成品)
     /// </summary>
     public class BasicData
@@ -697,6 +721,7 @@ namespace HonjiMES.Models
         public int WarehouseId { get; set; }
         public string CodeNo { get; set; }
         public int CreateUser { get; set; }
+        public int Type { get; set; }
     }
     public class WorkOrderReportDataAll
     {
@@ -983,6 +1008,12 @@ namespace HonjiMES.Models
     public class WarehouseForBom : Warehouse
     {
         public bool HasWarehouse { get; set; }
+        public decimal Quantity { get; set; }
+    }
+    public class StockHeadInfo : StockHead
+    {
+        public string DataNo { get; set; }
+        public decimal Original { get; set; }
         public decimal Quantity { get; set; }
     }
 

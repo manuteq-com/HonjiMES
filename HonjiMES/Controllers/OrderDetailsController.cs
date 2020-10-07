@@ -79,11 +79,13 @@ namespace HonjiMES.Controllers
                     }
                 }
                 //取得採購單號
+                var tempCheck = new List<int>();
                 foreach (var PurchaseDetailitem in Detailitem.PurchaseDetails.ToList())
                 {
                     var PurchaseHeads = _context.PurchaseHeads.Find(PurchaseDetailitem.PurchaseId);
-                    if (PurchaseHeads.DeleteFlag == 0)
+                    if (PurchaseHeads.DeleteFlag == 0 && !tempCheck.Contains(PurchaseDetailitem.PurchaseId))
                     {
+                        tempCheck.Add(PurchaseDetailitem.PurchaseId);
                         PurchaseDetailitem.Purchase = PurchaseHeads;
                     }
                     else

@@ -61,6 +61,9 @@ export class Myservice {
     getMasterType(): Selectitem[] {
         return mastertype;
     }
+    getStockType(): Selectitem[] {
+        return stocktype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -168,4 +171,8 @@ const timetype: Selectitem[] = [
     { Id: 1, Name: '前置時間' },
     { Id: 2, Name: '標準工時' },
     { Id: 3, Name: '總時間' },
+];
+const stocktype: Selectitem[] = [
+    { Id: 0, Name: '半成品入庫' },
+    { Id: 1, Name: '成品入庫' },
 ];

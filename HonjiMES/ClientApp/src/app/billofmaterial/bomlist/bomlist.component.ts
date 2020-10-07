@@ -176,7 +176,8 @@ export class BomlistComponent implements OnInit, OnChanges {
         if (e.row.data.Master === 0 && e.row.data.Lv === 1) {
             return true;
         } else {
-            return false;
+            // return false;
+            return true;
         }
     }
     readBomProcess(e, data) {

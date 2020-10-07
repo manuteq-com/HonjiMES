@@ -24,7 +24,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     dataSourceDB: any;
     dataSourceDB_Process: any[];
-    Controller = '/WorkOrders';
+    Controller = '/Stocks';
     remoteOperations = true;
     editOnkeyPress: boolean;
     enterKeyAction: string;
@@ -51,6 +51,8 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     keyup = '';
     userkey: any;
     closepopupVisible: boolean;
+    clearCheck: any;
+    listType: any;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.stockpopupVisible && !this.closepopupVisible && !this.logpopupVisible) {
@@ -60,9 +62,11 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                 const key = this.keyup;
                 const promise = new Promise((resolve, reject) => {
                     this.app.GetData('/WorkOrders/GetWorkOrderHeadByWorkOrderNo?DataNo=' + key).toPromise().then((res: APIResponse) => {
+                        this.workOrderHeadNo = '';
                         if (res.success) {
                             this.btnDisabled = true;
                             this.dataSourceDB_Process = [];
+                            this.clearCheck = false;
                             this.workOrderHeadNo = res.data.WorkOrderNo;
                             if (res.data.Status === 0) {
                                 this.showMessage('warning', '[ ' + res.data.WorkOrderNo + ' ]　工單尚未派工!', 3000);
@@ -118,13 +122,14 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
         this.listStatus = myservice.getWorkOrderStatus();
+        this.listType = myservice.getStockType();
         this.btnDisabled = true;
         this.dataSourceDB_Process = [];
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetWorkOrderHeadsRun',
+                this.Controller + '/GetStockHeads',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
 
         });
@@ -147,6 +152,18 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     ngOnChanges() {
     }
     valueChanged(e) {
+        if (this.clearCheck) {
+            this.dataSourceDB_Process = [];
+            this.btnDisabled = true;
+            this.workOrderHeadId = '';
+            this.workOrderHeadDataNo = '';
+            this.workOrderHeadDataName = '';
+            this.workOrderHeadStatus = '';
+            this.workOrderHeadCount = '';
+        } else {
+            this.clearCheck = true;
+        }
+
         this.WorkOrderNoInputVal = e.value;
     }
     onReorder(e) {
@@ -166,6 +183,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
             (s) => {
                 if (s.success) {
+                    this.clearCheck = false;
                     s.data.WorkOrderDetail.forEach(element => {
                         element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
                     });
@@ -189,6 +207,14 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.logpopupVisible = true;
     }
     async searchdata() {
+        this.dataSourceDB_Process = [];
+        this.btnDisabled = true;
+        this.workOrderHeadId = '';
+        this.workOrderHeadDataNo = '';
+        this.workOrderHeadDataName = '';
+        this.workOrderHeadStatus = '';
+        this.workOrderHeadCount = '';
+
         this.itemkey = 0;
         const SearchValue = { WorkOrderNo: this.WorkOrderNoInputVal };
         // tslint:disable-next-line: max-line-length
@@ -201,6 +227,9 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             this.workOrderHeadDataName = sendRequest.WorkOrderHead.DataName;
             this.workOrderHeadStatus = this.listStatus.find(x => x.Id === sendRequest.WorkOrderHead.Status)?.Name ?? '';
             this.workOrderHeadCount = (sendRequest.WorkOrderHead?.ReCount ?? '0') + ' / ' + sendRequest.WorkOrderHead.Count;
+
+            this.workOrderHeadDataType = sendRequest.WorkOrderHead.DataType;
+            this.workOrderHeadDataId = sendRequest.WorkOrderHead.DataId;
         }
     }
     overdata() {

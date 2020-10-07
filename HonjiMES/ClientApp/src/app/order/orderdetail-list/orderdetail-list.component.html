@@ -32,7 +32,7 @@
     [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
     [columnAutoWidth]="true">
 
-    <dxo-editing mode="row"
+    <dxo-editing mode="batch"
         [allowAdding]="false"
         [allowUpdating]="true"
         [allowDeleting]="true">
@@ -78,9 +78,10 @@
             summaryType="count">
         </dxi-total-item>
     </dxo-summary>
+
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="200"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品號" [width]="200" editCellTemplate="ProductBasicIdEditCellTemplate">
+    <dxi-column dataField="ProductBasicId" caption="品號" [width]="200" [allowEditing]="false" editCellTemplate="ProductBasicIdEditCellTemplate">
         <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false" [width]="100">
@@ -93,7 +94,7 @@
     <dxi-column dataField="Quantity" caption="數量" dataType="number"  [width]="50"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="50"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="120"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回復交期" dataType="date"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
@@ -103,16 +104,16 @@
     <dxi-column dataField="SaledCount" caption="已銷" dataType="number" [allowEditing]="false" [width]="50"></dxi-column>
 
     <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
-    <dxi-column type="buttons">
+    <dxi-column type="buttons" [visible]="false">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
-    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate"  [width]="180"></dxi-column>
-    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2"  [width]="180"></dxi-column>
-    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3"  [width]="180"></dxi-column>
+    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="180"></dxi-column>
 
     <div *dxTemplate="let data of 'ProductBasicIdEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
@@ -130,8 +131,8 @@
         </ul>
     </div>
     <div *dxTemplate="let d of 'diffCellTemplate3'" >
-        <ul style="list-style-type:none; text-align: left;">
-            <li *ngFor ="let item of distinct(d.value)">{{item.Purchase.PurchaseNo}}</li>
+        <ul style="list-style-type:none">
+            <li *ngFor ="let item of (d.value)">{{item.Purchase.PurchaseNo}}</li>
         </ul>
     </div>
 

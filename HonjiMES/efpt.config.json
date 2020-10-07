@@ -182,6 +182,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "stock_detail"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "stock_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "supplier"
       },
       {

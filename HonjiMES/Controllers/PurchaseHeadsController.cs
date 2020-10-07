@@ -388,14 +388,19 @@ namespace HonjiMES.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<PurchaseHead>> DeletePurchaseHead(int id)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            _context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
             var purchaseHead = await _context.PurchaseHeads.FindAsync(id);
             if (purchaseHead == null)
             {
                 return NotFound();
             }
             purchaseHead.DeleteFlag = 1;
+            foreach (var item in purchaseHead.PurchaseDetails.ToList())
+            {
+                item.DeleteFlag = 1;
+            }
             // _context.PurchaseHeads.Remove(purchaseHead);
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             await _context.SaveChangesAsync();
 
             return Ok(MyFun.APIResponseOK(purchaseHead));

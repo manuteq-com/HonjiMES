@@ -23,7 +23,7 @@ namespace HonjiMES.Controllers
     /// <summary>
     /// 產品列表
     /// </summary>
-   // [JWTAuthorize]
+    [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -104,15 +104,41 @@ namespace HonjiMES.Controllers
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-
-            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5);
+            _context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
+            // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5);
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
+            {
+                Id = x.Id,
+                WorkOrderNo = x.WorkOrderNo,
+                OrderDetailId = x.OrderDetailId,
+                MachineNo = x.MachineNo,
+                DataType = x.DataType,
+                DataId = x.DataId,
+                DataNo = x.DataNo,
+                DataName = x.DataName,
+                Count = x.Count,
+                ReCount = x.ReCount,
+                Status = x.Status,
+                TotalTime = x.TotalTime,
+                DispatchTime = x.DispatchTime,
+                DueStartTime = x.DueStartTime,
+                DueEndTime = x.DueEndTime,
+                ActualStartTime = x.ActualStartTime,
+                ActualEndTime = x.ActualEndTime,
+                DeleteFlag = x.DeleteFlag,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                OrderCount = x.OrderDetail.Quantity,
+            });
             var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
             // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
             // {
             //     data = data.Where(x => x.WorkOrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             // }
 
+            _context.ChangeTracker.LazyLoadingEnabled = false;
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
@@ -356,19 +382,41 @@ namespace HonjiMES.Controllers
             var dt = DateTime.Now;
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
+
+            // 入庫數量不能大於工單量 2020/10/05
+            if ((OWorkOrderHead.ReCount + WorkOrderReportData.ReCount) > OWorkOrderHead.Count) {
+                return Ok(MyFun.APIResponseError("入庫數量已超過工單量!! ( 工單量:" + OWorkOrderHead.Count + "　已完工量:" + OWorkOrderHead.ReCount + " )"));
+            }
             OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
             OWorkOrderHead.UpdateTime = DateTime.Now;
             OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
 
+            // 入庫數量抵達工單量以後，工單自動結案 2020/10/05
+            if (OWorkOrderHead.Count == OWorkOrderHead.ReCount) {
+                OWorkOrderHead.Status = 5;//結案
+            }
+
             //入庫
+            Decimal tempOriginal = 0;
+            Decimal tempQuantity = 0;
+            var tempDataNo = "";
+            var MessageType = "";
+            if (WorkOrderReportData.Type == 0) {
+                MessageType = "半成品入庫";
+            } else if (WorkOrderReportData.Type == 1) {
+                MessageType = "成品入庫";
+            }
             var checkInfo = false;
             if (OWorkOrderHead.DataType == 1) // 原料
             {
                 var MaterialBasic = await _context.MaterialBasics.Include(x => x.Materials).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                tempDataNo = MaterialBasic.MaterialNo;
                 foreach (var item in MaterialBasic.Materials)
                 {
                     if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
                     {
+                        tempOriginal += item.Quantity;
+                        tempQuantity += WorkOrderReportData.ReCount;
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
                         // item.UpdateUser = WorkOrderReportData.CreateUser;
@@ -377,7 +425,7 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = item.Quantity - WorkOrderReportData.ReCount,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         });
@@ -405,20 +453,24 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = 0,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
+                    tempQuantity = WorkOrderReportData.ReCount;
                 }
             }
             else if (OWorkOrderHead.DataType == 2) // 成品
             {
                 var ProductBasic = await _context.ProductBasics.Include(x => x.Products).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                tempDataNo = ProductBasic.ProductNo;
                 foreach (var item in ProductBasic.Products)
                 {
                     if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
                     {
+                        tempOriginal += item.Quantity;
+                        tempQuantity += WorkOrderReportData.ReCount;
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
                         // item.UpdateUser = WorkOrderReportData.CreateUser;
@@ -427,7 +479,7 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = item.Quantity - WorkOrderReportData.ReCount,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         });
@@ -456,20 +508,24 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = 0,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
+                    tempQuantity = WorkOrderReportData.ReCount;
                 }
             }
             else if (OWorkOrderHead.DataType == 3) // 半成品
             {
                 var WiproductBasic = await _context.WiproductBasics.Include(x => x.Wiproducts).Where(x => x.Id == OWorkOrderHead.DataId && x.DeleteFlag == 0).FirstAsync();
+                tempDataNo = WiproductBasic.WiproductNo;
                 foreach (var item in WiproductBasic.Wiproducts)
                 {
                     if (item.WarehouseId == WorkOrderReportData.WarehouseId && item.DeleteFlag == 0)
                     {
+                        tempOriginal += item.Quantity;
+                        tempQuantity += WorkOrderReportData.ReCount;
                         item.Quantity = item.Quantity + WorkOrderReportData.ReCount;
                         // item.UpdateTime = dt;
                         // item.UpdateUser = WorkOrderReportData.CreateUser;
@@ -478,7 +534,7 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = item.Quantity - WorkOrderReportData.ReCount,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         });
@@ -507,13 +563,60 @@ namespace HonjiMES.Controllers
                             LinkOrder = OWorkOrderHead.WorkOrderNo,
                             Original = 0,
                             Quantity = WorkOrderReportData.ReCount,
-                            Message = "品質檢驗入庫",
+                            Message = MessageType,
                             CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser
                         }}
                     });
+                    tempQuantity = WorkOrderReportData.ReCount;
                 }
             }
+
+            // 建立入庫單
+            var key = "AS";
+            var StockNo = DateTime.Now.ToString("yyMMdd");
+
+            var NoData = await _context.StockHeads.AsQueryable().Where(x => x.StockNo.Contains(key + StockNo) && x.StockNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            var NoCount = NoData.Count() + 1;
+            if (NoCount != 1)
+            {
+                var LastStockNo = NoData.FirstOrDefault().StockNo;
+                var NoLast = Int32.Parse(LastStockNo.Substring(LastStockNo.Length - 3, 3));
+                if (NoCount <= NoLast) {
+                    NoCount = NoLast + 1;
+                }
+            }
+            //// 建立主檔
+            var StockHead = new StockHead
+            {
+                StockNo = key + StockNo + NoCount.ToString("000"),
+                LinkOrder = OWorkOrderHead.WorkOrderNo,
+                Type = WorkOrderReportData.Type,
+                Remarks = MessageType,
+                CreateTime = dt,
+                CreateUser = WorkOrderReportData.CreateUser
+            };
+            //// 建立明細
+            StockHead.StockDetails.Add(new StockDetail
+            {
+                ItemType = OWorkOrderHead.DataType,
+                ItemId = OWorkOrderHead.DataId,
+                DataNo = tempDataNo,
+                Original = tempOriginal,
+                Quantity = tempQuantity,
+                // Price = null,
+                // PriceAll = null,
+                // Unit = null,
+                // UnitCount = null,
+                // UnitPrice = null,
+                // UnitPriceAll = null,
+                // WorkPrice = null,
+                // Reason = null,
+                Message = "",
+                CreateTime = dt,
+                CreateUser = WorkOrderReportData.CreateUser
+            });
+            _context.StockHeads.Add(StockHead);
 
             try
             {
@@ -1781,60 +1884,6 @@ namespace HonjiMES.Controllers
             x.WorkOrderHead.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || x.WorkOrderHead.Status == 5))
             .Include(x => x.WorkOrderHead).ToListAsync();
             return Ok(MyFun.APIResponseOK(WorkOrderDetails));
-        }
-
-        /// <summary>
-        /// 產報工單PDF
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public IActionResult GetPackingSlipPDF(int id)
-        {
-            var qcodesize = 70;
-            _context.ChangeTracker.LazyLoadingEnabled = true;
-            var ProcessReportVMList = new List<ProcessReportVM>();
-            var WorkOrder = _context.WorkOrderHeads.Find(id);
-            var txt = "";
-            foreach (var item in WorkOrder.WorkOrderDetails)
-            {
-                txt = item.WorkOrderHead.WorkOrderNo;
-                var dbQrCode = BarcodeHelper.CreateQrCode(txt + "-" + item.SerialNumber, qcodesize, qcodesize);
-                ProcessReportVMList.Add(new ProcessReportVM
-                {
-                    SerialNumber = item.SerialNumber,
-                    ProcessName = item.ProcessName,
-                    ProducingMachine = item.ProducingMachine,
-                    Status = item.Status.ToString(),
-                    Type = item.Type.ToString(),
-                    ReCount = item.ReCount,
-                    ActualStartTime = item.ActualStartTime,
-                    ActualEndTime = item.ActualEndTime,
-                    Img = MyFun.ImgToBase64String(dbQrCode),
-                });
-            }
-            ProcessReportVMList.AddRange(ProcessReportVMList);
-            ProcessReportVMList.AddRange(ProcessReportVMList);
-            var json = JsonConvert.SerializeObject(ProcessReportVMList);
-            var bQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
-            var webRootPath = _IWebHostEnvironment.ContentRootPath;
-            var ReportPath = Path.Combine(webRootPath, "Reports", "process.repx");
-            var report = XtraReport.FromFile(ReportPath);
-            report.RequestParameters = false;
-            report.Parameters["WorkOrderNo"].Value = WorkOrder.WorkOrderNo;
-            report.Parameters["DataName"].Value = WorkOrder.DataName;
-            report.Parameters["DataNo"].Value = WorkOrder.DataNo;
-            var PictureBox = (XRPictureBox)report.FindControl("Qrcode", true);
-            PictureBox.Image = Image.FromStream(new MemoryStream(bQrCode));
-            var jsonDataSource = new JsonDataSource();
-            jsonDataSource.JsonSource = new CustomJsonSource(json);
-            report.DataSource = jsonDataSource;
-            report.CreateDocument(true);
-            using (MemoryStream ms = new MemoryStream())
-            {
-                report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + "報工單.pdf");
-            }
-
         }
 
     }
