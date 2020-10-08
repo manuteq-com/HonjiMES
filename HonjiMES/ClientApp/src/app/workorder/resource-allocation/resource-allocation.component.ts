@@ -42,6 +42,7 @@ export class ResourceAllocationComponent implements OnInit {
     verpopupVisible: boolean;
     bomverdata: any;
     masterkey: any;
+    popupVisible: boolean;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.bomMod = 'PBOM';
         this.listTimeStatus = myservice.getTimeType();
@@ -66,6 +67,12 @@ export class ResourceAllocationComponent implements OnInit {
     readBomVer(e, data) {
         debugger;
         this.verpopupVisible = true;
+        this.masterkey = data.data;
+    }
+
+    readVer(e, data) {
+        debugger;
+        this.popupVisible = true; 
         this.masterkey = data.data;
     }
 
