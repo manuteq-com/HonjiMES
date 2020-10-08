@@ -74,6 +74,13 @@
     margin-top: -6px;
     border-radius: 2px;
 }
+.overviewbtn {
+    margin-top: -6px;
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #1e90ff;
+}
 .searchbtn {
     margin-top: -6px;
     margin-right: 3px;

@@ -8,6 +8,7 @@ import { APIResponse } from './app.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
 import jwt_decode from 'jwt-decode';
+import notify from 'devextreme/ui/notify';
 
 enum MenuOrientation {
     STATIC,

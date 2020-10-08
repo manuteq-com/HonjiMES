@@ -156,14 +156,32 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     }
                 }
             );
-            this.dataSourceDB = new CustomStore({
-                key: 'Id',
-                load: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkeyval),
-                byKey: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetail'),
-                insert: (values) => SendService.sendRequest(this.http, this.controller + '/PostOrderDetail', 'POST', { values }),
-                update: (key, values) => SendService.sendRequest(this.http, this.controller + '/PutOrderDetail', 'PUT', { key, values }),
-                remove: (key) => SendService.sendRequest(this.http, this.controller + '/DeleteOrderDetail', 'DELETE')
-            });
+            this.app.GetData(this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkeyval).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.SerialNo = 0;
+                        this.dataGridRowIndex = 0;
+                        s.data.forEach(item => {
+                            if (item.ProductBasicId === 0) {
+                                item.ProductBasicId = null;
+                            } else {
+                                this.SerialNo++;
+                                this.dataGridRowIndex++;
+                                item.RowIndex = this.dataGridRowIndex;
+                            }
+                        });
+                        this.dataSourceDB = s.data;
+                    }
+                }
+            );
+            // this.dataSourceDB = new CustomStore({
+            //     key: 'Id',
+            //     load: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkeyval),
+            //     byKey: () => SendService.sendRequest(this.http, this.controller + '/GetOrderDetail'),
+            //     insert: (values) => SendService.sendRequest(this.http, this.controller + '/PostOrderDetail', 'POST', { values }),
+            //     update: (key, values) => SendService.sendRequest(this.http, this.controller + '/PutOrderDetail', 'PUT', { key, values }),
+            //     remove: (key) => SendService.sendRequest(this.http, this.controller + '/DeleteOrderDetail', 'DELETE')
+            // });
         } else if (this.modval === 'excel') {
             debugger;
             let ProductPricrErr = '';

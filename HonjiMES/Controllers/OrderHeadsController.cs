@@ -301,6 +301,7 @@ namespace HonjiMES.Controllers
                             var OrderDetails = new List<OrderDetail>();
                             foreach (var item in OrderDetail)
                             {
+                                item.Id = 0;
                                 item.CreateTime = dt;
                                 item.CreateUser = MyFun.GetUserID(HttpContext);
                                 OrderDetails.Add(item);
@@ -596,7 +597,7 @@ namespace HonjiMES.Controllers
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0).Include(x => x.Order);
+            var data = _context.OrderDetails.Include(x => x.Order).Where(x => x.DeleteFlag == 0 && x.Order.Status == 0).OrderByDescending(x => x.Order.OrderNo);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

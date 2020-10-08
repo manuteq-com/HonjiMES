@@ -1,4 +1,5 @@
 <dx-data-grid
+
     [dataSource]="dataSourceDB"
     showBorders="true"
     keyExpr="id"
@@ -11,7 +12,7 @@
     (onSelectionChanged)="selectionChanged($event)"
     hoverStateEnabled="true"
     [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations" [columnAutoWidth]="true" [height]="600">
+    [remoteOperations]="remoteOperations" [columnAutoWidth]="true" [height]="620">
 
     <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
@@ -22,13 +23,13 @@
     <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
         <dxo-form>
-            <dxi-item  dataField="AdjustNo"></dxi-item>
+            <dxi-item dataField="AdjustNo"></dxi-item>
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" ></dxi-column>
+    <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="140" ></dxi-column>
     <dxi-column dataField="Order.OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -56,4 +57,40 @@
     <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100"></dxi-column>
     <dxi-column dataField="SaleCount" caption="銷單" [width]="80"></dxi-column>
     <dxi-column dataField="SaledCount" caption="已銷" [width]="80"></dxi-column>
+
 </dx-data-grid>
+
+<div class="row pt-3">
+    <div class="col-md-6 col-sm-8">
+    </div>
+    <div class="col-md-2 col-sm-2">
+        <!-- <div class="input-group">
+            <label class="pt-2">總數量：{{totalcount}}</label>
+        </div> -->
+    </div>
+    <div class="col-md-4 col-sm-1">
+        <dx-button text="建立銷貨單" type="default" (onClick)="to_saleClick($event)"></dx-button>
+        <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button>
+        <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)"></dx-button>
+        <dx-button text="建立托工單" type="default" (onClick)="to_outsideClick($event)"></dx-button>
+    </div>
+</div>
+
+<!-- <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="popupVisiblePurchase">
+    <div *dxTemplate="let data of 'content'">
+        <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+    </div>
+</dx-popup>
+<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="popupVisibleSale">
+    <div *dxTemplate="let data of 'content'">
+        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
+    </div>
+</dx-popup> -->
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="popupVisibleWork">
+    <div *dxTemplate="let data of 'content'">
+        <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork>
+    </div>
+</dx-popup>

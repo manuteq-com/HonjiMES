@@ -244,9 +244,11 @@ namespace HonjiMES.Controllers
                 var OrderDetailList = new List<OrderDetail>();
                 foreach (var item in OrderData.OrderDetail)
                 {
-                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
-                    if (CheckProductBasic.Count() == 0)
+                    var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id).AnyAsync();
+                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId && x.DeleteFlag == 0);
+                    if (CheckProductBasic.Count() == 0 || CheckWorkOrder)
                     {
+                        item.DeleteFlag = CheckWorkOrder ? 1 : 0; // 借用欄位，用來辨識是否要合併!
                         OrderDetailList.Add(item);
                     }
                     else
@@ -257,6 +259,7 @@ namespace HonjiMES.Controllers
 
                 foreach (var item in OrderDetailList)
                 {
+                    item.DeleteFlag = 0;
                     // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).ToListAsync();
                     // if (CheckWorkOrderHeads.Count() > 0)
                     // {

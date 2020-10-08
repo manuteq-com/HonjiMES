@@ -13,10 +13,11 @@
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
         </dx-file-uploader>
+        <dx-button class="overviewbtn" stylingMode="contained" text="訂單總覽" type="normal" [width]="130"
+            (onClick)="overviewpopup($event)">
+        </dx-button>
         <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130"
             (onClick)="creatdata()" [visible]="app.checkAddRoles()">
-        </dx-button>
-        <dx-button class="insertbtn ml-4" stylingMode="contained" text="訂單總覽" type="success" [width]="130" (onClick)="overviewpopup($event)">
         </dx-button>
     </div>
 </div>
@@ -125,7 +126,7 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="700"
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
     [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-order-overview (childOuter)="creatpopup_result($event)"></app-order-overview>
