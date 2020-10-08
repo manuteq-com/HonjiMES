@@ -327,7 +327,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     if (element.Type === 2) {
                                         this.NoPurchaseVisible = true;
                                     }
-                                } else if (element.Status === 3 || element.Status === 4) {
+                                } else if (element.Status === 3 || element.Status === 4 || element.Status === 6) {
                                     // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
                                     if (element.Type === 1) {
                                         this.ReCountVisible = true;
