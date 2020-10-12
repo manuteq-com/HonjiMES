@@ -198,6 +198,15 @@ namespace HonjiMES.Models
         public DateTime SaleDate { get; set; }
         public int SaleQuantity { get; set; }
     }
+    public class ToWorksOrderDetail : OrderDetail
+    {
+        public List<OrderDetailIdListInfo> OrderDetailIdList { get; set; }
+    }
+    public class OrderDetailIdListInfo
+    {
+        public int OrderDetailId { get; set; }
+        public decimal Count { get; set; }
+    }
     /// <summary>
     /// 過濾
     /// </summary>
@@ -685,7 +694,7 @@ namespace HonjiMES.Models
     }
     public class OrderToWorkCheckData
     {
-        public OrderDetail OrderDetail { get; set; }
+        public ToWorksOrderDetail OrderDetail { get; set; }
         public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
     public class WorkOrderData

@@ -19,8 +19,9 @@ import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
     templateUrl: './order-overview.component.html',
     styleUrls: ['./order-overview.component.css']
 })
-export class OrderOverviewComponent implements OnInit {
+export class OrderOverviewComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
+    @Input() randomkeyval: any;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
@@ -47,6 +48,11 @@ export class OrderOverviewComponent implements OnInit {
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+    }
+    ngOnInit() {
+
+    }
+    ngOnChanges() {
         this.getdata();
         this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
@@ -69,9 +75,6 @@ export class OrderOverviewComponent implements OnInit {
                 }
             }
         );
-    }
-    ngOnInit() {
-
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
@@ -253,13 +256,13 @@ export class OrderOverviewComponent implements OnInit {
         this.childOuter.emit(true);
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
+        // notify({
+        //     message: '存檔完成',
+        //     position: {
+        //         my: 'center top',
+        //         at: 'center top'
+        //     }
+        // }, 'success', 3000);
     }
     onFocusedRowChanging(e) {
         const rowsCount = e.component.getVisibleRows().length;

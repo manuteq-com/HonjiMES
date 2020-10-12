@@ -97,7 +97,7 @@ const OrderType: Selectitem[] = [
     { Id: 10, Name: '重製訂單' }
 ];
 const OrderTypeShow: Selectitem[] = [
-    { Id: 0, Name: '' },
+    { Id: 0, Name: '一般' },
     { Id: 10, Name: '重製' }
 ];
 const purchaseOrderSatatus: Selectitem[] = [

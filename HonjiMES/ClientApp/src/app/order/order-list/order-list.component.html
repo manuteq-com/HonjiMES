@@ -129,6 +129,6 @@
 <dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
     [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-overview (childOuter)="creatpopup_result($event)"></app-order-overview>
+        <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
     </div>
 </dx-popup>
