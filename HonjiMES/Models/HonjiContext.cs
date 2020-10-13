@@ -29,6 +29,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<OrderDetailAndWorkOrderHead> OrderDetailAndWorkOrderHeads { get; set; }
         public virtual DbSet<OrderHead> OrderHeads { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Process> Processes { get; set; }
@@ -1354,6 +1355,35 @@ namespace HonjiMES.Models
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("fk_order_detail_product1");
+            });
+
+            modelBuilder.Entity<OrderDetailAndWorkOrderHead>(entity =>
+            {
+                entity.HasIndex(e => e.OrderDetailId)
+                    .HasName("order_detail_id");
+
+                entity.HasIndex(e => e.WorkHeadId)
+                    .HasName("work_head_id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DataId).HasComment("料號Id");
+
+                entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
+
+                entity.Property(e => e.OrdeCount).HasComment("訂單數量");
+
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany(p => p.OrderDetailAndWorkOrderHeads)
+                    .HasForeignKey(d => d.OrderDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("order_detail_and_work_order_head_ibfk_1");
+
+                entity.HasOne(d => d.WorkHead)
+                    .WithMany(p => p.OrderDetailAndWorkOrderHeads)
+                    .HasForeignKey(d => d.WorkHeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("order_detail_and_work_order_head_ibfk_2");
             });
 
             modelBuilder.Entity<OrderHead>(entity =>

@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
             })
             .catch((e) => {
                 notify({
-                    message: e,
+                    message: e.message,
                     position: {
                         my: 'center top',
                         at: 'center top'

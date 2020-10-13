@@ -47,6 +47,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        this.disabledValues = [];
         if (this.itemkeyval !== null && this.itemkeyval !== undefined) {
             this.itemkeyval.forEach((element, index) => {
                 element.Id = index + 1;
@@ -157,23 +158,24 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
             const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrder', 'POST', { values: OrderData });
             if (sendRequest) {
                 this.childOuter.emit(true);
-                // if (sendRequest.message === '') {
-                //     notify({
-                //         message: '工單建立完成',
-                //         position: {
-                //             my: 'center top',
-                //             at: 'center top'
-                //         }
-                //     }, 'success', 3000);
-                // } else {
-                //     notify({
-                //         message: sendRequest.message,
-                //         position: {
-                //             my: 'center top',
-                //             at: 'center top'
-                //         }
-                //     }, 'warning', 6000);
-                // }
+                this.dataGrid.instance.clearSelection();
+                if (sendRequest.message === '' || sendRequest.message === undefined) {
+                    notify({
+                        message: '工單建立完成',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'success', 3000);
+                } else {
+                    notify({
+                        message: sendRequest.message,
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'warning', 6000);
+                }
             }
             this.dataGrid.instance.refresh();
         }

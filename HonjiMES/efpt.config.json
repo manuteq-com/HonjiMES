@@ -102,6 +102,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "order_detail_and_work_order_head"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "order_head"
       },
       {

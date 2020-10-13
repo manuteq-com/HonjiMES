@@ -67,7 +67,7 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
-    /// 成品主檔資訊
+    /// 銷貨單資訊
     /// </summary>
     public class SaleDetailNewData : SaleDetailNew
     {
@@ -78,6 +78,7 @@ namespace HonjiMES.Models
         public string MachineNo { get; set; }
         public string SaleNo { get; set; }
         public DateTime? SaleDate { get; set; }
+        public int WarehouseId { get; set; }
     }
 
     /// <summary>
@@ -197,6 +198,15 @@ namespace HonjiMES.Models
     {
         public DateTime SaleDate { get; set; }
         public int SaleQuantity { get; set; }
+    }
+    public class ToWorksOrderDetail : OrderDetail
+    {
+        public List<OrderDetailIdListInfo> OrderDetailIdList { get; set; }
+    }
+    public class OrderDetailIdListInfo
+    {
+        public int OrderDetailId { get; set; }
+        public decimal Count { get; set; }
     }
     /// <summary>
     /// 過濾
@@ -685,7 +695,7 @@ namespace HonjiMES.Models
     }
     public class OrderToWorkCheckData
     {
-        public OrderDetail OrderDetail { get; set; }
+        public ToWorksOrderDetail OrderDetail { get; set; }
         public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
     public class WorkOrderData
@@ -972,7 +982,7 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
-    /// 成品主檔資訊
+    /// 資源分配資訊
     /// </summary>
     public class ResoureAllocation
     {

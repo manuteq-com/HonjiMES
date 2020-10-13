@@ -74,7 +74,7 @@ namespace HonjiMES.Controllers
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
-                OrderCount = x.OrderDetail.Quantity,
+                OrderCount = x.OrderDetailAndWorkOrderHeads.Where(y => y.DataType == x.DataType && y.DataId == x.DataId && y.DeleteFlag == 0).Sum(y => y.OrdeCount),
             });
 
             var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
@@ -244,7 +244,8 @@ namespace HonjiMES.Controllers
                 var OrderDetailList = new List<OrderDetail>();
                 foreach (var item in OrderData.OrderDetail)
                 {
-                    var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id).AnyAsync();
+                    // var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).AnyAsync();
+                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataType == 2 && x.DataId == item.ProductBasicId && x.DeleteFlag == 0).AnyAsync();
                     var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId && x.DeleteFlag == 0);
                     if (CheckProductBasic.Count() == 0 || CheckWorkOrder)
                     {
@@ -297,22 +298,61 @@ namespace HonjiMES.Controllers
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 string NewResultMessage = "";
-                var OrderDetailList = new List<OrderDetail>();
+                var OrderDetailList = new List<ToWorksOrderDetail>();
                 foreach (var item in OrderData.OrderDetail)
                 {
-                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId);
-                    if (CheckProductBasic.Count() == 0)
+                    // var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).AnyAsync();
+                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataType == 2 && x.DataId == item.ProductBasicId && x.DeleteFlag == 0).AnyAsync();
+                    var CheckProductBasic = OrderDetailList.Where(x => x.ProductBasicId == item.ProductBasicId && x.DeleteFlag == 0);
+                    if (CheckProductBasic.Count() == 0 || CheckWorkOrder)
                     {
-                        OrderDetailList.Add(item);
+                        item.DeleteFlag = CheckWorkOrder ? 1 : 0; // 借用欄位，用來辨識是否要合併!
+                        var OrderDetailIdList = new List<OrderDetailIdListInfo>();
+                        OrderDetailIdList.Add(new OrderDetailIdListInfo{OrderDetailId = item.Id, Count = item.Quantity});
+                        OrderDetailList.Add(new ToWorksOrderDetail{
+                            Id = item.Id,
+                            OrderId = item.OrderId,
+                            CustomerNo = item.CustomerNo,
+                            Serial = item.Serial,
+                            ProductBasicId = item.ProductBasicId,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            OriginPrice = item.OriginPrice,
+                            Discount = item.Discount,
+                            DiscountPrice = item.DiscountPrice,
+                            Price = item.Price,
+                            Delivered = item.Delivered,
+                            Unit = item.Unit,
+                            DueDate = item.DueDate,
+                            Remark = item.Remark,
+                            ReplyDate = item.ReplyDate,
+                            ReplyRemark = item.ReplyRemark,
+                            MachineNo = item.MachineNo,
+                            Drawing = item.Drawing,
+                            Ink = item.Ink,
+                            Label = item.Label,
+                            Package = item.Package,
+                            Reply = item.Reply,
+                            SaleCount = item.SaleCount,
+                            SaledCount = item.SaledCount,
+                            DeleteFlag = item.DeleteFlag,
+                            CreateTime = item.CreateTime,
+                            CreateUser = item.CreateUser,
+                            UpdateTime = item.UpdateTime,
+                            UpdateUser = item.UpdateUser,
+                            OrderDetailIdList = OrderDetailIdList
+                        });
                     }
                     else
                     {
                         CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
+                        CheckProductBasic.FirstOrDefault().OrderDetailIdList.Add(new OrderDetailIdListInfo{OrderDetailId = item.Id, Count = item.Quantity});
                     }
                 }
 
                 foreach (var item in OrderDetailList)
                 {
+                    item.DeleteFlag = 0;
                     // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).ToListAsync();
                     // if (CheckWorkOrderHeads.Count() > 0)
                     // {
@@ -329,11 +369,11 @@ namespace HonjiMES.Controllers
                 }
 
                 _context.ChangeTracker.LazyLoadingEnabled = false;
-                // if (NewResultMessage.Length == 0) {
-                return Ok(MyFun.APIResponseOK("OK"));
-                // } else {
-                //     return Ok(MyFun.APIResponseOK("OK", NewResultMessage));
-                // }
+                if (NewResultMessage.Length == 0) {
+                    return Ok(MyFun.APIResponseOK("OK"));
+                } else {
+                    return Ok(MyFun.APIResponseOK("OK", NewResultMessage));
+                }
             }
             else
             {
@@ -1535,7 +1575,8 @@ namespace HonjiMES.Controllers
                 }
 
                 var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
-                var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
+                // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
+                var CheckWorkOrderHeads = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
                 if (CheckWorkOrderHeads.Count() > 0)
                 {
                     status = 1;
@@ -1567,6 +1608,7 @@ namespace HonjiMES.Controllers
                 WorkOrderHeadList.Add(nWorkOrderHead);
                 foreach (var item in Results)
                 {
+                    item.Count = item.Count * nWorkOrderHead.Count;
                     WorkOrderHeadList.Add(item);
                 }
             }
@@ -1675,6 +1717,19 @@ namespace HonjiMES.Controllers
                     {
                         item.Count = checkData.FirstOrDefault().Count;
                     }
+
+                    // 新增訂單明細&工單主檔的關聯 2020/10/08
+                    foreach (var item in OrderToWorkCheckData.OrderDetail.OrderDetailIdList)
+                    {
+                        nWorkOrderHead.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead{
+                            OrderDetailId = item.OrderDetailId,
+                            DataType = 2,
+                            DataId = OrderToWorkCheckData.OrderDetail.ProductBasicId,
+                            OrdeCount = item.Count,
+                            CreateTime = DateTime.Now,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                    }
                     _context.WorkOrderHeads.Add(nWorkOrderHead);
                 }
 
@@ -1687,6 +1742,19 @@ namespace HonjiMES.Controllers
                     ).ToList();
                     if (checkDataTemp.Count() == 1)
                     {
+                        // 新增訂單明細&工單主檔的關聯 2020/10/08
+                        foreach (var item2 in OrderToWorkCheckData.OrderDetail.OrderDetailIdList)
+                        {
+                            item.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead{
+                                OrderDetailId = item2.OrderDetailId,
+                                DataType = item.DataType,
+                                DataId = item.DataId,
+                                OrdeCount = item.Count * item2.Count,
+                                CreateTime = DateTime.Now,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
+                        }
+
                         item.Count = checkDataTemp.FirstOrDefault().Count;
                         foreach (var item2 in item.WorkOrderDetails)
                         {
@@ -1770,7 +1838,8 @@ namespace HonjiMES.Controllers
                         }
 
                         var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
-                        var CheckWorkOrderHeads = _context.WorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
+                        // var CheckWorkOrderHeads = _context.WorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
+                        var CheckWorkOrderHeads = _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
                         if (CheckWorkOrderHeads.Count() > 0)
                         {
                             status = 1;
@@ -1785,7 +1854,8 @@ namespace HonjiMES.Controllers
                             DataId = BasicDataID,
                             DataNo = BasicDataNo,
                             DataName = BasicDataName,
-                            Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1, // 注意!
+                            // Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1, // 注意!
+                            Count = Decimal.ToInt32(Decimal.Round(item.ReceiveQty)), // 注意!
                             Status = status, // 注意!原本用於表示該工單目前狀態，這裡借來表示[該工單是否已經建立]
                             CreateUser = MyFun.GetUserID(HttpContext),
                             StockCount = StockInfo
@@ -1803,7 +1873,8 @@ namespace HonjiMES.Controllers
                                 ProcessLeadTime = item2.ProcessLeadTime,
                                 ProcessTime = item2.ProcessTime,
                                 ProcessCost = item2.ProcessCost,
-                                Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1,
+                                // Count = Decimal.ToInt32(WorkOrderHead.Count * item.ReceiveQty) + 1,
+                                Count = Decimal.ToInt32(Decimal.Round(item.ReceiveQty)),
                                 // PurchaseId
                                 DrawNo = item2.DrawNo,
                                 Manpower = item2.Manpower,

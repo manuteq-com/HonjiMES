@@ -55,7 +55,6 @@ export class PostOrderMaster_Detail {
     orderDetail: OrderDetail[];
     workOrderHead: WorkOrderHead[];
 }
-
 export class InventoryChange {
     id: number;
     mod: string;
@@ -63,7 +62,6 @@ export class InventoryChange {
     reason: string;
     message: string;
 }
-
 export class Material {
     id: number;
     materialNo: string;
@@ -168,7 +166,6 @@ export class Selectitem {
     Id: number;
     Name: string;
 }
-
 export class BillofPurchaseDetail {
     Id: number;
     SupplierId: number;
@@ -177,7 +174,6 @@ export class BillofPurchaseDetail {
     OriginPrice: number;
     Price: number;
 }
-
 // tslint:disable-next-line: class-name
 export class workOrderReportData {
     WorkOrderID: number;
@@ -194,13 +190,11 @@ export class workOrderReportData {
     CodeNo: string;
     Type: number;
 }
-
 // tslint:disable-next-line: class-name
 export class requisitionsDetailInfo {
     RequisitionId: number;
     WarehouseId: number;
 }
-
 // tslint:disable-next-line: class-name
 export class basicData {
     TempId: number;
@@ -213,13 +207,11 @@ export class basicData {
     Price: number;
     WarehouseId: number;
 }
-
 export class MbomModelData {
     MbomModelHeadId: number;
     ModelCode: string;
     ModelName: string;
 }
-
 // tslint:disable-next-line: class-name
 export class mBillOfMaterial {
     SerialNumber: number;
@@ -240,4 +232,8 @@ export class WorkSchedulerStatu {
     text: string;
     id: number;
     color: string;
+}
+export class ToSaleInfo {
+    Id: number;
+    WarehouseId: number;
 }

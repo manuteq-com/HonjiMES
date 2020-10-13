@@ -603,6 +603,11 @@ namespace HonjiMES.Controllers
                     item.DeleteFlag = 1;
                 }
                 WorkOrderHeads.DeleteFlag = 1;
+                foreach (var item in WorkOrderHeads.OrderDetailAndWorkOrderHeads)
+                {
+                    item.DeleteFlag = 1;
+                }
+
                 await _context.SaveChangesAsync();
                 _context.ChangeTracker.LazyLoadingEnabled = false;
                 return Ok(MyFun.APIResponseOK("OK"));

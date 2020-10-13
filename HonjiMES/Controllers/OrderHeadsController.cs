@@ -298,14 +298,33 @@ namespace HonjiMES.Controllers
                             orderHead.OrderNo = key + OrderNo + NoCount.ToString("000");
                             orderHead.CreateTime = dt;
                             orderHead.CreateUser = MyFun.GetUserID(HttpContext);
+                            
+                            // 訂單複製功能，必須清除關聯資料。
                             var OrderDetails = new List<OrderDetail>();
                             foreach (var item in OrderDetail)
                             {
-                                item.Id = 0;
-                                item.CreateTime = dt;
-                                item.CreateUser = MyFun.GetUserID(HttpContext);
-                                OrderDetails.Add(item);
+                                OrderDetails.Add(new OrderDetail{
+                                    CustomerNo = item.CustomerNo,
+                                    Serial = item.Serial,
+                                    ProductBasicId = item.ProductBasicId,
+                                    Quantity = item.Quantity,
+                                    OriginPrice = item.OriginPrice,
+                                    Discount = item.Discount,
+                                    DiscountPrice = item.DiscountPrice,
+                                    Price = item.Price,
+                                    Unit = item.Unit,
+                                    DueDate = item.DueDate,
+                                    Remark = item.Remark,
+                                    ReplyDate = item.ReplyDate,
+                                    ReplyRemark = item.ReplyRemark,
+                                    MachineNo = item.MachineNo,
+                                    Package = item.Package,
+                                    Reply = item.Reply,
+                                    CreateTime = dt,
+                                    CreateUser = MyFun.GetUserID(HttpContext)
+                                });
                             }
+
                             orderHead.OrderDetails = OrderDetails.OrderBy(x => x.Serial).ToList();
                             _context.OrderHeads.Add(orderHead);
                             await _context.SaveChangesAsync();
@@ -597,7 +616,7 @@ namespace HonjiMES.Controllers
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.OrderDetails.Include(x => x.Order).Where(x => x.DeleteFlag == 0 && x.Order.Status == 0).OrderByDescending(x => x.Order.OrderNo);
+            var data = _context.OrderDetails.Include(x => x.Order).Where(x => x.DeleteFlag == 0 && x.Order.Status == 0).OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

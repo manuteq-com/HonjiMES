@@ -48,7 +48,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads).Include(x => x.PurchaseDetails).AsQueryable();
+            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads).Include(x => x.OrderDetailAndWorkOrderHeads).Include(x => x.PurchaseDetails).AsQueryable();
 
             if (OrderId.HasValue)
             {
@@ -71,13 +71,26 @@ namespace HonjiMES.Controllers
                     }
                 }
                 //取得工單號
-                foreach (var WorkOrderHeaditem in Detailitem.WorkOrderHeads.ToList())
+                foreach (var WorkOrderHeaditem in Detailitem.WorkOrderHeads.ToList()) // 先清空所有工單關聯資料。
                 {
-                    if (WorkOrderHeaditem.DeleteFlag != 0)
+                    Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
+                }
+                foreach (var WorkOrderHeaditem in Detailitem.OrderDetailAndWorkOrderHeads.ToList()) // 重新取得工單關聯資料。
+                {
+                    var WorkOrderHead = _context.WorkOrderHeads.Find(WorkOrderHeaditem.WorkHeadId);
+                    if (WorkOrderHeaditem.DeleteFlag == 0)
                     {
-                        Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
+                        Detailitem.WorkOrderHeads.Add(WorkOrderHead);
                     }
                 }
+                // //取得工單號(舊方法)
+                // foreach (var WorkOrderHeaditem in Detailitem.WorkOrderHeads.ToList())
+                // {
+                //     if (WorkOrderHeaditem.DeleteFlag != 0)
+                //     {
+                //         Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
+                //     }
+                // }
                 //取得採購單號
                 var tempCheck = new List<int>();
                 foreach (var PurchaseDetailitem in Detailitem.PurchaseDetails.ToList())

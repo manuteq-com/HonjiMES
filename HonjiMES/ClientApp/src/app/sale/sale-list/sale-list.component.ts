@@ -58,9 +58,10 @@ export class SaleListComponent implements OnInit, OnChanges {
     Url = '';
     UserList: any;
     overviewpopupVisible: boolean;
+    overRandomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
-        this.listSaleOrderStatus = myservice.getSaleOrderStatus();
+        this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.to_hsaleClick = this.to_hsaleClick.bind(this);
         this.to_dsaleClick = this.to_dsaleClick.bind(this);
@@ -172,18 +173,12 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.creatpopupVisible = true;
     }
     overviewpopup(e) {
+        this.overRandomkey = new Date().getTime();
         this.overviewpopupVisible = true;
     }
     creatpopup_result(e) {
-        this.creatpopupVisible = false;
+        this.overviewpopupVisible = false;
         this.dataGrid.instance.refresh();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
     }
     resalepopup_result(e) {
         this.resalepopupVisible = false;

@@ -46,6 +46,7 @@ export class OrderListComponent {
     randomkey: number;
     OrderTypeList: any;
     overviewpopupVisible = false;
+    overRandomkey: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
@@ -170,6 +171,7 @@ export class OrderListComponent {
         this.creatpopupVisible = true;
     }
     overviewpopup(e) {
+        this.overRandomkey = new Date().getTime();
         this.overviewpopupVisible = true;
     }
     updatepopup_result(e) {
@@ -196,7 +198,10 @@ export class OrderListComponent {
             }, 'success', 3000);
         }
     }
-
+    overpopup_result(e) {
+        this.overviewpopupVisible = false;
+        this.dataGrid.instance.refresh();
+    }
     selectionChanged(e) {
         // debugger;
         // 只開一筆Detail資料
