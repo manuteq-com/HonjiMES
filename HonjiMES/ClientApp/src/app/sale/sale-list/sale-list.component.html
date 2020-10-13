@@ -8,10 +8,11 @@
     </div>
     <div class="headerfont font2">銷貨單</div>
     <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="新增銷貨單" type="success" [width]="120"
-            (onClick)="creatdata()">
+        <dx-button class="overviewbtn" stylingMode="contained" text="銷貨單總覽" type="normal" [width]="130"
+            (onClick)="overviewpopup($event)">
         </dx-button>
-        <dx-button class="insertbtn ml-4" stylingMode="contained" text="銷貨單總覽" type="success" [width]="130" (onClick)="overviewpopup($event)">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增銷貨單" type="success" [width]="130"
+            (onClick)="creatdata()">
         </dx-button>
     </div>
 </div>
@@ -196,7 +197,7 @@
 <dx-popup [showTitle]="true" title="銷貨單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
     [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-sale-overview (childOuter)="creatpopup_result($event)"></app-sale-overview>
+        <app-sale-overview (childOuter)="creatpopup_result($event)" [randomkeyval]="overRandomkey"></app-sale-overview>
     </div>
 </dx-popup>
 

@@ -343,6 +343,95 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 銷貨單銷貨
         /// </summary>
+        /// <param name="ToSaleList"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<SaleHead>> SaleOrderToSale(List<SaleDetailNewData> ToSaleList)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var dt = DateTime.Now;
+            var oversale = new List<string>();
+            var Products = _context.Products.Where(x => x.DeleteFlag == 0);
+            foreach (var item in ToSaleList)
+            {
+                var SaleDetailData = await _context.SaleDetailNews.FindAsync(item.Id);
+                var ProductData = Products.Where(x => x.ProductBasicId == SaleDetailData.ProductBasicId && x.WarehouseId == item.WarehouseId).ToList();
+                var SaleHeadId = SaleDetailData.SaleId;
+
+                if (ProductData.Count() == 1)
+                {
+                    var Product = ProductData.FirstOrDefault();
+                    // if (SaleDetailData.OrderDetail.Quantity >= SaleDetailData.OrderDetail.SaleCount)
+                    {
+                        // 銷貨扣庫
+                        Product.ProductLogs.Add(new ProductLog
+                        {
+                            LinkOrder = SaleDetailData.Sale.SaleNo,
+                            Original = Product.Quantity,
+                            Quantity = -SaleDetailData.Quantity,
+                            Price = SaleDetailData.Price,
+                            PriceAll = SaleDetailData.Quantity * SaleDetailData.Price,
+                            Message = "銷貨",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        SaleDetailData.Status = 1; // 1已銷貨
+                        SaleDetailData.UpdateTime = dt;
+                        SaleDetailData.UpdateUser = MyFun.GetUserID(HttpContext);
+                        Product.Quantity -= SaleDetailData.Quantity;
+                        Product.QuantityAdv -= SaleDetailData.Quantity;
+                        Product.UpdateTime = dt;
+                        Product.UpdateUser = MyFun.GetUserID(HttpContext);
+
+                        if (Product.Quantity < 0)
+                        {
+                            oversale.Add(Product.ProductNo);
+                        }
+
+                        //更新訂單完成銷貨量
+                        SaleDetailData.OrderDetail.SaledCount = SaleDetailData.OrderDetail.SaledCount + SaleDetailData.Quantity;
+
+                        // 檢查該銷貨單各個明細狀態，更新銷貨單(head)狀態。
+                        var checkStatus = true;
+                        var SaleHeadData = _context.SaleHeads.Find(SaleHeadId);
+                        SaleHeadData.UpdateUser = MyFun.GetUserID(HttpContext);
+                        foreach (var SaleDetail in SaleHeadData.SaleDetailNews)
+                        {
+                            if (SaleDetail.Status == 0)
+                            {
+                                checkStatus = false;
+                            }
+                        }
+                        if (checkStatus == true)
+                        {
+                            SaleHeadData.Status = 2; // 完成銷貨
+                        }
+                        else
+                        {
+                            SaleHeadData.Status = 1; // 銷貨一半(未完成)
+                        }
+                    }
+                }
+                else
+                {
+                    return Ok(MyFun.APIResponseError("銷貨單號：" + SaleDetailData.Sale.SaleNo + "　[ 品號：" + SaleDetailData.ProductBasic.ProductNo + " ] 查無庫存資訊!"));
+                }
+            }
+
+            if (oversale.Any())
+            {
+                var ErrMsg = string.Join('；', oversale) + "\r\n" + "庫存不足，銷貨失敗";
+                return Ok(MyFun.APIResponseError(ErrMsg));
+            }
+            else
+            {
+                await _context.SaveChangesAsync();
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK("OK"));
+        }
+        /// <summary>
+        /// 銷貨單銷貨
+        /// </summary>
         /// <param name="OrderSale"></param>
         /// <returns></returns>
         [HttpPost]
@@ -381,7 +470,7 @@ namespace HonjiMES.Controllers
             {
                 saleId = item.SaleId;
 
-                if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
+                // if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
                     item.Product.ProductLogs.Add(new ProductLog

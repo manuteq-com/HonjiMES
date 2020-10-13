@@ -21,13 +21,22 @@
 
     </div>
 
-    <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
-        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    <dx-data-grid #dataGrid1
+        [dataSource]="dataSourceDB1"
+        showBorders="true"
+        keyExpr="Id"
+        [focusedRowEnabled]="true"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)"
+        [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)"
+        (onFocusedRowChanged)="onFocusedRowChanged($event)"
         (onEditorPreparing)="onEditorPreparing($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)"
-        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
-        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)"
+        [showColumnLines]="true"
+        [showRowLines]="false"
         [height]="290">
 
         <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>

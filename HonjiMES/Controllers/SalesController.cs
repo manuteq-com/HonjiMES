@@ -218,6 +218,53 @@ namespace HonjiMES.Controllers
             return _context.Sales.Any(e => e.Id == id);
         }
 
+        /// <summary>
+        /// 取得銷貨單明細列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Sales
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleOrderList()
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
+            var SaleDetailNews = await _context.SaleDetailNews
+                .Where(x => x.DeleteFlag == 0 && x.Sale.DeleteFlag == 0)
+                // .Include(x => x.Order)
+                // .Include(x => x.OrderDetail)
+                // .Include(x => x.Sale)
+                .OrderByDescending(x => x.Sale.SaleNo).ThenBy(x => x.OrderDetail.Serial)
+                .Select(x => new SaleDetailNewData
+                {
+                    TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                    Id = x.Id,
+                    SaleId = x.SaleId,
+                    OrderId = x.OrderId,
+                    OrderDetailId = x.OrderDetailId,
+                    ProductBasicId = x.ProductBasicId,
+                    ProductId = x.ProductId,
+                    SaleNo = x.Sale.SaleNo,
+                    SaleDate = x.Sale.SaleDate,
+                    CustomerNo = x.Order.CustomerNo,
+                    OrderNo = x.Order.OrderNo,
+                    Serial = x.OrderDetail.Serial,
+                    MachineNo = x.OrderDetail.MachineNo,
+                    ProductNo = x.ProductNo,
+                    Status = x.Status,
+                    Name = x.Name,
+                    Specification = x.Specification,
+                    Quantity = x.Quantity,
+                    OriginPrice = x.OriginPrice,
+                    Price = x.Price,
+                    Remarks = x.Remarks,
+                    CreateTime = x.CreateTime,
+                    CreateUser = x.CreateUser,
+                    UpdateTime = x.UpdateTime,
+                    UpdateUser = x.UpdateUser,
+                    DeleteFlag = x.DeleteFlag,
+                }).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            return Ok(MyFun.APIResponseOK(SaleDetailNews));
+        }
 
         /// <summary>
         /// 查詢銷貨單全部資料
@@ -230,7 +277,7 @@ namespace HonjiMES.Controllers
         {
            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 )
-            .Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.Sale).OrderByDescending(x => x.Sale.SaleDate)
+            .Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.Sale).OrderByDescending(x => x.Sale.SaleNo).ThenBy(x => x.OrderDetail.Serial)
             .Select(x => new SaleDetailNewData
             {
                 TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),

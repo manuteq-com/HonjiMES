@@ -1,4 +1,4 @@
-<form action="" (submit)="onFormSubmit($event)">
+<!-- <form action="" (submit)="onFormSubmit($event)">
 <div id="form-container">
     <div class="col-auto-12 mt-2 mb-1 ml-4">
         <dx-form id="form" [formData]="formData" [colCount]="4">
@@ -14,7 +14,10 @@
     </div>
 </div>
 
+</form> -->
+
 <dx-data-grid
+    #dataGrid1
     [dataSource]="dataSourceDB"
     showBorders="true"
     keyExpr="Id"
@@ -24,11 +27,14 @@
     (onFocusedRowChanging)="onFocusedRowChanging($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
+    (onToolbarPreparing)="onToolbarPreparing($event)"
     (onValueChanged)="onValueChanged($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
     hoverStateEnabled="true"
     [rowAlternationEnabled]="true"
     [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true" [height]="600">
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true" [height]="650">
 
     <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
@@ -40,35 +46,47 @@
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
 
 
-    <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox"
-    [editorOptions]="editorOptions">
-    </dxi-column>
-    <dxi-column dataField="Warehouse" caption="銷貨倉別" [width]="110" editCellTemplate="WarehouseIdEditCellTemplate"
+    <!-- <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
+    </dxi-column> -->
+    <dxi-column dataField="WarehouseId" caption="銷貨倉別" [width]="160" editCellTemplate="WarehouseIdEditCellTemplate"
     [editorOptions]="editorOptions">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="SaleNo" caption="銷貨單單單號" [width]="140" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號" [width]="140" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80" [allowEditing]="false">
-        <dxo-lookup [dataSource]="selectSaleType" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxo-lookup [dataSource]="SaleOrderDetailStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="160" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Serial" caption="訂單序號" [width]="80" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Serial" caption="序號" [width]="50" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="170" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="ProductNo" caption="品號" [width]="200" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Name" caption="品名" [width]="200" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Specification" caption="規格" [width]="200" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
+    <!-- <dxi-column dataField="Name" caption="品名" [width]="200" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [width]="200" [allowEditing]="false"></dxi-column> -->
     <dxi-column dataField="Quantity" caption="數量" [width]="50" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Price" caption="金額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="TotalCount" caption="成品倉數量" [width]="120" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="TotalCount" caption="成品倉數量" [width]="100" [allowEditing]="false"></dxi-column>
 
     <div *dxTemplate="let data of 'WarehouseIdEditCellTemplate'">
-        <dx-select-box [value]="data.value" [dataSource]="{ paginate: true,
-            store: { type: 'array', data: WarehouseList, key:'Id' } }"
-            valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" 
+            [dataSource]="{ paginate: true, store: { type: 'array', data: WarehouseList, key:'Id' } }" valueExpr="Id" displayExpr="Name"
+            [searchEnabled]="true">
+        </dx-select-box>
     </div>
-    </dx-data-grid>
 
-</form>
+</dx-data-grid>
+
+<div class="row pt-3">
+    <div class="col-md-6 col-sm-8">
+    </div>
+    <div class="col-md-2 col-sm-2">
+        <!-- <div class="input-group">
+            <label class="pt-2">總數量：{{totalcount}}</label>
+        </div> -->
+    </div>
+    <div class="col-md-4 col-sm-1">
+        <dx-button text="批次銷貨" type="success" (onClick)="to_saleClick($event)" [width]="100"></dx-button>
+    </div>
+</div>

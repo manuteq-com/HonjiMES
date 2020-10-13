@@ -67,7 +67,7 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
-    /// 成品主檔資訊
+    /// 銷貨單資訊
     /// </summary>
     public class SaleDetailNewData : SaleDetailNew
     {
@@ -78,6 +78,7 @@ namespace HonjiMES.Models
         public string MachineNo { get; set; }
         public string SaleNo { get; set; }
         public DateTime? SaleDate { get; set; }
+        public int WarehouseId { get; set; }
     }
 
     /// <summary>
@@ -981,7 +982,7 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
-    /// 成品主檔資訊
+    /// 資源分配資訊
     /// </summary>
     public class ResoureAllocation
     {

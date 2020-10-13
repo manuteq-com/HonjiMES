@@ -7,3 +7,7 @@
     position: absolute;
     right: 20px;
 }
+.dx-button {
+    float: right;
+    margin-right: 6px;
+}
