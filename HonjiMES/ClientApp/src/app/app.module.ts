@@ -120,6 +120,7 @@ import { UserQrcodeComponent } from './setting/user-qrcode/user-qrcode.component
 import { UserPasswordComponent } from './setting/user-password/user-password.component';
 import { OrderOverviewComponent } from './order/order-overview/order-overview.component';
 import { SaleOverviewComponent } from './sale/sale-overview/sale-overview.component';
+import { WorkorderCreatStockComponent } from './workorder/workorder-creat-stock/workorder-creat-stock.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -254,7 +255,8 @@ export function tokenGetter() {
         UserQrcodeComponent,
         UserPasswordComponent,
         OrderOverviewComponent,
-        SaleOverviewComponent
+        SaleOverviewComponent,
+        WorkorderCreatStockComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
