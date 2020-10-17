@@ -47,6 +47,9 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadDataId: any;
     modkey: string;
     userkey: any;
+    lograndomkey: number;
+    showTitleValue: string;
+    workOrderHeadDataNo: any;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listStatus = myservice.getWorkOrderStatus();
@@ -59,6 +62,7 @@ export class ProcessControlComponent implements OnInit {
         this.dataSourceDB_Process = [];
         this.btnDisabled = true;
         this.postval = {};
+        this.showTitleValue = '報工紀錄';
 
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -171,7 +175,7 @@ export class ProcessControlComponent implements OnInit {
                         this.dataSourceDB_Process = s.data.WorkOrderDetail;
                         this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
                         // this.workOrderHeadId = s.data.WorkOrderHead.Id;
-                        // this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
+                        this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
                         // this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
                         // this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
                         // this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
@@ -197,6 +201,8 @@ export class ProcessControlComponent implements OnInit {
         this.closepopupVisible = true;
     }
     readLog(e, data) {
+        this.showTitleValue = '報工紀錄　[ ' + this.workOrderHeadDataNo + ' ]';
+        this.lograndomkey = new Date().getTime();
         this.itemkey = data.data.Id;
         this.logpopupVisible = true;
     }

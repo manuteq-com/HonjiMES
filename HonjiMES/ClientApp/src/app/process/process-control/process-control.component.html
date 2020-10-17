@@ -160,10 +160,10 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
+        <dx-popup [showTitle]="true" [title]="showTitleValue" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
             [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
+                <app-workorder-report-log [itemkeyval]="itemkey" [randomkey]="lograndomkey"></app-workorder-report-log>
             </div>
         </dx-popup>
 

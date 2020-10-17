@@ -189,6 +189,30 @@ export class workOrderReportData {
     CreateUser: number;
     CodeNo: string;
     Type: number;
+
+    ReportType: number;
+    CkCount: number;
+    OkCount: number;
+    NgCount: number;
+    NcCount: number;
+    DrawNo: number;
+    CheckResult: number;
+    Message: number;
+}
+// tslint:disable-next-line: class-name
+export class workOrderQcData {
+    WorkOrderHeadId: number;
+    WorkOrderDetailId: number;
+    ReportType: number;
+    ReCount: number;
+    CkCount: number;
+    OkCount: number;
+    NgCount: number;
+    NcCount: number;
+    DrawNo: string;
+    CheckResult: number;
+    CreateUser: number;
+    Message: string;
 }
 // tslint:disable-next-line: class-name
 export class requisitionsDetailInfo {

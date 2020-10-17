@@ -11,6 +11,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class WorkorderReportLogComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
+    @Input() randomkey: any;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
 
     controller: string;
@@ -28,8 +29,12 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
     buttondisabled = false;
     ReportTypeList: any;
     UserList: any;
+    QcTypeList: any;
+    QCVisible: boolean;
+    NCVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.QcTypeList = myservice.getQcType();
         // this.CustomerVal = null;
         // this.formData = null;
         this.ReportTypeList = myservice.getReportType();
@@ -43,30 +48,58 @@ export class WorkorderReportLogComponent implements OnInit, OnChanges {
         this.colCount = 4;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
+        this.QCVisible = false;
+        this.NCVisible = false;
     }
     ngOnInit() {
     }
     ngOnChanges() {
         // debugger;
+        this.QCVisible = false;
+        this.NCVisible = false;
         this.dataSourceDB = [];
         this.app.GetData('/Users/GetUsers').subscribe(
             (s2) => {
                 if (s2.success) {
                     this.UserList = s2.data;
-                    if (this.itemkeyval != null) {
-                        this.app.GetData('/WorkOrders/GetWorkOrderLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
+                    if (this.itemkeyval != null && this.itemkeyval !== 0) {
+                        this.app.GetData('/WorkOrders/GetWorkOrderProcessByWorkOrderDetailId/' + this.itemkeyval).subscribe(
                             (s) => {
                                 if (s.success) {
-                                    s.data.forEach(element => {
-                                        element.CreateUser = s2.data.find(x => x.Id === element.CreateUser).Realname;
-                                        element.ReCount = element.ReCount !== 0 ? element.ReCount : null;
-                                        element.NgCount = element.NgCount !== 0 ? element.NgCount : null;
-                                    });
-                                    this.dataSourceDB = s.data;
+                                    if (s.data.Type === null || s.data.Type === 10) { // 顯示NC報工log
+                                        this.ShowNCLogView(s2.data);
+                                    } else if (s.data.Type === 20) { // 顯示QC報工log
+                                        this.ShowQCLogView(s2.data);
+                                    }
                                 }
                             }
                         );
                     }
+                }
+            }
+        );
+    }
+    ShowNCLogView(data) {
+        this.NCVisible = true;
+        this.app.GetData('/WorkOrders/GetWorkOrderLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(element => {
+                        // element.CreateUser = data.find(x => x.Id === element.CreateUser).Realname;
+                        element.ReCount = element.ReCount !== 0 ? element.ReCount : null;
+                        element.NgCount = element.NgCount !== 0 ? element.NgCount : null;
+                    });
+                    this.dataSourceDB = s.data;
+                }
+            }
+        );
+    }
+    ShowQCLogView(data) {
+        this.QCVisible = true;
+        this.app.GetData('/WorkOrders/GetWorkOrderQCLogByWorkOrderDetailId/' + this.itemkeyval).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.dataSourceDB = s.data;
                 }
             }
         );

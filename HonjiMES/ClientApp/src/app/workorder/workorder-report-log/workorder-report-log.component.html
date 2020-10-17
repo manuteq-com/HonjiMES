@@ -30,19 +30,41 @@
 
     <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
     <dxi-column dataField="CreateUser" caption="回報人員" alignment="center" [width]="100">
-        <!-- <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup> -->
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="70"></dxi-column>
-    <dxi-column dataField="ReCount" caption="回報完工數量" [width]="110"></dxi-column>
-    <dxi-column dataField="NgCount" caption="回報NG數量" [width]="100"></dxi-column>
-    <!-- <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100"></dxi-column> -->
-    <dxi-column dataField="DrawNo" caption="圖號" [width]="120"></dxi-column>
-    <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="120"></dxi-column>
-    <dxi-column dataField="Supplier.Name" caption="供應商" [width]="160"></dxi-column>
-    <dxi-column dataField="Message" caption="回報說明"></dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="70" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="ReCount" caption="回報良品數量" [width]="110" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="NgCount" caption="回報NG數量" [width]="100" [visible]="NCVisible"></dxi-column>
+    <!-- <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100" [visible]="NCVisible"></dxi-column> -->
+    <dxi-column dataField="DrawNo" caption="圖號" [width]="120" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="120" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="Supplier.Name" caption="供應商" [width]="160" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="Message" caption="回報說明" [visible]="NCVisible"></dxi-column>
+
+
+    <!-- <dxi-column dataField="QCWorkOrderHead.WorkOrderNo" caption="工單號" [width]="150" [visible]="QCVisible"></dxi-column> -->
+    <dxi-column dataField="QCReportType" caption="檢驗種類" alignment="center" [width]="150" [visible]="QCVisible">
+        <dxo-lookup [dataSource]="QcTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <!-- <dxi-column dataField="QCDrawNo" caption="圖號" [width]="150" [visible]="QCVisible"></dxi-column> -->
+    <dxi-column dataField="QCReCount" caption="回報數量" [width]="80" [visible]="QCVisible"></dxi-column>
+    <dxi-column dataField="QCCkCount" caption="檢驗數量" [width]="80" [visible]="QCVisible"></dxi-column>
+    <dxi-column dataField="QCOkCount" caption="合格數量" [width]="80" [visible]="QCVisible"></dxi-column>
+    <dxi-column dataField="QCNgCount" caption="NG數量" [width]="70" [visible]="QCVisible"></dxi-column>
+    <dxi-column dataField="QCNcCount" caption="NC數量" [width]="70" [visible]="QCVisible"></dxi-column>
+    <!-- <dxi-column dataField="QCCheckResult" caption="檢驗結果" alignment="center" [width] [visible]="QCVisible"="110">
+        <dxo-lookup [dataSource]="QcResultList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column> -->
+    <dxi-column dataField="QCMessage" caption="檢驗說明" [visible]="QCVisible"></dxi-column>
+    <!-- <dxi-column dataField="QCCreateUser" caption="檢驗人員" alignment="center" [width]="110" [visible]="QCVisible">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column> -->
+    <!-- <dxi-column dataField="QCCreateTime" caption="檢驗日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180" [visible]="QCVisible"></dxi-column> -->
+
+
 
     <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date">
     </dxi-column>

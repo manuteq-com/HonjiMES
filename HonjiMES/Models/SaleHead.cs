@@ -15,6 +15,7 @@ namespace HonjiMES.Models
         public SaleHead()
         {
             SaleDetailNews = new HashSet<SaleDetailNew>();
+            WorkOrderQcLogs = new HashSet<WorkOrderQcLog>();
         }
 
         [Key]
@@ -61,5 +62,7 @@ namespace HonjiMES.Models
 
         [InverseProperty(nameof(SaleDetailNew.Sale))]
         public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
+        [InverseProperty(nameof(WorkOrderQcLog.SaleHead))]
+        public virtual ICollection<WorkOrderQcLog> WorkOrderQcLogs { get; set; }
     }
 }

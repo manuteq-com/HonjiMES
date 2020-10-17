@@ -34,6 +34,11 @@ namespace HonjiMES.Models
         [Column("code", TypeName = "varchar(50)")]
         public string Code { get; set; }
         /// <summary>
+        /// &#24037;&#24207;&#31278;&#39006;
+        /// </summary>
+        [Column("type", TypeName = "int(11)")]
+        public int? Type { get; set; }
+        /// <summary>
         /// &#21069;&#32622;&#26178;&#38291;	
         /// </summary>
         [Column("lead_time", TypeName = "decimal(10,2)")]

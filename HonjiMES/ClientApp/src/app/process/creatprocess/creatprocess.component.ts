@@ -7,6 +7,7 @@ import { Customer } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-creatprocess',
@@ -36,7 +37,11 @@ export class CreatprocessComponent implements OnInit, OnChanges {
         icon: 'save'
     };
     NumberBoxOptions: { showSpinButtons: boolean; mode: string; min: number; value: number; };
-    constructor(private http: HttpClient, public app: AppComponent) {
+    ProcessTypeList: any;
+    selectBoxOptions: { items: any; displayExpr: string; valueExpr: string; };
+
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.ProcessTypeList = myservice.getProcessType();
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -47,6 +52,11 @@ export class CreatprocessComponent implements OnInit, OnChanges {
         this.minColWidth = 100;
         this.colCount = 1;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
+        this.selectBoxOptions = {
+            items: this.ProcessTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+        };
     }
     ngOnChanges() {
 

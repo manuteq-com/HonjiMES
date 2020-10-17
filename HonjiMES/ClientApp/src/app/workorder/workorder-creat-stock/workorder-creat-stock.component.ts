@@ -166,32 +166,52 @@ export class WorkorderCreatStockComponent implements OnInit {
                 }
             );
         }
+
+        //// 測試用暫時加入，可選人員
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
+                    this.buttondisabled = false;
                     this.UserList = [];
-                    let tempUser = null;
-                    if (this.userkeyval !== null) {
-                        tempUser = this.userkeyval;
-                    }
-
                     // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
                     s.data.forEach(element => {
-                        if (element.Permission === 20 && element.Id === tempUser) {
-                            this.UserList.push(element);
-                            s.data.forEach(element2 => {
-                                if (element2.Permission === 70) {
-                                    this.UserList.push(element2);
-                                }
-                            });
-                        } else if (element.Permission === 70 && element.Id === tempUser) {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
                             this.UserList.push(element);
                         }
                     });
-                    this.SetUserEditorOptions(this.UserList, tempUser);
+                    this.SetUserEditorOptions(this.UserList, null);
                 }
             }
         );
+
+        // this.app.GetData('/Users/GetUsers').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.UserList = [];
+        //             let tempUser = null;
+        //             if (this.userkeyval !== null) {
+        //                 tempUser = this.userkeyval;
+        //             }
+
+        //             // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+        //             s.data.forEach(element => {
+        //                 if (element.Permission === 20 && element.Id === tempUser) {
+        //                     this.UserList.push(element);
+        //                     s.data.forEach(element2 => {
+        //                         if (element2.Permission === 70) {
+        //                             this.UserList.push(element2);
+        //                         }
+        //                     });
+        //                 } else if (element.Permission === 70 && element.Id === tempUser) {
+        //                     this.UserList.push(element);
+        //                 }
+        //             });
+        //             this.SetUserEditorOptions(this.UserList, tempUser);
+        //         }
+        //     }
+        // );
     }
     GetDataInfo() {
         if (this.modkeyval === 'material') {

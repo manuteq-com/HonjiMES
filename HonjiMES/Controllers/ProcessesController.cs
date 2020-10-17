@@ -302,7 +302,8 @@ namespace HonjiMES.Controllers
                                     value1 = gitem[i].ProcessTime.ToString(),
                                     value2 = gitem[i].ProducingMachine,
                                     value3 = gitem[i].Status,
-                                    value4 = gitem[i].Type
+                                    value4 = gitem[i].Type,
+                                    value5 = gitem[i].Process.Type
                                 };
                                 typeitem.SetValue(nProcessesData, nTempString);
                                 foreach (var Columnitem in ColumnOptionlist.Where(x => x.key == "Temp" + i.ToString()))
@@ -336,11 +337,51 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderId(int id)
         {
             var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToListAsync();
-            var WorkOrderData = new WorkOrderData
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).Include(x => x.Process).OrderBy(x => x.SerialNumber).ToListAsync();
+
+            var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
+            foreach (var item in WorkOrderDetails)
+            {
+                WorkOrderDetailDataList.Add(new WorkOrderDetailData{
+                    Id = item.Id,
+                    WorkOrderHeadId = item.WorkOrderHeadId,
+                    SerialNumber = item.SerialNumber,
+                    ProcessId = item.ProcessId,
+                    ProcessNo = item.ProcessNo,
+                    ProcessName = item.ProcessName,
+                    ProcessLeadTime = item.ProcessLeadTime,
+                    ProcessTime = item.ProcessTime,
+                    ProcessCost = item.ProcessCost,
+                    Count = item.Count,
+                    PurchaseId = item.PurchaseId,
+                    SupplierId = item.SupplierId,
+                    DrawNo = item.DrawNo,
+                    CodeNo = item.CodeNo,
+                    Manpower = item.Manpower,
+                    ProducingMachine = item.ProducingMachine,
+                    Status = item.Status,
+                    Type = item.Type,
+                    Remarks = item.Remarks,
+                    ReCount = item.ReCount,
+                    RePrice = item.RePrice,
+                    NgCount = item.NgCount,
+                    TotalTime = item.TotalTime,
+                    DueStartTime = item.DueStartTime,
+                    DueEndTime = item.DueEndTime,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    DeleteFlag = item.DeleteFlag,
+                    CreateTime = item.CreateTime,
+                    CreateUser = item.CreateUser,
+                    UpdateTime = item.UpdateTime,
+                    UpdateUser = item.UpdateUser,
+                    ProcessType = item.Process.Type
+                });
+            }
+            var WorkOrderData = new WorkOrderData2
             {
                 WorkOrderHead = WorkOrderHeads,
-                WorkOrderDetail = WorkOrderDetails
+                WorkOrderDetail = WorkOrderDetailDataList
             };
             // var WorkOrder = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).Where(x => x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)).FirstOrDefaultAsync();
             if (WorkOrderHeads == null || WorkOrderDetails == null)

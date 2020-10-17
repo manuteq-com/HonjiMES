@@ -88,8 +88,8 @@
 
         <dxi-column dataField="ReCount" caption="完工" [allowEditing]="false" [width]="60"></dxi-column>
         <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" [width]="60"></dxi-column>
-        <dxi-column dataField="ReportCount" caption="回報數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions" [width]="80">
-            <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="完工數量 必須 >= 0">
+        <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions" [width]="80">
+            <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="良品數量 必須 >= 0">
             </dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="ReportNgCount" caption="回報NG" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions" [width]="80"></dxi-column>
