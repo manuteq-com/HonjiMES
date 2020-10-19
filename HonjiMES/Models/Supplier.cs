@@ -21,6 +21,7 @@ namespace HonjiMES.Models
             SupplierOfMaterials = new HashSet<SupplierOfMaterial>();
             WiproductBasics = new HashSet<WiproductBasic>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            WorkOrderQcLogs = new HashSet<WorkOrderQcLog>();
             WorkOrderReportLogs = new HashSet<WorkOrderReportLog>();
         }
 
@@ -120,6 +121,8 @@ namespace HonjiMES.Models
         public virtual ICollection<WiproductBasic> WiproductBasics { get; set; }
         [InverseProperty(nameof(WorkOrderDetail.Supplier))]
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        [InverseProperty(nameof(WorkOrderQcLog.Supplier))]
+        public virtual ICollection<WorkOrderQcLog> WorkOrderQcLogs { get; set; }
         [InverseProperty(nameof(WorkOrderReportLog.Supplier))]
         public virtual ICollection<WorkOrderReportLog> WorkOrderReportLogs { get; set; }
     }

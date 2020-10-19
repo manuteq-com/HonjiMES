@@ -229,6 +229,77 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢工單明細的報工紀錄
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<OrderHead>>> GetWorkOrderQCLogByWorkOrderDetailId(int id)
+        {
+            var WorkOrderReportLogs = await _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 && x.WorkOrderDetailId == id).Include(x => x.Supplier).ToListAsync();
+            var WorkOrderQcLogs = await _context.WorkOrderQcLogs.Where(x => x.DeleteFlag == 0 && x.WorkOrderDetailId == id).ToListAsync();
+            var data = new List<WorkOrderReportLogData>();
+            foreach (var item in WorkOrderReportLogs)
+            {
+                var QClog = WorkOrderQcLogs.Where(x => x.CreateTime == item.CreateTime).FirstOrDefault();
+                data.Add(new WorkOrderReportLogData{
+                    CreateTime = item.CreateTime,
+                    CreateUser = item.CreateUser,
+                    ReportType = item.ReportType,
+                    // ProducingMachine = item.ProducingMachine,
+                    // ReCount = item.ReCount,
+                    // NgCount = item.NgCount,
+                    // RePrice = item.RePrice,
+                    // DrawNo = item.DrawNo,
+                    // PurchaseNo = item.PurchaseNo,
+                    // Supplier = item.Supplier,
+                    // Message = item.Message,
+                    QCReportType = QClog?.ReportType ?? 0,
+                    QCReCount = QClog?.ReCount ?? 0,
+                    QCCkCount = QClog?.CkCount ?? 0,
+                    QCOkCount = QClog?.OkCount ?? 0,
+                    QCNgCount = QClog?.NgCount ?? 0,
+                    QCNcCount = QClog?.NcCount ?? 0,
+                    // CheckResult = QClog?.CheckResult ?? 0,
+                    QCMessage = QClog?.Message ?? null,
+                    // DueStartTime = item.DueStartTime,
+                    // DueEndTime = item.DueEndTime,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                });
+            }
+
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
+        /// <summary>
+        /// 查詢製程資訊By工單明細Id
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Process>>> GetWorkOrderProcessByWorkOrderDetailId(int id)
+        {
+            var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Id == id).Include(x => x.Process).Select(x => new Process{
+                Id = x.Process.Id,
+                Name = x.Process.Name,
+                Code = x.Process.Code,
+                Type = x.Process.Type,
+                LeadTime = x.Process.LeadTime,
+                WorkTime = x.Process.WorkTime,
+                Cost = x.Process.Cost,
+                DrawNo = x.Process.DrawNo,
+                Manpower = x.Process.Manpower,
+                ProducingMachine = x.Process.ProducingMachine,
+                Remark = x.Process.Remark,
+                CreateTime = x.Process.CreateTime,
+                CreateUser = x.Process.CreateUser,
+                UpdateTime = x.Process.UpdateTime,
+                UpdateUser = x.Process.UpdateUser,
+                DeleteFlag = x.Process.DeleteFlag,
+            }).FirstOrDefaultAsync();
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
+        /// <summary>
         /// 訂單轉工單前，確認清單
         /// </summary>
         /// <param name="OrderData"></param>
@@ -308,8 +379,9 @@ namespace HonjiMES.Controllers
                     {
                         item.DeleteFlag = CheckWorkOrder ? 1 : 0; // 借用欄位，用來辨識是否要合併!
                         var OrderDetailIdList = new List<OrderDetailIdListInfo>();
-                        OrderDetailIdList.Add(new OrderDetailIdListInfo{OrderDetailId = item.Id, Count = item.Quantity});
-                        OrderDetailList.Add(new ToWorksOrderDetail{
+                        OrderDetailIdList.Add(new OrderDetailIdListInfo { OrderDetailId = item.Id, Count = item.Quantity });
+                        OrderDetailList.Add(new ToWorksOrderDetail
+                        {
                             Id = item.Id,
                             OrderId = item.OrderId,
                             CustomerNo = item.CustomerNo,
@@ -346,7 +418,7 @@ namespace HonjiMES.Controllers
                     else
                     {
                         CheckProductBasic.FirstOrDefault().Quantity += item.Quantity;
-                        CheckProductBasic.FirstOrDefault().OrderDetailIdList.Add(new OrderDetailIdListInfo{OrderDetailId = item.Id, Count = item.Quantity});
+                        CheckProductBasic.FirstOrDefault().OrderDetailIdList.Add(new OrderDetailIdListInfo { OrderDetailId = item.Id, Count = item.Quantity });
                     }
                 }
 
@@ -369,9 +441,12 @@ namespace HonjiMES.Controllers
                 }
 
                 _context.ChangeTracker.LazyLoadingEnabled = false;
-                if (NewResultMessage.Length == 0) {
+                if (NewResultMessage.Length == 0)
+                {
                     return Ok(MyFun.APIResponseOK("OK"));
-                } else {
+                }
+                else
+                {
                     return Ok(MyFun.APIResponseOK("OK", NewResultMessage));
                 }
             }
@@ -427,7 +502,8 @@ namespace HonjiMES.Controllers
             var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
 
             // 入庫數量不能大於工單量 2020/10/05
-            if ((OWorkOrderHead.ReCount + WorkOrderReportData.ReCount) > OWorkOrderHead.Count) {
+            if ((OWorkOrderHead.ReCount + WorkOrderReportData.ReCount) > OWorkOrderHead.Count)
+            {
                 return Ok(MyFun.APIResponseError("入庫數量已超過工單量!! ( 工單量:" + OWorkOrderHead.Count + "　已完工量:" + OWorkOrderHead.ReCount + " )"));
             }
             OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
@@ -435,7 +511,8 @@ namespace HonjiMES.Controllers
             OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
 
             // 入庫數量抵達工單量以後，工單自動結案 2020/10/05
-            if (OWorkOrderHead.Count == OWorkOrderHead.ReCount) {
+            if (OWorkOrderHead.Count == OWorkOrderHead.ReCount)
+            {
                 OWorkOrderHead.Status = 5;//結案
             }
 
@@ -444,9 +521,12 @@ namespace HonjiMES.Controllers
             Decimal tempQuantity = 0;
             var tempDataNo = "";
             var MessageType = "";
-            if (WorkOrderReportData.Type == 0) {
+            if (WorkOrderReportData.Type == 0)
+            {
                 MessageType = "半成品入庫";
-            } else if (WorkOrderReportData.Type == 1) {
+            }
+            else if (WorkOrderReportData.Type == 1)
+            {
                 MessageType = "成品入庫";
             }
             var checkInfo = false;
@@ -625,7 +705,8 @@ namespace HonjiMES.Controllers
             {
                 var LastStockNo = NoData.FirstOrDefault().StockNo;
                 var NoLast = Int32.Parse(LastStockNo.Substring(LastStockNo.Length - 3, 3));
-                if (NoCount <= NoLast) {
+                if (NoCount <= NoLast)
+                {
                     NoCount = NoLast + 1;
                 }
             }
@@ -1207,11 +1288,12 @@ namespace HonjiMES.Controllers
                     var checkLogEnd = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime != null && x.DeleteFlag == 0);
                     if ((checkLogStart.Count() - checkLogEnd.Count()) == 1)
                     {
+                        var dt = DateTime.Now;
                         var Val = Convert.ToInt32(WorkOrderDetails.FirstOrDefault().ProcessTime * WorkOrderReportData.ReCount);
                         if (Val != 0)
                         {
                             // // Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes)
-                            var ActualTimeDiff = DateTime.Now - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? DateTime.Now);
+                            var ActualTimeDiff = dt - (WorkOrderDetails.FirstOrDefault()?.ActualStartTime ?? dt);
                             if (Convert.ToInt32(ActualTimeDiff.TotalMinutes) > Val)
                             {
                                 WorkOrderDetails.FirstOrDefault().Status = 6;// 完工(超時)
@@ -1227,7 +1309,7 @@ namespace HonjiMES.Controllers
                         }
 
                         WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
-                        WorkOrderDetails.FirstOrDefault().ActualEndTime = DateTime.Now;
+                        WorkOrderDetails.FirstOrDefault().ActualEndTime = dt;
                         WorkOrderDetails.FirstOrDefault().ReCount = (WorkOrderDetails.FirstOrDefault()?.ReCount ?? 0) + WorkOrderReportData.ReCount;
                         WorkOrderDetails.FirstOrDefault().NgCount = (WorkOrderDetails.FirstOrDefault()?.NgCount ?? 0) + WorkOrderReportData.NgCount;
                         WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
@@ -1256,7 +1338,7 @@ namespace HonjiMES.Controllers
                             DueEndTime = WorkOrderDetails.FirstOrDefault().DueEndTime,
                             ActualStartTime = checkLogStart.FirstOrDefault().ActualStartTime,
                             ActualEndTime = WorkOrderDetails.FirstOrDefault().ActualEndTime,
-                            CreateTime = DateTime.Now,
+                            CreateTime = dt,
                             CreateUser = WorkOrderReportData.CreateUser,
                         });
 
@@ -1273,6 +1355,30 @@ namespace HonjiMES.Controllers
                         // {
                         //     WorkOrderHeads.Status = 3;
                         // }
+
+                        // 該製程為QC檢驗的話，須建立QC檢驗log。
+                        if (WorkOrderDetails.FirstOrDefault().Process.Type == 20) {
+                            WorkOrderDetails.FirstOrDefault().WorkOrderQcLogs.Add(new WorkOrderQcLog
+                            {
+                                // WorkOrderHeadId = WorkOrderReportData.WorkOrderHeadId,
+                                // WorkOrderDetailId = WorkOrderReportData.WorkOrderDetailId,
+                                ReportType = WorkOrderReportData.ReportType,
+                                // PurchaseHeadId = WorkOrderReportData.PurchaseHeadId,
+                                // SaleHeadId = WorkOrderReportData.SaleHeadId,
+                                // SupplierId = WorkOrderReportData.SupplierId,
+                                DrawNo = WorkOrderReportData.DrawNo,
+                                ReCount = WorkOrderReportData.ReCount,
+                                CkCount = WorkOrderReportData.CkCount,
+                                OkCount = WorkOrderReportData.OkCount,
+                                NgCount = WorkOrderReportData.NgCount,
+                                NcCount = WorkOrderReportData.NcCount,
+                                // CheckResult = WorkOrderReportData.CheckResult,
+                                Message = WorkOrderReportData.Message,
+                                // Remark = WorkOrderReportData.Remark,
+                                CreateTime = dt,
+                                CreateUser = WorkOrderReportData.CreateUser,
+                            });
+                        }
                     }
                     else
                     {
@@ -1474,7 +1580,7 @@ namespace HonjiMES.Controllers
                     {
                         return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 2TO7]!"));
                     }
-                } 
+                }
                 else if (WorkOrderDetails.Status == 7) // 回報[回復加工]
                 {
                     // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
@@ -1510,7 +1616,7 @@ namespace HonjiMES.Controllers
                         return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportDataAll.ProducingMachine + " ] 回報異常[Code: 7TO2]!"));
                     }
                 }
-                
+
                 await _context.SaveChangesAsync();
                 _context.ChangeTracker.LazyLoadingEnabled = false;
                 return Ok(MyFun.APIResponseOK("OK"));
@@ -1721,7 +1827,8 @@ namespace HonjiMES.Controllers
                     // 新增訂單明細&工單主檔的關聯 2020/10/08
                     foreach (var item in OrderToWorkCheckData.OrderDetail.OrderDetailIdList)
                     {
-                        nWorkOrderHead.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead{
+                        nWorkOrderHead.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead
+                        {
                             OrderDetailId = item.OrderDetailId,
                             DataType = 2,
                             DataId = OrderToWorkCheckData.OrderDetail.ProductBasicId,
@@ -1745,7 +1852,8 @@ namespace HonjiMES.Controllers
                         // 新增訂單明細&工單主檔的關聯 2020/10/08
                         foreach (var item2 in OrderToWorkCheckData.OrderDetail.OrderDetailIdList)
                         {
-                            item.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead{
+                            item.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead
+                            {
                                 OrderDetailId = item2.OrderDetailId,
                                 DataType = item.DataType,
                                 DataId = item.DataId,
@@ -1959,6 +2067,126 @@ namespace HonjiMES.Controllers
             .Include(x => x.WorkOrderHead).ToListAsync();
             return Ok(MyFun.APIResponseOK(WorkOrderDetails));
         }
+
+        /// <summary>
+        /// 工單QC回報
+        /// </summary>
+        /// <param name="WorkOrderQcData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<WorkOrderQcLog>> WorkOrderReportQC(WorkOrderQcLog WorkOrderQcData)
+        {
+            if (WorkOrderQcData.ReCount == 0)
+            {
+                return Ok(MyFun.APIResponseError("注意! [回報數量]不能為 0"));
+            }
+            if (WorkOrderQcData.CkCount == 0)
+            {
+                return Ok(MyFun.APIResponseError("注意! [抽檢數量]不能為 0"));
+            }
+            if (WorkOrderQcData.OkCount == 0 && WorkOrderQcData.NgCount == 0)
+            {
+                return Ok(MyFun.APIResponseError("注意! [OK數量]與[NG數量]不能同時為 0"));
+            }
+            if (WorkOrderQcData.ReCount < WorkOrderQcData.CkCount || WorkOrderQcData.ReCount < (WorkOrderQcData.OkCount + WorkOrderQcData.NgCount)) 
+            {
+                return Ok(MyFun.APIResponseError("注意! 回報數量異常!"));
+            }
+
+            if (WorkOrderQcData.ReCount != 0 && WorkOrderQcData.CkCount != 0)
+            {
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(WorkOrderQcData.WorkOrderHeadId);
+                if (WorkOrderHeads.Status == 5)
+                {
+                    return Ok(MyFun.APIResponseError("該工單狀態為[結案]!"));
+                }
+                var Requisition = await _context.Requisitions.Where(x => x.WorkOrderHeadId == WorkOrderQcData.WorkOrderHeadId).ToListAsync();
+                if (Requisition.Count() == 0)
+                {
+                    return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
+                }
+
+                // var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
+                // if (WorkOrderDetails.Count() == 1)
+                // {
+                // if (WorkOrderDetails.FirstOrDefault().Status == 1)
+                // {
+                // 因工序可重複開工/完工，所以需檢查同機台是否重複報工 2020/09/09
+                // var checkLog = WorkOrderDetails.FirstOrDefault().WorkOrderReportLogs.Where(x => x.ProducingMachine == WorkOrderReportData.ProducingMachine && x.ActualEndTime == null && x.DeleteFlag == 0);
+                // if (checkLog.Count() == 0)
+                // {
+                // WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
+                // // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
+                // // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
+                // WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
+                // WorkOrderDetails.FirstOrDefault().ProducingMachine = WorkOrderReportData.ProducingMachine;
+                // if (WorkOrderDetails.FirstOrDefault().ActualStartTime == null)
+                // {
+                //     WorkOrderDetails.FirstOrDefault().ActualStartTime = DateTime.Now;
+                // }
+
+                WorkOrderHeads.WorkOrderQcLogs.Add(new WorkOrderQcLog
+                {
+                    WorkOrderHeadId = WorkOrderQcData.WorkOrderHeadId,
+                    // WorkOrderDetailId = WorkOrderQcData.WorkOrderDetailId,
+                    ReportType = WorkOrderQcData.ReportType,
+                    // PurchaseHeadId = WorkOrderQcData.PurchaseHeadId,
+                    // SaleHeadId = WorkOrderQcData.SaleHeadId,
+                    // SupplierId = WorkOrderQcData.SupplierId,
+                    DrawNo = WorkOrderQcData.DrawNo,
+                    ReCount = WorkOrderQcData.ReCount,
+                    CkCount = WorkOrderQcData.CkCount,
+                    OkCount = WorkOrderQcData.OkCount,
+                    NgCount = WorkOrderQcData.NgCount,
+                    NcCount = WorkOrderQcData.NcCount,
+                    CheckResult = WorkOrderQcData.CheckResult,
+                    Message = WorkOrderQcData.Message,
+                    // Remark = WorkOrderQcData.Remark,
+                    CreateTime = DateTime.Now,
+                    CreateUser = WorkOrderQcData.CreateUser,
+                });
+                // }
+                // else
+                // {
+                //     return Ok(MyFun.APIResponseError("該機台 [ " + WorkOrderReportData.ProducingMachine + " ] 已經回報開工!"));
+                // }
+
+                // }
+                // else
+                // {
+                //     return Ok(MyFun.APIResponseError("工單狀態異常!"));
+                // }
+                // }
+                // else
+                // {
+                //     return Ok(MyFun.APIResponseError("工單數量不正確!"));
+                // }
+                await _context.SaveChangesAsync();
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK("OK"));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("回報失敗!"));
+            }
+        }
+
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// QC報工紀錄列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderQcLog([FromQuery] DataSourceLoadOptions FromQuery)
+        {
+            var data = _context.WorkOrderQcLogs.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderHead);
+            // data.FirstOrDefault().WorkOrderDetail.WorkOrderHead.WorkOrderNo 單獨抓取WorkOrderNo
+            // data = data.Include(x => x.WorkOrderHead);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
 
     }
 }

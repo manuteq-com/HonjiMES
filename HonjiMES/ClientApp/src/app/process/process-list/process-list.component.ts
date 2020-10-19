@@ -10,6 +10,7 @@ import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-process-list',
@@ -31,8 +32,10 @@ export class ProcessListComponent implements OnInit {
     uploadUrl: string;
     exceldata: any;
     Supplierlist: any;
-    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
-        // debugger;
+    ProcessTypeList: any;
+
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+        this.ProcessTypeList = myservice.getProcessType();
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
@@ -125,7 +128,7 @@ export class ProcessListComponent implements OnInit {
 
     }
     onEditorPreparing(e) {
-        debugger;
+        // debugger;
         if (e.parentType === 'dataRow' && e.dataField === 'Code' ) {
             e.editorOptions.readOnly = true;
         }

@@ -54,10 +54,14 @@
 }
 .toolbtn {
     float: right;
+    height: 40px;
     margin-left: 4px;
-    margin-top: 6px;
+    margin-top: 8px;
     border-radius: 2px;
 }
 .toolinput {
     margin-top: 8px;
+}
+.dx-button {
+    float: right;
 }

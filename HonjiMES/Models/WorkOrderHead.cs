@@ -14,6 +14,7 @@ namespace HonjiMES.Models
             OrderDetailAndWorkOrderHeads = new HashSet<OrderDetailAndWorkOrderHead>();
             Requisitions = new HashSet<Requisition>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            WorkOrderQcLogs = new HashSet<WorkOrderQcLog>();
         }
 
         [Key]
@@ -121,5 +122,7 @@ namespace HonjiMES.Models
         public virtual ICollection<Requisition> Requisitions { get; set; }
         [InverseProperty(nameof(WorkOrderDetail.WorkOrderHead))]
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        [InverseProperty(nameof(WorkOrderQcLog.WorkOrderHead))]
+        public virtual ICollection<WorkOrderQcLog> WorkOrderQcLogs { get; set; }
     }
 }

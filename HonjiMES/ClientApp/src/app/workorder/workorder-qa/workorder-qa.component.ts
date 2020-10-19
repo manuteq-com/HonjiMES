@@ -7,9 +7,9 @@ import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { AppComponent } from 'src/app/app.component';
-import { mBillOfMaterial, workOrderReportData } from 'src/app/model/viewmodels';
+import { mBillOfMaterial, workOrderQcData } from 'src/app/model/viewmodels';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
@@ -20,11 +20,44 @@ import { Title } from '@angular/platform-browser';
     styleUrls: ['./workorder-qa.component.css']
 })
 export class WorkorderQaComponent implements OnInit, OnChanges {
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     dataSourceDB: any;
+
+
+    formData: any;
+    labelLocation: string;
+    readOnly: boolean;
+    showColon: boolean;
+    minColWidth: number;
+    colCount: number;
+    width: any;
+
+    buttondisabled: boolean;
+    QcTypeList: any;
+    QcResultList: any;
+    selectCreateUser: any;
+    selectQcType: any;
+    selectQcResult: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: number; };
+    CountEditorOptions: any;
+    UserList: any[];
+    UserListAll: any;
+
+
+
+
+
+
+
+
+
+
+
+
+
     dataSourceDB_Process: any[];
-    Controller = '/Stocks';
+    Controller = '/WorkOrders';
     remoteOperations = true;
     editOnkeyPress: boolean;
     enterKeyAction: string;
@@ -117,7 +150,81 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
     }
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+        this.QcTypeList = myservice.getQcType();
+        this.QcResultList = myservice.getQcResult();
         this.onReorder = this.onReorder.bind(this);
+        this.buttondisabled = true;
+
+        this.formData = null;
+        this.labelLocation = 'left';
+        this.readOnly = false;
+        this.showColon = true;
+        this.minColWidth = 100;
+        this.colCount = 1;
+        this.selectQcType = {
+            items: this.QcTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            value: null
+        };
+        this.selectQcResult = {
+            items: this.QcResultList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            value: null
+        };
+        this.CountEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: '0',
+            min: '0',
+            // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserListAll = s2.data;
+                }
+            }
+        );
+
+        //// 測試用暫時加入，可選人員
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.buttondisabled = false;
+                    this.UserList = [];
+                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
+                            this.UserList.push(element);
+                        }
+                    });
+                    this.SetUserEditorOptions(this.UserList, null);
+                }
+            }
+        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
@@ -129,7 +236,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetStockHeads',
+                this.Controller + '/GetWorkOrderQcLog',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
 
         });
@@ -147,10 +254,120 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
-        this.titleService.setTitle('工單入庫確認');
+        this.titleService.setTitle('品質管理');
     }
     ngOnChanges() {
+
     }
+    QuantityValueChanged(e) {
+        // this.formData.PriceAll = this.formData.Price * e.value;
+        // this.formData.UnitPrice = this.formData.UnitCount * e.value;
+    }
+    SetUserEditorOptions(List, IdVal) {
+        this.selectCreateUser = {
+            items: List,
+            displayExpr: 'Realname',
+            valueExpr: 'Id',
+            value: IdVal,
+            searchEnabled: true,
+            disable: false
+        };
+    }
+    async searchdata() {
+        this.dataSourceDB_Process = [];
+        this.buttondisabled = true;
+        this.btnDisabled = true;
+        this.workOrderHeadId = '';
+        this.workOrderHeadDataNo = '';
+        this.workOrderHeadDataName = '';
+        this.workOrderHeadStatus = '';
+        this.workOrderHeadCount = '';
+
+        this.itemkey = 0;
+        const SearchValue = { WorkOrderNo: this.WorkOrderNoInputVal };
+        // tslint:disable-next-line: max-line-length
+        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderDetailByWorkOrderNo', 'POST', { values: SearchValue });
+        if (sendRequest) {
+            this.buttondisabled = false;
+            this.dataSourceDB_Process = sendRequest.WorkOrderDetail;
+            this.btnDisabled = false;
+            this.workOrderHeadId = sendRequest.WorkOrderHead.Id;
+            this.workOrderHeadDataNo = sendRequest.WorkOrderHead.DataNo;
+            this.workOrderHeadDataName = sendRequest.WorkOrderHead.DataName;
+            this.workOrderHeadStatus = this.listStatus.find(x => x.Id === sendRequest.WorkOrderHead.Status)?.Name ?? '';
+            this.workOrderHeadCount = (sendRequest.WorkOrderHead?.ReCount ?? '0') + ' / ' + sendRequest.WorkOrderHead.Count;
+
+            this.workOrderHeadDataType = sendRequest.WorkOrderHead.DataType;
+            this.workOrderHeadDataId = sendRequest.WorkOrderHead.DataId;
+        }
+    }
+    validate_before(): boolean {
+        // 表單驗證
+        if (this.myform.instance.validate().isValid === false) {
+            this.showMessage('error', '請注意訂單內容必填的欄位', 3000);
+            return false;
+        }
+        return true;
+    }
+    async onFormSubmit(e) {
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            this.buttondisabled = false;
+            return;
+        }
+        this.formData = this.myform.instance.option('formData');
+        // tslint:disable-next-line: new-parens
+        this.postval = new workOrderQcData;
+        this.postval.WorkOrderHeadId = this.workOrderHeadId;
+        // this.postval.WorkOrderDetailId = this.formData.ReCount;
+        this.postval.ReportType = this.formData.ReportType;
+        this.postval.ReCount = this.formData.ReCount;
+        this.postval.CkCount = this.formData.CkCount;
+        this.postval.OkCount = this.formData.OkCount;
+        this.postval.NgCount = this.formData.NgCount;
+        this.postval.NcCount = this.formData.NcCount;
+        this.postval.DrawNo = this.formData.DrawNo;
+        this.postval.CheckResult = this.formData.CheckResult;
+        this.postval.CreateUser = this.formData.CreateUser;
+        this.postval.Message = this.formData.Message;
+        try {
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportQC', 'POST', { values: this.postval });
+            this.viewRefresh(e, sendRequest);
+        } catch (error) {
+
+        }
+        this.buttondisabled = false;
+    }
+    viewRefresh(e, result) {
+        if (result) {
+            this.myform.instance.resetValues();
+            this.dataGrid.instance.refresh();
+            this.buttondisabled = true;
+            this.workOrderHeadId = '';
+            this.workOrderHeadDataNo = '';
+            this.workOrderHeadDataName = '';
+            this.workOrderHeadStatus = '';
+            this.workOrderHeadCount = '';
+            // this.CustomerVal = null;
+            e.preventDefault();
+            // this.childOuter.emit(true);
+            this.showMessage('success', '回報完成', 3000);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     valueChanged(e) {
         if (this.clearCheck) {
             this.dataSourceDB_Process = [];
@@ -206,32 +423,6 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.itemkey = data.data.Id;
         this.logpopupVisible = true;
     }
-    async searchdata() {
-        this.dataSourceDB_Process = [];
-        this.btnDisabled = true;
-        this.workOrderHeadId = '';
-        this.workOrderHeadDataNo = '';
-        this.workOrderHeadDataName = '';
-        this.workOrderHeadStatus = '';
-        this.workOrderHeadCount = '';
-
-        this.itemkey = 0;
-        const SearchValue = { WorkOrderNo: this.WorkOrderNoInputVal };
-        // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/GetWorkOrderDetailByWorkOrderNo', 'POST', { values: SearchValue });
-        if (sendRequest) {
-            this.dataSourceDB_Process = sendRequest.WorkOrderDetail;
-            this.btnDisabled = false;
-            this.workOrderHeadId = sendRequest.WorkOrderHead.Id;
-            this.workOrderHeadDataNo = sendRequest.WorkOrderHead.DataNo;
-            this.workOrderHeadDataName = sendRequest.WorkOrderHead.DataName;
-            this.workOrderHeadStatus = this.listStatus.find(x => x.Id === sendRequest.WorkOrderHead.Status)?.Name ?? '';
-            this.workOrderHeadCount = (sendRequest.WorkOrderHead?.ReCount ?? '0') + ' / ' + sendRequest.WorkOrderHead.Count;
-
-            this.workOrderHeadDataType = sendRequest.WorkOrderHead.DataType;
-            this.workOrderHeadDataId = sendRequest.WorkOrderHead.DataId;
-        }
-    }
     overdata() {
         if (this.workOrderHeadDataType === 1) {
             this.modkey = 'material';
@@ -244,36 +435,6 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.randomkey = new Date().getTime();
         this.itemkey = this.workOrderHeadDataId;
         this.closepopupVisible = true;
-        //// 以下舊方法
-        // Swal.fire({
-        //     showCloseButton: true,
-        //     allowEnterKey: false,
-        //     allowOutsideClick: false,
-        //     title: '確認結案?',
-        //     html: '狀態將無法復原!',
-        //     icon: 'question',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#296293',
-        //     cancelButtonColor: '#CE312C',
-        //     confirmButtonText: '確認',
-        //     cancelButtonText: '取消'
-        // }).then(async (result) => {
-        //     if (result.value) {
-        //         // tslint:disable-next-line: max-line-length
-        //         const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/CloseWorkOrder', 'PUT', { key: this.workOrderHeadId, values: '' });
-        //         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-        //         if (sendRequest) {
-        //             this.dataGrid.instance.refresh();
-        //             notify({
-        //                 message: '更新成功',
-        //                 position: {
-        //                     my: 'center top',
-        //                     at: 'center top'
-        //                 }
-        //             }, 'success', 2000);
-        //         }
-        //     }
-        // });
     }
     stockdata(userId) {
         if (this.workOrderHeadDataType === 1) {
@@ -312,63 +473,6 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
                 at: 'center top'
             }
         }, 'success', 3000);
-    }
-    stockdataOld() {
-        Swal.fire({
-            title: '請確認入庫數量!',
-            input: 'number',
-            inputAttributes: {
-                autocapitalize: 'off',
-                min: '0',
-                step: '1'
-            },
-            showCancelButton: true,
-            confirmButtonColor: '#296293',
-            cancelButtonColor: '#CE312C',
-            confirmButtonText: '確認',
-            cancelButtonText: '取消',
-            showLoaderOnConfirm: true,
-            // preConfirm: (login) => {
-            //     return fetch(`//api.github.com/users/${login}`)
-            //     .then(response => {
-            //         if (!response.ok) {
-            //             throw new Error(response.statusText)
-            //         }
-            //         return response.json()
-            //     })
-            //     .catch(error => {
-            //         Swal.showValidationMessage(
-            //             `Request failed: ${error}`
-            //         )
-            //     })
-            // },
-            // allowOutsideClick: () => !Swal.isLoading()
-            inputValidator: (value) => {
-                if (!Number.isInteger(Number(value))) {
-                    return '數量需為整數!';
-                } else if (Number(value) === 0) {
-                    return '數量不能為0!';
-                }
-            }
-        }).then(async (result) => {
-            if (result.value) {
-                const Data = new workOrderReportData();
-                Data.ReCount = result.value;
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/StockWorkOrder', 'PUT', { key: this.workOrderHeadId, values: Data });
-                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-                if (sendRequest) {
-                    this.dataGrid.instance.refresh();
-                    notify({
-                        message: '更新成功',
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'success', 2000);
-                }
-            }
-        });
     }
     showMessage(type, data, val) {
         notify({

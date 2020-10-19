@@ -7,6 +7,7 @@ import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-workorder-report',
@@ -80,6 +81,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     UserList: any;
     keyup = '';
     MachineEditorOptions: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
+    HasProducingMachineVisible: boolean;
+    HasCodeNoVisible: boolean;
+    QcTypeList: any;
+    QcResultList: any;
+    selectQcType: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: any; };
+    selectQcResult: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: any; };
+    CountEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: string; min: string; };
+    HasQCVisible: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -141,7 +150,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         }
     }
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.QcTypeList = myservice.getQcType();
+        this.QcResultList = myservice.getQcResult();
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
@@ -157,11 +168,34 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             mode: 'number',
             // onValueChanged: this.PriceValueChanged.bind(this)
         };
+        this.selectQcType = {
+            items: this.QcTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            value: null
+        };
+        this.selectQcResult = {
+            items: this.QcResultList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            value: null
+        };
+        this.CountEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            format: '#0',
+            value: '0',
+            min: '0',
+            // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
     }
     ngOnInit() {
     }
     ngOnChanges() {
         // debugger;
+        this.HasCodeNoVisible = false;
         this.ReCountVisible = false;
         this.NgCountVisible = false;
         this.RemarkVisible = false;
@@ -170,6 +204,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.restartedBtnVisible = false;
         this.NoPurchaseVisible = false;
         this.HasPurchaseVisible = false;
+        this.HasProducingMachineVisible = false;
+        this.HasQCVisible = false;
         this.PurchaseHeadList = [];
 
         this.UserList = [];
@@ -306,41 +342,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.NgCount = 0;
                                 findProcess = true;
 
-                                if (element.Status === 1) { // 未開工
-                                    // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
-                                    if (element.Type === 1) {
-                                        this.ReCountVisible = true;
-                                        this.HasPurchaseVisible = true;
-                                    } else {
-                                        this.startBtnVisible = true;
-                                    }
-                                } else if (element.Status === 2) { // 已開工
-                                    this.ReCountVisible = true;
-                                    this.NgCountVisible = true;
-                                    this.RemarkVisible = true;
-                                    this.endBtnVisible = true;
-
-                                    // 可重複報開工 2020/09/09
-                                    this.restartedBtnVisible = true;
-
-                                    // 如工序為委外(無採購單)，則需填入供應商、金額
-                                    if (element.Type === 2) {
-                                        this.NoPurchaseVisible = true;
-                                    }
-                                } else if (element.Status === 3 || element.Status === 4 || element.Status === 6) {
-                                    // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
-                                    if (element.Type === 1) {
-                                        this.ReCountVisible = true;
-                                        this.HasPurchaseVisible = true;
-                                    } else {
-                                        this.restartedBtnVisible = true;
-                                        this.RemarkVisible = true;
-
-                                        // 因重複報開工，所以重複完工 2020/09/09
-                                        this.endBtnVisible = true;
-                                        this.ReCountVisible = true;
-                                        this.NgCountVisible = true;
-                                    }
+                                // 依照製程種類決定顯示報工畫面
+                                if (element.ProcessType === 20) { // QC檢驗
+                                    this.ShowQCReportView(element.Status, element.Type);
+                                } else if (element.ProcessType === null || element.ProcessType === 10) {
+                                    this.ShowNCReportView(element.Status, element.Type);
                                 }
                             }
                         });
@@ -358,6 +364,56 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             searchEnabled: true,
             disable: false
         };
+    }
+    ShowQCReportView(Status, Type) { // QC報工畫面
+        if (Status === 1) { // 未開工
+            this.startBtnVisible = true;
+        } else if (Status === 2) { // 已開工
+            this.endBtnVisible = true;
+            this.HasQCVisible = true;
+        } else if (Status === 3 || Status === 4 || Status === 6) {
+            this.restartedBtnVisible = true;
+        }
+    }
+    ShowNCReportView(Status, Type) { // NC報工畫面
+        this.HasCodeNoVisible = true;
+        this.HasProducingMachineVisible = true;
+        if (Status === 1) { // 未開工
+            // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
+            if (Type === 1) {
+                this.ReCountVisible = true;
+                this.HasPurchaseVisible = true;
+            } else {
+                this.startBtnVisible = true;
+            }
+        } else if (Status === 2) { // 已開工
+            this.ReCountVisible = true;
+            this.NgCountVisible = true;
+            this.RemarkVisible = true;
+            this.endBtnVisible = true;
+
+            // 可重複報開工 2020/09/09
+            this.restartedBtnVisible = true;
+
+            // 如工序為委外(無採購單)，則需填入供應商、金額
+            if (Type === 2) {
+                this.NoPurchaseVisible = true;
+            }
+        } else if (Status === 3 || Status === 4 || Status === 6) {
+            // 如工序為委外(有採購單)，則需選擇採購單or新建採購單
+            if (Type === 1) {
+                this.ReCountVisible = true;
+                this.HasPurchaseVisible = true;
+            } else {
+                this.restartedBtnVisible = true;
+                this.RemarkVisible = true;
+
+                // 因重複報開工，所以重複完工 2020/09/09
+                this.endBtnVisible = true;
+                this.ReCountVisible = true;
+                this.NgCountVisible = true;
+            }
+        }
     }
     PurchaseNoValueChanged(e) {
 
@@ -455,6 +511,16 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval.PurchaseId = this.formData.PurchaseId;
         this.postval.CreateUser = this.formData.CreateUser;
         this.postval.CodeNo = this.formData.CodeNo;
+
+        this.postval.ReportType = this.formData.ReportType;
+        this.postval.CkCount = this.formData.CkCount;
+        this.postval.OkCount = this.formData.OkCount;
+        this.postval.NgCount = this.formData.NgCount;
+        this.postval.NcCount = this.formData.NcCount;
+        this.postval.DrawNo = this.formData.DrawNo;
+        this.postval.CheckResult = this.formData.CheckResult;
+        this.postval.Message = this.formData.Message;
+
         try {
             if (this.modval === 'start') {
                 // tslint:disable-next-line: max-line-length

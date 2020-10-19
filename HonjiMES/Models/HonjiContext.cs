@@ -44,12 +44,9 @@ namespace HonjiMES.Models
         public virtual DbSet<Requisition> Requisitions { get; set; }
         public virtual DbSet<RequisitionDetail> RequisitionDetails { get; set; }
         public virtual DbSet<ReturnSale> ReturnSales { get; set; }
-        public virtual DbSet<Sale> Sales { get; set; }
-        public virtual DbSet<SaleDetail> SaleDetails { get; set; }
         public virtual DbSet<SaleDetailNew> SaleDetailNews { get; set; }
         public virtual DbSet<SaleHead> SaleHeads { get; set; }
         public virtual DbSet<SaleLog> SaleLogs { get; set; }
-        public virtual DbSet<Saleold> Saleolds { get; set; }
         public virtual DbSet<StockDetail> StockDetails { get; set; }
         public virtual DbSet<StockHead> StockHeads { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
@@ -65,6 +62,7 @@ namespace HonjiMES.Models
         public virtual DbSet<WiproductLog> WiproductLogs { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
         public virtual DbSet<WorkOrderHead> WorkOrderHeads { get; set; }
+        public virtual DbSet<WorkOrderQcLog> WorkOrderQcLogs { get; set; }
         public virtual DbSet<WorkOrderReportLog> WorkOrderReportLogs { get; set; }
 
         public HonjiContext(DbContextOptions<HonjiContext> options) : base(options)
@@ -1508,6 +1506,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Type).HasComment("工序種類");
+
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
@@ -2176,121 +2176,6 @@ namespace HonjiMES.Models
                     .HasConstraintName("fk_return_sale_warehouse1");
             });
 
-            modelBuilder.Entity<Sale>(entity =>
-            {
-                entity.HasComment("銷貨單");
-
-                entity.HasIndex(e => e.SaleNo)
-                    .HasName("sale_no");
-
-                entity.Property(e => e.Id).HasComment("唯一碼");
-
-                entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("新增時間");
-
-                entity.Property(e => e.Customer)
-                    .HasComment("客戶")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.CustomerNo)
-                    .HasComment("客戶單號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.Name)
-                    .HasComment("主件品名")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Price).HasComment("單價");
-
-                entity.Property(e => e.ProductNo).HasComment("主件品號");
-
-                entity.Property(e => e.ProjectNo).HasComment("專案號");
-
-                entity.Property(e => e.Quantity).HasComment("數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.SaleDate).HasComment("銷貨日期");
-
-                entity.Property(e => e.SaleNo)
-                    .HasComment("銷貨單號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Specification)
-                    .HasComment("規格")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Status)
-                    .HasComment("狀態")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("更新時間")
-                    .ValueGeneratedOnAddOrUpdate();
-
-                entity.Property(e => e.UpdateUser).HasComment("更新者id");
-            });
-
-            modelBuilder.Entity<SaleDetail>(entity =>
-            {
-                entity.HasComment("銷貨明細");
-
-                entity.Property(e => e.Id).HasComment("唯一碼");
-
-                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.Name)
-                    .HasComment("主件品名")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.OrderId).HasComment("訂單單號id");
-
-                entity.Property(e => e.OriginPrice).HasComment("原單價	");
-
-                entity.Property(e => e.Price).HasComment("價格");
-
-                entity.Property(e => e.ProductId).HasComment("主件品號ID");
-
-                entity.Property(e => e.ProductNo)
-                    .HasComment("主件品號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Quantity).HasComment("數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.SaleId).HasComment("銷貨單號");
-
-                entity.Property(e => e.Specification)
-                    .HasComment("規格")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .ValueGeneratedOnAddOrUpdate();
-            });
-
             modelBuilder.Entity<SaleDetailNew>(entity =>
             {
                 entity.HasComment("銷貨明細");
@@ -2428,74 +2313,6 @@ namespace HonjiMES.Models
                 entity.Property(e => e.SaleId).HasComment("銷貨單id");
 
                 entity.Property(e => e.Type).HasComment("log種類");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("更新時間")
-                    .ValueGeneratedOnAddOrUpdate();
-
-                entity.Property(e => e.UpdateUser).HasComment("更新者id");
-            });
-
-            modelBuilder.Entity<Saleold>(entity =>
-            {
-                entity.HasComment("銷貨單");
-
-                entity.HasIndex(e => e.SaleNo)
-                    .HasName("sale_no");
-
-                entity.Property(e => e.Id).HasComment("唯一碼");
-
-                entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("'current_timestamp()'")
-                    .HasComment("新增時間");
-
-                entity.Property(e => e.Customer)
-                    .HasComment("客戶")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.CustomerNo)
-                    .HasComment("客戶單號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.Name)
-                    .HasComment("主件品名")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Price).HasComment("單價");
-
-                entity.Property(e => e.ProductNo).HasComment("主件品號");
-
-                entity.Property(e => e.ProjectNo).HasComment("專案號");
-
-                entity.Property(e => e.Quantity).HasComment("數量");
-
-                entity.Property(e => e.Remarks)
-                    .HasComment("備註")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.SaleDate).HasComment("銷貨日期");
-
-                entity.Property(e => e.SaleNo)
-                    .HasComment("銷貨單號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Specification)
-                    .HasComment("規格")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.Status)
-                    .HasComment("狀態")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -3315,6 +3132,90 @@ namespace HonjiMES.Models
                     .WithMany(p => p.WorkOrderHeads)
                     .HasForeignKey(d => d.OrderDetailId)
                     .HasConstraintName("work_order_head_ibfk_1");
+            });
+
+            modelBuilder.Entity<WorkOrderQcLog>(entity =>
+            {
+                entity.HasIndex(e => e.PurchaseHeadId)
+                    .HasName("purchase_head_id");
+
+                entity.HasIndex(e => e.SaleHeadId)
+                    .HasName("sale_head_id");
+
+                entity.HasIndex(e => e.SupplierId)
+                    .HasName("supplier_id");
+
+                entity.HasIndex(e => e.WorkOrderDetailId)
+                    .HasName("work_order_detail_id");
+
+                entity.HasIndex(e => e.WorkOrderHeadId)
+                    .HasName("work_order_head_id");
+
+                entity.Property(e => e.CheckResult).HasComment("檢驗結果(0合格 1不合格)");
+
+                entity.Property(e => e.CkCount).HasComment("抽驗數量");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Message)
+                    .HasComment("回報說明")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.NcCount).HasComment("NC未完工量");
+
+                entity.Property(e => e.NgCount).HasComment("NG數量");
+
+                entity.Property(e => e.OkCount).HasComment("OK數量");
+
+                entity.Property(e => e.PurchaseHeadId).HasComment("採購單ID");
+
+                entity.Property(e => e.ReCount).HasComment("回報數量");
+
+                entity.Property(e => e.Remark)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ReportType).HasComment("回報種類");
+
+                entity.Property(e => e.SaleHeadId).HasComment("採購單ID");
+
+                entity.Property(e => e.SupplierId).HasComment("供應商id");
+
+                entity.Property(e => e.WorkOrderDetailId).HasComment("工單明細ID");
+
+                entity.Property(e => e.WorkOrderHeadId).HasComment("工單主檔Id");
+
+                entity.HasOne(d => d.PurchaseHead)
+                    .WithMany(p => p.WorkOrderQcLogs)
+                    .HasForeignKey(d => d.PurchaseHeadId)
+                    .HasConstraintName("work_order_qc_log_ibfk_1");
+
+                entity.HasOne(d => d.SaleHead)
+                    .WithMany(p => p.WorkOrderQcLogs)
+                    .HasForeignKey(d => d.SaleHeadId)
+                    .HasConstraintName("work_order_qc_log_ibfk_2");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.WorkOrderQcLogs)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("work_order_qc_log_ibfk_3");
+
+                entity.HasOne(d => d.WorkOrderDetail)
+                    .WithMany(p => p.WorkOrderQcLogs)
+                    .HasForeignKey(d => d.WorkOrderDetailId)
+                    .HasConstraintName("work_order_qc_log_ibfk_4");
+
+                entity.HasOne(d => d.WorkOrderHead)
+                    .WithMany(p => p.WorkOrderQcLogs)
+                    .HasForeignKey(d => d.WorkOrderHeadId)
+                    .HasConstraintName("work_order_qc_log_ibfk_5");
             });
 
             modelBuilder.Entity<WorkOrderReportLog>(entity =>

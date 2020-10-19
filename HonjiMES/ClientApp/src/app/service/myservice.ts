@@ -67,6 +67,15 @@ export class Myservice {
     getStockType(): Selectitem[] {
         return stocktype;
     }
+    getQcType(): Selectitem[] {
+        return qctype;
+    }
+    getQcResult(): Selectitem[] {
+        return qcresult;
+    }
+    getProcessType(): Selectitem[] {
+        return processtype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -182,4 +191,18 @@ const timetype: Selectitem[] = [
 const stocktype: Selectitem[] = [
     { Id: 0, Name: '半成品入庫' },
     { Id: 1, Name: '成品入庫' },
+];
+const qctype: Selectitem[] = [
+    { Id: 1, Name: '生產品質檢驗' },
+    { Id: 2, Name: '表面處理品質檢驗' }
+];
+const qcresult: Selectitem[] = [
+    { Id: 0, Name: '合格' },
+    { Id: 1, Name: '不合格' },
+];
+const processtype: Selectitem[] = [
+    { Id: null, Name: '' },
+    { Id: 10, Name: 'NC加工' },
+    { Id: 20, Name: 'QC檢驗' },
+    { Id: 100, Name: '其他' },
 ];

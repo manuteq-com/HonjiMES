@@ -62,6 +62,9 @@
 
     <dxi-column dataField="Code" caption="製程代號" sortOrder="asc"></dxi-column>
     <dxi-column dataField="Name" caption="製程名稱"></dxi-column>
+    <dxi-column dataField="Type" caption="製程種類" alignment="center" [width]="140">
+        <dxo-lookup [dataSource]="ProcessTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="LeadTime" caption="前置時間(分)" dataType="number"></dxi-column>
     <dxi-column dataField="WorkTime" caption="標準工時(分)" dataType="number"></dxi-column>
     <dxi-column dataField="Cost" caption="單位成本(元/分)" dataType="number" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
@@ -81,7 +84,7 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="500"
+<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="520"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

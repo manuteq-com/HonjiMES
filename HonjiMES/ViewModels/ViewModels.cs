@@ -698,12 +698,20 @@ namespace HonjiMES.Models
         public ToWorksOrderDetail OrderDetail { get; set; }
         public List<WorkOrderHead> WorkOrderHead { get; set; }
     }
+    public class WorkOrderDetailData : WorkOrderDetail
+    {
+        public int? ProcessType { get; set; }
+    }
     public class WorkOrderData
     {
         public WorkOrderHead WorkOrderHead { get; set; }
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
     }
-
+    public class WorkOrderData2
+    {
+        public WorkOrderHead WorkOrderHead { get; set; }
+        public List<WorkOrderDetailData> WorkOrderDetail { get; set; }
+    }
     public class ResourceProcessData
     {
         public WorkOrderHead WorkOrderHead { get; set; }
@@ -732,6 +740,13 @@ namespace HonjiMES.Models
         public string CodeNo { get; set; }
         public int CreateUser { get; set; }
         public int Type { get; set; }
+        
+        public int ReportType { get; set; } 
+        public int CkCount { get; set; } 
+        public int OkCount { get; set; } 
+        public int NcCount { get; set; } 
+        public string DrawNo { get; set; } 
+        public int CheckResult { get; set; } 
     }
     public class WorkOrderReportDataAll
     {
@@ -756,6 +771,16 @@ namespace HonjiMES.Models
         public int CreateUser { get; set; }
     }
 
+    public class WorkOrderReportLogData : WorkOrderReportLog
+    {
+        public int QCReportType { get; set; }
+        public int QCReCount { get; set; }
+        public int QCCkCount { get; set; }
+        public int QCOkCount { get; set; }
+        public int QCNgCount { get; set; }
+        public int QCNcCount { get; set; }
+        public string QCMessage { get; set; }
+    }
     public class WorkOrderLog
     {
         public string WorkOrderNo { get; set; }
@@ -913,6 +938,7 @@ namespace HonjiMES.Models
         public string value2 { get; set; }
         public int value3 { get; set; }
         public int value4 { get; set; }
+        public int? value5 { get; set; }
     }
     public class BillOfMaterialVerLv : BillOfMaterialVer
     {

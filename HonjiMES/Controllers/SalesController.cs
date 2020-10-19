@@ -132,56 +132,56 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(new { SaleHeads.Id, SaleHeads.SaleNo }));
         }
-        /// <summary>
-        /// 修改銷貨單
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="saleHead"></param>
-        /// <returns></returns>
-        // PUT: api/Sales/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSale(int id, SaleHead saleHead)
-        {
-            saleHead.Id = id;
-            var OsaleHead = _context.SaleHeads.Find(id);
-            var Msg = MyFun.MappingData(ref OsaleHead, saleHead);
-            OsaleHead.UpdateTime = DateTime.Now;
-            OsaleHead.UpdateUser = MyFun.GetUserID(HttpContext);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SaleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return Ok(MyFun.APIResponseOK(saleHead));
-        }
-        /// <summary>
-        /// 新增銷貨單
-        /// </summary>
-        /// <param name="saleHead"></param>
-        /// <returns></returns>
-        // POST: api/Sales
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<Sale>> PostSale(SaleHead saleHead)
-        {
-            _context.SaleHeads.Add(saleHead);
-            await _context.SaveChangesAsync();
+        // /// <summary>
+        // /// 修改銷貨單
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <param name="saleHead"></param>
+        // /// <returns></returns>
+        // // PUT: api/Sales/5
+        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // // more details see https://aka.ms/RazorPagesCRUD.
+        // [HttpPut("{id}")]
+        // public async Task<IActionResult> PutSale(int id, SaleHead saleHead)
+        // {
+        //     saleHead.Id = id;
+        //     var OsaleHead = _context.SaleHeads.Find(id);
+        //     var Msg = MyFun.MappingData(ref OsaleHead, saleHead);
+        //     OsaleHead.UpdateTime = DateTime.Now;
+        //     OsaleHead.UpdateUser = MyFun.GetUserID(HttpContext);
+        //     try
+        //     {
+        //         await _context.SaveChangesAsync();
+        //     }
+        //     catch (DbUpdateConcurrencyException)
+        //     {
+        //         if (!SaleExists(id))
+        //         {
+        //             return NotFound();
+        //         }
+        //         else
+        //         {
+        //             throw;
+        //         }
+        //     }
+        //     return Ok(MyFun.APIResponseOK(saleHead));
+        // }
+        // /// <summary>
+        // /// 新增銷貨單
+        // /// </summary>
+        // /// <param name="saleHead"></param>
+        // /// <returns></returns>
+        // // POST: api/Sales
+        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // // more details see https://aka.ms/RazorPagesCRUD.
+        // [HttpPost]
+        // public async Task<ActionResult<Sale>> PostSale(SaleHead saleHead)
+        // {
+        //     _context.SaleHeads.Add(saleHead);
+        //     await _context.SaveChangesAsync();
 
-            return Ok(MyFun.APIResponseOK(saleHead));
-        }
+        //     return Ok(MyFun.APIResponseOK(saleHead));
+        // }
         /// <summary>
         /// 刪除銷貨單
         /// </summary>
@@ -211,11 +211,6 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             return Ok(MyFun.APIResponseOK(SaleHead));
-        }
-
-        private bool SaleExists(int id)
-        {
-            return _context.Sales.Any(e => e.Id == id);
         }
 
         /// <summary>
