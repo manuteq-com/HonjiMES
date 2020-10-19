@@ -311,5 +311,21 @@ namespace HonjiMES.Controllers
             var FromQueryResult =await  MyFun.ExFromQueryResultAsync(SaleDetailNews, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+
+        /// <summary>
+        /// 銷貨退回紀錄報表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaleDetailNew>>> GetSaleReturnRecord(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.Status == 1) 
+            .Include(x => x.Sale).Include(x => x.Order).Include(x => x.OrderDetail)
+            .OrderByDescending(x => x.Sale.SaleNo);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }

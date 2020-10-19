@@ -20,6 +20,8 @@ var user_list_component_1 = require("./setting/user-list/user-list.component");
 var work_order_log_component_1 = require("./workorder/workorder-log/workorder-log.component");
 var resource_allocation_component_1 = require("./workorder/resource_allocation/resource_allocation.component");
 var user_password_1 = require("./setting/user_password/user_password.component");
+var sale_return_1 = require("./report/sale_return/sale_return.component");
+var billpurchase_return_1 = require("./report/billpurchase_return/billpurchase_return.component");
 
 exports.routes = [
     { path: '', component: homepage_component_1.HomepageComponent },
@@ -41,6 +43,8 @@ exports.routes = [
     { path: 'workorderlog', component: work_order_log_component_1.WorkorderLogComponent },
     { path: 'resourceallocation', component: resource_allocation_component_1.ResourceAllocationComponent },
     { path: 'userpassword', component: user_password_1.UserPasswordComponent },
+    { path: 'salereturn', component: sale_return_1.SaleReturnComponent },
+    { path: 'billpurchasereturn', component: billpurchase_return_1.BiilpurchaseReturnComponent },
 ];
 exports.AppRoutes = router_1.RouterModule.forRoot(exports.routes, { scrollPositionRestoration: 'enabled' });
 //# sourceMappingURL=app.routes.js.map

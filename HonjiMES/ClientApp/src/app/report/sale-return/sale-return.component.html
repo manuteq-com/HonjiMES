@@ -1,0 +1,77 @@
+<div class="headerblock">
+    <div class="headerfont font1">報表管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">銷貨退回紀錄查詢</div>
+    <div class="buttongroup">
+        <dx-button
+            class="searchbtn"
+            stylingMode="contained"
+            text="下載報表"
+            type="normal"
+            [width]="140"
+            (onClick)="download()">
+        </dx-button>
+    </div>
+</div>
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
+    >
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    </dxo-editing>
+
+    <dxi-column dataField="Sale.SaleNo" caption="銷貨單號" [width]="150" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="Sale.Status" caption="狀態" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Sale.SaleDate" caption="銷貨日期" dataType="date" [width]="120"></dxi-column>
+    <dxi-column dataField="Sale.CreateTime" caption="建立日期" dataType="date" [width]="120"></dxi-column>
+    <dxi-column dataField="Sale.CreateUser" caption="建立人員" [width]="120">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
+    <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140"></dxi-column>
+    <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="140"></dxi-column>
+    <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [width]="80"></dxi-column>
+    <dxi-column dataField="OrderDetail.MachineNo" caption="機號" [width]="180"></dxi-column>
+    <dxi-column dataField="ProductBasicId" caption="品號" [width]="220" alignment="center">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProductBasicId" caption="品名" [width]="180">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProductBasicId" caption="規格" [width]="220">
+        <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="Price" caption="金額" [width]="80"></dxi-column>
+
+</dx-data-grid>
+

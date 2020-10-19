@@ -434,5 +434,21 @@ namespace HonjiMES.Controllers
         {
             return _context.BillofPurchaseHeads.Any(e => e.Id == id);
         }
+
+        /// <summary>
+        /// 進貨驗退紀錄報表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BillofPurchaseDetail>>> GetBillPurchaseReturnRecord(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.BillofPurchaseDetails.Where(x => x.DeleteFlag == 0 && x.CheckCountOut != 0)
+            .Include(x => x.BillofPurchase).Include(x => x.PurchaseDetail).Include(x => x.Purchase)
+            .OrderByDescending(x => x.BillofPurchase.BillofPurchaseNo);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }
