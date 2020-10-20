@@ -53,12 +53,14 @@
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)"
+        (onEditorPreparing)="editorPreparing($event)"
         (onCellPrepared)="onCellPrepared($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
         (onRowRemoved)="onRowRemoved($event)">
 
         <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="allowReordering"></dxo-row-dragging>
 
-        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
             <dxo-form colCount=4>
                 <dxi-item dataField="SerialNumber"></dxi-item>
                 <dxi-item dataField="ProcessId"></dxi-item>
@@ -76,7 +78,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
+        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260">
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
@@ -109,7 +111,7 @@
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column type="buttons">
+        <dxi-column type="buttons" [width]="50">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
@@ -156,12 +158,14 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新建存檔' type='success' icon='save' [useSubmitBehavior]="true"
             [disabled]="saveDisabled" [visible]="newVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='取消變更' type='warring' icon='close' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除工單' type='danger' icon='trash' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='更新' type='success' icon='save' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
         <!-- <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button> -->
     </div>
