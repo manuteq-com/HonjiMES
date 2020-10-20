@@ -208,6 +208,12 @@ namespace HonjiMES.Models
         public int OrderDetailId { get; set; }
         public decimal Count { get; set; }
     }
+    public class OrderDetailInfo : OrderDetail
+    {
+        public string OrderNo { get; set; }
+        public string OrderType { get; set; }
+        public int Customer { get; set; }
+    }
     /// <summary>
     /// 過濾
     /// </summary>

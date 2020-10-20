@@ -616,8 +616,28 @@ namespace HonjiMES.Controllers
                  [FromQuery] DataSourceLoadOptions FromQuery,
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.OrderDetails.Include(x => x.Order).Where(x => x.DeleteFlag == 0 && x.Order.Status == 0).OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial);
+            // _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Order.Status == 0)
+                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo{
+                OrderNo = x.Order.OrderNo,
+                OrderType = x.Order.OrderType,
+                CustomerNo = x.Order.CustomerNo,
+                Customer = x.Order.Customer,
+                MachineNo = x.MachineNo,
+                ProductBasicId = x.ProductBasicId,
+                Quantity = x.Quantity,
+                Unit = x.Unit,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                DueDate = x.DueDate,
+                ReplyDate = x.ReplyDate,
+                Remark = x.Remark,
+                ReplyRemark = x.ReplyRemark,
+                SaleCount = x.SaleCount,
+                SaledCount = x.SaledCount,
+            });
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            // _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
     }

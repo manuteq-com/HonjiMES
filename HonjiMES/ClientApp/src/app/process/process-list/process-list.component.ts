@@ -33,18 +33,34 @@ export class ProcessListComponent implements OnInit {
     exceldata: any;
     Supplierlist: any;
     ProcessTypeList: any;
+    NumberBoxOptions: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.ProcessTypeList = myservice.getProcessType();
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetProcesses'),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProcess', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProcess', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProcess', 'PUT', { key, values }),
+            update: (key, values) => {
+                if (values.LeadTime === null) {
+                    values.LeadTime = 0;
+                }
+                if (values.WorkTime === null) {
+                    values.WorkTime = 0;
+                }
+                if (values.Cost === null) {
+                    values.Cost = 0;
+                }
+                if (values.Manpower === null) {
+                    values.Manpower = 0;
+                }
+                return SendService.sendRequest(http, this.Controller + '/PutProcess', 'PUT', { key, values })
+            },
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProcess/' + key, 'DELETE')
         });
     }
