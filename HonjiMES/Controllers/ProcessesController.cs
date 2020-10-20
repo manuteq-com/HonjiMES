@@ -283,6 +283,7 @@ namespace HonjiMES.Controllers
                         BasicDataName = BasicDataName,
                         BasicDataNo = BasicDataNo,
                         MachineNo = item.MachineNo,
+                        OrderCount = item.OrderDetailAndWorkOrderHeads.Where(y => y.DataType == item.DataType && y.DataId == item.DataId && y.DeleteFlag == 0).Sum(y => y.OrdeCount),
                         Count = item.Count,
                         Status = item.Status,
                         DueEndTime = item.DueEndTime?.ToString("yyyy/MM/dd") ?? ""

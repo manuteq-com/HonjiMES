@@ -1,143 +1,184 @@
 <form action="" (submit)="onFormSubmit($event)">
 
-    <label>{{itemval1}}</label><br>
-    <label>{{itemval2}}</label><br>
-    <label>{{itemval3}}</label><br>
-    <label>{{itemval4}}</label><br>
-    <label>{{itemval5}}</label><br>
-    <label>{{itemval6}}</label><br>
-    <label>{{itemval7}}</label><br>
-    <label>{{itemval8}}</label><br>
-    <label>{{itemval9}}</label><br>
-    <label>{{itemval10}}</label><br>
-    <label>{{itemval11}}</label><br>
-    <label>{{itemval12}}</label><br>
-    <label>{{itemval13}}</label><br>
-    <label>{{itemval14}}</label><br>
-    <label>{{itemval15}}</label><br>
-    <label>{{itemval16}}</label><br>
-    <label>{{itemval17}}</label><br>
-    <label>{{itemval18}}</label><br>
-    <label>{{itemval19}}</label><br>
+    <div class="row">
 
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <div class="col-6">
+            <label>{{itemval1}}</label><br>
+            <label>{{itemval2}}</label><br>
+            <label>{{itemval3}}</label><br>
+            <label>{{itemval4}}</label><br>
+            <label>{{itemval5}}</label><br>
+            <label>{{itemval6}}</label><br>
+            <label>{{itemval7}}</label><br>
+            <label>{{itemval8}}</label><br>
+            <label>{{itemval9}}</label><br>
+            <label>{{itemval10}}</label><br>
+            <label>{{itemval11}}</label><br>
+            <label>{{itemval12}}</label><br>
+            <label>{{itemval13}}</label><br>
+            <label>{{itemval14}}</label><br>
+            <label>{{itemval15}}</label><br>
+            <label>{{itemval16}}</label><br>
+            <label>{{itemval17}}</label><br>
+            <label>{{itemval18}}</label><br>
+            <label>{{itemval19}}</label><br>
+        </div>
 
+        <div class="col-6">
+            <dx-data-grid
+                #dataGrid1
+                [dataSource]="dataSourceDB"
+                showBorders="true"
+                keyExpr="Id"
+                [focusedRowEnabled]="true"
+                (onDataErrorOccurred)="onDataErrorOccurred($event)"
+                [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+                (onFocusedRowChanging)="onFocusedRowChanging($event)"
+                (onEditorPreparing)="onEditorPreparing($event)"
+                (onToolbarPreparing)="onToolbarPreparing($event)"
+                (onValueChanged)="onValueChanged($event)"
+                hoverStateEnabled="true"
+                [rowAlternationEnabled]="true"
+                [remoteOperations]="remoteOperations"  [columnAutoWidth]="true" [height]="400">
 
-        <dxi-item dataField="CodeNo" [colSpan]="2" [disabled]="false" [visible]="HasCodeNoVisible">
-            <dxo-label text="加工程式"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="2" editorType="dxSelectBox">
-            <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
-            <dxo-label text="操作人員"></dxo-label>
-        </dxi-item>
-        <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
-            <dxo-label text="製程序號"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions" [disabled]="true">
-            <dxo-label text="製程名稱"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="DrawNo" [disabled]="true">
-            <dxo-label text="圖號"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Manpower" [disabled]="true">
-            <dxo-label text="所需人力"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Remarks" [disabled]="true">
-            <dxo-label text="備註"></dxo-label>
-        </dxi-item> -->
+                <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
+                <dxo-filter-row [visible]="false"></dxo-filter-row>
+                <dxo-header-filter [visible]="false"></dxo-header-filter>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+                <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false"></dxo-editing>
 
-        <!-- <dxi-item dataField="ProcessLeadTime" [disabled]="true">
-            <dxo-label text="前置時間(分)"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ProcessTime" [disabled]="true">
-            <dxo-label text="標準工時(分)"></dxo-label>
-        </dxi-item> -->
-        <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="4" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
-            <dxo-label text="回報說明"></dxo-label>
-        </dxi-item>
-
-        <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
-            <dxo-label text="委外供應商"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="RePrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
-            <dxo-label text="委外金額"></dxo-label>
-        </dxi-item>
-
-        <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="HasPurchaseVisible">
-            <dxo-label text="採購供應商"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="PurchaseId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions" [colSpan]="2" [visible]="HasPurchaseVisible">
-            <dxo-label text="採購單號"></dxo-label>
-        </dxi-item>
-
-        <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [colSpan]="1" [disabled]="true" [visible]="false">
-            <dxo-label text="成本"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ProducingMachine" dataType="number" editorType="dxSelectBox" [editorOptions]="MachineEditorOptions" [colSpan]="1" [visible]="HasProducingMachineVisible">
-            <dxo-label text="機台"></dxo-label>
-        </dxi-item>
-
-        <!-- <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
-            <dxo-label text="預計開工日"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
-            <dxo-label text="預計完工日"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
-            <dxo-label text="實際開工日"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
-            <dxo-label text="實際完工日"></dxo-label>
-        </dxi-item> -->
-        <!-- <dxi-item dataField="Count" [disabled]="true">
-            <dxo-label text="需求數量"></dxo-label>
-        </dxi-item> -->
-        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
-            <dxo-label text="良品數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="1" [visible]="NgCountVisible">
-            <dxo-label text="NG數量"></dxo-label>
-        </dxi-item>
+                <dxi-column dataField="Serial" caption="No." [width]="50" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="DataNo" caption="品號" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="Quantity" caption="數量" [width]="70" [allowEditing]="false"></dxi-column>
 
 
-        <dxi-item dataField="ReportType" editorType="dxSelectBox" [editorOptions]="selectQcType" [colSpan]="2" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="檢驗種類 必填"></dxi-validation-rule>
-            <dxo-label text="檢驗種類"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="回報數量 必填"></dxi-validation-rule>
-            <dxo-label text="回報數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="CkCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="抽驗數量 必填"></dxi-validation-rule>
-            <dxo-label text="檢驗數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="OkCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="合格數量 必填"></dxi-validation-rule>
-            <dxo-label text="合格數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
-            <dxo-label text="NG數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="NC未完工量 必填"></dxi-validation-rule>
-            <dxo-label text="NC未完工"></dxo-label>
-        </dxi-item>
-        <!-- <dxi-item dataField="DrawNo" [visible]="HasQCVisible">
-            <dxo-label text="加工圖號"></dxo-label>
-        </dxi-item> -->
-        <!-- <dxi-item dataField="CheckResult" editorType="dxSelectBox" [editorOptions]="selectQcResult" [visible]="HasQCVisible">
-            <dxi-validation-rule type="required" message="檢驗結果 必填"></dxi-validation-rule>
-            <dxo-label text="檢驗結果"></dxo-label>
-        </dxi-item> -->
-        <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="3" [visible]="HasQCVisible">
-            <dxo-label text="回報說明"></dxo-label>
-        </dxi-item>
+            </dx-data-grid>
+        </div>
+
+    </div>
+
+    <div class="col-12">
+
+        <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+            [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+            <dxi-item dataField="CodeNo" [colSpan]="2" [disabled]="false" [visible]="HasCodeNoVisible">
+                <dxo-label text="加工程式"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="2" editorType="dxSelectBox">
+                <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
+                <dxo-label text="操作人員"></dxo-label>
+            </dxi-item>
+            <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
+                <dxo-label text="製程序號"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions" [disabled]="true">
+                <dxo-label text="製程名稱"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="DrawNo" [disabled]="true">
+                <dxo-label text="圖號"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="Manpower" [disabled]="true">
+                <dxo-label text="所需人力"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="Remarks" [disabled]="true">
+                <dxo-label text="備註"></dxo-label>
+            </dxi-item> -->
+
+            <!-- <dxi-item dataField="ProcessLeadTime" [disabled]="true">
+                <dxo-label text="前置時間(分)"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ProcessTime" [disabled]="true">
+                <dxo-label text="標準工時(分)"></dxo-label>
+            </dxi-item> -->
+            <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="4" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+                <dxo-label text="回報說明"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
+                <dxo-label text="委外供應商"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="RePrice" dataType="number" editorType="dxNumberBox" format="$ #,##0.##;($ #,##0.##)" [editorOptions]="PriceEditorOptions" [colSpan]="2" [visible]="NoPurchaseVisible">
+                <dxo-label text="委外金額"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="SupplierId" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions" [colSpan]="2" [visible]="HasPurchaseVisible">
+                <dxo-label text="採購供應商"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="PurchaseId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions" [colSpan]="2" [visible]="HasPurchaseVisible">
+                <dxo-label text="採購單號"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [colSpan]="1" [disabled]="true" [visible]="false">
+                <dxo-label text="成本"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ProducingMachine" dataType="number" editorType="dxSelectBox" [editorOptions]="MachineEditorOptions" [colSpan]="1" [visible]="HasProducingMachineVisible">
+                <dxo-label text="機台"></dxo-label>
+            </dxi-item>
+
+            <!-- <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
+                <dxo-label text="預計開工日"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
+                <dxo-label text="預計完工日"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
+                <dxo-label text="實際開工日"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
+                <dxo-label text="實際完工日"></dxo-label>
+            </dxi-item> -->
+            <!-- <dxi-item dataField="Count" [disabled]="true">
+                <dxo-label text="需求數量"></dxo-label>
+            </dxi-item> -->
+            <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
+                <dxo-label text="良品數量"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="1" [visible]="NgCountVisible">
+                <dxo-label text="NG數量"></dxo-label>
+            </dxi-item>
 
 
-    </dx-form>
+            <dxi-item dataField="ReportType" editorType="dxSelectBox" [editorOptions]="selectQcType" [colSpan]="2" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="檢驗種類 必填"></dxi-validation-rule>
+                <dxo-label text="檢驗種類"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="回報數量 必填"></dxi-validation-rule>
+                <dxo-label text="回報數量"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="CkCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="抽驗數量 必填"></dxi-validation-rule>
+                <dxo-label text="檢驗數量"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="OkCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="合格數量 必填"></dxi-validation-rule>
+                <dxo-label text="合格數量"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
+                <dxo-label text="NG數量"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="NC未完工量 必填"></dxi-validation-rule>
+                <dxo-label text="NC未完工"></dxo-label>
+            </dxi-item>
+            <!-- <dxi-item dataField="DrawNo" [visible]="HasQCVisible">
+                <dxo-label text="加工圖號"></dxo-label>
+            </dxi-item> -->
+            <!-- <dxi-item dataField="CheckResult" editorType="dxSelectBox" [editorOptions]="selectQcResult" [visible]="HasQCVisible">
+                <dxi-validation-rule type="required" message="檢驗結果 必填"></dxi-validation-rule>
+                <dxo-label text="檢驗結果"></dxo-label>
+            </dxi-item> -->
+            <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="3" [visible]="HasQCVisible">
+                <dxo-label text="回報說明"></dxo-label>
+            </dxi-item>
+
+
+        </dx-form>
+    </div>
 
     <br>
     <!-- <div class="long-title">
