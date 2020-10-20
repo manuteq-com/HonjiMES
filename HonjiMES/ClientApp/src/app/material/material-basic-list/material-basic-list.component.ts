@@ -34,10 +34,13 @@ export class MaterialBasicListComponent implements OnInit {
     remoteOperations: boolean;
     detailfilter: any;
     supplierList: any;
+    NumberBoxOptions: any;
+
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.remoteOperations = true;
         this.supplierList = [];
         this.dataSourceDB = new CustomStore({
@@ -48,7 +51,12 @@ export class MaterialBasicListComponent implements OnInit {
                 'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterialBasic', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterialBasic', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterialBasic', 'PUT', { key, values }),
+            update: (key, values) => {
+                if (values.Price === null) {
+                    values.Price = 0;
+                }
+                return SendService.sendRequest(http, this.Controller + '/PutMaterialBasic', 'PUT', { key, values });
+            },
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterialBasic/' + key, 'DELETE')
         });
         this.app.GetData('/Materials/GetMaterials').subscribe(
