@@ -50,8 +50,8 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     editorOptions: {};
     keyup = '';
     UserTurn: number;
-    selectUserDefault: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; inputAttr: { style: string; }; };
-    selectUser: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; inputAttr: { style: any; }; onValueChanged: any; };
+    selectUserDefault: any;
+    selectUser: any;
     AttrValue: string;
     tempCreateUserId: number;
 
@@ -283,81 +283,6 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             }
         );
     }
-    async onFormSubmit(e) {
-        let cansave = true;
-        let msg = '';
-        this.buttondisabled = true;
-        if (this.validate_before() === false) {
-            return;
-        }
-        this.dataGrid.instance.saveEditData();
-        let allCount = 0;
-        this.dataSourceAllDB.forEach(x => {
-            if (x.RQty > 0 && (!x.WarehouseId || x.WarehouseId < 0)) {
-                msg += x.NameNo + ':請選擇倉庫\r\n';
-                this.buttondisabled = false;
-                cansave = false;
-                return false;
-            } else if (x.WarehouseId > 0 && x.RQty < 0) {
-                msg += x.NameNo + ':請輸入數量 \r\n';
-                this.buttondisabled = false;
-                cansave = false;
-                return false;
-            }
-            if (x.RQty) {
-                allCount += x.RQty;
-            }
-        });
-        if (allCount === 0) {
-            msg += '請輸入數量! \r\n';
-            this.buttondisabled = false;
-            cansave = false;
-        }
-        if (!cansave) {
-            notify({
-                message: msg,
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-            return;
-        }
-        this.formData = this.myform.instance.option('formData');
-        // 新增資料
-        const postdata = this.formData;
-        postdata.ReceiveList = this.dataSourceAllDB;
-        this.buttondisabled = true;
-        this.app.PostData(this.Controller + '/PostRequisitionsDetailAll', postdata).toPromise()
-            .then((ReturnData: any) => {
-                if (ReturnData.success) {
-                    this.myform.instance.resetValues();
-                    this.dataSourceAllDB = null;
-                    e.preventDefault();
-                    this.childOuter.emit(true);
-                } else {
-                    notify({
-                        message: ReturnData.message,
-                        position: {
-                            my: 'center top',
-                            at: 'center top'
-                        }
-                    }, 'error');
-                    this.buttondisabled = false;
-                }
-            })
-            .catch(ex => {
-                notify({
-                    message: ex.message,
-                    position: {
-                        my: 'center top',
-                        at: 'center top'
-                    }
-                }, 'error');
-
-            });
-        this.buttondisabled = false;
-    }
     allowDeleting(e) {
         if (e.row.data.Quantity !== null) {
             return false;
@@ -521,6 +446,81 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
                 }
             }, 'error', 3000);
         }
+    }
+    async onFormSubmit(e) {
+        let cansave = true;
+        let msg = '';
+        this.buttondisabled = true;
+        if (this.validate_before() === false) {
+            return;
+        }
+        this.dataGrid.instance.saveEditData();
+        let allCount = 0;
+        this.dataSourceAllDB.forEach(x => {
+            if (x.RQty > 0 && (!x.WarehouseId || x.WarehouseId < 0)) {
+                msg += x.NameNo + ':請選擇倉庫\r\n';
+                this.buttondisabled = false;
+                cansave = false;
+                return false;
+            } else if (x.WarehouseId > 0 && x.RQty < 0) {
+                msg += x.NameNo + ':請輸入數量 \r\n';
+                this.buttondisabled = false;
+                cansave = false;
+                return false;
+            }
+            if (x.RQty) {
+                allCount += x.RQty;
+            }
+        });
+        if (allCount === 0) {
+            msg += '請輸入數量! \r\n';
+            this.buttondisabled = false;
+            cansave = false;
+        }
+        if (!cansave) {
+            notify({
+                message: msg,
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'error', 3000);
+            return;
+        }
+        this.formData = this.myform.instance.option('formData');
+        // 新增資料
+        const postdata = this.formData;
+        postdata.ReceiveList = this.dataSourceAllDB;
+        this.buttondisabled = true;
+        this.app.PostData(this.Controller + '/PostRequisitionsDetailAll', postdata).toPromise()
+            .then((ReturnData: any) => {
+                if (ReturnData.success) {
+                    this.myform.instance.resetValues();
+                    this.dataSourceAllDB = null;
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                } else {
+                    notify({
+                        message: ReturnData.message,
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'error');
+                    this.buttondisabled = false;
+                }
+            })
+            .catch(ex => {
+                notify({
+                    message: ex.message,
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error');
+
+            });
+        this.buttondisabled = false;
     }
     showMessage(type, data, val) {
         notify({
