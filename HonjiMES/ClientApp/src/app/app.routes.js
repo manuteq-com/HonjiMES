@@ -22,6 +22,7 @@ var resource_allocation_component_1 = require("./workorder/resource_allocation/r
 var user_password_1 = require("./setting/user_password/user_password.component");
 var sale_return_1 = require("./report/sale_return/sale_return.component");
 var billpurchase_return_1 = require("./report/billpurchase_return/billpurchase_return.component");
+var quality_record_1 = require("./report/quality_record/quality_record.component");
 
 exports.routes = [
     { path: '', component: homepage_component_1.HomepageComponent },
@@ -45,6 +46,7 @@ exports.routes = [
     { path: 'userpassword', component: user_password_1.UserPasswordComponent },
     { path: 'salereturn', component: sale_return_1.SaleReturnComponent },
     { path: 'billpurchasereturn', component: billpurchase_return_1.BiilpurchaseReturnComponent },
+    { path: 'qualityrecord', component: quality_record_1.QualityRecordComponent },
 ];
 exports.AppRoutes = router_1.RouterModule.forRoot(exports.routes, { scrollPositionRestoration: 'enabled' });
 //# sourceMappingURL=app.routes.js.map

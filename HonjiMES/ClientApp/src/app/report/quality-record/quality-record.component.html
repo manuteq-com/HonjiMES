@@ -1,0 +1,71 @@
+<div class="headerblock">
+    <div class="headerfont font1">報表管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">品質紀錄查詢</div>
+    <div class="buttongroup">
+        <dx-button
+            class="searchbtn"
+            stylingMode="contained"
+            text="下載報表"
+            type="normal"
+            [width]="140"
+            (onClick)="download()">
+        </dx-button>
+    </div>
+</div>
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true" [columnAutoWidth]="true"
+    >
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    </dxo-editing>
+
+    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="回報人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
+        <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
+    <dxi-column dataField="QCReportType" caption="檢驗種類" alignment="center" [width]="150">
+        <dxo-lookup [dataSource]="QcTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
+    <dxi-column dataField="QCReCount" caption="回報數量" [width]="80"></dxi-column>
+    <dxi-column dataField="QCCkCount" caption="檢驗數量" [width]="80"></dxi-column>
+    <dxi-column dataField="QCOkCount" caption="合格數量" [width]="80"></dxi-column>
+    <dxi-column dataField="QCNgCount" caption="NG數量" [width]="70"></dxi-column>
+    <dxi-column dataField="QCNcCount" caption="NC數量" [width]="70"></dxi-column>
+
+    <dxi-column dataField="QCMessage" caption="檢驗說明"></dxi-column>
+
+    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+    <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+
+</dx-data-grid>
+
