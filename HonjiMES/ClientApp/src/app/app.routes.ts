@@ -33,6 +33,7 @@ import { RebackListComponent } from './reback/reback-list/reback-list.component'
 import { UserPasswordComponent } from './setting/user-password/user-password.component';
 import { SaleReturnComponent } from './report/sale-return/sale-return.component';
 import { BiilpurchaseReturnComponent } from './report/biilpurchase-return/biilpurchase-return.component';
+import { QualityRecordComponent } from './report/quality-record/quality-record.component';
 
 
 
@@ -69,6 +70,7 @@ export const routes: Routes = [
     { path: 'userpassword', component: UserPasswordComponent, canActivate: [AuthGuard] },
     { path: 'salereturn', component: SaleReturnComponent, canActivate: [AuthGuard] },
     { path: 'billpurchasereturn', component: BiilpurchaseReturnComponent, canActivate: [AuthGuard] },
+    { path: 'qualityrecord', component: QualityRecordComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

@@ -2195,6 +2195,52 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢品質相關報工紀錄
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderReportLog>> GetWorkOrderQCLogs(
+            [FromQuery] DataSourceLoadOptions FromQuery)
+        {
+            // var WorkOrderReportLogs = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 ).Include(x => x.Supplier);
+            var WorkOrderQcLogs = _context.WorkOrderQcLogs.Where(x => x.DeleteFlag == 0);
+            //leftjoin：
+            // var gnWorkOrderReportLogs = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 )
+            //   .GroupJoin(WorkOrderQcLogs, x=>x.CreateTime,y=>y.CreateTime,(x, y) => new {
+            //       x,y
+            //   }).SelectMany(x=>x.y.DefaultIfEmpty(),(x,y)=>new WorkOrderReportLogData{
+            //              CreateTime = x.x.CreateTime,
+            //                     CreateUser = x.x.CreateUser,
+            //                     ReportType = x.x.ReportType,
+            //                     QCReportType = y.ReportType,
+            //                     QCReCount = y.ReCount ,
+            //                     QCCkCount = y.CkCount ,
+            //                     QCOkCount = y.OkCount ,
+            //                     QCNgCount = y.NgCount ,
+            //                     QCNcCount = y.NcCount,
+            //                     QCMessage = y.Message,
+            //                     ActualStartTime = x.x.ActualStartTime,
+            //                     ActualEndTime = x.x.ActualEndTime,
+            //   });
+
+            var nWorkOrderReportLogs = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 )
+            .Join(WorkOrderQcLogs, x=>x.CreateTime,y=>y.CreateTime,(x, y) => new WorkOrderReportLogData{
+                CreateTime = x.CreateTime,
+                                CreateUser = x.CreateUser,
+                                ReportType = x.ReportType,
+                                QCReportType = y.ReportType,
+                                QCReCount = y.ReCount ,
+                                QCCkCount = y.CkCount ,
+                                QCOkCount = y.OkCount ,
+                                QCNgCount = y.NgCount ,
+                                QCNcCount = y.NcCount,
+                                QCMessage = y.Message,
+                                ActualStartTime = x.ActualStartTime,
+                                ActualEndTime = x.ActualEndTime,
+            });
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(nWorkOrderReportLogs, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
         /// 取得品號主要用料By工單Id
         /// </summary>
         /// <param name="id"></param>

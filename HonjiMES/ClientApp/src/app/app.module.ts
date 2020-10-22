@@ -122,8 +122,8 @@ import { OrderOverviewComponent } from './order/order-overview/order-overview.co
 import { SaleOverviewComponent } from './sale/sale-overview/sale-overview.component';
 import { SaleReturnComponent } from './report/sale-return/sale-return.component';
 import { BiilpurchaseReturnComponent } from './report/biilpurchase-return/biilpurchase-return.component';
-import { OrderCustomerComponent } from './report/order-customer/order-customer.component';
 import { WorkorderCreatStockComponent } from './workorder/workorder-creat-stock/workorder-creat-stock.component';
+import { QualityRecordComponent } from './report/quality-record/quality-record.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -261,8 +261,8 @@ export function tokenGetter() {
         SaleOverviewComponent,
         SaleReturnComponent,
         BiilpurchaseReturnComponent,
-        OrderCustomerComponent,
-        WorkorderCreatStockComponent
+        WorkorderCreatStockComponent,
+        QualityRecordComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
