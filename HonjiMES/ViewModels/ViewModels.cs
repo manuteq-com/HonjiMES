@@ -208,6 +208,12 @@ namespace HonjiMES.Models
         public int OrderDetailId { get; set; }
         public decimal Count { get; set; }
     }
+    public class OrderDetailInfo : OrderDetail
+    {
+        public string OrderNo { get; set; }
+        public string OrderType { get; set; }
+        public int Customer { get; set; }
+    }
     /// <summary>
     /// 過濾
     /// </summary>
@@ -844,6 +850,7 @@ namespace HonjiMES.Models
         public string BasicDataNo { get; set; }
         public string MachineNo { get; set; }
         public string Remark { get; set; }
+        public decimal OrderCount { get; set; }
         public int Count { get; set; }
         public int Status { get; set; }
         public string DueEndTime { get; set; }
@@ -944,6 +951,10 @@ namespace HonjiMES.Models
     {
         public int ShowLV { get; set; }
         public int ShowPLV { get; set; }
+    }
+    public class BillOfMaterialData : BillOfMaterial
+    {
+        public string DataNo { get; set; }
     }
     public class RequisitionsDetailInfo
     {

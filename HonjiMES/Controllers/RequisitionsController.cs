@@ -1001,7 +1001,7 @@ namespace HonjiMES.Controllers
                     return Ok(MyFun.APIResponseError("數量錯誤或倉庫錯誤"));
                 }
             }
-            var WorkOrderHead = _context.WorkOrderHeads.Find(PostRequisition.WorkOrderNo);
+            var WorkOrderHead = _context.WorkOrderHeads.Where(x => x.Id == PostRequisition.WorkOrderNo).Include(x => x.WorkOrderDetails).First();
             var head = PostRequisitionByWorkOrderNoFun(WorkOrderHead, PostRequisition);
             if (head.Result.success)
             {
@@ -1041,6 +1041,43 @@ namespace HonjiMES.Controllers
                                 return Ok(await Detail);
                             }
                         }
+
+                        //// 2020/10/19 領料完成自動回報(報工) 工單第一站工序(AMA)。
+                        var dt = DateTime.Now;
+                        var FirstWorkOrderDetails = WorkOrderHead.WorkOrderDetails.Where(x => x.SerialNumber == 1 && x.DeleteFlag == 0).FirstOrDefault();
+                        if (FirstWorkOrderDetails.ActualStartTime == null)
+                        {
+                            FirstWorkOrderDetails.ActualStartTime = dt;
+                        }
+                        FirstWorkOrderDetails.ActualEndTime = dt;
+                        FirstWorkOrderDetails.Status = 3; // 完工
+
+                        FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                        {
+                            // WorkOrderDetailId = FirstWorkOrderDetails.Id,
+                            ReportType = 2, // 完工回報
+                            // PurchaseId = FirstWorkOrderDetails.PurchaseId,
+                            // PurchaseNo = FirstWorkOrderDetails.,
+                            // SupplierId = FirstWorkOrderDetails.SupplierId,
+                            // DrawNo = FirstWorkOrderDetails.DrawNo,
+                            // CodeNo = WorkOrderReportData.CodeNo,
+                            // Manpower = FirstWorkOrderDetails.Manpower,
+                            // ProducingMachineId = FirstWorkOrderDetails.,
+                            // ProducingMachine = WorkOrderReportData.ProducingMachine,
+                            // ReCount = WorkOrderReportData.ReCount,
+                            // RePrice = WorkOrderReportData.RePrice,
+                            // NgCount = WorkOrderReportData.NgCount,
+                            // Message = WorkOrderReportData.Message,
+                            StatusO = 0,
+                            StatusN = 3,
+                            DueStartTime = FirstWorkOrderDetails.DueStartTime,
+                            DueEndTime = FirstWorkOrderDetails.DueEndTime,
+                            ActualStartTime = dt,
+                            ActualEndTime = dt,
+                            CreateTime = dt,
+                            CreateUser = PostRequisition.CreateUser,
+                        });
+                        await _context.SaveChangesAsync();
                     }
                 }
                 return Ok(await head);

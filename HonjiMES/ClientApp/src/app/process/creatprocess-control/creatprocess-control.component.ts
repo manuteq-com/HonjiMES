@@ -181,7 +181,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     }
                 }
             );
-        } else if (this.itemkeyval != null) {
+        } else if (this.itemkeyval != null && this.itemkeyval !== 0) {
             if (this.itemkeyTemp !== this.itemkeyval || this.productBasicChange) {
                 this.modCheck = true; // 避免製程資訊被刷新
                 this.itemkeyTemp = this.itemkeyval;
@@ -218,7 +218,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.onCellPreparedLevel = 0;
     }
     allowEdit(e) {
-        if (e.row.data.Status !== undefined && e.row.data.WorkOrderHead !== undefined) {
+        if (e.row.data.Status !== undefined && e.row.data.WorkOrderHead !== undefined && e.row.data.WorkOrderHead !== null) {
             if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
                 return false;
             } else {
@@ -389,17 +389,52 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
         }
     }
+    editorPreparing(e) {
+        if (e.parentType === 'dataRow' && e.dataField === 'Type') {
+            e.editorOptions.readOnly = true;
+            if (e.row.data.ProcessType == null || e.row.data.ProcessType === 10) { // 如工序的[種類]為'null'或'NC'則可以選擇是否委外。
+                e.editorOptions.readOnly = false;
+            }
+        }
+    }
+    onToolbarPreparing(e) {
+        e.toolbarOptions.visible = false;
+        // const toolbarItems = e.toolbarOptions.items;
+        // toolbarItems.forEach(item => {
+        //     if (item.name === 'saveButton') {
+        //         // item.options.icon = '';
+        //         // item.options.text = '退料';
+        //         // item.showText = 'always';
+        //         item.visible = false;
+        //     } else if (item.name === 'revertButton') {
+        //         // item.options.icon = '';
+        //         // item.options.text = '取消';
+        //         // item.showText = 'always';
+        //         item.visible = false;
+        //     }
+        // });
+    }
     DeleteOnClick(e) {
         this.modName = 'delete';
     }
     UpdateOnClick(e) {
+        this.dataGrid2.instance.saveEditData();
         this.modName = 'update';
     }
     RunOnClick(e) {
         this.modName = 'run';
     }
-    onFormSubmit = async function (e) {
+    CancelOnClick(e) {
+        this.modName = 'cancel';
+    }
+    onFormSubmit = async function(e) {
         // debugger;
+        if (this.modName !== 'cancel') {
+            this.dataGrid2.instance.saveEditData();
+        } else {
+            this.dataGrid2.instance.cancelEditData();
+            this.childOuter.emit(true);
+        }
         this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
@@ -480,6 +515,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.dataSourceDB = [];
             e.preventDefault();
             this.childOuter.emit(true);
+            notify({
+                message: '更新完成',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
         }
     }
 }

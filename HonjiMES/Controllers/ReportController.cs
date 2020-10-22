@@ -102,7 +102,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_採購單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_PurchaseOrder.pdf");
             }
         }
 
@@ -166,7 +166,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_銷貨單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_SaleOrder.pdf");
             }
         }
 
@@ -211,7 +211,8 @@ namespace HonjiMES.Controllers
             report.Parameters["Quantity"].Value = WorkOrderHead.Count;
             report.Parameters["MachineNo"].Value = WorkOrderHead.MachineNo;
             report.Parameters["DueEndTime"].Value = WorkOrderHead.DueEndTime?.ToString("MM/dd") ?? "";
-            report.Parameters["CreateUser"].Value = Users.Where(x => x.Id == WorkOrderHead.CreateUser).FirstOrDefault().Realname;
+            // report.Parameters["CreateUser"].Value = Users.Where(x => x.Id == WorkOrderHead.CreateUser).FirstOrDefault().Realname;
+            report.Parameters["CreateUser"].Value = Users.Where(x => x.Id == MyFun.GetUserID(HttpContext)).FirstOrDefault().Realname;
             report.Parameters["CreateTime"].Value = "　" + DateTime.Now;
             report.Parameters["QRCode"].Value = MyFun.ImgToBase64String(dbQrCode);
             var jsonDataSource = new JsonDataSource();
@@ -221,7 +222,7 @@ namespace HonjiMES.Controllers
             using (MemoryStream ms = new MemoryStream())
             {
                 report.ExportToPdf(ms);
-                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_工單.pdf");
+                return File(ms.ToArray(), "application/pdf", txt + '_' + DateTime.Now.ToString("yyyyMMdd") + "_WorkOrder.pdf");
             }
         }
         

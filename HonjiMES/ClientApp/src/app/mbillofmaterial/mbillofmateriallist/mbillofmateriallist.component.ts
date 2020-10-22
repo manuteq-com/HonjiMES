@@ -107,7 +107,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         );
     }
     ngOnInit() {
-        this.titleService.setTitle('物料製程管理');
+        this.titleService.setTitle('標準製程管理');
     }
     ngOnChanges() {
         this.dataSourceDB_Process = [];

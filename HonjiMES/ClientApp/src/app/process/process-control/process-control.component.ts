@@ -148,11 +148,11 @@ export class ProcessControlComponent implements OnInit {
         this.mod = 'edit';
         this.randomkey = new Date().getTime();
     }
-    readProcess(e, data) {
+    readProcess(e, dataId) {
         if (!this.creatpopupVisible) {
             this.itemkey = 0;
-            this.workOrderHeadId = data.data.Id;
-            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + data.data.Id).subscribe(
+            this.workOrderHeadId = dataId;
+            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + dataId).subscribe(
                 (s) => {
                     if (s.success) {
                         this.editVisible = true;
@@ -226,23 +226,17 @@ export class ProcessControlComponent implements OnInit {
         this.itemkey = null;
         this.dataGrid1.instance.refresh();
         if (this.workOrderHeadId !== undefined) {
-            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + this.workOrderHeadId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.dataSourceDB_Process = s.data.WorkOrderDetail;
-                        this.btnDisabled = false;
-                        this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
-                    }
-                }
-            );
+            this.readProcess(null, this.workOrderHeadId);
+            // this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + this.workOrderHeadId).subscribe(
+            //     (s) => {
+            //         if (s.success) {
+            //             this.dataSourceDB_Process = s.data.WorkOrderDetail;
+            //             this.btnDisabled = false;
+            //             this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
+            //         }
+            //     }
+            // );
         }
-        notify({
-            message: '更新完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
     }
     closepopup_result(e) {
         this.btnDisabled = true;
@@ -262,7 +256,7 @@ export class ProcessControlComponent implements OnInit {
         this.viewpopupVisible = false;
     }
     downloadWorkOrder(e) {
-        debugger;
+        // debugger;
         if (this.workOrderHeadId === undefined) {
             Swal.fire({
                 allowEnterKey: false,
@@ -274,8 +268,9 @@ export class ProcessControlComponent implements OnInit {
             });
             return false;
         } else {
-            this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
-            window.open(this.Url, '_blank');
+            this.app.downloadfile('/Report/GetWorkOrderPDF/' + this.workOrderHeadId);
+            // this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
+            // window.open(this.Url, '_blank');
         }
     }
 }

@@ -205,8 +205,8 @@ export class OrderListComponent {
     selectionChanged(e) {
         // debugger;
         // 只開一筆Detail資料
-        // e.component.collapseAll(-1);
-        // e.component.expandRow(e.currentSelectedRowKeys[0]);
+        e.component.collapseAll(-1);
+        e.component.expandRow(e.currentSelectedRowKeys[0]);
     }
     contentReady(e) {
         // 預設要打開的子表單

@@ -92,7 +92,7 @@
         <dxi-item dataField="SupplierId" [editorOptions]="selectSupplier" editorType="dxSelectBox">
             <dxo-label text="供應商"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Weight">
+        <dxi-item dataField="Weight" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             <dxo-label text="重量(公斤)"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">

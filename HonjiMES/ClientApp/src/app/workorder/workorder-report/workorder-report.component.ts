@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, HostListener } from '@angular/core';
-import { DxFormComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { Myservice } from 'src/app/service/myservice';
 })
 export class WorkorderReportComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild('dataGrid1') dataGrid1: DxDataGridComponent;
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() serialkeyval: any;
@@ -89,6 +90,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     selectQcResult: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: any; };
     CountEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: string; min: string; };
     HasQCVisible: boolean;
+    dataSourceDB: any;
+    autoNavigateToFocusedRow = true;
+    remoteOperations: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -158,6 +162,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.minColWidth = 300;
         this.colCount = 4;
         this.labelLocation = 'left';
+        this.remoteOperations = true;
 
         this.DateBoxOptions = {
             displayFormat: 'yyyy/MM/dd HH:mm:ss',
@@ -298,35 +303,48 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         };
 
         if (this.itemkeyval != null) {
+            this.dataSourceDB = [];
+            this.app.GetData('/WorkOrders/GetBomDataByWorkOrderId/' + this.itemkeyval).subscribe(
+                (s) => {
+                    if (s.success) {
+                        let index = 1;
+                        s.data.forEach(element => {
+                            element.Serial = index++;
+                        });
+                        this.dataSourceDB = s.data;
+                    }
+                }
+            );
+
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.itemval1 = '　　　　　　　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
-                        this.itemval2 = '　　　　　　　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
-                        this.itemval3 = '　　　　　　　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
-                        // this.itemval4 = '　　　　　　　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
+                        this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
+                        this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
+                        this.itemval3 = '　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
+                        // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         this.itemval4 = '';
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
-                        this.itemval5 = '　　　　　　　　　　　　　　　';
+                        this.itemval5 = '　　';
                         this.itemval6 = '';
 
                         let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
                             if (element.SerialNumber === this.serialkeyval && findProcess === false) {
-                                this.itemval7 = '　　　　　　　　　　製程序號：　' + element.SerialNumber;
-                                this.itemval8 = '　　　　　　　　　　製程名稱：　[' + element.ProcessNo + '] ' + element.ProcessName;
-                                this.itemval9 = '　　　　　　　　　　　　圖號：　' + (element?.DrawNo ?? '');
-                                this.itemval10 = '　　　　　　　　　　所需人力：　' + (element?.Manpower ?? '');
-                                this.itemval11 = '　　　　　　　　　　　　備註：　' + (element?.Remarks ?? '');
-                                this.itemval12 = '　　　　　　　前置時間（分）：　' + (element?.ProcessLeadTime ?? '');
-                                this.itemval13 = '　　　　　　　標準工時（分）：　' + (element?.ProcessTime ?? '');
-                                // this.itemval14 = '　　　　　　　　　預計開工日：　' + (element?.DueStartTime ?? '');
+                                this.itemval7 = '　　　　製程序號：　' + element.SerialNumber;
+                                this.itemval8 = '　　　　製程名稱：　[' + element.ProcessNo + '] ' + element.ProcessName;
+                                this.itemval9 = '　　　　　　圖號：　' + (element?.DrawNo ?? '');
+                                this.itemval10 = '　　　　所需人力：　' + (element?.Manpower ?? '');
+                                this.itemval11 = '　　　　　　備註：　' + (element?.Remarks ?? '');
+                                this.itemval12 = '　前置時間（分）：　' + (element?.ProcessLeadTime ?? '');
+                                this.itemval13 = '　標準工時（分）：　' + (element?.ProcessTime ?? '');
+                                // this.itemval14 = '　　　預計開工日：　' + (element?.DueStartTime ?? '');
                                 this.itemval14 = '';
-                                this.itemval15 = '　　　　　　　　　預計完工日：　' + (element?.DueEndTime ?? '');
-                                this.itemval16 = '　　　　　　　　　實際開工日：　' + (element?.ActualStartTime ?? '');
-                                this.itemval17 = '　　　　　　　　　實際完工日：　' + (element?.ActualEndTime ?? '');
-                                this.itemval18 = '　　　　　　　　　　需求數量：　' + (element?.Count ?? '0');
-                                this.itemval19 = '　　　　　　　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
+                                this.itemval15 = '　　　預計完工日：　' + (element?.DueEndTime ?? '');
+                                this.itemval16 = '　　　實際開工日：　' + (element?.ActualStartTime ?? '');
+                                this.itemval17 = '　　　實際完工日：　' + (element?.ActualEndTime ?? '');
+                                this.itemval18 = '　　　　需求數量：　' + (element?.Count ?? '0');
+                                this.itemval19 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
                                 this.QuantityEditorOptions = {
                                     showSpinButtons: true,
@@ -414,6 +432,42 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 this.NgCountVisible = true;
             }
         }
+    }
+    onDataErrorOccurred(e) {
+        notify({
+            message: e.error.message,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'error', 3000);
+    }
+    onFocusedRowChanging(e) {
+        const rowsCount = e.component.getVisibleRows().length;
+        const pageCount = e.component.pageCount();
+        const pageIndex = e.component.pageIndex();
+        const key = e.event && e.event.key;
+
+        if (key && e.prevRowIndex === e.newRowIndex) {
+            if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
+                // tslint:disable-next-line: only-arrow-functions
+                e.component.pageIndex(pageIndex + 1).done(function() {
+                    e.component.option('focusedRowIndex', 0);
+                });
+            } else if (e.newRowIndex === 0 && pageIndex > 0) {
+                // tslint:disable-next-line: only-arrow-functions
+                e.component.pageIndex(pageIndex - 1).done(function() {
+                    e.component.option('focusedRowIndex', rowsCount - 1);
+                });
+            }
+        }
+    }
+    onEditorPreparing(e) {
+    }
+    onToolbarPreparing(e) {
+        e.toolbarOptions.visible = false;
+    }
+    onValueChanged(e) {
     }
     PurchaseNoValueChanged(e) {
 

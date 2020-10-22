@@ -52,11 +52,11 @@
             <dxi-item dataField="Name"></dxi-item>
             <dxi-item dataField="Specification"></dxi-item>
             <dxi-item dataField="Property"></dxi-item>
-            <dxi-item dataField="Price"></dxi-item>
+            <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
             <!-- <dxi-item dataField="MaterialId"></dxi-item>
             <dxi-item dataField="WarehouseId"></dxi-item> -->
             <dxi-item dataField="ProductNumber"></dxi-item>
-            <dxi-item dataField="TotalCount"></dxi-item>
+            <!-- <dxi-item dataField="TotalCount"></dxi-item> -->
             <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
         <dxo-popup [showTitle]="true" title="修改成品基本資訊"  [width]="800" [height]="360">

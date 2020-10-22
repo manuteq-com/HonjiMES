@@ -34,11 +34,13 @@ export class ProductBasicListComponent implements OnInit {
     hint: boolean;
     remoteOperations: boolean;
     detailfilter: any;
+    NumberBoxOptions: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.remoteOperations = true;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -48,7 +50,12 @@ export class ProductBasicListComponent implements OnInit {
                 'GET', { loadOptions, remote: this.remoteOperations , detailfilter: this.detailfilter}),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetProductBasic', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostProductBasic', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutProductBasic', 'PUT', { key, values }),
+            update: (key, values) => {
+                if (values.Price === null) {
+                    values.Price = 0;
+                }
+                return SendService.sendRequest(http, this.Controller + '/PutProductBasic', 'PUT', { key, values });
+            },
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteProductBasic/' + key, 'DELETE')
         });
         this.app.GetData('/Materials/GetMaterials').subscribe(

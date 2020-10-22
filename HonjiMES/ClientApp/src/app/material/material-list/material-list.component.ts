@@ -34,16 +34,27 @@ export class MaterialListComponent implements OnInit, OnChanges {
     exceldata: any;
     Supplierlist: any;
     visible: boolean;
+    NumberBoxOptions: any;
+
     constructor(private http: HttpClient, public app: AppComponent) {
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.Controller + '/GetMaterialsById/' + this.masterkey),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMaterial', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMaterial', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
+            update: (key, values) => {
+                if (values.Price === null) {
+                    values.Price = 0;
+                }
+                if (values.QuantityLimit === null) {
+                    values.QuantityLimit = 0;
+                }
+                return SendService.sendRequest(http, this.Controller + '/PutMaterial', 'PUT', { key, values });
+            },
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMaterial/' + key, 'DELETE')
         });
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(

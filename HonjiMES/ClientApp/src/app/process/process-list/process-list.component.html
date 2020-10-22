@@ -40,15 +40,15 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <dxi-item  dataField="Code"></dxi-item>
             <dxi-item  dataField="Name"></dxi-item>
-            <dxi-item  dataField="LeadTime"></dxi-item>
-            <dxi-item  dataField="WorkTime"></dxi-item>
-            <dxi-item  dataField="Cost"></dxi-item>
+            <dxi-item  dataField="LeadTime" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
+            <dxi-item  dataField="WorkTime" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
+            <dxi-item  dataField="Cost" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
             <dxi-item  dataField="DrawNo"></dxi-item>
-            <dxi-item  dataField="Manpower"></dxi-item>
+            <dxi-item  dataField="Manpower" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
             <dxi-item  dataField="ProducingMachine"></dxi-item>
             <dxi-item  dataField="Remark"></dxi-item>
         </dxo-form>
@@ -65,11 +65,11 @@
     <dxi-column dataField="Type" caption="製程種類" alignment="center" [width]="140">
         <dxo-lookup [dataSource]="ProcessTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="LeadTime" caption="前置時間(分)" dataType="number"></dxi-column>
-    <dxi-column dataField="WorkTime" caption="標準工時(分)" dataType="number"></dxi-column>
-    <dxi-column dataField="Cost" caption="單位成本(元/分)" dataType="number" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
+    <dxi-column dataField="LeadTime" caption="前置時間(分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
+    <dxi-column dataField="WorkTime" caption="標準工時(分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
+    <dxi-column dataField="Cost" caption="單位成本(元/分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
     <dxi-column dataField="DrawNo" caption="圖號" [visible]="false"></dxi-column>
-    <dxi-column dataField="Manpower" caption="人力" dataType="number"></dxi-column>
+    <dxi-column dataField="Manpower" caption="人力" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
     <dxi-column dataField="ProducingMachine" caption="機台" [visible]="false"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <!-- <dxi-column dataField="CreateTime" caption="建立時間"></dxi-column> -->

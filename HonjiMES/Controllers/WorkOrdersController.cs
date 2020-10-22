@@ -501,19 +501,26 @@ namespace HonjiMES.Controllers
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
             var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
 
-            // 入庫數量不能大於工單量 2020/10/05
-            if ((OWorkOrderHead.ReCount + WorkOrderReportData.ReCount) > OWorkOrderHead.Count)
+            if (WorkOrderReportData.Type == 0) // 入庫種類為半成品入庫時，不會更新[工單量]
             {
-                return Ok(MyFun.APIResponseError("入庫數量已超過工單量!! ( 工單量:" + OWorkOrderHead.Count + "　已完工量:" + OWorkOrderHead.ReCount + " )"));
+                
             }
-            OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
-            OWorkOrderHead.UpdateTime = DateTime.Now;
-            OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
-
-            // 入庫數量抵達工單量以後，工單自動結案 2020/10/05
-            if (OWorkOrderHead.Count == OWorkOrderHead.ReCount)
+            else if (WorkOrderReportData.Type == 1)
             {
-                OWorkOrderHead.Status = 5;//結案
+                // 入庫數量不能大於工單量 2020/10/05
+                if ((OWorkOrderHead.ReCount + WorkOrderReportData.ReCount) > OWorkOrderHead.Count)
+                {
+                    return Ok(MyFun.APIResponseError("入庫數量已超過工單量!! ( 工單量:" + OWorkOrderHead.Count + "　已完工量:" + OWorkOrderHead.ReCount + " )"));
+                }
+                OWorkOrderHead.ReCount = OWorkOrderHead.ReCount + WorkOrderReportData.ReCount;
+                OWorkOrderHead.UpdateTime = DateTime.Now;
+                OWorkOrderHead.UpdateUser = WorkOrderReportData.CreateUser;
+
+                // 入庫數量抵達工單量以後，工單自動結案 2020/10/05
+                if (OWorkOrderHead.Count == OWorkOrderHead.ReCount)
+                {
+                    OWorkOrderHead.Status = 5;//結案
+                }
             }
 
             //入庫
@@ -2234,5 +2241,31 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(nWorkOrderReportLogs, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+        /// 取得品號主要用料By工單Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/WorkOrders
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<BillOfMaterial>>> GetBomDataByWorkOrderId(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
+            var WorkOrderHead = await _context.WorkOrderHeads.FindAsync(id);
+            var BillOfMaterial = await _context.BillOfMaterials
+                .Where(x => x.DeleteFlag == 0 && x.ProductBasicId == WorkOrderHead.DataId && x.Lv == 1 && x.Master == 1 && x.MaterialBasicId != null)
+                // .Include(x => x.Order)
+                // .Include(x => x.OrderDetail)
+                // .Include(x => x.Sale)
+                .OrderByDescending(x => x.MaterialBasic.MaterialNo).ThenBy(x => x.MaterialBasic.Name)
+                .Select(x => new BillOfMaterialData
+                {
+                    DataNo = x.MaterialBasic.MaterialNo,
+                    Quantity = x.Quantity
+                }).ToListAsync();
+            _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
+            return Ok(MyFun.APIResponseOK(BillOfMaterial));
+        }
+
+
     }
 }

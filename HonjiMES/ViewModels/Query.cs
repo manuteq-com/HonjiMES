@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using LinqKit;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
@@ -311,6 +312,12 @@ namespace HonjiMES.Models
     {
         private static object Private(this object obj, string privateField) => obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
         private static T Private<T>(this object obj, string privateField) => (T)obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+        /// <summary>
+        /// 顯示SQL語法
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public static string ToSql<TEntity>(this IQueryable<TEntity> query) where TEntity : class
         {
             var enumerator = query.Provider.Execute<IEnumerable<TEntity>>(query.Expression).GetEnumerator();
@@ -323,5 +330,69 @@ namespace HonjiMES.Models
             string sql = command.CommandText;
             return sql;
         }
+        /// <summary>
+        /// LeftJoin
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TInner"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source">主要資料</param>
+        /// <param name="inner">要Join的資料</param>
+        /// <param name="sourceKey">主要比對的KEY</param>
+        /// <param name="innerKey">要比對的KEY</param>
+        /// <param name="result">回傳</param>
+        /// <returns></returns>
+        public static IQueryable<TResult> LeftOuterJoin<TSource, TInner, TKey, TResult>(this IQueryable<TSource> source, IQueryable<TInner> inner, Expression<Func<TSource, TKey>> sourceKey, Expression<Func<TInner, TKey>> innerKey, Expression<Func<TSource, TInner, TResult>> result)
+        {
+            return from a in source.AsExpandable()
+                   join b in inner on sourceKey.Invoke(a) equals innerKey.Invoke(b) into c
+                   from d in c.DefaultIfEmpty()
+                   select result.Invoke(a, d);
+        }
+        public class SemiNumericComparer : IComparer<string>
+        {
+            /// <summary>
+            /// 數字字串比大小
+            /// </summary>
+            /// <param name="s1"></param>
+            /// <param name="s2"></param>
+            /// <returns></returns>
+            public int Compare(string s1, string s2)
+            {
+                if (IsNumeric(s1) && IsNumeric(s2))
+                {
+                    if (Convert.ToInt32(s1) > Convert.ToInt32(s2)) return 1;
+                    if (Convert.ToInt32(s1) < Convert.ToInt32(s2)) return -1;
+                    if (Convert.ToInt32(s1) == Convert.ToInt32(s2)) return 0;
+                }
+
+                if (IsNumeric(s1) && !IsNumeric(s2))
+                    return -1;
+
+                if (!IsNumeric(s1) && IsNumeric(s2))
+                    return 1;
+
+                return string.Compare(s1, s2, true);
+            }
+        }
+        /// <summary>
+        /// 檢查是否為數字
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNumeric(object value)
+        {
+            try
+            {
+                int i = Convert.ToInt32(value.ToString());
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
     }
 }
+
