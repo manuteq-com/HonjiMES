@@ -82,6 +82,19 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 銷貨單銷退資訊
+    /// </summary>
+    public class SaleDetailNewReturnData : SaleDetailNewData
+    {
+        public string ReturnWarehouse { get; set; }
+        public int ReturnQuantity { get; set; }
+        public string ReturnReason { get; set; }
+        public string ReturnRemarks { get; set; }
+        public DateTime ReturnCreateTime { get; set; }
+        public string ReturnCreateUser { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData

@@ -316,9 +316,37 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery,
             [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.Status == 1) 
-            .Include(x => x.Sale).Include(x => x.Order).Include(x => x.OrderDetail)
-            .OrderByDescending(x => x.Sale.SaleNo);
+            var Users = _context.Users.Where(x => x.DeleteFlag == 0);
+            // var Warehouses = _context.Warehouses.Where(x => x.DeleteFlag == 0);
+            var data = _context.ReturnSales.Where(x => x.DeleteFlag == 0)
+            .Include(x => x.SaleDetailNew)
+            .Include(x => x.SaleDetailNew.Sale)
+            .Include(x => x.SaleDetailNew.Order)
+            .Include(x => x.SaleDetailNew.OrderDetail)
+            .Include(x => x.SaleDetailNew.ProductBasic)
+            .Include(x => x.SaleDetailNew.Product)
+            .Include(x => x.Warehouse)
+            .OrderByDescending(x => x.SaleDetailNew.Sale.SaleNo).Select(x => new SaleDetailNewReturnData
+            {
+                Id = x.Id,
+                ReturnWarehouse = x.Warehouse.Code + x.Warehouse.Name,
+                ReturnQuantity = x.Quantity,
+                ReturnReason = x.Reason,
+                ReturnRemarks = x.Remarks,
+                ReturnCreateTime = x.CreateTime,
+                ReturnCreateUser = Users.Where(y => y.Id == x.CreateUser).FirstOrDefault().Realname,
+
+                SaleNo = x.SaleDetailNew.Sale.SaleNo,
+                SaleDate = x.SaleDetailNew.Sale.SaleDate,
+                CustomerNo = x.SaleDetailNew.Order.CustomerNo,
+                OrderNo = x.SaleDetailNew.Order.OrderNo,
+                Serial = x.SaleDetailNew.OrderDetail.Serial,
+                MachineNo = x.SaleDetailNew.OrderDetail.MachineNo,
+                ProductNo = x.SaleDetailNew.ProductBasic.ProductNo,
+                Specification = x.SaleDetailNew.ProductBasic.Specification
+            });;
+            // data.LeftOuterJoin(_context.SaleLogs, x => new {x.CreateTime, x.CreateUser }, y => y.CreateTime, (o,s) => new SaleDetailNewData{
+            //     SaleNo = o.SaleNo, o,s});
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

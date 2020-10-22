@@ -37,9 +37,9 @@ export class SaleReturnComponent implements OnInit {
     editorOptions: any;
     detailfilter: any;
     UserList: any;
-    listSaleOrderStatus: any;
+
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-        this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
+
         this.remoteOperations = true;
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.getdata();

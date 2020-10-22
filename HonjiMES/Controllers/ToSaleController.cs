@@ -575,6 +575,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
             }
+            ReturnSale.CreateUser = MyFun.GetUserID(HttpContext);
             SaleDetail.ReturnSales.Add(ReturnSale);
             var ReturnCount = SaleDetail.ReturnSales.Sum(x => x.Quantity);
             if (ReturnCount > SaleDetail.Quantity)
@@ -586,33 +587,64 @@ namespace HonjiMES.Controllers
             if (SaleDetail.Status == 1)//抓已銷貨的
             {
                 var Warehouses = _context.Warehouses.Find(ReturnSale.WarehouseId);
-                if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
+                // if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
-                    var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
-                    ProductsData.ProductLogs.Add(new ProductLog
-                    {
-                        // LinkOrder = ReturnSale.ReturnNo,
-                        LinkOrder = SaleDetail.Sale.SaleNo,
-                        Original = ProductsData.Quantity,
-                        Quantity = ReturnSale.Quantity,
-                        Price = ProductsData.Price,
-                        PriceAll = ProductsData.Price * ReturnSale.Quantity,
-                        Reason = ReturnSale.Reason,
-                        Message = "銷退",
-                        CreateUser = MyFun.GetUserID(HttpContext)
-                    });
-                    ProductsData.Quantity += ReturnSale.Quantity;
-                    ProductsData.UpdateTime = dt;
-                    ProductsData.UpdateUser = MyFun.GetUserID(HttpContext);
-                    // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
-                    // SaleDetail.Product.Quantity += ReturnSale.Quantity;
-                    // SaleDetail.Product.UpdateTime = dt;
-                    // SaleDetail.Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                    var ProductBasic = _context.ProductBasics.Where(x => x.Id == SaleDetail.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                    var Products = ProductBasic.Products.Where(x => x.WarehouseId == ReturnSale.WarehouseId).ToList();
+                    // var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
+                    if (Products.Count() == 1) {
+                        Products.FirstOrDefault().ProductLogs.Add(new ProductLog
+                        {
+                            // LinkOrder = ReturnSale.ReturnNo,
+                            LinkOrder = SaleDetail.Sale.SaleNo,
+                            Original = Products.FirstOrDefault().Quantity,
+                            Quantity = ReturnSale.Quantity,
+                            Price = Products.FirstOrDefault().Price,
+                            PriceAll = Products.FirstOrDefault().Price * ReturnSale.Quantity,
+                            Reason = ReturnSale.Reason,
+                            Message = "銷退",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Products.FirstOrDefault().Quantity += ReturnSale.Quantity;
+                        Products.FirstOrDefault().UpdateTime = dt;
+                        Products.FirstOrDefault().UpdateUser = MyFun.GetUserID(HttpContext);
+                        // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
+                        // SaleDetail.Product.Quantity += ReturnSale.Quantity;
+                        // SaleDetail.Product.UpdateTime = dt;
+                        // SaleDetail.Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                    } else {
+                        ProductBasic.Products.Add(new Product
+                        {
+                            ProductNo = ProductBasic.ProductNo,
+                            ProductNumber = ProductBasic.ProductNumber,
+                            Name = ProductBasic.Name,
+                            Quantity = ReturnSale.Quantity,
+                            Specification = ProductBasic.Specification,
+                            Property = ProductBasic.Property,
+                            Price = ProductBasic.Price,
+                            MaterialRequire = 1,
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            WarehouseId = ReturnSale.WarehouseId,
+                            ProductLogs = {new ProductLog
+                            {
+                                // LinkOrder = ReturnSale.ReturnNo,
+                                LinkOrder = SaleDetail.Sale.SaleNo,
+                                Original = 0,
+                                Quantity = ReturnSale.Quantity,
+                                Price = ProductBasic.Price,
+                                PriceAll = ProductBasic.Price * ReturnSale.Quantity,
+                                Reason = ReturnSale.Reason,
+                                Message = "銷退",
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            }}
+                        });
+                    }
                 }
-                else
-                {
-                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
-                }
+                // else
+                // {
+                //     SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
+                // }
                 SaleDetail.Sale.UpdateUser = MyFun.GetUserID(HttpContext);
 
                 await _context.SaveChangesAsync();

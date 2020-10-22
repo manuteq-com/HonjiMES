@@ -285,6 +285,7 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.resaleitemkey = new ReorderSale();
         this.resaleitemkey.key = item.key;
         this.resaleitemkey.qty = item.data.Quantity;
+        this.resaleitemkey.ProductBasicId = item.data.ProductBasicId;
         this.resaleitemkey.ProductId = item.data.ProductId;
         this.resaleitemkey.ProductNo = item.data.ProductNo;
         // Swal.fire({
