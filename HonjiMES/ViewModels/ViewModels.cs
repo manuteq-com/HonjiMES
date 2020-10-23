@@ -365,6 +365,8 @@ namespace HonjiMES.Models
         public decimal? WorkPrice { get; set; }
         public string Reason { get; set; }
         public string Remarks { get; set; }
+        public int? Responsibility { get; set; }
+        public DateTime? ReturnTime { get; set; }
         public DateTime CreateTime { get; set; }
         public int CreateUser { get; set; }
     }

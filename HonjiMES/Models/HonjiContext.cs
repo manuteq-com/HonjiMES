@@ -619,10 +619,14 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Responsibility).HasComment("歸責(0自己1廠商)");
+
                 entity.Property(e => e.ReturnNo)
                     .HasComment("驗退單號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ReturnTime).HasComment("寄回日");
 
                 entity.Property(e => e.Unit)
                     .HasComment("單位")

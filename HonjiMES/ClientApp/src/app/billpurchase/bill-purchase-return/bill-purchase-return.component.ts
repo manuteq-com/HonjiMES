@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-bill-purchase-return',
@@ -34,13 +35,23 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     UnitPriceEditorOptions: any;
     UnitPriceAllEditorOptions: any;
     WarehouseList: any[];
+    ResponsibilitySelectBoxOptions: any;
+    ResponsibilityTypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.ResponsibilityTypeList = myservice.getResponsibilityType();
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
+
+        this.ResponsibilitySelectBoxOptions = {
+            items: this.ResponsibilityTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            value: null
+        };
     }
     ngOnInit() {
     }

@@ -76,6 +76,9 @@ export class Myservice {
     getProcessType(): Selectitem[] {
         return processtype;
     }
+    getResponsibilityType(): Selectitem[] {
+        return responsibilitytype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -205,4 +208,8 @@ const processtype: Selectitem[] = [
     { Id: 10, Name: 'NC加工' },
     { Id: 20, Name: 'QC檢驗' },
     { Id: 100, Name: '其他' },
+];
+const responsibilitytype: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '廠商' },
 ];

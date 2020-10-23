@@ -1347,6 +1347,8 @@ namespace HonjiMES.Controllers
                 Unit = BillofPurchaseReturn.Unit,
                 UnitCount = BillofPurchaseReturn.UnitCount,
                 UnitPrice = BillofPurchaseReturn.UnitPrice,
+                Responsibility = BillofPurchaseReturn.Responsibility,
+                ReturnTime = BillofPurchaseReturn.ReturnTime,
                 Reason = BillofPurchaseReturn.Reason,
                 Remarks = BillofPurchaseReturn.Remarks
             });
