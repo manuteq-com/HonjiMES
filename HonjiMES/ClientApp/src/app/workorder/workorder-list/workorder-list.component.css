@@ -48,9 +48,9 @@
     right: 0%;
 }
 .buttongroup {
-    padding-top: 10px;
+    /* padding-top: 10px; */
     position: absolute;
-    right: 10px;
+    right: 4px;
 }
 .insertbtn {
     margin-top: -6px;
@@ -77,4 +77,12 @@
     transition: background .3s;
     background-color: rgba(255, 145, 0, 0.589);
     color: #000;
+}
+
+.infobtn {
+    margin-top: 4px;
+    margin-right: 2px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #1e90ff;
 }

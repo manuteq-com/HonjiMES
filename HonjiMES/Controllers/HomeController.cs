@@ -66,7 +66,7 @@ namespace HonjiMES.Controllers
             }
             else
             {
-                UserRoles = _context.UserRoles.AsEnumerable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id &&x.Roles.StartsWith('1')).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
+                UserRoles = _context.UserRoles.AsEnumerable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id && x.Roles.StartsWith('1')).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
             }
             foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
             {
@@ -97,16 +97,16 @@ namespace HonjiMES.Controllers
             {
                 var Rolearray = userRoles.Where(x => x.Item1 == item.Id).FirstOrDefault().Item2.ToCharArray();
                 // if (true) {
-                    MenuViewModellist.Add(new MenuViewModel
-                    {
-                        label = item.Name,
-                        icon = item.Icon,
-                        routerLink = item.RouterLink.Split(','),
-                        Query = Rolearray[0] == '1',
-                        Creat = Rolearray[1] == '1',
-                        Edit = Rolearray[2] == '1',
-                        Delete = Rolearray.Length == 4 ? Rolearray[3] == '1' : false,
-                    });
+                MenuViewModellist.Add(new MenuViewModel
+                {
+                    label = item.Name,
+                    icon = item.Icon,
+                    routerLink = item.RouterLink.Split(','),
+                    Query = Rolearray[0] == '1',
+                    Creat = Rolearray[1] == '1',
+                    Edit = Rolearray[2] == '1',
+                    Delete = Rolearray.Length == 4 ? Rolearray[3] == '1' : false,
+                });
                 // }
             }
             return MenuViewModellist.ToArray();
@@ -153,8 +153,9 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<User>>> PutPassword(int id, UserPasswordSet UserPasswordSet)
         {
             var user = await _context.Users.FindAsync(MyFun.GetUserID(HttpContext));
-            if(user.DeleteFlag == 0 && UserPasswordSet.Password != null){
-               user.Password = MyFun.Encryption(UserPasswordSet.Password);
+            if (user.DeleteFlag == 0 && UserPasswordSet.Password != null)
+            {
+                user.Password = MyFun.Encryption(UserPasswordSet.Password);
             }
             try
             {

@@ -8,13 +8,13 @@
     <div class="headerfont font2">工單管理</div>
     <div class="buttongroup">
         <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
-            (onClick)="qrcodedata()">
+            (onClick)="qrcodedata()" [visible]="app.checkAddRoles()">
         </dx-button>
         <dx-button class="viewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="120"
-            (onClick)="viewdata()">
+            (onClick)="viewdata()" [visible]="app.checkAddRoles()">
         </dx-button>
         <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="120"
-            (onClick)="creatdata()">
+            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
         </dx-button>
     </div>
 </div>
