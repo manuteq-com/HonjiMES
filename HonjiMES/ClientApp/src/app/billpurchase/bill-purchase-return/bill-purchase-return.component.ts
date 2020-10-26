@@ -74,6 +74,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                         mode: 'number',
                         format: '#0',
                         min: 0,
+                        value: 0,
                         onValueChanged: this.PriceValueChanged.bind(this)
                     };
                     this.UnitCountEditorOptions = {

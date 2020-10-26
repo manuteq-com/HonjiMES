@@ -95,6 +95,24 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 銷貨單銷退資訊
+    /// </summary>
+    public class BillofPurchaseReturnData : BillofPurchaseReturn
+    {
+        public string BillofPurchaseNo { get; set; }
+        public string PurchaseNo { get; set; }
+        public string SupplierName { get; set; }
+        public string ProductNo { get; set; }
+        public string Specification { get; set; }
+        public string ReturnWarehouse { get; set; }
+        public decimal ReturnQuantity { get; set; }
+        public string ReturnReason { get; set; }
+        public string ReturnRemarks { get; set; }
+        public DateTime ReturnCreateTime { get; set; }
+        public string ReturnCreateUser { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData

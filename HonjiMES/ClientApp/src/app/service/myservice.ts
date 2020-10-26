@@ -210,6 +210,6 @@ const processtype: Selectitem[] = [
     { Id: 100, Name: '其他' },
 ];
 const responsibilitytype: Selectitem[] = [
-    { Id: 0, Name: '' },
+    { Id: 0, Name: '自己' },
     { Id: 1, Name: '廠商' },
 ];

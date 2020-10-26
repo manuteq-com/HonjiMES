@@ -326,8 +326,8 @@ namespace HonjiMES.Controllers
             .Include(x => x.SaleDetailNew.ProductBasic)
             .Include(x => x.SaleDetailNew.Product)
             .Include(x => x.Warehouse)
-            .OrderByDescending(x => x.SaleDetailNew.Sale.SaleNo).Select(x => new SaleDetailNewReturnData
-            {
+            .OrderByDescending(x => x.SaleDetailNew.Sale.SaleNo)
+            .Select(x => new SaleDetailNewReturnData {
                 Id = x.Id,
                 ReturnWarehouse = x.Warehouse.Code + x.Warehouse.Name,
                 ReturnQuantity = x.Quantity,
@@ -344,7 +344,7 @@ namespace HonjiMES.Controllers
                 MachineNo = x.SaleDetailNew.OrderDetail.MachineNo,
                 ProductNo = x.SaleDetailNew.ProductBasic.ProductNo,
                 Specification = x.SaleDetailNew.ProductBasic.Specification
-            });;
+            });
             // data.LeftOuterJoin(_context.SaleLogs, x => new {x.CreateTime, x.CreateUser }, y => y.CreateTime, (o,s) => new SaleDetailNewData{
             //     SaleNo = o.SaleNo, o,s});
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

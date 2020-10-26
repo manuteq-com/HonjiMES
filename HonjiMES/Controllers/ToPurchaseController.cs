@@ -1324,6 +1324,7 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BillofPurchaseReturn>> PostPurchaseCheckReturn(BillofPurchaseCheckData BillofPurchaseReturn)
         {
+            var dt = DateTime.Now;
             _context.ChangeTracker.LazyLoadingEnabled = true;
             if (BillofPurchaseReturn.WarehouseId == 0)
             {
@@ -1350,7 +1351,9 @@ namespace HonjiMES.Controllers
                 Responsibility = BillofPurchaseReturn.Responsibility,
                 ReturnTime = BillofPurchaseReturn.ReturnTime,
                 Reason = BillofPurchaseReturn.Reason,
-                Remarks = BillofPurchaseReturn.Remarks
+                Remarks = BillofPurchaseReturn.Remarks,
+                CreateTime = dt,
+                CreateUser = MyFun.GetUserID(HttpContext)
             });
             var ReturnCount = BillofPurchaseDetails.BillofPurchaseReturns.Sum(x => x.Quantity);
             if (ReturnCount > BillofPurchaseDetails.Quantity)
@@ -1358,7 +1361,6 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("驗退數量超過採購數量! [已驗退數量：" + (ReturnCount - BillofPurchaseReturn.Quantity) + "]"));
             }
 
-            var dt = DateTime.Now;
             BillofPurchaseReturn.CreateTime = dt;
             BillofPurchaseReturn.CreateUser = MyFun.GetUserID(HttpContext);
             BillofPurchaseDetails.UpdateTime = dt;

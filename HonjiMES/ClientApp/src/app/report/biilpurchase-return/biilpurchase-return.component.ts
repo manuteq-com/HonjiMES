@@ -40,9 +40,12 @@ export class BiilpurchaseReturnComponent implements OnInit {
     listBillofPurchaseStatus: any;
     WarehouseList: any;
     ItemTypeList: any;
+    ResponsibilityTypeList: any;
+
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseStatus = myservice.getBillofPurchaseOrderStatus();
         this.ItemTypeList = myservice.getlistAdjustStatus();
+        this.ResponsibilityTypeList = myservice.getResponsibilityType();
         this.remoteOperations = true;
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.getdata();
@@ -77,11 +80,7 @@ export class BiilpurchaseReturnComponent implements OnInit {
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
                 this.Controller + '/GetBillPurchaseReturnRecord',
-                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetBillPurchaseReturnRecord', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter })
         });
     }
     onUploaded(e) {
@@ -109,12 +108,12 @@ export class BiilpurchaseReturnComponent implements OnInit {
         }
     }
     onValueChanged(e) {
-        debugger;
-        if (e.value === '全部資料') {
-            this.dataGrid.instance.clearFilter();
-        } else {
-            this.dataGrid.instance.filter(['Message', '=', e.value]);
-        }
+        // debugger;
+        // if (e.value === '全部資料') {
+        //     this.dataGrid.instance.clearFilter();
+        // } else {
+        //     this.dataGrid.instance.filter(['Message', '=', e.value]);
+        // }
     }
     ngOnInit() {
         this.titleService.setTitle('進貨驗退紀錄查詢');

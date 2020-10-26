@@ -46,37 +46,29 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="BillofPurchase.BillofPurchaseNo" caption="進貨單號" [width]="150" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="BillofPurchase.Status" caption="狀態" alignment="center" [width]="80">
-        <dxo-lookup [dataSource]="listBillofPurchaseStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="BillofPurchase.BillofPurchaseDate" caption="進貨日期" dataType="date" [width]="120"></dxi-column>
-    <dxi-column dataField="BillofPurchase.CreateTime" caption="建立日期" dataType="date" [width]="120"></dxi-column>
-    <dxi-column dataField="BillofPurchase.CreateUser" caption="建立人員" [width]="120">
-        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
+    <dxi-column dataField="ReturnCreateTime" caption="驗退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
 
-    <dxi-column dataField="SupplierId" caption="供應商" [width]="220">
-        <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="BillofPurchaseNo" caption="進貨單號" [width]="150"></dxi-column>
+    <dxi-column dataField="PurchaseNo" caption="採購單號" [width]="140"></dxi-column>
+    <dxi-column dataField="SupplierName" caption="供應商" [width]="140"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="品號" [width]="220"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [width]="220"></dxi-column>
+
+    <dxi-column dataField="ReturnWarehouse" caption="驗退倉別" [width]="150"></dxi-column>
+    <dxi-column dataField="ReturnQuantity" caption="驗退數量" alignment="center" [width]="80"></dxi-column>
+    <dxi-column dataField="ReturnReason" caption="驗退原因"></dxi-column>
+
+    <dxi-column dataField="Responsibility" caption="歸責" [width]="80">
+        <dxo-lookup [dataSource]="ResponsibilityTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="Purchase.PurchaseNo" caption="採購單號" [width]="130"></dxi-column>
-    <dxi-column dataField="DataType" caption="類別" [width]="80">
-        <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="DataNo" caption="品號" [width]="220" alignment="center"></dxi-column>
-    <dxi-column dataField="DataName" caption="品名" [width]="180"></dxi-column>
-    <dxi-column dataField="Quantity" caption="數量" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" [width]="80"></dxi-column>
+    <dxi-column dataField="ReturnTime" caption="寄回時間" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+    <dxi-column dataField="Price" caption="驗退單價" [width]="80"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="驗退總價" [width]="80"></dxi-column>
+    <!-- <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
     <dxi-column dataField="UnitCount" caption="計價數量" [width]="80"></dxi-column>
-    <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
-    <dxi-column dataField="UnitPrice" caption="計價單價" [width]="80"></dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="計價總額" [width]="80"></dxi-column>
-    <dxi-column dataField="WorkPrice" caption="加工費用" [width]="80"></dxi-column>
-    <dxi-column dataField="WarehouseId" caption="倉別" [width]="120">
-        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="CheckCountOut" caption="已驗退" [width]="80"></dxi-column>
-    <dxi-column dataField="Remarks" caption="備註" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitPrice" caption="計價總額" [width]="80"></dxi-column> -->
+
+    <!-- <dxi-column dataField="ReturnRemarks" caption="驗退備註" [width]="140"></dxi-column> -->
+    <dxi-column dataField="ReturnCreateUser" caption="驗退人員" [width]="100"></dxi-column>
 
 </dx-data-grid>
