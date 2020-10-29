@@ -126,8 +126,8 @@ namespace HonjiMES.Controllers
                     {
                         SaleNo = item.Sale.SaleNo,
                         MachineNo = item.OrderDetail.MachineNo,
-                        ProductNo = item.ProductNo,
-                        ProductName = item.OrderDetail.ProductBasic.Name,
+                        MaterialNo = item.MaterialNo,
+                        MaterialName = item.OrderDetail.MaterialBasic.Name,
                         Quantity = item.Quantity,
                         Price = item.OriginPrice,
                         Total = item.Price
@@ -142,8 +142,8 @@ namespace HonjiMES.Controllers
                     {
                         SaleNo = null,
                         MachineNo = null,
-                        ProductNo = null,
-                        ProductName = null,
+                        MaterialNo = null,
+                        MaterialName = null,
                         Quantity = null,
                         Price = null,
                         Total = null

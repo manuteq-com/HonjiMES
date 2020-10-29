@@ -178,7 +178,7 @@ export class WorkorderQaComponent implements OnInit, OnChanges {
         this.CountEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             value: '0',
             min: '0',
             // onValueChanged: this.QuantityValueChanged.bind(this)

@@ -134,45 +134,45 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
         this.SetUserEditorOptions(this.UserList, null);
     }
     GetDataInfo() {
-        if (this.modkeyval === 'material') {
+        // if (this.modkeyval === 'material') {
             this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.itemkeyval).subscribe(
                 (s) => {
                     console.log(s);
                     if (s.success) {
                         const totalCount = this.GetTotalCount(s.data.Materials);
-                        this.itemval1 = '　　　元件料號：' + s.data.MaterialNo;
-                        this.itemval2 = '　　　元件品名：' + s.data.Name;
-                        this.itemval3 = '　　　元件規格：' + s.data.Specification;
+                        this.itemval1 = '　　　　　品號：' + s.data.MaterialNo;
+                        this.itemval2 = '　　　　　品名：' + s.data.Name;
+                        this.itemval3 = '　　　　　規格：' + s.data.Specification;
                         this.itemval4 = '　　　總庫存數：' + totalCount;
                     }
                 }
             );
-        } else if (this.modkeyval === 'product') {
-            this.app.GetData('/ProductBasics/GetProductBasic/' + this.itemkeyval).subscribe(
-                (s) => {
-                    if (s.success) {
-                        const totalCount = this.GetTotalCount(s.data.Products);
-                        this.itemval1 = '　　　成品料號：' + s.data.ProductNo;
-                        this.itemval2 = '　　　成品品名：' + s.data.Name;
-                        this.itemval3 = '　　　成品規格：' + s.data.Specification;
-                        this.itemval4 = '　　　總庫存數：' + totalCount;
-                    }
-                }
-            );
-        } else if (this.modkeyval === 'wiproduct') {
-            this.app.GetData('/WiproductBasics/GetWiproductBasic/' + this.itemkeyval).subscribe(
-                (s) => {
-                    console.log(s);
-                    if (s.success) {
-                        const totalCount = this.GetTotalCount(s.data.Wiproducts);
-                        this.itemval1 = '　　半成品料號：' + s.data.WiproductNo;
-                        this.itemval2 = '　　半成品品名：' + s.data.Name;
-                        this.itemval3 = '　　半成品規格：' + s.data.Specification;
-                        this.itemval4 = '　　　總庫存數：' + totalCount;
-                    }
-                }
-            );
-        }
+        // } else if (this.modkeyval === 'product') {
+        //     this.app.GetData('/ProductBasics/GetProductBasic/' + this.itemkeyval).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 const totalCount = this.GetTotalCount(s.data.Products);
+        //                 this.itemval1 = '　　　成品品號：' + s.data.ProductNo;
+        //                 this.itemval2 = '　　　成品品名：' + s.data.Name;
+        //                 this.itemval3 = '　　　成品規格：' + s.data.Specification;
+        //                 this.itemval4 = '　　　總庫存數：' + totalCount;
+        //             }
+        //         }
+        //     );
+        // } else if (this.modkeyval === 'wiproduct') {
+        //     this.app.GetData('/WiproductBasics/GetWiproductBasic/' + this.itemkeyval).subscribe(
+        //         (s) => {
+        //             console.log(s);
+        //             if (s.success) {
+        //                 const totalCount = this.GetTotalCount(s.data.Wiproducts);
+        //                 this.itemval1 = '　　半成品品號：' + s.data.WiproductNo;
+        //                 this.itemval2 = '　　半成品品名：' + s.data.Name;
+        //                 this.itemval3 = '　　半成品規格：' + s.data.Specification;
+        //                 this.itemval4 = '　　　總庫存數：' + totalCount;
+        //             }
+        //         }
+        //     );
+        // }
     }
     GetTotalCount(data) {
         let totalCount = 0;

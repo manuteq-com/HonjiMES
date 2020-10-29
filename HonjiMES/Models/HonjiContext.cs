@@ -251,7 +251,7 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.MaterialBasic)
-                    .WithMany(p => p.BillOfMaterials)
+                    .WithMany(p => p.BillOfMaterialMaterialBasics)
                     .HasForeignKey(d => d.MaterialBasicId)
                     .HasConstraintName("fk_bill_of_material_material_basic1");
 
@@ -262,7 +262,7 @@ namespace HonjiMES.Models
                     .HasConstraintName("fk_bill_of_material_bill_of_material1");
 
                 entity.HasOne(d => d.ProductBasic)
-                    .WithMany(p => p.BillOfMaterials)
+                    .WithMany(p => p.BillOfMaterialProductBasics)
                     .HasForeignKey(d => d.ProductBasicId)
                     .HasConstraintName("fk_bill_of_material_product_basic1");
             });
@@ -869,12 +869,19 @@ namespace HonjiMES.Models
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo)
-                    .HasComment("元件品號")
+                    .HasComment("品號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.MaterialNumber)
+                    .HasComment("場內品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MaterialRequire).HasComment("原料需求量	");
+
                 entity.Property(e => e.Name)
-                    .HasComment("元件品名")
+                    .HasComment("品名")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -886,6 +893,8 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Quantity).HasComment("庫存量");
+
+                entity.Property(e => e.QuantityAdv).HasComment("預先扣庫數量");
 
                 entity.Property(e => e.QuantityLimit).HasComment("庫存極限");
 
@@ -937,12 +946,19 @@ namespace HonjiMES.Models
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
                 entity.Property(e => e.MaterialNo)
-                    .HasComment("元件品號")
+                    .HasComment("品號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.MaterialNumber)
+                    .HasComment("廠內品號	")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MaterialType).HasComment("品號種類");
+
                 entity.Property(e => e.Name)
-                    .HasComment("元件品名")
+                    .HasComment("品名")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -1248,14 +1264,14 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("訂單明細");
 
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("material_basic_id");
+
+                entity.HasIndex(e => e.MaterialId)
+                    .HasName("fk_order_detail_product1_idx");
+
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_order_order_detail");
-
-                entity.HasIndex(e => e.ProductBasicId)
-                    .HasName("fk_order_detail_product_basic1");
-
-                entity.HasIndex(e => e.ProductId)
-                    .HasName("fk_order_detail_product1_idx");
 
                 entity.Property(e => e.CreateTime)
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -1296,6 +1312,10 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.MaterialBasicId).HasComment("品號基本資訊id");
+
+                entity.Property(e => e.MaterialId).HasComment("品號id");
+
                 entity.Property(e => e.OrderId).HasComment("訂單id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價");
@@ -1303,10 +1323,6 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Package).HasComment("包裝數");
 
                 entity.Property(e => e.Price).HasComment("折後價格");
-
-                entity.Property(e => e.ProductBasicId).HasComment("成品基本資訊id");
-
-                entity.Property(e => e.ProductId).HasComment("產品id");
 
                 entity.Property(e => e.Quantity).HasComment("數量");
 
@@ -1341,22 +1357,22 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("order_detail_ibfk_1");
+
+                entity.HasOne(d => d.Material)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.MaterialId)
+                    .HasConstraintName("fk_order_detail_product1");
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_order_detail_order_head1");
-
-                entity.HasOne(d => d.ProductBasic)
-                    .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ProductBasicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_order_detail_product_basic1");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("fk_order_detail_product1");
             });
 
             modelBuilder.Entity<OrderDetailAndWorkOrderHead>(entity =>
@@ -1976,7 +1992,7 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("領料資料主檔");
 
-                entity.HasIndex(e => e.ProductBasicId)
+                entity.HasIndex(e => e.MaterialBasicId)
                     .HasName("fk_requisition_product_basic1_idx");
 
                 entity.HasIndex(e => e.WorkOrderHeadId)
@@ -1986,18 +2002,18 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
-                entity.Property(e => e.Name)
-                    .HasComment("領料單名稱")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.ProductNo)
+                entity.Property(e => e.MaterialNo)
                     .HasComment("主件品號")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.ProductNumber)
+                entity.Property(e => e.MaterialNumber)
                     .HasComment("廠內成品號")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Name)
+                    .HasComment("領料單名稱")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -2026,9 +2042,9 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.WorkOrderHeadId).HasComment("工單主檔ID");
 
-                entity.HasOne(d => d.ProductBasic)
+                entity.HasOne(d => d.MaterialBasic)
                     .WithMany(p => p.Requisitions)
-                    .HasForeignKey(d => d.ProductBasicId)
+                    .HasForeignKey(d => d.MaterialBasicId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_requisition_product_basic1");
 
@@ -2112,12 +2128,12 @@ namespace HonjiMES.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(d => d.MaterialBasic)
-                    .WithMany(p => p.RequisitionDetails)
+                    .WithMany(p => p.RequisitionDetailMaterialBasics)
                     .HasForeignKey(d => d.MaterialBasicId)
                     .HasConstraintName("fk_requisition_detail_material_basic1");
 
                 entity.HasOne(d => d.ProductBasic)
-                    .WithMany(p => p.RequisitionDetails)
+                    .WithMany(p => p.RequisitionDetailProductBasics)
                     .HasForeignKey(d => d.ProductBasicId)
                     .HasConstraintName("fk_requisition_detail_product_basic1");
 
@@ -2184,17 +2200,17 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("銷貨明細");
 
+                entity.HasIndex(e => e.MaterialBasicId)
+                    .HasName("fk_sale_detail_new_product_basic1");
+
+                entity.HasIndex(e => e.MaterialId)
+                    .HasName("fk_sale_detail_new_product1_idx");
+
                 entity.HasIndex(e => e.OrderDetailId)
                     .HasName("fk_sale_detail_new_order_detail1_idx");
 
                 entity.HasIndex(e => e.OrderId)
                     .HasName("fk_sale_detail_new_order_head1_idx");
-
-                entity.HasIndex(e => e.ProductBasicId)
-                    .HasName("fk_sale_detail_new_product_basic1");
-
-                entity.HasIndex(e => e.ProductId)
-                    .HasName("fk_sale_detail_new_product1_idx");
 
                 entity.HasIndex(e => e.SaleId)
                     .HasName("fk_sale_detail_new_sale_head1_idx");
@@ -2202,6 +2218,15 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.MaterialBasicId).HasComment("產品基本資訊id");
+
+                entity.Property(e => e.MaterialId).HasComment("主件品號ID");
+
+                entity.Property(e => e.MaterialNo)
+                    .HasComment("主件品號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Name)
                     .HasComment("主件品名")
@@ -2215,15 +2240,6 @@ namespace HonjiMES.Models
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
 
                 entity.Property(e => e.Price).HasComment("價格");
-
-                entity.Property(e => e.ProductBasicId).HasComment("產品基本資訊id");
-
-                entity.Property(e => e.ProductId).HasComment("主件品號ID");
-
-                entity.Property(e => e.ProductNo)
-                    .HasComment("主件品號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Quantity).HasComment("數量");
 
@@ -2245,6 +2261,17 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("'current_timestamp()'")
                     .ValueGeneratedOnAddOrUpdate();
 
+                entity.HasOne(d => d.MaterialBasic)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.MaterialBasicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_sale_detail_new_product_basic1");
+
+                entity.HasOne(d => d.Material)
+                    .WithMany(p => p.SaleDetailNews)
+                    .HasForeignKey(d => d.MaterialId)
+                    .HasConstraintName("fk_sale_detail_new_product1");
+
                 entity.HasOne(d => d.OrderDetail)
                     .WithMany(p => p.SaleDetailNews)
                     .HasForeignKey(d => d.OrderDetailId)
@@ -2256,17 +2283,6 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_sale_detail_new_order_head1");
-
-                entity.HasOne(d => d.ProductBasic)
-                    .WithMany(p => p.SaleDetailNews)
-                    .HasForeignKey(d => d.ProductBasicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_sale_detail_new_product_basic1");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.SaleDetailNews)
-                    .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("fk_sale_detail_new_product1");
 
                 entity.HasOne(d => d.Sale)
                     .WithMany(p => p.SaleDetailNews)

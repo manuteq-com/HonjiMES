@@ -28,7 +28,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     Customerlist: any;
-    ProductList: any;
+    MaterialList: any;
     creatpopupVisible: any;
     resalepopupVisible = false;
     tosalepopupVisible = false;
@@ -43,7 +43,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     Controller = '/Sales';
     listSaleOrderStatus: any;
     postval: POrderSale;
-    ProductBasicList: any;
+    MaterialBasicList: any;
 
     remoteOperations: boolean;
     formData: any;
@@ -77,16 +77,16 @@ export class SaleListComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/Products/GetProducts').subscribe(
+        this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
-                this.ProductList = s.data;
+                this.MaterialList = s.data;
                 if (s.success) {
                 }
             }
         );
-        this.app.GetData('/Products/GetProductBasics').subscribe(
+        this.app.GetData('/Materials/GetMaterialBasics').subscribe(
             (s) => {
-                this.ProductBasicList = s.data;
+                this.MaterialBasicList = s.data;
                 if (s.success) {
                 }
             }
@@ -178,6 +178,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     }
     creatpopup_result(e) {
         this.overviewpopupVisible = false;
+        this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
     }
     resalepopup_result(e) {
@@ -262,8 +263,8 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.tosaleitemkey = new ToorderSale();
         this.tosaleitemkey.key = item.key;
         this.tosaleitemkey.qty = item.data.Quantity;
-        this.tosaleitemkey.ProductBasicId = item.data.ProductBasicId;
-        this.tosaleitemkey.ProductNo = item.data.ProductNo;
+        this.tosaleitemkey.MaterialBasicId = item.data.MaterialBasicId;
+        this.tosaleitemkey.MaterialNo = item.data.MaterialNo;
 
         // vvv以下舊的方法停用
         // this.postval = new POrderSale();
@@ -285,9 +286,9 @@ export class SaleListComponent implements OnInit, OnChanges {
         this.resaleitemkey = new ReorderSale();
         this.resaleitemkey.key = item.key;
         this.resaleitemkey.qty = item.data.Quantity;
-        this.resaleitemkey.ProductBasicId = item.data.ProductBasicId;
-        this.resaleitemkey.ProductId = item.data.ProductId;
-        this.resaleitemkey.ProductNo = item.data.ProductNo;
+        this.resaleitemkey.MaterialBasicId = item.data.MaterialBasicId;
+        this.resaleitemkey.MaterialId = item.data.MaterialId;
+        this.resaleitemkey.MaterialNo = item.data.MaterialNo;
         // Swal.fire({
         //     allowEnterKey: false,
         //     allowOutsideClick: false,
@@ -321,56 +322,6 @@ export class SaleListComponent implements OnInit, OnChanges {
         //     }, 'success', 3000);
         //     this.dataGrid.instance.refresh();
         // }
-    }
-    onUploaded(e) {
-        const response = JSON.parse(e.request.response) as APIResponse;
-        if (response.success) {
-            if (response.message) {
-                const shtml = '品號 / 品名 不存在，請先新增成品資訊!<br/>';
-                Swal.fire({
-                    allowEnterKey: false,
-                    allowOutsideClick: false,
-                    width: 600,
-                    title: '是否新增品號 ?',
-                    html: shtml + response.message,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    // confirmButtonColor: '#3085d6',
-                    // cancelButtonColor: '#d33',
-                    cancelButtonText: '取消匯入',
-                    confirmButtonText: '確認新增'
-                }).then(async (result) => {
-                    if (result.value) {
-                        // tslint:disable-next-line: new-parens
-                        const postval = { OrderNo: response.data.OrderNo, Products: response.message };
-                        // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
-                        // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-                        if (sendRequest) {
-                            this.mod = 'excel';
-                            this.creatpopupVisible = true;
-                            this.exceldata = sendRequest;
-                        }
-                    } else {
-                        this.uploader.instance.reset();
-                    }
-                });
-            } else {
-                this.mod = 'excel';
-                this.creatpopupVisible = true;
-                this.exceldata = response.data;
-            }
-
-        } else {
-            notify({
-                message: 'Excel 檔案讀取失敗:' + response.message,
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-        }
-
     }
     onDataErrorOccurred(e) {
         notify({

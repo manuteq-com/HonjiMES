@@ -41,19 +41,19 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#29986;&#21697;&#22522;&#26412;&#36039;&#35338;id
         /// </summary>
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int ProductBasicId { get; set; }
+        [Column("material_basic_id", TypeName = "int(11)")]
+        public int MaterialBasicId { get; set; }
         /// <summary>
         /// &#20027;&#20214;&#21697;&#34399;ID
         /// </summary>
-        [Column("product_id", TypeName = "int(11)")]
-        public int? ProductId { get; set; }
+        [Column("material_id", TypeName = "int(11)")]
+        public int? MaterialId { get; set; }
         /// <summary>
         /// &#20027;&#20214;&#21697;&#34399;
         /// </summary>
         [Required]
-        [Column("product_no", TypeName = "varchar(50)")]
-        public string ProductNo { get; set; }
+        [Column("material_no", TypeName = "varchar(50)")]
+        public string MaterialNo { get; set; }
         /// <summary>
         /// &#37559;&#36008;&#29376;&#24907;
         /// </summary>
@@ -101,18 +101,18 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
+        [ForeignKey(nameof(MaterialId))]
+        [InverseProperty("SaleDetailNews")]
+        public virtual Material Material { get; set; }
+        [ForeignKey(nameof(MaterialBasicId))]
+        [InverseProperty("SaleDetailNews")]
+        public virtual MaterialBasic MaterialBasic { get; set; }
         [ForeignKey(nameof(OrderId))]
         [InverseProperty(nameof(OrderHead.SaleDetailNews))]
         public virtual OrderHead Order { get; set; }
         [ForeignKey(nameof(OrderDetailId))]
         [InverseProperty("SaleDetailNews")]
         public virtual OrderDetail OrderDetail { get; set; }
-        [ForeignKey(nameof(ProductId))]
-        [InverseProperty("SaleDetailNews")]
-        public virtual Product Product { get; set; }
-        [ForeignKey(nameof(ProductBasicId))]
-        [InverseProperty("SaleDetailNews")]
-        public virtual ProductBasic ProductBasic { get; set; }
         [ForeignKey(nameof(SaleId))]
         [InverseProperty(nameof(SaleHead.SaleDetailNews))]
         public virtual SaleHead Sale { get; set; }

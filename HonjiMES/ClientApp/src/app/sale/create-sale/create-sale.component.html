@@ -59,17 +59,17 @@
         <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
         <!-- <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" sortOrder="desc" [allowEditing]="false"></dxi-column> -->
-        <!-- <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ProductName" caption="品名" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="MaterialNo" caption="品號" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="MaterialName" caption="品名" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column> -->
-        <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+        <dxi-column dataField="MaterialBasicId" caption="品號" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="品名" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxi-column dataField="MaterialBasicId" caption="品名" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <!-- <dxi-column dataField="ProductBasicId" caption="規格" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+        <!-- <dxi-column dataField="MaterialBasicId" caption="規格" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column> -->
 
         <dxi-column dataField="Quantity" caption="數量" [width]="60" [allowEditing]="false"></dxi-column>
@@ -121,17 +121,17 @@
         <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
         <!-- <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="120" sortOrder="desc" [allowEditing]="false"></dxi-column> -->
-        <!-- <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ProductName" caption="品名" [allowEditing]="false"></dxi-column>
+        <!-- <dxi-column dataField="MaterialNo" caption="品號" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="MaterialName" caption="品名" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column> -->
-        <dxi-column dataField="ProductBasicId" caption="品號" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+        <dxi-column dataField="MaterialBasicId" caption="品號" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="ProductBasicId" caption="品名" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxi-column dataField="MaterialBasicId" caption="品名" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <!-- <dxi-column dataField="ProductBasicId" caption="規格" dataType="number" [allowEditing]="false">
-            <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+        <!-- <dxi-column dataField="MaterialBasicId" caption="規格" dataType="number" [allowEditing]="false">
+            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column> -->
 
         <dxi-column dataField="Quantity" caption="數量" [width]="60" [allowEditing]="false"></dxi-column>

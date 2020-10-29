@@ -21,7 +21,7 @@ export class OrderdetailListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Output() childOuter = new EventEmitter();
     @Input() itemkey: number;
-    @Input() ProductBasicList: any;
+    @Input() MaterialBasicList: any;
     popupVisiblePurchase: boolean;
     popupVisibleSale: boolean;
     popupVisibleWork: boolean;
@@ -224,20 +224,20 @@ export class OrderdetailListComponent implements OnInit {
         let serial = 1;
         const tempdataSource = [];
         SelectData.forEach(element => {
-            const index = tempdataSource.findIndex(z => z.DataType === 2 && z.DataId === element.ProductBasicId);
+            const index = tempdataSource.findIndex(z => z.DataType === 2 && z.DataId === element.MaterialBasicId);
             // tslint:disable-next-line: no-bitwise
             if (~index) {
                 tempdataSource[index].Quantity += element.Quantity;
                 tempdataSource[index].Price += element.Quantity * element.OriginPrice;
             } else {
-                const result = BasicData.find(y => y.DataType === 2 && y.DataId === element.ProductBasicId);
+                const result = BasicData.find(y => y.DataType === 2 && y.DataId === element.MaterialBasicId);
                 if (result) {
                     tempdataSource.push({
                         OrderDetailId: element.Id,
                         Serial: serial,
                         TempId: result.TempId,
                         DataType: 2,
-                        DataId: element.ProductBasicId,
+                        DataId: element.MaterialBasicId,
                         WarehouseId: result.WarehouseId,
                         Quantity: element.Quantity,
                         OriginPrice: element.OriginPrice,
@@ -250,13 +250,13 @@ export class OrderdetailListComponent implements OnInit {
         });
         this.dataSource = tempdataSource;
     }
-    GetBomData(BasicData) {
+    GetBomData(BasicData) { // ProductCheck
         let indexVal = 0;
         let serial = 1;
         const tempdataSource = [];
         this.topurchasekey.forEach(x => {
             // 取得BOM原料清單
-            this.app.GetData('/BillOfMaterials/GetBomlist/' + x.ProductBasicId).subscribe(
+            this.app.GetData('/BillOfMaterials/GetBomlist/' + x.MaterialBasicId).subscribe(
                 (s) => {
                     if (s.success) {
                         let productId = 1;
@@ -280,7 +280,7 @@ export class OrderdetailListComponent implements OnInit {
                             if (~index) {
                                 tempdataSource[index].Quantity += Math.ceil(x.Quantity * tempQuantity);
                                 tempdataSource[index].Price += (x.Quantity * tempQuantity) * element.MaterialPrice;
-                            } else if (element.MaterialBasicId != null && element.Master === 1) { // 只取得料號為[原料]的項目
+                            } else if (element.MaterialBasicId != null && element.Master === 1) { // 只取得品號為[原料]的項目
                                 const result = BasicData.find(y => y.DataType === 1 && y.DataId === element.MaterialBasicId);
                                 if (result) {
                                     tempdataSource.push({
@@ -325,7 +325,7 @@ export class OrderdetailListComponent implements OnInit {
     }
     rowClick(e) {
         debugger;
-        this.app.GetData('/OrderDetails/GetStockCountByProductBasicId/' + e.key).subscribe(
+        this.app.GetData('/OrderDetails/GetStockCountByMaterialBasicId/' + e.key).subscribe(
             (s) => {
                 if (s.success) {
                     this.totalcount = s.data.TotalCount;

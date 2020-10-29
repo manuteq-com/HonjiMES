@@ -19,7 +19,7 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() itemkeyval: any;
     @Input() modval: any;
-    @Input() ProductBasicList: any;
+    @Input() MaterialBasicList: any;
     autoNavigateToFocusedRow = true;
     detailfilter = [];
     Controller = '/PurchaseHeads';

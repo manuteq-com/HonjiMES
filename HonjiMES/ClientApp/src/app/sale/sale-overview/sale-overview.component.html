@@ -61,7 +61,7 @@
     <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Serial" caption="序號" [width]="50" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="170" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="ProductNo" caption="品號" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="MaterialNo" caption="品號" [allowEditing]="false"></dxi-column>
     <!-- <dxi-column dataField="Name" caption="品名" [width]="200" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" [width]="200" [allowEditing]="false"></dxi-column> -->
     <dxi-column dataField="Quantity" caption="數量" [width]="50" [allowEditing]="false"></dxi-column>
@@ -70,7 +70,7 @@
     <dxi-column dataField="TotalCount" caption="成品倉數量" [width]="100" [allowEditing]="false"></dxi-column>
 
     <div *dxTemplate="let data of 'WarehouseIdEditCellTemplate'">
-        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" 
+        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
             [dataSource]="{ paginate: true, store: { type: 'array', data: WarehouseList, key:'Id' } }" valueExpr="Id" displayExpr="Name"
             [searchEnabled]="true">
         </dx-select-box>

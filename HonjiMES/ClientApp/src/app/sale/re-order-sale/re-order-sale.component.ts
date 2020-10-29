@@ -49,7 +49,7 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
             }
         );
         this.WarehouseList = [];
-        this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + this.itemkeyval.ProductBasicId).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + this.itemkeyval.MaterialBasicId).subscribe(
             (s) => {
                 this.WarehouseList = s.data;
                 this.selectBoxOptions = {

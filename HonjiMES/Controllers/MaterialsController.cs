@@ -33,6 +33,21 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(Materials));
         }
 
+        /// <summary>
+        /// 查詢產品列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Materials
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasics()
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0);
+            var MaterialBasics = await data.ToListAsync();
+            return Ok(MyFun.APIResponseOK(MaterialBasics));
+            //return Ok(new { data = Materials, success = true, timestamp = DateTime.Now, message = "" });
+        }
+
         // GET: api/Materials/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Material>> GetMaterial(int id)

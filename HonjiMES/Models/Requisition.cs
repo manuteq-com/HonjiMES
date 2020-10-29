@@ -20,8 +20,8 @@ namespace HonjiMES.Models
         [Key]
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int ProductBasicId { get; set; }
+        [Column("material_basic_id", TypeName = "int(11)")]
+        public int MaterialBasicId { get; set; }
         /// <summary>
         /// &#24037;&#21934;&#20027;&#27284;ID
         /// </summary>
@@ -43,14 +43,14 @@ namespace HonjiMES.Models
         /// &#20027;&#20214;&#21697;&#34399;
         /// </summary>
         [Required]
-        [Column("product_no", TypeName = "varchar(50)")]
-        public string ProductNo { get; set; }
+        [Column("material_no", TypeName = "varchar(50)")]
+        public string MaterialNo { get; set; }
         /// <summary>
         /// &#24288;&#20839;&#25104;&#21697;&#34399;
         /// </summary>
         [Required]
-        [Column("product_number", TypeName = "varchar(50)")]
-        public string ProductNumber { get; set; }
+        [Column("material_number", TypeName = "varchar(50)")]
+        public string MaterialNumber { get; set; }
         /// <summary>
         /// &#35215;&#26684;
         /// </summary>
@@ -87,9 +87,9 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [ForeignKey(nameof(ProductBasicId))]
+        [ForeignKey(nameof(MaterialBasicId))]
         [InverseProperty("Requisitions")]
-        public virtual ProductBasic ProductBasic { get; set; }
+        public virtual MaterialBasic MaterialBasic { get; set; }
         [ForeignKey(nameof(WorkOrderHeadId))]
         [InverseProperty("Requisitions")]
         public virtual WorkOrderHead WorkOrderHead { get; set; }

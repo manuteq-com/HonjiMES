@@ -69,11 +69,11 @@
             <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [width]="140">
             </dxi-column>
             <dxi-column dataField="Name" caption="退料單名稱" dataType="string" [visible]="false"></dxi-column>
-            <dxi-column dataField="ProductNo" caption="成品號" dataType="string"></dxi-column>
-            <dxi-column dataField="ProductNumber" caption="廠內成品號" dataType="string"></dxi-column>
+            <dxi-column dataField="MaterialNo" caption="品號" dataType="string"></dxi-column>
+            <dxi-column dataField="MaterialNumber" caption="廠內品號" dataType="string"></dxi-column>
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
-            <dxi-column dataField="ProductBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
+            <dxi-column dataField="MaterialBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
             <dxi-column dataField="CreateUser" caption="退料人" dataType="string" alignment="center" [width]="100">
                 <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
             </dxi-column>

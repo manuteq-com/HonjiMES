@@ -115,39 +115,28 @@ export class InventoryListComponent implements OnInit, OnChanges {
         const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         const dataType = basicData.DataType;
         const dataId = basicData.DataId;
-        if (dataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal(dataType);
-                }
-            );
-        } else if (dataType === 2) {    // 查詢成品
-            // this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + dataId).subscribe(
-            //     (s) => {
-            //         this.WarehouseList = [];
-            //         s.data.forEach((element, index) => {
-            //             element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-            //             this.WarehouseList[index] = element.Warehouse;
-            //             this.Warehouseval = this.WarehouseList[0].Id;
-            //             this.minValue = -element.Quantity;
-            //         });
-            //     }
-            // );
-            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal(dataType);
-                }
-            );
-        } else if (dataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal(dataType);
-                }
-            );
-        }
+        // if (dataType === 1) {   // 查詢原料
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+                this.UpdateVal(dataType);
+            }
+        );
+        // } else if (dataType === 2) {    // 查詢成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //             this.UpdateVal(dataType);
+        //         }
+        //     );
+        // } else if (dataType === 3) {    // 查詢半成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //             this.UpdateVal(dataType);
+        //         }
+        //     );
+        // }
         // const basicData = this.BasicDataList.find(z => z.TempId === e.value);
         // this.DataType = basicData.DataType;
         // this.DataId = basicData.DataId;

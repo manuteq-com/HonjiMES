@@ -111,9 +111,9 @@ namespace HonjiMES.Controllers
             {
                 data = data.Where(x => x.OrderDetails.Where(y => y.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-            if (!string.IsNullOrWhiteSpace(qSearchValue.ProductNo))
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MaterialNo))
             {
-                data = data.Where(x => x.OrderDetails.Where(y => y.ProductBasic.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.OrderDetails.Where(y => y.MaterialBasic.MaterialNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
             data = data.Include(x => x.OrderDetails);
             //var OrderHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
@@ -298,15 +298,16 @@ namespace HonjiMES.Controllers
                             orderHead.OrderNo = key + OrderNo + NoCount.ToString("000");
                             orderHead.CreateTime = dt;
                             orderHead.CreateUser = MyFun.GetUserID(HttpContext);
-                            
+
                             // 訂單複製功能，必須清除關聯資料。
                             var OrderDetails = new List<OrderDetail>();
                             foreach (var item in OrderDetail)
                             {
-                                OrderDetails.Add(new OrderDetail{
+                                OrderDetails.Add(new OrderDetail
+                                {
                                     CustomerNo = item.CustomerNo,
                                     Serial = item.Serial,
-                                    ProductBasicId = item.ProductBasicId,
+                                    MaterialBasicId = item.MaterialBasicId,
                                     Quantity = item.Quantity,
                                     OriginPrice = item.OriginPrice,
                                     Discount = item.Discount,
@@ -423,65 +424,65 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 由Excel自動產生產品
         /// </summary>
-        /// <param name="ProductByExcel"></param>
+        /// <param name="MaterialByExcel"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<OrderHead>> PostCreatProductByExcelAsync(ProductByExcel ProductByExcel)
+        public async Task<ActionResult<OrderHead>> PostCreatMaterialByExcel(MaterialByExcel MaterialByExcel)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
 
             var dt = DateTime.Now;
-            var nProductBasicslist = new List<ProductBasic>();
-            foreach (var Productitem in ProductByExcel.Products.Split("<br/>"))
+            var nMaterialBasicslist = new List<MaterialBasic>();
+            foreach (var Materialitem in MaterialByExcel.Materials.Split("<br/>"))
             {
-                var Productitemlist = Productitem.Split(" ; ");
-                if (Productitemlist.Length == 3)
+                var Materialitemlist = Materialitem.Split(" ; ");
+                if (Materialitemlist.Length == 3)
                 {
                     //再檢查一次
-                    if (!_context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Productitemlist[0] && x.DeleteFlag == 0).Any())
+                    if (!_context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Materialitemlist[0] && x.DeleteFlag == 0).Any())
                     {
-                        var nProductBasics = new ProductBasic
+                        var nMaterialBasics = new MaterialBasic
                         {
-                            ProductNo = Productitemlist[0].Trim(),
-                            ProductNumber = Productitemlist[0].Trim(),
-                            Name = Productitemlist[1].Trim(),
-                            Specification = Productitemlist[2].Trim(),
+                            MaterialNo = Materialitemlist[0].Trim(),
+                            MaterialNumber = Materialitemlist[0].Trim(),
+                            Name = Materialitemlist[1].Trim(),
+                            Specification = Materialitemlist[2].Trim(),
                             Property = "",
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext),
                         };
 
-                        // 自動新增Product資料。(2020/08/20 確認自動新增)
+                        // 自動新增Material資料。(2020/08/20 確認自動新增)
                         var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301").FirstAsync();// 固定新增301成品倉
-                        var  nProduct = new Product
+                        var nMaterial = new Material
                         {
-                            ProductNo = Productitemlist[0].Trim(),
-                            ProductNumber = Productitemlist[0].Trim(),
-                            Name = Productitemlist[1].Trim(),
+                            MaterialNo = Materialitemlist[0].Trim(),
+                            MaterialNumber = Materialitemlist[0].Trim(),
+                            Name = Materialitemlist[1].Trim(),
                             Quantity = 0,
-                            Specification = Productitemlist[2].Trim(),
+                            Specification = Materialitemlist[2].Trim(),
                             Property = "",
                             MaterialRequire = 1,
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext),
-                            WarehouseId  = Warehouses.Id 
+                            WarehouseId = Warehouses.Id
                         };
-                        nProduct.ProductLogs.Add(new ProductLog
+                        nMaterial.MaterialLogs.Add(new MaterialLog
                         {
-                            LinkOrder = ProductByExcel.CustomerNo,
+                            LinkOrder = MaterialByExcel.CustomerNo,
                             Reason = "Excel匯入新增",
-                            Message = "成品新增",
+                            Message = "品號新增",
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
-                        nProductBasics.Products.Add(nProduct);
-                        nProductBasicslist.Add(nProductBasics);
+                        nMaterialBasics.Materials.Add(nMaterial);
+                        nMaterialBasicslist.Add(nMaterialBasics);
                     }
                 }
             }
             try
             {
-                _context.AddRange(nProductBasicslist);
+                _context.AddRange(nMaterialBasicslist);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -493,17 +494,17 @@ namespace HonjiMES.Controllers
             //取暫存Excel檔案
             var webRootPath = _IWebHostEnvironment.WebRootPath;
             var Dir = $"{webRootPath}";
-            var Files = MyFun.ProcessGetTempExcelAsync(Dir, ProductByExcel.OrderNo);
+            var Files = MyFun.ProcessGetTempExcelAsync(Dir, MaterialByExcel.OrderNo);
             var OrderHeadlist = new List<OrderHead>();
             foreach (var Fileitem in Files)
             {
-                string sLostProduct = "";
-                OrderHeadlist.AddRange(DBHelper.GetExcelData(Fileitem, _context, ref sLostProduct));
+                string sLostMaterial = "";
+                OrderHeadlist.AddRange(DBHelper.GetExcelData(Fileitem, _context, ref sLostMaterial));
             }
             foreach (var Headitem in OrderHeadlist.ToList())
             {
                 var len = ("000-000000000").Length;
-                Headitem.OrderNo = ProductByExcel.OrderNo;
+                Headitem.OrderNo = MaterialByExcel.OrderNo;
                 if (!string.IsNullOrWhiteSpace(Headitem.CustomerNo) && Headitem.CustomerNo.Length > len)
                     Headitem.CustomerNo = Headitem.CustomerNo.Substring(0, len);
                 foreach (var Detailitem in Headitem.OrderDetails.ToList())
@@ -512,11 +513,11 @@ namespace HonjiMES.Controllers
                     {
                         Headitem.OrderDetails.Remove(Detailitem);
                     }
-                    //var oProduct = _context.Products.Find(Detailitem.ProductId); 補金額的功能先停掉，客戶要求金額不同只顯示不修改
-                    //if (oProduct != null)
-                    //    if (oProduct.Price == 0)
+                    //var oMaterial = _context.Materials.Find(Detailitem.MaterialId); 補金額的功能先停掉，客戶要求金額不同只顯示不修改
+                    //if (oMaterial != null)
+                    //    if (oMaterial.Price == 0)
                     //    {
-                    //        oProduct.Price = Detailitem.OriginPrice;
+                    //        oMaterial.Price = Detailitem.OriginPrice;
                     //        await _context.SaveChangesAsync();
                     //    }
                 }
@@ -584,9 +585,12 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderHead>>> CheckData(int id)
         {
             var orderHead = _context.OrderHeads.Find(id);
-            if(orderHead.CheckFlag == 0){
+            if (orderHead.CheckFlag == 0)
+            {
                 orderHead.CheckFlag = 1;
-            }else{
+            }
+            else
+            {
                 orderHead.CheckFlag = 0;
             }
             try
@@ -618,24 +622,43 @@ namespace HonjiMES.Controllers
         {
             // _context.ChangeTracker.LazyLoadingEnabled = true;
             var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Order.Status == 0)
-                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo{
-                OrderNo = x.Order.OrderNo,
-                OrderType = x.Order.OrderType,
-                CustomerNo = x.Order.CustomerNo,
-                Customer = x.Order.Customer,
-                MachineNo = x.MachineNo,
-                ProductBasicId = x.ProductBasicId,
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-                OriginPrice = x.OriginPrice,
-                Price = x.Price,
-                DueDate = x.DueDate,
-                ReplyDate = x.ReplyDate,
-                Remark = x.Remark,
-                ReplyRemark = x.ReplyRemark,
-                SaleCount = x.SaleCount,
-                SaledCount = x.SaledCount,
-            });
+                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo
+                {
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    CustomerNo = x.CustomerNo,
+                    Serial = x.Serial,
+                    MaterialBasicId = x.MaterialBasicId,
+                    MaterialId = x.MaterialId,
+                    Quantity = x.Quantity,
+                    OriginPrice = x.OriginPrice,
+                    Discount = x.Discount,
+                    DiscountPrice = x.DiscountPrice,
+                    Price = x.Price,
+                    Delivered = x.Delivered,
+                    Unit = x.Unit,
+                    DueDate = x.DueDate,
+                    Remark = x.Remark,
+                    ReplyDate = x.ReplyDate,
+                    ReplyRemark = x.ReplyRemark,
+                    MachineNo = x.MachineNo,
+                    Drawing = x.Drawing,
+                    Ink = x.Ink,
+                    Label = x.Label,
+                    Package = x.Package,
+                    Reply = x.Reply,
+                    SaleCount = x.SaleCount,
+                    SaledCount = x.SaledCount,
+                    DeleteFlag = x.DeleteFlag,
+                    CreateTime = x.CreateTime,
+                    CreateUser = x.CreateUser,
+                    UpdateTime = x.UpdateTime,
+                    UpdateUser = x.UpdateUser,
+
+                    OrderNo = x.Order.OrderNo,
+                    OrderType = x.Order.OrderType,
+                    Customer = x.Order.Customer
+                });
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             // _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(FromQueryResult));

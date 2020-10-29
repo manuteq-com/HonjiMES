@@ -100,29 +100,29 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<PurchaseDetail>> GetBasicsDataByPurchase(int id)
         {
             var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            // var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            // var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
             var PurchaseDetails = await _context.PurchaseDetails.Where(x => x.DeleteFlag == 0 && x.PurchaseId == id).ToListAsync();
             foreach (var item in PurchaseDetails)
             {
-                if (item.DataType == 1)
-                {
+                // if (item.DataType == 1)
+                // {
                     var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.MaterialNo;
                     item.DataName = BasicData.Name;
-                }
-                else if (item.DataType == 2)
-                {
-                    var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
-                    item.DataNo = BasicData.ProductNo;
-                    item.DataName = BasicData.Name;
-                }
-                else if (item.DataType == 3)
-                {
-                    var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
-                    item.DataNo = BasicData.WiproductNo;
-                    item.DataName = BasicData.Name;
-                }
+                // }
+                // else if (item.DataType == 2)
+                // {
+                //     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                //     item.DataNo = BasicData.ProductNo;
+                //     item.DataName = BasicData.Name;
+                // }
+                // else if (item.DataType == 3)
+                // {
+                //     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                //     item.DataNo = BasicData.WiproductNo;
+                //     item.DataName = BasicData.Name;
+                // }
                 item.Quantity = item.Quantity - item.PurchaseCount;
                 item.Price = item.OriginPrice * (item.Quantity - item.PurchaseCount);
             }

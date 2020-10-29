@@ -63,7 +63,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.QuantityEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         value: this.itemkeyval.CheckCountIn - this.itemkeyval.CheckCountOut,
                         min: 1,
                         max: this.itemkeyval.Quantity,
@@ -72,7 +72,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.PriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
                         value: 0,
                         onValueChanged: this.PriceValueChanged.bind(this)
@@ -85,45 +85,45 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.UnitPriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
                         onValueChanged: this.UnitPriceValueChanged.bind(this)
                     };
                     this.UnitPriceAllEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
                     };
                 }
             }
         );
 
-        if (this.itemkeyval.DataType === 1) {
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
+        // if (this.itemkeyval.DataType === 1) {
+        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.DataId).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.WarehousesDataFormat(s.data);
                 }
-            );
-        } else if (this.itemkeyval.DataType === 2) {
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
-                }
-            );
-        } else if (this.itemkeyval.DataType === 3) {
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
-                }
-            );
-        }
+            }
+        );
+        // } else if (this.itemkeyval.DataType === 2) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.DataId).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.WarehousesDataFormat(s.data);
+        //             }
+        //         }
+        //     );
+        // } else if (this.itemkeyval.DataType === 3) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + this.itemkeyval.DataId).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.WarehousesDataFormat(s.data);
+        //             }
+        //         }
+        //     );
+        // }
     }
     WarehousesDataFormat(data) {
         this.WarehouseList = [];

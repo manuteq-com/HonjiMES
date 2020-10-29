@@ -10,7 +10,7 @@
         <dx-button
             class="searchbtn"
             stylingMode="contained"
-            text="料號紀錄查詢"
+            text="品號紀錄查詢"
             type="normal"
             [width]="140"
             (onClick)="creatdata()">
@@ -90,19 +90,19 @@
     <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
     <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
 
-    <dxi-column dataField="DataNo" caption="料號" [width]="220"></dxi-column>
+    <dxi-column dataField="DataNo" caption="品號" [width]="220"></dxi-column>
     <dxi-column dataField="DataName" caption="名稱" [width]="220"></dxi-column>
     <dxi-column dataField="WarehouseId" caption="倉別" [width]="120">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <!-- <dxi-column dataField="DataId" caption="料號" [width]="220">
+    <!-- <dxi-column dataField="DataId" caption="品號" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DataId" caption="名稱" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column> -->
 
-    <dxi-column dataField="NameType" caption="類別" [width]="100" alignment="center">
+    <dxi-column dataField="DataType" caption="品號類別" [width]="100" alignment="center">
         <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="Original" caption="原始數量" [width]="80"></dxi-column>
@@ -118,7 +118,7 @@
 
 </dx-data-grid>
 
-<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="料號紀錄查詢" [nzWidth]="1800" [nzStyle]="{ top: '10px' }" [nzFooter]="null"
+<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="品號紀錄查詢" [nzWidth]="1800" [nzStyle]="{ top: '10px' }" [nzFooter]="null"
     (nzOnCancel)="handleCancel()">
     <app-inventory-search (childOuter)="creatpopup_result($event)"></app-inventory-search>
 </nz-modal>

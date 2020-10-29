@@ -35,7 +35,7 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     OrderTypeList: any;
     editorOptions: any;
     detailfilter: any;
-    ProductBasicList: any;
+    MaterialBasicList: any;
     CustomerList: any;
     topurchasekey: any;
     toworkkey: any;
@@ -61,10 +61,10 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/ProductBasics/GetProductBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
-                    this.ProductBasicList = s.data;
+                    this.MaterialBasicList = s.data;
                 }
             }
         );

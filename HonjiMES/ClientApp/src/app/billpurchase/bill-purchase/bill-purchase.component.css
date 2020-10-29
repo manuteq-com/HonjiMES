@@ -50,18 +50,18 @@
 .buttongroup {
     padding-top: 10px;
     position: absolute;
-    right: 10px;
+    right: 4px;
 }
 
 .insertbtn {
 
     margin-top: -6px;
     border-radius: 2px;
-    margin-left: 30px;
+    /* margin-left: 30px; */
 }
 
 .newbtn {
     margin-top: -6px;
     border-radius: 2px;
-    margin-left: 30px;
+    margin-left: 4px;
 }

@@ -44,8 +44,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     productBasicChange: boolean;
 
     CreateTimeDateBoxOptions: any;
-    ProductBasicSelectBoxOptions: any;
-    ProductBasicList: any;
+    MaterialBasicSelectBoxOptions: any;
+    MaterialBasicList: any;
     ProcessBasicList: any;
     NumberBoxOptions: any;
     SerialNo: any;
@@ -127,19 +127,19 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/ProductBasics/GetProductBasicsAsc').subscribe(
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
-                    this.ProductBasicList = s.data;
-                    this.ProductBasicList.forEach(x => {
-                        x.Name = x.ProductNo + '_' + x.Name;
+                    this.MaterialBasicList = s.data;
+                    this.MaterialBasicList.forEach(x => {
+                        x.Name = x.MaterialNo + '_' + x.Name;
                     });
-                    this.ProductBasicSelectBoxOptions = {
-                        dataSource: { paginate: true, store: { type: 'array', data: this.ProductBasicList, key: 'Id' } },
+                    this.MaterialBasicSelectBoxOptions = {
+                        dataSource: { paginate: true, store: { type: 'array', data: this.MaterialBasicList, key: 'Id' } },
                         searchEnabled: true,
                         displayExpr: 'Name',
                         valueExpr: 'Id',
-                        onValueChanged: this.onProductBasicSelectionChanged.bind(this)
+                        onValueChanged: this.onMaterialBasicSelectionChanged.bind(this)
                     };
 
                 }
@@ -194,7 +194,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
                         this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
-                        this.formData.ProductBasicId = s.data.WorkOrderHead.DataId;
+                        this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
                         this.formData.Count = s.data.WorkOrderHead.Count;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
                         this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
@@ -264,14 +264,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
         }
     };
-    onProductBasicSelectionChanged(e) {
+    onMaterialBasicSelectionChanged(e) {
         // debugger;
         if (this.modCheck) {
             this.modCheck = false;
         } else {
             this.saveDisabled = false;
             if (e.value !== 0 && e.value !== null && e.value !== undefined) {
-                this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + e.value).subscribe(
+                this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
                     (s) => {
                         if (s.success) {
                             s.data.forEach(element => {
@@ -460,7 +460,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 WorkOrderNo: this.formData.WorkOrderNo,
                 CreateTime: this.formData.CreateTime,
                 DataType: 2,
-                DataId: this.formData.ProductBasicId,
+                DataId: this.formData.MaterialBasicId,
                 Count: this.formData.Count,
                 MachineNo: this.formData.MachineNo,
                 DueStartTime: this.formData.DueStartTime,

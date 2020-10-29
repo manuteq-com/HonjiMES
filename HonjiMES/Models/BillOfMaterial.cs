@@ -92,14 +92,14 @@ namespace HonjiMES.Models
         public sbyte DeleteFlag { get; set; }
 
         [ForeignKey(nameof(MaterialBasicId))]
-        [InverseProperty("BillOfMaterials")]
+        [InverseProperty("BillOfMaterialMaterialBasics")]
         public virtual MaterialBasic MaterialBasic { get; set; }
         [ForeignKey(nameof(Pid))]
         [InverseProperty(nameof(BillOfMaterial.InverseP))]
         public virtual BillOfMaterial P { get; set; }
         [ForeignKey(nameof(ProductBasicId))]
-        [InverseProperty("BillOfMaterials")]
-        public virtual ProductBasic ProductBasic { get; set; }
+        [InverseProperty("BillOfMaterialProductBasics")]
+        public virtual MaterialBasic ProductBasic { get; set; }
         [InverseProperty(nameof(BillOfMaterial.P))]
         public virtual ICollection<BillOfMaterial> InverseP { get; set; }
     }

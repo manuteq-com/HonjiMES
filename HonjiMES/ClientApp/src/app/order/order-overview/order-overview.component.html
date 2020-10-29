@@ -38,14 +38,14 @@
         <dxo-lookup [dataSource]="CustomerList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="170"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品號" [width]="200">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="200">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品名" [width]="150">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="品名" [width]="150">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="規格" [width]="200">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="規格" [width]="200">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="Quantity" caption="數量" [width]="50"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" alignment="center" [width]="50"></dxi-column>

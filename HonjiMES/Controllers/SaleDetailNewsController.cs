@@ -72,20 +72,20 @@ namespace HonjiMES.Controllers
             // {
             //     SaleDetailNews = SaleDetailNews.Where(x => x.SaleId == SaleId);
             // }
-            var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.SaleId == SaleId).Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.ProductBasic).Select(x => new SaleDetailNewData
+            var SaleDetailNews = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.SaleId == SaleId).Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.MaterialBasic).Select(x => new SaleDetailNewData
             {
-                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                TotalCount = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
                 Id = x.Id,
                 SaleId = x.SaleId,
                 OrderId = x.OrderId,
                 OrderDetailId = x.OrderDetailId,
-                ProductBasicId = x.ProductBasicId,
-                ProductId = x.ProductId,
+                MaterialBasicId = x.MaterialBasicId,
+                MaterialId = x.MaterialId,
                 CustomerNo = x.Order.CustomerNo,
                 OrderNo = x.Order.OrderNo,
                 Serial = x.OrderDetail.Serial,
                 MachineNo = x.OrderDetail.MachineNo,
-                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
                 Status = x.Status,
                 Name = x.Name,
                 Specification = x.Specification,
@@ -202,7 +202,7 @@ namespace HonjiMES.Controllers
             saleDetailNew.Id = id;
             var OsaleDetailNew = _context.SaleDetailNews.Find(id);
             dQty = saleDetailNew.Quantity - OsaleDetailNew.Quantity; //差異數量
-            var ProductId = OsaleDetailNew.ProductId; //產品ID
+            var MaterialId = OsaleDetailNew.MaterialId; //產品ID
             var OrderDetailId = OsaleDetailNew.OrderDetailId; //訂單明細ID
 
             //修改銷貨數量
@@ -214,7 +214,7 @@ namespace HonjiMES.Controllers
             else
             {
                 //檢查多次轉銷貨的數量
-                var SaleDetailNewslist = _context.SaleDetailNews.AsQueryable().Where(x => x.DeleteFlag == 0 && x.OrderDetailId == OrderDetailId && x.ProductId == ProductId);
+                var SaleDetailNewslist = _context.SaleDetailNews.AsQueryable().Where(x => x.DeleteFlag == 0 && x.OrderDetailId == OrderDetailId && x.MaterialId == MaterialId);
                 var AllQty = SaleDetailNewslist.Sum(x => x.Quantity);//轉銷貨的總數量
                 if (AllQty + dQty <= OsaleDetailNew.OrderDetail.Quantity)//不超過總採購數
                 {
@@ -226,7 +226,7 @@ namespace HonjiMES.Controllers
                     ErrMsg += "請檢查銷貨單號：" + string.Join(',', SaleDetailNewslist.Select(x => x.Sale.SaleNo).Distinct());
                 }
             }
-            OsaleDetailNew.Product.QuantityAdv += dQty;
+            OsaleDetailNew.Material.QuantityAdv += dQty;
             try
             {
                 if (string.IsNullOrWhiteSpace(ErrMsg))

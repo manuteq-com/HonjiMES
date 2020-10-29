@@ -29,9 +29,9 @@ namespace HonjiMES.Models
         public int ExcelOrder { get; set; }
     }
     /// <summary>
-    /// 從匯入的Excel產生Product
+    /// 從匯入的Excel產生Material
     /// </summary>
-    public class ProductByExcel
+    public class MaterialByExcel
     {
         /// <summary>
         /// 訂單號
@@ -42,8 +42,8 @@ namespace HonjiMES.Models
         /// </summary>
         public string CustomerNo { get; set; }
         /// <summary>
-        /// 少的Product
+        /// 少的Material
         /// </summary>
-        public string Products { get; set; }
+        public string Materials { get; set; }
     }
 }

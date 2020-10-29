@@ -14,9 +14,14 @@ namespace HonjiMES.Models
     {
         public MaterialBasic()
         {
-            BillOfMaterials = new HashSet<BillOfMaterial>();
+            BillOfMaterialMaterialBasics = new HashSet<BillOfMaterial>();
+            BillOfMaterialProductBasics = new HashSet<BillOfMaterial>();
             Materials = new HashSet<Material>();
-            RequisitionDetails = new HashSet<RequisitionDetail>();
+            OrderDetails = new HashSet<OrderDetail>();
+            RequisitionDetailMaterialBasics = new HashSet<RequisitionDetail>();
+            RequisitionDetailProductBasics = new HashSet<RequisitionDetail>();
+            Requisitions = new HashSet<Requisition>();
+            SaleDetailNews = new HashSet<SaleDetailNew>();
             SupplierOfMaterials = new HashSet<SupplierOfMaterial>();
         }
 
@@ -27,13 +32,23 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         /// <summary>
-        /// &#20803;&#20214;&#21697;&#34399;
+        /// &#21697;&#34399;
         /// </summary>
         [Required]
         [Column("material_no", TypeName = "varchar(50)")]
         public string MaterialNo { get; set; }
         /// <summary>
-        /// &#20803;&#20214;&#21697;&#21517;
+        /// &#24288;&#20839;&#21697;&#34399;	
+        /// </summary>
+        [Column("material_number", TypeName = "varchar(50)")]
+        public string MaterialNumber { get; set; }
+        /// <summary>
+        /// &#21697;&#34399;&#31278;&#39006;
+        /// </summary>
+        [Column("material_type", TypeName = "int(11)")]
+        public int? MaterialType { get; set; }
+        /// <summary>
+        /// &#21697;&#21517;
         /// </summary>
         [Required]
         [Column("name", TypeName = "varchar(50)")]
@@ -92,11 +107,21 @@ namespace HonjiMES.Models
         [InverseProperty("MaterialBasics")]
         public virtual Supplier Supplier { get; set; }
         [InverseProperty(nameof(BillOfMaterial.MaterialBasic))]
-        public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
+        public virtual ICollection<BillOfMaterial> BillOfMaterialMaterialBasics { get; set; }
+        [InverseProperty(nameof(BillOfMaterial.ProductBasic))]
+        public virtual ICollection<BillOfMaterial> BillOfMaterialProductBasics { get; set; }
         [InverseProperty(nameof(Material.MaterialBasic))]
         public virtual ICollection<Material> Materials { get; set; }
+        [InverseProperty(nameof(OrderDetail.MaterialBasic))]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         [InverseProperty(nameof(RequisitionDetail.MaterialBasic))]
-        public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
+        public virtual ICollection<RequisitionDetail> RequisitionDetailMaterialBasics { get; set; }
+        [InverseProperty(nameof(RequisitionDetail.ProductBasic))]
+        public virtual ICollection<RequisitionDetail> RequisitionDetailProductBasics { get; set; }
+        [InverseProperty(nameof(Requisition.MaterialBasic))]
+        public virtual ICollection<Requisition> Requisitions { get; set; }
+        [InverseProperty(nameof(SaleDetailNew.MaterialBasic))]
+        public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
         [InverseProperty(nameof(SupplierOfMaterial.MaterialBasic))]
         public virtual ICollection<SupplierOfMaterial> SupplierOfMaterials { get; set; }
     }

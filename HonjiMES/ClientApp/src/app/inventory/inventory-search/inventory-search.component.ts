@@ -78,7 +78,7 @@ export class InventorySearchComponent implements OnInit, OnChanges {
         }
     }
     GetInventoryData(type, key) {
-        if (type === 1) { // 原料
+        // if (type === 1) { // 原料
             this.app.GetData(this.Controller + '/GetAdjustLogByMaterialBasicID/' + key).subscribe(
                 (s) => {
                     if (s.success) {
@@ -86,23 +86,23 @@ export class InventorySearchComponent implements OnInit, OnChanges {
                     }
                 }
             );
-        } else if (type === 2) { // 成品
-            this.app.GetData(this.Controller + '/GetAdjustLogByProductBasicID/' + key).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.dataSourceDB = s.data;
-                    }
-                }
-            );
-        } else if (type === 3) { // 半成品
-            this.app.GetData(this.Controller + '/GetAdjustLogByWiproductBasicID/' + key).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.dataSourceDB = s.data;
-                    }
-                }
-            );
-        }
+        // } else if (type === 2) { // 成品
+        //     this.app.GetData(this.Controller + '/GetAdjustLogByProductBasicID/' + key).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.dataSourceDB = s.data;
+        //             }
+        //         }
+        //     );
+        // } else if (type === 3) { // 半成品
+        //     this.app.GetData(this.Controller + '/GetAdjustLogByWiproductBasicID/' + key).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.dataSourceDB = s.data;
+        //             }
+        //         }
+        //     );
+        // }
     }
     onValueChanged(e) {
         this.dataSourceDB = [];

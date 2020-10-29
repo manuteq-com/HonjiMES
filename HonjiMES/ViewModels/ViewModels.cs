@@ -716,7 +716,7 @@ namespace HonjiMES.Models
 
     public class MbomData
     {
-        public int ProductBasicId { get; set; }
+        public int MaterialBasicId { get; set; }
         public int BomId { get; set; }
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }

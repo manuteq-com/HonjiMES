@@ -91,11 +91,12 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Requisition>> PostReback(Requisition requisition)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
-            if (requisition.ProductBasicId == 0)
+            if (requisition.MaterialBasicId == 0)
             {
                 return Ok(MyFun.APIResponseError("沒有品號資料"));
             }
-            var ProductBasics = _context.ProductBasics.Find(requisition.ProductBasicId);
+            // 此API無使用
+            var ProductBasics = _context.ProductBasics.Find(requisition.MaterialBasicId);
 
             var key = "MR";
             var dt = DateTime.Now;
@@ -115,14 +116,14 @@ namespace HonjiMES.Controllers
             requisition.RequisitionNo = key + RequisitionNo + NoCount.ToString("000");
             // requisition.Name = ProductBasics.Name;
             requisition.Name = requisition?.Name ?? "";
-            requisition.ProductNo = ProductBasics.ProductNo;
-            requisition.ProductNumber = ProductBasics.ProductNumber;
+            requisition.MaterialNo = ProductBasics.ProductNo;
+            requisition.MaterialNumber = ProductBasics.ProductNumber;
             requisition.Specification = ProductBasics.Specification;
             requisition.CreateTime = dt;
             requisition.CreateUser = MyFun.GetUserID(HttpContext);
             requisition.Type = 0;
             // BOM內容
-            var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+            var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.MaterialBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
             {
                 var sameCheck = false;
@@ -184,7 +185,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(null));
         }
         /// <summary>
-        /// 用工單號取出可退的料號 一階
+        /// 用工單號取出可退的品號 一階
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -235,7 +236,7 @@ namespace HonjiMES.Controllers
                 {
 
                     var WorkOrderHeads = _context.WorkOrderHeads.Find(id);
-                    var ProductBasics = _context.ProductBasics.Find(WorkOrderHeads.DataId);
+                    var MaterialBasics = _context.MaterialBasics.Find(WorkOrderHeads.DataId);
                     // BOM內容
                     var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == WorkOrderHeads.DataId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
 
@@ -319,7 +320,7 @@ namespace HonjiMES.Controllers
             else
             {
                 _context.ChangeTracker.LazyLoadingEnabled = true;
-                var ProductBasics = _context.ProductBasics.Find(WorkOrderHead.DataId);
+                var MaterialBasics = _context.MaterialBasics.Find(WorkOrderHead.DataId);
                 var key = "MR";
                 var dt = DateTime.Now;
                 var RequisitionNo = dt.ToString("yyMMdd");
@@ -337,18 +338,18 @@ namespace HonjiMES.Controllers
                 }
                 var requisition = new Requisition();//表頭
                 requisition.Type = 1;
-                requisition.ProductBasicId = WorkOrderHead.DataId;
+                requisition.MaterialBasicId = WorkOrderHead.DataId;
                 requisition.WorkOrderHeadId = WorkOrderHead.Id;
                 requisition.RequisitionNo = key + RequisitionNo + NoCount.ToString("000");
                 requisition.Name = "";
-                requisition.ProductNo = ProductBasics.ProductNo;
-                requisition.ProductNumber = ProductBasics.ProductNumber;
-                requisition.Specification = ProductBasics.Specification;
+                requisition.MaterialNo = MaterialBasics.MaterialNo;
+                requisition.MaterialNumber = MaterialBasics.MaterialNumber;
+                requisition.Specification = MaterialBasics.Specification;
                 requisition.Quantity = WorkOrderHead.Count;
                 requisition.CreateTime = dt;
                 requisition.CreateUser = PostRequisition.CreateUser;
                 // BOM內容
-                var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.ProductBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+                var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == requisition.MaterialBasicId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
                 foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, requisition.Quantity))
                 {
                     if (item.Lv == 1)
@@ -412,7 +413,7 @@ namespace HonjiMES.Controllers
                                 }
                                 else if (Receive.ProductBasicId.HasValue)
                                 {
-                                    var Product = _context.Products.Where(x => x.WarehouseId == Receive.WarehouseID && x.ProductBasicId == Receive.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                                    var Product = _context.Materials.Where(x => x.WarehouseId == Receive.WarehouseID && x.MaterialBasicId == Receive.ProductBasicId && x.DeleteFlag == 0).FirstOrDefault();
                                     if (Product == null)
                                     {
                                         return Ok(MyFun.APIResponseError("沒有庫存資料! 請確認[ " + item.ProductNo + " ]的庫存資訊!"));
@@ -421,7 +422,7 @@ namespace HonjiMES.Controllers
                                     Product.Quantity = Original + Receive.RQty ?? 0;
                                     Product.UpdateTime = dt;
                                     Product.UpdateUser = PostRequisition.CreateUser;
-                                    Product.ProductLogs.Add(new ProductLog
+                                    Product.MaterialLogs.Add(new MaterialLog
                                     {
                                         LinkOrder = requisition.RequisitionNo,
                                         Original = Original,
@@ -477,7 +478,7 @@ namespace HonjiMES.Controllers
             else if (Req.ProductBasicId.HasValue)
             {
                 var ProductBasicId = Req.ProductBasicId;
-                var GWarehouseList = _context.Products.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.ProductBasicId == Req.ProductBasicId).GroupBy(x => x.WarehouseId).ToList();
+                var GWarehouseList = _context.Materials.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.MaterialBasicId == Req.ProductBasicId).GroupBy(x => x.WarehouseId).ToList();
                 foreach (var item in GWarehouseList)
                 {
                     WarehouseList.Add(new ReqWarehouse

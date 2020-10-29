@@ -29,7 +29,7 @@ namespace HonjiMES.Models
             var ExcelOrderModellist = new List<ExcelOrderModel>();
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "CustomerNo", ExcelName = "訂單單號", TableName = "OrderHead", ExcelOrder = 1 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Serial", ExcelName = "序號", TableName = "OrderDetail", ExcelOrder = 2 });
-            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ProductBasicId", ExcelName = "品號", TableName = "OrderDetail", Change = "ProductBasic", ExcelOrder = 3 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "MaterialBasicId", ExcelName = "品號", TableName = "OrderDetail", Change = "MaterialBasic", ExcelOrder = 3 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "品名", TableName = "OrderDetail", ExcelOrder = 4 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "", ExcelName = "規格", TableName = "OrderDetail", ExcelOrder = 5 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Quantity", ExcelName = "數量", TableName = "OrderDetail", ExcelOrder = 6 });
@@ -180,9 +180,9 @@ namespace HonjiMES.Models
         /// </summary>
         /// <param name="Fileitem"></param>
         /// <param name="_context"></param>
-        /// <param name="sLostProduct"></param>
+        /// <param name="sLostMaterial"></param>
         /// <returns></returns>
-        internal static List<OrderHead> GetExcelData(string Fileitem, HonjiContext _context, ref string sLostProduct)
+        internal static List<OrderHead> GetExcelData(string Fileitem, HonjiContext _context, ref string sLostMaterial)
         {
             var OrderHeadlist = new List<OrderHead>();//所有檔案
             using (FileStream item = File.OpenRead(Fileitem))
@@ -193,7 +193,7 @@ namespace HonjiMES.Models
                 item.CopyTo(ms);
                 ms.Position = 0; // <-- Add this, to make it work
                 var bytes = ms.ToArray();
-                var lostProductNoList = new List<string>();
+                var lostMaterialNoList = new List<string>();
 
                 try
                 {
@@ -288,12 +288,14 @@ namespace HonjiMES.Models
                                     {
                                         switch (Mappingitem.Change)
                                         {
-                                            case "ProductBasic":
-                                                Cellval = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
-                                                if (string.IsNullOrWhiteSpace(Cellval) && !lostProductNoList.Contains(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j))))
+                                            case "MaterialBasic":
+                                                // 2020/10/27 品號合併(使用Material資料表)
+                                                // Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                if (string.IsNullOrWhiteSpace(Cellval) && !lostMaterialNoList.Contains(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j))))
                                                 {
-                                                    lostProductNoList.Add(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)));
-                                                    sLostProduct += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
+                                                    lostMaterialNoList.Add(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)));
+                                                    sLostMaterial += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
                                                         + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
                                                         + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
                                                 }

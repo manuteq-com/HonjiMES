@@ -427,64 +427,76 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         );
     }
     GetWarehouseByBasicData(Type, Id) {
-        if (Type === 1) {
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
+        // if (Type === 1) {
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + Id).subscribe(
                 (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
-                    this.BasicDataListTemp.forEach(element => {
-                        if (element.Id === Id) {
-                            if (element.WarehouseId !== null) {
-                                this.Warehouseval = element.WarehouseId;
-                            } else {
-                                this.Warehouseval = this.WarehouseList[0].Id;
-                            }
-                        }
-                    });
+                    this.WarehouseList = s.data;
+                    if (Type === 1) {
+                        this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+                    } else if (Type === 2) {
+                        this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+                    } else {
+                        this.Warehouseval = this.WarehouseList[0].Id;
+                    }
                 }
             );
-        } else if (Type === 2) {
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + Id).subscribe(
-                (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
-                    this.BasicDataListTemp.forEach(element => {
-                        if (element.Id === Id) {
-                            if (element.WarehouseId !== null) {
-                                this.Warehouseval = element.WarehouseId;
-                            } else {
-                                this.Warehouseval = this.WarehouseList[0].Id;
-                            }
-                        }
-                    });
-                }
-            );
-        } else if (Type === 3) {
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + Id).subscribe(
-                (s) => {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
-                    this.BasicDataListTemp.forEach(element => {
-                        if (element.Id === Id) {
-                            if (element.WarehouseId !== null) {
-                                this.Warehouseval = element.WarehouseId;
-                            } else {
-                                this.Warehouseval = this.WarehouseList[0].Id;
-                            }
-                        }
-                    });
-                }
-            );
-        }
+            // this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
+            //     (s) => {
+            //         this.WarehouseList = [];
+            //         s.data.forEach((element, index) => {
+            //             element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+            //             this.WarehouseList[index] = element.Warehouse;
+            //         });
+            //         this.BasicDataListTemp.forEach(element => {
+            //             if (element.Id === Id) {
+            //                 if (element.WarehouseId !== null) {
+            //                     this.Warehouseval = element.WarehouseId;
+            //                 } else {
+            //                     this.Warehouseval = this.WarehouseList[0].Id;
+            //                 }
+            //             }
+            //         });
+            //     }
+            // );
+        // } else if (Type === 2) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + Id).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = [];
+        //             s.data.forEach((element, index) => {
+        //                 element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+        //                 this.WarehouseList[index] = element.Warehouse;
+        //             });
+        //             this.BasicDataListTemp.forEach(element => {
+        //                 if (element.Id === Id) {
+        //                     if (element.WarehouseId !== null) {
+        //                         this.Warehouseval = element.WarehouseId;
+        //                     } else {
+        //                         this.Warehouseval = this.WarehouseList[0].Id;
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     );
+        // } else if (Type === 3) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + Id).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = [];
+        //             s.data.forEach((element, index) => {
+        //                 element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+        //                 this.WarehouseList[index] = element.Warehouse;
+        //             });
+        //             this.BasicDataListTemp.forEach(element => {
+        //                 if (element.Id === Id) {
+        //                     if (element.WarehouseId !== null) {
+        //                         this.Warehouseval = element.WarehouseId;
+        //                     } else {
+        //                         this.Warehouseval = this.WarehouseList[0].Id;
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     );
+        // }
     }
     onDataErrorOccurred(e) {
         notify({

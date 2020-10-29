@@ -117,7 +117,7 @@ export class ReceiveListComponent implements OnInit {
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteRequisition/' + key, 'DELETE')
         });
-        this.app.GetData('/BillOfMaterials/GetProductBasicsDrowDown').subscribe(
+        this.app.GetData('/BillOfMaterials/GetMaterialBasicsDrowDown').subscribe(
             (s) => {
                 if (s.success) {
                     this.selectBoxOptions = {
@@ -216,13 +216,13 @@ export class ReceiveListComponent implements OnInit {
             load: (loadOptions) =>
 
                 SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAllShow/' + data.data.Id),
-            insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
-            update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetailAll', 'PUT',
-                    { key, values }),
-            remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
+            // insert: (values) =>
+            //     SendService.sendRequest(this.http, this.Controller + '/PostBomlist/' + this.requisitionId, 'POST', { values }),
+            // update: (key, values) =>
+            //     SendService.sendRequest(this.http, this.Controller + '/PutRequisitionsDetailAll', 'PUT',
+            //         { key, values }),
+            // remove: (key) =>
+            //     SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         });
 
         // this.dataSourceMaterialDB = new CustomStore({

@@ -312,7 +312,9 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
     }
     GetWarehouseStockQty(data) {
         if (data.value) {
-            return data.data.WarehouseList.find(x => x.ID === data.value).StockQty ?? 0;
+            if (data.data.WarehouseList.find(x => x.ID === data.value) !== undefined) {
+                return data.data.WarehouseList.find(x => x.ID === data.value).StockQty ?? 0;
+            }
         } else {
             return data.value;
         }
@@ -439,7 +441,7 @@ export class CreatreceiveComponent implements OnInit, OnChanges {
             this.popupVisible = false;
         } else {
             notify({
-                message: '該料號已存在清單!',
+                message: '該品號已存在清單!',
                 position: {
                     my: 'center top',
                     at: 'center top'
