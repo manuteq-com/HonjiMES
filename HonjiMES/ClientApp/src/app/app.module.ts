@@ -124,6 +124,8 @@ import { SaleReturnComponent } from './report/sale-return/sale-return.component'
 import { BiilpurchaseReturnComponent } from './report/biilpurchase-return/biilpurchase-return.component';
 import { WorkorderCreatStockComponent } from './workorder/workorder-creat-stock/workorder-creat-stock.component';
 import { QualityRecordComponent } from './report/quality-record/quality-record.component';
+import { DealPriceComponent } from './report/deal-price/deal-price.component';
+import { DealLogComponent } from './report/deal-log/deal-log.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -262,7 +264,9 @@ export function tokenGetter() {
         SaleReturnComponent,
         BiilpurchaseReturnComponent,
         WorkorderCreatStockComponent,
-        QualityRecordComponent
+        QualityRecordComponent,
+        DealPriceComponent,
+        DealLogComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

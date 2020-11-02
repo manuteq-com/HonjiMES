@@ -813,6 +813,8 @@ namespace HonjiMES.Models
 
     public class WorkOrderReportLogData : WorkOrderReportLog
     {
+        public string WorkOrderNo { get; set; }
+        public string DataNo { get; set; }
         public int QCReportType { get; set; }
         public int QCReCount { get; set; }
         public int QCCkCount { get; set; }
@@ -1098,5 +1100,20 @@ namespace HonjiMES.Models
         public decimal Quantity { get; set; }
     }
 
+    public class DealPriceList
+    {
+        public int Id { get; set; }
+        public int Customer { get; set; }
+        public int ProductId { get; set; }
+        public decimal Original { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? PriceAll { get; set; }
+        public string LinkOrder { get; set; }
+        public DateTime? SaleDate { get; set; }
+        public string OrderNo { get; set; }
+        public string CustomerNo { get; set; }
+        public DateTime CreateTime { get; set; }
+    }
 
 }

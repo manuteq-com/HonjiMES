@@ -34,6 +34,7 @@ import { UserPasswordComponent } from './setting/user-password/user-password.com
 import { SaleReturnComponent } from './report/sale-return/sale-return.component';
 import { BiilpurchaseReturnComponent } from './report/biilpurchase-return/biilpurchase-return.component';
 import { QualityRecordComponent } from './report/quality-record/quality-record.component';
+import { DealPriceComponent } from './report/deal-price/deal-price.component';
 
 
 
@@ -71,6 +72,7 @@ export const routes: Routes = [
     { path: 'salereturn', component: SaleReturnComponent, canActivate: [AuthGuard] },
     { path: 'billpurchasereturn', component: BiilpurchaseReturnComponent, canActivate: [AuthGuard] },
     { path: 'qualityrecord', component: QualityRecordComponent, canActivate: [AuthGuard] },
+    { path: 'dealprice', component: DealPriceComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

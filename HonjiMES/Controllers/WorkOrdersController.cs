@@ -2241,8 +2241,11 @@ namespace HonjiMES.Controllers
             //   });
 
             var nWorkOrderReportLogs = _context.WorkOrderReportLogs.Where(x => x.DeleteFlag == 0 )
+            .Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead)
             .Join(WorkOrderQcLogs, x=>x.CreateTime,y=>y.CreateTime,(x, y) => new WorkOrderReportLogData{
-                CreateTime = x.CreateTime,
+                                WorkOrderNo = x.WorkOrderDetail.WorkOrderHead.WorkOrderNo,
+                                DataNo = x.WorkOrderDetail.WorkOrderHead.DataNo,
+                                CreateTime = x.CreateTime,
                                 CreateUser = x.CreateUser,
                                 ReportType = x.ReportType,
                                 QCReportType = y.ReportType,

@@ -663,5 +663,43 @@ namespace HonjiMES.Controllers
             // _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+
+        /// <summary>
+        /// 交易單價紀錄報表_old
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductLog>>> GetDealPriceRecords_old(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.ProductLogs.Where(x => x.DeleteFlag == 0 && x.Message == "銷貨");
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            var q = ((List<ProductLog>)FromQueryResult.data).Select(x => x.Id).ToList();
+            FromQueryResult.data = data.Where(x => q.Contains(x.Id)).LeftOuterJoin(_context.SaleHeads.Include(y => y.SaleDetailNews).ThenInclude(z => z.Order), x => x.LinkOrder, y => y.SaleNo, (ProductLogs, SaleHeads) => new
+            {
+                ProductLogs.Id,
+                ProductLogs,
+                SaleHeads,
+                SaleHeads.SaleDetailNews,
+            }).ToList();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+
+        /// <summary>
+        /// 交易單價紀錄
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<SaleDetailNew>> GetDealPriceRecord(int? id,
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.SaleDetailNews.AsQueryable().Where(x => x.OrderDetailId == id).Include(x => x.Sale);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }
