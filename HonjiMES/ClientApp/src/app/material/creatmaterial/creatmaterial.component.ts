@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnChanges } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ import { AppComponent } from 'src/app/app.component';
     templateUrl: './creatmaterial.component.html',
     styleUrls: ['./creatmaterial.component.css']
 })
-export class CreatmaterialComponent implements OnInit {
+export class CreatmaterialComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemdata: any;
     @Input() exceldata: any;
@@ -78,12 +78,12 @@ export class CreatmaterialComponent implements OnInit {
             }
         );
     }
+    ngOnInit() {
+    }
     ngOnChanges() {
         // debugger;
         this.formData = this.itemdata;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
-    }
-    ngOnInit() {
     }
     validate_before(): boolean {
         // 表單驗證
@@ -99,7 +99,7 @@ export class CreatmaterialComponent implements OnInit {
         }
         return true;
     }
-    onFormSubmit = async function (e) {
+    onFormSubmit = async function(e) {
         // this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;

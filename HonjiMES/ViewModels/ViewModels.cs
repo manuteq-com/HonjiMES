@@ -179,7 +179,7 @@ namespace HonjiMES.Models
     public class BasicData
     {
         public int TempId { get; set; }
-        public int DataType { get; set; }
+        public int? DataType { get; set; }
         public int DataId { get; set; }
         public string DataNo { get; set; }
         public string Name { get; set; }
@@ -358,6 +358,7 @@ namespace HonjiMES.Models
     }
     public class MaterialW : Material
     {
+        public int? MaterialType { get; set; }
         public int? SupplierId { get; set; }
         public decimal? Weight { get; set; }
         public string Remarks { get; set; }

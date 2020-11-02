@@ -180,7 +180,7 @@ namespace HonjiMES.Controllers
                 //新增時檢查主件品號是否重複
                 if (_context.Wiproducts.AsQueryable().Where(x => x.WiproductNo == wiproduct.WiproductNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                 {
-                    sRepeatWiproduct += "主件品號 [" + wiproduct.WiproductNo + "] 已經存在 [" + wiproduct.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                    sRepeatWiproduct += "主件品號 [" + wiproduct.WiproductNo + "] 已經存在 [" + wiproduct.warehouseData.Where(x => x.Id == warehouseId).FirstOrDefault().Name + "] !<br/>";
                 }
                 else
                 {

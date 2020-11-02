@@ -89,12 +89,12 @@ namespace HonjiMES.Models
         /// &#32068;&#25104;&#29992;&#37327;
         /// </summary>
         [Column("composition", TypeName = "int(11)")]
-        public int Composition { get; set; }
+        public int? Composition { get; set; }
         /// <summary>
         /// &#24213;&#25976;
         /// </summary>
         [Column("base_quantity", TypeName = "int(11)")]
-        public int BaseQuantity { get; set; }
+        public int? BaseQuantity { get; set; }
         /// <summary>
         /// &#20379;&#25033;&#21830;
         /// </summary>

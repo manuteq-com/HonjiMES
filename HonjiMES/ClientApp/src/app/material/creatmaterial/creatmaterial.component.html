@@ -21,11 +21,11 @@
             <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule>
             <dxo-label text="屬性"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)">
+        <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="{ disabled: true }" format="$ #,##0.##;($ #,##0.##)">
             <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
             <dxo-label text="單價"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Unit">
+        <dxi-item dataField="Unit" [editorOptions]="{ disabled: true }">
             <dxo-label text="單位"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="Supplier" dataType="number" editorType="dxSelectBox"  [editorOptions]="selectBoxOptions">

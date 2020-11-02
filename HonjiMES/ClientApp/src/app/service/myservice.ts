@@ -40,6 +40,9 @@ export class Myservice {
     getlistAdjustStatus(): Selectitem[] {
         return adjusttypes;
     }
+    getlistMaterialType(): Selectitem[] {
+        return materialtypes;
+    }
     getWorkOrderStatus(): Selectitem[] {
         return workorderstatus;
     }
@@ -142,6 +145,11 @@ const adjusttypes: Selectitem[] = [
     { Id: 1, Name: '原料' },
     { Id: 2, Name: '成品' },
     { Id: 3, Name: '半成品' },
+];
+const materialtypes: Selectitem[] = [
+    { Id: null, Name: '' },
+    { Id: 1, Name: '原料' },
+    { Id: 2, Name: '成品' }
 ];
 const workorderstatus: Selectitem[] = [ // 訂單[主檔]&[明細]共用狀態
     { Id: 0, Name: '新建' },

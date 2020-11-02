@@ -34,8 +34,11 @@ namespace HonjiMES.Controllers
             var materialBasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Materials.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+
                 Id = x.Id,
                 MaterialNo = x.MaterialNo,
+                MaterialNumber = x.MaterialNumber,
+                MaterialType = x.MaterialType,
                 Name = x.Name,
                 Specification = x.Specification,
                 Property = x.Property,
@@ -112,6 +115,7 @@ namespace HonjiMES.Controllers
             foreach (var item in Materials)
             {
                 item.MaterialNo = OmaterialBasic.MaterialNo;
+                item.MaterialNumber = OmaterialBasic.MaterialNumber;
                 item.Name = OmaterialBasic.Name;
                 item.Specification = OmaterialBasic.Specification;
                 item.Property = OmaterialBasic.Property;
@@ -155,10 +159,10 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<Material>> PostMaterial(MaterialW material)
         {
-            if (material.wid == null)
-            {
-                return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", material));
-            }
+            // if (material.wid == null)
+            // {
+            //     return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", material));
+            // }
 
             //優先確認Basic是否存在
             var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
@@ -168,6 +172,8 @@ namespace HonjiMES.Controllers
                 _context.MaterialBasics.Add(new MaterialBasic
                 {
                     MaterialNo = material.MaterialNo,
+                    MaterialNumber = material.MaterialNumber,
+                    MaterialType = material.MaterialType,
                     Name = material.Name,
                     Specification = material.Specification,
                     Property = material.Property,
@@ -181,36 +187,40 @@ namespace HonjiMES.Controllers
                 _context.SaveChanges();
                 MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             } else {
-                return Ok(MyFun.APIResponseError("[元件品號] 已存在!"));
+                return Ok(MyFun.APIResponseError("[品號] 已存在!"));
             }
             material.MaterialBasicId = MaterialBasicData.Id;
 
             string sRepeatMaterial = null;
             var nMateriallist = new List<Material>();
-            foreach (var warehouseId in material.wid)
-            {
-                //新增時檢查主件品號是否重複
-                if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
+            if (material.wid != null) {
+                foreach (var warehouseId in material.wid)
                 {
-                    sRepeatMaterial += "元件品號 [" + material.MaterialNo + "] 已經存在 [" + material.warehouseData[warehouseId - 1].Name + "] !<br/>";
-                }
-                else
-                {
-                    nMateriallist.Add(new Material
+                    //新增時檢查主件品號是否重複
+                    if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                     {
-                        MaterialNo = material.MaterialNo,
-                        Name = material.Name,
-                        Quantity = material.Quantity,
-                        Specification = material.Specification,
-                        Property = material.Property,
-                        Price = material.Price,
-                        Unit = material.Unit,
-                        Composition = 1,
-                        BaseQuantity = 2,
-                        WarehouseId = warehouseId,
-                        MaterialBasicId = material.MaterialBasicId,
-                         CreateUser = MyFun.GetUserID(HttpContext)
-                    });
+                        sRepeatMaterial += "品號 [" + material.MaterialNo + "] 已經存在 [" + material.warehouseData.Where(x => x.Id == warehouseId).FirstOrDefault().Name + "] !<br/>";
+                    }
+                    else
+                    {
+                        nMateriallist.Add(new Material
+                        {
+                            MaterialNo = material.MaterialNo,
+                            MaterialNumber = material.MaterialNumber,
+                            Name = material.Name,
+                            Quantity = material.Quantity,
+                            QuantityLimit = material.QuantityLimit,
+                            Specification = material.Specification,
+                            Property = material.Property,
+                            Price = material.Price,
+                            Unit = material.Unit,
+                            // Composition = 1,
+                            // BaseQuantity = 2,
+                            WarehouseId = warehouseId,
+                            MaterialBasicId = material.MaterialBasicId,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                    }
                 }
             }
 

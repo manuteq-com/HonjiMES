@@ -1,26 +1,41 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" [showValidationSummary]="true">
+    <dx-form id="form"
+        [formData]="formData"
+        [readOnly]="readOnly"
+        [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation"
+        [minColWidth]="minColWidth"
+        [colCount]="colCount"
+        [width]="width"
+        [showValidationSummary]="true">
+
         <dxi-item dataField="MaterialNo">
-            <dxi-validation-rule type="required" message="元件品號 必填"></dxi-validation-rule>
-            <dxi-validation-rule type="async" message="元件品號已存在" [validationCallback]="asyncValidation"></dxi-validation-rule>
-            <dxo-label text="元件品號"></dxo-label>
+            <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
+            <dxi-validation-rule type="async" message="品號已存在" [validationCallback]="asyncValidation"></dxi-validation-rule>
+            <dxo-label text="品號"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Name">
-            <dxi-validation-rule type="required" message="元件品名 必填"></dxi-validation-rule>
-            <dxo-label text="元件品名"></dxo-label>
+            <dxi-validation-rule type="required" message="品名 必填"></dxi-validation-rule>
+            <dxo-label text="品名"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="MaterialType" editorType="dxSelectBox" [editorOptions]="MaterialTypeOptions">
+            <dxo-label text="品號種類"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="Quantity"  dataType="number" editorType="dxNumberBox"
         [editorOptions]="NumberBoxOptions">
             <dxi-validation-rule type="required" message="庫存量 必填"></dxi-validation-rule>
             <dxo-label text="庫存量"></dxo-label>
         </dxi-item> -->
+        <dxi-item dataField="QuantityLimit" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
+            <dxi-validation-rule type="required" message="庫存警示 必填"></dxi-validation-rule>
+            <dxo-label text="庫存警示"></dxo-label>
+        </dxi-item>
         <dxi-item dataField="Specification">
             <dxi-validation-rule type="required" message="規格 必填"></dxi-validation-rule>
             <dxo-label text="規格"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Property">
-            <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule> -->
             <dxo-label text="屬性"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)">
@@ -39,7 +54,7 @@
             <dxo-label text="存放庫別"></dxo-label>
         </dxi-item> -->
         <dxi-item dataField="wid" [visible]="btnVisibled">
-            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule> -->
             <dxo-label text="存放庫別"></dxo-label>
             <dx-drop-down-box
                 [(value)]="gridBoxValue"
@@ -65,7 +80,7 @@
         </dxi-item>
 
         <dxi-item dataField="wid" [visible]="!btnVisibled">
-            <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule> -->
             <dxo-label text="存放庫別"></dxo-label>
             <dx-drop-down-box
                 [(value)]="gridBoxValue"
@@ -77,7 +92,7 @@
                     <dx-data-grid
                         keyExpr="Id"
                         [dataSource]="WarehouseList"
-                        [columns]="['Name']"
+                        [columns]="['名稱']"
                         [selection]="{ mode: 'multiple' }"
                         [hoverStateEnabled]="true"
                         [paging]="{ enabled: true, pageSize: 10 }"
@@ -89,11 +104,16 @@
                 </div>
             </dx-drop-down-box>
         </dxi-item>
+
         <dxi-item dataField="SupplierId" [editorOptions]="selectSupplier" editorType="dxSelectBox">
             <dxo-label text="供應商"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Weight" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             <dxo-label text="重量(公斤)"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="MaterialNumber">
+            <!-- <dxi-validation-rule type="required" message="廠內品號 必填"></dxi-validation-rule> -->
+            <dxo-label text="廠內品號"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Remarks">
             <dxo-label text="備註"></dxo-label>

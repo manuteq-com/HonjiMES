@@ -143,7 +143,7 @@ namespace HonjiMES.Controllers
             var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
             if (MaterialBasicData == null)
             {
-                return Ok(MyFun.APIResponseError("[元件品號] 不存在，請確認資訊是否正確。"));
+                return Ok(MyFun.APIResponseError("[品號] 不存在，請確認資訊是否正確。"));
             } else {
                 material.MaterialBasicId = MaterialBasicData.Id;
             }
@@ -155,24 +155,26 @@ namespace HonjiMES.Controllers
                 //新增時檢查主件品號是否重複
                 if (_context.Materials.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.WarehouseId == warehouseId && x.DeleteFlag == 0).Any())
                 {
-                    sRepeatMaterial += "元件品號 [" + material.MaterialNo + "] 已經存在 [" + material.warehouseData[warehouseId - 1].Name + "] !<br/>";
+                    sRepeatMaterial += "品號 [" + material.MaterialNo + "] 已經存在 [" + material.warehouseData.Where(x => x.Id == warehouseId).FirstOrDefault().Name + "] !<br/>";
                 }
                 else
                 {
                     nMateriallist.Add(new Material
                     {
                         MaterialNo = material.MaterialNo,
+                        MaterialNumber = MaterialBasicData.MaterialNumber,
                         Name = material.Name,
                         Quantity = material.Quantity,
+                        QuantityLimit = 0,
                         Specification = material.Specification,
                         Property = material.Property,
                         Price = material.Price,
                         Unit = material.Unit,
-                        Composition = 1,
-                        BaseQuantity = 2,
+                        // Composition = 1,
+                        // BaseQuantity = 2,
                         WarehouseId = warehouseId,
                         MaterialBasicId = material.MaterialBasicId,
-                         CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = MyFun.GetUserID(HttpContext)
                     });
                 }
             }

@@ -243,7 +243,7 @@ namespace HonjiMES.Controllers
             {
                 if (item.MaterialType == 1 && item.Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) { //如果是[原料]，則預設101倉
                     WarehouseIdVal = warehousesM.Id;
-                } else if (item.MaterialType != 1 && item.Materials.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) { //如果不是[原料]，則預設301倉
+                } else if (item.MaterialType == 2 && item.Materials.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) { //如果是[成品]，則預設301倉
                     WarehouseIdVal = warehousesP.Id;
                 } else {
                     WarehouseIdVal = 0;
@@ -252,7 +252,8 @@ namespace HonjiMES.Controllers
                 {
                     TempId = TempId++,
                     // DataType = 1,
-                    DataType = item.MaterialType == 1 ? 1 : 2, // 重要!! 在資料庫裡，只要[MaterialType]設為1就表示[原料]，其餘皆為成品(包括null)。
+                    // DataType = item.MaterialType == 1 ? 1 : 2, // 重要!! 在資料庫裡，只要[MaterialType]設為1就表示[原料]，其餘皆為成品(包括null)。
+                    DataType = item.MaterialType,
                     DataId = item.Id,
                     DataNo = item.MaterialNo,
                     Name = item.Name,

@@ -9,6 +9,7 @@ import { APIResponse } from 'src/app/app.module';
 import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { Myservice } from 'src/app/service/myservice';
 @Component({
     selector: 'app-material-basic-list',
     templateUrl: './material-basic-list.component.html',
@@ -35,8 +36,10 @@ export class MaterialBasicListComponent implements OnInit {
     detailfilter: any;
     supplierList: any;
     NumberBoxOptions: any;
+    materialTypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+        this.materialTypeList = myservice.getlistMaterialType();
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
@@ -89,7 +92,7 @@ export class MaterialBasicListComponent implements OnInit {
         );
     }
     ngOnInit() {
-        this.titleService.setTitle('原料庫存');
+        this.titleService.setTitle('品號資料');
     }
     creatdata() {
         this.itemkey = new Date().getTime();

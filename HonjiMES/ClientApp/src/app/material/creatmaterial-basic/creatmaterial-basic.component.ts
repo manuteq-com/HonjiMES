@@ -7,6 +7,7 @@ import { Material } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-creatmaterial-basic',
@@ -35,7 +36,7 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     warehousesOptions: any;
     NumberBoxOptions: any;
-    gridBoxValue: number[] = [1];
+    gridBoxValue: number[];
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
@@ -45,8 +46,16 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     supplierList: any;
     WarehouseList: any;
     selectSupplier: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
+    MaterialTypeOptions: any;
 
-    constructor(private http: HttpClient, private app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
+        this.MaterialTypeOptions = {
+            items: myservice.getlistMaterialType(),
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            searchEnabled: true,
+            onValueChanged: this.onValueChanged.bind(this)
+        };
         this.formData = null;
         // this.editOnkeyPress = true;
         // this.enterKeyAction = 'moveFocus';
@@ -70,24 +79,26 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
             }
         );
     }
+    ngOnInit() {
+    }
     ngOnChanges() {
-        debugger;
+        // debugger;
         this.readOnly = true;
         if (this.editStatus !== null) {
             this.readOnly = this.editStatus;
         }
-        this.gridBoxValue = [1];
+        // this.gridBoxValue = [1];
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.formData = {
             MaterialNo: '',
             Name: '',
             // Quantity: '',
             Specification: '',
-            Property: '採購件',
+            Property: '',
             Price: 0,
             Unit: ''
         };
-        if (this.masterkey !== null) {
+        if (this.masterkey !== null && this.masterkey !== undefined) {
             this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.masterkey).subscribe(
                 (s) => {
                     if (s.success) {
@@ -137,7 +148,12 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
             }
         );
     }
-    ngOnInit() {
+    onValueChanged(e) {
+        if (e.value === 1) {
+            this.formData.Property = '採購件';
+        } else {
+
+        }
     }
     validate_before(): boolean {
         // 表單驗證

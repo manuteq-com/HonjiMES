@@ -34,24 +34,24 @@
             <dxi-item dataField="Specification" [editorOptions]="{ disabled: true }"></dxi-item>
             <dxi-item dataField="Property" [editorOptions]="{ disabled: true }"></dxi-item>
             <!-- <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item> -->
-            <dxi-item dataField="Unit"></dxi-item>
-            <dxi-item dataField="WarehouseId"></dxi-item>
+            <!-- <dxi-item dataField="Unit"></dxi-item> -->
+            <dxi-item dataField="WarehouseId" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改原料明細資訊" [width]="800" [height]="410">
+        <dxo-popup [showTitle]="true" title="修改明細資訊" [width]="800" [height]="410">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
-    <dxi-column dataField="MaterialNo" caption="元件品號" [visible]="visible"></dxi-column>
-    <dxi-column dataField="Name" caption="元件品名" [visible]="visible"></dxi-column>
+    <dxi-column dataField="MaterialNo" caption="品號" [visible]="visible"></dxi-column>
+    <dxi-column dataField="Name" caption="品名" [visible]="visible"></dxi-column>
     <dxi-column dataField="Quantity" caption="庫存量"></dxi-column>
     <dxi-column dataField="QuantityLimit" caption="庫存警示"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" [visible]="visible"></dxi-column>
     <dxi-column dataField="Property" caption="屬性" [visible]="visible"></dxi-column>
     <!-- <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)"></dxi-column> -->
-    <dxi-column dataField="Unit" caption="單位"></dxi-column>
+    <!-- <dxi-column dataField="Unit" caption="單位"></dxi-column> -->
     <!-- <dxi-column dataField="Supplier" caption="供應商">
         <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
@@ -61,7 +61,7 @@
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column type="buttons" caption="新增原料明細" cssClass="addmod" [width]="200">
+    <dxi-column type="buttons" caption="新增明細資訊" cssClass="addmod" [width]="200">
         <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
@@ -70,14 +70,14 @@
         <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
     </dxi-column>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
+<dx-popup [showTitle]="true" title="新增明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod"
         [exceldata]="exceldata"></app-creatmaterial>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="調整原料庫存" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="700" [height]="580"
+<dx-popup [showTitle]="true" title="調整庫存" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="700" [height]="580"
     [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"

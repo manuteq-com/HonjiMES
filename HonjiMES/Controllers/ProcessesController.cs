@@ -460,7 +460,8 @@ namespace HonjiMES.Controllers
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.MaterialNo;
                     BasicDataName = BasicData.Name;
-                    DataType = BasicData.MaterialType == 1 ? 1 : 2;
+                    // DataType = BasicData.MaterialType == 1 ? 1 : 2;
+                    DataType = BasicData.MaterialType ?? 0;
                 // }
                 // else if (DataType == 2)
                 // {
