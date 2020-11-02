@@ -44,6 +44,8 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
+    <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="120"></dxi-column>
+    <dxi-column dataField="DataNo" caption="品號" [width]="160"></dxi-column>
     <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
     <dxi-column dataField="CreateUser" caption="回報人員" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>

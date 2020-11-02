@@ -298,12 +298,13 @@ namespace HonjiMES.Controllers
                             orderHead.OrderNo = key + OrderNo + NoCount.ToString("000");
                             orderHead.CreateTime = dt;
                             orderHead.CreateUser = MyFun.GetUserID(HttpContext);
-                            
+
                             // 訂單複製功能，必須清除關聯資料。
                             var OrderDetails = new List<OrderDetail>();
                             foreach (var item in OrderDetail)
                             {
-                                OrderDetails.Add(new OrderDetail{
+                                OrderDetails.Add(new OrderDetail
+                                {
                                     CustomerNo = item.CustomerNo,
                                     Serial = item.Serial,
                                     ProductBasicId = item.ProductBasicId,
@@ -453,7 +454,7 @@ namespace HonjiMES.Controllers
 
                         // 自動新增Product資料。(2020/08/20 確認自動新增)
                         var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301").FirstAsync();// 固定新增301成品倉
-                        var  nProduct = new Product
+                        var nProduct = new Product
                         {
                             ProductNo = Productitemlist[0].Trim(),
                             ProductNumber = Productitemlist[0].Trim(),
@@ -464,7 +465,7 @@ namespace HonjiMES.Controllers
                             MaterialRequire = 1,
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext),
-                            WarehouseId  = Warehouses.Id 
+                            WarehouseId = Warehouses.Id
                         };
                         nProduct.ProductLogs.Add(new ProductLog
                         {
@@ -584,9 +585,12 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<OrderHead>>> CheckData(int id)
         {
             var orderHead = _context.OrderHeads.Find(id);
-            if(orderHead.CheckFlag == 0){
+            if (orderHead.CheckFlag == 0)
+            {
                 orderHead.CheckFlag = 1;
-            }else{
+            }
+            else
+            {
                 orderHead.CheckFlag = 0;
             }
             try
@@ -618,26 +622,83 @@ namespace HonjiMES.Controllers
         {
             // _context.ChangeTracker.LazyLoadingEnabled = true;
             var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Order.Status == 0)
-                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo{
-                OrderNo = x.Order.OrderNo,
-                OrderType = x.Order.OrderType,
-                CustomerNo = x.Order.CustomerNo,
-                Customer = x.Order.Customer,
-                MachineNo = x.MachineNo,
-                ProductBasicId = x.ProductBasicId,
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-                OriginPrice = x.OriginPrice,
-                Price = x.Price,
-                DueDate = x.DueDate,
-                ReplyDate = x.ReplyDate,
-                Remark = x.Remark,
-                ReplyRemark = x.ReplyRemark,
-                SaleCount = x.SaleCount,
-                SaledCount = x.SaledCount,
-            });
+                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo
+                {
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    CustomerNo = x.CustomerNo,
+                    Serial = x.Serial,
+                    ProductBasicId = x.ProductBasicId,
+                    ProductId = x.ProductId,
+                    Quantity = x.Quantity,
+                    OriginPrice = x.OriginPrice,
+                    Discount = x.Discount,
+                    DiscountPrice = x.DiscountPrice,
+                    Price = x.Price,
+                    Delivered = x.Delivered,
+                    Unit = x.Unit,
+                    DueDate = x.DueDate,
+                    Remark = x.Remark,
+                    ReplyDate = x.ReplyDate,
+                    ReplyRemark = x.ReplyRemark,
+                    MachineNo = x.MachineNo,
+                    Drawing = x.Drawing,
+                    Ink = x.Ink,
+                    Label = x.Label,
+                    Package = x.Package,
+                    Reply = x.Reply,
+                    SaleCount = x.SaleCount,
+                    SaledCount = x.SaledCount,
+                    DeleteFlag = x.DeleteFlag,
+                    CreateTime = x.CreateTime,
+                    CreateUser = x.CreateUser,
+                    UpdateTime = x.UpdateTime,
+                    UpdateUser = x.UpdateUser,
+
+                    OrderNo = x.Order.OrderNo,
+                    OrderType = x.Order.OrderType,
+                    Customer = x.Order.Customer,
+                });
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             // _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
+        /// 交易單價紀錄報表_old
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductLog>>> GetDealPriceRecords_old(
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.ProductLogs.Where(x => x.DeleteFlag == 0 && x.Message == "銷貨");
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            var q = ((List<ProductLog>)FromQueryResult.data).Select(x => x.Id).ToList();
+            FromQueryResult.data = data.Where(x => q.Contains(x.Id)).LeftOuterJoin(_context.SaleHeads.Include(y => y.SaleDetailNews).ThenInclude(z => z.Order), x => x.LinkOrder, y => y.SaleNo, (ProductLogs, SaleHeads) => new
+            {
+                ProductLogs.Id,
+                ProductLogs,
+                SaleHeads,
+                SaleHeads.SaleDetailNews,
+            }).ToList();
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+
+        /// <summary>
+        /// 交易單價紀錄
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<SaleDetailNew>> GetDealPriceRecord(int? id,
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.SaleDetailNews.AsQueryable().Where(x => x.OrderDetailId == id).Include(x => x.Sale);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
     }

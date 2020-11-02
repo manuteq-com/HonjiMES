@@ -43,6 +43,7 @@ export class QualityRecordComponent implements OnInit, OnChanges {
     NCVisible: boolean;
     remoteOperations: any;
     detailfilter: any;
+    ProductList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
 
@@ -65,6 +66,13 @@ export class QualityRecordComponent implements OnInit, OnChanges {
             (s2) => {
                 if (s2.success) {
                     this.UserList = s2.data;
+                }
+            }
+        );
+        this.app.GetData('/Products/GetProductBasics').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.ProductList = s.data;
                 }
             }
         );

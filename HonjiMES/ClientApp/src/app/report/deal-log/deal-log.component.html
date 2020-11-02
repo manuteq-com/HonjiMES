@@ -1,0 +1,39 @@
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
+    >
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    </dxo-editing>
+
+    <dxi-column dataField="Sale.SaleNo" caption="銷貨單號" [width]="150"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="品號" [width]="220" alignment="center"></dxi-column>
+    <dxi-column dataField="Name" caption="品名" [allowEditing]="false" [width]="200"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [allowEditing]="false" [width]="220"></dxi-column>
+    <dxi-column dataField="Quantity" caption="原始數量" [width]="80"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="Sale.SaleDate" caption="銷貨日期" dataType="date" [width]="120"></dxi-column>
+    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+
+</dx-data-grid>
