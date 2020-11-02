@@ -21,7 +21,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     @Input() itemkeyval: any;
     @Input() randomkeyval: any;
-    @Input() ProductBasicList: any;
+    @Input() MaterialBasicList: any;
     labelLocation: string;
     readOnly: boolean;
     showColon: boolean;
@@ -247,7 +247,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
                                 this.dataGrid2.instance.clearSelection();
                                 this.childOuter.emit(true);
                                 notify({
-                                    message: sendRequest.message,
+                                    message: '存檔完成',
                                     position: {
                                         my: 'center top',
                                         at: 'center top'

@@ -14,12 +14,7 @@ namespace HonjiMES.Models
     {
         public ProductBasic()
         {
-            BillOfMaterials = new HashSet<BillOfMaterial>();
-            OrderDetails = new HashSet<OrderDetail>();
             Products = new HashSet<Product>();
-            RequisitionDetails = new HashSet<RequisitionDetail>();
-            Requisitions = new HashSet<Requisition>();
-            SaleDetailNews = new HashSet<SaleDetailNew>();
         }
 
         /// <summary>
@@ -86,17 +81,7 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
-        [InverseProperty(nameof(BillOfMaterial.ProductBasic))]
-        public virtual ICollection<BillOfMaterial> BillOfMaterials { get; set; }
-        [InverseProperty(nameof(OrderDetail.ProductBasic))]
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         [InverseProperty(nameof(Product.ProductBasic))]
         public virtual ICollection<Product> Products { get; set; }
-        [InverseProperty(nameof(RequisitionDetail.ProductBasic))]
-        public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
-        [InverseProperty(nameof(Requisition.ProductBasic))]
-        public virtual ICollection<Requisition> Requisitions { get; set; }
-        [InverseProperty(nameof(SaleDetailNew.ProductBasic))]
-        public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

@@ -15,6 +15,8 @@ namespace HonjiMES.Models
         public string AdjustNo { get; set; }
         [Column("link_order", TypeName = "varchar(50)")]
         public string LinkOrder { get; set; }
+        [Column("data_type", TypeName = "int(11)")]
+        public int? DataType { get; set; }
         [Column("data_id", TypeName = "int(11)")]
         public int DataId { get; set; }
         [Column("data_no", TypeName = "varchar(50)")]

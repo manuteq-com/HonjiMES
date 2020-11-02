@@ -29,6 +29,8 @@ export class WorkorderListComponent implements OnInit {
     editpopupVisible: boolean;
     checkVisible: boolean;
     randomkey: number;
+    iteminfokey: any;
+    infopopupVisible: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.editpopupVisible) {
@@ -240,6 +242,12 @@ export class WorkorderListComponent implements OnInit {
                 }
             }
         });
+    }
+    infodata() {
+        this.iteminfokey = null;
+        this.infopopupVisible = true;
+        this.randomkey = new Date().getTime();
+        this.getWorkOrderData();
     }
     creatdata() {
         // this.creatpopupVisible = true;

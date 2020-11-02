@@ -257,24 +257,24 @@ namespace HonjiMES.Controllers
                 {
                     var BasicDataNo = "";
                     var BasicDataName = "";
-                    if (item.DataType == 1)
-                    {
+                    // if (item.DataType == 1)
+                    // {
                         var BasicData = _context.MaterialBasics.Find(item.DataId);
                         BasicDataNo = BasicData.MaterialNo;
                         BasicDataName = BasicData.Name;
-                    }
-                    else if (item.DataType == 2)
-                    {
-                        var BasicData = _context.ProductBasics.Find(item.DataId);
-                        BasicDataNo = BasicData.ProductNo;
-                        BasicDataName = BasicData.Name;
-                    }
-                    else if (item.DataType == 3)
-                    {
-                        var BasicData = _context.WiproductBasics.Find(item.DataId);
-                        BasicDataNo = BasicData.WiproductNo;
-                        BasicDataName = BasicData.Name;
-                    }
+                    // }
+                    // else if (item.DataType == 2)
+                    // {
+                    //     var BasicData = _context.ProductBasics.Find(item.DataId);
+                    //     BasicDataNo = BasicData.ProductNo;
+                    //     BasicDataName = BasicData.Name;
+                    // }
+                    // else if (item.DataType == 3)
+                    // {
+                    //     var BasicData = _context.WiproductBasics.Find(item.DataId);
+                    //     BasicDataNo = BasicData.WiproductNo;
+                    //     BasicDataName = BasicData.Name;
+                    // }
 
                     var nProcessesData = new ProcessesData
                     {
@@ -454,21 +454,25 @@ namespace HonjiMES.Controllers
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
-                if (DataType == 1)
-                {
-
-                }
-                else if (DataType == 2)
-                {
-                    var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
+                // if (DataType == 1)
+                // {
+                    var BasicData = _context.MaterialBasics.Find(WorkOrderData.WorkOrderHead.DataId);
                     BasicDataID = BasicData.Id;
-                    BasicDataNo = BasicData.ProductNo;
+                    BasicDataNo = BasicData.MaterialNo;
                     BasicDataName = BasicData.Name;
-                }
-                else if (DataType == 3)
-                {
+                    DataType = BasicData.MaterialType == 1 ? 1 : 2;
+                // }
+                // else if (DataType == 2)
+                // {
+                //     var BasicData = _context.ProductBasics.Find(WorkOrderData.WorkOrderHead.DataId);
+                //     BasicDataID = BasicData.Id;
+                //     BasicDataNo = BasicData.ProductNo;
+                //     BasicDataName = BasicData.Name;
+                // }
+                // else if (DataType == 3)
+                // {
 
-                }
+                // }
                 var nWorkOrderHead = new WorkOrderHead
                 {
                     WorkOrderNo = workOrderNo,
@@ -599,9 +603,9 @@ namespace HonjiMES.Controllers
                 }
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
-                var ProductBasic = await _context.ProductBasics.FindAsync(OWorkOrderHeads.DataId);
-                OWorkOrderHeads.DataNo = ProductBasic.ProductNo;
-                OWorkOrderHeads.DataName = ProductBasic.Name;
+                var MaterialBasic = await _context.MaterialBasics.FindAsync(OWorkOrderHeads.DataId);
+                OWorkOrderHeads.DataNo = MaterialBasic.MaterialNo;
+                OWorkOrderHeads.DataName = MaterialBasic.Name;
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
                 OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try
@@ -675,8 +679,8 @@ namespace HonjiMES.Controllers
             [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            // var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+            // var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
             var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime);
             // var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
             // if (!string.IsNullOrWhiteSpace(qSearchValue.MachineNo))
@@ -686,24 +690,24 @@ namespace HonjiMES.Controllers
 
             foreach (var item in data)
             {
-                if (item.DataType == 1)
-                {
+                // if (item.DataType == 1)
+                // {
                     var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                     item.DataNo = BasicData.MaterialNo;
                     item.DataName = BasicData.Name;
-                }
-                else if (item.DataType == 2)
-                {
-                    var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
-                    item.DataNo = BasicData.ProductNo;
-                    item.DataName = BasicData.Name;
-                }
-                else if (item.DataType == 3)
-                {
-                    var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
-                    item.DataNo = BasicData.WiproductNo;
-                    item.DataName = BasicData.Name;
-                }
+                // }
+                // else if (item.DataType == 2)
+                // {
+                //     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                //     item.DataNo = BasicData.ProductNo;
+                //     item.DataName = BasicData.Name;
+                // }
+                // else if (item.DataType == 3)
+                // {
+                //     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                //     item.DataNo = BasicData.WiproductNo;
+                //     item.DataName = BasicData.Name;
+                // }
             }
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

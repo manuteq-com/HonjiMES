@@ -95,61 +95,61 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
                 }
             }
         );
-        if (this.modval === 'material') {
-            this.app.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
-                (s) => {
-                    console.log(s);
-                    if (s.success) {
-                        this.itemval1 = '元件品號：' + s.data.MaterialNo;
-                        this.itemval2 = '元件品名：' + s.data.Name;
-                        this.itemval3 = '　庫存數：' + s.data.Quantity;
-                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
-                        if (s.data.Quantity >= 0) {
-                            this.minval = (-s.data.Quantity);
-                        }
-                        this.SetEditorOptions();
+        // if (this.modval === 'material') {
+        this.app.GetData('/Materials/GetMaterial/' + this.itemkeyval).subscribe(
+            (s) => {
+                console.log(s);
+                if (s.success) {
+                    this.itemval1 = '　　品號：' + s.data.MaterialNo;
+                    this.itemval2 = '　　品名：' + s.data.Name;
+                    this.itemval3 = '　庫存數：' + s.data.Quantity;
+                    this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
+                    if (s.data.Quantity >= 0) {
+                        this.minval = (-s.data.Quantity);
                     }
+                    this.SetEditorOptions();
                 }
-            );
-        } else if (this.modval === 'product') {
-            this.app.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
-                (s) => {
-                    console.log(s);
-                    if (s.success) {
-                        this.itemval1 = '主件品號：' + s.data.ProductNo;
-                        this.itemval2 = '主件品名：' + s.data.Name;
-                        this.itemval3 = '　庫存數：' + s.data.Quantity;
-                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
-                        if (s.data.Quantity >= 0) {
-                            this.minval = (-s.data.Quantity);
-                        }
-                        this.SetEditorOptions();
-                    }
-                }
-            );
-        } else if (this.modval === 'wiproduct') {
-            this.app.GetData('/Wiproducts/GetWiproduct/' + this.itemkeyval).subscribe(
-                (s) => {
-                    console.log(s);
-                    if (s.success) {
-                        this.itemval1 = '主件品號：' + s.data.WiproductNo;
-                        this.itemval2 = '主件品名：' + s.data.Name;
-                        this.itemval3 = '　庫存數：' + s.data.Quantity;
-                        this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
-                        if (s.data.Quantity >= 0) {
-                            this.minval = (-s.data.Quantity);
-                        }
-                        this.SetEditorOptions();
-                    }
-                }
-            );
-        }
+            }
+        );
+        // } else if (this.modval === 'product') {
+        //     this.app.GetData('/Products/GetProduct/' + this.itemkeyval).subscribe(
+        //         (s) => {
+        //             console.log(s);
+        //             if (s.success) {
+        //                 this.itemval1 = '主件品號：' + s.data.ProductNo;
+        //                 this.itemval2 = '主件品名：' + s.data.Name;
+        //                 this.itemval3 = '　庫存數：' + s.data.Quantity;
+        //                 this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
+        //                 if (s.data.Quantity >= 0) {
+        //                     this.minval = (-s.data.Quantity);
+        //                 }
+        //                 this.SetEditorOptions();
+        //             }
+        //         }
+        //     );
+        // } else if (this.modval === 'wiproduct') {
+        //     this.app.GetData('/Wiproducts/GetWiproduct/' + this.itemkeyval).subscribe(
+        //         (s) => {
+        //             console.log(s);
+        //             if (s.success) {
+        //                 this.itemval1 = '主件品號：' + s.data.WiproductNo;
+        //                 this.itemval2 = '主件品名：' + s.data.Name;
+        //                 this.itemval3 = '　庫存數：' + s.data.Quantity;
+        //                 this.itemval4 = '　　倉別：' + s.data.Warehouse.Name;
+        //                 if (s.data.Quantity >= 0) {
+        //                     this.minval = (-s.data.Quantity);
+        //                 }
+        //                 this.SetEditorOptions();
+        //             }
+        //         }
+        //     );
+        // }
     }
     SetEditorOptions() {
         this.QuantityEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             value: 0,
             min: this.minval,
             onValueChanged: this.QuantityValueChanged.bind(this)
@@ -199,13 +199,13 @@ export class InventoryChangeComponent implements OnInit, OnChanges {
         }
         this.formData = this.myform.instance.option('formData');
         this.postval = new InventoryChange();
-        if (this.modval === 'material') {
-            this.postval.MaterialLog = this.formData;
-        } else if (this.modval === 'product') {
-            this.postval.ProductLog = this.formData;
-        } else if (this.modval === 'wiproduct') {
-            this.postval.WiproductLog = this.formData;
-        }
+        // if (this.modval === 'material') {
+        this.postval.MaterialLog = this.formData;
+        // } else if (this.modval === 'product') {
+        //     this.postval.ProductLog = this.formData;
+        // } else if (this.modval === 'wiproduct') {
+        //     this.postval.WiproductLog = this.formData;
+        // }
         this.postval.id = this.itemkeyval;
         this.postval.mod = this.modval;
         const sendRequest = await SendService.sendRequest(this.http, '/Inventory/inventorychange', 'POST', { values: this.postval });

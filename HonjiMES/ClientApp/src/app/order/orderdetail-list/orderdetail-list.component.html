@@ -37,7 +37,7 @@
         [allowUpdating]="true"
         [allowDeleting]="true">
         <dxo-form colCount=5>
-            <dxi-item dataField="ProductBasicId">
+            <dxi-item dataField="MaterialBasicId">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="Quantity">
@@ -81,14 +81,14 @@
 
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="200"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品號" [width]="200" [allowEditing]="false" editCellTemplate="ProductBasicIdEditCellTemplate">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="200" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false" [width]="100">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="100">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false" [width]="200">
-        <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+    <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" [width]="200">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
 
     <dxi-column dataField="Quantity" caption="數量" dataType="number"  [width]="50"></dxi-column>
@@ -115,10 +115,10 @@
     <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="180"></dxi-column>
     <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="180"></dxi-column>
 
-    <div *dxTemplate="let data of 'ProductBasicIdEditCellTemplate'">
+    <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
-            [dataSource]="{ paginate: true, store: { type: 'array', data: ProductBasicList, key:'Id' } }"
-            valueExpr="Id" displayExpr="ProductNo" [searchEnabled]="true"></dx-select-box>
+            [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }"
+            valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
     </div>
     <div *dxTemplate="let d of 'diffCellTemplate'" >
         <ul style="list-style-type:none">

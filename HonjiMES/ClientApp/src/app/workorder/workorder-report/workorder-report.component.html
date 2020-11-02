@@ -69,7 +69,7 @@
             </dxi-item>
             <dxi-item dataField="CreateUser" [editorOptions]="UserEditorOptions" [colSpan]="2" editorType="dxSelectBox">
                 <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
-                <dxo-label text="操作人員"></dxo-label>
+                <dxo-label text="人員"></dxo-label>
             </dxi-item>
             <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
                 <dxo-label text="製程序號"></dxo-label>
@@ -134,10 +134,12 @@
                 <dxo-label text="需求數量"></dxo-label>
             </dxi-item> -->
             <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
-                <dxo-label text="良品數量"></dxo-label>
+                <dxi-validation-rule type="required" message="良品數量 必填"></dxi-validation-rule>
+                <dxo-label text="良品"></dxo-label>
             </dxi-item>
             <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="1" [visible]="NgCountVisible">
-                <dxo-label text="NG數量"></dxo-label>
+                <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
+                <dxo-label text="NG"></dxo-label>
             </dxi-item>
 
 

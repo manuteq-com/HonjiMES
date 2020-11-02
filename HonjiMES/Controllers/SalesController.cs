@@ -53,9 +53,9 @@ namespace HonjiMES.Controllers
             {
                 data = data.Where(x => x.SaleDetailNews.Where(y => y.OrderDetail.MachineNo.Contains(qSearchValue.MachineNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
-            if (!string.IsNullOrWhiteSpace(qSearchValue.ProductNo))
+            if (!string.IsNullOrWhiteSpace(qSearchValue.MaterialNo))
             {
-                data = data.Where(x => x.SaleDetailNews.Where(y => y.ProductNo.Contains(qSearchValue.ProductNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+                data = data.Where(x => x.SaleDetailNews.Where(y => y.MaterialNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
             }
 
             data = data.Include(x => x.SaleDetailNews);
@@ -73,7 +73,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;//停止關連，減少資料
             var orderlists = await _context.OrderDetails
-                .Where(x => x.DeleteFlag == 0 && x.Order.DeleteFlag == 0 && x.Quantity > x.SaleCount && x.ProductBasic.DeleteFlag == 0)
+                .Where(x => x.DeleteFlag == 0 && x.Order.DeleteFlag == 0 && x.Quantity > x.SaledCount && x.MaterialBasic.DeleteFlag == 0)
                 .Include(x => x.Order).ToListAsync();
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             return Ok(MyFun.APIResponseOK(orderlists));
@@ -230,20 +230,20 @@ namespace HonjiMES.Controllers
                 .OrderByDescending(x => x.Sale.SaleNo).ThenBy(x => x.OrderDetail.Serial)
                 .Select(x => new SaleDetailNewData
                 {
-                    TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                    TotalCount = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
                     Id = x.Id,
                     SaleId = x.SaleId,
                     OrderId = x.OrderId,
                     OrderDetailId = x.OrderDetailId,
-                    ProductBasicId = x.ProductBasicId,
-                    ProductId = x.ProductId,
+                    MaterialBasicId = x.MaterialBasicId,
+                    MaterialId = x.MaterialId,
                     SaleNo = x.Sale.SaleNo,
                     SaleDate = x.Sale.SaleDate,
                     CustomerNo = x.Order.CustomerNo,
                     OrderNo = x.Order.OrderNo,
                     Serial = x.OrderDetail.Serial,
                     MachineNo = x.OrderDetail.MachineNo,
-                    ProductNo = x.ProductNo,
+                    MaterialNo = x.MaterialNo,
                     Status = x.Status,
                     Name = x.Name,
                     Specification = x.Specification,
@@ -275,20 +275,20 @@ namespace HonjiMES.Controllers
             .Include(x => x.Order).Include(x => x.OrderDetail).Include(x => x.Sale).OrderByDescending(x => x.Sale.SaleNo).ThenBy(x => x.OrderDetail.Serial)
             .Select(x => new SaleDetailNewData
             {
-                TotalCount = x.ProductBasic.Products.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                TotalCount = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
                 Id = x.Id,
                 SaleId = x.SaleId,
                 OrderId = x.OrderId,
                 OrderDetailId = x.OrderDetailId,
-                ProductBasicId = x.ProductBasicId,
-                ProductId = x.ProductId,
+                MaterialBasicId = x.MaterialBasicId,
+                MaterialId = x.MaterialId,
                 SaleNo = x.Sale.SaleNo,
                 SaleDate = x.Sale.SaleDate,
                 CustomerNo = x.Order.CustomerNo,
                 OrderNo = x.Order.OrderNo,
                 Serial = x.OrderDetail.Serial,
                 MachineNo = x.OrderDetail.MachineNo,
-                ProductNo = x.ProductNo,
+                MaterialNo = x.MaterialNo,
                 Status = x.Status,
                 Name = x.Name,
                 Specification = x.Specification,
@@ -316,9 +316,37 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery,
             [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.SaleDetailNews.Where(x => x.DeleteFlag == 0 && x.Status == 1) 
-            .Include(x => x.Sale).Include(x => x.Order).Include(x => x.OrderDetail)
-            .OrderByDescending(x => x.Sale.SaleNo);
+            var Users = _context.Users.Where(x => x.DeleteFlag == 0);
+            // var Warehouses = _context.Warehouses.Where(x => x.DeleteFlag == 0);
+            var data = _context.ReturnSales.Where(x => x.DeleteFlag == 0)
+            .Include(x => x.SaleDetailNew)
+            .Include(x => x.SaleDetailNew.Sale)
+            .Include(x => x.SaleDetailNew.Order)
+            .Include(x => x.SaleDetailNew.OrderDetail)
+            .Include(x => x.SaleDetailNew.MaterialBasic)
+            .Include(x => x.SaleDetailNew.Material)
+            .Include(x => x.Warehouse)
+            .OrderByDescending(x => x.SaleDetailNew.Sale.SaleNo)
+            .Select(x => new SaleDetailNewReturnData {
+                Id = x.Id,
+                ReturnWarehouse = x.Warehouse.Code + x.Warehouse.Name,
+                ReturnQuantity = x.Quantity,
+                ReturnReason = x.Reason,
+                ReturnRemarks = x.Remarks,
+                ReturnCreateTime = x.CreateTime,
+                ReturnCreateUser = Users.Where(y => y.Id == x.CreateUser).FirstOrDefault().Realname,
+
+                SaleNo = x.SaleDetailNew.Sale.SaleNo,
+                SaleDate = x.SaleDetailNew.Sale.SaleDate,
+                CustomerNo = x.SaleDetailNew.Order.CustomerNo,
+                OrderNo = x.SaleDetailNew.Order.OrderNo,
+                Serial = x.SaleDetailNew.OrderDetail.Serial,
+                MachineNo = x.SaleDetailNew.OrderDetail.MachineNo,
+                MaterialNo = x.SaleDetailNew.MaterialBasic.MaterialNo,
+                Specification = x.SaleDetailNew.MaterialBasic.Specification
+            });
+            // data.LeftOuterJoin(_context.SaleLogs, x => new {x.CreateTime, x.CreateUser }, y => y.CreateTime, (o,s) => new SaleDetailNewData{
+            //     SaleNo = o.SaleNo, o,s});
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

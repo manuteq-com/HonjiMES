@@ -219,9 +219,10 @@ namespace HonjiMES.Controllers
         {
             try
             {
+                // 2020/10/27 品號合併(使用MaterialBasics資料表)
                 var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-                var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-                var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+                // var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+                // var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
                 var Head = PostBillofPurchaseHead_Detail.BillofPurchaseHead;
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
 
@@ -249,27 +250,27 @@ namespace HonjiMES.Controllers
                 foreach (var item in Detail)
                 {
                     var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Include(x => x.Purchase).Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
-                    if (item.DataType == 1)
-                    {
+                    // if (item.DataType == 1)
+                    // {
                         var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                         item.DataNo = BasicData.MaterialNo;
                         item.DataName = BasicData.Name;
                         item.Specification = BasicData.Specification;
-                    }
-                    else if (item.DataType == 2)
-                    {
-                        var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
-                        item.DataNo = BasicData.ProductNo;
-                        item.DataName = BasicData.Name;
-                        item.Specification = BasicData.Specification;
-                    }
-                    else if (item.DataType == 3)
-                    {
-                        var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
-                        item.DataNo = BasicData.WiproductNo;
-                        item.DataName = BasicData.Name;
-                        item.Specification = BasicData.Specification;
-                    }
+                    // }
+                    // else if (item.DataType == 2)
+                    // {
+                    //     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                    //     item.DataNo = BasicData.ProductNo;
+                    //     item.DataName = BasicData.Name;
+                    //     item.Specification = BasicData.Specification;
+                    // }
+                    // else if (item.DataType == 3)
+                    // {
+                    //     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                    //     item.DataNo = BasicData.WiproductNo;
+                    //     item.DataName = BasicData.Name;
+                    //     item.Specification = BasicData.Specification;
+                    // }
                     item.PurchaseDetailId = PurchaseDetail.Id;
                     item.CreateTime = dt;
                     item.CreateUser = MyFun.GetUserID(HttpContext);
@@ -299,9 +300,10 @@ namespace HonjiMES.Controllers
         {
             try
             {
+                // 2020/10/27 品號合併(使用MaterialBasics資料表)
                 var MaterialBasics = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-                var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
-                var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+                // var ProductBasics = await _context.ProductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
+                // var WiproductBasics = await _context.WiproductBasics.Where(x => x.DeleteFlag == 0).ToListAsync();
                 var PurchaseHeads = await _context.PurchaseHeads.Where(x => x.DeleteFlag == 0).ToListAsync();
                 var Head = PostBillofPurchaseHead_Detail.BillofPurchaseHead;
                 var Detail = PostBillofPurchaseHead_Detail.BillofPurchaseDetail;
@@ -356,27 +358,27 @@ namespace HonjiMES.Controllers
                         if (item2.PurchaseHeadIdArray.Exists(x => x == (item?.PurchaseId ?? 0)))
                         {
                             var PurchaseDetail = _context.PurchaseDetails.AsQueryable().Include(x => x.Purchase).Where(x => x.PurchaseId == item.PurchaseId && x.DataId == item.DataId && x.DeleteFlag == 0).FirstOrDefault();
-                            if (item.DataType == 1)
-                            {
+                            // if (item.DataType == 1)
+                            // {
                                 var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
                                 item.DataNo = BasicData.MaterialNo;
                                 item.DataName = BasicData.Name;
                                 item.Specification = BasicData.Specification;
-                            }
-                            else if (item.DataType == 2)
-                            {
-                                var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
-                                item.DataNo = BasicData.ProductNo;
-                                item.DataName = BasicData.Name;
-                                item.Specification = BasicData.Specification;
-                            }
-                            else if (item.DataType == 3)
-                            {
-                                var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
-                                item.DataNo = BasicData.WiproductNo;
-                                item.DataName = BasicData.Name;
-                                item.Specification = BasicData.Specification;
-                            }
+                            // }
+                            // else if (item.DataType == 2)
+                            // {
+                            //     var BasicData = ProductBasics.Find(x => x.Id == item.DataId);
+                            //     item.DataNo = BasicData.ProductNo;
+                            //     item.DataName = BasicData.Name;
+                            //     item.Specification = BasicData.Specification;
+                            // }
+                            // else if (item.DataType == 3)
+                            // {
+                            //     var BasicData = WiproductBasics.Find(x => x.Id == item.DataId);
+                            //     item.DataNo = BasicData.WiproductNo;
+                            //     item.DataName = BasicData.Name;
+                            //     item.Specification = BasicData.Specification;
+                            // }
                             item.PurchaseDetailId = PurchaseDetail.Id;
                             item.CreateTime = dt;
                             item.CreateUser = MyFun.GetUserID(HttpContext);
@@ -444,9 +446,46 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery,
             [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = _context.BillofPurchaseDetails.Where(x => x.DeleteFlag == 0 && x.CheckCountOut != 0)
-            .Include(x => x.BillofPurchase).Include(x => x.PurchaseDetail).Include(x => x.Purchase)
-            .OrderByDescending(x => x.BillofPurchase.BillofPurchaseNo);
+            var Users = _context.Users.Where(x => x.DeleteFlag == 0);
+            var data = _context.BillofPurchaseReturns
+            .Where(x => x.DeleteFlag == 0)
+            .Include(x => x.BillofPurchaseDetail.BillofPurchase)
+            .Include(x => x.BillofPurchaseDetail.PurchaseDetail)
+            .Include(x => x.BillofPurchaseDetail.Purchase)
+            .Include(x => x.BillofPurchaseDetail.Supplier)
+            .Include(x => x.Warehouse)
+            .OrderByDescending(x => x.CreateTime)
+            .Select(x => new BillofPurchaseReturnData {
+                Id = x.Id,
+                ReturnWarehouse = x.Warehouse.Code + x.Warehouse.Name,
+                ReturnQuantity = x.Quantity,
+                ReturnReason = x.Reason,
+                ReturnRemarks = x.Remarks,
+                ReturnCreateTime = x.CreateTime,
+                ReturnCreateUser = Users.Where(y => y.Id == x.CreateUser).FirstOrDefault().Realname,
+
+                BillofPurchaseNo = x.BillofPurchaseDetail.BillofPurchase.BillofPurchaseNo,
+                PurchaseNo = x.BillofPurchaseDetail.Purchase.PurchaseNo,
+                SupplierName = x.BillofPurchaseDetail.Supplier.Name,
+                ProductNo = x.BillofPurchaseDetail.DataNo,
+                Specification = x.BillofPurchaseDetail.Specification,
+
+                Responsibility = x.Responsibility,
+                ReturnTime = x.ReturnTime,
+                Price = x.Price,
+                PriceAll = x.PriceAll,
+                Unit = x.Unit,
+                UnitCount = x.UnitCount,
+                UnitPrice = x.UnitPrice
+            });
+                
+            // var data = _context.BillofPurchaseDetails
+            //     .Where(x => x.DeleteFlag == 0 && x.CheckCountOut != 0)
+            //     .Include(x => x.BillofPurchase)
+            //     .Include(x => x.PurchaseDetail)
+            //     .Include(x => x.Purchase)
+            //     .OrderByDescending(x => x.BillofPurchase.BillofPurchaseNo);
+
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }

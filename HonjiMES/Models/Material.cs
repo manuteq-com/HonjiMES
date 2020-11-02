@@ -15,6 +15,8 @@ namespace HonjiMES.Models
         public Material()
         {
             MaterialLogs = new HashSet<MaterialLog>();
+            OrderDetails = new HashSet<OrderDetail>();
+            SaleDetailNews = new HashSet<SaleDetailNew>();
         }
 
         /// <summary>
@@ -26,13 +28,18 @@ namespace HonjiMES.Models
         [Column("material_basic_id", TypeName = "int(11)")]
         public int MaterialBasicId { get; set; }
         /// <summary>
-        /// &#20803;&#20214;&#21697;&#34399;
+        /// &#21697;&#34399;
         /// </summary>
         [Required]
         [Column("material_no", TypeName = "varchar(50)")]
         public string MaterialNo { get; set; }
         /// <summary>
-        /// &#20803;&#20214;&#21697;&#21517;
+        /// &#22580;&#20839;&#21697;&#34399;
+        /// </summary>
+        [Column("material_number", TypeName = "varchar(50)")]
+        public string MaterialNumber { get; set; }
+        /// <summary>
+        /// &#21697;&#21517;
         /// </summary>
         [Required]
         [Column("name", TypeName = "varchar(50)")]
@@ -47,6 +54,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("quantity_limit", TypeName = "int(11)")]
         public int? QuantityLimit { get; set; }
+        /// <summary>
+        /// &#38928;&#20808;&#25187;&#24235;&#25976;&#37327;
+        /// </summary>
+        [Column("quantity_adv", TypeName = "int(11)")]
+        public int QuantityAdv { get; set; }
         /// <summary>
         /// &#35215;&#26684;
         /// </summary>
@@ -68,6 +80,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("unit", TypeName = "varchar(50)")]
         public string Unit { get; set; }
+        /// <summary>
+        /// &#21407;&#26009;&#38656;&#27714;&#37327;	
+        /// </summary>
+        [Column("material_require", TypeName = "int(11)")]
+        public int? MaterialRequire { get; set; }
         /// <summary>
         /// &#32068;&#25104;&#29992;&#37327;
         /// </summary>
@@ -112,5 +129,9 @@ namespace HonjiMES.Models
         public virtual Warehouse Warehouse { get; set; }
         [InverseProperty(nameof(MaterialLog.Material))]
         public virtual ICollection<MaterialLog> MaterialLogs { get; set; }
+        [InverseProperty(nameof(OrderDetail.Material))]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [InverseProperty(nameof(SaleDetailNew.Material))]
+        public virtual ICollection<SaleDetailNew> SaleDetailNews { get; set; }
     }
 }

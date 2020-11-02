@@ -32,7 +32,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
     enterKeyDirection: string;
     ProcessBasicList: any;
     SerialNo = 0;
-    productbasicId: any;
+    materialbasicId: any;
     bomId: any;
     bomNo: any;
     bomName: any;
@@ -75,21 +75,21 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         const remote = this.remoteOperations;
         // this.dataSourceDB = createStore({
         //     key: 'Id',
-        //     loadUrl: this.apiurl + this.Controller + '/GetProducts',
+        //     loadUrl: this.apiurl + this.Controller + '/GetMaterials',
         //     insertUrl: this.apiurl + this.Controller + '/PostBillofPurchaseDetail',
-        //     updateUrl: this.apiurl + this.Controller + '/PutProduct',
+        //     updateUrl: this.apiurl + this.Controller + '/PutMaterial',
         //     deleteUrl: this.apiurl + this.Controller + '/DeleteBillofPurchaseDetail',
         // });
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetProductBasics', 'GET', { loadOptions, remote }),
+                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasics', 'GET', { loadOptions, remote }),
             byKey: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutProduct', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
@@ -152,15 +152,15 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         });
     }
     readBomProcess(e, data) {
-        this.productbasicId = data.data.Id;
+        this.materialbasicId = data.data.Id;
         this.bomId = 0;
-        this.bomNo = data.data.ProductNo;
+        this.bomNo = data.data.MaterialNo;
         this.bomName = data.data.Name;
         this.saveDisabled = false;
         this.itemkey = null;
         this.OnChangeValue = 0;
         this.allowAdding = true;
-        this.app.GetData('/BillOfMaterials/GetProcessByProductBasicId/' + this.productbasicId).subscribe(
+        this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + this.materialbasicId).subscribe(
             (s) => {
                 if (s.success) {
                     this.dataSourceDB_Process = s.data;
@@ -170,14 +170,14 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
         );
     }
     onChangeVar(variable: any) {
-        this.productbasicId = 0;
+        this.materialbasicId = 0;
         this.bomId = variable.Id;
         if (variable.Ismaterial) {
             this.bomNo = variable.MaterialNo;
             this.bomName = variable.MaterialName;
         } else {
-            this.bomNo = variable.ProductNo;
-            this.bomName = variable.ProductName;
+            this.bomNo = variable.MaterialNo;
+            this.bomName = variable.MaterialName;
         }
         this.saveDisabled = false;
         this.app.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
@@ -273,7 +273,7 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             });
         });
         this.postval = {
-            ProductBasicId: this.productbasicId,
+            MaterialBasicId: this.materialbasicId,
             BomId: this.bomId,
             MBillOfMaterialList: this.dataSourceDB_Process
         };

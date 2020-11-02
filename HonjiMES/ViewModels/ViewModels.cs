@@ -82,6 +82,37 @@ namespace HonjiMES.Models
     }
 
     /// <summary>
+    /// 銷貨單銷退資訊
+    /// </summary>
+    public class SaleDetailNewReturnData : SaleDetailNewData
+    {
+        public string ReturnWarehouse { get; set; }
+        public int ReturnQuantity { get; set; }
+        public string ReturnReason { get; set; }
+        public string ReturnRemarks { get; set; }
+        public DateTime ReturnCreateTime { get; set; }
+        public string ReturnCreateUser { get; set; }
+    }
+
+    /// <summary>
+    /// 銷貨單銷退資訊
+    /// </summary>
+    public class BillofPurchaseReturnData : BillofPurchaseReturn
+    {
+        public string BillofPurchaseNo { get; set; }
+        public string PurchaseNo { get; set; }
+        public string SupplierName { get; set; }
+        public string ProductNo { get; set; }
+        public string Specification { get; set; }
+        public string ReturnWarehouse { get; set; }
+        public decimal ReturnQuantity { get; set; }
+        public string ReturnReason { get; set; }
+        public string ReturnRemarks { get; set; }
+        public DateTime ReturnCreateTime { get; set; }
+        public string ReturnCreateUser { get; set; }
+    }
+
+    /// <summary>
     /// 庫存調整單
     /// </summary>
     public class AdjustData
@@ -352,6 +383,8 @@ namespace HonjiMES.Models
         public decimal? WorkPrice { get; set; }
         public string Reason { get; set; }
         public string Remarks { get; set; }
+        public int? Responsibility { get; set; }
+        public DateTime? ReturnTime { get; set; }
         public DateTime CreateTime { get; set; }
         public int CreateUser { get; set; }
     }
@@ -683,7 +716,7 @@ namespace HonjiMES.Models
 
     public class MbomData
     {
-        public int ProductBasicId { get; set; }
+        public int MaterialBasicId { get; set; }
         public int BomId { get; set; }
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }

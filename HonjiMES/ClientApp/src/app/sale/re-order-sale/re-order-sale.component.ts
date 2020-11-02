@@ -48,20 +48,15 @@ export class ReOrderSaleComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/Warehouses/GetWarehouseByProduct/' + this.itemkeyval.ProductId).subscribe(
+        this.WarehouseList = [];
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + this.itemkeyval.MaterialBasicId).subscribe(
             (s) => {
-                if (s.success) {
-                    this.WarehouseList = [];
-                    s.data.forEach((element, index) => {
-                        element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-                        this.WarehouseList[index] = element.Warehouse;
-                    });
-                    this.selectBoxOptions = {
-                        items: this.WarehouseList,
-                        displayExpr: 'Name',
-                        valueExpr: 'Id',
-                    };
-                }
+                this.WarehouseList = s.data;
+                this.selectBoxOptions = {
+                    items: this.WarehouseList,
+                    displayExpr: 'Name',
+                    valueExpr: 'Id',
+                };
             }
         );
     }

@@ -303,10 +303,10 @@ namespace HonjiMES.Models
                 ws.GetRow(i).CreateCell(0).SetCellValue(orderHead.CustomerNo);//訂單單號
                 ws.GetRow(i).CreateCell(1).SetCellValue(Detailitem.Serial);//序號
 
-                var Product = _context.Products.Find(Detailitem.ProductId);
+                var Product = _context.Materials.Find(Detailitem.MaterialId);
                 if (Product != null)
                 {
-                    ws.GetRow(i).CreateCell(2).SetCellValue(Product.ProductNo);//品號
+                    ws.GetRow(i).CreateCell(2).SetCellValue(Product.MaterialNo);//品號
                     ws.GetRow(i).CreateCell(3).SetCellValue(Product.Name);//品名
                     ws.GetRow(i).CreateCell(4).SetCellValue(Product.Specification);//規格
                 }
@@ -432,8 +432,8 @@ namespace HonjiMES.Models
                         Type = item.Type,
                         Remarks = item.Remarks,
                         ProductName = item.InverseP.FirstOrDefault()?.ProductBasic?.Name ?? "",
-                        ProductNo = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNo ?? "",
-                        ProductNumber = item.InverseP.FirstOrDefault()?.ProductBasic?.ProductNumber ?? "",
+                        ProductNo = item.InverseP.FirstOrDefault()?.ProductBasic?.MaterialNo ?? "",
+                        ProductNumber = item.InverseP.FirstOrDefault()?.ProductBasic?.MaterialNumber ?? "",
                         ProductSpecification = item.InverseP.FirstOrDefault()?.ProductBasic?.Specification ?? "",
                         ProductPrice = item.InverseP.FirstOrDefault()?.ProductBasic?.Price ?? 0,
                         MaterialBasicId = item.MaterialBasicId,

@@ -155,9 +155,13 @@ export class ProcessControlComponent implements OnInit {
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + dataId).subscribe(
                 (s) => {
                     if (s.success) {
-                        this.editVisible = true;
+                        if (this.app.checkUpdateRoles()) {
+                            this.editVisible = true;
+                        }
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) {
-                            this.runVisible = true;
+                            if (this.app.checkUpdateRoles()) {
+                                this.runVisible = true;
+                            }
                         } else {
                             this.runVisible = false;
                         }

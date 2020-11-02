@@ -101,11 +101,11 @@ namespace HonjiMES.Models
         public bool? Ismaterial { get; set; }
 
         [ForeignKey(nameof(MaterialBasicId))]
-        [InverseProperty("RequisitionDetails")]
+        [InverseProperty("RequisitionDetailMaterialBasics")]
         public virtual MaterialBasic MaterialBasic { get; set; }
         [ForeignKey(nameof(ProductBasicId))]
-        [InverseProperty("RequisitionDetails")]
-        public virtual ProductBasic ProductBasic { get; set; }
+        [InverseProperty("RequisitionDetailProductBasics")]
+        public virtual MaterialBasic ProductBasic { get; set; }
         [ForeignKey(nameof(RequisitionId))]
         [InverseProperty("RequisitionDetails")]
         public virtual Requisition Requisition { get; set; }

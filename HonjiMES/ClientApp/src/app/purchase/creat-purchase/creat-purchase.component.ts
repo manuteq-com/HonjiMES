@@ -281,28 +281,28 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.OriginPriceval = basicData.Price ? basicData.Price : 0;
         this.Priceval = basicData.Price ? basicData.Price : 0;
 
-        if (this.DataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal();
-                }
-            );
-        } else if (this.DataType === 2) {    // 查詢成品
-            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal();
-                }
-            );
-        } else if (this.DataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    this.UpdateVal();
-                }
-            );
-        }
+        // if (this.DataType === 1) {   // 查詢原料
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+                this.UpdateVal();
+            }
+        );
+        // } else if (this.DataType === 2) {    // 查詢成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //             this.UpdateVal();
+        //         }
+        //     );
+        // } else if (this.DataType === 3) {    // 查詢半成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //             this.UpdateVal();
+        //         }
+        //     );
+        // }
     }
     UpdateVal() {
         if (this.DataType === 1 && this.formData.Type === 10) {
@@ -375,25 +375,25 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.WarehousevalB = e.data.WarehouseIdB;
         this.DeliveryTime = e.data.DeliveryTime;
 
-        if (this.DataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                }
-            );
-        } else if (this.DataType === 2) {    // 查詢成品
-            this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                }
-            );
-        } else if (this.DataType === 3) {    // 查詢半成品
-            this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                }
-            );
-        }
+        // if (this.DataType === 1) {   // 查詢原料
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+            }
+        );
+        // } else if (this.DataType === 2) {    // 查詢成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //         }
+        //     );
+        // } else if (this.DataType === 3) {    // 查詢半成品
+        //     this.app.GetData('/Warehouses/GetWarehouseListByWiproductBasic/' + dataId).subscribe(
+        //         (s) => {
+        //             this.WarehouseList = s.data;
+        //         }
+        //     );
+        // }
     }
     onCellPrepared(e) {
         if (e.column.command === 'edit') {

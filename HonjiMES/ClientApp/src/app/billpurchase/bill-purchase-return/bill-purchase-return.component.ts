@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { Myservice } from 'src/app/service/myservice';
 
 @Component({
     selector: 'app-bill-purchase-return',
@@ -34,13 +35,23 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
     UnitPriceEditorOptions: any;
     UnitPriceAllEditorOptions: any;
     WarehouseList: any[];
+    ResponsibilitySelectBoxOptions: any;
+    ResponsibilityTypeList: any;
 
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.ResponsibilityTypeList = myservice.getResponsibilityType();
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 2;
         this.labelLocation = 'left';
+
+        this.ResponsibilitySelectBoxOptions = {
+            items: this.ResponsibilityTypeList,
+            displayExpr: 'Name',
+            valueExpr: 'Id',
+            value: null
+        };
     }
     ngOnInit() {
     }
@@ -52,7 +63,7 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.QuantityEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         value: this.itemkeyval.CheckCountIn - this.itemkeyval.CheckCountOut,
                         min: 1,
                         max: this.itemkeyval.Quantity,
@@ -61,8 +72,9 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.PriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
+                        value: 0,
                         onValueChanged: this.PriceValueChanged.bind(this)
                     };
                     this.UnitCountEditorOptions = {
@@ -73,45 +85,45 @@ export class BillPurchaseReturnComponent implements OnInit, OnChanges {
                     this.UnitPriceEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
                         onValueChanged: this.UnitPriceValueChanged.bind(this)
                     };
                     this.UnitPriceAllEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         min: 0,
                     };
                 }
             }
         );
 
-        if (this.itemkeyval.DataType === 1) {
-            this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
+        // if (this.itemkeyval.DataType === 1) {
+        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.DataId).subscribe(
+            (s) => {
+                if (s.success) {
+                    this.WarehousesDataFormat(s.data);
                 }
-            );
-        } else if (this.itemkeyval.DataType === 2) {
-            this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
-                }
-            );
-        } else if (this.itemkeyval.DataType === 3) {
-            this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + this.itemkeyval.DataId).subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.WarehousesDataFormat(s.data);
-                    }
-                }
-            );
-        }
+            }
+        );
+        // } else if (this.itemkeyval.DataType === 2) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.DataId).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.WarehousesDataFormat(s.data);
+        //             }
+        //         }
+        //     );
+        // } else if (this.itemkeyval.DataType === 3) {
+        //     this.app.GetData('/Warehouses/GetWarehouseByWiproductBasic/' + this.itemkeyval.DataId).subscribe(
+        //         (s) => {
+        //             if (s.success) {
+        //                 this.WarehousesDataFormat(s.data);
+        //             }
+        //         }
+        //     );
+        // }
     }
     WarehousesDataFormat(data) {
         this.WarehouseList = [];

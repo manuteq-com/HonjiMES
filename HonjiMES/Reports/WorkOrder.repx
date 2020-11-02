@@ -95,7 +95,7 @@
                 <Item1 Ref="49" ControlType="XRTableCell" Name="tableCell1" Weight="3.3532404587332167" CanGrow="false" Text="工單" TextAlignment="MiddleCenter" Font="新細明體, 15.75pt, style=Bold, charSet=136">
                   <StylePriority Ref="50" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="51" ControlType="XRTableCell" Name="tableCell2" Weight="1.4041114921366185" CanGrow="false" Multiline="true" Text="料號" TextAlignment="MiddleCenter" Font="新細明體, 10pt" Borders="All">
+                <Item2 Ref="51" ControlType="XRTableCell" Name="tableCell2" Weight="1.4041114921366185" CanGrow="false" Multiline="true" Text="品號" TextAlignment="MiddleCenter" Font="新細明體, 10pt" Borders="All">
                   <StylePriority Ref="52" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
                 <Item3 Ref="53" ControlType="XRTableCell" Name="tableCell227" Weight="5.5026893891409685" CanGrow="false" Multiline="true" TextAlignment="MiddleLeft" Font="新細明體, 15.75pt, charSet=136" Borders="All">

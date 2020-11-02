@@ -26,7 +26,7 @@ export class OrderListComponent {
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     Customerlist: any;
-    ProductList: any;
+    MaterialList: any;
     DetailsDataSourceStorage: any;
     creatpopupVisible = false;
     formData: any;
@@ -36,7 +36,7 @@ export class OrderListComponent {
     uploadUrl: string;
     exceldata: any;
     Controller = '/OrderHeads';
-    ProductBasicList: any;
+    MaterialBasicList: any;
     detailfilter = [];
     listOrderStatus: any;
     remoteOperations: boolean;
@@ -64,7 +64,7 @@ export class OrderListComponent {
         this.onValueChanged = this.onValueChanged.bind(this);
         this.DetailsDataSourceStorage = [];
         this.getdata();
-        this.getProductsData();
+        this.getMaterialsData();
         this.editorOptions = { onValueChanged: this.onValueChanged };
         this.checkData = this.checkData.bind(this);
         this.CheckFlagIconClick = this.CheckFlagIconClick.bind(this);
@@ -110,18 +110,18 @@ export class OrderListComponent {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
         });
     }
-    getProductsData() {
-        this.app.GetData('/Products/GetProducts').subscribe(
+    getMaterialsData() {
+        this.app.GetData('/Materials/GetMaterials').subscribe(
             (s) => {
                 if (s.success) {
-                    this.ProductList = s.data;
+                    this.MaterialList = s.data;
                 }
             }
         );
-        this.app.GetData('/Products/GetProductBasics').subscribe(
+        this.app.GetData('/Materials/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
-                    this.ProductBasicList = s.data;
+                    this.MaterialBasicList = s.data;
                 }
             }
         );
@@ -266,9 +266,9 @@ export class OrderListComponent {
                 }).then(async (result) => {
                     if (result.value) {
                         // tslint:disable-next-line: max-line-length
-                        const postval = { OrderNo: response.data.OrderNo, Products: response.message, CustomerNo: response.data.CustomerNo };
+                        const postval = { OrderNo: response.data.OrderNo, Materials: response.message, CustomerNo: response.data.CustomerNo };
                         // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatProductByExcel', 'POST', { values: postval });
+                        const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/PostCreatMaterialByExcel', 'POST', { values: postval });
                         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
                         if (sendRequest) {
                             this.uploader.instance.reset();
@@ -278,7 +278,7 @@ export class OrderListComponent {
                         }
                     } else {
                     }
-                    this.getProductsData();
+                    this.getMaterialsData();
                 });
             } else {
                 this.uploader.instance.reset();

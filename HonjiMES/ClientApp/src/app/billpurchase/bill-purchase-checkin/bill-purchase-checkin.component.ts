@@ -59,7 +59,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
                     this.QuantityEditorOptions = {
                         showSpinButtons: true,
                         mode: 'number',
-                        format: '#0',
+                        // format: '#0',
                         value: s.data.Quantity,
                         min: 1,
                         max: s.data.Quantity,
@@ -78,7 +78,7 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
         this.PriceEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             min: 0,
             onValueChanged: this.PriceValueChanged.bind(this)
         };
@@ -90,14 +90,14 @@ export class BillPurchaseCheckinComponent implements OnInit, OnChanges {
         this.UnitPriceEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             min: 0,
             onValueChanged: this.UnitPriceValueChanged.bind(this)
         };
         this.UnitPriceAllEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             min: 0,
         };
     }

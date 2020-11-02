@@ -88,7 +88,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     QcResultList: any;
     selectQcType: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: any; };
     selectQcResult: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; value: any; };
-    CountEditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: string; min: string; };
+    CountEditorOptions: any;
     HasQCVisible: boolean;
     dataSourceDB: any;
     autoNavigateToFocusedRow = true;
@@ -190,7 +190,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.CountEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             value: '0',
             min: '0',
             // onValueChanged: this.QuantityValueChanged.bind(this)
@@ -296,7 +296,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.NgEditorOptions = {
             showSpinButtons: true,
             mode: 'number',
-            format: '#0',
+            // format: '#0',
             value: '0',
             min: '0',
             // onValueChanged: this.QuantityValueChanged.bind(this)
@@ -349,7 +349,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.QuantityEditorOptions = {
                                     showSpinButtons: true,
                                     mode: 'number',
-                                    format: '#0',
+                                    // format: '#0',
                                     value: (element?.Count ?? '0'),
                                     min: -(element?.ReCount ?? '0'),
                                     // onValueChanged: this.QuantityValueChanged.bind(this)

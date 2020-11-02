@@ -57,27 +57,27 @@ namespace HonjiMES.Controllers
             foreach (var item in data)
             {
                 var BasicData = new BasicData();
-                if (item.ItemType == 1)
-                {
+                // if (item.ItemType == 1)
+                // {
                     var tempInfo = _context.Materials.Find(item.ItemId);
                     BasicData.DataNo = tempInfo.MaterialNo;
                     BasicData.Name = tempInfo.Name;
                     BasicData.WarehouseId = tempInfo.WarehouseId;
-                }
-                else if (item.ItemType == 2)
-                {
-                    var tempInfo = _context.Products.Find(item.ItemId);
-                    BasicData.DataNo = tempInfo.ProductNo;
-                    BasicData.Name = tempInfo.Name;
-                    BasicData.WarehouseId = tempInfo.WarehouseId;
-                }
-                else if (item.ItemType == 3)
-                {
-                    var tempInfo = _context.Wiproducts.Find(item.ItemId);
-                    BasicData.DataNo = tempInfo.WiproductNo;
-                    BasicData.Name = tempInfo.Name;
-                    BasicData.WarehouseId = tempInfo.WarehouseId;
-                }
+                // }
+                // else if (item.ItemType == 2)
+                // {
+                //     var tempInfo = _context.Products.Find(item.ItemId);
+                //     BasicData.DataNo = tempInfo.ProductNo;
+                //     BasicData.Name = tempInfo.Name;
+                //     BasicData.WarehouseId = tempInfo.WarehouseId;
+                // }
+                // else if (item.ItemType == 3)
+                // {
+                //     var tempInfo = _context.Wiproducts.Find(item.ItemId);
+                //     BasicData.DataNo = tempInfo.WiproductNo;
+                //     BasicData.Name = tempInfo.Name;
+                //     BasicData.WarehouseId = tempInfo.WarehouseId;
+                // }
                 StockDetailData.Add(new StockDetailData
                 {
                     TempId = tempId,

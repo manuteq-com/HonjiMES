@@ -270,6 +270,7 @@ namespace HonjiMES.Controllers
                 {
                     UserRolesitem = new UserRole
                     {
+                        Roles = "0000",
                         MenuId = item.Id,
                         UsersId = id,
                     };

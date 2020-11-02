@@ -147,10 +147,10 @@ namespace HonjiMES.Controllers
                             Quantity = Qty,
                             OriginPrice = Detailitem.OriginPrice,
                             Price = Detailitem.Price,
-                            ProductBasicId = Detailitem.ProductBasicId,
-                            ProductNo = Detailitem.ProductBasic.ProductNo,
-                            Name = Detailitem.ProductBasic.Name,
-                            Specification = Detailitem.ProductBasic.Specification,
+                            MaterialBasicId = Detailitem.MaterialBasicId,
+                            MaterialNo = Detailitem.MaterialBasic.MaterialNo,
+                            Name = Detailitem.MaterialBasic.Name,
+                            Specification = Detailitem.MaterialBasic.Specification,
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext),
                             DeleteFlag = 0
@@ -158,7 +158,7 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("訂單 [ " + PDetailitem.Order.OrderNo + " ] " + Detailitem.ProductBasic.ProductNo + " 超過可銷貨數量!!"));
+                        return Ok(MyFun.APIResponseError("訂單 [ " + PDetailitem.Order.OrderNo + " ] " + Detailitem.MaterialBasic.MaterialNo + " 超過可銷貨數量!!"));
                     }
                 }
                 //檢查訂單明細是否都完成銷貨
@@ -240,7 +240,7 @@ namespace HonjiMES.Controllers
                             //var Qty = PDetailitem.Quantity - Detailitem.SaleCount;//剩下可開的銷貨數量
                             var Qty = PDetailitem.Quantity;
                             Detailitem.SaleCount += Qty;
-                            // Detailitem.Product.QuantityAdv += Qty;//暫時停用，等待更新做法
+                            // Detailitem.Material.QuantityAdv += Qty;//暫時停用，等待更新做法
                             nlist.Add(new SaleDetailNew
                             {
                                 OrderId = Detailitem.OrderId,
@@ -248,10 +248,10 @@ namespace HonjiMES.Controllers
                                 Quantity = Qty,
                                 OriginPrice = Detailitem.OriginPrice,
                                 Price = Detailitem.Price,
-                                ProductBasicId = Detailitem.ProductBasicId,
-                                ProductNo = Detailitem.ProductBasic.ProductNo,
-                                Name = Detailitem.ProductBasic.Name,
-                                Specification = Detailitem.ProductBasic.Specification,
+                                MaterialBasicId = Detailitem.MaterialBasicId,
+                                MaterialNo = Detailitem.MaterialBasic.MaterialNo,
+                                Name = Detailitem.MaterialBasic.Name,
+                                Specification = Detailitem.MaterialBasic.Specification,
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext),
                                 DeleteFlag = 0
@@ -351,23 +351,23 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var dt = DateTime.Now;
             var oversale = new List<string>();
-            var Products = _context.Products.Where(x => x.DeleteFlag == 0);
+            var Materials = _context.Materials.Where(x => x.DeleteFlag == 0);
             foreach (var item in ToSaleList)
             {
                 var SaleDetailData = await _context.SaleDetailNews.FindAsync(item.Id);
-                var ProductData = Products.Where(x => x.ProductBasicId == SaleDetailData.ProductBasicId && x.WarehouseId == item.WarehouseId).ToList();
+                var MaterialData = Materials.Where(x => x.MaterialBasicId == SaleDetailData.MaterialBasicId && x.WarehouseId == item.WarehouseId).ToList();
                 var SaleHeadId = SaleDetailData.SaleId;
 
-                if (ProductData.Count() == 1)
+                if (MaterialData.Count() == 1)
                 {
-                    var Product = ProductData.FirstOrDefault();
+                    var Material = MaterialData.FirstOrDefault();
                     // if (SaleDetailData.OrderDetail.Quantity >= SaleDetailData.OrderDetail.SaleCount)
                     {
                         // 銷貨扣庫
-                        Product.ProductLogs.Add(new ProductLog
+                        Material.MaterialLogs.Add(new MaterialLog
                         {
                             LinkOrder = SaleDetailData.Sale.SaleNo,
-                            Original = Product.Quantity,
+                            Original = Material.Quantity,
                             Quantity = -SaleDetailData.Quantity,
                             Price = SaleDetailData.Price,
                             PriceAll = SaleDetailData.Quantity * SaleDetailData.Price,
@@ -377,14 +377,14 @@ namespace HonjiMES.Controllers
                         SaleDetailData.Status = 1; // 1已銷貨
                         SaleDetailData.UpdateTime = dt;
                         SaleDetailData.UpdateUser = MyFun.GetUserID(HttpContext);
-                        Product.Quantity -= SaleDetailData.Quantity;
-                        Product.QuantityAdv -= SaleDetailData.Quantity;
-                        Product.UpdateTime = dt;
-                        Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                        Material.Quantity -= SaleDetailData.Quantity;
+                        Material.QuantityAdv -= SaleDetailData.Quantity;
+                        Material.UpdateTime = dt;
+                        Material.UpdateUser = MyFun.GetUserID(HttpContext);
 
-                        if (Product.Quantity < 0)
+                        if (Material.Quantity < 0)
                         {
-                            oversale.Add(Product.ProductNo);
+                            oversale.Add(Material.MaterialNo);
                         }
 
                         //更新訂單完成銷貨量
@@ -413,7 +413,7 @@ namespace HonjiMES.Controllers
                 }
                 else
                 {
-                    return Ok(MyFun.APIResponseError("銷貨單號：" + SaleDetailData.Sale.SaleNo + "　[ 品號：" + SaleDetailData.ProductBasic.ProductNo + " ] 查無庫存資訊!"));
+                    return Ok(MyFun.APIResponseError("銷貨單號：" + SaleDetailData.Sale.SaleNo + "　[ 品號：" + SaleDetailData.MaterialBasic.MaterialNo + " ] 查無庫存資訊!"));
                 }
             }
 
@@ -449,14 +449,14 @@ namespace HonjiMES.Controllers
             else if (OrderSale.SaleDID.HasValue)
             {
                 var SaleDetail = _context.SaleDetailNews.Find(OrderSale.SaleDID);
-                // var ProductId = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
-                // SaleDetail.ProductId = ProductId;
+                // var MaterialId = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == SaleDetail.MaterialBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
+                // SaleDetail.MaterialId = MaterialId;
 
-                var Product = _context.Products.AsQueryable().Where(x => x.ProductBasicId == SaleDetail.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
-                SaleDetail.Product = Product;
-                // foreach (var item in ProductData)
+                var Material = _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == SaleDetail.MaterialBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault();
+                SaleDetail.Material = Material;
+                // foreach (var item in MaterialData)
                 // {
-                //     var ProductsId =_context.Products.AsQueryable().Where(x => x.ProductBasicId == item.ProductBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
+                //     var MaterialsId =_context.Materials.AsQueryable().Where(x => x.MaterialBasicId == item.MaterialBasicId && x.WarehouseId == OrderSale.WarehouseId && x.DeleteFlag == 0).FirstOrDefault()?.Id;
                 //     item.p
                 // }
                 SaleDetailNewList.Add(SaleDetail);
@@ -473,26 +473,26 @@ namespace HonjiMES.Controllers
                 // if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
-                    item.Product.ProductLogs.Add(new ProductLog
+                    item.Material.MaterialLogs.Add(new MaterialLog
                     {
                         LinkOrder = item.Sale.SaleNo,
-                        Original = item.Product.Quantity,
+                        Original = item.Material.Quantity,
                         Quantity = -item.Quantity,
                         Price = item.Price,
                         PriceAll = item.Quantity * item.Price,
                         Message = "銷貨",
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
-                    item.Product.Quantity -= item.Quantity;
-                    item.Product.QuantityAdv -= item.Quantity;
+                    item.Material.Quantity -= item.Quantity;
+                    item.Material.QuantityAdv -= item.Quantity;
                     item.Status = 1;//1已銷貨
                     item.UpdateTime = dt;
                     item.UpdateUser = MyFun.GetUserID(HttpContext);
-                    item.Product.UpdateTime = dt;
-                    item.Product.UpdateUser = MyFun.GetUserID(HttpContext);
-                    if (item.Product.Quantity < 0)
+                    item.Material.UpdateTime = dt;
+                    item.Material.UpdateUser = MyFun.GetUserID(HttpContext);
+                    if (item.Material.Quantity < 0)
                     {
-                        oversale.Add(item.Product.ProductNo);
+                        oversale.Add(item.Material.MaterialNo);
                     }
 
                     //更新訂單完成銷貨量
@@ -532,13 +532,13 @@ namespace HonjiMES.Controllers
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;
 
-            //foreach (var GDetailitem in SaleHead.SaleDetailNews.GroupBy(x => x.ProductId))
+            //foreach (var GDetailitem in SaleHead.SaleDetailNews.GroupBy(x => x.MaterialId))
             //{
             //    var sQuantity = GDetailitem.Sum(x => x.Quantity);//品項的總銷貨數
-            //    var Products = _context.Products.Find(GDetailitem.Key);//目前庫存數
-            //    if (sQuantity > Products.Quantity)//超過庫存
+            //    var Materials = _context.Materials.Find(GDetailitem.Key);//目前庫存數
+            //    if (sQuantity > Materials.Quantity)//超過庫存
             //    {
-            //        oversale += Products.ProductNo + ":" + Products.Quantity + "=>" + sQuantity;
+            //        oversale += Materials.MaterialNo + ":" + Materials.Quantity + "=>" + sQuantity;
             //    }
             //    else
             //    {
@@ -575,6 +575,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("銷貨資訊錯誤"));
             }
+            ReturnSale.CreateUser = MyFun.GetUserID(HttpContext);
             SaleDetail.ReturnSales.Add(ReturnSale);
             var ReturnCount = SaleDetail.ReturnSales.Sum(x => x.Quantity);
             if (ReturnCount > SaleDetail.Quantity)
@@ -586,33 +587,64 @@ namespace HonjiMES.Controllers
             if (SaleDetail.Status == 1)//抓已銷貨的
             {
                 var Warehouses = _context.Warehouses.Find(ReturnSale.WarehouseId);
-                if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
+                // if (Warehouses.Recheck.HasValue && Warehouses.Recheck == 0)//不用檢查直接存回庫存
                 {
-                    var ProductsData = _context.Products.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.ProductBasicId == SaleDetail.ProductBasicId).FirstOrDefault();
-                    ProductsData.ProductLogs.Add(new ProductLog
-                    {
-                        // LinkOrder = ReturnSale.ReturnNo,
-                        LinkOrder = SaleDetail.Sale.SaleNo,
-                        Original = ProductsData.Quantity,
-                        Quantity = ReturnSale.Quantity,
-                        Price = ProductsData.Price,
-                        PriceAll = ProductsData.Price * ReturnSale.Quantity,
-                        Reason = ReturnSale.Reason,
-                        Message = "銷退",
-                        CreateUser = MyFun.GetUserID(HttpContext)
-                    });
-                    ProductsData.Quantity += ReturnSale.Quantity;
-                    ProductsData.UpdateTime = dt;
-                    ProductsData.UpdateUser = MyFun.GetUserID(HttpContext);
-                    // SaleDetail.Product.ProductLogs.Add(new ProductLog { Original = SaleDetail.Product.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
-                    // SaleDetail.Product.Quantity += ReturnSale.Quantity;
-                    // SaleDetail.Product.UpdateTime = dt;
-                    // SaleDetail.Product.UpdateUser = MyFun.GetUserID(HttpContext);
+                    var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == SaleDetail.MaterialBasicId && x.DeleteFlag == 0).FirstOrDefault();
+                    var Materials = MaterialBasic.Materials.Where(x => x.WarehouseId == ReturnSale.WarehouseId).ToList();
+                    // var MaterialsData = _context.Materials.AsQueryable().Where(x => x.WarehouseId == ReturnSale.WarehouseId && x.DeleteFlag == 0 && x.MaterialBasicId == SaleDetail.MaterialBasicId).FirstOrDefault();
+                    if (Materials.Count() == 1) {
+                        Materials.FirstOrDefault().MaterialLogs.Add(new MaterialLog
+                        {
+                            // LinkOrder = ReturnSale.ReturnNo,
+                            LinkOrder = SaleDetail.Sale.SaleNo,
+                            Original = Materials.FirstOrDefault().Quantity,
+                            Quantity = ReturnSale.Quantity,
+                            Price = Materials.FirstOrDefault().Price,
+                            PriceAll = Materials.FirstOrDefault().Price * ReturnSale.Quantity,
+                            Reason = ReturnSale.Reason,
+                            Message = "銷退",
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        });
+                        Materials.FirstOrDefault().Quantity += ReturnSale.Quantity;
+                        Materials.FirstOrDefault().UpdateTime = dt;
+                        Materials.FirstOrDefault().UpdateUser = MyFun.GetUserID(HttpContext);
+                        // SaleDetail.Material.MaterialLogs.Add(new MaterialLog { Original = SaleDetail.Material.Quantity, Quantity = ReturnSale.Quantity, Reason = ReturnSale.Reason, Message = SaleDetail.Sale.SaleNo + "銷貨直接退庫", CreateTime = dt,  CreateUser = MyFun.GetUserID(HttpContext) });
+                        // SaleDetail.Material.Quantity += ReturnSale.Quantity;
+                        // SaleDetail.Material.UpdateTime = dt;
+                        // SaleDetail.Material.UpdateUser = MyFun.GetUserID(HttpContext);
+                    } else {
+                        MaterialBasic.Materials.Add(new Material
+                        {
+                            MaterialNo = MaterialBasic.MaterialNo,
+                            MaterialNumber = MaterialBasic.MaterialNumber,
+                            Name = MaterialBasic.Name,
+                            Quantity = ReturnSale.Quantity,
+                            Specification = MaterialBasic.Specification,
+                            Property = MaterialBasic.Property,
+                            Price = MaterialBasic.Price,
+                            MaterialRequire = 1,
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            WarehouseId = ReturnSale.WarehouseId,
+                            MaterialLogs = {new MaterialLog
+                            {
+                                // LinkOrder = ReturnSale.ReturnNo,
+                                LinkOrder = SaleDetail.Sale.SaleNo,
+                                Original = 0,
+                                Quantity = ReturnSale.Quantity,
+                                Price = MaterialBasic.Price,
+                                PriceAll = MaterialBasic.Price * ReturnSale.Quantity,
+                                Reason = ReturnSale.Reason,
+                                Message = "銷退",
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            }}
+                        });
+                    }
                 }
-                else
-                {
-                    SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
-                }
+                // else
+                // {
+                //     SaleDetail.ReturnSales.Add(new ReturnSale { WarehouseId = ReturnSale.WarehouseId, Reason = ReturnSale.Reason, Quantity = ReturnSale.Quantity, CreateTime = dt, CreateUser = MyFun.GetUserID(HttpContext) });
+                // }
                 SaleDetail.Sale.UpdateUser = MyFun.GetUserID(HttpContext);
 
                 await _context.SaveChangesAsync();

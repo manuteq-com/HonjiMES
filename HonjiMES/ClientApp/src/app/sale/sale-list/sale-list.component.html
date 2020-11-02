@@ -26,7 +26,7 @@
                 <dxi-item dataField="MachineNo" [editorOptions]="editorOptions">
                     <dxo-label text="機號查詢"></dxo-label>
                 </dxi-item>
-                <dxi-item dataField="ProductNo" [editorOptions]="editorOptions">
+                <dxi-item dataField="MaterialNo" [editorOptions]="editorOptions">
                     <dxo-label text="主件品號查詢"></dxo-label>
                 </dxi-item>
             </dx-form>
@@ -114,14 +114,14 @@
             <dxi-column dataField="OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
             <dxi-column dataField="MachineNo" caption="機號" [allowEditing]="false" width="200"></dxi-column>
-            <dxi-column dataField="ProductBasicId" caption="品號" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
+            <dxi-column dataField="MaterialBasicId" caption="品號" [allowEditing]="false">
+                <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductBasicId" caption="品名" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false">
+                <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="ProductBasicId" caption="規格" [allowEditing]="false">
-                <dxo-lookup [dataSource]="ProductBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+            <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false">
+                <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -176,7 +176,7 @@
 <dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="850"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-create-sale (childOuter)="creatpopup_result($event)" [ProductBasicList]="ProductBasicList" [itemkeyval]="itemkey" [randomkeyval]="randomkey"></app-create-sale>
+        <app-create-sale (childOuter)="creatpopup_result($event)" [MaterialBasicList]="MaterialBasicList" [itemkeyval]="itemkey" [randomkeyval]="randomkey"></app-create-sale>
     </div>
 </dx-popup>
 

@@ -61,6 +61,16 @@ namespace HonjiMES.Models
         [Column("unit_price", TypeName = "decimal(10,2)")]
         public decimal? UnitPrice { get; set; }
         /// <summary>
+        /// &#27512;&#36012;(0&#33258;&#24049;1&#24288;&#21830;)
+        /// </summary>
+        [Column("responsibility", TypeName = "int(11)")]
+        public int? Responsibility { get; set; }
+        /// <summary>
+        /// &#23492;&#22238;&#26085;
+        /// </summary>
+        [Column("return_time", TypeName = "timestamp")]
+        public DateTime? ReturnTime { get; set; }
+        /// <summary>
         /// &#21407;&#22240;
         /// </summary>
         [Required]

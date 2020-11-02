@@ -39,7 +39,7 @@
         <dxi-button name="upload" text="設定主要用料" icon="sorted" [visible]="isUploadVisible" [onClick]="uploadIconClick"></dxi-button>
     </dxi-column>
 
-    <dxi-column caption="料號查詢" cellTemplate="DataInfoCellTemplate" alignment="center" width="80"></dxi-column>
+    <dxi-column caption="品號查詢" cellTemplate="DataInfoCellTemplate" alignment="center" width="80"></dxi-column>
     <div *dxTemplate="let data of 'DataInfoCellTemplate'">
         <dx-button icon="detailslayout" type="normal" (onClick)="readData($event,data)"></dx-button>
     </div>
@@ -66,7 +66,7 @@
 <dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
     [(visible)]="productpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatproduct-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatproduct-basic>
+        <app-creatmaterial-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
     </div>
 </dx-popup>
 <!-- <dx-popup [showTitle]="true" title="半成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"

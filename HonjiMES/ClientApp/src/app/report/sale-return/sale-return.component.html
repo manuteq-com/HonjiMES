@@ -46,32 +46,26 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="Sale.SaleNo" caption="銷貨單號" [width]="150" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="Sale.Status" caption="狀態" alignment="center" [width]="100">
-        <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="Sale.SaleDate" caption="銷貨日期" dataType="date" [width]="120"></dxi-column>
-    <dxi-column dataField="Sale.CreateTime" caption="建立日期" dataType="date" [width]="120"></dxi-column>
-    <dxi-column dataField="Sale.CreateUser" caption="建立人員" [width]="120">
-        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
+    <dxi-column dataField="ReturnCreateTime" caption="銷退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
 
-    <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140"></dxi-column>
-    <dxi-column dataField="Order.OrderNo" caption="訂單單號" [width]="140"></dxi-column>
-    <dxi-column dataField="OrderDetail.Serial" caption="訂單序號" [width]="80"></dxi-column>
-    <dxi-column dataField="OrderDetail.MachineNo" caption="機號" [width]="180"></dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品號" [width]="220" alignment="center">
-        <dxo-lookup [dataSource]="ProductList" displayExpr="ProductNo" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="品名" [width]="180">
-        <dxo-lookup [dataSource]="ProductList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="ProductBasicId" caption="規格" [width]="220">
-        <dxo-lookup [dataSource]="ProductList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="Quantity" caption="數量" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="SaleNo" caption="銷貨單號" [width]="150"></dxi-column>
+    <!-- <dxi-column dataField="SaleDate" caption="銷貨單日期" dataType="date" [width]="120"></dxi-column> -->
+    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140"></dxi-column>
+    <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="140"></dxi-column>
+    <!-- <dxi-column dataField="Serial" caption="訂單序號" [width]="80"></dxi-column> -->
+    <dxi-column dataField="MachineNo" caption="機號" [width]="180"></dxi-column>
+    <dxi-column dataField="ProductNo" caption="品號" [width]="220"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [width]="220"></dxi-column>
+
+    <dxi-column dataField="ReturnWarehouse" caption="銷退倉別" [width]="150"></dxi-column>
+    <dxi-column dataField="ReturnQuantity" caption="銷退數量" alignment="center" [width]="80"></dxi-column>
+    <dxi-column dataField="ReturnReason" caption="銷退原因"></dxi-column>
+    <!-- <dxi-column dataField="ReturnRemarks" caption="銷退備註" [width]="140"></dxi-column> -->
+    <dxi-column dataField="ReturnCreateUser" caption="銷退人員" [width]="100"></dxi-column>
+
+    <!-- <dxi-column dataField="Quantity" caption="數量" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="Price" caption="金額" [width]="80"></dxi-column>
+    <dxi-column dataField="Price" caption="金額" [width]="80"></dxi-column> -->
 
 </dx-data-grid>
 

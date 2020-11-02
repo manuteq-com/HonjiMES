@@ -25,8 +25,8 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("name", TypeName = "varchar(45)")]
         public string Name { get; set; }
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int? ProductBasicId { get; set; }
+        [Column("material_basic_id", TypeName = "int(11)")]
+        public int? MaterialBasicId { get; set; }
         [Column("bom_id", TypeName = "int(11)")]
         public int? BomId { get; set; }
         /// <summary>

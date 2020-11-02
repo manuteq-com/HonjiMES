@@ -33,11 +33,11 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     buttonOptions: any = { text: '存檔', type: 'success', useSubmitBehavior: true };
     editorOptions: any;
-    ProductList: any;
+    MaterialList: any;
     WarehouseList: any;
     dataSourceDB: any;
-    ProductBasicList: any;
-    ProductsAllList: any;
+    MaterialBasicList: any;
+    MaterialsAllList: any;
     CreateTimeDateBoxOptions: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
@@ -67,22 +67,22 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             min: new Date().toDateString()
         };
         this.dataSourceDB = [];
-        this.ProductsAllList = [];
+        this.MaterialsAllList = [];
         this.itemkeyval.forEach(x => this.dataSourceDB.push(Object.assign({}, x)));
         this.dataSourceDB.forEach(async x => {
             x.Quantity = x.Quantity - x.SaleCount;
-            this.app.GetData('/Products/GetProductsById/' + x.ProductBasicId).subscribe(
+            this.app.GetData('/Materials/GetMaterialsById/' + x.MaterialBasicId).subscribe(
                 (s) => {
                     if (s.success) {
                         s.data.forEach(element => {
-                            this.ProductsAllList.push(element);
+                            this.MaterialsAllList.push(element);
                         });
                     }
                 }
             );
         });
 
-        this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
+        this.MaterialList = await SendService.sendRequest(this.http, '/Materials/GetMaterials');
         // this.WarehouseList = await SendService.sendRequest(this.http, '/Warehouses/GetWarehouses');
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
@@ -94,7 +94,7 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
+        this.MaterialBasicList = await SendService.sendRequest(this.http, '/Materials/GetMaterialBasics');
         if (this.modval === 'add') {
             this.showdisabled = false;
         } else {
@@ -152,8 +152,6 @@ export class OrdertosaleComponent implements OnInit, OnChanges {
             e.editorOptions.max = originData.Quantity - originData.SaleCount;
         }
         if (e.parentType === 'dataRow' && e.dataField === 'WarehouseId') {
-            const gg = this.ProductsAllList;
-            debugger;
             const rowIndex = e.row.rowIndex;
             const originData = this.itemkeyval[rowIndex];
         }

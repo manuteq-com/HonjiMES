@@ -170,7 +170,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var MaterialBasiclist = new List<MaterialBasic>();
-            string Fileitem = @"D:\project\鴻銡\給翔呈 成品料號匯入(BOM).xlsx";
+            string Fileitem = @"D:\project\鴻銡\給翔呈 成品品號匯入(BOM).xlsx";
             //string Fileitem = @"C:\Users\user\Downloads\基本資料匯入(原料).xlsx";
             var excelcount = 0;
             using (FileStream item = System.IO.File.OpenRead(Fileitem))
@@ -223,7 +223,9 @@ namespace HonjiMES.Controllers
                             {
                                 TempBOM.H = CellvalH;
                             }
-                            var ProductBasic = _context.ProductBasics.AsQueryable().Where(x => x.ProductNo == TempBOM.A).ToList();
+                            
+                            // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
+                            var ProductBasic = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == TempBOM.A).ToList();
                             var MaterialBasic = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == TempBOM.H).ToList();
                             if (ProductBasic.Any())//有成品NO
                             {
@@ -233,10 +235,10 @@ namespace HonjiMES.Controllers
                                     {
                                         foreach (var MaterialBasicitem in MaterialBasic)
                                         {
-                                            if (!ProductBasicitem.BillOfMaterials.Where(x => x.MaterialBasicId == MaterialBasicitem.Id).Any())
+                                            if (!ProductBasicitem.BillOfMaterialMaterialBasics.Where(x => x.MaterialBasicId == MaterialBasicitem.Id).Any())
                                             {
                                                 //加入BOM
-                                                ProductBasicitem.BillOfMaterials.Add(new BillOfMaterial
+                                                ProductBasicitem.BillOfMaterialProductBasics.Add(new BillOfMaterial
                                                 {
                                                     MaterialBasicId = MaterialBasicitem.Id,
                                                     Quantity = 1,
@@ -255,10 +257,10 @@ namespace HonjiMES.Controllers
                                 //新增成品
                                 if (MaterialBasic.Any())
                                 {
-                                    var nProductBasic = new ProductBasic
+                                    var nProductBasic = new MaterialBasic
                                     {
-                                        ProductNo = TempBOM.A,
-                                        ProductNumber = TempBOM.J,
+                                        MaterialNo = TempBOM.A,
+                                        MaterialNumber = TempBOM.J,
                                         Name = TempBOM.B,
                                         Specification = TempBOM.E,
                                         Property = ""
@@ -266,7 +268,7 @@ namespace HonjiMES.Controllers
                                     foreach (var MaterialBasicitem in MaterialBasic)
                                     {
                                         //加入BOM
-                                        nProductBasic.BillOfMaterials.Add(new BillOfMaterial
+                                        nProductBasic.BillOfMaterialProductBasics.Add(new BillOfMaterial
                                         {
                                             MaterialBasicId = MaterialBasicitem.Id,
                                             Quantity = 1,
@@ -274,7 +276,7 @@ namespace HonjiMES.Controllers
                                             Group = 1
                                         });
                                     }
-                                    _context.ProductBasics.Add(nProductBasic);
+                                    _context.MaterialBasics.Add(nProductBasic);
                                     _context.SaveChanges();
                                 }
                             }
@@ -324,15 +326,15 @@ namespace HonjiMES.Controllers
         /// <param name="FromQuery"></param>
         /// <returns></returns>
         [HttpGet]
-        //public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProducts([FromQuery] FromQuery FromQuery)
-        public async Task<ActionResult<IEnumerable<ProductBasic>>> GetProductBasics([FromQuery] DataSourceLoadOptions FromQuery)
+        //public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterials([FromQuery] FromQuery FromQuery)
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasics([FromQuery] DataSourceLoadOptions FromQuery)
         {
 
-            //var ProductBasict = _context.ProductBasics.AsEnumerable();
-            //var ProductBasic = _context.ProductBasics.AsQueryable();
-            //var ProductBasic = await DataSourceLoader.LoadAsync(_context.ProductBasics.AsQueryable(), FromQuery);
+            //var MaterialBasict = _context.MaterialBasics.AsEnumerable();
+            //var MaterialBasic = _context.MaterialBasics.AsQueryable();
+            //var MaterialBasic = await DataSourceLoader.LoadAsync(_context.MaterialBasics.AsQueryable(), FromQuery);
 
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.ProductBasics.AsQueryable().Where(x => x.DeleteFlag == 0), FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
         /// <summary>
@@ -346,6 +348,8 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var bomlist = new List<BomList>();
+
+            // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
             var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
             if (BillOfMaterials != null)
             {
@@ -484,36 +488,42 @@ namespace HonjiMES.Controllers
                 //複製BOM內容
                 int BasicId = PostBom.BasicId.Value;
                 // var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
-                var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.Where(x => x.Pid == null).ToList();
-                foreach (var item1 in BillOfMaterials)
-                {
-                    var nbom1 = new BillOfMaterial
+                
+                // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
+                var BillOfMaterials = _context.MaterialBasics.Find(BasicId).BillOfMaterialProductBasics.Where(x => x.Pid == null).ToList();
+                if (BillOfMaterials.Count() == 0) {
+                    nBillOfMaterials.MaterialBasicId = PostBom.BasicId;
+                } else {
+                    foreach (var item1 in BillOfMaterials)
                     {
-                        ProductBasicId = item1.ProductBasicId,
-                        MaterialBasicId = item1.MaterialBasicId,
-                        Quantity = item1.Quantity
-                    };
-                    foreach (var item2 in item1.InverseP)
-                    {
-                        var nbom2 = new BillOfMaterial
+                        var nbom1 = new BillOfMaterial
                         {
-                            ProductBasicId = item2.ProductBasicId,
-                            MaterialBasicId = item2.MaterialBasicId,
-                            Quantity = item2.Quantity
+                            ProductBasicId = item1.ProductBasicId,
+                            MaterialBasicId = item1.MaterialBasicId,
+                            Quantity = item1.Quantity
                         };
-                        foreach (var item3 in item2.InverseP)
+                        foreach (var item2 in item1.InverseP)
                         {
-                            var nbom3 = new BillOfMaterial
+                            var nbom2 = new BillOfMaterial
                             {
-                                ProductBasicId = item3.ProductBasicId,
-                                MaterialBasicId = item3.MaterialBasicId,
-                                Quantity = item3.Quantity
+                                ProductBasicId = item2.ProductBasicId,
+                                MaterialBasicId = item2.MaterialBasicId,
+                                Quantity = item2.Quantity
                             };
-                            nbom2.InverseP.Add(nbom3);
+                            foreach (var item3 in item2.InverseP)
+                            {
+                                var nbom3 = new BillOfMaterial
+                                {
+                                    ProductBasicId = item3.ProductBasicId,
+                                    MaterialBasicId = item3.MaterialBasicId,
+                                    Quantity = item3.Quantity
+                                };
+                                nbom2.InverseP.Add(nbom3);
+                            }
+                            nbom1.InverseP.Add(nbom2);
                         }
-                        nbom1.InverseP.Add(nbom2);
+                        nBillOfMaterials.InverseP.Add(nbom1);
                     }
-                    nBillOfMaterials.InverseP.Add(nbom1);
                 }
             }
             _context.BillOfMaterials.Add(nBillOfMaterials);
@@ -533,8 +543,9 @@ namespace HonjiMES.Controllers
                 }
                 foreach (var item in bomlist)
                 {
+                    // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
                     var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
-                    var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
+                    var ProductBasicInfo = _context.MaterialBasics.Find(item.ProductBasicId);
                     var nVer = new BillOfMaterialVer
                     {
                         ProductBasicId = id,
@@ -543,7 +554,7 @@ namespace HonjiMES.Controllers
                         Bompid = item.Pid,
                         MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
                         MaterialName = MaterialBasicInfo?.Name ?? null,
-                        ProductNo = ProductBasicInfo?.ProductNo ?? null,
+                        ProductNo = ProductBasicInfo?.MaterialNo ?? null,
                         ProductName = ProductBasicInfo?.Name ?? null,
                         Name = item.Name,
                         Quantity = item.Quantity,
@@ -574,7 +585,7 @@ namespace HonjiMES.Controllers
             // var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
             if (BillOfMaterials != null)
             {
-                // 假設該刪除料號被設為主件，則另尋其他料號設為主件。
+                // 假設該刪除品號被設為主件，則另尋其他品號設為主件。
                 if (BillOfMaterials.FirstOrDefault().Master == 1) {
                     var BillOfMaterial = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterials.FirstOrDefault().ProductBasicId && x.Lv == 1 && x.Master == 0 && x.DeleteFlag == 0).ToList();
                     if (BillOfMaterial.Count() != 0) {
@@ -617,8 +628,9 @@ namespace HonjiMES.Controllers
                     }
                     foreach (var item in bomlist)
                     {
+                        // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
                         var MaterialBasicInfo = _context.MaterialBasics.Find(item.MaterialBasicId);
-                        var ProductBasicInfo = _context.ProductBasics.Find(item.ProductBasicId);
+                        var ProductBasicInfo = _context.MaterialBasics.Find(item.ProductBasicId);
                         var nVer = new BillOfMaterialVer
                         {
                             ProductBasicId = TempProductBasicData.ProductBasicId,
@@ -627,7 +639,7 @@ namespace HonjiMES.Controllers
                             Bompid = item.Pid,
                             MaterialNo = MaterialBasicInfo?.MaterialNo ?? null,
                             MaterialName = MaterialBasicInfo?.Name ?? null,
-                            ProductNo = ProductBasicInfo?.ProductNo ?? null,
+                            ProductNo = ProductBasicInfo?.MaterialNo ?? null,
                             ProductName = ProductBasicInfo?.Name ?? null,
                             Name = item.Name,
                             Quantity = item.Quantity,
@@ -690,11 +702,11 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/BillOfMaterials/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BillOfMaterial>> GetProcessByProductBasicId(int id)
+        public async Task<ActionResult<BillOfMaterial>> GetProcessByMaterialBasicId(int id)
         {
             if (id != 0)
             {
-                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.ProductBasicId == id).OrderBy(x => x.SerialNumber).ToListAsync();
+                var billOfMaterial = await _context.MBillOfMaterials.AsQueryable().Where(x => x.MaterialBasicId == id).OrderBy(x => x.SerialNumber).ToListAsync();
 
                 if (billOfMaterial == null)
                 {
@@ -743,12 +755,12 @@ namespace HonjiMES.Controllers
         [HttpPost]
         public async Task<ActionResult<BomList>> PostMbomlist(MbomData MbomData)
         {
-            if (MbomData.BomId != 0 || MbomData.ProductBasicId != 0)
+            if (MbomData.BomId != 0 || MbomData.MaterialBasicId != 0)
             {
                 var MbillOfMaterials = new List<MBillOfMaterial>();
-                if (MbomData.ProductBasicId != 0)
+                if (MbomData.MaterialBasicId != 0)
                 {
-                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.ProductBasicId == MbomData.ProductBasicId).ToListAsync();
+                    MbillOfMaterials = await _context.MBillOfMaterials.Where(x => x.MaterialBasicId == MbomData.MaterialBasicId).ToListAsync();
                 }
                 else
                 {
@@ -770,7 +782,7 @@ namespace HonjiMES.Controllers
                     {
                         Pid = null,
                         Name = null,
-                        ProductBasicId = MbomData.ProductBasicId,
+                        MaterialBasicId = MbomData.MaterialBasicId,
                         BomId = MbomData.BomId,
                         SerialNumber = item.SerialNumber,
                         ProcessId = item.ProcessId,
@@ -796,7 +808,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用ProductID取BOM表的變更紀錄
+        /// 用MaterialID取BOM表的變更紀錄
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

@@ -40,15 +40,15 @@ namespace HonjiMES.Models
         [Column("serial", TypeName = "int(11)")]
         public int Serial { get; set; }
         /// <summary>
-        /// &#25104;&#21697;&#22522;&#26412;&#36039;&#35338;id
+        /// &#21697;&#34399;&#22522;&#26412;&#36039;&#35338;id
         /// </summary>
-        [Column("product_basic_id", TypeName = "int(11)")]
-        public int ProductBasicId { get; set; }
+        [Column("material_basic_id", TypeName = "int(11)")]
+        public int MaterialBasicId { get; set; }
         /// <summary>
-        /// &#29986;&#21697;id
+        /// &#21697;&#34399;id
         /// </summary>
-        [Column("product_id", TypeName = "int(11)")]
-        public int? ProductId { get; set; }
+        [Column("material_id", TypeName = "int(11)")]
+        public int? MaterialId { get; set; }
         /// <summary>
         /// &#25976;&#37327;
         /// </summary>
@@ -160,15 +160,15 @@ namespace HonjiMES.Models
         [Column("update_user", TypeName = "int(11)")]
         public int? UpdateUser { get; set; }
 
+        [ForeignKey(nameof(MaterialId))]
+        [InverseProperty("OrderDetails")]
+        public virtual Material Material { get; set; }
+        [ForeignKey(nameof(MaterialBasicId))]
+        [InverseProperty("OrderDetails")]
+        public virtual MaterialBasic MaterialBasic { get; set; }
         [ForeignKey(nameof(OrderId))]
         [InverseProperty(nameof(OrderHead.OrderDetails))]
         public virtual OrderHead Order { get; set; }
-        [ForeignKey(nameof(ProductId))]
-        [InverseProperty("OrderDetails")]
-        public virtual Product Product { get; set; }
-        [ForeignKey(nameof(ProductBasicId))]
-        [InverseProperty("OrderDetails")]
-        public virtual ProductBasic ProductBasic { get; set; }
         [InverseProperty(nameof(OrderDetailAndWorkOrderHead.OrderDetail))]
         public virtual ICollection<OrderDetailAndWorkOrderHead> OrderDetailAndWorkOrderHeads { get; set; }
         [InverseProperty(nameof(PurchaseDetail.OrderDetail))]

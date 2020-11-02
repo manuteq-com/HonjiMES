@@ -216,18 +216,18 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/OrderDetails/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductBasicData>> GetStockCountByProductBasicId(int id)//OrderDetails.id
+        public async Task<ActionResult<MaterialBasicData>> GetStockCountByMaterialBasicId(int id)//OrderDetails.id
         {
-            var OrderDetails = await _context.OrderDetails.FindAsync(id);//Find OrderDetails.ProductBasicId
-            var productBasic  = await _context.ProductBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.ProductBasicId).Select(x => new ProductBasicData
+            var OrderDetails = await _context.OrderDetails.FindAsync(id);//Find OrderDetails.MaterialBasicId
+            var materialBasic  = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.MaterialBasicId).Select(x => new MaterialBasicData
             {
-                TotalCount = x.Products.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
-                Products = x.Products.Where(y => y.DeleteFlag == 0).ToList()
+                TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
+                Materials = x.Materials.Where(y => y.DeleteFlag == 0).ToList()
             }).FirstOrDefaultAsync();
-            if (productBasic.Products.Count() == 0) {
-                return Ok(MyFun.APIResponseError("尚未建立成品明細!"));
+            if (materialBasic.Materials.Count() == 0) {
+                return Ok(MyFun.APIResponseError("尚未建立品號明細!"));
             } else {
-                return Ok(MyFun.APIResponseOK(productBasic));
+                return Ok(MyFun.APIResponseOK(materialBasic));
             }
         }
 

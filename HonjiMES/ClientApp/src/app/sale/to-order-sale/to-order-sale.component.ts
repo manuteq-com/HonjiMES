@@ -38,7 +38,7 @@ export class ToOrderSaleComponent implements OnInit, OnChanges {
 
     ngOnChanges() {
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', max: this.itemkeyval.qty, min: 1, value: this.itemkeyval.qty };
-        this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + this.itemkeyval.ProductBasicId).subscribe(
+        this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + this.itemkeyval.MaterialBasicId).subscribe(
             (s) => {
                 if (s.success) {
                     const WarehouseList = [];

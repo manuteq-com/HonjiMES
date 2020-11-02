@@ -28,21 +28,21 @@ export class BillofmateriallistComponent implements OnInit {
         this.readBomVer = this.readBomVer.bind(this);
         // this.dataSourceDB = createStore({
         //     key: 'Id',
-        //     loadUrl: this.apiurl + this.Controller + '/GetProducts',
+        //     loadUrl: this.apiurl + this.Controller + '/GetMaterials',
         //     insertUrl: this.apiurl + this.Controller + '/PostBillofPurchaseDetail',
-        //     updateUrl: this.apiurl + this.Controller + '/PutProduct',
+        //     updateUrl: this.apiurl + this.Controller + '/PutMaterial',
         //     deleteUrl: this.apiurl + this.Controller + '/DeleteBillofPurchaseDetail',
         // });
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetProductBasics', 'GET', { loadOptions, remote }),
+                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasics', 'GET', { loadOptions, remote }),
             byKey: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutProduct', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });

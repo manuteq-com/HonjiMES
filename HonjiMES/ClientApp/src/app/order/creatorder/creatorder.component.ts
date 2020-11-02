@@ -37,7 +37,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     minColWidth: number;
     colCount: number;
     width: any;
-    ProductList: any;
+    MaterialList: any;
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
@@ -51,12 +51,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
     selectBoxOptions: any;
     controller: string;
     CustomerVal: string;
-    ProductBasicList: any;
+    MaterialBasicList: any;
     CreateNumberInfoVal: any;
     CreateTime: any;
     CreateOrderNo: any;
     CreateTimeDateBoxOptions: any;
-    ProductPricrErrList: any;
+    MaterialPricrErrList: any;
     btnMod: any;
     Quantity: number;
     DBOriginPrice: number;
@@ -100,12 +100,12 @@ export class CreatorderComponent implements OnInit, OnChanges {
         };
 
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
-        // this.app.GetData('/Products/GetProducts').subscribe(
+        // this.app.GetData('/Materials/GetMaterials').subscribe(
         //     (s) => {
         //         console.log(s);
         //         debugger;
         //         if (s.success) {
-        //             this.ProductList = s.data;
+        //             this.MaterialList = s.data;
         //         }
         //     }
         // );
@@ -144,8 +144,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.ProductList = await SendService.sendRequest(this.http, '/Products/GetProducts');
-        this.ProductBasicList = await SendService.sendRequest(this.http, '/Products/GetProductBasics');
+        this.MaterialList = await SendService.sendRequest(this.http, '/Materials/GetMaterials');
+        this.MaterialBasicList = await SendService.sendRequest(this.http, '/Materials/GetMaterialBasics');
         if (this.modval === 'clone') {
             this.app.GetData('/OrderHeads/GetOrderHead/' + this.itemkeyval).subscribe(
                 (s) => {
@@ -162,8 +162,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
                         this.SerialNo = 0;
                         this.dataGridRowIndex = 0;
                         s.data.forEach(item => {
-                            if (item.ProductBasicId === 0) {
-                                item.ProductBasicId = null;
+                            if (item.MaterialBasicId === 0) {
+                                item.MaterialBasicId = null;
                             } else {
                                 this.SerialNo++;
                                 this.dataGridRowIndex++;
@@ -184,26 +184,26 @@ export class CreatorderComponent implements OnInit, OnChanges {
             // });
         } else if (this.modval === 'excel') {
             debugger;
-            let ProductPricrErr = '';
+            let MaterialPricrErr = '';
             if (this.exceldata.Customer === 0) {
                 this.exceldata.Customer = null;
             }
 
             this.SerialNo = 0;
-            this.ProductPricrErrList = [];
+            this.MaterialPricrErrList = [];
             this.exceldata.OrderDetails.forEach(item => {
                 this.SerialNo++;
-                if (item.ProductBasicId === 0) {
-                    item.ProductBasicId = null;
+                if (item.MaterialBasicId === 0) {
+                    item.MaterialBasicId = null;
                 } else {
                     this.dataGridRowIndex++;
                     item.RowIndex = this.dataGridRowIndex;
-                    const Product = this.ProductBasicList.filter(x => x.Id === item.ProductBasicId)[0];
-                    item.DBOriginPrice = Product.Price;
-                    item.DBPrice = Product.Price * item.Quantity;
-                    if (Product.Price !== item.OriginPrice && !this.ProductPricrErrList.some(x => x === Product.ProductNo)) {
-                        this.ProductPricrErrList.push(Product.ProductNo);
-                        ProductPricrErr += Product.ProductNo + '：' + Product.Price + '=>' + item.OriginPrice + '<br/>';
+                    const Material = this.MaterialBasicList.filter(x => x.Id === item.MaterialBasicId)[0];
+                    item.DBOriginPrice = Material.Price;
+                    item.DBPrice = Material.Price * item.Quantity;
+                    if (Material.Price !== item.OriginPrice && !this.MaterialPricrErrList.some(x => x === Material.MaterialNo)) {
+                        this.MaterialPricrErrList.push(Material.MaterialNo);
+                        MaterialPricrErr += Material.MaterialNo + '：' + Material.Price + '=>' + item.OriginPrice + '<br/>';
                     }
                 }
             });
@@ -213,13 +213,13 @@ export class CreatorderComponent implements OnInit, OnChanges {
             this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;
             this.formData.OrderType = 0;
             this.dataSourceDB = this.exceldata.OrderDetails;
-            if (ProductPricrErr) {
+            if (MaterialPricrErr) {
                 Swal.fire({
                     allowEnterKey: false,
                     allowOutsideClick: false,
                     title: '金額不同',
                     icon: 'info',
-                    html: '品項=>訂單<br/>' + ProductPricrErr,
+                    html: '品項=>訂單<br/>' + MaterialPricrErr,
                     confirmButtonText: '確認'
                 });
             }
@@ -241,11 +241,11 @@ export class CreatorderComponent implements OnInit, OnChanges {
     };
     onValueChanged(e, data) {
         data.setValue(e.value);
-        const Product = this.ProductBasicList.filter(x => x.Id === e.value)[0];
+        const Material = this.MaterialBasicList.filter(x => x.Id === e.value)[0];
         this.Quantity = 1;
-        this.DBOriginPrice = Product.Price;
-        this.DBPrice = this.Quantity * Product.Price;
-        this.OriginPrice = Product.Price;
+        this.DBOriginPrice = Material.Price;
+        this.DBPrice = this.Quantity * Material.Price;
+        this.OriginPrice = Material.Price;
         this.Price = this.Quantity * this.OriginPrice;
     }
     QuantityonValueChanged(e, data) {
@@ -330,7 +330,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                 }
                 this.dataGrid.instance.saveEditData();
                 this.formData = this.myform.instance.option('formData');
-                const hnull = this.dataSourceDB.find(item => item.ProductBasicId == null);
+                const hnull = this.dataSourceDB.find(item => item.MaterialBasicId == null);
                 if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
                     notify({
                         message: '請注意訂單內容必填的欄位',
