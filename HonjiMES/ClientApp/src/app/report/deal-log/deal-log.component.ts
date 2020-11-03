@@ -61,7 +61,6 @@ export class DealLogComponent implements OnInit, OnChanges {
         );
     }
     ngOnChanges() {
-        debugger;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetDealPriceRecord?id=' + this.itemkeyval)

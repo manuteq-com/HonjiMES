@@ -43,7 +43,7 @@ export class SaleReturnComponent implements OnInit {
         this.remoteOperations = true;
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.getdata();
-        this.app.GetData('/Products/GetProductBasics').subscribe(
+        this.app.GetData('/Material/GetMaterialBasics').subscribe(
             (s) => {
                 if (s.success) {
                     this.ProductList = s.data;

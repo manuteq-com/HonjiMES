@@ -104,7 +104,7 @@ export class DealPriceComponent implements OnInit {
         }
     }
     ngOnInit() {
-        this.titleService.setTitle('銷貨退回紀錄查詢');
+        this.titleService.setTitle('交易單價紀錄');
     }
 
     onDataErrorOccurred(e) {
