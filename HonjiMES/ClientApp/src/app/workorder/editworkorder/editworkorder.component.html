@@ -52,12 +52,23 @@
     <!-- <div class="long-title">
         <h5>採購內容</h5>
     </div> -->
-    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" height="580"
-        (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
-        (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
-        (onRowRemoved)="onRowRemoved($event)" (onSelectionChanged)="onSelectionChanged($event)"
-        (onToolbarPreparing)="onToolbarPreparing($event)" (onEditorPreparing)="editorPreparing($event)"
-        (onRowClick)="onRowClick($event)" [showColumnLines]="true" [showRowLines]="true"
+    <dx-data-grid #dataGrid2
+        [dataSource]="dataSourceDB"
+        [showBorders]="true"
+        keyExpr="Id"
+        height="580"
+        (onFocusedCellChanging)="onFocusedCellChanging($event)"
+        (onInitNewRow)="onInitNewRow($event)"
+        (onEditingStart)="onEditingStart($event)"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowRemoved)="onRowRemoved($event)"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onSelectionChanged)="onSelectionChanged($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+        (onEditorPreparing)="editorPreparing($event)"
+        (onRowClick)="onRowClick($event)"
+        [showColumnLines]="true"
+        [showRowLines]="true"
         hoverStateEnabled="true">
 
         <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
