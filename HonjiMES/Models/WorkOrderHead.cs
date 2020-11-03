@@ -40,7 +40,7 @@ namespace HonjiMES.Models
         /// &#26009;&#34399;&#31278;&#39006;(1&#21407;&#26009; 2&#25104;&#21697; 3 &#21322;&#25104;&#21697;)
         /// </summary>
         [Column("data_type", TypeName = "int(11)")]
-        public int DataType { get; set; }
+        public int? DataType { get; set; }
         /// <summary>
         /// &#26009;&#34399;ID
         /// </summary>

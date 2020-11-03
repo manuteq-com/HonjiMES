@@ -155,7 +155,7 @@ namespace HonjiMES.Models
     public class StockDetailData
     {
         public int TempId { get; set; }
-        public int DataType { get; set; }
+        public int? DataType { get; set; }
         public int DataId { get; set; }
         public string DataNo { get; set; }
         public string DataName { get; set; }

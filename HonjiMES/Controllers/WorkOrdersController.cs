@@ -316,7 +316,7 @@ namespace HonjiMES.Controllers
                 foreach (var item in OrderData.OrderDetail)
                 {
                     // var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).AnyAsync();
-                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataType == 2 && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
+                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
                     var CheckMaterialBasic = OrderDetailList.Where(x => x.MaterialBasicId == item.MaterialBasicId && x.DeleteFlag == 0);
                     if (CheckMaterialBasic.Count() == 0 || CheckWorkOrder)
                     {
@@ -373,7 +373,7 @@ namespace HonjiMES.Controllers
                 foreach (var item in OrderData.OrderDetail)
                 {
                     // var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).AnyAsync();
-                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataType == 2 && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
+                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
                     var CheckMaterialBasic = OrderDetailList.Where(x => x.MaterialBasicId == item.MaterialBasicId && x.DeleteFlag == 0);
                     if (CheckMaterialBasic.Count() == 0 || CheckWorkOrder)
                     {
@@ -1654,7 +1654,7 @@ namespace HonjiMES.Controllers
                 }
                 var workOrderNo = key + WorkOrderNo + (NoCount + TempNo).ToString("000");
 
-                var DataType = 2;
+                // var DataType = 0;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
@@ -1666,6 +1666,7 @@ namespace HonjiMES.Controllers
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.MaterialNo;
                     BasicDataName = BasicData.Name;
+                    // DataType = BasicData.MaterialType ?? 0;
 
                     StockInfo = "無庫存";
                     var WarehousesInfo = Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301");
@@ -1703,7 +1704,7 @@ namespace HonjiMES.Controllers
 
                 var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
                 // var CheckWorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
-                var CheckWorkOrderHeads = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
+                var CheckWorkOrderHeads = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == OrderDetail.Id && x.DataType == BasicData.MaterialType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToListAsync();
                 if (CheckWorkOrderHeads.Count() > 0)
                 {
                     status = 1;
@@ -1719,7 +1720,7 @@ namespace HonjiMES.Controllers
                     WorkOrderNo = workOrderNo,
                     OrderDetailId = OrderDetail.Id, // 
                     MachineNo = OrderDetail.MachineNo,
-                    DataType = DataType,
+                    DataType = BasicData.MaterialType,
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
@@ -1762,7 +1763,7 @@ namespace HonjiMES.Controllers
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
 
-                var DataType = 2;
+                // var DataType = 0;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
@@ -1772,6 +1773,7 @@ namespace HonjiMES.Controllers
                     BasicDataID = BasicData.Id;
                     BasicDataNo = BasicData.MaterialNo;
                     BasicDataName = BasicData.Name;
+                    // DataType = BasicData.MaterialType ?? 0;
                 // }
                 // else if (DataType == 2)
                 // {
@@ -1789,7 +1791,7 @@ namespace HonjiMES.Controllers
                     WorkOrderNo = workOrderNo,
                     OrderDetailId = OrderToWorkCheckData.OrderDetail.Id, // 
                     MachineNo = OrderToWorkCheckData.OrderDetail.MachineNo,
-                    DataType = DataType,
+                    DataType = BasicData.MaterialType,
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
@@ -1854,7 +1856,7 @@ namespace HonjiMES.Controllers
                         nWorkOrderHead.OrderDetailAndWorkOrderHeads.Add(new OrderDetailAndWorkOrderHead
                         {
                             OrderDetailId = item.OrderDetailId,
-                            DataType = 2,
+                            DataType = nWorkOrderHead.DataType,
                             DataId = OrderToWorkCheckData.OrderDetail.MaterialBasicId,
                             OrdeCount = item.Count,
                             CreateTime = DateTime.Now,
@@ -1924,7 +1926,8 @@ namespace HonjiMES.Controllers
                     var billOfMaterial = _context.MBillOfMaterials.AsQueryable().Where(x => x.BomId == item.Id).ToList();
                     if (billOfMaterial.Count() != 0)
                     {
-                        var DataType = 0;
+                        var BasicData = new MaterialBasic();
+                        // var DataType = NULL;
                         var BasicDataID = 0;
                         var BasicDataNo = "";
                         var BasicDataName = "";
@@ -1932,8 +1935,8 @@ namespace HonjiMES.Controllers
                         var Warehouses = _context.Warehouses.Where(x => x.DeleteFlag == 0);
                         if (item.MaterialBasicId != null)
                         {
-                            var BasicData = _context.MaterialBasics.Find(item.MaterialBasicId);
-                            DataType = 1;
+                            BasicData = _context.MaterialBasics.Find(item.MaterialBasicId);
+                            // DataType = BasicData.MaterialType;
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.MaterialNo;
                             BasicDataName = BasicData.Name;
@@ -1951,8 +1954,8 @@ namespace HonjiMES.Controllers
                         }
                         else if (item.ProductBasicId != null)
                         {
-                            var BasicData = _context.MaterialBasics.Find(item.ProductBasicId);
-                            DataType = 2;
+                            BasicData = _context.MaterialBasics.Find(item.ProductBasicId);
+                            // DataType = BasicData.MaterialType;
                             BasicDataID = BasicData.Id;
                             BasicDataNo = BasicData.MaterialNo;
                             BasicDataName = BasicData.Name;
@@ -1971,7 +1974,7 @@ namespace HonjiMES.Controllers
 
                         var status = 0; // 工單是否已建立，和是否有MBOM (0否 1是 2無MBOM)
                         // var CheckWorkOrderHeads = _context.WorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
-                        var CheckWorkOrderHeads = _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == DataType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
+                        var CheckWorkOrderHeads = _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == WorkOrderHead.OrderDetailId && x.DataType == BasicData.MaterialType && x.DataId == BasicDataID && x.DeleteFlag == 0).ToList();
                         if (CheckWorkOrderHeads.Count() > 0)
                         {
                             status = 1;
@@ -1982,7 +1985,7 @@ namespace HonjiMES.Controllers
                             WorkOrderNo = WorkOrderHead.WorkOrderNo + "-" + index,
                             OrderDetailId = WorkOrderHead.OrderDetailId, // 
                             MachineNo = WorkOrderHead.MachineNo,
-                            DataType = DataType,
+                            DataType = BasicData.MaterialType,
                             DataId = BasicDataID,
                             DataNo = BasicDataNo,
                             DataName = BasicDataName,

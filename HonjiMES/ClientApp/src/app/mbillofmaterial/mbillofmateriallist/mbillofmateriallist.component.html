@@ -38,13 +38,13 @@
             </dxo-remote-operations> -->
             <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="false"></dxo-editing>
 
-            <dxi-column dataField="MaterialNo" caption="品號" [allowEditing]="false" [filterValue]="" dataType="string"
-                sortOrder="asc">
+            <dxi-column dataField="MaterialNo" caption="品號" [allowEditing]="false" [filterValue]="" dataType="string">
             </dxi-column>
             <dxi-column dataField="Name" caption="品名" dataType="string"></dxi-column>
             <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
             <dxi-column dataField="Property" caption="廠內規格"></dxi-column>
             <dxi-column dataField="MaterialNumber" caption="廠內品號"></dxi-column>
+            <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" [visible]="false" sortOrder="desc"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">

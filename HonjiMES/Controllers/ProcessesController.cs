@@ -450,7 +450,7 @@ namespace HonjiMES.Controllers
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
 
-                var DataType = 2;
+                // var DataType = 0;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
                 var BasicDataName = "";
@@ -461,7 +461,6 @@ namespace HonjiMES.Controllers
                     BasicDataNo = BasicData.MaterialNo;
                     BasicDataName = BasicData.Name;
                     // DataType = BasicData.MaterialType == 1 ? 1 : 2;
-                    DataType = BasicData.MaterialType ?? 0;
                 // }
                 // else if (DataType == 2)
                 // {
@@ -478,7 +477,7 @@ namespace HonjiMES.Controllers
                 {
                     WorkOrderNo = workOrderNo,
                     MachineNo = WorkOrderData.WorkOrderHead.MachineNo,
-                    DataType = DataType,
+                    DataType = BasicData.MaterialType,
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,

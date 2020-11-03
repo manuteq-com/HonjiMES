@@ -48,7 +48,6 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#24288;&#20839;&#25104;&#21697;&#34399;
         /// </summary>
-        [Required]
         [Column("material_number", TypeName = "varchar(50)")]
         public string MaterialNumber { get; set; }
         /// <summary>
