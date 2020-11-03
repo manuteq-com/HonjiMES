@@ -9,11 +9,15 @@
         [width]="width"
         [showValidationSummary]="true">
 
-        <dxi-item dataField="MaterialNo">
+        <dxi-item dataField="MaterialNo" [visible]="btnVisibled">
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
             <dxi-validation-rule type="async" message="品號已存在" [validationCallback]="asyncValidation"></dxi-validation-rule>
             <dxo-label text="品號"></dxo-label>
         </dxi-item>
+        <dxi-item dataField="MaterialNo" [visible]="!btnVisibled">
+            <dxo-label text="品號"></dxo-label>
+        </dxi-item>
+
         <dxi-item dataField="Name">
             <dxi-validation-rule type="required" message="品名 必填"></dxi-validation-rule>
             <dxo-label text="品名"></dxo-label>
@@ -35,8 +39,8 @@
             <dxo-label text="規格"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Property">
-            <!-- <dxi-validation-rule type="required" message="屬性 必填"></dxi-validation-rule> -->
-            <dxo-label text="屬性"></dxo-label>
+            <!-- <dxi-validation-rule type="required" message="廠內規格 必填"></dxi-validation-rule> -->
+            <dxo-label text="廠內規格"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)">
             <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
@@ -83,23 +87,18 @@
             <!-- <dxi-validation-rule type="required" message="存放庫別 必填"></dxi-validation-rule> -->
             <dxo-label text="存放庫別"></dxo-label>
             <dx-drop-down-box
-                [(value)]="gridBoxValue"
                 valueExpr="Id"
                 displayExpr="Name"
-                [showClearButton]="true"
                 [dataSource]="WarehouseList">
                 <div *dxTemplate="let data of 'content'">
                     <dx-data-grid
                         keyExpr="Id"
                         [dataSource]="WarehouseList"
-                        [columns]="['名稱']"
-                        [selection]="{ mode: 'multiple' }"
-                        [hoverStateEnabled]="true"
+                        [columns]="['Name']"
                         [paging]="{ enabled: true, pageSize: 10 }"
                         [filterRow]="{ visible: false }"
                         [scrolling]="{ mode: 'infinite' }"
-                        [height]="245"
-                        [(selectedRowKeys)]="gridBoxValue">
+                        [height]="245">
                     </dx-data-grid>
                 </div>
             </dx-drop-down-box>

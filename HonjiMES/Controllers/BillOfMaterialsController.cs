@@ -483,7 +483,7 @@ namespace HonjiMES.Controllers
             {
                 nBillOfMaterials.MaterialBasicId = PostBom.BasicId;
             }
-            else if (PostBom.BasicType == 2 && PostBom.BasicId.HasValue)//成品連同組成加入
+            else if (PostBom.BasicType == null && PostBom.BasicId.HasValue)//成品連同組成加入
             {
                 //複製BOM內容
                 int BasicId = PostBom.BasicId.Value;
