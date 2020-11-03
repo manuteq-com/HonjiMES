@@ -176,8 +176,8 @@ export class MbillofmateriallistComponent implements OnInit, OnChanges {
             this.bomNo = variable.MaterialNo;
             this.bomName = variable.MaterialName;
         } else {
-            this.bomNo = variable.MaterialNo;
-            this.bomName = variable.MaterialName;
+            this.bomNo = variable.ProductNo;
+            this.bomName = variable.ProductName;
         }
         this.saveDisabled = false;
         this.app.GetData('/BillOfMaterials/GetProcessByBomId/' + this.bomId).subscribe(
