@@ -44,14 +44,14 @@
         </dxo-keyboard-navigation>
         <dxo-paging [enabled]="false">
         </dxo-paging>
-        <dxi-column dataField="MaterialBasicId" caption="元件品號" editCellTemplate="MaterialNoTemplate" >
+        <dxi-column dataField="MaterialBasicId" caption="品號" editCellTemplate="MaterialNoTemplate" >
             <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Name" caption="元件品名" editCellTemplate="NameTemplate" >
+        <dxi-column dataField="MaterialBasic.Name" caption="品名" editCellTemplate="NameTemplate" >
         </dxi-column>
         <dxi-column dataField="MaterialBasic.Specification" caption="規格" editCellTemplate="SpecificationTemplate">
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Property" caption="屬性" editCellTemplate="PropertyTemplate">
+        <dxi-column dataField="MaterialBasic.Property" caption="廠內規格" editCellTemplate="PropertyTemplate">
         </dxi-column>
         <dxi-column dataField="MaterialBasic.Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceTemplate">
         </dxi-column>

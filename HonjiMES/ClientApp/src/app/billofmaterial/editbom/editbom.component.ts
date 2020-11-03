@@ -155,7 +155,7 @@ export class EditbomComponent implements OnInit, OnChanges {
         this.PostBom.BasicType = basicData.DataType;
         this.PostBom.BasicId = basicData.DataId;
         this.buttondisabled = false;
-        if (this.modval === 'receive') {
+        if (this.modval === 'receive') { // 工單領料時
             try {
                 const sendRequest = await SendService.sendRequest(
                     this.http,
@@ -180,7 +180,7 @@ export class EditbomComponent implements OnInit, OnChanges {
             } catch (error) {
 
             }
-        } else {
+        } else { // 建立BOM資訊時
             try {
                 const sendRequest = await SendService.sendRequest(
                     this.http,
