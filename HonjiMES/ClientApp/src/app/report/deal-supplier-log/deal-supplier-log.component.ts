@@ -12,20 +12,19 @@ import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 
-
 @Component({
-  selector: 'app-deal-log',
-  templateUrl: './deal-log.component.html',
-  styleUrls: ['./deal-log.component.css']
+  selector: 'app-deal-supplier-log',
+  templateUrl: './deal-supplier-log.component.html',
+  styleUrls: ['./deal-supplier-log.component.css']
 })
-export class DealLogComponent implements OnInit, OnChanges {
+export class DealSupplierLogComponent implements OnInit {
     @Input() itemkeyval: any;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/OrderHeads';
+    Controller = '/PurchaseHeads';
     itemkey: number;
     mod: string;
     uploadUrl: string;
@@ -43,7 +42,6 @@ export class DealLogComponent implements OnInit, OnChanges {
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
         this.remoteOperations = true;
-        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
         this.app.GetData('/ProductBasics/GetProductBasics').subscribe(
             (s) => {
@@ -61,11 +59,13 @@ export class DealLogComponent implements OnInit, OnChanges {
         );
     }
     ngOnChanges() {
+        debugger;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetDealPriceRecord?id=' + this.itemkeyval)
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillOfPurchaseByDetailId?id=' + this.itemkeyval)
         });
     }
+
     ngOnInit(){}
 
     onUploaded(e) {
@@ -92,14 +92,7 @@ export class DealLogComponent implements OnInit, OnChanges {
             }
         }
     }
-    onValueChanged(e) {
-        debugger;
-        // if (e.value === '全部資料') {
-        //     this.dataGrid.instance.clearFilter();
-        // } else {
-        //     this.dataGrid.instance.filter(['Message', '=', e.value]);
-        // }
-    }
+
 
     onDataErrorOccurred(e) {
         notify({
@@ -118,4 +111,5 @@ export class DealLogComponent implements OnInit, OnChanges {
     selectionChanged(e) {
     }
     download(){}
+
 }

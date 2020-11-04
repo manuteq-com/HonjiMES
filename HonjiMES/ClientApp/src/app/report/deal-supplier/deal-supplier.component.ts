@@ -14,35 +14,36 @@ import { Title } from '@angular/platform-browser';
 
 
 @Component({
-  selector: 'app-deal-price',
-  templateUrl: './deal-price.component.html',
-  styleUrls: ['./deal-price.component.css']
+  selector: 'app-deal-supplier',
+  templateUrl: './deal-supplier.component.html',
+  styleUrls: ['./deal-supplier.component.css']
 })
-export class DealPriceComponent implements OnInit {
+export class DealSupplierComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/OrderHeads';
+    Controller = '/PurchaseDetails';
     itemkey: number;
-    mod: string;
-    uploadUrl: string;
     remoteOperations: boolean;
     editorOptions: any;
     detailfilter: any;
     MaterialList: any;
-    listSaleOrderStatus: any;
-    CustomerList: any;
+    listPurchaseStatus: any;
+    SupplierList: any;
     OrderTypeList: any;
     ProductList: any;
     UserList: any;
     logpopupVisible: boolean;
-    MaterialBasicList: any;
+    listPurchaseOrderStatus: any;
+    listStatus: any;
+    warehousesList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-        this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
+        this.listPurchaseStatus = myservice.getpurchasetypes();
+        this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();
+        this.listStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
-        this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
         this.getdata();
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
@@ -51,17 +52,20 @@ export class DealPriceComponent implements OnInit {
                 }
             }
         );
-        this.app.GetData('/Customers/GetCustomers').subscribe(
+        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
                 if (s.success) {
-                    this.CustomerList = s.data;
+                    this.SupplierList = s.data;
                 }
             }
         );
-        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
-            (s2) => {
-                if (s2.success) {
-                    this.MaterialBasicList = s2.data;
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                if (s.success) {
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+                    this.warehousesList = s.data;
                 }
             }
         );
@@ -71,48 +75,19 @@ export class DealPriceComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetOrderData',
+                this.Controller + '/GetPurchaseDetails',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetSaleReturnRecords', 'GET', { key }),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetPurchaseData', 'GET', { key }),
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustLog', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
         });
     }
     onUploaded(e) {
-
     }
 
-    onFocusedRowChanging(e) {
-        const rowsCount = e.component.getVisibleRows().length;
-        const pageCount = e.component.pageCount();
-        const pageIndex = e.component.pageIndex();
-        const key = e.event && e.event.key;
-
-        if (key && e.prevRowIndex === e.newRowIndex) {
-            if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
-                // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
-                    e.component.option('focusedRowIndex', 0);
-                });
-            } else if (e.newRowIndex === 0 && pageIndex > 0) {
-                // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
-                    e.component.option('focusedRowIndex', rowsCount - 1);
-                });
-            }
-        }
-    }
-    onValueChanged(e) {
-        debugger;
-        if (e.value === '全部資料') {
-            this.dataGrid.instance.clearFilter();
-        } else {
-            this.dataGrid.instance.filter(['Message', '=', e.value]);
-        }
-    }
     ngOnInit() {
-        this.titleService.setTitle('交易單價紀錄');
+        this.titleService.setTitle('廠商交易紀錄');
     }
 
     onDataErrorOccurred(e) {
@@ -129,12 +104,6 @@ export class DealPriceComponent implements OnInit {
         debugger;
         this.itemkey = data.key;
         this.logpopupVisible = true;
-    }
-    onFocusedRowChanged(e) {
-    }
-    onEditorPreparing(e) {
-    }
-    selectionChanged(e) {
     }
     download(){}
 }

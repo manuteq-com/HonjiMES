@@ -410,5 +410,18 @@ namespace HonjiMES.Controllers
         {
             return _context.PurchaseHeads.Any(e => e.Id == id);
         }
+        
+        /// <summary>
+        /// 廠商交易紀錄
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<BillofPurchaseDetail>> GetBillOfPurchaseByDetailId(int? id,
+            [FromQuery] DataSourceLoadOptions FromQuery,
+            [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            var data = _context.BillofPurchaseDetails.AsQueryable().Where(x => x.PurchaseDetailId == id).Include(x => x.BillofPurchase);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
     }
 }
