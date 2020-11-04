@@ -38,6 +38,7 @@ export class DealPriceComponent implements OnInit {
     ProductList: any;
     UserList: any;
     logpopupVisible: boolean;
+    MaterialBasicList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
         this.remoteOperations = true;
@@ -54,6 +55,13 @@ export class DealPriceComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.CustomerList = s.data;
+                }
+            }
+        );
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.MaterialBasicList = s2.data;
                 }
             }
         );

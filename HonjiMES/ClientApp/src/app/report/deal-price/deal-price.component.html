@@ -46,18 +46,27 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="200"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
     <dxi-column dataField="Customer" caption="客戶名稱" [width]="220">
         <dxo-lookup [dataSource]="CustomerList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="250"></dxi-column>
-    <dxi-column dataField="OrderNo" caption="訂單單號" sortOrder="desc" [width]="220"></dxi-column>
+    <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="180"></dxi-column>
+    <dxi-column dataField="OrderNo" caption="訂單單號" sortOrder="desc" [width]="130"></dxi-column>
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="180">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="MaterialBasicId" caption="品名" [width]="180">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="MaterialBasicId" caption="規格" [width]="180">
+        <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="listSaleOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="200"></dxi-column>
-    <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="200"></dxi-column>
+    <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="110"></dxi-column>
+    <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="110"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -68,7 +77,7 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
+<dx-popup [showTitle]="true" title="銷貨交易明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
             [height]="800" [(visible)]="logpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-deal-log [itemkeyval]="itemkey"></app-deal-log>

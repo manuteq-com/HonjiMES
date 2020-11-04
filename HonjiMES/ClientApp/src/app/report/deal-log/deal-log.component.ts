@@ -66,6 +66,7 @@ export class DealLogComponent implements OnInit, OnChanges {
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetDealPriceRecord?id=' + this.itemkeyval)
         });
     }
+    ngOnInit(){}
 
     onUploaded(e) {
 
@@ -98,9 +99,6 @@ export class DealLogComponent implements OnInit, OnChanges {
         // } else {
         //     this.dataGrid.instance.filter(['Message', '=', e.value]);
         // }
-    }
-    ngOnInit() {
-        this.titleService.setTitle('銷貨退回紀錄查詢');
     }
 
     onDataErrorOccurred(e) {
