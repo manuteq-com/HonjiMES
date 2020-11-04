@@ -449,6 +449,13 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             }
         });
     }
+    onRowPrepared(e) {
+        if (e.data !== undefined) {
+            if (e.data.Status === 2) {
+                e.rowElement.style.backgroundColor = '#f8f691';
+            }
+        }
+    }
     validateNumber(e) {
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData().find(x => x.Id === e.data.Id);
         if (SelectedRows) {
