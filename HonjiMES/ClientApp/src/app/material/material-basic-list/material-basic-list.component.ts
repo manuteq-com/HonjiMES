@@ -37,12 +37,16 @@ export class MaterialBasicListComponent implements OnInit {
     supplierList: any;
     NumberBoxOptions: any;
     materialTypeList: any;
+    randomkey: number;
+    creatMod: string;
+    creatItemkey: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.materialTypeList = myservice.getlistMaterialType();
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
         this.saveClickHandler = this.saveClickHandler.bind(this);
+        this.cloneIconClick = this.cloneIconClick.bind(this);
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.remoteOperations = true;
         this.supplierList = [];
@@ -95,7 +99,8 @@ export class MaterialBasicListComponent implements OnInit {
         this.titleService.setTitle('品號資料');
     }
     creatdata() {
-        this.itemkey = new Date().getTime();
+        this.randomkey = new Date().getTime();
+        this.creatMod = null;
         this.creatpopupVisible = true;
     }
     creatAdjust() {
@@ -111,6 +116,13 @@ export class MaterialBasicListComponent implements OnInit {
                 at: 'center top'
             }
         }, 'success', 3000);
+    }
+    cloneIconClick(e) {
+        // debugger;
+        this.creatItemkey = e.row.key;
+        this.creatMod = 'clone';
+        this.creatpopupVisible = true;
+        // e.event.preventDefault();
     }
     adjustpopup_result(e) {
         this.adjustpopupVisible = false;

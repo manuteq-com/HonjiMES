@@ -445,6 +445,7 @@ namespace HonjiMES.Controllers
                         {
                             MaterialNo = Materialitemlist[0].Trim(),
                             MaterialNumber = Materialitemlist[0].Trim(),
+                            MaterialType = 2, // Excel匯入，自動建立[成品]品號
                             Name = Materialitemlist[1].Trim(),
                             Specification = Materialitemlist[2].Trim(),
                             Property = "",

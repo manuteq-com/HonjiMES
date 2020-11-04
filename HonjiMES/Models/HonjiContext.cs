@@ -945,6 +945,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.MaterialNo)
                     .HasComment("品號")
                     .HasCharSet("utf8mb4")

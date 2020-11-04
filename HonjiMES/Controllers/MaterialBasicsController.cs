@@ -31,7 +31,12 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery)
         {
              _context.ChangeTracker.LazyLoadingEnabled = true;
-            var materialBasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Materials.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
+            var materialBasic = _context.MaterialBasics
+            .Where(x => x.DeleteFlag == 0)
+            .OrderByDescending(x => x.UpdateTime)
+            .ThenByDescending(x => x.Materials.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime)
+            .Include(x => x.Materials)
+            .Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
 
@@ -47,6 +52,7 @@ namespace HonjiMES.Controllers
                 SupplierId = x.SupplierId,
                 Weight = x.Weight,
                 Remarks = x.Remarks,
+                DrawNo = x.DrawNo,
                 CreateTime = x.CreateTime,
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
