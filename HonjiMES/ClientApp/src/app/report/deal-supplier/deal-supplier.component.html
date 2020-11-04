@@ -1,0 +1,81 @@
+<div class="headerblock">
+    <div class="headerfont font1">報表管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">廠商交易紀錄</div>
+    <div class="buttongroup">
+        <dx-button
+            class="searchbtn"
+            stylingMode="contained"
+            text="下載報表"
+            type="normal"
+            [width]="140"
+            (onClick)="download()">
+        </dx-button>
+    </div>
+</div>
+
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
+    >
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    </dxo-editing>
+
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+    <dxi-column dataField="SupplierId" caption="廠商名稱" [width]="220">
+        <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Purchase.PurchaseNo" caption="採購單號" sortOrder="desc" [width]="120"></dxi-column>
+    <dxi-column dataField="DataType" caption="類別" [width]="70">
+        <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Purchase.Status" caption="狀態" [width]="80">
+        <dxo-lookup [dataSource]="listPurchaseOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Purchase.Type" caption="採購種類" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="listPurchaseStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
+    <dxi-column dataField="DataNo" caption="品號" [width]="180"></dxi-column>
+    <dxi-column dataField="DataName" caption="品名" [width]="200"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [width]="200"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" [width]="50"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" [width]="50"></dxi-column>
+    <dxi-column dataField="Purchase.PurchaseDate" caption="採購日期"  dataType="date" [width]="100"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Remark" caption="備註" ></dxi-column>
+    <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+        <div *dxTemplate="let data of 'cellTemplate'">
+            <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
+    </div>
+</dx-data-grid>
+
+<dx-popup [showTitle]="true" title="廠商進貨明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
+            [height]="800" [(visible)]="logpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-deal-supplier-log [itemkeyval]="itemkey"></app-deal-supplier-log>
+    </div>
+</dx-popup>

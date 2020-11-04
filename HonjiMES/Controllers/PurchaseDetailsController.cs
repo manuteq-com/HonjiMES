@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HonjiMES.Models;
+using DevExtreme.AspNet.Mvc;
 using HonjiMES.Filter;
 
 namespace HonjiMES.Controllers
@@ -29,11 +30,14 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/PurchaseDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetails()
+        public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetails(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.PurchaseDetails.AsQueryable().ToListAsync();
-            return Ok(MyFun.APIResponseOK(data));
+            var data = _context.PurchaseDetails.Where(x => x.DeleteFlag == 0).Include(x => x.Purchase)
+                .OrderByDescending(x => x.CreateTime);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
         /// <summary>
         /// 用ID取採購明細
@@ -220,5 +224,6 @@ namespace HonjiMES.Controllers
         {
             return _context.PurchaseDetails.Any(e => e.Id == id);
         }
+
     }
 }

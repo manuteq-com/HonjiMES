@@ -126,6 +126,8 @@ import { WorkorderCreatStockComponent } from './workorder/workorder-creat-stock/
 import { QualityRecordComponent } from './report/quality-record/quality-record.component';
 import { DealPriceComponent } from './report/deal-price/deal-price.component';
 import { DealLogComponent } from './report/deal-log/deal-log.component';
+import { DealSupplierComponent } from './report/deal-supplier/deal-supplier.component';
+import { DealSupplierLogComponent } from './report/deal-supplier-log/deal-supplier-log.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -266,7 +268,9 @@ export function tokenGetter() {
         WorkorderCreatStockComponent,
         QualityRecordComponent,
         DealPriceComponent,
-        DealLogComponent
+        DealLogComponent,
+        DealSupplierComponent,
+        DealSupplierLogComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
