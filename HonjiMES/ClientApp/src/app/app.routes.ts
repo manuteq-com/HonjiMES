@@ -36,6 +36,7 @@ import { BiilpurchaseReturnComponent } from './report/biilpurchase-return/biilpu
 import { QualityRecordComponent } from './report/quality-record/quality-record.component';
 import { DealPriceComponent } from './report/deal-price/deal-price.component';
 import { DealSupplierComponent } from './report/deal-supplier/deal-supplier.component';
+import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.component';
 
 
 
@@ -75,6 +76,7 @@ export const routes: Routes = [
     { path: 'qualityrecord', component: QualityRecordComponent, canActivate: [AuthGuard] },
     { path: 'dealprice', component: DealPriceComponent, canActivate: [AuthGuard] },
     { path: 'dealsupplier', component: DealSupplierComponent, canActivate: [AuthGuard] },
+    { path: 'purchasetotal', component: PurchaseTotalComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

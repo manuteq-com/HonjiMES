@@ -423,5 +423,48 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+
+        /// <summary>
+        /// 採購單的採購種類在各種狀態下的總數
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<PurchaseHead>> GetPurchaseQuantityByStatus()
+        {
+            var data = await _context.PurchaseHeads.ToListAsync();
+
+            var Types = new List<PurchaseTotal>();
+            var index = 0;
+
+            foreach (var item in data.GroupBy(x => x.Type).ToList())
+            {
+                Types.Add(new PurchaseTotal
+                {
+                    Id = index,
+                    Type = item.Key,
+                    New = item.Where( x => x.Status == 0 && x.Type == item.Key).Count(),
+                    PurchaseFinished = item.Where( x => x.Status == 1 && x.Type == item.Key).Count(),
+                    Undone = item.Where( x => x.Status == 2 && x.Type == item.Key).Count(),
+                });
+                index++;
+            }
+            return Ok(MyFun.APIResponseOK(Types));
+        }
+
+        /// <summary>
+        /// 不同狀態的採購單列表
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/PurchaseHeads
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PurchaseHead>>> GetPurchaseHeadsByType(int type,
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var data = _context.PurchaseHeads.Where(x => x.DeleteFlag == 0 && x.Type == type);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
     }
 }

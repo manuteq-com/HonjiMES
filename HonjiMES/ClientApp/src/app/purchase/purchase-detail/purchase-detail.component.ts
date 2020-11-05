@@ -20,6 +20,7 @@ import { Myservice } from 'src/app/service/myservice';
 export class PurchaseDetailComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @Input() status: boolean;
     @Input() itemkey: number;
     @Input() SupplierList: any;
     @Input() MaterialBasicList: any;
