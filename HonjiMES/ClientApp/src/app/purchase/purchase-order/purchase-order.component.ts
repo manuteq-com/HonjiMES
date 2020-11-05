@@ -1,7 +1,7 @@
 import { style } from '@angular/animations';
 import { PurchaseDetailComponent } from './../purchase-detail/purchase-detail.component';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
@@ -22,7 +22,7 @@ import { Title } from '@angular/platform-browser';
 export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-
+    @Output() status = true;
     creatpopupVisible: boolean;
     newpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
@@ -46,7 +46,6 @@ export class PurchaseOrderComponent implements OnInit {
     Url = '';
     purchaseHeadId: any;
     UserList: any;
-
     // tslint:disable-next-line: max-line-length
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
         this.TypeList = myservice.getpurchasetypes();

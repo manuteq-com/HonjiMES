@@ -10,7 +10,7 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
 (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" [rowAlternationEnabled]="true">
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true" ></dxo-editing>
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
             [customizeText]="customizeText"

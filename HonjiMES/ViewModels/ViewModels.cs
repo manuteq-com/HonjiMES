@@ -1116,4 +1116,14 @@ namespace HonjiMES.Models
         public DateTime CreateTime { get; set; }
     }
 
+    public class PurchaseTotal
+    {
+        public int Id { get; set; }
+        public int? Type { get; set; }
+        public int New { get; set; }
+        public int PurchaseFinished { get; set; }
+        public int Undone { get; set; }
+    }
+
+
 }
