@@ -111,7 +111,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AllStockLog>>> GetAdjustType()
         {
-            var data = await _context.AllStockLogs.ToListAsync();
+            var data = await _context.AllStockLogs.OrderBy(x => x.Message).ToListAsync();
 
             var AdjustTypes = new List<AdjustType>();
             var index = 0;
@@ -534,7 +534,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<AllStockLog>>> GetInventoryLog(
                 [FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0 && x.Message == "庫存調整單");
+            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0 && x.Message == "[庫存調整單]");
             // var MaterialLogs = await data.ToListAsync();
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));

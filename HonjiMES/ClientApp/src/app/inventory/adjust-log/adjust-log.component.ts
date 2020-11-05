@@ -37,6 +37,7 @@ export class AdjustLogComponent implements OnInit {
     listAdjustStatus: any;
     editorOptions: any;
     detailfilter: any;
+    UserList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
@@ -49,6 +50,13 @@ export class AdjustLogComponent implements OnInit {
             (s) => {
                 if (s.success) {
                     this.MaterialList = s.data;
+                }
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
                 }
             }
         );

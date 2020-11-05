@@ -255,7 +255,7 @@ namespace HonjiMES.Controllers
                             LinkOrder = PurchaseNo,
                             Original = Warehouse201.First().Quantity,
                             Quantity = -itemData.Quantity,
-                            Message = "表處轉倉",
+                            Message = "[轉倉]表處採購單",
                             CreateTime = dt.AddSeconds(-1),
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
@@ -268,7 +268,7 @@ namespace HonjiMES.Controllers
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
                                 Quantity = itemData.Quantity,
-                                Message = "表處轉倉",
+                                Message = "[轉倉]表處採購單",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -293,7 +293,7 @@ namespace HonjiMES.Controllers
                                     LinkOrder = PurchaseNo,
                                     Original = 0,
                                     Quantity = itemData.Quantity,
-                                    Message = "表處轉倉",
+                                    Message = "[轉倉]表處採購單",
                                     CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 }}
@@ -311,7 +311,7 @@ namespace HonjiMES.Controllers
                     //         LinkOrder = PurchaseNo,
                     //         Original = Warehouse201.First().Quantity,
                     //         Quantity = -itemData.Quantity,
-                    //         Message = "表處轉倉",
+                    //         Message = "[轉倉]表處採購單",
                     //         CreateTime = dt.AddSeconds(-1),
                     //         CreateUser = MyFun.GetUserID(HttpContext)
                     //     });
@@ -324,7 +324,7 @@ namespace HonjiMES.Controllers
                     //             LinkOrder = PurchaseNo,
                     //             Original = Warehouse202.First().Quantity,
                     //             Quantity = itemData.Quantity,
-                    //             Message = "表處轉倉",
+                    //             Message = "[轉倉]表處採購單",
                     //             CreateTime = dt,
                     //             CreateUser = MyFun.GetUserID(HttpContext)
                     //         });
@@ -350,7 +350,7 @@ namespace HonjiMES.Controllers
                     //                 LinkOrder = PurchaseNo,
                     //                 Original = 0,
                     //                 Quantity = itemData.Quantity,
-                    //                 Message = "表處轉倉",
+                    //                 Message = "[轉倉]表處採購單",
                     //                 CreateTime = dt,
                     //                 CreateUser = MyFun.GetUserID(HttpContext)
                     //             }}
@@ -368,7 +368,7 @@ namespace HonjiMES.Controllers
                     //         LinkOrder = PurchaseNo,
                     //         Original = Warehouse201.First().Quantity,
                     //         Quantity = -itemData.Quantity,
-                    //         Message = "表處轉倉",
+                    //         Message = "[轉倉]表處採購單",
                     //         CreateTime = dt.AddSeconds(-1),
                     //         CreateUser = MyFun.GetUserID(HttpContext)
                     //     });
@@ -381,7 +381,7 @@ namespace HonjiMES.Controllers
                     //             LinkOrder = PurchaseNo,
                     //             Original = Warehouse202.First().Quantity,
                     //             Quantity = itemData.Quantity,
-                    //             Message = "表處轉倉",
+                    //             Message = "[轉倉]表處採購單",
                     //             CreateTime = dt,
                     //             CreateUser = MyFun.GetUserID(HttpContext)
                     //         });
@@ -407,7 +407,7 @@ namespace HonjiMES.Controllers
                     //                 LinkOrder = PurchaseNo,
                     //                 Original = 0,
                     //                 Quantity = itemData.Quantity,
-                    //                 Message = "表處轉倉",
+                    //                 Message = "[轉倉]表處採購單",
                     //                 CreateTime = dt,
                     //                 CreateUser = MyFun.GetUserID(HttpContext)
                     //             }}
@@ -608,7 +608,7 @@ namespace HonjiMES.Controllers
                                 UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
                                 WorkPrice = BillofPurchaseCheckin.WorkPrice,
                                 Reason = "202庫存轉出",
-                                Message = "表處轉倉",
+                                Message = "[轉倉]表處採購單",
                                 CreateTime = dt.AddSeconds(-1),
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -646,7 +646,7 @@ namespace HonjiMES.Controllers
                             UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
                             WorkPrice = BillofPurchaseCheckin.WorkPrice,
                             Reason = BillofPurchaseCheckin.Remarks,
-                            Message = "進貨檢驗入庫",
+                            Message = "[進貨驗收]入庫",
                             CreateTime = dt,
                             CreateUser = MyFun.GetUserID(HttpContext)
                         }}
@@ -667,7 +667,7 @@ namespace HonjiMES.Controllers
                         UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
                         WorkPrice = BillofPurchaseCheckin.WorkPrice,
                         Reason = BillofPurchaseCheckin.Remarks,
-                        Message = "進貨檢驗入庫",
+                        Message = "[進貨驗收]入庫",
                         CreateTime = dt,
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
@@ -707,7 +707,7 @@ namespace HonjiMES.Controllers
             //                     UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //                     WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //                     Reason = "202庫存轉出",
-            //                     Message = "表處轉倉",
+            //                     Message = "[轉倉]表處採購單",
             //                     CreateTime = dt.AddSeconds(-1),
             //                     CreateUser = MyFun.GetUserID(HttpContext)
             //                 });
@@ -746,7 +746,7 @@ namespace HonjiMES.Controllers
             //                 UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //                 WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //                 Reason = BillofPurchaseCheckin.Remarks,
-            //                 Message = "進貨檢驗入庫",
+            //                 Message = "[進貨驗收]入庫",
             //                 CreateTime = dt,
             //                 CreateUser = MyFun.GetUserID(HttpContext)
             //             }}
@@ -767,7 +767,7 @@ namespace HonjiMES.Controllers
             //             UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //             WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //             Reason = BillofPurchaseCheckin.Remarks,
-            //             Message = "進貨檢驗入庫",
+            //             Message = "[進貨驗收]入庫",
             //             CreateTime = dt,
             //             CreateUser = MyFun.GetUserID(HttpContext)
             //         });
@@ -807,7 +807,7 @@ namespace HonjiMES.Controllers
             //                     UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //                     WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //                     Reason = "202庫存轉出",
-            //                     Message = "表處轉倉",
+            //                     Message = "[轉倉]表處採購單",
             //                     CreateTime = dt.AddSeconds(-1),
             //                     CreateUser = MyFun.GetUserID(HttpContext)
             //                 });
@@ -846,7 +846,7 @@ namespace HonjiMES.Controllers
             //                 UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //                 WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //                 Reason = BillofPurchaseCheckin.Remarks,
-            //                 Message = "進貨檢驗入庫",
+            //                 Message = "[進貨驗收]入庫",
             //                 CreateTime = dt,
             //                 CreateUser = MyFun.GetUserID(HttpContext)
             //             }}
@@ -867,7 +867,7 @@ namespace HonjiMES.Controllers
             //             UnitPriceAll = BillofPurchaseCheckin.UnitPriceAll,
             //             WorkPrice = BillofPurchaseCheckin.WorkPrice,
             //             Reason = BillofPurchaseCheckin.Remarks,
-            //             Message = "進貨檢驗入庫",
+            //             Message = "[進貨驗收]入庫",
             //             CreateTime = dt,
             //             CreateUser = MyFun.GetUserID(HttpContext)
             //         });
@@ -1015,7 +1015,7 @@ namespace HonjiMES.Controllers
                                         UnitPriceAll = item.UnitPriceAll,
                                         WorkPrice = item.WorkPrice,
                                         Reason = "202庫存轉出",
-                                        Message = "表處轉倉",
+                                        Message = "[轉倉]表處採購單",
                                         CreateTime = dt.AddSeconds(-1),
                                         CreateUser = MyFun.GetUserID(HttpContext)
                                     });
@@ -1053,7 +1053,7 @@ namespace HonjiMES.Controllers
                                     UnitPriceAll = item.UnitPriceAll,
                                     WorkPrice = item.WorkPrice,
                                     Reason = item.Remarks,
-                                    Message = "進貨檢驗入庫",
+                                    Message = "[進貨驗收]入庫",
                                     CreateTime = dt,
                                     CreateUser = MyFun.GetUserID(HttpContext)
                                 }}
@@ -1074,7 +1074,7 @@ namespace HonjiMES.Controllers
                                 UnitPriceAll = item.UnitPriceAll,
                                 WorkPrice = item.WorkPrice,
                                 Reason = item.Remarks,
-                                Message = "進貨檢驗入庫",
+                                Message = "[進貨驗收]入庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -1114,7 +1114,7 @@ namespace HonjiMES.Controllers
                     //                     UnitPriceAll = item.UnitPriceAll,
                     //                     WorkPrice = item.WorkPrice,
                     //                     Reason = "202庫存轉出",
-                    //                     Message = "表處轉倉",
+                    //                     Message = "[轉倉]表處採購單",
                     //                     CreateTime = dt.AddSeconds(-1),
                     //                     CreateUser = MyFun.GetUserID(HttpContext)
                     //                 });
@@ -1153,7 +1153,7 @@ namespace HonjiMES.Controllers
                     //                 UnitPriceAll = item.UnitPriceAll,
                     //                 WorkPrice = item.WorkPrice,
                     //                 Reason = item.Remarks,
-                    //                 Message = "進貨檢驗入庫",
+                    //                 Message = "[進貨驗收]入庫",
                     //                 CreateTime = dt,
                     //                 CreateUser = MyFun.GetUserID(HttpContext)
                     //             }}
@@ -1174,7 +1174,7 @@ namespace HonjiMES.Controllers
                     //             UnitPriceAll = item.UnitPriceAll,
                     //             WorkPrice = item.WorkPrice,
                     //             Reason = item.Remarks,
-                    //             Message = "進貨檢驗入庫",
+                    //             Message = "[進貨驗收]入庫",
                     //             CreateTime = dt,
                     //             CreateUser = MyFun.GetUserID(HttpContext)
                     //         });
@@ -1214,7 +1214,7 @@ namespace HonjiMES.Controllers
                     //                     UnitPriceAll = item.UnitPriceAll,
                     //                     WorkPrice = item.WorkPrice,
                     //                     Reason = "202庫存轉出",
-                    //                     Message = "表處轉倉",
+                    //                     Message = "[轉倉]表處採購單",
                     //                     CreateTime = dt.AddSeconds(-1),
                     //                     CreateUser = MyFun.GetUserID(HttpContext)
                     //                 });
@@ -1253,7 +1253,7 @@ namespace HonjiMES.Controllers
                     //                 UnitPriceAll = item.UnitPriceAll,
                     //                 WorkPrice = item.WorkPrice,
                     //                 Reason = item.Remarks,
-                    //                 Message = "進貨檢驗入庫",
+                    //                 Message = "[進貨驗收]入庫",
                     //                 CreateTime = dt,
                     //                 CreateUser = MyFun.GetUserID(HttpContext)
                     //             }}
@@ -1274,7 +1274,7 @@ namespace HonjiMES.Controllers
                     //             UnitPriceAll = item.UnitPriceAll,
                     //             WorkPrice = item.WorkPrice,
                     //             Reason = item.Remarks,
-                    //             Message = "進貨檢驗入庫",
+                    //             Message = "[進貨驗收]入庫",
                     //             CreateTime = dt,
                     //             CreateUser = MyFun.GetUserID(HttpContext)
                     //         });
@@ -1407,7 +1407,7 @@ namespace HonjiMES.Controllers
                     UnitPriceAll = BillofPurchaseReturn.UnitPriceAll,
                     WorkPrice = BillofPurchaseReturn.WorkPrice,
                     Reason = BillofPurchaseReturn.Reason,
-                    Message = "進貨驗退出庫",
+                    Message = "[進貨驗退]出庫",
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 Material.Quantity -= (int)BillofPurchaseReturn.Quantity;
@@ -1433,7 +1433,7 @@ namespace HonjiMES.Controllers
             //         UnitPriceAll = BillofPurchaseReturn.UnitPriceAll,
             //         WorkPrice = BillofPurchaseReturn.WorkPrice,
             //         Reason = BillofPurchaseReturn.Reason,
-            //         Message = "進貨驗退出庫",
+            //         Message = "[進貨驗退]出庫",
             //         CreateUser = MyFun.GetUserID(HttpContext)
             //     });
             //     Product.Quantity -= (int)BillofPurchaseReturn.Quantity;
@@ -1459,7 +1459,7 @@ namespace HonjiMES.Controllers
             //         UnitPriceAll = BillofPurchaseReturn.UnitPriceAll,
             //         WorkPrice = BillofPurchaseReturn.WorkPrice,
             //         Reason = BillofPurchaseReturn.Reason,
-            //         Message = "進貨驗退出庫",
+            //         Message = "[進貨驗退]出庫",
             //         CreateUser = MyFun.GetUserID(HttpContext)
             //     });
             //     Wiproduct.Quantity -= (int)BillofPurchaseReturn.Quantity;

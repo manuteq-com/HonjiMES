@@ -301,7 +301,7 @@ namespace HonjiMES.Controllers
                 inventorychange.MaterialLog.Original = Material.Quantity;
                 inventorychange.MaterialLog.CreateTime = dt;
                 inventorychange.MaterialLog.CreateUser = UserID;
-                inventorychange.MaterialLog.Message = "庫存調整";
+                inventorychange.MaterialLog.Message = "[庫存調整]";
                 Material.MaterialLogs.Add(inventorychange.MaterialLog);
                 Material.Quantity += inventorychange.MaterialLog.Quantity;
                 await _context.SaveChangesAsync();
@@ -415,7 +415,7 @@ namespace HonjiMES.Controllers
                                 UnitPriceAll = item.UnitPriceAll,
                                 WorkPrice = item.WorkPrice,
                                 Reason = item.Remark,
-                                Message = "庫存調整單",
+                                Message = "[庫存調整單]",
                                 CreateTime = dt,
                                 CreateUser = UserID
                             });
@@ -451,7 +451,7 @@ namespace HonjiMES.Controllers
                                     UnitPriceAll = item.UnitPriceAll,
                                     WorkPrice = item.WorkPrice,
                                     Reason = item.Remark,
-                                    Message = "庫存調整單",
+                                    Message = "[庫存調整單]",
                                     CreateTime = dt,
                                     CreateUser = UserID
                                 }}
@@ -481,7 +481,7 @@ namespace HonjiMES.Controllers
                     //             UnitPriceAll = item.UnitPriceAll,
                     //             WorkPrice = item.WorkPrice,
                     //             Reason = item.Remark,
-                    //             Message = "庫存調整單",
+                    //             Message = "[庫存調整單]",
                     //             CreateTime = dt,
                     //             CreateUser = UserID
                     //         });
@@ -518,7 +518,7 @@ namespace HonjiMES.Controllers
                     //                 UnitPriceAll = item.UnitPriceAll,
                     //                 WorkPrice = item.WorkPrice,
                     //                 Reason = item.Remark,
-                    //                 Message = "庫存調整單",
+                    //                 Message = "[庫存調整單]",
                     //                 CreateTime = dt,
                     //                 CreateUser = UserID
                     //             }}
@@ -548,7 +548,7 @@ namespace HonjiMES.Controllers
                     //             UnitPriceAll = item.UnitPriceAll,
                     //             WorkPrice = item.WorkPrice,
                     //             Reason = item.Remark,
-                    //             Message = "庫存調整單",
+                    //             Message = "[庫存調整單]",
                     //             CreateTime = dt,
                     //             CreateUser = UserID
                     //         });
@@ -585,7 +585,7 @@ namespace HonjiMES.Controllers
                     //                 UnitPriceAll = item.UnitPriceAll,
                     //                 WorkPrice = item.WorkPrice,
                     //                 Reason = item.Remark,
-                    //                 Message = "庫存調整單",
+                    //                 Message = "[庫存調整單]",
                     //                 CreateTime = dt,
                     //                 CreateUser = UserID
                     //             }}

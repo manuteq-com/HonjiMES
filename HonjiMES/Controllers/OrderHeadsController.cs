@@ -455,28 +455,30 @@ namespace HonjiMES.Controllers
 
                         // 自動新增Material資料。(2020/08/20 確認自動新增)
                         var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301").FirstAsync();// 固定新增301成品倉
-                        var nMaterial = new Material
-                        {
-                            MaterialNo = Materialitemlist[0].Trim(),
-                            MaterialNumber = Materialitemlist[0].Trim(),
-                            Name = Materialitemlist[1].Trim(),
-                            Quantity = 0,
-                            Specification = Materialitemlist[2].Trim(),
-                            Property = "",
-                            MaterialRequire = 1,
-                            CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext),
-                            WarehouseId = Warehouses.Id
-                        };
-                        nMaterial.MaterialLogs.Add(new MaterialLog
-                        {
-                            LinkOrder = MaterialByExcel.CustomerNo,
-                            Reason = "Excel匯入新增",
-                            Message = "品號新增",
-                            CreateTime = dt,
-                            CreateUser = MyFun.GetUserID(HttpContext)
-                        });
+                        if (Warehouses != null) {
+                            var nMaterial = new Material
+                            {
+                                MaterialNo = Materialitemlist[0].Trim(),
+                                MaterialNumber = Materialitemlist[0].Trim(),
+                                Name = Materialitemlist[1].Trim(),
+                                Quantity = 0,
+                                Specification = Materialitemlist[2].Trim(),
+                                Property = "",
+                                MaterialRequire = 1,
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                                WarehouseId = Warehouses.Id
+                            };
+                            nMaterial.MaterialLogs.Add(new MaterialLog
+                            {
+                                LinkOrder = MaterialByExcel.CustomerNo,
+                                Reason = "Excel匯入新增",
+                                Message = "[新增品號]",
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            });
                         nMaterialBasics.Materials.Add(nMaterial);
+                        }
                         nMaterialBasicslist.Add(nMaterialBasics);
                     }
                 }

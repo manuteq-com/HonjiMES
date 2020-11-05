@@ -530,11 +530,11 @@ namespace HonjiMES.Controllers
             var MessageType = "";
             if (WorkOrderReportData.Type == 0)
             {
-                MessageType = "半成品入庫";
+                MessageType = "[入庫單]半成品入庫";
             }
             else if (WorkOrderReportData.Type == 1)
             {
-                MessageType = "成品入庫";
+                MessageType = "[入庫單]成品入庫";
             }
             var checkInfo = false;
             // if (OWorkOrderHead.DataType == 1) // 原料
@@ -981,7 +981,7 @@ namespace HonjiMES.Controllers
                             LinkOrder = PurchaseNo,
                             Original = Warehouse201.First().Quantity,
                             Quantity = -WorkOrderReportData.ReCount,
-                            Message = "表處轉倉",
+                            Message = "[轉倉]表處採購單",
                             CreateTime = dt.AddSeconds(-1),
                             CreateUser = WorkOrderReportData.CreateUser
                         });
@@ -994,7 +994,7 @@ namespace HonjiMES.Controllers
                                 LinkOrder = PurchaseNo,
                                 Original = Warehouse202.First().Quantity,
                                 Quantity = WorkOrderReportData.ReCount,
-                                Message = "表處轉倉",
+                                Message = "[轉倉]表處採購單",
                                 CreateTime = dt,
                                 CreateUser = WorkOrderReportData.CreateUser
                             });
@@ -1019,7 +1019,7 @@ namespace HonjiMES.Controllers
                                     LinkOrder = PurchaseNo,
                                     Original = 0,
                                     Quantity = WorkOrderReportData.ReCount,
-                                    Message = "表處轉倉",
+                                    Message = "[轉倉]表處採購單",
                                     CreateTime = dt,
                                     CreateUser = WorkOrderReportData.CreateUser
                                 }}
@@ -1037,7 +1037,7 @@ namespace HonjiMES.Controllers
                     //         LinkOrder = PurchaseNo,
                     //         Original = Warehouse201.First().Quantity,
                     //         Quantity = -WorkOrderReportData.ReCount,
-                    //         Message = "表處轉倉",
+                    //         Message = "[轉倉]表處採購單",
                     //         CreateTime = dt.AddSeconds(-1),
                     //         CreateUser = WorkOrderReportData.CreateUser
                     //     });
@@ -1050,7 +1050,7 @@ namespace HonjiMES.Controllers
                     //             LinkOrder = PurchaseNo,
                     //             Original = Warehouse202.First().Quantity,
                     //             Quantity = WorkOrderReportData.ReCount,
-                    //             Message = "表處轉倉",
+                    //             Message = "[轉倉]表處採購單",
                     //             CreateTime = dt,
                     //             CreateUser = WorkOrderReportData.CreateUser
                     //         });
@@ -1076,7 +1076,7 @@ namespace HonjiMES.Controllers
                     //                 LinkOrder = PurchaseNo,
                     //                 Original = 0,
                     //                 Quantity = WorkOrderReportData.ReCount,
-                    //                 Message = "表處轉倉",
+                    //                 Message = "[轉倉]表處採購單",
                     //                 CreateTime = dt,
                     //                 CreateUser = WorkOrderReportData.CreateUser
                     //             }}
@@ -1094,7 +1094,7 @@ namespace HonjiMES.Controllers
                     //         LinkOrder = PurchaseNo,
                     //         Original = Warehouse201.First().Quantity,
                     //         Quantity = -WorkOrderReportData.ReCount,
-                    //         Message = "表處轉倉",
+                    //         Message = "[轉倉]表處採購單",
                     //         CreateTime = dt.AddSeconds(-1),
                     //         CreateUser = WorkOrderReportData.CreateUser
                     //     });
@@ -1107,7 +1107,7 @@ namespace HonjiMES.Controllers
                     //             LinkOrder = PurchaseNo,
                     //             Original = Warehouse202.First().Quantity,
                     //             Quantity = WorkOrderReportData.ReCount,
-                    //             Message = "表處轉倉",
+                    //             Message = "[轉倉]表處採購單",
                     //             CreateTime = dt,
                     //             CreateUser = WorkOrderReportData.CreateUser
                     //         });
@@ -1133,7 +1133,7 @@ namespace HonjiMES.Controllers
                     //                 LinkOrder = PurchaseNo,
                     //                 Original = 0,
                     //                 Quantity = WorkOrderReportData.ReCount,
-                    //                 Message = "表處轉倉",
+                    //                 Message = "[轉倉]表處採購單",
                     //                 CreateTime = dt,
                     //                 CreateUser = WorkOrderReportData.CreateUser
                     //             }}
