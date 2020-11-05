@@ -129,6 +129,7 @@ import { DealLogComponent } from './report/deal-log/deal-log.component';
 import { DealSupplierComponent } from './report/deal-supplier/deal-supplier.component';
 import { DealSupplierLogComponent } from './report/deal-supplier-log/deal-supplier-log.component';
 import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.component';
+import { InventoryShortComponent } from './report/inventory-short/inventory-short.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -272,7 +273,8 @@ export function tokenGetter() {
         DealLogComponent,
         DealSupplierComponent,
         DealSupplierLogComponent,
-        PurchaseTotalComponent
+        PurchaseTotalComponent,
+        InventoryShortComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
