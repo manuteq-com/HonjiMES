@@ -80,6 +80,11 @@ namespace HonjiMES.Models
         [Column("supplier_id", TypeName = "int(11)")]
         public int? SupplierId { get; set; }
         /// <summary>
+        /// &#22294;&#34399;
+        /// </summary>
+        [Column("draw_no", TypeName = "varchar(100)")]
+        public string DrawNo { get; set; }
+        /// <summary>
         /// &#37325;&#37327;(&#20844;&#26020;)
         /// </summary>
         [Column("weight", TypeName = "decimal(10,2)")]

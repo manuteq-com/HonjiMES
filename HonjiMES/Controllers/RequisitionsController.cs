@@ -628,7 +628,7 @@ namespace HonjiMES.Controllers
                             {
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
-                                Message = "領料出庫",
+                                Message = "[工單領料]出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -667,7 +667,7 @@ namespace HonjiMES.Controllers
                             {
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
-                                Message = "領料出庫",
+                                Message = "[工單領料]出庫",
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
@@ -740,7 +740,7 @@ namespace HonjiMES.Controllers
                                 LinkOrder = RequisitionNo,
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
-                                Message = "領料出庫",
+                                Message = "[工單領料]出庫",
                                 CreateTime = dt,
                                 CreateUser = CreateUser
                             });
@@ -781,7 +781,7 @@ namespace HonjiMES.Controllers
                                 LinkOrder = RequisitionNo,
                                 Original = Original,
                                 Quantity = -Receive.RQty ?? 0,
-                                Message = "領料出庫",
+                                Message = "[工單領料]出庫",
                                 CreateTime = dt,
                                 CreateUser = CreateUser
                             });

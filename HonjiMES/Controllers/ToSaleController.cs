@@ -371,7 +371,7 @@ namespace HonjiMES.Controllers
                             Quantity = -SaleDetailData.Quantity,
                             Price = SaleDetailData.Price,
                             PriceAll = SaleDetailData.Quantity * SaleDetailData.Price,
-                            Message = "銷貨",
+                            Message = "[銷貨]出庫",
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         SaleDetailData.Status = 1; // 1已銷貨
@@ -480,7 +480,7 @@ namespace HonjiMES.Controllers
                         Quantity = -item.Quantity,
                         Price = item.Price,
                         PriceAll = item.Quantity * item.Price,
-                        Message = "銷貨",
+                        Message = "[銷貨]出庫",
                         CreateUser = MyFun.GetUserID(HttpContext)
                     });
                     item.Material.Quantity -= item.Quantity;
@@ -602,7 +602,7 @@ namespace HonjiMES.Controllers
                             Price = Materials.FirstOrDefault().Price,
                             PriceAll = Materials.FirstOrDefault().Price * ReturnSale.Quantity,
                             Reason = ReturnSale.Reason,
-                            Message = "銷退",
+                            Message = "[銷退]入庫",
                             CreateUser = MyFun.GetUserID(HttpContext)
                         });
                         Materials.FirstOrDefault().Quantity += ReturnSale.Quantity;
@@ -635,7 +635,7 @@ namespace HonjiMES.Controllers
                                 Price = MaterialBasic.Price,
                                 PriceAll = MaterialBasic.Price * ReturnSale.Quantity,
                                 Reason = ReturnSale.Reason,
-                                Message = "銷退",
+                                Message = "[銷退]入庫",
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             }}
                         });

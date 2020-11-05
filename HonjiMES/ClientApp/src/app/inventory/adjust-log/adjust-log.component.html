@@ -72,6 +72,11 @@
     </dxo-editing>
 
 
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
     <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
     <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
 
@@ -96,10 +101,8 @@
     <dxi-column dataField="UnitPrice" caption="單位金額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="UnitPriceAll" caption="計價總額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費用" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
-    <dxi-column dataField="Message" caption="補充說明" [width]="140"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="CreateUser" caption="使用者"></dxi-column>
+    <dxi-column dataField="Reason" caption="修改原因"></dxi-column>
+    <!-- <dxi-column dataField="Message" caption="補充說明" [width]="140"></dxi-column> -->
     <!-- <dxi-column type="buttons">
         <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button>
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>

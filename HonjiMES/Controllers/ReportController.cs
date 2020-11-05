@@ -181,6 +181,7 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderReport = new List<WorkOrderReportVM>();
             var WorkOrderHead = _context.WorkOrderHeads.Find(id);
+            var MaterialBasic = _context.MaterialBasics.Find(WorkOrderHead.DataId);
             var Users = _context.Users.Where(x => x.DeleteFlag == 0).ToList();
             var txt = WorkOrderHead.WorkOrderNo;
             var dbQrCode = BarcodeHelper.CreateQrCode(txt, qcodesize, qcodesize);
@@ -215,6 +216,17 @@ namespace HonjiMES.Controllers
             report.Parameters["CreateUser"].Value = Users.Where(x => x.Id == MyFun.GetUserID(HttpContext)).FirstOrDefault().Realname;
             report.Parameters["CreateTime"].Value = "　" + DateTime.Now;
             report.Parameters["QRCode"].Value = MyFun.ImgToBase64String(dbQrCode);
+
+            // 圖號資料處理
+            if (MaterialBasic.DrawNo != null) {
+                string[] str2 = null;
+                str2 = MaterialBasic.DrawNo.Split('\n');
+                report.Parameters["DrawNo1"].Value = str2.Length >= 1 ? str2[0] : "";
+                report.Parameters["DrawNo2"].Value = str2.Length >= 2 ? str2[1] : "";
+                report.Parameters["DrawNo3"].Value = str2.Length >= 3 ? str2[2] : "";
+                report.Parameters["DrawNo4"].Value = str2.Length >= 4 ? str2[3] : "";
+            }
+
             var jsonDataSource = new JsonDataSource();
             jsonDataSource.JsonSource = new CustomJsonSource(json);
             report.DataSource = jsonDataSource;

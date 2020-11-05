@@ -31,7 +31,12 @@ namespace HonjiMES.Controllers
             [FromQuery] DataSourceLoadOptions FromQuery)
         {
              _context.ChangeTracker.LazyLoadingEnabled = true;
-            var materialBasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Materials.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime).Include(x => x.Materials).Select(x => new MaterialBasicData
+            var materialBasic = _context.MaterialBasics
+            .Where(x => x.DeleteFlag == 0)
+            .OrderByDescending(x => x.UpdateTime)
+            .ThenByDescending(x => x.Materials.OrderByDescending(y => y.UpdateTime).FirstOrDefault().UpdateTime)
+            .Include(x => x.Materials)
+            .Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
 
@@ -47,6 +52,7 @@ namespace HonjiMES.Controllers
                 SupplierId = x.SupplierId,
                 Weight = x.Weight,
                 Remarks = x.Remarks,
+                DrawNo = x.DrawNo,
                 CreateTime = x.CreateTime,
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
@@ -163,6 +169,7 @@ namespace HonjiMES.Controllers
             // {
             //     return Ok(MyFun.APIResponseError("請選擇 [存放庫別]!", material));
             // }
+            var dt = DateTime.Now;
 
             //優先確認Basic是否存在
             var MaterialBasicData = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == material.MaterialNo && x.DeleteFlag == 0).FirstOrDefault();
@@ -182,6 +189,7 @@ namespace HonjiMES.Controllers
                     SupplierId = material.SupplierId,
                     Weight = material.Weight,
                     Remarks = material.Remarks,
+                    CreateTime = dt,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 });
                 _context.SaveChanges();
@@ -218,7 +226,14 @@ namespace HonjiMES.Controllers
                             // BaseQuantity = 2,
                             WarehouseId = warehouseId,
                             MaterialBasicId = material.MaterialBasicId,
-                            CreateUser = MyFun.GetUserID(HttpContext)
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            MaterialLogs = {new MaterialLog{
+                                // LinkOrder = "",
+                                Reason = "手動新增",
+                                Message = "[新增品號]",
+                                CreateTime = dt,
+                                CreateUser = MyFun.GetUserID(HttpContext)
+                            }}
                         });
                     }
                 }

@@ -149,6 +149,7 @@ namespace HonjiMES.Controllers
             }
 
             string sRepeatMaterial = null;
+            var dt = DateTime.Now;
             var nMateriallist = new List<Material>();
             foreach (var warehouseId in material.wid)
             {
@@ -174,7 +175,15 @@ namespace HonjiMES.Controllers
                         // BaseQuantity = 2,
                         WarehouseId = warehouseId,
                         MaterialBasicId = material.MaterialBasicId,
-                        CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateTime = dt,
+                        CreateUser = MyFun.GetUserID(HttpContext),
+                        MaterialLogs = {new MaterialLog{
+                            // LinkOrder = "",
+                            Reason = "手動新增",
+                            Message = "[新增品號]",
+                            CreateTime = dt,
+                            CreateUser = MyFun.GetUserID(HttpContext)
+                        }}
                     });
                 }
             }

@@ -406,7 +406,7 @@ namespace HonjiMES.Controllers
                                         LinkOrder = requisition.RequisitionNo,
                                         Original = Original,
                                         Quantity = Receive.RQty ?? 0,
-                                        Message = "退料入庫",
+                                        Message = "[工單退料]入庫",
                                         CreateTime = dt,
                                         CreateUser = PostRequisition.CreateUser
                                     });
@@ -427,7 +427,7 @@ namespace HonjiMES.Controllers
                                         LinkOrder = requisition.RequisitionNo,
                                         Original = Original,
                                         Quantity = Receive.RQty ?? 0,
-                                        Message = "退料入庫",
+                                        Message = "[工單退料]入庫",
                                         CreateTime = dt,
                                         CreateUser = PostRequisition.CreateUser
                                     });

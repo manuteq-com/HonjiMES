@@ -22,6 +22,7 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
+    @Input() randomkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
@@ -91,13 +92,23 @@ export class CreatmaterialBasicComponent implements OnInit, OnChanges {
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.formData = {
             MaterialNo: '',
+            MaterialType: 1,
             Name: '',
             // Quantity: '',
             Specification: '',
-            Property: '',
+            Property: '採購件',
             Price: 0,
             Unit: ''
         };
+        if (this.modval === 'clone') {
+            this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.itemkeyval).subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData = s.data;
+                    }
+                }
+            );
+        }
         if (this.masterkey !== null && this.masterkey !== undefined) {
             this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.masterkey).subscribe(
                 (s) => {

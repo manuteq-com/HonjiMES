@@ -58,11 +58,12 @@
             <dxi-item dataField="Unit"></dxi-item>
             <dxi-item dataField="SupplierId"></dxi-item>
             <dxi-item dataField="Weight"></dxi-item>
-            <dxi-item dataField="MaterialNumber"></dxi-item>
+            <!-- <dxi-item dataField="MaterialNumber"></dxi-item> -->
             <dxi-item dataField="Remarks"></dxi-item>
+            <dxi-item dataField="DrawNo" editorType="dxTextArea" [editorOptions]="{ height: 90 }"></dxi-item>
             <!-- <dxi-item dataField="WarehouseId"></dxi-item> -->
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改品號基本資訊"  [width]="800" [height]="440">
+        <dxo-popup [showTitle]="true" title="修改品號基本資訊"  [width]="800" [height]="500">
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
                 [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
@@ -72,9 +73,9 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="MaterialNo" caption="品號" [width]="250"></dxi-column>
-    <dxi-column dataField="Name" caption="品名" [width]="250"></dxi-column>
-    <dxi-column dataField="Specification" caption="規格" [width]="250"></dxi-column>
+    <dxi-column dataField="MaterialNo" caption="品號" [width]="240"></dxi-column>
+    <dxi-column dataField="Name" caption="品名" [width]="240"></dxi-column>
+    <dxi-column dataField="Specification" caption="規格" [width]="240"></dxi-column>
     <dxi-column dataField="MaterialType" caption="種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="materialTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -86,10 +87,11 @@
     <dxi-column dataField="SupplierId" caption="供應商" [width]="160">
         <dxo-lookup [dataSource]="supplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialNumber" caption="廠內品號" [width]="200"></dxi-column>
+    <dxi-column dataField="DrawNo" caption="圖號" [width]="200"></dxi-column>
+    <!-- <dxi-column dataField="MaterialNumber" caption="廠內品號" [width]="200"></dxi-column> -->
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
+        <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button>
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
@@ -108,9 +110,9 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="460" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [btnVisibled]="true"
+        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true"
             [exceldata]="exceldata"></app-creatmaterial-basic>
     </div>
 </dx-popup>
