@@ -54,6 +54,7 @@
         (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)"
         (onEditorPreparing)="editorPreparing($event)"
+        (onCellClick)="cellClick($event)"
         (onCellPrepared)="onCellPrepared($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)"
         (onRowRemoved)="onRowRemoved($event)">
@@ -111,7 +112,14 @@
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column type="buttons" [width]="50">
+        <dxi-column type="buttons" [width]="50" [visible]="!processVisible">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        </dxi-column>
+
+        <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod" [visible]="processVisible">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>

@@ -70,6 +70,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     allowReordering: boolean;
     listWorkOrderTypes: any;
     MachineList: any;
+    processVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -165,11 +166,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.runVisible = false;
         this.editVisible = false;
         this.saveDisabled = false;
+        this.processVisible = false;
         this.allowReordering = false;
         if (this.modval === 'new') {
             this.modName = 'new';
             this.newVisible = true;
             this.modVisible = true;
+            this.processVisible = true;
             this.allowReordering = true;
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
@@ -203,12 +206,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
                             this.runVisible = true;
+                            this.processVisible = true;
                             this.allowReordering = true;
                         } else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;
                         } else {
                             this.editVisible = true;
+                            this.processVisible = true;
                             this.allowReordering = true;
                         }
                     }
@@ -228,16 +233,32 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             return true;
         }
     }
+    cellClick(e) {
+        if (e.rowType === 'header') {
+            if (e.column.type === 'buttons') {
+                if (e.column.cssClass === 'addmod') {
+                    this.dataGrid2.instance.saveEditData();
+                    // tslint:disable-next-line: deprecation
+                    this.dataGrid2.instance.insertRow();
+                }
+            }
+        } else if (e.rowType === 'header' && e.rowType === 'data') {
+            // // tslint:disable-next-line: deprecation
+            // this.dataGrid.instance.insertRow();
+        }
+    }
     onInitialized(value, data) {
         data.setValue(value);
     }
     onRowRemoved(e) {
+        this.dataGrid2.instance.saveEditData();
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
     }
     onReorder(e) {
-        debugger;
+        // debugger;
+        this.dataGrid2.instance.saveEditData();
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
