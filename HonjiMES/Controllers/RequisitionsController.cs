@@ -878,16 +878,16 @@ namespace HonjiMES.Controllers
                         NameType = item.FirstOrDefault().NameType,
                     });
                 }
-                if (!RequisitionDetailAllList.Any())//沒開過的要從頭抓
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var WorkOrderHeads = _context.WorkOrderHeads.Find(id);
+                // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
+                // var ProductBasics = _context.MaterialBasics.Find(WorkOrderHeads.DataId);
+                // BOM內容
+                var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == WorkOrderHeads.DataId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+                var BomDataList = MyFun.GetBomList(BillOfMaterials, 0, WorkOrderHeads.Count);
+                if (!RequisitionDetailAllList.Any())//沒開過領料單的要從頭抓
                 {
-                    _context.ChangeTracker.LazyLoadingEnabled = true;
-                    var WorkOrderHeads = _context.WorkOrderHeads.Find(id);
-                    // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
-                    var ProductBasics = _context.MaterialBasics.Find(WorkOrderHeads.DataId);
-                    // BOM內容
-                    var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == WorkOrderHeads.DataId && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
-
-                    foreach (var item in MyFun.GetBomList(BillOfMaterials, 0, WorkOrderHeads.Count))
+                    foreach (var item in BomDataList)
                     {
                         if (item.Lv == 1)// 只取一階
                         {
@@ -916,8 +916,21 @@ namespace HonjiMES.Controllers
                             });
                         }
                     }
-                    _context.ChangeTracker.LazyLoadingEnabled = false;
+                } else { // 已經開過的，更新master
+                    foreach (var item in BomDataList)
+                    {
+                        if (item.Lv == 1)// 只取一階
+                        {
+                            foreach (var item2 in RequisitionDetailAllList)
+                            {
+                                if (item.MaterialBasicId == item2.MaterialBasicId && item.ProductBasicId == item2.ProductBasicId)
+                                    item2.Master = item.Master;
+                            }
+                        }
+                    }
                 }
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                    
                 foreach (var item in RequisitionDetailAllList)
                 {
                     item.WarehouseList = GetWarehouse(item);
