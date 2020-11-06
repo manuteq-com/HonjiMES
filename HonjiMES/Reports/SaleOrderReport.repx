@@ -1,54 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="20.1.6.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.1, Version=20.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="SaleOrder" Margins="0, 0, 124, 14" PaperKind="Custom" PageWidth="820" PageHeight="470" Version="20.1" DataSource="#Ref-0" Font="Arial, 9.75pt" BorderWidth="2">
+<XtraReportsLayoutSerializer SerializerVersion="20.1.6.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.1, Version=20.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="SaleOrder" Margins="0, 0, 111, 14" PaperKind="Custom" PageWidth="820" PageHeight="470" Version="20.1" DataSource="#Ref-0" Font="Arial, 9.75pt" BorderWidth="2">
   <Parameters>
     <Item1 Ref="3" Description="CreateDate" ValueInfo="0" Name="CreateDate" Type="#Ref-2" />
     <Item2 Ref="4" Description="CustomerName" ValueInfo="0" Name="CustomerName" Type="#Ref-2" />
     <Item3 Ref="5" Description="Address" ValueInfo="0" Name="Address" Type="#Ref-2" />
   </Parameters>
   <Bands>
-    <Item1 Ref="6" ControlType="DetailBand" Name="Detail" HeightF="26.9583817" KeepTogether="true" TextAlignment="TopLeft" StyleName="baseControlStyle" Padding="0,0,0,0,100">
+    <Item1 Ref="6" ControlType="DetailBand" Name="Detail" HeightF="27.9446278" KeepTogether="true" TextAlignment="TopLeft" StyleName="baseControlStyle" Padding="0,0,0,0,100">
       <Controls>
-        <Item1 Ref="7" ControlType="XRTable" Name="detailTable" SizeF="801.0416,26.1249866" LocationFloat="8.958404,0.416692138" Font="Segoe UI, 11.25pt, charSet=0" Borders="All" BorderWidth="1">
+        <Item1 Ref="7" ControlType="XRTable" Name="detailTable" SizeF="801.041565,27.527935" LocationFloat="8.958435,0.4166921" Font="Segoe UI, 11.25pt, charSet=0" Borders="All" BorderWidth="1">
           <Rows>
             <Item1 Ref="8" ControlType="XRTableRow" Name="detailTableRow" Weight="10.58">
               <Cells>
-                <Item1 Ref="9" ControlType="XRTableCell" Name="quantity" Weight="0.35785490469861303" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item1 Ref="9" ControlType="XRTableCell" Name="quantity" Weight="0.25295606706965718" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
                     <Item1 Ref="10" EventName="BeforePrint" PropertyName="Text" Expression="[SaleNo]" />
                   </ExpressionBindings>
                   <StylePriority Ref="11" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="12" ControlType="XRTableCell" Name="productName" Weight="0.3495295725575942" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item2 Ref="12" ControlType="XRTableCell" Name="productName" Weight="0.37656428582154633" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
                     <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="[MachineNo]" />
                   </ExpressionBindings>
                   <StylePriority Ref="14" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="15" ControlType="XRTableCell" Name="unitPrice" Weight="0.43201538569726194" TextFormatString="{0:$0.00}" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Bottom">
+                <Item3 Ref="15" ControlType="XRTableCell" Name="unitPrice" Weight="0.50987951006226573" TextFormatString="{0:$0.00}" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[ProductNo]" />
+                    <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[MaterialNo]" />
                   </ExpressionBindings>
                   <StylePriority Ref="17" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="18" ControlType="XRTableCell" Name="lineTotal" Weight="0.35426255864649059" TextFormatString="{0:$0.00}" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item4 Ref="18" ControlType="XRTableCell" Name="lineTotal" Weight="0.46971623452282768" TextFormatString="{0:$0.00}" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="19" EventName="BeforePrint" PropertyName="Text" Expression="[ProductName]" />
+                    <Item1 Ref="19" EventName="BeforePrint" PropertyName="Text" Expression="[MaterialName]" />
                   </ExpressionBindings>
                   <StylePriority Ref="20" UseFont="false" UseForeColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="21" ControlType="XRTableCell" Name="tableCell17" Weight="0.1528989632808348" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item5 Ref="21" ControlType="XRTableCell" Name="tableCell17" Weight="0.14215903523388362" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
                     <Item1 Ref="22" EventName="BeforePrint" PropertyName="Text" Expression="[Quantity]" />
                   </ExpressionBindings>
                   <StylePriority Ref="23" UseFont="false" UseForeColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="24" ControlType="XRTableCell" Name="tableCell18" Weight="0.19798932185291368" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item6 Ref="24" ControlType="XRTableCell" Name="tableCell18" Weight="0.16845440173200052" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
                     <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[Price]" />
                   </ExpressionBindings>
                   <StylePriority Ref="26" UseFont="false" UseForeColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="27" ControlType="XRTableCell" Name="tableCell19" Weight="0.220190273667477" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
+                <Item7 Ref="27" ControlType="XRTableCell" Name="tableCell19" Weight="0.14501144595900423" Multiline="true" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,5,0,100" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
                     <Item1 Ref="28" EventName="BeforePrint" PropertyName="Text" Expression="[Total]" />
                   </ExpressionBindings>
@@ -61,9 +61,9 @@
         </Item1>
       </Controls>
     </Item1>
-    <Item2 Ref="31" ControlType="TopMarginBand" Name="TopMargin" HeightF="123.907425" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+    <Item2 Ref="31" ControlType="TopMarginBand" Name="TopMargin" HeightF="111.407425" TextAlignment="TopLeft" Padding="0,0,0,0,100">
       <Controls>
-        <Item1 Ref="32" ControlType="XRTable" Name="table2" TextAlignment="MiddleLeft" SizeF="290.396118,41.8981667" LocationFloat="519.370239,40.1110954" Font="新細明體, 8.25pt, charSet=136" Padding="2,2,0,0,96">
+        <Item1 Ref="32" ControlType="XRTable" Name="table2" TextAlignment="MiddleLeft" SizeF="290.396118,41.8981667" LocationFloat="520.6548,24.3379116" Font="新細明體, 8.25pt, charSet=136" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="33" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
@@ -81,7 +81,7 @@
           </Rows>
           <StylePriority Ref="40" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="41" ControlType="XRTable" Name="table1" TextAlignment="MiddleLeft" SizeF="801.0416,41.8981552" LocationFloat="8.724753,82.0092545" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,0,0,96">
+        <Item2 Ref="41" ControlType="XRTable" Name="table1" TextAlignment="MiddleLeft" SizeF="801.0416,41.8981552" LocationFloat="8.958435,66.236084" Font="新細明體, 11.25pt, charSet=136" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="42" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
@@ -119,7 +119,7 @@
           </Rows>
           <StylePriority Ref="58" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="59" ControlType="XRLabel" Name="label1" Multiline="true" Text="鴻銡科技股份有限公司" TextAlignment="TopCenter" SizeF="327.880371,34.12499" LocationFloat="229.522064,5.98611832" Font="新細明體, 18pt, style=Bold, charSet=0" Padding="2,2,0,0,100">
+        <Item3 Ref="59" ControlType="XRLabel" Name="label1" Multiline="true" Text="鴻銡科技股份有限公司" TextAlignment="TopCenter" SizeF="261.772156,34.12499" LocationFloat="258.88266,5.98610258" Font="新細明體, 18pt, style=Bold, charSet=0" Padding="2,2,0,0,100">
           <StylePriority Ref="60" UseFont="false" UseTextAlignment="false" />
         </Item3>
         <Item4 Ref="61" ControlType="XRLabel" Name="label2" Multiline="true" Text="銷貨單" TextAlignment="MiddleCenter" SizeF="245.515442,26.1249847" LocationFloat="269.445435,40.1110954" Font="新細明體, 14.25pt, charSet=0" Padding="2,2,0,0,100">
@@ -131,29 +131,29 @@
     <Item3 Ref="64" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="14" TextAlignment="TopLeft" Padding="0,0,0,0,100" />
     <Item4 Ref="65" ControlType="GroupHeaderBand" Name="GroupHeader1" RepeatEveryPage="true" HeightF="20.2082958" StyleName="baseControlStyle">
       <Controls>
-        <Item1 Ref="66" ControlType="XRTable" Name="headerTable" SizeF="801.0416,20.2082958" LocationFloat="10.0000067,0" Font="新細明體, 12pt, charSet=136" Borders="All" BorderWidth="2">
+        <Item1 Ref="66" ControlType="XRTable" Name="headerTable" SizeF="801.0416,20.2082958" LocationFloat="10.0001068,0" Font="新細明體, 12pt, charSet=136" Borders="All" BorderWidth="2">
           <Rows>
             <Item1 Ref="67" ControlType="XRTableRow" Name="headerTableRow" Weight="11.5">
               <Cells>
-                <Item1 Ref="68" ControlType="XRTableCell" Name="tableCell3" Weight="0.53096845390685332" Multiline="true" Text="銷貨單號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All" BorderWidth="2">
+                <Item1 Ref="68" ControlType="XRTableCell" Name="tableCell3" Weight="0.37134055219706363" Multiline="true" Text="銷貨單號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All" BorderWidth="2">
                   <StylePriority Ref="69" UseFont="false" UseBorders="false" UseBorderWidth="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="70" ControlType="XRTableCell" Name="quantityCaption" Weight="0.518615635877353" Text="機台編號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
+                <Item2 Ref="70" ControlType="XRTableCell" Name="quantityCaption" Weight="0.55872850976380073" Text="機台編號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
                   <StylePriority Ref="71" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="72" ControlType="XRTableCell" Name="tableCell2" Weight="0.64100415472369054" Multiline="true" Text="品號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
+                <Item3 Ref="72" ControlType="XRTableCell" Name="tableCell2" Weight="0.76051915444788687" Multiline="true" Text="品號" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
                   <StylePriority Ref="73" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="74" ControlType="XRTableCell" Name="productNameCaption" Weight="0.52563772939701814" Text="品名" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
+                <Item4 Ref="74" ControlType="XRTableCell" Name="productNameCaption" Weight="0.69295918772646659" Text="品名" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
                   <StylePriority Ref="75" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="76" ControlType="XRTableCell" Name="unitPriceCaption" Weight="0.2268646394881926" Text="數量" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="Left, Top, Bottom">
+                <Item5 Ref="76" ControlType="XRTableCell" Name="unitPriceCaption" Weight="0.21092892973113112" Text="數量" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="Left, Top, Bottom">
                   <StylePriority Ref="77" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="78" ControlType="XRTableCell" Name="lineTotalCaption" Weight="0.2937673120006527" Text="單價" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
+                <Item6 Ref="78" ControlType="XRTableCell" Name="lineTotalCaption" Weight="0.24994448584131057" Text="單價" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
                   <StylePriority Ref="79" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="80" ControlType="XRTableCell" Name="tableCell1" Weight="0.32670826060901959" Multiline="true" Text="小計" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
+                <Item7 Ref="80" ControlType="XRTableCell" Name="tableCell1" Weight="0.21914533819597476" Multiline="true" Text="小計" TextAlignment="MiddleCenter" Font="新細明體, 11.25pt, charSet=136" Borders="All">
                   <StylePriority Ref="81" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item7>
               </Cells>
@@ -187,7 +187,7 @@
     <Item1 Ref="92" Name="baseControlStyle" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Segoe UI, 9.75pt" StringFormat="Near;Near;0;None;Character;Default" />
   </StyleSheet>
   <ComponentStorage>
-    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Json.JsonDataSource,DevExpress.DataAccess.v20.1" Name="jsonDataSource1" Base64="PEpzb25EYXRhU291cmNlIE5hbWU9Impzb25EYXRhU291cmNlMSI+PFNvdXJjZSBTb3VyY2VUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuSnNvbi5DdXN0b21Kc29uU291cmNlIiBKc29uPSJbeyZxdW90O1NhbGVObyZxdW90OzpudWxsLCZxdW90O01hY2hpbmVObyZxdW90OzpudWxsLCZxdW90O1Byb2R1Y3RObyZxdW90OzpudWxsLCZxdW90O1Byb2R1Y3ROYW1lJnF1b3Q7Om51bGwsJnF1b3Q7UXVhbnRpdHkmcXVvdDs6bnVsbCwmcXVvdDtQcmljZSZxdW90OzpudWxsLCZxdW90O1RvdGFsJnF1b3Q7Om51bGx9XSIgLz48U2NoZW1hPjxOb2RlIE5hbWU9InJvb3QiIFNlbGVjdGVkPSJ0cnVlIiBOb2RlVHlwZT0iQXJyYXkiPjxOb2RlIE5hbWU9IlNhbGVObyIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48Tm9kZSBOYW1lPSJNYWNoaW5lTm8iIFR5cGU9IlN5c3RlbS5PYmplY3QiIFNlbGVjdGVkPSJ0cnVlIiBOb2RlVHlwZT0iUHJvcGVydHkiIC8+PE5vZGUgTmFtZT0iUHJvZHVjdE5vIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9IlByb2R1Y3ROYW1lIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9IlF1YW50aXR5IiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9IlByaWNlIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9IlRvdGFsIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjwvTm9kZT48L1NjaGVtYT48L0pzb25EYXRhU291cmNlPg==" />
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Json.JsonDataSource,DevExpress.DataAccess.v20.1" Name="jsonDataSource1" Base64="PEpzb25EYXRhU291cmNlIE5hbWU9Impzb25EYXRhU291cmNlMSI+PFNvdXJjZSBTb3VyY2VUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuSnNvbi5DdXN0b21Kc29uU291cmNlIiBKc29uPSJbeyZxdW90O1NhbGVObyZxdW90OzpudWxsLCZxdW90O01hY2hpbmVObyZxdW90OzpudWxsLCZxdW90O01hdGVyaWFsTm8mcXVvdDs6bnVsbCwmcXVvdDtNYXRlcmlhbE5hbWUmcXVvdDs6bnVsbCwmcXVvdDtRdWFudGl0eSZxdW90OzpudWxsLCZxdW90O1ByaWNlJnF1b3Q7Om51bGwsJnF1b3Q7VG90YWwmcXVvdDs6bnVsbH1dIiAvPjxTY2hlbWE+PE5vZGUgTmFtZT0icm9vdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJBcnJheSI+PE5vZGUgTmFtZT0iU2FsZU5vIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9Ik1hY2hpbmVObyIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48Tm9kZSBOYW1lPSJNYXRlcmlhbE5vIiBUeXBlPSJTeXN0ZW0uT2JqZWN0IiBTZWxlY3RlZD0idHJ1ZSIgTm9kZVR5cGU9IlByb3BlcnR5IiAvPjxOb2RlIE5hbWU9Ik1hdGVyaWFsTmFtZSIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48Tm9kZSBOYW1lPSJRdWFudGl0eSIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48Tm9kZSBOYW1lPSJQcmljZSIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48Tm9kZSBOYW1lPSJUb3RhbCIgVHlwZT0iU3lzdGVtLk9iamVjdCIgU2VsZWN0ZWQ9InRydWUiIE5vZGVUeXBlPSJQcm9wZXJ0eSIgLz48L05vZGU+PC9TY2hlbWE+PC9Kc29uRGF0YVNvdXJjZT4=" />
   </ComponentStorage>
   <ObjectStorage>
     <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v20.1" Ref="2" Content="System.Int32" Type="System.Type" />

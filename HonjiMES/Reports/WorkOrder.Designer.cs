@@ -196,6 +196,7 @@ namespace HonjiMES.Reports {
             this.tableCell175 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell175");
             this.tableCell176 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell176");
             this.tableCell177 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell177");
+            this.tableCell178 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell178");
             this.tableCell179 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell179");
             this.tableCell180 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell180");
             this.tableCell181 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell181");
@@ -240,7 +241,6 @@ namespace HonjiMES.Reports {
             this.tableCell220 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell220");
             this.tableCell221 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell221");
             this.tableCell222 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell222");
-            this.tableCell178 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell178");
 
             // Parameters
             this.WorkOrderNo = reportInitializer.GetParameter("WorkOrderNo");
@@ -444,6 +444,7 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell175;
         private DevExpress.XtraReports.UI.XRTableCell tableCell176;
         private DevExpress.XtraReports.UI.XRTableCell tableCell177;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell178;
         private DevExpress.XtraReports.UI.XRTableCell tableCell179;
         private DevExpress.XtraReports.UI.XRTableCell tableCell180;
         private DevExpress.XtraReports.UI.XRTableCell tableCell181;
@@ -499,7 +500,6 @@ namespace HonjiMES.Reports {
         private DevExpress.XtraReports.Parameters.Parameter DueEndTime;
         private DevExpress.XtraReports.Parameters.Parameter CreateUser;
         private DevExpress.XtraReports.Parameters.Parameter CreateTime;
-        private DevExpress.XtraReports.UI.XRTableCell tableCell178;
         private DevExpress.XtraReports.Parameters.Parameter DrawNo1;
         private DevExpress.XtraReports.Parameters.Parameter DrawNo2;
         private DevExpress.XtraReports.Parameters.Parameter DrawNo3;
