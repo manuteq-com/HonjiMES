@@ -338,7 +338,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderId(int id)
         {
             var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).Include(x => x.Process).OrderBy(x => x.SerialNumber).ToListAsync();
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).Include(x => x.Process).Include(x => x.WorkOrderHead).OrderBy(x => x.SerialNumber).ToListAsync();
 
             var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
             foreach (var item in WorkOrderDetails)
@@ -376,7 +376,9 @@ namespace HonjiMES.Controllers
                     CreateUser = item.CreateUser,
                     UpdateTime = item.UpdateTime,
                     UpdateUser = item.UpdateUser,
-                    ProcessType = item.Process.Type
+                    ProcessType = item.Process.Type,
+
+                    WorkOrderHead = item.WorkOrderHead
                 });
             }
             var WorkOrderData = new WorkOrderData2

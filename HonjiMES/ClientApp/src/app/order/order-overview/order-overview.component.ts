@@ -54,17 +54,18 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.getdata();
-        this.app.GetData('/Materials/GetMaterials').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialList = s.data;
-                }
-            }
-        );
+        // this.app.GetData('/Materials/GetMaterials').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialList = s.data;
+        //         }
+        //     }
+        // );
         this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
-                    this.MaterialBasicList = s.data;
+                    // this.MaterialBasicList = s.data;
+                    this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
                 }
             }
         );
