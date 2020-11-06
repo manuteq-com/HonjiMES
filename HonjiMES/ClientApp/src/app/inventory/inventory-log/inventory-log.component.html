@@ -83,28 +83,24 @@
     </dxo-editing>
 
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="170" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
-        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
     <dxi-column dataField="Message" caption="種類" [width]="140"></dxi-column>
-    <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
-    <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
-
     <dxi-column dataField="DataNo" caption="品號" [width]="220"></dxi-column>
     <dxi-column dataField="DataName" caption="名稱" [width]="220"></dxi-column>
+    <dxi-column dataField="DataType" caption="品號類別" [width]="100" alignment="center">
+        <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
     <dxi-column dataField="WarehouseId" caption="倉別" [width]="120">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
+    <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
+    <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
+
     <!-- <dxi-column dataField="DataId" caption="品號" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="DataId" caption="名稱" [width]="220">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column> -->
-
-    <dxi-column dataField="DataType" caption="品號類別" [width]="100" alignment="center">
-        <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
     <dxi-column dataField="Original" caption="原始數量" [width]="80"></dxi-column>
     <dxi-column dataField="Quantity" caption="增減數量" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
@@ -115,6 +111,9 @@
     <dxi-column dataField="UnitPriceAll" caption="計價總額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費用" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
 
 </dx-data-grid>
 
