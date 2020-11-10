@@ -20,22 +20,24 @@
     </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
-    <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
+    <dxi-column dataField="PurchaseDetails.DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
         <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="DataNo" caption="品號" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="DataName" caption="品名" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Specification" caption="規格" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
-    <dxi-column dataField="WarehouseId" caption="倉別" [allowEditing]="false">
+    <dxi-column dataField="PurchaseDetails.DataId" caption="品號/規格" [allowEditing]="false">
+        <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="MaterialBasics.ActualSpecification" caption="實際規格" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.DataName" caption="品名" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.WarehouseId" caption="倉別" [allowEditing]="false">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PurchaseCount" caption="進貨單數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
-    <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.PurchaseCount" caption="進貨單數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
         <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="1" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>

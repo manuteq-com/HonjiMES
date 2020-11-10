@@ -68,7 +68,14 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<PurchaseDetail>>> GetPurchaseDetailByPId(int Pid)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == Pid && x.DeleteFlag == 0).Include(x => x.Purchase).ToListAsync();
+            var data = await _context.PurchaseDetails.AsQueryable().Where(x => x.PurchaseId == Pid && x.DeleteFlag == 0)
+            .Include(x => x.Purchase).Join(_context.MaterialBasics, x => x.DataId, y => y.Id, (PurchaseDetails, MaterialBasics) => new
+            {
+                PurchaseDetails.Id,
+                PurchaseDetails,
+                MaterialBasics,
+            })
+            .ToListAsync();
             return Ok(MyFun.APIResponseOK(data));
         }
 

@@ -34,6 +34,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     Priceval: number;
     WarehouseList: any;
     ItemTypeList: any;
+    MaterialList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
@@ -57,6 +58,15 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
                     e.Name = e.Code + e.Name;
                 });
                 this.WarehouseList = s.data;
+            }
+        );
+        debugger;
+        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
+            (s) => {
+                s.data.data.forEach(e => {
+                    e.MaterialNo = e.MaterialNo + ' / ' +  e.Specification;
+                });
+                this.MaterialList = s.data.data;
             }
         );
     }
