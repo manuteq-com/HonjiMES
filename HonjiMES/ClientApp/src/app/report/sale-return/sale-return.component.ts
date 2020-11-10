@@ -105,7 +105,7 @@ export class SaleReturnComponent implements OnInit {
         }
     }
     ngOnInit() {
-        this.titleService.setTitle('銷貨退回紀錄查詢');
+        this.titleService.setTitle('銷貨紀錄查詢');
     }
 
     onDataErrorOccurred(e) {

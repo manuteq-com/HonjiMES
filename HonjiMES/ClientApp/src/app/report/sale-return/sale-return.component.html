@@ -5,7 +5,7 @@
         <div class="lefttriangle1"></div>
         <div class="lefttriangle2"></div>
     </div>
-    <div class="headerfont font2">銷貨退回紀錄查詢</div>
+    <div class="headerfont font2">銷貨紀錄查詢</div>
     <div class="buttongroup">
         <dx-button
             class="searchbtn"
@@ -56,6 +56,7 @@
     <dxi-column dataField="MachineNo" caption="機號" [width]="180"></dxi-column>
     <dxi-column dataField="MaterialNo" caption="品號" [width]="220"></dxi-column>
     <dxi-column dataField="Specification" caption="規格" [width]="220"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
 
     <dxi-column dataField="ReturnWarehouse" caption="銷退倉別" [width]="150"></dxi-column>
     <dxi-column dataField="ReturnQuantity" caption="銷退數量" alignment="center" [width]="80"></dxi-column>
@@ -64,7 +65,6 @@
     <dxi-column dataField="ReturnCreateUser" caption="銷退人員" [width]="100"></dxi-column>
 
     <!-- <dxi-column dataField="Quantity" caption="數量" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="金額" [width]="80"></dxi-column> -->
 
 </dx-data-grid>

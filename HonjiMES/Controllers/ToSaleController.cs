@@ -138,6 +138,7 @@ namespace HonjiMES.Controllers
                     if (Detailitem.Quantity >= Detailitem.SaleCount + PDetailitem.SaleQuantity)//原有數量+目前數量不超過未銷貨完的可以開
                     {
                         var Qty = PDetailitem.SaleQuantity;
+                        var Oprice = PDetailitem.OriginPrice; 
                         Detailitem.SaleCount += Qty;
 
                         nlist.Add(new SaleDetailNew
@@ -145,7 +146,7 @@ namespace HonjiMES.Controllers
                             OrderId = Detailitem.OrderId,
                             OrderDetailId = Detailitem.Id,
                             Quantity = Qty,
-                            OriginPrice = Detailitem.OriginPrice,
+                            OriginPrice = Oprice,
                             Price = Detailitem.Price,
                             MaterialBasicId = Detailitem.MaterialBasicId,
                             MaterialNo = Detailitem.MaterialBasic.MaterialNo,
@@ -469,7 +470,6 @@ namespace HonjiMES.Controllers
             foreach (var item in SaleDetailNewList.Where(x => x.Status == 0))
             {
                 saleId = item.SaleId;
-
                 // if (item.OrderDetail.Quantity >= item.OrderDetail.SaleCount)
                 {
                     //銷貨扣庫
@@ -498,6 +498,7 @@ namespace HonjiMES.Controllers
                     //更新訂單完成銷貨量
                     var OrderDetail = _context.OrderDetails.Find(item.OrderDetailId);
                     OrderDetail.SaledCount = OrderDetail.SaledCount + item.Quantity;
+                    OrderDetail.OriginPrice = item.OriginPrice;
                 }
             }
 
@@ -519,6 +520,7 @@ namespace HonjiMES.Controllers
             else
             {
                 SaleHeadData.Status = 1; // 銷貨一半(未完成)
+
             }
 
             if (oversale.Any())
