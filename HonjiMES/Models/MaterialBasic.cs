@@ -59,6 +59,11 @@ namespace HonjiMES.Models
         [Column("specification", TypeName = "varchar(50)")]
         public string Specification { get; set; }
         /// <summary>
+        /// &#23526;&#38555;&#35215;&#26684;
+        /// </summary>
+        [Column("actual_specification", TypeName = "varchar(50)")]
+        public string ActualSpecification { get; set; }
+        /// <summary>
         /// &#23660;&#24615;
         /// </summary>
         [Required]

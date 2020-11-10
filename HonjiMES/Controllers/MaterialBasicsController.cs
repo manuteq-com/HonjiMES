@@ -147,6 +147,23 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(OmaterialBasic));
         }
 
+        /// <summary>
+        /// 訂單單號
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="id"></param>
+        /// <param name="materialBasic"></param>
+        // GET: api/OrderHeads
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> PutActualSpecification(int id, MaterialBasic materialBasic)
+        {
+            var data = _context.MaterialBasics.Find(id);
+            data.ActualSpecification = materialBasic.ActualSpecification;
+            await _context.SaveChangesAsync();
+
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
         // POST: api/MaterialBasics
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

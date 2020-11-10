@@ -941,6 +941,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
+                entity.Property(e => e.ActualSpecification)
+                    .HasComment("實際規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
@@ -2494,6 +2499,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Remarks)
                     .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ShortName)
+                    .HasComment("簡稱")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
