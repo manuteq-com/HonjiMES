@@ -37,10 +37,13 @@ export class ResourceWorkorderComponent implements OnInit, OnChanges {
         // items: this.MaterialList,
         displayExpr: string; valueExpr: string;
     };
+    remoteOperations: boolean;
+    detailfilter = [];
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.ReportTypeList = myservice.getReportType();
+        this.remoteOperations = true;
         this.dataSourceDB = [];
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -55,8 +58,10 @@ export class ResourceWorkorderComponent implements OnInit, OnChanges {
         this.formData = this.masterkey;
         this.dataSourceDB = new CustomStore({
             key: 'WorkOrderNo',
-            load: () => SendService.sendRequest(this.http, this.Controller
-                + '/GetWorkOrderReportLogByNum?machine=' + this.masterkey.ProducingMachine),
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetWorkOrderReportLogByNum?machine=' + this.masterkey.ProducingMachine,
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
         });
     }
     // tslint:disable-next-line: only-arrow-functions

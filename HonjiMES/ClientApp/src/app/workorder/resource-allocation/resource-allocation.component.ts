@@ -64,18 +64,16 @@ export class ResourceAllocationComponent implements OnInit {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
         });
     }
-    readBomVer(e, data) {
-        debugger;
+    readReportLog(e, data) {
+        // debugger;
+        this.popupVisible = true;
+        this.masterkey = data.data;
+    }
+    readWorkOrderDetail(e, data) {
+        // debugger;
         this.verpopupVisible = true;
         this.masterkey = data.data;
     }
-
-    readVer(e, data) {
-        debugger;
-        this.popupVisible = true; 
-        this.masterkey = data.data;
-    }
-
     creatdata() {
         this.creatpopupVisible = true;
     }

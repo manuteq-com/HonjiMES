@@ -40,18 +40,26 @@ namespace HonjiMES.Controllers
             // var WorkOrderHeads = await _context.WorkOrderHeads.AsQueryable().Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToListAsync();
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
             var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0).GroupBy(x => x.ProducingMachine).ToList();
+
+            var dataNew = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 0);
+            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1);
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2);
+            var dataReady = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 3);
+            var dataToNew = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 4);
+            var dataFinish = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 5);
+
             var Resource = new List<ResoureAllocation>();
             foreach (var item in machine)
             {
                 Resource.Add(new ResoureAllocation
                 {
-                    ProducingMachine = item.Key,
-                    New = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 0).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Assign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 1).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Start = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 2).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Ready = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 3).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    ToNew = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 4).Sum(y => y.ProcessTime + y.ProcessLeadTime),
-                    Finish = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == item.Key && x.Status == 5).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    ProducingMachine = item.Key == null ? "<無>" : item.Key,
+                    New = dataNew.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataNew.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Assign = dataAssign.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataAssign.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Start = dataStart.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataStart.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Ready = dataReady.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataReady.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    ToNew = dataToNew.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataToNew.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
+                    Finish = dataFinish.Where(x => x.ProducingMachine == item.Key).Count() + " / " + dataFinish.Where(x => x.ProducingMachine == item.Key).Sum(y => y.ProcessTime + y.ProcessLeadTime),
                 });
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;

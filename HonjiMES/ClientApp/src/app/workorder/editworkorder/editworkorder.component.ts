@@ -203,7 +203,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             (s) => {
                 if (s.success) {
                     if (s.success) {
-                        s.data.unshift({Id: null, Name: ''}); // 加入第一行
+                        s.data.unshift({Id: null, Name: '<無>'}); // 加入第一行
                         this.MachineList = s.data;
                     }
                 }

@@ -829,11 +829,30 @@ namespace HonjiMES.Models
         public int ReportType { get; set; }
         public int SerialNumber { get; set; }
         public string Process { get; set; }
-        public int ProcessTime { get; set; }
+        public int? ProcessTime { get; set; }
         public int? ReCount { get; set; }
         public string Remarks { get; set; }
         public int StatusO { get; set; }
         public int StatusN { get; set; }
+        public DateTime? DueStartTime { get; set; }
+        public DateTime? DueEndTime { get; set; }
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+        public DateTime CreateTime { get; set; }
+    }
+
+    public class WorkOrderDetailForResourceal
+    {
+        public int Id { get; set; }
+        public string ProcessName { get; set; }
+        public int SerialNumber { get; set; }
+        public string WorkOrderNo { get; set; }
+        public string MaterialBasicName { get; set; }
+        public int WorkOrderHeadStatus { get; set; }
+        public int WorkOrderDetailStatus { get; set; }
+        public int Count { get; set; }
+        public int? ReCount { get; set; }
+        public string Remarks { get; set; }
         public DateTime? DueStartTime { get; set; }
         public DateTime? DueEndTime { get; set; }
         public DateTime? ActualStartTime { get; set; }
@@ -1060,12 +1079,12 @@ namespace HonjiMES.Models
     public class ResoureAllocation
     {
         public string ProducingMachine { get; set; }
-        public decimal New { get; set; }
-        public decimal Assign { get; set; }
-        public decimal Start { get; set; }
-        public decimal Ready { get; set; }
-        public decimal ToNew { get; set; }
-        public decimal Finish { get; set; }
+        public string New { get; set; }
+        public string Assign { get; set; }
+        public string Start { get; set; }
+        public string Ready { get; set; }
+        public string ToNew { get; set; }
+        public string Finish { get; set; }
 
     }
 

@@ -505,7 +505,7 @@ namespace HonjiMES.Controllers
                         // PurchaseId
                         DrawNo = item.DrawNo,
                         Manpower = item.Manpower,
-                        ProducingMachine = item.ProducingMachine,
+                        ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
                         Type = item.Type,
                         Remarks = item.Remarks,
                         DueStartTime = item.DueStartTime,
@@ -558,7 +558,7 @@ namespace HonjiMES.Controllers
                         // OWorkOrderDetail.PurchaseId
                         OWorkOrderDetail.DrawNo = item.DrawNo;
                         OWorkOrderDetail.Manpower = item.Manpower;
-                        OWorkOrderDetail.ProducingMachine = item.ProducingMachine;
+                        OWorkOrderDetail.ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine;
                         OWorkOrderDetail.Type = item.Type;
                         OWorkOrderDetail.Remarks = item.Remarks;
                         OWorkOrderDetail.DueStartTime = item.DueStartTime;
@@ -582,7 +582,7 @@ namespace HonjiMES.Controllers
                             // PurchaseId
                             DrawNo = item.DrawNo,
                             Manpower = item.Manpower,
-                            ProducingMachine = item.ProducingMachine,
+                            ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
                             Status = OWorkOrderHeads.Status,
                             Type = item.Type,
                             Remarks = item.Remarks,

@@ -271,6 +271,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.unshift({Id: null, Name: '<無>'}); // 加入第一行
                     this.MachineEditorOptions = {
                         items: s.data,
                         displayExpr: 'Name',
