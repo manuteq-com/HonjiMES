@@ -92,17 +92,10 @@
     <dxi-column dataField="WarehouseId" caption="倉別" [width]="120">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="AdjustNo" caption="調整單號" [width]="120"></dxi-column>
-    <dxi-column dataField="LinkOrder" caption="關聯單號" [width]="130"></dxi-column>
-
-    <!-- <dxi-column dataField="DataId" caption="品號" [width]="220">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="DataId" caption="名稱" [width]="220">
-        <dxo-lookup [dataSource]="MaterialList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column> -->
+    <dxi-column dataField="No" caption="關聯單號/調整單號" [width]="240"></dxi-column>
     <dxi-column dataField="Original" caption="原始數量" [width]="80"></dxi-column>
-    <dxi-column dataField="Quantity" caption="增減數量" [width]="80"></dxi-column>
+    <dxi-column dataField="Increase" caption="增加數量" [width]="80"></dxi-column>
+    <dxi-column dataField="Decrease" caption="減少數量" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="UnitCount" caption="計價數量" [width]="80"></dxi-column>

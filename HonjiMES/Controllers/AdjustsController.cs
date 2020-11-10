@@ -141,8 +141,38 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<AllStockLog>>> GetAdjustLog(
                 [FromQuery] DataSourceLoadOptions FromQuery)
         {
-            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0);
-            // var MaterialLogs = await data.ToListAsync();
+            var data = _context.AllStockLogs.Where(x => x.DeleteFlag == 0).Select(x => new InventoryAdjust
+            {
+                    Id = x.Id,
+                    AdjustNo = x.AdjustNo,
+                    LinkOrder = x.LinkOrder,
+                    DataType = x.DataType,
+                    DataId = x.DataId,
+                    DataNo = x.DataNo,
+                    DataName = x.DataName,
+                    Original = x.Original,
+                    Quantity = x.Quantity,
+                    Price = x.Price,
+                    PriceAll = x.PriceAll,
+                    Unit = x.Unit,
+                    UnitCount = x.UnitCount,
+                    UnitPrice = x.UnitPrice,
+                    UnitPriceAll = x.UnitPriceAll,
+                    WorkPrice = x.WorkPrice,
+                    Reason = x.Reason,
+                    Message = x.Message,
+                    CreateTime = x.CreateTime,
+                    CreateUser = x.CreateUser,
+                    NameLog = x.NameLog,
+                    DeleteFlag = x.DeleteFlag,
+                    NameType = x.NameType,
+                    WarehouseId = x.WarehouseId,
+                    No = string.IsNullOrWhiteSpace(x.LinkOrder) ? "無資料/"+ (string.IsNullOrWhiteSpace(x.AdjustNo)? "無資料":x.AdjustNo) : x.LinkOrder + "/"+ (string.IsNullOrWhiteSpace(x.AdjustNo)? "無資料":x.AdjustNo),                    
+                    // No = x.AdjustNo + "/" + x.LinkOrder,
+                    Increase = x.Quantity >= 0 ? x.Quantity : 0,
+                    Decrease = x.Quantity < 0 ? x.Quantity : 0,
+            });
+
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
