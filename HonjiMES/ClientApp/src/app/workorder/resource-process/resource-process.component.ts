@@ -40,10 +40,13 @@ export class ResourceProcessComponent implements OnInit, OnChanges {
         displayExpr: string; valueExpr: string;
     };
     StatusList: any;
+    remoteOperations: boolean;
+    detailfilter = [];
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent) {
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.StatusList = myservice.getResourceWorkOrderStatus();
+        this.remoteOperations = true;
         this.dataSourceDB = [];
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -64,18 +67,20 @@ export class ResourceProcessComponent implements OnInit, OnChanges {
     ngOnChanges() {
         this.formData = this.masterkey;
         this.dataSourceDB = new CustomStore({
-            key: 'ProcessNo',
-            load: () => SendService.sendRequest(this.http, this.Controller
-                + '/GetProcessByMachineName?machine=' + this.masterkey.ProducingMachine),
+            key: 'Id',
+            load: (loadOptions) => SendService.sendRequest(
+                this.http,
+                this.Controller + '/GetProcessByMachineName?machine=' + this.masterkey.ProducingMachine,
+                'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
         });
     }
     onValueChanged(e) {
-        debugger;
-        if (e.value === 0) {
-            this.dataGrid.instance.clearFilter();
-        } else {
-            this.dataGrid.instance.filter(['WorkOrderHead.Status', '=', e.value]);
-        }
+        // debugger;
+        // if (e.value === 0) {
+        //     this.dataGrid.instance.clearFilter();
+        // } else {
+        //     this.dataGrid.instance.filter(['WorkOrderHead.Status', '=', e.value]);
+        // }
     }
     // tslint:disable-next-line: only-arrow-functions
     onFormSubmit = function (e) { };

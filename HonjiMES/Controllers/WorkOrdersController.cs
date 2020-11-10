@@ -791,7 +791,7 @@ namespace HonjiMES.Controllers
                         DrawNo = item.DrawNo,
                         Manpower = item.Manpower,
                         // ProducingMachineId = item.,
-                        ProducingMachine = item.ProducingMachine,
+                        ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
                         ReCount = WorkOrderReportData.ReCount,
                         Message = WorkOrderReportData.Message,
                         StatusO = 1,
@@ -1821,7 +1821,7 @@ namespace HonjiMES.Controllers
                         // PurchaseId
                         DrawNo = item.DrawNo,
                         Manpower = item.Manpower,
-                        ProducingMachine = item.ProducingMachine,
+                        ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
                         Remarks = item.Remarks,
                         DueStartTime = DateTime.Now,
                         DueEndTime = DateTime.Now,
@@ -2013,7 +2013,7 @@ namespace HonjiMES.Controllers
                                 // PurchaseId
                                 DrawNo = item2.DrawNo,
                                 Manpower = item2.Manpower,
-                                ProducingMachine = item2.ProducingMachine,
+                                ProducingMachine = item2.ProducingMachine == "" ? null : item2.ProducingMachine,
                                 Remarks = item2.Remarks,
                                 DueStartTime = DateTime.Now,
                                 DueEndTime = DateTime.Now,
@@ -2045,54 +2045,94 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
-        // GET: api/WorkOrderReportLogs
         /// <summary>
-        /// 報工紀錄列表
+        /// 報工紀錄列表 By 機台名稱
         /// </summary>
+        /// <param name="machine"></param>
+        /// <param name="FromQuery"></param>
+        /// <param name="detailfilter"></param>
         /// <returns></returns>
+        // GET: api/WorkOrder
         [HttpGet]
-        public async Task<ActionResult<WorkOrderLog>> GetWorkOrderReportLogByNum(string machine)
+        public async Task<ActionResult<IEnumerable<WorkOrderLog>>> GetWorkOrderReportLogByNum(
+                string machine,
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var data = await _context.WorkOrderReportLogs.AsQueryable().Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine)
-            .OrderByDescending(x => x.CreateTime).Include(x => x.WorkOrderDetail).ThenInclude(x => x.WorkOrderHead).ToListAsync();
-            var WorkOrderLog = new List<WorkOrderLog>();
-            foreach (var item in data)
-            {
-                var dt = DateTime.Now;
-                var tempData = new WorkOrderLog
-                {
-                    WorkOrderNo = item.WorkOrderDetail.WorkOrderHead.WorkOrderNo,
-                    ReportType = item.ReportType,
-                    SerialNumber = item.WorkOrderDetail.SerialNumber,
-                    Process = item.WorkOrderDetail.ProcessNo + '_' + item.WorkOrderDetail.ProcessName,
-                    ProcessTime = Convert.ToInt32(((item?.ActualEndTime ?? dt) - (item?.ActualStartTime ?? dt)).TotalMinutes),
-                    ReCount = item.ReCount,
-                    Remarks = item.WorkOrderDetail.Remarks,
-                    StatusO = item.StatusO,
-                    StatusN = item.StatusN,
-                    DueStartTime = item.DueStartTime,
-                    DueEndTime = item.DueEndTime,
-                    ActualStartTime = item.ActualStartTime,
-                    ActualEndTime = item.ActualEndTime,
-                    CreateTime = item.CreateTime
-                };
-                WorkOrderLog.Add(tempData);
-            }
-            return Ok(MyFun.APIResponseOK(WorkOrderLog));
+            var machineValue = machine == "<無>" ? null : machine;
+            var dt = DateTime.Now;
+            var data = _context.WorkOrderReportLogs.Where(
+                x => x.DeleteFlag == 0 && 
+                x.ProducingMachine == machineValue)
+                .Include(x => x.WorkOrderDetail)
+                .ThenInclude(x => x.WorkOrderHead)
+                .OrderByDescending(x => x.CreateTime)
+                .Select(x => new WorkOrderLog{
+                    WorkOrderNo = x.WorkOrderDetail.WorkOrderHead.WorkOrderNo,
+                    ReportType = x.ReportType,
+                    SerialNumber = x.WorkOrderDetail.SerialNumber,
+                    Process = x.WorkOrderDetail.ProcessNo + '_' + x.WorkOrderDetail.ProcessName,
+                    ProcessTime = x.ActualEndTime == null ? 0 : Convert.ToInt32(((x.ActualEndTime ?? dt) - (x.ActualStartTime ?? dt)).TotalMinutes),
+                    ReCount = x.ReCount == 0 ? null : x.ReCount,
+                    Remarks = x.WorkOrderDetail.Remarks,
+                    StatusO = x.StatusO,
+                    StatusN = x.StatusN,
+                    DueStartTime = x.DueStartTime,
+                    DueEndTime = x.DueEndTime,
+                    ActualStartTime = x.ActualStartTime,
+                    ActualEndTime = x.ActualEndTime,
+                    CreateTime = x.CreateTime
+                });
+
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
-        // GET: api/WorkOrderReportLogs
         /// <summary>
-        /// 查詢機台報工紀錄 By 機台名稱
+        /// 查詢機台工序資訊 By 機台名稱
         /// </summary>
+        /// <param name="machine"></param>
+        /// <param name="FromQuery"></param>
+        /// <param name="detailfilter"></param>
         /// <returns></returns>
+        // GET: api/WorkOrder
         [HttpGet]
-        public async Task<ActionResult<ResourceProcessData>> GetProcessByMachineName(string machine)
+        public async Task<ActionResult<IEnumerable<WorkOrderDetailForResourceal>>> GetProcessByMachineName(
+                string machine,
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
         {
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.ProducingMachine == machine &&
-            x.WorkOrderHead.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || x.WorkOrderHead.Status == 5))
-            .Include(x => x.WorkOrderHead).ToListAsync();
-            return Ok(MyFun.APIResponseOK(WorkOrderDetails));
+            var machineValue = machine == "<無>" ? null : machine;
+            var data = _context.WorkOrderDetails.Where(
+                x => x.DeleteFlag == 0 && 
+                x.ProducingMachine == machineValue &&
+                x.WorkOrderHead.DeleteFlag == 0 && 
+                (x.WorkOrderHead.Status == 1 || x.WorkOrderHead.Status == 5))
+                .OrderByDescending(x => x.WorkOrderHead.WorkOrderNo)
+                .ThenBy(x => x.SerialNumber)
+                .Select(x => new WorkOrderDetailForResourceal{
+                    Id = x.Id,
+                    SerialNumber = x.SerialNumber,
+                    ProcessName = x.ProcessNo + "_" + x.ProcessName,
+                    WorkOrderNo = x.WorkOrderHead.WorkOrderNo,
+                    MaterialBasicName = x.WorkOrderHead.DataNo + "_" + x.WorkOrderHead.DataName,
+                    WorkOrderHeadStatus = x.WorkOrderHead.Status,
+                    WorkOrderDetailStatus = x.Status,
+                    Count = x.Count,
+                    ReCount = x.ReCount,
+                    Remarks = x.Remarks,
+                    DueStartTime = x.DueStartTime,
+                    DueEndTime = x.DueEndTime,
+                    ActualStartTime = x.ActualStartTime,
+                    ActualEndTime = x.ActualEndTime,
+                    CreateTime = x.CreateTime,
+                });
+
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            // data = data.Include(x => x.WorkOrderHead);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>

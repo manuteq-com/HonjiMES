@@ -82,6 +82,9 @@ export class Myservice {
     getResponsibilityType(): Selectitem[] {
         return responsibilitytype;
     }
+    getInventoryLogType(): Selectitem[] {
+        return inventorylogtype;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -220,4 +223,18 @@ const processtype: Selectitem[] = [
 const responsibilitytype: Selectitem[] = [
     { Id: 0, Name: '其他' },
     { Id: 1, Name: '廠商' },
+];
+const inventorylogtype: Selectitem[] = [ // id數值沒有意義，資料庫是使用Name過濾
+    { Id: 9, Name: '[進貨驗收]入庫' },
+    { Id: 10, Name: '[進貨驗退]出庫' },
+    { Id: 11, Name: '[銷貨]出庫' },
+    { Id: 12, Name: '[銷退]入庫' },
+    { Id: 8, Name: '[轉倉]表處單' },
+    { Id: 4, Name: '[工單領料]出庫' },
+    { Id: 3, Name: '[工單退料]入庫' },
+    { Id: 1, Name: '[入庫單]半成品入庫' },
+    { Id: 2, Name: '[入庫單]成品入庫' },
+    { Id: 7, Name: '[新增品號]' },
+    { Id: 5, Name: '[庫存調整]' },
+    { Id: 6, Name: '[庫存調整單]' },
 ];

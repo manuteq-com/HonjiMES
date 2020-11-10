@@ -109,7 +109,7 @@ export class PurchaseTotalComponent implements OnInit {
         }
     }
     ngOnInit() {
-        this.titleService.setTitle('機台資源分配');
+        this.titleService.setTitle('採購單統計查詢');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

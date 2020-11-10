@@ -36,7 +36,7 @@
 
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
@@ -61,22 +61,22 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="ProducingMachine" caption="機台">
+    <dxi-column dataField="ProducingMachine" alignment="center" caption="機台" sortOrder="asc">
         <!-- <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup> -->
     </dxi-column>
-    <dxi-column dataField="New" caption="新建"></dxi-column>
-    <dxi-column dataField="Assign" caption="派工"></dxi-column>
-    <dxi-column dataField="Start" caption="開工" ></dxi-column>
-    <dxi-column dataField="Ready" caption="完工"></dxi-column>
-    <dxi-column dataField="ToNew" caption="轉新"></dxi-column>
-    <dxi-column dataField="Finish" caption="結案"></dxi-column>
-    <dxi-column caption="報工紀錄" cellTemplate="readVercellTemplate" width="100"></dxi-column>
-    <div *dxTemplate="let data of 'readVercellTemplate'">
-        <dx-button icon="detailslayout" type="normal" (onClick)="readVer($event,data)"></dx-button>
+    <dxi-column dataField="New" caption="新建統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="Assign" caption="派工統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="Start" caption="開工統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="Ready" caption="完工統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="ToNew" caption="轉新統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="Finish" caption="結案統計 (工序/工時)"></dxi-column>
+    <dxi-column caption="工序總覽" cellTemplate="readWorkOrderDetailcellTemplate" alignment="center" width="90"></dxi-column>
+    <div *dxTemplate="let data of 'readWorkOrderDetailcellTemplate'">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readWorkOrderDetail($event,data)"></dx-button>
     </div>
-    <dxi-column caption="後續排程" cellTemplate="readBomVercellTemplate" width="100"></dxi-column>
-    <div *dxTemplate="let data of 'readBomVercellTemplate'">
-        <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
+    <dxi-column caption="報工紀錄" cellTemplate="readReportLogcellTemplate" alignment="center" width="90"></dxi-column>
+    <div *dxTemplate="let data of 'readReportLogcellTemplate'">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readReportLog($event,data)"></dx-button>
     </div>
 </dx-data-grid>
 
@@ -86,7 +86,7 @@
         <app-resource-workorder [masterkey]="masterkey"></app-resource-workorder>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="後續排程" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="850" [width]="1600"
+<dx-popup [showTitle]="true" title="工序總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="850" [width]="1600"
     [(visible)]="verpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-resource-process [masterkey]="masterkey"></app-resource-process>

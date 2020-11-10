@@ -42,6 +42,7 @@ export class InventoryLogComponent implements OnInit {
     AdjustTypeList: any;
     WarehouseList: any;
     UserList: any;
+
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.remoteOperations = true;
@@ -57,21 +58,28 @@ export class InventoryLogComponent implements OnInit {
                 }
             }
         );
-        this.app.GetData(this.Controller + '/GetAdjustType').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.AdjustTypeList = s.data;
-                    // this.AdjustTypeList.forEach(x => x.Message);
-                    this.selectAdjustType = {
-                        items: this.AdjustTypeList,
-                        displayExpr: 'Message',
-                        valueExpr: 'Message',
-                        searchEnabled: true,
-                        onValueChanged: this.onValueChanged.bind(this)
-                    };
-                }
-            }
-        );
+        // this.app.GetData(this.Controller + '/GetAdjustType').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.AdjustTypeList = s.data;
+        //             // this.AdjustTypeList.forEach(x => x.Message);
+        //             this.selectAdjustType = {
+        //                 items: this.AdjustTypeList,
+        //                 displayExpr: 'Message',
+        //                 valueExpr: 'Message',
+        //                 searchEnabled: true,
+        //                 onValueChanged: this.onValueChanged.bind(this)
+        //             };
+        //         }
+        //     }
+        // );
+        this.selectAdjustType = {
+            items: myservice.getInventoryLogType(),
+            displayExpr: 'Name',
+            valueExpr: 'Name',
+            searchEnabled: true,
+            onValueChanged: this.onValueChanged.bind(this)
+        };
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 s.data.forEach(e => {
@@ -161,7 +169,7 @@ export class InventoryLogComponent implements OnInit {
         }
     }
     onValueChanged(e) {
-        debugger;
+        // debugger;
         if (e.value === '全部資料') {
             this.dataGrid.instance.clearFilter();
         } else {

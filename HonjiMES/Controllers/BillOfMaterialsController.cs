@@ -436,19 +436,20 @@ namespace HonjiMES.Controllers
             var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
             if (BillOfMaterial != null) {
                 
-                if (BillOfMaterial.Master == 0) {
-                    BillOfMaterial.Master = 1;
-                } else {
-                    BillOfMaterial.Master = 0;
-                }
-
-                // 以下舊方法
-                // var BillOfMaterialAll = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterial.ProductBasicId && x.DeleteFlag == 0).ToList();
-                // foreach (var item in BillOfMaterialAll)
-                // {
-                //     item.Master = 0;
+                // 原本方法! 任何BOM成員都可以設為主要用料
+                // if (BillOfMaterial.Master == 0) {
+                //     BillOfMaterial.Master = 1;
+                // } else {
+                //     BillOfMaterial.Master = 0;
                 // }
-                // BillOfMaterial.Master = 1;
+
+                // 2020/11/05 確定BOM成員只能有一個主要用料
+                var BillOfMaterialAll = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterial.ProductBasicId && x.DeleteFlag == 0).ToList();
+                foreach (var item in BillOfMaterialAll)
+                {
+                    item.Master = 0;
+                }
+                BillOfMaterial.Master = 1;
 
                 await _context.SaveChangesAsync();
             }
