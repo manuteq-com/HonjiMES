@@ -38,6 +38,11 @@ namespace HonjiMES.Models
         [Column("name", TypeName = "varchar(50)")]
         public string Name { get; set; }
         /// <summary>
+        /// &#31777;&#31281;
+        /// </summary>
+        [Column("short_name", TypeName = "varchar(50)")]
+        public string ShortName { get; set; }
+        /// <summary>
         /// &#20195;&#34399;
         /// </summary>
         [Required]
