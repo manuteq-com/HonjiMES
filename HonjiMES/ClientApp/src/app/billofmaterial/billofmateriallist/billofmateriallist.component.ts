@@ -21,6 +21,7 @@ export class BillofmateriallistComponent implements OnInit {
     verpopupVisible: boolean;
     itemkey: number;
     bomverdata: any;
+    dataGrid: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.bomMod = 'PBOM';
@@ -33,6 +34,7 @@ export class BillofmateriallistComponent implements OnInit {
         //     updateUrl: this.apiurl + this.Controller + '/PutMaterial',
         //     deleteUrl: this.apiurl + this.Controller + '/DeleteBillofPurchaseDetail',
         // });
+
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) =>
@@ -42,7 +44,7 @@ export class BillofmateriallistComponent implements OnInit {
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
             update: (key, values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PutMaterial', 'PUT', { key, values }),
+                SendService.sendRequest(this.http, '/MaterialBasics/PutActualSpecification', 'PUT', { key, values }),
             remove: (key) =>
                 SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
         });
@@ -68,5 +70,12 @@ export class BillofmateriallistComponent implements OnInit {
             }
         );
         // this.onChangeVar.emit(data.data);
+    }
+
+    cancelClickHandler(e) {
+        this.dataGrid.instance.cancelEditData();
+    }
+    saveClickHandler(e) {
+        this.dataGrid.instance.saveEditData();
     }
 }

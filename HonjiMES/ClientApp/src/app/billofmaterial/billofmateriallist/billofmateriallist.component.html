@@ -32,27 +32,32 @@
     </dxo-pager>
     <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
     </dxo-remote-operations> -->
-    <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="false"></dxo-editing>
+    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
+        <dxo-form>
+            <dxi-item dataField="ActualSpecification"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
 
-    <dxi-column dataField="MaterialNo" caption="成品品號" [allowEditing]="false" [filterValue]="" dataType="string">
+    <dxi-column dataField="MaterialNo" caption="成品品號"  [filterValue]="" dataType="string" [allowEditing]="false">
     </dxi-column>
-    <dxi-column dataField="Name" caption="成品品名" dataType="string"></dxi-column>
-    <dxi-column dataField="Specification" caption="成品規格" dataType="string"></dxi-column>
-    <dxi-column dataField="Property" caption="廠內規格"></dxi-column>
-    <dxi-column dataField="MaterialNumber" caption="廠內品號"></dxi-column>
-    <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="Name" caption="成品品名" dataType="string" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Specification" caption="成品規格" dataType="string" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ActualSpecification" caption="實際規格" dataType="string"></dxi-column>
+    <dxi-column dataField="Property" caption="廠內規格" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false"></dxi-column>
 
     <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
     </div>
 
-    <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
         <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
