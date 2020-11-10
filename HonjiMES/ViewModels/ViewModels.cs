@@ -1125,5 +1125,12 @@ namespace HonjiMES.Models
         public int Undone { get; set; }
     }
 
+    public class InventoryAdjust : AllStockLog
+    {
+        public decimal Increase { get; set; }
+        public decimal Decrease { get; set; }
+        public string No { get; set; }
+    }
+
 
 }
