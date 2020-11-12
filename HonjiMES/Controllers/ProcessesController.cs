@@ -212,7 +212,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Processes
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProcessesStatus>> GetWorkOrderByStatus(int id)
+        public async Task<ActionResult<ProcessesStatus>> GetWorkOrderByMode(int mode)
         {
             var ptype = typeof(ProcessesData);
             var ProcessesStatus = new ProcessesStatus();
@@ -244,13 +244,13 @@ namespace HonjiMES.Controllers
             try
             {
                 var WorkOrderHeads = new List<WorkOrderHead>();
-                if (id == 0)
+                if (mode == 0) // 取得全部狀態的工單
                 {
                     WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
                 }
-                else
+                else // 取得已派工狀態的工單
                 {
-                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == id && x.DeleteFlag == 0).OrderByDescending(x => x.DispatchTime).ToListAsync();
+                    WorkOrderHeads = await _context.WorkOrderHeads.Where(x => x.Status == 1 && x.Status == 2 && x.DeleteFlag == 0).OrderByDescending(x => x.DispatchTime).ToListAsync();
                 }
 
                 foreach (var item in WorkOrderHeads)

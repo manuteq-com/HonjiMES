@@ -1071,6 +1071,11 @@ namespace HonjiMES.Controllers
                         FirstWorkOrderDetails.ActualEndTime = dt;
                         FirstWorkOrderDetails.Status = 3; // 完工
 
+                        // 如果[工單Head]狀態為[已派工]，則改為[以開工]
+                        if (FirstWorkOrderDetails.WorkOrderHead.Status == 1) {
+                            FirstWorkOrderDetails.WorkOrderHead.Status = 2;
+                        }
+
                         FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
                         {
                             // WorkOrderDetailId = FirstWorkOrderDetails.Id,

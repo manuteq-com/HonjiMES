@@ -64,12 +64,12 @@
     <dxi-column dataField="ProducingMachine" alignment="center" caption="機台" sortOrder="asc">
         <!-- <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup> -->
     </dxi-column>
-    <dxi-column dataField="New" caption="新建統計 (工序/工時)"></dxi-column>
-    <dxi-column dataField="Assign" caption="派工統計 (工序/工時)"></dxi-column>
-    <dxi-column dataField="Start" caption="開工統計 (工序/工時)"></dxi-column>
-    <dxi-column dataField="Ready" caption="完工統計 (工序/工時)"></dxi-column>
-    <dxi-column dataField="ToNew" caption="轉新統計 (工序/工時)"></dxi-column>
-    <dxi-column dataField="Finish" caption="結案統計 (工序/工時)"></dxi-column>
+    <dxi-column dataField="New" caption="新建統計 (工序/工時)" alignment="center"></dxi-column>
+    <dxi-column dataField="Assign" caption="已派工統計 (工序/工時)" alignment="center"></dxi-column>
+    <dxi-column dataField="Start" caption="已開工統計 (工序/工時)" alignment="center"></dxi-column>
+    <!-- <dxi-column dataField="Ready" caption="完工統計 (工序/工時)" alignment="center"></dxi-column> -->
+    <!-- <dxi-column dataField="ToNew" caption="轉新統計 (工序/工時)" alignment="center"></dxi-column> -->
+    <dxi-column dataField="Finish" caption="結案統計 (工序/工時)" alignment="center"></dxi-column>
     <dxi-column caption="工序總覽" cellTemplate="readWorkOrderDetailcellTemplate" alignment="center" width="90"></dxi-column>
     <div *dxTemplate="let data of 'readWorkOrderDetailcellTemplate'">
         <dx-button icon="detailslayout" type="normal" (onClick)="readWorkOrderDetail($event,data)"></dx-button>

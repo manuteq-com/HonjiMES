@@ -771,6 +771,10 @@ namespace HonjiMES.Controllers
         public async Task<IActionResult> ReportWorkOrderByPurchase(int id, WorkOrderReportData WorkOrderReportData)
         {
             var OWorkOrderHead = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).FirstAsync();
+            // 如果[工單Head]狀態為[已派工]，則改為[以開工]
+            if (OWorkOrderHead.Status == 1) {
+                OWorkOrderHead.Status = 2;
+            }
             foreach (var item in OWorkOrderHead.WorkOrderDetails)
             {
                 if (item.SerialNumber == WorkOrderReportData.WorkOrderSerial)
@@ -1200,6 +1204,10 @@ namespace HonjiMES.Controllers
                     return Ok(MyFun.APIResponseError("該工單尚未[領料]!"));
                 }
 
+                // 如果[工單Head]狀態為[已派工]，則改為[以開工]
+                if (WorkOrderHeads.Status == 1) {
+                    WorkOrderHeads.Status = 2;
+                }
                 var WorkOrderDetails = WorkOrderHeads.WorkOrderDetails.Where(x => x.SerialNumber == WorkOrderReportData.WorkOrderSerial && x.DeleteFlag == 0).ToList();
                 if (WorkOrderDetails.Count() == 1)
                 {

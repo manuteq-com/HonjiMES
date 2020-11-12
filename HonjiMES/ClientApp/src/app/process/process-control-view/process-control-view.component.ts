@@ -35,7 +35,7 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
         this.scrollValue.x = (window.innerWidth - 0) + 'px';
     }
     ngOnChanges() {
-        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByMode/0').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;
@@ -94,7 +94,7 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
         this.itemkey = null;
         // this.dataGrid.instance.refresh();
         this.loadingVisible = true;
-        this.app.GetData('/Processes/GetWorkOrderByStatus/0').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByMode/0').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;
