@@ -480,7 +480,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 Id: this.formData.WorkOrderHeadId,
                 WorkOrderNo: this.formData.WorkOrderNo,
                 CreateTime: this.formData.CreateTime,
-                DataType: 2,
+                // DataType: 2,
                 DataId: this.formData.MaterialBasicId,
                 Count: this.formData.Count,
                 MachineNo: this.formData.MachineNo,
