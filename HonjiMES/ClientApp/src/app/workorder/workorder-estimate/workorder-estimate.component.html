@@ -1,0 +1,41 @@
+<div class="headerblock">
+    <div class="headerfont font1">生產管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">工單交期預估</div>
+    <div class="buttongroup">
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="設定工作日"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+    </div>
+</div>
+<!-- <div class="container">
+    <div class="row" style="text-align: center;">
+        <div class="col-xs-1" *ngFor="let Status of WorkEstimateStatus" [style.backgroundColor]="Status.color"
+            style="width:50px;height:40px;margin:10px;line-height:40px;">
+            <span style="color: aliceblue;">{{Status.text}}</span>
+        </div>
+    </div>
+</div> -->
+<dx-scheduler [dataSource]="dataSourceDB" [remoteFiltering]="true" currentView="month" textExpr="Text" [height]="Height"
+    [width]="1870" [views]='views' startDateExpr="StartDate" endDateExpr="EndDate" allDayExpr="AllDay"
+    [maxAppointmentsPerCell]="MaxMachineCount" [adaptivityEnabled]="false">
+    <dxo-editing [allowAdding]="false" [allowDeleting]="false" [allowUpdating]="false" [allowResizing]="false"
+        [allowDragging]="true"></dxo-editing>
+    <dxi-resource fieldExpr="Status" label="狀態" [dataSource]="WorkEstimateStatus"></dxi-resource>
+
+</dx-scheduler>
+
+<dx-popup [showTitle]="true" title="設定工作日" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)"></app-creatmaterial-basic>
+    </div>
+</dx-popup>

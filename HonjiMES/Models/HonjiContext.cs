@@ -20,6 +20,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
         public virtual DbSet<MachineInformation> MachineInformations { get; set; }
+        public virtual DbSet<MachineWorkdate> MachineWorkdates { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -848,6 +849,27 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UserId).HasComment("負責人ID");
             });
 
+            modelBuilder.Entity<MachineWorkdate>(entity =>
+            {
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Setting).HasComment("設定");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.Property(e => e.WorkDate).HasComment("日期");
+
+                entity.Property(e => e.WorkTimeEnd)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("結束時間");
+
+                entity.Property(e => e.WorkTimeStart)
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasComment("起始時間");
+            });
+
             modelBuilder.Entity<Material>(entity =>
             {
                 entity.HasComment("原料庫存");
@@ -1328,7 +1350,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.OrderId).HasComment("訂單id");
 
-                entity.Property(e => e.OriginPrice).HasComment("原單價");
+                entity.Property(e => e.OriginPrice).HasComment("單價");
 
                 entity.Property(e => e.Package).HasComment("包裝數");
 

@@ -66,6 +66,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "machine_workdate"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "material"
       },
       {

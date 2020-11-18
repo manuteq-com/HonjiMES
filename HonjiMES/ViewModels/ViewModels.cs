@@ -1085,6 +1085,8 @@ namespace HonjiMES.Models
         public string Ready { get; set; }
         public string ToNew { get; set; }
         public string Finish { get; set; }
+        public int? AllCount { get; set; }
+        public decimal? AllTime { get; set; }
 
     }
 

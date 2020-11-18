@@ -58,6 +58,9 @@ export class Myservice {
     getWorkSchedulerStatus(): WorkSchedulerStatu[] {
         return WorkSchedulerStatus;
     }
+    getWorkEstimateStatus(): WorkSchedulerStatu[] {
+        return WorkEstimateStatus;
+    }
     getTimeType(): Selectitem[] {
         return timetype;
     }
@@ -196,6 +199,10 @@ const WorkSchedulerStatus: WorkSchedulerStatu[] = [
     { text: '開工', id: 2, color: '#FFC300' },
     { text: '完工', id: 3, color: '#0B9500' },
     { text: '轉單', id: 4, color: '#929292' }
+];
+const WorkEstimateStatus: WorkSchedulerStatu[] = [
+    { text: '', id: 0, color: '#929292' },
+    { text: '', id: 1, color: '#5c72b5' },
 ];
 const timetype: Selectitem[] = [
     { Id: 1, Name: '前置時間' },
