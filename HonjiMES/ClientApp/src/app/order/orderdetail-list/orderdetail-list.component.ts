@@ -66,7 +66,7 @@ export class OrderdetailListComponent implements OnInit {
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
-                    this.GetData(s.data, this.topurchasekey);
+                    this.GetDataFun(s.data, this.topurchasekey);
                 }
             }
         );
@@ -220,23 +220,23 @@ export class OrderdetailListComponent implements OnInit {
             });
         }
     }
-    GetData(BasicData, SelectData) {
+    GetDataFun(BasicData, SelectData) {
         let serial = 1;
         const tempdataSource = [];
         SelectData.forEach(element => {
-            const index = tempdataSource.findIndex(z => z.DataType === 2 && z.DataId === element.MaterialBasicId);
+            const index = tempdataSource.findIndex(z => z.DataId === element.MaterialBasicId);
             // tslint:disable-next-line: no-bitwise
             if (~index) {
                 tempdataSource[index].Quantity += element.Quantity;
                 tempdataSource[index].Price += element.Quantity * element.OriginPrice;
             } else {
-                const result = BasicData.find(y => y.DataType === 2 && y.DataId === element.MaterialBasicId);
+                const result = BasicData.find(y => y.DataId === element.MaterialBasicId);
                 if (result) {
                     tempdataSource.push({
                         OrderDetailId: element.Id,
                         Serial: serial,
                         TempId: result.TempId,
-                        DataType: 2,
+                        // DataType: 2,
                         DataId: element.MaterialBasicId,
                         WarehouseId: result.WarehouseId,
                         Quantity: element.Quantity,

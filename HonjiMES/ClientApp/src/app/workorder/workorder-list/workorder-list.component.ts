@@ -92,7 +92,7 @@ export class WorkorderListComponent implements OnInit {
         this.titleService.setTitle('生產看板');
     }
     getWorkOrderData() {
-        this.app.GetData('/Processes/GetWorkOrderByStatus/1').subscribe(
+        this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
                 this.loadingVisible = false;

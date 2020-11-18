@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 import { Myservice } from 'src/app/service/myservice';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-workorder-report',
@@ -347,17 +348,18 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval18 = '　　　　需求數量：　' + (element?.Count ?? '0');
                                 this.itemval19 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
+                                const reCount = (element?.Count ?? '0') - (element?.ReCount ?? '0');
                                 this.QuantityEditorOptions = {
                                     showSpinButtons: true,
                                     mode: 'number',
                                     // format: '#0',
-                                    value: (element?.Count ?? '0'),
-                                    min: -(element?.ReCount ?? '0'),
+                                    value: reCount > 0 ? reCount : 0,
+                                    min: '0',
                                     // onValueChanged: this.QuantityValueChanged.bind(this)
                                 };
 
                                 this.formData = element;
-                                this.formData.ReCount = element.Count;
+                                this.formData.ReCount = reCount > 0 ? reCount : 0;
                                 this.formData.NgCount = 0;
                                 findProcess = true;
 
@@ -593,10 +595,36 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 if (this.postval.SupplierId != null && this.postval.PurchaseId != null) {
                     const result = this.PurchaseHeadList.find(x => x.Id === this.postval.PurchaseId);
                     if (result) {
-                        this.postval.PurchaseNo = result.PurchaseNo;
-                        // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: this.postval.WorkOrderID, values: this.postval });
-                        this.viewRefresh(e, sendRequest);
+                        let tempCheck = false;
+                        Swal.fire({
+                            showCloseButton: true,
+                            allowEnterKey: false,
+                            allowOutsideClick: false,
+                            title: '是否回填?',
+                            html: '如確認回填採購單，將會進行轉倉!',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#71c016',
+                            cancelButtonText: '不回填',
+                            confirmButtonText: '確認回填'
+                        }).then(async (result2) => {
+                            if (result2.value) {
+                                tempCheck = true;
+                                this.postval.CheckResult = 1;
+                            } else if (result2.dismiss === Swal.DismissReason.cancel) {
+                                tempCheck = true;
+                                this.postval.CheckResult = 0;
+                            } else if (result2.dismiss === Swal.DismissReason.close) {
+                                tempCheck = false;
+                            }
+                            if (tempCheck) {
+                                this.postval.PurchaseNo = result.PurchaseNo;
+                                // tslint:disable-next-line: max-line-length
+                                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: this.postval.WorkOrderID, values: this.postval });
+                                this.viewRefresh(e, sendRequest);
+                            }
+                        });
                     }
                 } else {
                     this.showMessage('error', '請選擇[供應商]和[採購單號]!', 3000);
