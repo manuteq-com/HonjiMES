@@ -223,7 +223,7 @@ namespace HonjiMES.Controllers
                             {
                                 TempBOM.H = CellvalH;
                             }
-                            
+
                             // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
                             var ProductBasic = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == TempBOM.A).ToList();
                             var MaterialBasic = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == TempBOM.H).ToList();
@@ -337,6 +337,45 @@ namespace HonjiMES.Controllers
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(_context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0), FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
+
+        /// <summary>
+        /// 有BOM資料的產品列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasicsHaveBom([FromQuery] DataSourceLoadOptions FromQuery)
+        {
+
+            var materailbasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && x.BillOfMaterialProductBasics.Where(y => y.DeleteFlag == 0).Any());
+
+
+            // var materailbasic = _context.MaterialBasics.AsQueryable().Where(x => x.DeleteFlag == 0)
+            // .Join(_context.BillOfMaterials.Where(x => x.Pid == null && x.DeleteFlag == 0),
+            // x => x.Id, y => y.ProductBasicId, (MaterialBasics, BillOfMaterials) => new
+            // {
+            //     BillOfMaterials.Id,
+            //     BillOfMaterials.MaterialBasicId,
+            //     MaterialBasics
+            // });
+            // var a =materailbasic.ToSql();
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(materailbasic, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
+        /// 無BOM資料的產品列表
+        /// </summary>
+        /// <param name="FromQuery"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasicsHaveAny([FromQuery] DataSourceLoadOptions FromQuery)
+        {
+            var materailbasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && !x.BillOfMaterialProductBasics.Any(y => y.DeleteFlag == 0));
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(materailbasic, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
         /// <summary>
         /// 用性品ID取BOM的列表
         /// </summary>
@@ -434,8 +473,9 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<BomList>>> PutBomlistMaster(int id, BomList PutBomlist)
         {
             var BillOfMaterial = await _context.BillOfMaterials.FindAsync(id);
-            if (BillOfMaterial != null) {
-                
+            if (BillOfMaterial != null)
+            {
+
                 // 原本方法! 任何BOM成員都可以設為主要用料
                 // if (BillOfMaterial.Master == 0) {
                 //     BillOfMaterial.Master = 1;
@@ -453,7 +493,7 @@ namespace HonjiMES.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            
+
             return Ok(MyFun.APIResponseOK(BillOfMaterial));
         }
 
@@ -470,7 +510,7 @@ namespace HonjiMES.Controllers
             {
                 return Ok(MyFun.APIResponseError("請輸入名稱或品號"));
             }
-            var masterVal = _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).Any()? 0 : 1;
+            var masterVal = _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0).Any() ? 0 : 1;
             var nBillOfMaterials = new BillOfMaterial
             {
                 ProductBasicId = id,
@@ -489,12 +529,15 @@ namespace HonjiMES.Controllers
                 //複製BOM內容
                 int BasicId = PostBom.BasicId.Value;
                 // var BillOfMaterials = _context.ProductBasics.Find(BasicId).BillOfMaterials.ToList();
-                
+
                 // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
                 var BillOfMaterials = _context.MaterialBasics.Find(BasicId).BillOfMaterialProductBasics.Where(x => x.Pid == null).ToList();
-                if (BillOfMaterials.Count() == 0) {
+                if (BillOfMaterials.Count() == 0)
+                {
                     nBillOfMaterials.MaterialBasicId = PostBom.BasicId;
-                } else {
+                }
+                else
+                {
                     foreach (var item1 in BillOfMaterials)
                     {
                         var nbom1 = new BillOfMaterial
@@ -587,14 +630,19 @@ namespace HonjiMES.Controllers
             if (BillOfMaterials != null)
             {
                 // 假設該刪除品號被設為主件，則另尋其他品號設為主件。
-                if (BillOfMaterials.FirstOrDefault().Master == 1) {
+                if (BillOfMaterials.FirstOrDefault().Master == 1)
+                {
                     var BillOfMaterial = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterials.FirstOrDefault().ProductBasicId && x.Lv == 1 && x.Master == 0 && x.DeleteFlag == 0).ToList();
-                    if (BillOfMaterial.Count() != 0) {
+                    if (BillOfMaterial.Count() != 0)
+                    {
                         BillOfMaterial.FirstOrDefault().Master = 1;
                     }
-                } else { // 檢查是否有主件存在，否則隨機選一個當主件。
+                }
+                else
+                { // 檢查是否有主件存在，否則隨機選一個當主件。
                     var BillOfMaterial = _context.BillOfMaterials.Where(x => x.ProductBasicId == BillOfMaterials.FirstOrDefault().ProductBasicId && x.Lv == 1 && x.Id != BillOfMaterials.FirstOrDefault().Id && x.DeleteFlag == 0).ToList();
-                    if (BillOfMaterial.Where(x => x.Master == 1).ToList().Count() == 0) {
+                    if (BillOfMaterial.Where(x => x.Master == 1).ToList().Count() == 0)
+                    {
                         BillOfMaterial.FirstOrDefault().Master = 1;
                     }
                 }
