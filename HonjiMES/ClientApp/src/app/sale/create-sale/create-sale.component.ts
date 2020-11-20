@@ -8,7 +8,6 @@ import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
 
-
 @Component({
     selector: 'app-create-sale',
     templateUrl: './create-sale.component.html',

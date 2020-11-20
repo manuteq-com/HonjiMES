@@ -88,6 +88,9 @@ export class Myservice {
     getInventoryLogType(): Selectitem[] {
         return inventorylogtype;
     }
+    getMachineWorkDateVal(): Selectitem[] {
+        return MachineWorkDateVal;
+    }
 }
 const purchasetypes: Selectitem[] = [
     { Id: 10, Name: '採購' },
@@ -244,4 +247,8 @@ const inventorylogtype: Selectitem[] = [ // id數值沒有意義，資料庫是�
     { Id: 7, Name: '[新增品號]' },
     { Id: 5, Name: '[庫存調整]' },
     { Id: 6, Name: '[庫存調整單]' },
+];
+const MachineWorkDateVal: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '預設' },
 ];

@@ -34,8 +34,8 @@
 
 </dx-scheduler>
 
-<dx-popup [showTitle]="true" title="設定工作日" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="設定工作日" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="510" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)"></app-creatmaterial-basic>
+        <app-workorder-estimate-setting (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey"></app-workorder-estimate-setting>
     </div>
 </dx-popup>

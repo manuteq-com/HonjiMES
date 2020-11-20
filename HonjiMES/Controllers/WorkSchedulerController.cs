@@ -142,30 +142,30 @@ namespace HonjiMES.Controllers
         {
             var index = 0;
             var DT_now = DateTime.Now;
-            var DT_start = machineDefDate.WorkTimeStart;
-            var DT_end = machineDefDate.WorkTimeEnd;
-            var DT_min = (DT_end - DT_start).TotalMinutes - 60;
+            var DT_start = machineDefDate.WorkTimeStart; // 資料庫預設上班時間
+            var DT_end = machineDefDate.WorkTimeEnd; // 資料庫預設下班時間
+            var DT_min = (DT_end - DT_start).TotalMinutes - 60; // 資料庫預設[單日工作時間]，扣除中午休息時間
             var newlist = new List<WorkSchedulerVM>();
             foreach (var item in TimeData)
             {
-                var tempAllTime = Decimal.ToDouble(item.AllTime ?? 0);
-                var tempDayIndex = 0;
-                while (tempAllTime > 0)
+                var tempAllTime = Decimal.ToDouble(item.AllTime ?? 0); // 機台的[總工序時間]
+                var tempDayIndex = 0; // 日期遞增
+                while (tempAllTime > 0) // 將[總工序時間]扣除[單日工作時間]
                 {
                     var tempDT_min = DT_min;
                     var tempDT = DT_now.AddDays(tempDayIndex);
                     var showCheck = false;
                     var hasDate = machineSetDate.Where(x => x.WorkDate == tempDT.Date);
-                    if (hasDate.Any()) {
+                    if (hasDate.Any()) { // 檢查資料庫是否有設定該日期的[單日工作時間]
                         tempDT_min = (hasDate.FirstOrDefault().WorkTimeEnd - hasDate.FirstOrDefault().WorkTimeStart).TotalMinutes - 60;
                         showCheck = true;
-                    } else if (tempDT.DayOfWeek != DayOfWeek.Saturday && tempDT.DayOfWeek != DayOfWeek.Sunday) {
+                    } else if (tempDT.DayOfWeek != DayOfWeek.Saturday && tempDT.DayOfWeek != DayOfWeek.Sunday) { // 如果資料庫沒設定，且又是[平日]則使用預設[單日工作時間]
                         showCheck = true;
                     }
                     
-                    if (showCheck) {
+                    if (showCheck) { // 如果不是平日，且也沒特別設定工作日，就不計算該日期，遞延
                         var showVal = tempDT_min;
-                        if (tempAllTime < tempDT_min) {
+                        if (tempAllTime < tempDT_min) { // 如果[總工序時間]還有多，則顯示[單日工作時間]，否則顯示剩餘的[總工序時間]
                             showVal = tempAllTime;
                         }
                         newlist.Add(new WorkSchedulerVM
@@ -177,7 +177,7 @@ namespace HonjiMES.Controllers
                             AllDay = true,
                             Status = item.ProducingMachine == "<無>" ? 0 : 1
                         });
-                        tempAllTime = tempAllTime - tempDT_min;
+                        tempAllTime = tempAllTime - tempDT_min; // 更新[總工序時間]
                     }
                     
                     tempDayIndex++;
@@ -186,5 +186,96 @@ namespace HonjiMES.Controllers
 
             return newlist;
         }
+        
+        /// <summary>
+        /// 查詢工作日全部資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetMachineWorkDate(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            // _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.MachineWorkdates.Where(x => x.DeleteFlag == 0).OrderByDescending(x => x.Setting).ThenByDescending(x => x.WorkDate);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            // _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+        
+        // PUT: api/WorkScheduler/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// 修改工作日
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="MachineWorkDate"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMachineWorkDate(int id, MachineWorkdate MachineWorkDate)
+        {
+            MachineWorkDate.Id = id;
+            var OMachineWorkDate = _context.MachineWorkdates.Find(id);
+            var CMachineWorkDate = OMachineWorkDate;
+
+            var Msg = MyFun.MappingData(ref OMachineWorkDate, MachineWorkDate);
+            OMachineWorkDate.UpdateTime = DateTime.Now;
+            OMachineWorkDate.UpdateUser = MyFun.GetUserID(HttpContext);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+               
+            }
+
+            return Ok(MyFun.APIResponseOK(OMachineWorkDate));
+        }
+
+        // POST: api/WorkScheduler
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// 新增工作日
+        /// </summary>
+        /// <param name="MachineWorkDate"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<MaterialLog>> PostMachineWorkDate(MachineWorkdate MachineWorkDate)
+        {
+            //新增時檢查[日期]是否重複
+            if (_context.MachineWorkdates.AsQueryable().Where(x => (x.WorkDate == MachineWorkDate.WorkDate) && x.DeleteFlag == 0).Any())
+            {
+                return Ok(MyFun.APIResponseError("[設定日期] 已存在!", MachineWorkDate));
+            }
+            MachineWorkDate.CreateUser = MyFun.GetUserID(HttpContext);
+            _context.MachineWorkdates.Add(MachineWorkDate);
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(MachineWorkDate));
+        }
+
+        // DELETE: api/WorkScheduler/5
+        /// <summary>
+        /// 刪除工作日
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<MaterialLog>> DeleteMachineWorkDate(int id)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            var MachineWorkDate = await _context.MachineWorkdates.FindAsync(id);
+            if (MachineWorkDate == null)
+            {
+                return NotFound();
+            }
+            MachineWorkDate.DeleteFlag = 1;
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(MachineWorkDate));
+        }
+
     }
 }

@@ -132,6 +132,7 @@ import { DealSupplierLogComponent } from './report/deal-supplier-log/deal-suppli
 import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.component';
 import { InventoryShortComponent } from './report/inventory-short/inventory-short.component';
 import { WorkorderEstimateComponent } from './workorder/workorder-estimate/workorder-estimate.component';
+import { WorkorderEstimateSettingComponent } from './workorder/workorder-estimate-setting/workorder-estimate-setting.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -278,7 +279,8 @@ export function tokenGetter() {
         DealSupplierLogComponent,
         PurchaseTotalComponent,
         InventoryShortComponent,
-        WorkorderEstimateComponent
+        WorkorderEstimateComponent,
+        WorkorderEstimateSettingComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

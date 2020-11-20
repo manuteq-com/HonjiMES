@@ -50,7 +50,7 @@ export class WorkorderEstimateComponent implements OnInit {
     }
     creatdata() {
         this.randomkey = new Date().getTime();
-        // this.creatpopupVisible = true;
+        this.creatpopupVisible = true;
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
