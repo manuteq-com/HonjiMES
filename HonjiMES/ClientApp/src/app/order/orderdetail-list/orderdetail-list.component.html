@@ -104,10 +104,10 @@
     <dxi-column dataField="SaledCount" caption="已銷" dataType="number" [allowEditing]="false" [width]="50"></dxi-column>
 
     <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
-    <dxi-column type="buttons" [visible]="false">
+    <dxi-column type="buttons" [visible]="true">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <!-- <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button> -->
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
@@ -135,7 +135,6 @@
             <li *ngFor ="let item of (d.value)">{{item.Purchase.PurchaseNo}}</li>
         </ul>
     </div>
-
 </dx-data-grid>
 
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
