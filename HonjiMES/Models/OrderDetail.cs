@@ -55,7 +55,7 @@ namespace HonjiMES.Models
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         /// <summary>
-        /// &#21407;&#21934;&#20729;
+        /// &#21934;&#20729;
         /// </summary>
         [Column("originPrice", TypeName = "decimal(10,2)")]
         public decimal OriginPrice { get; set; }

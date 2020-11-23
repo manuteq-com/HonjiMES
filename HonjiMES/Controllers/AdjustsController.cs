@@ -170,7 +170,7 @@ namespace HonjiMES.Controllers
                     No = string.IsNullOrWhiteSpace(x.LinkOrder) ? "無資料/"+ (string.IsNullOrWhiteSpace(x.AdjustNo)? "無資料":x.AdjustNo) : x.LinkOrder + "/"+ (string.IsNullOrWhiteSpace(x.AdjustNo)? "無資料":x.AdjustNo),                    
                     // No = x.AdjustNo + "/" + x.LinkOrder,
                     Increase = x.Quantity >= 0 ? x.Quantity : 0,
-                    Decrease = x.Quantity < 0 ? x.Quantity : 0,
+                    Decrease = x.Quantity < 0 ? Math.Abs(x.Quantity) : 0,
             });
 
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

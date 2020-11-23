@@ -1,0 +1,47 @@
+<dx-data-grid #dataGrid1
+    [dataSource]="dataSourceDB1"
+    showBorders="true"
+    keyExpr="Id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    [height]="390">
+
+    <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+    <!-- <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection> -->
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+    <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
+    <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
+
+    <dxi-column dataField="Setting" caption="設定" [width]="60" [allowEditing]="false">
+        <dxo-lookup [dataSource]="SettingList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="WorkDate" caption="設定日期" [width]="150" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
+    <dxi-column dataField="WorkTimeStart" caption="開始時間" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
+    <dxi-column dataField="WorkTimeEnd" caption="結束時間" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立時間" [width]="180" dataType="date" editorType="dxDateBox" format="shortDateShortTime" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100" [allowEditing]="false">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+
+    <dxi-column type="buttons" [width]="60">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
+</dx-data-grid>
+

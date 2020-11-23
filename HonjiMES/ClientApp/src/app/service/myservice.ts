@@ -58,6 +58,9 @@ export class Myservice {
     getWorkSchedulerStatus(): WorkSchedulerStatu[] {
         return WorkSchedulerStatus;
     }
+    getWorkEstimateStatus(): WorkSchedulerStatu[] {
+        return WorkEstimateStatus;
+    }
     getTimeType(): Selectitem[] {
         return timetype;
     }
@@ -84,6 +87,9 @@ export class Myservice {
     }
     getInventoryLogType(): Selectitem[] {
         return inventorylogtype;
+    }
+    getMachineWorkDateVal(): Selectitem[] {
+        return MachineWorkDateVal;
     }
 }
 const purchasetypes: Selectitem[] = [
@@ -197,6 +203,10 @@ const WorkSchedulerStatus: WorkSchedulerStatu[] = [
     { text: '完工', id: 3, color: '#0B9500' },
     { text: '轉單', id: 4, color: '#929292' }
 ];
+const WorkEstimateStatus: WorkSchedulerStatu[] = [
+    { text: '', id: 0, color: '#929292' },
+    { text: '', id: 1, color: '#5c72b5' },
+];
 const timetype: Selectitem[] = [
     { Id: 1, Name: '前置時間' },
     { Id: 2, Name: '標準工時' },
@@ -237,4 +247,8 @@ const inventorylogtype: Selectitem[] = [ // id數值沒有意義，資料庫是�
     { Id: 7, Name: '[新增品號]' },
     { Id: 5, Name: '[庫存調整]' },
     { Id: 6, Name: '[庫存調整單]' },
+];
+const MachineWorkDateVal: Selectitem[] = [
+    { Id: 0, Name: '' },
+    { Id: 1, Name: '預設' },
 ];

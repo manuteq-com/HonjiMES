@@ -37,6 +37,7 @@ import { QualityRecordComponent } from './report/quality-record/quality-record.c
 import { DealPriceComponent } from './report/deal-price/deal-price.component';
 import { DealSupplierComponent } from './report/deal-supplier/deal-supplier.component';
 import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.component';
+import { WorkorderEstimateComponent } from './workorder/workorder-estimate/workorder-estimate.component';
 
 
 
@@ -77,6 +78,7 @@ export const routes: Routes = [
     { path: 'dealprice', component: DealPriceComponent, canActivate: [AuthGuard] },
     { path: 'dealsupplier', component: DealSupplierComponent, canActivate: [AuthGuard] },
     { path: 'purchasetotal', component: PurchaseTotalComponent, canActivate: [AuthGuard] },
+    { path: 'workestimate', component: WorkorderEstimateComponent, canActivate: [AuthGuard] },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
