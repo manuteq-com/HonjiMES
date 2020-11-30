@@ -342,7 +342,7 @@ namespace HonjiMES.Controllers
                     }
                     else
                     {
-                        return Ok(MyFun.APIResponseError("新建失敗! 請確認[客戶單號]是否重複!"));
+                        return Ok(MyFun.APIResponseError("新建失敗! 請確認[客戶單號]是否有誤!"));
                     }
                 }
                 else
@@ -563,7 +563,7 @@ namespace HonjiMES.Controllers
             var len = ("000-000000000").Length;
             foreach (var item in Data.OrderDetail)
             {
-                if (!string.IsNullOrWhiteSpace(item.CustomerNo) && item.CustomerNo.Length > len)
+                if (!string.IsNullOrWhiteSpace(item.CustomerNo) && item.CustomerNo.Length >= len)
                 {
                     var tempCustomerNoVal = item.CustomerNo.Substring(0, len);
                     if (!list.Any() || !list.Exists(x => x.CustomerNo == tempCustomerNoVal))
