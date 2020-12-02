@@ -261,14 +261,16 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<Warehouse>> GetWarehouseByMaterialBasic(int id)
         {
             var materialBasics = _context.MaterialBasics.Find(id);
-            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0).Include(x => x.Warehouse).ToListAsync();
+            var WarehouseData = await _context.Materials.AsQueryable().Where(x => x.MaterialNo == materialBasics.MaterialNo && x.DeleteFlag == 0)
+            .Include(x => x.Warehouse).Select(x=>new {x.Warehouse, x.Quantity} ).Distinct().ToListAsync();
+            // var WarehouseData = await _context.Materials.Where(x => x.DeleteFlag == 0 && x.MaterialBasicId == id).ToListAsync();
 
             if (WarehouseData == null)
             {
                 return NotFound();
             }
 
-            return Ok(MyFun.APIResponseOK(WarehouseData));
+            return Ok( MyFun.APIResponseOK(WarehouseData));
         }
 
         /// <summary>
