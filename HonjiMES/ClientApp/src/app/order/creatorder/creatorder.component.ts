@@ -207,7 +207,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     }
                 }
             });
-
             this.formData = this.exceldata;
             this.formData.OrderNo = this.CreateNumberInfoVal.CreateNumber;
             this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;
@@ -321,7 +320,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
     async onFormSubmit(e) {
         // debugger;
         try {
-
             if (this.btnMod === 'save') {
                 // this.buttondisabled = true;
                 if (this.validate_before() === false) {
@@ -357,6 +355,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                         this.formData.OrderDate = null;
                         this.formData.ReplyDate = null;
                         this.CustomerVal = null;
+                        this.modval = null;
                         e.preventDefault();
                         this.childOuter.emit(sendRequest);
                     }
