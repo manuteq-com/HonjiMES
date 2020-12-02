@@ -47,15 +47,15 @@
         <dxi-column dataField="MaterialBasicId" caption="品號" editCellTemplate="MaterialNoTemplate" >
             <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Name" caption="品名" editCellTemplate="NameTemplate" >
+        <dxi-column dataField="MaterialBasic.Name" caption="品名" editCellTemplate="NameTemplate" [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Specification" caption="規格" editCellTemplate="SpecificationTemplate">
+        <dxi-column dataField="MaterialBasic.Specification" caption="規格" editCellTemplate="SpecificationTemplate" [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Property" caption="廠內規格" editCellTemplate="PropertyTemplate">
+        <dxi-column dataField="MaterialBasic.Property" caption="廠內規格" editCellTemplate="PropertyTemplate" [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceTemplate">
+        <dxi-column dataField="MaterialBasic.Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceTemplate" [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="MaterialBasic.Unit" caption="單位" editCellTemplate="UnitTemplate">
+        <dxi-column dataField="MaterialBasic.Unit" caption="單位" editCellTemplate="UnitTemplate" [allowEditing]="false">
         </dxi-column>
 
         <dxi-column type="buttons">
