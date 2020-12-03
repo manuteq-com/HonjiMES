@@ -60,7 +60,6 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
                 this.WarehouseList = s.data;
             }
         );
-        debugger;
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 s.data.data.forEach(e => {
@@ -99,7 +98,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
         this.childOuter.emit(true);
     }
     onRowPrepared(e) {
-        // debugger;
+        debugger;
         if (e.data !== undefined) {
             let hint = false;
             if (e.data.Purchase.Status !== 1) {

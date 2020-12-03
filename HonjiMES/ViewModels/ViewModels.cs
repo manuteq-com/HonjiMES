@@ -1153,5 +1153,11 @@ namespace HonjiMES.Models
         public string No { get; set; }
     }
 
+    public class PurchaseDetailVM {
+        public int Id { get; set; }
+        public PurchaseDetail PurchaseDetails { get; set; }
+        public MaterialBasic MaterialBasics { get; set; }
+    }
+
 
 }
