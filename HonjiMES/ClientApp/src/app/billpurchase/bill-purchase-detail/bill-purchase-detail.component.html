@@ -4,7 +4,7 @@
     <div class="col-md-1 col-sm-1">
     </div>
     <div class="col-md-1 col-sm-1">
-        <dx-button text="批量驗收" type="default" (onClick)="to_CheckInClick($event)" [visible]="CheckInBtnVisible"></dx-button>
+        <dx-button class="acceptance_btn" text="批量驗收" type="default" (onClick)="to_CheckInClick($event)" [visible]="CheckInBtnVisible"></dx-button>
     </div>
 </div>
 
@@ -65,10 +65,10 @@
     <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceEditCellTemplate">
+    <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="60" editCellTemplate="PriceEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceAllEditCellTemplate">
+    <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="60" editCellTemplate="PriceAllEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" editCellTemplate="UnitQuantityEditCellTemplate"></dxi-column>
