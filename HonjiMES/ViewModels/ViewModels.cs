@@ -1159,5 +1159,11 @@ namespace HonjiMES.Models
         public MaterialBasic MaterialBasics { get; set; }
     }
 
+    public class SaleDetailNewVM {
+        public int Id { get; set; }
+        public int? Quantity { get; set; }
+        public decimal? OriginPrice { get; set; }
+    }
+
 
 }
