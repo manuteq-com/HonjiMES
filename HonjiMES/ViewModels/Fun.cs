@@ -100,6 +100,20 @@ namespace HonjiMES.Models
                                         Old_Props.SetValue(Olddata, New_Props_Value);
                                     }
                                 }
+                                else if (New_Props.PropertyType == typeof(decimal))
+                                {
+                                    if (((decimal)New_Props_Value) != 0)
+                                    {
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
+                                    }
+                                }
+                                else if (New_Props.PropertyType == typeof(float))
+                                {
+                                    if (((float)New_Props_Value) != 0)
+                                    {
+                                        Old_Props.SetValue(Olddata, New_Props_Value);
+                                    }
+                                }
                                 else
                                 {
                                     if (true)
