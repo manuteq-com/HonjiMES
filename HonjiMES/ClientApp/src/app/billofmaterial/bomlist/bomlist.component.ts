@@ -17,6 +17,7 @@ import { Myservice } from 'src/app/service/myservice';
 })
 export class BomlistComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
+    @Output() childOuterBOM = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() bomMod: any;
     @ViewChild(DxTreeListComponent) TreeList: DxTreeListComponent;
@@ -183,4 +184,10 @@ export class BomlistComponent implements OnInit, OnChanges {
     readBomProcess(e, data) {
         this.childOuter.emit(data.data);
     }
+    //#region 觸發父層重新讀取
+    emiterReloadBOM() {
+        console.log('hithere');
+        this.childOuterBOM.emit(true);
+    }
+    //#endregion
 }

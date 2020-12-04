@@ -16,6 +16,7 @@ import { AppComponent } from 'src/app/app.component';
 export class EditbomComponent implements OnInit, OnChanges {
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @Output() childOuter = new EventEmitter();
+    @Output() childOuter2 = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;
     @Input() randomkeyval: any;
@@ -129,6 +130,14 @@ export class EditbomComponent implements OnInit, OnChanges {
         //     this.editorOptions.items = [];
         // }
     }
+
+    //#region 觸發父層重新讀取
+    emiterReload() {
+        console.log('hithere');
+        this.childOuter2.emit(true);
+    }
+    //#endregion
+
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -175,6 +184,7 @@ export class EditbomComponent implements OnInit, OnChanges {
                     this.PostBom.WarehouseId = basicData.WarehouseId;
                     this.PostBom.WarehouseList = sendRequest;
                     this.childOuter.emit(this.PostBom);
+                    this.emiterReload();
                     this.myform.instance.resetValues();
                 }
             } catch (error) {
@@ -191,6 +201,7 @@ export class EditbomComponent implements OnInit, OnChanges {
                     this.myform.instance.resetValues();
                     e.preventDefault();
                     this.childOuter.emit(true);
+                    this.emiterReload();
                 }
             } catch (error) {
 

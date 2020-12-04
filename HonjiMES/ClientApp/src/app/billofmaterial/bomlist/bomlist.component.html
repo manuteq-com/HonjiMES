@@ -52,7 +52,7 @@
 <dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="30%"
     [width]="600" [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval" [randomkeyval]="randomkey">
+        <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval" [randomkeyval]="randomkey" (childOuter2)="emiterReloadBOM()">
         </app-editbom>
     </div>
 </dx-popup>

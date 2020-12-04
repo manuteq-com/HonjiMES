@@ -102,7 +102,7 @@
 
 
         <div *dxTemplate="let item of 'detail'">
-            <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
+            <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (childOuterBOM)="refreshBM()"></app-bomlist>
         </div>
         </dx-data-grid>
     </nz-tab>

@@ -110,4 +110,37 @@ export class BillofmateriallistComponent implements OnInit {
     saveClickHandler(e) {
         this.dataGrid.instance.saveEditData();
     }
+
+    //#region 重新載入
+    refreshBM() {
+        console.log('its reload');
+        const remote = this.remoteOperations;
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveBom', 'GET', { loadOptions, remote }),
+            byKey: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
+            insert: (values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
+            update: (key, values) =>
+                SendService.sendRequest(this.http, '/MaterialBasics/PutActualSpecification', 'PUT', { key, values }),
+            remove: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
+        });
+        this.dataSourceDB2 = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveAny', 'GET', { loadOptions, remote }),
+            byKey: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
+            insert: (values) =>
+                SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
+            update: (key, values) =>
+                SendService.sendRequest(this.http, '/MaterialBasics/PutActualSpecification', 'PUT', { key, values }),
+            remove: (key) =>
+                SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
+        });
+    }
+    //#endregion
 }
