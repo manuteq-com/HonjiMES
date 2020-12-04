@@ -60,7 +60,7 @@ export class BillPurchaseDetailComponent implements OnInit {
             insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail?PId=' + this.itemkey, 'POST', { values }),
             // tslint:disable-next-line: max-line-length
             update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseDetail', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE', { key })
         });
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
