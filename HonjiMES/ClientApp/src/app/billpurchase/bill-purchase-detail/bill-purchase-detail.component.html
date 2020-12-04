@@ -13,7 +13,7 @@
     (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onInitNewRow)="onInitNewRow($event)"
     (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)"
     (onCellPrepared)="onCellPrepared($event)">
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
+    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
         <dxo-form>
             <dxi-item dataField="SupplierId"></dxi-item>
             <!-- <dxi-item dataField="DataId"></dxi-item> -->
