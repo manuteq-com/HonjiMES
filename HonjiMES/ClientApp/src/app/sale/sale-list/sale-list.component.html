@@ -102,7 +102,7 @@
     <div *dxTemplate="let item of 'detail'">
         <dx-data-grid [dataSource]="getDetails(item.key)" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDetailsDataErrorOccurred($event)" keyExpr="id"
         (onEditingStart)="onEditingStart2($event)">
-            <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
+            <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
             <dxo-summary [recalculateWhileEditing]="true">
                 <dxi-total-item
                     [customizeText]="customizeText"
