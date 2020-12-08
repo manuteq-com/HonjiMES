@@ -2,6 +2,7 @@
     float: right;
 }
 
-/* .row .col-md-1:nth-child(3){
-     padding-bottom: 10px;
-} */
+.dx-template-wrapper{
+    display: flex;
+    justify-content: center;
+}
