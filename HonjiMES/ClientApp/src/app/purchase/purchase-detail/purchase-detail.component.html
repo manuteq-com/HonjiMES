@@ -44,7 +44,7 @@
     <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
     </div>
-    <dxi-column type="buttons">
+    <dxi-column type="buttons" [width]="50">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
