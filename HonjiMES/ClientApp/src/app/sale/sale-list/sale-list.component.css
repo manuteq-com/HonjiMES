@@ -71,3 +71,8 @@
     position: absolute;
     right: 4px;
 }
+
+.dx-template-wrapper{
+    display: flex;
+    justify-content: center;
+}
