@@ -169,6 +169,10 @@ export class BillPurchaseDetailComponent implements OnInit {
             return true;
         }
     }
+    onEditorPreparing(e) {
+        debugger;
+
+    }
     selectvalueChanged(e, data) {
         data.setValue(e.value);
         const today = new Date();
@@ -182,13 +186,19 @@ export class BillPurchaseDetailComponent implements OnInit {
     }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
-        this.Quantityval = e.value;
-        this.PriceAllval = this.Quantityval * this.Priceval;
+        // this.Quantityval = e.value;
+        // this.PriceAllval = this.Quantityval * this.Priceval;
     }
     PriceValueChanged(e, data) {
         data.setValue(e.value);
-        this.Priceval = e.value;
-        this.PriceAllval = this.Quantityval * this.Priceval;
+        // debugger;
+        // e.component.cellValue(data.rowIndex, 'PriceAll' , e.value * data.data.Quantity);
+
+    }
+
+    updateCell(rowIndex, dataField, value) {
+        this.dataGrid.instance.cellValue(rowIndex, dataField, value);
+        this.dataGrid.instance.saveEditData();
     }
     UnitQuantityValueChanged(e, data) {
         data.setValue(e.value);

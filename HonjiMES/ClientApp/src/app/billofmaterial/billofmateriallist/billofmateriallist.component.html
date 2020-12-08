@@ -17,7 +17,7 @@
 </div>
 <nz-tabset>
     <nz-tab nzTitle="有BOM資料">
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+        <dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
         [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
         [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
         [masterDetail]="{ enabled: true, template: 'detail' }">
@@ -61,7 +61,7 @@
         </dx-data-grid>
     </nz-tab>
     <nz-tab nzTitle="尚未建立BOM資料">
-        <dx-data-grid [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
+        <dx-data-grid #dsDB2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
         [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
         [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
         [masterDetail]="{ enabled: true, template: 'detail' }">

@@ -94,10 +94,12 @@ namespace HonjiMES.Controllers
                 var value = OldBillofPurchaseDetail.Quantity - billofPurchaseDetail.Quantity;
                 OldBillofPurchaseDetail.PurchaseDetail.PurchaseCount -= value;
             }
+
             var Msg = MyFun.MappingData(ref OldBillofPurchaseDetail, billofPurchaseDetail);
 
             OldBillofPurchaseDetail.UpdateTime = DateTime.Now;
             OldBillofPurchaseDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+            OldBillofPurchaseDetail.PriceAll = OldBillofPurchaseDetail.Quantity * OldBillofPurchaseDetail.Price;
 
             try
             {

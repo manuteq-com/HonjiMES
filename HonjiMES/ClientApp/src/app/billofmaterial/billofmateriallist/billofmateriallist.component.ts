@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -9,6 +9,8 @@ import DataSource from 'devextreme/data/data_source';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 import notify from 'devextreme/ui/notify';
+import { DxDataGridComponent, DxFormComponent, DxPopupComponent, DxFileUploaderComponent } from 'devextreme-angular';
+
 @Component({
     selector: 'app-billofmateriallist',
     templateUrl: './billofmateriallist.component.html',
@@ -22,9 +24,11 @@ export class BillofmateriallistComponent implements OnInit {
     verpopupVisible: boolean;
     itemkey: number;
     bomverdata: any;
-    dataGrid: any;
+    //dataGrid: any;
     creatpopupVisible: boolean;
     dataSourceDB2: any;
+    @ViewChild('dsDB', { static: false }) dataGrid: DxDataGridComponent;
+    @ViewChild('dsDB2', { static: false }) dataGridnobom: DxDataGridComponent;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.bomMod = 'PBOM';
@@ -65,7 +69,7 @@ export class BillofmateriallistComponent implements OnInit {
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
-        this.dataGrid.instance.refresh();
+        this.dataGridnobom.instance.refresh();
         if (e.message !== undefined) {
             notify({
                 message: '注意!! 客戶單號已存在!! ' + e.message,
@@ -87,7 +91,7 @@ export class BillofmateriallistComponent implements OnInit {
     readBomVer(e, data) {
         this.app.GetData('/BillOfMaterials/GetBomVerByProductId/' + data.key).subscribe(
             (s) => {
-                debugger;
+                //debugger;
                 s.data.forEach(element => {
                     if (element.ShowPLV === 0) {
                         element.Lv = null;
@@ -105,42 +109,17 @@ export class BillofmateriallistComponent implements OnInit {
     }
 
     cancelClickHandler(e) {
-        this.dataGrid.instance.cancelEditData();
+        this.dataGridnobom.instance.cancelEditData();
     }
     saveClickHandler(e) {
-        this.dataGrid.instance.saveEditData();
+        this.dataGridnobom.instance.saveEditData();
     }
 
     //#region 重新載入
     refreshBM() {
         console.log('its reload');
-        const remote = this.remoteOperations;
-        this.dataSourceDB = new CustomStore({
-            key: 'Id',
-            load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveBom', 'GET', { loadOptions, remote }),
-            byKey: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
-            insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
-            update: (key, values) =>
-                SendService.sendRequest(this.http, '/MaterialBasics/PutActualSpecification', 'PUT', { key, values }),
-            remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
-        });
-        this.dataSourceDB2 = new CustomStore({
-            key: 'Id',
-            load: (loadOptions) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveAny', 'GET', { loadOptions, remote }),
-            byKey: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
-            insert: (values) =>
-                SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
-            update: (key, values) =>
-                SendService.sendRequest(this.http, '/MaterialBasics/PutActualSpecification', 'PUT', { key, values }),
-            remove: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseDetail', 'DELETE')
-        });
+        this.dataGrid.instance.refresh();
+        this.dataGridnobom.instance.refresh();
     }
     //#endregion
 }

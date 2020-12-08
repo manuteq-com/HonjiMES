@@ -20,7 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Reporting.Core" Version="20.1.6" />
-    <PackageReference Include="DevExtreme.AspNet.Core" Version="20.2.3" />
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="20.2.4" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.7.1" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
     <PackageReference Include="EntityFrameworkCore.Scaffolding.Handlebars" Version="3.8.2" />
@@ -195,7 +195,7 @@
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
       <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -219,7 +219,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DismissedDevExtremeVersion="20.1.6" />
+      <UserProperties DismissedDevExtremeVersion="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
