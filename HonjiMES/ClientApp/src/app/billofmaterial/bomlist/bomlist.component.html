@@ -57,13 +57,13 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="原料基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="420"
+<dx-popup [showTitle]="true" title="原料基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="500"
     [(visible)]="materialpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic [masterkey]="MaterialKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="420"
+<dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="500"
     [(visible)]="productpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
