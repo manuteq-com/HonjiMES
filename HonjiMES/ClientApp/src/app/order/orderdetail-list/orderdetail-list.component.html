@@ -80,22 +80,22 @@
     </dxo-summary>
 
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
-    <dxi-column dataField="MachineNo" caption="機號" [width]="200"></dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="200" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
+    <dxi-column dataField="MachineNo" caption="機號" [width]="180"></dxi-column>
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="180" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="100">
+    <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="150">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" [width]="200">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
 
-    <dxi-column dataField="Quantity" caption="數量" dataType="number"  [width]="50"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" dataType="number"  [width]="70"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="50"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="120"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="DueDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
@@ -104,7 +104,7 @@
     <dxi-column dataField="SaledCount" caption="已銷" dataType="number" [allowEditing]="false" [width]="50"></dxi-column>
 
     <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
-    <dxi-column type="buttons" [visible]="true">
+    <dxi-column type="buttons" [visible]="true" [width]="40">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <!-- <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button> -->
