@@ -144,6 +144,7 @@ namespace HonjiMES.Controllers
             var Msg = MyFun.MappingData(ref OrderDetails, orderDetail);
             OrderDetails.UpdateTime = DateTime.Now;
             OrderDetails.UpdateUser = MyFun.GetUserID(HttpContext);
+            OrderDetails.Price = orderDetail.Quantity * OrderDetails.OriginPrice;
             try
             {
                 await _context.SaveChangesAsync();
