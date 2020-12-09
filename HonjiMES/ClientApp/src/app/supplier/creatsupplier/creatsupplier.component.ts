@@ -29,6 +29,7 @@ export class CreatsupplierComponent implements OnInit, OnChanges {
     minColWidth: number;
     colCount: number;
     width: any;
+    btnMod: any;
     buttonOptions: any = {
         text: '存檔',
         type: 'success',
@@ -54,6 +55,12 @@ export class CreatsupplierComponent implements OnInit, OnChanges {
     ngOnChanges() {
 
     }
+    saveBtn(e) {
+        this.btnMod = 'save';
+    }
+    removeBtn(e) {
+        this.btnMod = 'remove';
+    }
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
@@ -69,23 +76,32 @@ export class CreatsupplierComponent implements OnInit, OnChanges {
         return true;
     }
     onFormSubmit = async function (e) {
-        // this.buttondisabled = true;
-        if (this.validate_before() === false) {
-            this.buttondisabled = false;
-            return;
-        }
-        this.formData = this.myform.instance.option('formData');
-        // this.postval = new Supplier();
-        // this.postval = this.formData as Supplier;
-        // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/Suppliers/PostSupplier', 'POST', { values: this.formData });
-        // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-        if (sendRequest) {
-            this.myform.instance.resetValues();
-            e.preventDefault();
-            this.childOuter.emit(true);
+        try {
+            if (this.btnMod === 'save') {
+                if (this.validate_before() === false) {
+                    this.buttondisabled = false;
+                    return;
+                }
+                this.formData = this.myform.instance.option('formData');
+                // this.postval = new Supplier();
+                // this.postval = this.formData as Supplier;
+                // tslint:disable-next-line: max-line-length
+                const sendRequest = await SendService.sendRequest(this.http, '/Suppliers/PostSupplier', 'POST', { values: this.formData });
+                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                if (sendRequest) {
+                    this.myform.instance.resetValues();
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                }
+            } else if (this.btnMod === 'remove') {
+                this.formData = [];
+            }
+        } catch (error) {
         }
         this.buttondisabled = false;
+
+
+
 
     };
 }
