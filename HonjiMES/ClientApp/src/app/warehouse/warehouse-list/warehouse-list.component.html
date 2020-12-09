@@ -76,7 +76,7 @@
     </dxi-column>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增倉庫" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="480"
+<dx-popup [showTitle]="true" title="新增倉庫" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="500"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatwarehouse (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
