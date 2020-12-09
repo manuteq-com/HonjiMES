@@ -61,16 +61,16 @@
     </dxo-editing>
 
     <dxi-column dataField="Code" caption="供應商代號" [width]="100"></dxi-column>
-    <dxi-column dataField="Name" caption="供應商名稱" [width]="300"></dxi-column>
-    <dxi-column dataField="ShortName" caption="供應商簡稱" [width]="300"></dxi-column>
+    <dxi-column dataField="Name" caption="供應商名稱" [width]="250"></dxi-column>
+    <dxi-column dataField="ShortName" caption="供應商簡稱" [width]="100"></dxi-column>
     <dxi-column dataField="ContactName" caption="聯絡人" [width]="100"></dxi-column>
-    <dxi-column dataField="Phone" caption="聯絡電話" [width]="160"></dxi-column>
-    <dxi-column dataField="Fax" caption="傳真" [width]="160"></dxi-column>
-    <dxi-column dataField="Address" caption="地址"></dxi-column>
-    <dxi-column dataField="Email" caption="電子郵件"></dxi-column>
-    <dxi-column dataField="UniformNo" caption="統一編號" [width]="160"></dxi-column>
+    <dxi-column dataField="Phone" caption="聯絡電話" [width]="180"></dxi-column>
+    <dxi-column dataField="Fax" caption="傳真" [width]="130"></dxi-column>
+    <dxi-column dataField="Address" caption="地址" [width]="350"></dxi-column>
+    <dxi-column dataField="Email" caption="電子郵件" [width]="200"></dxi-column>
+    <dxi-column dataField="UniformNo" caption="統一編號" [width]="100"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-    <dxi-column caption="原料" cellTemplate="content" width="100"></dxi-column>
+    <dxi-column caption="原料" cellTemplate="content" [width]="50"></dxi-column>
     <div *dxTemplate="let data of 'content'" class="materialbutton">
         <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
     </div>
@@ -91,7 +91,7 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="520"
+<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="600"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatsupplier (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
