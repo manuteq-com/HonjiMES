@@ -129,7 +129,7 @@
                 </dxi-total-item>
             </dxo-summary>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
             </dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="220">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
@@ -143,13 +143,13 @@
                 cellTemplate="cProcessTimeTemplate" [width]="80">
             </dxi-column>
             <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate"
-                cellTemplate="cProcessCostTemplate" [width]="120">
+                cellTemplate="cProcessCostTemplate" [width]="80">
             </dxi-column>
             <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
                 cellTemplate="cProducingMachineTemplate" [visible]="false">
             </dxi-column>
             <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate"
-                cellTemplate="cRemarksTemplate">
+                cellTemplate="cRemarksTemplate" [width]="185">
             </dxi-column>
             <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="150"
                 cellTemplate="cDrawNoTemplate" [visible]="false">
@@ -158,7 +158,7 @@
                 cellTemplate="cManpowerTemplate" [visible]="false">
             </dxi-column>
 
-            <dxi-column type="buttons" [width]="90">
+            <dxi-column type="buttons" [width]="40">
                 <dxi-button name="save" text="存檔"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
