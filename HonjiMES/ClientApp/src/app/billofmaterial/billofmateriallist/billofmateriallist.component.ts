@@ -38,8 +38,8 @@ export class BillofmateriallistComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveBom', 'GET', { loadOptions, remote }),
-            byKey: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
+            // byKey: (key) =>
+            //     SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
             update: (key, values) =>
@@ -51,8 +51,8 @@ export class BillofmateriallistComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetMaterialBasicsHaveAny', 'GET', { loadOptions, remote }),
-            byKey: (key) =>
-                SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
+            // byKey: (key) =>
+            //     SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseDetail', 'GET', { key }),
             insert: (values) =>
                 SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseDetail', 'POST', { values }),
             update: (key, values) =>

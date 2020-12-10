@@ -372,7 +372,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<IEnumerable<MaterialBasic>>> GetMaterialBasicsHaveAny([FromQuery] DataSourceLoadOptions FromQuery)
         {
             var materailbasic = _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && !x.BillOfMaterialProductBasics.Any(y => y.DeleteFlag == 0));
-            var FromQueryResult = await MyFun.ExFromQueryResultAsync(materailbasic, FromQuery);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(materailbasic, FromQuery); 
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
@@ -518,7 +518,7 @@ namespace HonjiMES.Controllers
                 Quantity = PostBom.Quantity,
                 Master = masterVal
             };
-
+            
             _context.ChangeTracker.LazyLoadingEnabled = true;
             if (PostBom.BasicType == 1)//原料直接加入
             {
@@ -571,6 +571,8 @@ namespace HonjiMES.Controllers
                 }
             }
             _context.BillOfMaterials.Add(nBillOfMaterials);
+            var materialBasic = _context.MaterialBasics.Find(id);
+            materialBasic.UpdateTime = DateTime.Now;
             await _context.SaveChangesAsync();
 
             /////紀錄變更版本
