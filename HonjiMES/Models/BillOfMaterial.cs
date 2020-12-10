@@ -33,8 +33,14 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("master", TypeName = "int(11)")]
         public int Master { get; set; }
+        /// <summary>
+        /// materialbasic&#25104;&#21697;
+        /// </summary>
         [Column("product_basic_id", TypeName = "int(11)")]
         public int? ProductBasicId { get; set; }
+        /// <summary>
+        /// materialbasic&#21407;&#26009;
+        /// </summary>
         [Column("material_basic_id", TypeName = "int(11)")]
         public int? MaterialBasicId { get; set; }
         /// <summary>

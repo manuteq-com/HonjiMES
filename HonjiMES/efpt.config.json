@@ -14,235 +14,293 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "adjust_detail"
+         "Name": "adjust_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "adjust_head"
+         "Name": "adjust_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "all_stock_log"
+         "Name": "all_stock_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "bill_of_material"
+         "Name": "bill_of_material",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "bill_of_material_ver"
+         "Name": "bill_of_material_ver",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "billof_purchase"
+         "Name": "billof_purchase",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "billof_purchase_checkin"
+         "Name": "billof_purchase_checkin",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "billof_purchase_detail"
+         "Name": "billof_purchase_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "billof_purchase_head"
+         "Name": "billof_purchase_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "billof_purchase_return"
+         "Name": "billof_purchase_return",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "customer"
+         "Name": "customer",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "m_bill_of_material"
+         "Name": "m_bill_of_material",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "machine_informations"
+         "Name": "machine_informations",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "machine_workdate"
+         "Name": "machine_workdate",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "material"
+         "Name": "material",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "material_basic"
+         "Name": "material_basic",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "material_log"
+         "Name": "material_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "mbom_model_detail"
+         "Name": "mbom_model_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "mbom_model_head"
+         "Name": "mbom_model_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "menu"
+         "Name": "menu",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "message"
+         "Name": "message",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "order"
+         "Name": "order",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "order_detail"
+         "Name": "order_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "order_detail_and_work_order_head"
+         "Name": "order_detail_and_work_order_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "order_head"
+         "Name": "order_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "permission"
+         "Name": "permission",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "process"
+         "Name": "process",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "product"
+         "Name": "product",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "product_basic"
+         "Name": "product_basic",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "product_log"
+         "Name": "product_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "product_sn"
+         "Name": "product_sn",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "purchase"
+         "Name": "purchase",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "purchase_detail"
+         "Name": "purchase_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "purchase_head"
+         "Name": "purchase_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "receive"
+         "Name": "receive",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "requisition"
+         "Name": "requisition",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "requisition_detail"
+         "Name": "requisition_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "return_sale"
+         "Name": "return_sale",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "sale_detail_new"
+         "Name": "sale_detail_new",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "sale_head"
+         "Name": "sale_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "sale_log"
+         "Name": "sale_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "stock_detail"
+         "Name": "stock_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "stock_head"
+         "Name": "stock_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "supplier"
+         "Name": "supplier",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "supplier_of_material"
+         "Name": "supplier_of_material",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "system"
+         "Name": "system",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "user_logs"
+         "Name": "user_logs",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "user_roles"
+         "Name": "user_roles",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "users"
+         "Name": "users",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "warehouse"
+         "Name": "warehouse",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "web_sessions"
+         "Name": "web_sessions",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "wiproduct"
+         "Name": "wiproduct",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "wiproduct_basic"
+         "Name": "wiproduct_basic",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "wiproduct_log"
+         "Name": "wiproduct_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "work_order_detail"
+         "Name": "work_order_detail",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "work_order_head"
+         "Name": "work_order_head",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "work_order_qc_log"
+         "Name": "work_order_qc_log",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "work_order_report_log"
+         "Name": "work_order_report_log",
+         "ObjectType": 0
       }
    ],
    "UseDatabaseNames": false,
@@ -252,6 +310,5 @@
    "UseInflector": true,
    "UseLegacyPluralizer": false,
    "UseNodaTime": false,
-   "UseSpatial": false,
-   "UseStoredProcedures": false
+   "UseSpatial": false
 }
