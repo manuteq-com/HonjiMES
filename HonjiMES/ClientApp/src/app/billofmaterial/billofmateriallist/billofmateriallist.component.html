@@ -54,6 +54,11 @@
         <div *dxTemplate="let data of 'cellTemplate'">
             <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
         </div>
+        <dxi-column type="buttons">
+            <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        </dxi-column>
 
         <div *dxTemplate="let item of 'detail'">
             <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
@@ -99,6 +104,11 @@
         <div *dxTemplate="let data of 'cellTemplate'">
             <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
         </div>
+        <dxi-column type="buttons">
+            <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        </dxi-column>
 
 
         <div *dxTemplate="let item of 'detail'">
