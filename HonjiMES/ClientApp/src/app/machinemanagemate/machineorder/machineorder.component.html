@@ -16,9 +16,9 @@
             <div class="card" [ngClass]="getClass(item.Process)">
                 <h5 class="card-header">{{item.Name}}</h5>
                 <div class="card-body">
-                    <p class="card-text">剩餘時間 : {{item.Date | date:'shortTime'}}</p>
+                    <p class="card-text">剩餘時間 : {{item.Date | date:'hh:mm'}}</p>
                     <p class="card-text">已安排製程 : {{item.Process}}</p>
-                    <p class="card-text">預計完工日 : {{item.Date | date:'longDate'}}</p>
+                    <p class="card-text">預計完工日 : {{item.Date | date:'yyyy/MM/dd'}}</p>
                     <ul>
                         <li *ngFor="let itemd of item.machineOrderList">
                             <p class="card-text">{{itemd.Name}}</p>
@@ -27,6 +27,7 @@
 
                     <a href="#" class="btn btn-primary">機台詳情</a>
                 </div>
+
             </div>
         </div>
 
