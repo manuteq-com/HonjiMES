@@ -133,6 +133,8 @@ import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.c
 import { InventoryShortComponent } from './report/inventory-short/inventory-short.component';
 import { WorkorderEstimateComponent } from './workorder/workorder-estimate/workorder-estimate.component';
 import { WorkorderEstimateSettingComponent } from './workorder/workorder-estimate-setting/workorder-estimate-setting.component';
+import { CreatbomComponent } from './billofmaterial/creatbom/creatbom.component';
+import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -280,7 +282,9 @@ export function tokenGetter() {
         PurchaseTotalComponent,
         InventoryShortComponent,
         WorkorderEstimateComponent,
-        WorkorderEstimateSettingComponent
+        WorkorderEstimateSettingComponent,
+        CreatbomComponent,
+        MachineorderComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

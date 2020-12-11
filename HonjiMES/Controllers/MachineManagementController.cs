@@ -13,7 +13,7 @@ namespace HonjiMES.Controllers
     /// <summary>
     /// 顧客列表
     /// </summary>
-    [JWTAuthorize]
+    // [JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -45,16 +45,18 @@ namespace HonjiMES.Controllers
             {
                 var nmachinedata = new machine{
                     Id = i,
-                    Date = DateTime.Now.AddDays(i),
-                    Name = "A" + i
+                    Date = DateTime.Now.AddHours(i),
+                    Name = "A" + i,
+                    machineOrderList=new List<machineOrder>()
                 };
-                for (int j = 0; i < 3; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     nmachinedata.machineOrderList.Add(new machineOrder{
                     Id = i,
                     Name = "LHAIHDI" + i + j 
                 });
                 }
+                machinedata.Add(nmachinedata);
             }
             return Ok(MyFun.APIResponseOK(machinedata));
         }
