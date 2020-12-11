@@ -43,10 +43,12 @@ namespace HonjiMES.Controllers
             var machinedata = new List<machine>();
             for (int i = 0; i < 16; i++)
             {
+                Random process = new Random();
                 var nmachinedata = new machine{
                     Id = i,
                     Date = DateTime.Now.AddHours(i),
                     Name = "A" + i,
+                    Process = process.Next(0, 20),
                     machineOrderList=new List<machineOrder>()
                 };
                 for (int j = 0; j < 3; j++)

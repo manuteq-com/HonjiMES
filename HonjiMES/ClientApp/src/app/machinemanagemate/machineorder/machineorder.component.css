@@ -78,3 +78,7 @@ li{
 a{
     float: right;
 }
+
+.Alert{
+    background-color: rgb(209, 150, 150);
+}

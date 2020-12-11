@@ -14,11 +14,16 @@ export class MachineorderComponent implements OnInit {
     ngOnInit() {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
-                //debugger;
+                debugger;
                 this.dataSourceDB = s.data;
-
             }
         );
+    }
+
+    getClass(data){
+        if (data <= 5) { // 開工
+            return 'Alert';
+        }
     }
 
 

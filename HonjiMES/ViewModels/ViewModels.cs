@@ -1169,6 +1169,7 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Name { get; set; }
+        public int Process { get; set; }
         public string Image { get; set; }
         public List<machineOrder> machineOrderList { get; set; }
     }
