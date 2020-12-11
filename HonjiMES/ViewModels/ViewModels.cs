@@ -1165,5 +1165,18 @@ namespace HonjiMES.Models
         public decimal? OriginPrice { get; set; }
     }
 
+    public class machine {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
+        public List<machineOrder> machineOrderList { get; set; }
+    }
+
+    public class machineOrder{
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
 
 }
