@@ -134,6 +134,7 @@ import { InventoryShortComponent } from './report/inventory-short/inventory-shor
 import { WorkorderEstimateComponent } from './workorder/workorder-estimate/workorder-estimate.component';
 import { WorkorderEstimateSettingComponent } from './workorder/workorder-estimate-setting/workorder-estimate-setting.component';
 import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
+import { MachinedetailComponent } from './machinemanagemate/machinedetail/machinedetail.component';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -282,7 +283,9 @@ export function tokenGetter() {
         InventoryShortComponent,
         WorkorderEstimateComponent,
         WorkorderEstimateSettingComponent,
-        MachineorderComponent
+        CreatbomComponent,
+        MachineorderComponent,
+        MachinedetailComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
