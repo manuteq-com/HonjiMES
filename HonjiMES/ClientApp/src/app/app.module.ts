@@ -135,6 +135,7 @@ import { WorkorderEstimateComponent } from './workorder/workorder-estimate/worko
 import { WorkorderEstimateSettingComponent } from './workorder/workorder-estimate-setting/workorder-estimate-setting.component';
 import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
 import { MachinedetailComponent } from './machinemanagemate/machinedetail/machinedetail.component';
+
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -283,7 +284,6 @@ export function tokenGetter() {
         InventoryShortComponent,
         WorkorderEstimateComponent,
         WorkorderEstimateSettingComponent,
-        CreatbomComponent,
         MachineorderComponent,
         MachinedetailComponent
     ],
