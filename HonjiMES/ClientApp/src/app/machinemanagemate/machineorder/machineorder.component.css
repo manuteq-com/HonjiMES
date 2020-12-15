@@ -81,17 +81,23 @@ a{
     float: right;
 }
 
-.btn{
-    padding: 7px 18px 8px 18px;
-}
-
 .card{
     padding: 0px !important;
 }
 
 .card-text{
-    font-size: 16px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
+
+.btn{
+    font-size: 16px;
+    float: right;
+}
+
+/* .dx-button-content{
+    background-color: ;
+} */
 
 .Alert{
     background-color:#f1abbd;
