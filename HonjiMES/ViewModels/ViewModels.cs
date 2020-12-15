@@ -1167,17 +1167,28 @@ namespace HonjiMES.Models
 
     public class machine {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public string Name { get; set; }
-        public int Process { get; set; }
-        public string Image { get; set; }
+        public string DataNo { get; set; }
+        public string ProcessName { get; set; }
+        public int? RemainingTime { get; set; }
+        public int ProcessTotal { get; set; }
+        public Decimal TotalTime { get; set; }
         public List<machineOrder> machineOrderList { get; set; }
     }
 
     public class machineOrder{
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string WorkOrderNo { get; set; }
     }
+
+
+    public class ProcessesList{
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string WorkOrderNo { get; set; }
+        public int SerialNumber { get; set; }
+
+    }
+
 
 
 }

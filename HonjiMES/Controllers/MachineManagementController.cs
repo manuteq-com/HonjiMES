@@ -40,27 +40,53 @@ namespace HonjiMES.Controllers
 
         public async Task<ActionResult<IEnumerable<machine>>> GetMachineData()
         {
-            var machinedata = new List<machine>();
-            for (int i = 0; i < 16; i++)
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.Status == 1 || y.Status == 2).GroupBy(x => x.ProducingMachine).ToList();
+            
+            // 工單Head為[已派工]
+            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || (x.WorkOrderHead.Status == 2 && x.Status == 1))); 
+            // 工單Head為[已開工]
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 2 && x.Status != 1)); 
+
+            var machineList = new List <machine>();
+            foreach (var item in machine)
             {
-                Random process = new Random();
-                var nmachinedata = new machine{
-                    Id = i,
-                    Date = DateTime.Now.AddHours(i),
-                    Name = "A" + i,
-                    Process = process.Next(0, 20),
-                    machineOrderList=new List<machineOrder>()
-                };
-                for (int j = 0; j < 3; j++)
+                var Assign = dataAssign.Where(x => x.ProducingMachine == item.Key);
+                var AssignCount = Assign.Count();
+                var AssignProcessTime = Assign.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+
+                var Start = dataStart.Where(x => x.ProducingMachine == item.Key);
+                var StartCount = Start.Count();
+                var StartProcessTime = Start.Where(x => x.SerialNumber != 1).Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+                
+                var dt = DateTime.Now;
+                var machineData = new machine();
+                var x = item.FirstOrDefault();
+                machineData.Id = x.Id;
+                machineData.DataNo = x.WorkOrderHead.DataNo;
+                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
+                machineData.RemainingTime = Convert.ToInt32((dt - (x.DueStartTime ?? dt)).TotalMinutes);
+                machineData.ProcessTotal = AssignCount + StartCount;
+                machineData.TotalTime = AssignProcessTime + StartProcessTime;
+                machineData.machineOrderList = new List<machineOrder>();
+                foreach (var itemdata in item)
                 {
-                    nmachinedata.machineOrderList.Add(new machineOrder{
-                    Id = i,
-                    Name = "LHAIHDI" + i + j 
+                    machineData.machineOrderList.Add(new machineOrder{
+                    Id = itemdata.Id,
+                    WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo
                 });
                 }
-                machinedata.Add(nmachinedata);
+                machineList.Add(machineData);
             }
-            return Ok(MyFun.APIResponseOK(machinedata));
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(machineList));
+        }
+
+        public async Task<ActionResult<IEnumerable<machine>>> GetProcessDatas()
+        {
+            var Data = _context.WorkOrderDetails.Include( x => x.WorkOrderHead);
+            return Ok(MyFun.APIResponseOK(Data));
         }
 
         private bool CustomerExists(int id)

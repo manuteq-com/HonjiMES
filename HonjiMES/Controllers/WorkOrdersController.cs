@@ -2138,8 +2138,8 @@ namespace HonjiMES.Controllers
                     ActualStartTime = x.ActualStartTime,
                     ActualEndTime = x.ActualEndTime,
                     CreateTime = x.CreateTime,
-                });
-
+                }
+            );
             var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
             // data = data.Include(x => x.WorkOrderHead);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
