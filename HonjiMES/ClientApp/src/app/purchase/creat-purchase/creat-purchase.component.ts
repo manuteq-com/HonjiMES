@@ -74,8 +74,13 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
     WarehouseIdBVisible: boolean;
     DeliveryTime: Date;
     TypeDisabled: boolean;
+    gridsaveCheck: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.requiredfun = this.requiredfun.bind(this);
+        this.onRowValidating = this.onRowValidating.bind(this);
+        this.onInitNewRow = this.onInitNewRow.bind(this);
+
         this.listAdjustStatus = myservice.getlistAdjustStatus();
         this.PurchasetypeList = myservice.getpurchasetypes();
         this.CustomerVal = null;
@@ -329,6 +334,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     OriginValueChanged(e, data) {
+        debugger;
         data.setValue(e.value);
         this.OriginPriceval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
@@ -348,13 +354,32 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         return true;
     }
     onInitNewRow(e) {
+        debugger;
         this.saveCheck = false;
         // this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
         this.OriginPriceval = e.data.OriginPrice;
         this.Priceval = e.data.Price;
-        this.WarehouseList = null;
+        // this.WarehouseList = null;
         this.DeliveryTime = new Date();
+        //
+
+        e.data.DeliveryTime = new Date();
+        //
+        if (this.DataType === 1 && this.formData.Type === 10) {
+            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null;
+        } else if (this.DataType === 1) {
+            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '101')?.Id ?? null;
+        } else {
+            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        }
+
+        if (this.formData.Type === 30) { // 表處採購
+            e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+            e.data.WarehouseIdB = this.WarehouseListAll.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        } else if (this.formData.Type === 40) { // 傳統銑床採購
+            e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
+        }
     }
     onRowInserted(e) {
         if (this.dataSourceDB.length !== 0) {
@@ -362,25 +387,27 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
     }
     onEditingStart(e) {
-        this.saveCheck = false;
-        // this.onCellPreparedLevel = 1;
-        const basicData = this.BasicDataList.find(z => z.TempId === e.data.TempId);
-        this.DataType = basicData.DataType;
-        const dataId = basicData.DataId;
-        this.Quantityval = e.data.Quantity;
-        this.OriginPriceval = e.data.OriginPrice;
-        this.Priceval = e.data.Price;
-        this.Warehouseval = e.data.WarehouseId;
-        this.WarehousevalA = e.data.WarehouseIdA;
-        this.WarehousevalB = e.data.WarehouseIdB;
-        this.DeliveryTime = e.data.DeliveryTime;
+        if (e.data.TempId) {
+            this.saveCheck = false;
+            // this.onCellPreparedLevel = 1;
+            const basicData = this.BasicDataList.find(z => z.TempId === e.data.TempId);
+            this.DataType = basicData.DataType;
+            const dataId = basicData.DataId;
+            this.Quantityval = e.data.Quantity;
+            this.OriginPriceval = e.data.OriginPrice;
+            this.Priceval = e.data.Price;
+            this.Warehouseval = e.data.WarehouseId;
+            this.WarehousevalA = e.data.WarehouseIdA;
+            this.WarehousevalB = e.data.WarehouseIdB;
+            this.DeliveryTime = e.data.DeliveryTime;
 
-        // if (this.DataType === 1) {   // 查詢原料
-        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
-            (s) => {
-                this.WarehouseList = s.data;
-            }
-        );
+            // if (this.DataType === 1) {   // 查詢原料
+            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+                (s) => {
+                    this.WarehouseList = s.data;
+                }
+            );
+        }
         // } else if (this.DataType === 2) {    // 查詢成品
         //     this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
         //         (s) => {
@@ -408,18 +435,18 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
             // }
         }
     }
-    onFormSubmit = async function(e) {
-        // debugger;
+    onFormSubmit = async function (e) {
         this.buttondisabled = true;
+        this.gridsaveCheck = true;
+        this.dataGrid.instance.saveEditData();
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
         }
-        if (!this.saveCheck) {
+        if (!this.saveCheck || !this.gridsaveCheck) {
             this.buttondisabled = false;
             return;
         }
-        this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
         let dataCheck = true;
         this.dataSourceDB.forEach(element => {
@@ -472,4 +499,44 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
         this.buttondisabled = false;
     };
+    requiredfun(e) {
+        if (e.rule.pattern === "WarehouseIdA" && this.WarehouseIdAVisible) {
+            if (e.value) {
+                return true;
+            } else {
+                this.gridsaveCheck = false;
+                return false;
+            }
+        } else if (e.rule.pattern === "WarehouseIdB" && this.WarehouseIdBVisible) {
+            if (e.value) {
+                return true;
+            } else {
+                this.gridsaveCheck = false;
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+    onRowValidating(e) {
+        debugger;
+        if (!e.isValid) {
+            this.gridsaveCheck = false;
+        }
+    }
+    QuantitysetCellValue(newData, value, currentRowData) {
+        newData.Quantity = value;
+        newData.Price = value * currentRowData.OriginPrice;
+        if (isNaN(newData.Price)) {
+            newData.Price = null;
+        }
+    }
+    OriginPricesetCellValue(newData, value, currentRowData) {
+        newData.OriginPrice = value;
+        newData.Price = currentRowData.Quantity * value;
+        if (isNaN(newData.Price)) {
+            newData.Price = null;
+        }
+    }
 }
