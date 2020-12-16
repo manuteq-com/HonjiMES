@@ -83,6 +83,12 @@ a{
 
 .card{
     padding: 0px !important;
+    min-height: 475px !important;
+    margin-bottom: 25px;
+}
+
+.card-body{
+    position: relative;
 }
 
 .card-text{
@@ -92,12 +98,10 @@ a{
 
 .btn{
     font-size: 16px;
-    float: right;
+    position: absolute;
+    right:20px;
+    bottom:20px;
 }
-
-/* .dx-button-content{
-    background-color: ;
-} */
 
 .Alert{
     background-color:#f1abbd;
