@@ -1169,6 +1169,7 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public string MachineName { get; set; }
         public string DataNo { get; set; }
+        public string No { get; set; }
         public string ProcessName { get; set; }
         public int? RemainingTime { get; set; }
         public int ProcessTotal { get; set; }

@@ -66,6 +66,7 @@ namespace HonjiMES.Controllers
                 var x = item.FirstOrDefault();
                 machineData.Id = no + 1 ;
                 machineData.MachineName = x.ProducingMachine; 
+                machineData.No = x.WorkOrderHead.WorkOrderNo;
                 machineData.DataNo = x.WorkOrderHead.DataNo;
                 machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
                 machineData.RemainingTime = Convert.ToInt32((dt - (x.DueStartTime ?? dt)).TotalMinutes);
