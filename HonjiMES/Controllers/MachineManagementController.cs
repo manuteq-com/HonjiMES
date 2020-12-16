@@ -42,12 +42,12 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && y.Status == 1 || y.Status == 2).GroupBy(x => x.ProducingMachine).ToList();
+            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && (y.Status == 1 || y.Status == 2)).GroupBy(x => x.ProducingMachine).ToList();
             
             // 工單Head為[已派工]
             var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || (x.WorkOrderHead.Status == 2 && x.Status == 1))); 
             // 工單Head為[已開工]
-            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 2 && x.Status != 1)); 
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 2 && x.Status == 2)); 
 
             var no = 0;
             var machineList = new List <machine>();
@@ -64,14 +64,28 @@ namespace HonjiMES.Controllers
                 var dt = DateTime.Now;
                 var machineData = new machine();
                 var x = item.FirstOrDefault();
+                //剩餘時間 = (前置時間+標準時間)*數量 - (現在時間- 實際開工時間)
+                var remain = (x.ProcessTime + x.ProcessLeadTime)*(x.Count - (x.ReCount ?? 0)) - Convert.ToInt32((dt - (x.ActualStartTime ?? dt)).TotalMinutes);
                 machineData.Id = no + 1 ;
                 machineData.MachineName = x.ProducingMachine; 
                 machineData.No = x.WorkOrderHead.WorkOrderNo;
                 machineData.DataNo = x.WorkOrderHead.DataNo;
                 machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
-                machineData.RemainingTime = Convert.ToInt32((dt - (x.DueStartTime ?? dt)).TotalMinutes);
+                //  if(剩餘時間 >= 0){
+                //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
+                //  }elseif(剩餘時間 < 0 ){
+                //    工序剩餘時間 = 0,抵累時間 = |剩餘時間|,總時間 = 已派工工序時間+已開工工序時間
+                //  }
+                if(Convert.ToInt32(remain) >= 0){
+                    machineData.RemainingTime = Convert.ToInt32(remain);
+                    machineData.DelayTime = 0;
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime + Convert.ToInt32(remain);
+                } else if( Convert.ToInt32(remain) < 0 ) {
+                    machineData.RemainingTime = 0;
+                    machineData.DelayTime = Math.Abs(Convert.ToInt32(remain));
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime;
+                } 
                 machineData.ProcessTotal = AssignCount + StartCount;
-                machineData.TotalTime = AssignProcessTime + StartProcessTime;
                 machineData.machineOrderList = new List<machineOrder>();
                 foreach (var itemdata in item)
                 {
