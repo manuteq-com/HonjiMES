@@ -70,9 +70,9 @@ namespace HonjiMES.Controllers
                 var remain = processtime - tasktime;
                 machineData.Id = no + 1 ;
                 machineData.MachineName = x.ProducingMachine; 
-                machineData.No = x.WorkOrderHead.WorkOrderNo;
+                machineData.No = x.WorkOrderHead.WorkOrderNo + " / " + x.ProcessNo + "_" + x.ProcessName ;
                 machineData.DataNo = x.WorkOrderHead.DataNo;
-                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName + processtime;
+                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
                 //  if(剩餘時間 >= 0){
                 //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
                 //  }elseif(剩餘時間 < 0 ){
@@ -81,11 +81,11 @@ namespace HonjiMES.Controllers
                 if(Convert.ToInt32(remain) >= 0){
                     machineData.RemainingTime = Convert.ToInt32(remain);
                     machineData.DelayTime = 0;
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime + Convert.ToInt32(remain);
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime -processtime + Convert.ToInt32(remain);
                 } else if( Convert.ToInt32(remain) < 0 ) {
                     machineData.RemainingTime = 0;
                     machineData.DelayTime = Math.Abs(Convert.ToInt32(remain));
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime;
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime -processtime;
                 }
                 machineData.ProcessTotal = AssignCount + StartCount;
                 machineData.machineOrderList = new List<machineOrder>();
@@ -93,7 +93,7 @@ namespace HonjiMES.Controllers
                 {
                     machineData.machineOrderList.Add(new machineOrder{
                     Id = itemdata.Id,
-                    WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo
+                    WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName
                 });
                 }
                 machineList.Add(machineData);
