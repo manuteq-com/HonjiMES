@@ -42,12 +42,12 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && (y.Status == 1 || y.Status == 2)).GroupBy(x => x.ProducingMachine).ToList();
+            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && (y.Status == 1 || y.Status == 2)).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
             
             // 工單Head為[已派工]
-            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 1 || (x.WorkOrderHead.Status == 2 && x.Status == 1))); 
+            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1); 
             // 工單Head為[已開工]
-            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && (x.WorkOrderHead.Status == 2 && x.Status == 2)); 
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2); 
 
             var no = 0;
             var machineList = new List <machine>();
@@ -87,7 +87,7 @@ namespace HonjiMES.Controllers
                 } 
                 machineData.ProcessTotal = AssignCount + StartCount;
                 machineData.machineOrderList = new List<machineOrder>();
-                foreach (var itemdata in item)
+                foreach (var itemdata in item.Skip(1))
                 {
                     machineData.machineOrderList.Add(new machineOrder{
                     Id = itemdata.Id,
