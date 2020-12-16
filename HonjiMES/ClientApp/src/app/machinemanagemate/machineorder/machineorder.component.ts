@@ -24,22 +24,14 @@ export class MachineorderComponent implements OnInit {
     ngOnInit() {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
-                debugger;
-                if(s.data[0].MachineName == null){
                     this.dataSourceDB = s.data;
-                    this.dataSourceDB.splice(0,1);
-                }else {
-                    this.dataSourceDB = s.data;
-                    this.dataSourceDB.machineOrderList.splice(0,1);
-                }
-
             }
         );
     }
 
-    // 製程數小於5顯示紅色
+    // 已安排剩餘時間小於100min 畫面顯示紅色
     getClass(data){
-        if (data < 2) {
+        if (data < 100) {
             return 'Alert';
         }
     }

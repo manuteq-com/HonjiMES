@@ -60,7 +60,7 @@
 }
 
 .container{
-    max-width: 1900px;
+    max-width: 1950px;
 }
 
 .card-header{
@@ -69,7 +69,7 @@
 }
 
 ul{
-    padding: 0px !important;
+    padding: 0px;
 }
 
 li{
@@ -82,8 +82,8 @@ a{
 }
 
 .card{
-    padding: 0px !important;
-    min-height: 475px !important;
+    padding: 0px;
+    min-height: 510px;
     margin-bottom: 25px;
 }
 
@@ -96,11 +96,21 @@ a{
     margin-bottom: 10px;
 }
 
+.machineOrderList-box{
+    /* background-color: rgb(245, 245, 245); */
+    height: 120px;
+    overflow: auto;
+}
+
 .btn{
     font-size: 16px;
     position: absolute;
     right:20px;
     bottom:20px;
+}
+
+.alerttime{
+    color: red;
 }
 
 .Alert{
