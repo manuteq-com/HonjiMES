@@ -43,7 +43,7 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
             var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(y.ProducingMachine)&& (y.Status == 1 || y.Status == 2))
-            .OrderByDescending(x => x.ActualStartTime).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
+            .OrderByDescending(x =>x.Status).ThenBy(x => x.CreateTime).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
             
             // 工單Head為[已派工]
             var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1); 
