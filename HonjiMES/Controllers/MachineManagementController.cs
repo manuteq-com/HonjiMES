@@ -59,18 +59,20 @@ namespace HonjiMES.Controllers
 
                 var Start = dataStart.Where(x => x.ProducingMachine == item.Key);
                 var StartCount = Start.Count();
-                var StartProcessTime = Start.Where(x => x.SerialNumber != 1).Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+                var StartProcessTime = Start.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
                 
                 var dt = DateTime.Now;
                 var machineData = new machine();
                 var x = item.FirstOrDefault();
                 //剩餘時間 = (前置時間+標準時間)*數量 - (現在時間- 實際開工時間)
-                var remain = (x.ProcessTime + x.ProcessLeadTime)*(x.Count - (x.ReCount ?? 0)) - Convert.ToInt32((dt - (x.ActualStartTime ?? dt)).TotalMinutes);
+                var processtime = (x.ProcessTime + x.ProcessLeadTime)*(x.Count <= x.ReCount ? 0 : (x.Count - (x.ReCount ?? 0)));//工時
+                var tasktime = Convert.ToInt32((dt - (x.ActualStartTime ?? dt)).TotalMinutes);//目前加工時間
+                var remain = processtime - tasktime;
                 machineData.Id = no + 1 ;
                 machineData.MachineName = x.ProducingMachine; 
                 machineData.No = x.WorkOrderHead.WorkOrderNo;
                 machineData.DataNo = x.WorkOrderHead.DataNo;
-                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
+                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName + processtime;
                 //  if(剩餘時間 >= 0){
                 //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
                 //  }elseif(剩餘時間 < 0 ){
@@ -79,12 +81,12 @@ namespace HonjiMES.Controllers
                 if(Convert.ToInt32(remain) >= 0){
                     machineData.RemainingTime = Convert.ToInt32(remain);
                     machineData.DelayTime = 0;
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime + Convert.ToInt32(remain);
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime + Convert.ToInt32(remain);
                 } else if( Convert.ToInt32(remain) < 0 ) {
                     machineData.RemainingTime = 0;
                     machineData.DelayTime = Math.Abs(Convert.ToInt32(remain));
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime;
-                } 
+                    machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime;
+                }
                 machineData.ProcessTotal = AssignCount + StartCount;
                 machineData.machineOrderList = new List<machineOrder>();
                 foreach (var itemdata in item.Skip(1))
