@@ -42,70 +42,86 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(y.ProducingMachine)&& (y.Status == 1 || y.Status == 2))
-            .OrderByDescending(x =>x.Status).ThenBy(x => x.CreateTime).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
-            
+            var machineName = _context.MachineInformations.Where(x => x.EnableState == 1).Select(x => x.Name).ToList();
+            var machine = _context.WorkOrderDetails.AsEnumerable().Where(y => y.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(y.ProducingMachine) && (y.Status == 1 || y.Status == 2))
+            .OrderByDescending(x => x.Status).ThenBy(x => x.CreateTime).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
+
             // 工單Head為[已派工]
-            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1); 
+            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1);
             // 工單Head為[已開工]
-            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2); 
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2);
 
             var no = 0;
-            var machineList = new List <machine>();
-            foreach (var item in machine)
+            var machineList = new List<machine>();
+            foreach (var items in machineName)
             {
-                var Assign = dataAssign.Where(x => x.ProducingMachine == item.Key);
-                var AssignCount = Assign.Count();
-                var AssignProcessTime = Assign.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
-
-                var Start = dataStart.Where(x => x.ProducingMachine == item.Key);
-                var StartCount = Start.Count();
-                var StartProcessTime = Start.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
-                
-                var dt = DateTime.Now;
                 var machineData = new machine();
-                var x = item.FirstOrDefault();
-                //剩餘時間 = (前置時間+標準時間)*數量 - (現在時間- 實際開工時間)
-                var processtime = (x.ProcessTime + x.ProcessLeadTime)*(x.Count <= x.ReCount ? 0 : (x.Count - (x.ReCount ?? 0)));//工時
-                var tasktime = Convert.ToInt32((dt - (x.ActualStartTime ?? dt)).TotalMinutes);//目前加工時間
-                var remain = processtime - tasktime;
-                machineData.Id = no + 1 ;
-                machineData.MachineName = x.ProducingMachine; 
-                machineData.No = x.WorkOrderHead.WorkOrderNo;
-                machineData.DataNo = x.WorkOrderHead.DataNo;
-                machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
-                //  if(剩餘時間 >= 0){
-                //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
-                //  }elseif(剩餘時間 < 0 ){
-                //    工序剩餘時間 = 0,抵累時間 = |剩餘時間|,總時間 = 已派工工序時間+已開工工序時間
-                //  }
-                if(Convert.ToInt32(remain) >= 0){
-                    machineData.RemainingTime = Convert.ToInt32(remain);
-                    machineData.DelayTime = 0;
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime -processtime + Convert.ToInt32(remain);
-                } else if( Convert.ToInt32(remain) < 0 ) {
-                    machineData.RemainingTime = 0;
-                    machineData.DelayTime = Math.Abs(Convert.ToInt32(remain));
-                    machineData.TotalTime = AssignProcessTime + StartProcessTime -processtime;
-                }
-                machineData.ProcessTotal = AssignCount + StartCount;
-                machineData.machineOrderList = new List<machineOrder>();
-                foreach (var itemdata in item.Skip(1))
-                {
-                    machineData.machineOrderList.Add(new machineOrder{
-                    Id = itemdata.Id,
-                    WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName
-                });
-                }
                 machineList.Add(machineData);
+                machineData.MachineName = items;
+                foreach (var item in machine)
+                {
+                    if (items == item.Key)
+                    {
+                        var Assign = dataAssign.Where(x => x.ProducingMachine == item.Key);
+                        var AssignCount = Assign.Count();
+                        var AssignProcessTime = Assign.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+
+                        var Start = dataStart.Where(x => x.ProducingMachine == item.Key);
+                        var StartCount = Start.Count();
+                        var StartProcessTime = Start.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+
+                        var dt = DateTime.Now;
+
+                        var x = item.FirstOrDefault();
+                        //剩餘時間 = (前置時間+標準時間)*數量 - (現在時間- 實際開工時間)
+                        var processtime = (x.ProcessTime + x.ProcessLeadTime) * (x.Count <= x.ReCount ? 0 : (x.Count - (x.ReCount ?? 0)));//工時
+                        var tasktime = Convert.ToDecimal((dt - (x.ActualStartTime ?? dt)).TotalMinutes);//目前加工時間
+                        var remain = processtime - tasktime;
+                        machineData.Id = no + 1;
+                        if(item.Where(x => x.Status == 2).Any()){
+                            machineData.No = x.WorkOrderHead.WorkOrderNo;
+                            machineData.DataNo = x.WorkOrderHead.DataNo;
+                            machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
+                        }
+                        //  if(剩餘時間 >= 0){
+                        //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
+                        //  }elseif(剩餘時間 < 0 ){
+                        //    工序剩餘時間 = 0,抵累時間 = |剩餘時間|,總時間 = 已派工工序時間+已開工工序時間
+                        //  }
+                        if (Convert.ToDecimal(remain) >= 0)
+                        {
+                            machineData.RemainingTime = Convert.ToDecimal(remain);
+                            machineData.DelayTime = 0;
+                            machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime + Convert.ToDecimal(remain);
+                        }
+                        else if (Convert.ToDecimal(remain) < 0)
+                        {
+                            machineData.RemainingTime = 0;
+                            machineData.DelayTime = Math.Abs(Convert.ToDecimal(remain));
+                            machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime;
+                        }
+                        machineData.ProcessTotal = AssignCount + StartCount;
+                        machineData.machineOrderList = new List<machineOrder>();
+                        foreach (var itemdata in item.Where(x=>x.Status == 1))
+                        {
+                            machineData.machineOrderList.Add(new machineOrder
+                            {
+                                Id = itemdata.Id,
+                                WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName
+                            });
+                        }
+
+                    }
+                }
             }
+
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(machineList));
         }
 
         public async Task<ActionResult<IEnumerable<machine>>> GetProcessDatas()
         {
-            var Data = _context.WorkOrderDetails.Include( x => x.WorkOrderHead);
+            var Data = _context.WorkOrderDetails.Include(x => x.WorkOrderHead);
             return Ok(MyFun.APIResponseOK(Data));
         }
 
