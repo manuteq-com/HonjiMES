@@ -19,10 +19,13 @@
                     <p class="card-text">品號 : {{item.DataNo}}</p>
                     <p class="card-text">工單號 : {{item.No}}</p>
                     <p class="card-text">製程名稱 : {{item.ProcessName}}</p>
-                    <p *ngIf="item.RemainingTime > 0 " class="card-text">目前製程剩餘時間 : {{item.RemainingTime.toFixed(0)}}分</p>
-                    <p *ngIf="item.DelayTime > 0 " class="card-text alert-time">目前製程已逾時 : {{item.DelayTime.toFixed(0)}}分</p>
+                    <p *ngIf="item.RemainingTime > 0 " class="card-text">目前製程剩餘時間 : {{formattime(item.RemainingTime)}}
+                    </p>
+                    <p *ngIf="item.DelayTime > 0 " class="card-text alert-time">目前製程已逾時 :
+                        {{formattime(item.DelayTime)}}
+                    </p>
                     <p class="card-text" [ngClass]="sendAlert(item.ProcessTotal)">已安排製程數 : {{item.ProcessTotal}}</p>
-                    <p class="card-text">已安排製程剩餘時間 : {{item.TotalTime.toFixed(0)}}分</p>
+                    <p class="card-text">已安排製程剩餘時間 : {{formattime(item.TotalTime)}}</p>
                     <div class="machineOrderList-box">
                         <ul>
                             <li *ngFor="let itemd of item.machineOrderList">
