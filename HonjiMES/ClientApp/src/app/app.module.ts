@@ -135,6 +135,7 @@ import { WorkorderEstimateComponent } from './workorder/workorder-estimate/worko
 import { WorkorderEstimateSettingComponent } from './workorder/workorder-estimate-setting/workorder-estimate-setting.component';
 import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
 import { MachinedetailComponent } from './machinemanagemate/machinedetail/machinedetail.component';
+import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -285,7 +286,8 @@ export function tokenGetter() {
         WorkorderEstimateComponent,
         WorkorderEstimateSettingComponent,
         MachineorderComponent,
-        MachinedetailComponent
+        MachinedetailComponent,
+        CreateBomComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
