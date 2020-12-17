@@ -25,13 +25,14 @@ export class MachineorderComponent implements OnInit {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
+                debugger;
                 setInterval(() => {
                     this.dataSourceDB.forEach(x => {
                         if (x.RemainingTime > 0) {
                             x.RemainingTime--;
                             x.TotalTime--;
                         }
-                        if (x.DelayTime > 0 || x.RemainingTime == 0) {
+                        if ((x.DelayTime > 0) || (x.RemainingTime <= 0 && x.No)) {
                             x.DelayTime++;
                         }
                     });
