@@ -36,6 +36,13 @@ export class MachineorderComponent implements OnInit {
         }
     }
 
+    //已安排製程數等於0 字體顯示紅色
+    sendAlert(data){
+        if (data == 0){
+            return 'Alert-text'
+        }
+    }
+
     //機台詳情
     viewProcess() {
         this.creatpopupVisible = true;

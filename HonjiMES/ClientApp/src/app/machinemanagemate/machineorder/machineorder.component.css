@@ -109,10 +109,14 @@ a{
     bottom:20px;
 }
 
-.alerttime{
+.alert-time{
     color: red;
 }
 
 .Alert{
     background-color:#f1abbd;
+}
+
+.Alert-text{
+    color: red;
 }
