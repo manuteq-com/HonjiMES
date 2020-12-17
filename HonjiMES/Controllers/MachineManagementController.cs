@@ -100,7 +100,7 @@ namespace HonjiMES.Controllers
                             machineData.DelayTime = Math.Abs(Convert.ToDecimal(remain));
                             machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime;
                         }
-                        machineData.ProcessTotal = AssignCount + StartCount;
+                        machineData.ProcessTotal = AssignCount;
                         machineData.machineOrderList = new List<machineOrder>();
                         foreach (var itemdata in item.Where(x=>x.Status == 1))
                         {
