@@ -19,26 +19,36 @@ export class MachineorderComponent implements OnInit {
     constructor(public app: AppComponent) {
         this.editVisible = true;
         this.btnDisabled = false;
-     }
+    }
 
     ngOnInit() {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
-                    this.dataSourceDB = s.data;
+                this.dataSourceDB = s.data;
+                setInterval(() => {
+                    this.dataSourceDB.forEach(x => {
+                        if (x.RemainingTime > 0) {
+                            x.RemainingTime--;
+                        }
+                        if (x.DelayTime > 0) {
+                            x.DelayTime++;
+                        }
+                    });
+                }, 1000)
             }
         );
     }
 
     // 已安排剩餘時間小於100min 畫面顯示紅色
-    getClass(data){
+    getClass(data) {
         if (data < 100) {
             return 'Alert';
         }
     }
 
     //已安排製程數等於0 字體顯示紅色
-    sendAlert(data){
-        if (data == 0){
+    sendAlert(data) {
+        if (data == 0) {
             return 'Alert-text'
         }
     }
