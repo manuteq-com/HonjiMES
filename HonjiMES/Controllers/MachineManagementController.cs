@@ -82,6 +82,16 @@ namespace HonjiMES.Controllers
                             machineData.No = x.WorkOrderHead.WorkOrderNo;
                             machineData.DataNo = x.WorkOrderHead.DataNo;
                             machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
+                            if (Convert.ToDecimal(remain) >= 0)
+                            {
+                                machineData.RemainingTime = Convert.ToDecimal(remain);
+                                machineData.DelayTime = 0;
+                            }
+                            else if (Convert.ToDecimal(remain) < 0)
+                            {
+                                machineData.RemainingTime = 0;
+                                machineData.DelayTime = Math.Abs(Convert.ToDecimal(remain));
+                            }
                         }
                         //  if(剩餘時間 >= 0){
                         //    工序剩餘時間 = 剩餘時間,抵累時間 = 0,總時間 = 已派工工序時間+已開工工序時間+剩餘時間
@@ -90,14 +100,10 @@ namespace HonjiMES.Controllers
                         //  }
                         if (Convert.ToDecimal(remain) >= 0)
                         {
-                            machineData.RemainingTime = Convert.ToDecimal(remain);
-                            machineData.DelayTime = 0;
                             machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime + Convert.ToDecimal(remain);
                         }
                         else if (Convert.ToDecimal(remain) < 0)
                         {
-                            machineData.RemainingTime = 0;
-                            machineData.DelayTime = Math.Abs(Convert.ToDecimal(remain));
                             machineData.TotalTime = AssignProcessTime + StartProcessTime - processtime;
                         }
                         machineData.ProcessTotal = AssignCount;
