@@ -1,0 +1,53 @@
+<!-- <p>所有訂單</p> -->
+<div class="headerblock">
+    <div class="headerfont font1">組成管理</div>
+    <div class="triangle"></div>
+    <div class="lefttriangle">
+        <div class="lefttriangle1"></div>
+        <div class="lefttriangle2"></div>
+    </div>
+    <div class="headerfont font2">快速建BOM</div>
+    <div class="buttongroup">
+    </div>
+    <!-- <div class="buttongroup">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增成品資訊" type="success" [width]="130"
+            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
+        </dx-button>
+    </div> -->
+</div>
+<div class="col-md-6 offset-md-3 mt-5">
+    <form action="" (submit)="onFormSubmit($event)">
+        <div class="card">
+            <h4 class="card-header">選擇欲新增BOM資料之品號</h4>
+            <div class="card-body">
+                <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                    [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                    <dxi-item dataField="Id" editorType="dxSelectBox" [editorOptions]="selectData">
+                        <dxo-label text="品號種類"></dxo-label>
+                    </dxi-item>
+                    <h4>輸入BOM資料</h4>
+                    <dxi-item dataField="Name" [visible]="NameVisible">
+                        <dxo-label text="名稱"></dxo-label>
+                    </dxi-item>
+                    <dxi-item dataField="TempId" dataType="number" editorType="dxSelectBox" [editorOptions]="editorOptions">
+                        <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
+                        <dxo-label text="品號"></dxo-label>
+                    </dxi-item>
+
+                    <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [visible]="NameVisible">
+                        <dxi-validation-rule type="required" message="組成數量 必填"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" [min]="0.001" message="組成數量 必須大於0.001"></dxi-validation-rule>
+                        <dxo-label text="組成數量"></dxo-label>
+                    </dxi-item>
+
+                </dx-form>
+
+                <div class="col-auto-12 mt-2">
+                    <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+                        [disabled]="buttondisabled"></dx-button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

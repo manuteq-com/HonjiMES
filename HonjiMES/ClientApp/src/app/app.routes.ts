@@ -39,6 +39,7 @@ import { DealSupplierComponent } from './report/deal-supplier/deal-supplier.comp
 import { PurchaseTotalComponent } from './report/purchase-total/purchase-total.component';
 import { WorkorderEstimateComponent } from './workorder/workorder-estimate/workorder-estimate.component';
 import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
+import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.component';
 
 
 
@@ -81,6 +82,7 @@ export const routes: Routes = [
     { path: 'purchasetotal', component: PurchaseTotalComponent, canActivate: [AuthGuard] },
     { path: 'workestimate', component: WorkorderEstimateComponent, canActivate: [AuthGuard] },
     { path: 'machineorder', component: MachineorderComponent},
+    { path: 'createbom', component: CreateBomComponent},
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

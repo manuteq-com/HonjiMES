@@ -67,6 +67,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     OrderTypeVisible: boolean;
     OrderTypeList: any;
     TypeSelectBoxOptions: any;
+    gridsaveCheck: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.OrderTypeList = myservice.getOrderType();
@@ -320,6 +321,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
     async onFormSubmit(e) {
         // debugger;
         try {
+            this.gridsaveCheck = true;
             if (this.btnMod === 'save') {
                 // this.buttondisabled = true;
                 if (this.validate_before() === false) {
@@ -327,6 +329,11 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     return;
                 }
                 this.dataGrid.instance.saveEditData();
+
+                if (!this.gridsaveCheck) {
+                    this.buttondisabled = false;
+                    return;
+                }
                 this.formData = this.myform.instance.option('formData');
                 const hnull = this.dataSourceDB.find(item => item.MaterialBasicId == null);
                 if (hnull || (this.SerialNo > 0 && this.dataSourceDB.length < 1)) {
@@ -366,5 +373,36 @@ export class CreatorderComponent implements OnInit, OnChanges {
         } catch (error) {
         }
         this.buttondisabled = false;
+    }
+    onRowValidating(e) {
+        debugger;
+        if (!e.isValid) {
+            this.gridsaveCheck = false;
+        }
+    }
+    QuantitysetCellValue(newData, value, currentRowData) {
+        newData.Quantity = value;
+        newData.Price = value * currentRowData.OriginPrice;
+        newData.DBPrice = value * currentRowData.DBOriginPrice;
+        if (isNaN(newData.Price)) {
+            newData.Price = null;
+        }
+        if (isNaN(newData.DBPrice)) {
+            newData.DBPrice = null;
+        }
+    }
+    OriginPricesetCellValue(newData, value, currentRowData) {
+        newData.OriginPrice = value;
+        newData.Price = currentRowData.Quantity * value;
+        if (isNaN(newData.Price)) {
+            newData.Price = null;
+        }
+    }
+    DBOriginPricesetCellValue(newData, value, currentRowData) {
+        newData.DBOriginPrice = value;
+        newData.DBPrice = currentRowData.Quantity * value;
+        if (isNaN(newData.DBPrice)) {
+            newData.DBPrice = null;
+        }
     }
 }
