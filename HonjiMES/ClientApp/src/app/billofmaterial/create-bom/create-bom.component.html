@@ -1,19 +1,6 @@
 <!-- <p>所有訂單</p> -->
 <div class="headerblock">
-    <div class="headerfont font1">組成管理</div>
-    <div class="triangle"></div>
-    <div class="lefttriangle">
-        <div class="lefttriangle1"></div>
-        <div class="lefttriangle2"></div>
-    </div>
-    <div class="headerfont font2">快速建BOM</div>
-    <div class="buttongroup">
-    </div>
-    <!-- <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="新增成品資訊" type="success" [width]="130"
-            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
-        </dx-button>
-    </div> -->
+    <app-headerfont></app-headerfont>
 </div>
 <div class="col-md-6 offset-md-3 mt-5">
     <form action="" (submit)="onFormSubmit($event)">
