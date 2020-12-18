@@ -287,7 +287,8 @@ export function tokenGetter() {
         WorkorderEstimateComponent,
         WorkorderEstimateSettingComponent,
         MachineorderComponent,
-        MachinedetailComponent
+        MachinedetailComponent,
+        HeaderfontComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
