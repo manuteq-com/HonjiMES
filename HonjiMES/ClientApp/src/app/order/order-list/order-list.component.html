@@ -1,13 +1,6 @@
 <!-- <p>所有訂單</p> -->
 <div class="headerblock">
-    <div class="headerfont font1">訂單管理</div>
-    <div class="triangle"></div>
-    <div class="lefttriangle">
-        <div class="lefttriangle1"></div>
-        <div class="lefttriangle2"></div>
-    </div>
-    
-    <div class="headerfont font2">客戶訂單</div>
+    <app-headerfont></app-headerfont>
     <div class="buttongroup">
         <dx-file-uploader #fileUploader selectButtonText="匯入訂單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             [width]="130" [uploadHeaders]="uploadHeaders"
@@ -119,7 +112,7 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800"
+<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey"
@@ -127,8 +120,8 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
-    [(visible)]="overviewpopupVisible">
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
+    [(visible)]="overviewpopupVisible" >
     <div *dxTemplate="let data of 'content'">
         <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
     </div>

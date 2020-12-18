@@ -11,7 +11,7 @@ export class MachineorderComponent implements OnInit {
     creatpopupVisible: any;
     editVisible: boolean;
     btnDisabled: boolean;
-    itemkey: number;
+    itemkey: any;
     randomkey: number;
     mod: string;
 

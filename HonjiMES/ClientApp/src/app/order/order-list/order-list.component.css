@@ -18,57 +18,14 @@
     border: none;
 }
 .headerblock {
-    display: flex;
-    flex-direction: row;
     position: relative;
 }
-.headerfont {
-    width: 15%;
-    height: 43px;
-    color: white;
-    padding-left: 18px;
-    font-size: 15px;
-    font-weight: bold;
-    line-height: 43px;
-    background-color: #314991;
-    border-radius: 3px 0px 0px 3px;
-}
-.triangle {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 21px 0 22px 10px;
-    border-color: transparent transparent transparent #314991;
-}
-.lefttriangle {
-    display: flex;
-    flex-direction: column;
-    margin-left: -6px;
-}
-.lefttriangle1 {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 10px 21px 0;
-    border-color: transparent #5C72B5 transparent transparent;
-}
-.lefttriangle2 {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 0 22px 10px;
-    border-color: transparent transparent #5C72B5 transparent;
-}
-.font2 {
-    width: 84.25%;
-    border-radius: 0px 4px 4px 0px;
-    background-color: #5C72B5;
-    position: absolute;
-    right: 0%;
-}
+
 .buttongroup {
     position: absolute;
-    right: 6px;
+    right: 4px;
+    top:0px;
+    padding: 0px !important;
 }
 .insertbtn {
     margin-top: -6px;
