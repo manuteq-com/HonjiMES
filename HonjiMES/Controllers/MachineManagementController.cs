@@ -51,7 +51,7 @@ namespace HonjiMES.Controllers
             // 工單Head為[已開工]
             var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2);
 
-            var no = 0;
+            // var no = 0;
             var machineList = new List<machine>();
             foreach (var items in machineName)
             {
@@ -77,8 +77,9 @@ namespace HonjiMES.Controllers
                         var processtime = (x.ProcessTime + x.ProcessLeadTime) * (x.Count <= x.ReCount ? 0 : (x.Count - (x.ReCount ?? 0)));//工時
                         var tasktime = Convert.ToDecimal((dt - (x.ActualStartTime ?? dt)).TotalMinutes);//目前加工時間
                         var remain = processtime - tasktime;
-                        machineData.Id = no + 1;
+                        // machineData.Id = no + 1;
                         if(item.Where(x => x.Status == 2).Any()){
+                            machineData.Id = x.Id;
                             machineData.No = x.WorkOrderHead.WorkOrderNo;
                             machineData.DataNo = x.WorkOrderHead.DataNo;
                             machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
