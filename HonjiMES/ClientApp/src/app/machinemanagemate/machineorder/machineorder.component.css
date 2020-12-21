@@ -52,11 +52,18 @@ a{
     overflow: auto;
 }
 
-.btn{
+.detail-btn{
     font-size: 16px;
     position: absolute;
     right:20px;
     bottom:20px;
+}
+
+.order-btn{
+    font-size: 16px;
+    position: absolute;
+    right:20px;
+    top:50px;
 }
 
 .alert-time{

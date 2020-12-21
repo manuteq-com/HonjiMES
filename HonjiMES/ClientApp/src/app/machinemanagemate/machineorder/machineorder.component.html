@@ -27,8 +27,11 @@
                             </li>
                         </ul>
                     </div>
-                    <dx-button class="btn-primary btn" stylingMode="contained" text="機台詳情" type="default" [width]="110"
+                    <dx-button class="btn-primary detail-btn" stylingMode="contained" text="機台詳情" type="default" [width]="110"
                         [visible]="editVisible" [disabled]="btnDisabled" (onClick)="viewProcess()">
+                    </dx-button>
+                    <dx-button class="btn-primary order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110"
+                        [visible]="orderbtnDisabled" [disabled]="btnDisabled" (onClick)="viewWorkorderList()">
                     </dx-button>
                 </div>
             </div>
@@ -43,5 +46,15 @@
         <app-machinedetail (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey"
             [modval]="mod">
         </app-machinedetail>
+    </div>
+</dx-popup>
+
+
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+    [height]="ReportHeight" [(visible)]="popupVisibleWorkorderList">
+    <div *dxTemplate="let data of 'content'">
+        <app-machineorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey"
+            [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
+        </app-machineorder-report>
     </div>
 </dx-popup>

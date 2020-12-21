@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
+import notify from 'devextreme/ui/notify';
 
 @Component({
     selector: 'app-machineorder',
@@ -9,22 +10,33 @@ import { AppComponent } from 'src/app/app.component';
 export class MachineorderComponent implements OnInit {
     dataSourceDB: any;
     creatpopupVisible: any;
+    popupVisibleWorkorderList: any;
     editVisible: boolean;
     btnDisabled: boolean;
+    orderbtnDisabled: boolean;
+    checkVisible: boolean;
     itemkey: any;
+    itemtdkey: any;
+    serialkey: number;
     randomkey: number;
     mod: string;
+    ReportHeight:number;
+    loadingVisible = false;
 
 
     constructor(public app: AppComponent) {
         this.editVisible = true;
         this.btnDisabled = false;
+        this.orderbtnDisabled = true;
+        this.loadingVisible = true;
+        this.ReportHeight = 750;
     }
 
     ngOnInit() {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
+                debugger;
                 // this.dataSourceDB.forEach(x => {
                 //     x.RemainingTime = x.RemainingTime * 60;
                 //     x.TotalTime = x.TotalTime * 60;
@@ -43,6 +55,7 @@ export class MachineorderComponent implements OnInit {
                 }, 60000)
             }
         );
+
     }
 
     // 已安排剩餘時間小於100min 畫面顯示紅色
@@ -67,14 +80,35 @@ export class MachineorderComponent implements OnInit {
         this.randomkey = new Date().getTime();
     }
 
-    //機台詳情頁面關閉後
+    //製程頁面
+    viewWorkorderList() {
+        this.popupVisibleWorkorderList = true;
+        // this.getWorkOrderData();
+    }
+
+    // getWorkOrderData() {
+    //     this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(
+    //         (s) => {
+    //             this.dataSourceDB = s.data;
+    //             this.loadingVisible = false;
+    //         }
+    //     );
+    // }
+
+    //機台詳情、製程頁面關閉後
     creatpopup_result(e) {
         this.creatpopupVisible = false;
+        this.popupVisibleWorkorderList = false;
         this.itemkey = null;
+        this.checkVisible = false;
+        this.loadingVisible = true;
         this.dataSourceDB.instance.refresh();
+        // this.getWorkOrderData();
+        this.showMessage('success', '更新完成', 3000);
         // if (this.workOrderHeadId !== undefined) {
         //     this.readProcess(null, this.workOrderHeadId);
     }
+
     formatsecondTime(secondTime) {
         var minuteTime = 0;// 分
         var hourTime = 0;// 小時
@@ -138,5 +172,14 @@ export class MachineorderComponent implements OnInit {
         return resultTime;
     }
 
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
+    }
 
 }
