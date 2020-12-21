@@ -137,6 +137,7 @@ import { MachineorderComponent } from './machinemanagemate/machineorder/machineo
 import { MachinedetailComponent } from './machinemanagemate/machinedetail/machinedetail.component';
 import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.component';
 import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
+import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -289,7 +290,8 @@ export function tokenGetter() {
         MachineorderComponent,
         MachinedetailComponent,
         HeaderfontComponent,
-        CreateBomComponent
+        CreateBomComponent,
+        MachineorderReportComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
