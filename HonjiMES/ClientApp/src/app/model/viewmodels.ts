@@ -261,3 +261,9 @@ export class ToSaleInfo {
     Id: number;
     WarehouseId: number;
 }
+export class HubMessage {
+    clientuniqueid: string;
+    type: string;
+    message: string;
+    date: Date;
+}
