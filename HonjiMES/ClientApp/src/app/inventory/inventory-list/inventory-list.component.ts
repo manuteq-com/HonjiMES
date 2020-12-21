@@ -54,6 +54,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     Warehouseval: any;
     onCellPreparedLevel: number;
     minValue: number;
+    gridsaveCheck: boolean;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.CustomerVal = null;
@@ -67,6 +68,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.minColWidth = 200;
         this.colCount = 3;
         this.dataSourceDB = [];
+        this.onRowValidating = this.onRowValidating.bind(this);
 
     }
     ngOnInit() {
@@ -107,6 +109,11 @@ export class InventoryListComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+    onRowValidating(e) {
+        if (!e.isValid) {
+            this.gridsaveCheck = false;
+        }
     }
     onFocusedCellChanging(e) {
     }
@@ -243,11 +250,12 @@ export class InventoryListComponent implements OnInit, OnChanges {
     onFormSubmit = async function (e) {
         // debugger;
         this.buttondisabled = true;
+        this.gridsaveCheck = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
         }
-        if (!this.saveCheck) {
+        if (!this.saveCheck|| !this.gridsaveCheck) {
             this.buttondisabled = false;
             return;
         }

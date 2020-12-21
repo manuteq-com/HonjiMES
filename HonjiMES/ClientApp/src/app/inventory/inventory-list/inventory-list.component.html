@@ -27,9 +27,10 @@
         (onInitNewRow)="onInitNewRow($event)"
         (onRowInserting)="onRowInserting($event)"
         (onEditingStart)="onEditingStart($event)"
-        (onCellPrepared)="onCellPrepared($event)">
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowValidating)="onRowValidating($event)">
 
-        <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
                 <dxi-item dataField="TempId"></dxi-item>
                 <!-- <dxi-item dataField="DataType" [visible]="false"></dxi-item>
