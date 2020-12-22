@@ -161,6 +161,7 @@ export class MachineorderComponent implements OnInit {
                             at: 'center top'
                         }
                     }, 'warning', 6000);
+                    this.getdata();
                 }
 
             });
