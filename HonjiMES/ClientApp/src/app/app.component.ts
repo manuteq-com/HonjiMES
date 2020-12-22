@@ -9,6 +9,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
 import jwt_decode from 'jwt-decode';
 import notify from 'devextreme/ui/notify';
+import { SignalRService } from 'src/app/service/signal-r.service';
+import { HubMessage } from './model/viewmodels';
 
 enum MenuOrientation {
     STATIC,
@@ -43,7 +45,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     breadcrumbList: Array<any> = [];
     login$: LoginUser;
     UserId: number;
-    constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient) {
+    constructor(public renderer: Renderer2, private _router: Router, private _authService: AuthService, private http: HttpClient, private SignalRService: SignalRService) {
         this._authService.currentUser.subscribe(x => this.login$ = x);
         this._authService.currentUser.subscribe(x => this.UserName = x ? x.Realname : '');
         this.checkRoles = this.checkRoles.bind(this);
@@ -111,7 +113,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         let Token = '';
         this._authService.currentUser.subscribe(x => Token = x ? x.Token : '');
         const data = this.getDecodedAccessToken(Token);
-        UserID = Number(data.UserID) ;
+        UserID = Number(data.UserID);
         return UserID;
     }
     getDecodedAccessToken(token: string): any {
@@ -418,4 +420,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
                 }
             });
     }
+    // 更新機台看版
+    startBillboardReload() {
+        let message = new HubMessage();
+        message.type = "sent";
+        message.message = "ReloadBillboard";
+        message.date = new Date();
+        this.SignalRService.sendMessage(message);
+    }
 }
+

@@ -150,21 +150,19 @@ export class MachineorderComponent implements OnInit {
         }
         return resultTime;
     }
-    private subscribeToEvents(): void {
-
+    private subscribeToEvents() {
         this.SignalRService.messageReceived.subscribe((message: HubMessage) => {
             this._ngZone.run(() => {
-                if (message.clientuniqueid !== this.uniqueID) {
-                    message.type = "received";
-                    this.messages.push(message);
+                if (message.message === 'ReloadBillboard') {
                     notify({
-                        message: message.message,
+                        message: '重新載入',
                         position: {
                             my: 'center top',
                             at: 'center top'
                         }
                     }, 'warning', 6000);
                 }
+
             });
         });
     }
