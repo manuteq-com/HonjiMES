@@ -53,15 +53,9 @@ export class MachineorderComponent implements OnInit {
                             x.DelayTime++;
                         }
                     });
-                }, 1000)
+                }, 60000)
             }
         );
-    }
-    private startHttpRequest = () => {
-        this.http.get('/api/chart')
-            .subscribe(res => {
-                console.log(res);
-            })
     }
     // 已安排剩餘時間小於100min 畫面顯示紅色
     getClass(data) {
@@ -85,11 +79,6 @@ export class MachineorderComponent implements OnInit {
         this.randomkey = new Date().getTime();
     }
 
-    //製程頁面
-    viewWorkorderList() {
-        this.popupVisibleWorkorderList = true;
-        // this.getWorkOrderData();
-    }
     //機台詳情頁面關閉後
     creatpopup_result(e) {
         this.creatpopupVisible = false;
