@@ -88,6 +88,7 @@ export class CreateBomComponent implements OnInit {
     ngOnInit() {
     }
     ngOnChanges() {
+        
     }
     onComponentSelectionChanged(e) {
     }
