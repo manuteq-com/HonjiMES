@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 
@@ -81,8 +81,11 @@ export class MachineorderComponent implements OnInit {
     }
 
     //製程頁面
-    viewWorkorderList() {
+    viewWorkorderList(data) {
+        debugger;
         this.popupVisibleWorkorderList = true;
+        this.itemtdkey = data.Id;
+        this.serialkey = data.SerialNumber;
         // this.getWorkOrderData();
     }
 

@@ -79,8 +79,9 @@ namespace HonjiMES.Controllers
                         var remain = processtime - tasktime;
                         // machineData.Id = no + 1;
                         if(item.Where(x => x.Status == 2).Any()){
-                            machineData.Id = x.Id;
+                            machineData.Id = x.WorkOrderHead.Id;
                             machineData.No = x.WorkOrderHead.WorkOrderNo;
+                            machineData.SerialNumber = x.SerialNumber;
                             machineData.DataNo = x.WorkOrderHead.DataNo;
                             machineData.ProcessName = x.ProcessNo + "_" + x.ProcessName;
                             if (Convert.ToDecimal(remain) >= 0)
