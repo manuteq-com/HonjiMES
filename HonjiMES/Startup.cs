@@ -18,6 +18,7 @@ using HonjiMES.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using HonjiMES.Hubs;
 
 namespace HonjiMES
 {
@@ -115,6 +116,8 @@ namespace HonjiMES
                 };
             });
             services.AddApplicationInsightsTelemetry();
+            //services.AddSingleton<CountService>();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -148,6 +151,8 @@ namespace HonjiMES
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+                endpoints.MapHub<ChartHub>("/chart");
             });
 
             app.UseSpa(spa =>
