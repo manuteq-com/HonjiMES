@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit, NgZone} from '@angular/core';
+import { Component, Input, OnInit, NgZone } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
 import { HubMessage } from 'src/app/model/viewmodels';
@@ -165,5 +165,14 @@ export class MachineorderComponent implements OnInit {
                 }
             });
         });
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 }
