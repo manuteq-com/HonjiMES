@@ -4,12 +4,13 @@ import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
 import Swal from 'sweetalert2';
-import { workOrderReportData } from 'src/app/model/viewmodels';
+import { HubMessage, workOrderReportData } from 'src/app/model/viewmodels';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Title } from '@angular/platform-browser';
-
+import { SignalRService } from 'src/app/service/signal-r.service';
+import { HubConnectionBuilder } from '@aspnet/signalr';
 @Component({
     selector: 'app-workorder-list',
     templateUrl: './workorder-list.component.html',
@@ -31,7 +32,6 @@ export class WorkorderListComponent implements OnInit {
     randomkey: number;
     iteminfokey: any;
     infopopupVisible: boolean;
-
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.editpopupVisible) {
             if (e.key === 'Enter') {
@@ -76,9 +76,11 @@ export class WorkorderListComponent implements OnInit {
         }
     }
 
-    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title, private SignalRService: SignalRService) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
+
+
         this.getWorkOrderData();
         // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
         //     (s) => {
@@ -86,10 +88,12 @@ export class WorkorderListComponent implements OnInit {
         //         this.dataSourceDB = s.data;
         //     }
         // );
+
     }
     ngOnInit() {
         // debugger;
         this.titleService.setTitle('生產看板');
+
     }
     getWorkOrderData() {
         this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(
@@ -207,18 +211,18 @@ export class WorkorderListComponent implements OnInit {
             showLoaderOnConfirm: true,
             preConfirm: (purchaseNo) => {
                 return this.app.GetData('/PurchaseHeads/GetPurchasesByPurchaseNo?DataNo=' + purchaseNo).toPromise()
-                .then(response => {
-                    if (!response.success) {
-                        // throw new Error(response.message);
-                        Swal.showValidationMessage(response.message);
-                    }
-                    return {purchaseId: response.data, purchaseNo};
-                })
-                .catch(error => {
-                    Swal.showValidationMessage(
-                        `Request failed: ${error}`
-                    );
-                });
+                    .then(response => {
+                        if (!response.success) {
+                            // throw new Error(response.message);
+                            Swal.showValidationMessage(response.message);
+                        }
+                        return { purchaseId: response.data, purchaseNo };
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                        );
+                    });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then(async (result) => {
@@ -257,12 +261,14 @@ export class WorkorderListComponent implements OnInit {
         // this.mod = 'new';
     }
     creatpopup_result(e) {
+        this.app.startBillboardReload();
         this.creatpopupVisible = false;
         this.editpopupVisible = false;
         this.checkVisible = false;
         this.loadingVisible = true;
         this.getWorkOrderData();
         this.showMessage('success', '更新完成', 3000);
+
     }
     showMessage(type, data, val) {
         notify({

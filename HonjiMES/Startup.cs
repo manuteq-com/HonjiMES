@@ -117,7 +117,10 @@ namespace HonjiMES
             });
             services.AddApplicationInsightsTelemetry();
             //services.AddSingleton<CountService>();
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

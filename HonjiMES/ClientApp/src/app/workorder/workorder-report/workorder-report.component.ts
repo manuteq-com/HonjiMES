@@ -5,10 +5,11 @@ import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from 'src/app/app.module';
 import { Observable } from 'rxjs';
-import { workOrderReportData } from 'src/app/model/viewmodels';
+import { HubMessage, workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
+
 
 @Component({
     selector: 'app-workorder-report',
@@ -94,7 +95,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     dataSourceDB: any;
     autoNavigateToFocusedRow = true;
     remoteOperations: boolean;
-
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
             if (e.key === 'Enter') {
@@ -272,7 +272,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
-                    s.data.unshift({Id: null, Name: '<無>'}); // 加入第一行
+                    s.data.unshift({ Id: null, Name: '<無>' }); // 加入第一行
                     this.MachineEditorOptions = {
                         items: s.data,
                         displayExpr: 'Name',
@@ -454,12 +454,12 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         if (key && e.prevRowIndex === e.newRowIndex) {
             if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex + 1).done(function() {
+                e.component.pageIndex(pageIndex + 1).done(function () {
                     e.component.option('focusedRowIndex', 0);
                 });
             } else if (e.newRowIndex === 0 && pageIndex > 0) {
                 // tslint:disable-next-line: only-arrow-functions
-                e.component.pageIndex(pageIndex - 1).done(function() {
+                e.component.pageIndex(pageIndex - 1).done(function () {
                     e.component.option('focusedRowIndex', rowsCount - 1);
                 });
             }

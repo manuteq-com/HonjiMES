@@ -422,11 +422,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
     }
     // 更新機台看版
     startBillboardReload() {
-        let message = new HubMessage();
-        message.type = "sent";
-        message.message = "ReloadBillboard";
-        message.date = new Date();
-        this.SignalRService.sendMessage(message);
+        this.GetData('/Reload/Get').subscribe(
+            (s) => {
+
+            }
+        );
+        // let message = new HubMessage();
+        // message.clientuniqueid = '00123'
+        // message.type = "sent";
+        // message.message = "ReloadBillboard";
+        // message.date = new Date();
+        // this.SignalRService.sendMessage(message);
     }
 }
 

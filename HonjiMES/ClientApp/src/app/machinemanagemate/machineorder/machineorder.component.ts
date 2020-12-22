@@ -156,7 +156,7 @@ export class MachineorderComponent implements OnInit {
             this._ngZone.run(() => {
                 if (message.message === 'ReloadBillboard') {
                     notify({
-                        message: '重新載入',
+                        message: '資料更新',
                         position: {
                             my: 'center top',
                             at: 'center top'
