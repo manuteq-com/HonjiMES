@@ -64,28 +64,6 @@
                 <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
                 <dxo-label text="人員"></dxo-label>
             </dxi-item>
-            <!-- <dxi-item dataField="SerialNumber" [disabled]="true">
-                <dxo-label text="製程序號"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="ProcessId" dataType="number" editorType="dxSelectBox" [editorOptions]="ProcessEditorOptions" [disabled]="true">
-                <dxo-label text="製程名稱"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="DrawNo" [disabled]="true">
-                <dxo-label text="圖號"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="Manpower" [disabled]="true">
-                <dxo-label text="所需人力"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="Remarks" [disabled]="true">
-                <dxo-label text="備註"></dxo-label>
-            </dxi-item> -->
-
-            <!-- <dxi-item dataField="ProcessLeadTime" [disabled]="true">
-                <dxo-label text="前置時間(分)"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="ProcessTime" [disabled]="true">
-                <dxo-label text="標準工時(分)"></dxo-label>
-            </dxi-item> -->
             <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="4" [editorOptions]="{ height: 60 }"
                 [visible]="RemarkVisible">
                 <dxo-label text="回報說明"></dxo-label>
@@ -117,22 +95,6 @@
                 [editorOptions]="MachineEditorOptions" [colSpan]="1" [visible]="HasProducingMachineVisible">
                 <dxo-label text="機台"></dxo-label>
             </dxi-item>
-
-            <!-- <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="true">
-                <dxo-label text="預計開工日"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="true">
-                <dxo-label text="預計完工日"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="ActualStartTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
-                <dxo-label text="實際開工日"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="ActualEndTime" editorType="dxDateBox" [editorOptions]="DateBoxOptions" [disabled]="true">
-                <dxo-label text="實際完工日"></dxo-label>
-            </dxi-item> -->
-            <!-- <dxi-item dataField="Count" [disabled]="true">
-                <dxo-label text="需求數量"></dxo-label>
-            </dxi-item> -->
             <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox"
                 [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
                 <dxi-validation-rule type="required" message="良品數量 必填"></dxi-validation-rule>
@@ -175,13 +137,6 @@
                 <dxi-validation-rule type="required" message="NC未完工量 必填"></dxi-validation-rule>
                 <dxo-label text="NC未完工"></dxo-label>
             </dxi-item>
-            <!-- <dxi-item dataField="DrawNo" [visible]="HasQCVisible">
-                <dxo-label text="加工圖號"></dxo-label>
-            </dxi-item> -->
-            <!-- <dxi-item dataField="CheckResult" editorType="dxSelectBox" [editorOptions]="selectQcResult" [visible]="HasQCVisible">
-                <dxi-validation-rule type="required" message="檢驗結果 必填"></dxi-validation-rule>
-                <dxo-label text="檢驗結果"></dxo-label>
-            </dxi-item> -->
             <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="3"
                 [visible]="HasQCVisible">
                 <dxo-label text="回報說明"></dxo-label>

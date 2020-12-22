@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, Input, OnInit, NgZone } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
 import { HubMessage } from 'src/app/model/viewmodels';
@@ -79,11 +79,24 @@ export class MachineorderComponent implements OnInit {
         this.randomkey = new Date().getTime();
     }
 
+    //製程頁面
+    viewWorkorderList(data) {
+        debugger;
+        this.popupVisibleWorkorderList = true;
+        this.itemtdkey = data.Id;
+        this.serialkey = data.SerialNumber;
+        // this.getWorkOrderData();
+    }
     //機台詳情頁面關閉後
     creatpopup_result(e) {
         this.creatpopupVisible = false;
+        this.popupVisibleWorkorderList = false;
         this.itemkey = null;
+        this.checkVisible = false;
+        this.loadingVisible = true;
         this.dataSourceDB.instance.refresh();
+        // this.getWorkOrderData();
+        this.showMessage('success', '更新完成', 3000);
         // if (this.workOrderHeadId !== undefined) {
         //     this.readProcess(null, this.workOrderHeadId);
     }
@@ -150,5 +163,14 @@ export class MachineorderComponent implements OnInit {
                 }
             });
         });
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
     }
 }

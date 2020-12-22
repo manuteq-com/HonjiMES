@@ -199,7 +199,7 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        // debugger;
+        debugger;
         this.HasCodeNoVisible = false;
         this.ReCountVisible = false;
         this.NgCountVisible = false;
@@ -302,7 +302,6 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
             min: '0',
             // onValueChanged: this.QuantityValueChanged.bind(this)
         };
-
         if (this.itemkeyval != null) {
             this.dataSourceDB = [];
             this.app.GetData('/WorkOrders/GetBomDataByWorkOrderId/' + this.itemkeyval).subscribe(
@@ -317,6 +316,7 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
                 }
             );
 
+            debugger;
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {

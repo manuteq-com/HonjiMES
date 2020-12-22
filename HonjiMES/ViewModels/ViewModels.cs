@@ -1170,6 +1170,7 @@ namespace HonjiMES.Models
         public string MachineName { get; set; }
         public string DataNo { get; set; }
         public string No { get; set; }
+        public int SerialNumber { get; set; }
         public string ProcessName { get; set; }
         public decimal RemainingTime { get; set; }
         public decimal DelayTime { get; set; }
