@@ -31,27 +31,34 @@ export class MachineorderComponent implements OnInit {
         this.editVisible = true;
         this.btnDisabled = false;
         this.loadingVisible = true;
-        this.ReportHeight = 750;
+        this.ReportHeight = 800;
         this.subscribeToEvents();
         // this.startHttpRequest();
     }
 
     ngOnInit() {
+        this.getdata();
+        this.startInterval()
+    }
+    startInterval() {
+        setInterval(() => {
+            if (this.dataSourceDB) {
+                this.dataSourceDB.forEach(x => {
+                    if (x.RemainingTime > 0) {
+                        x.RemainingTime--;
+                        x.TotalTime--;
+                    }
+                    if ((x.DelayTime > 0) || (x.RemainingTime <= 0 && x.No)) {
+                        x.DelayTime++;
+                    }
+                });
+            }
+        }, 60000)
+    }
+    getdata() {
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
-                debugger;
-                setInterval(() => {
-                    this.dataSourceDB.forEach(x => {
-                        if (x.RemainingTime > 0) {
-                            x.RemainingTime--;
-                            x.TotalTime--;
-                        }
-                        if ((x.DelayTime > 0) || (x.RemainingTime <= 0 && x.No)) {
-                            x.DelayTime++;
-                        }
-                    });
-                }, 60000)
             }
         );
     }
@@ -83,17 +90,16 @@ export class MachineorderComponent implements OnInit {
         this.popupVisibleWorkorderList = true;
         this.itemtdkey = data.Id;
         this.serialkey = data.SerialNumber;
-        // this.getWorkOrderData();
+        this.mod = 'report';
     }
-    //機台詳情頁面關閉後
+    //機台詳情、回報完工頁面關閉後
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.popupVisibleWorkorderList = false;
         this.itemkey = null;
         this.checkVisible = false;
         this.loadingVisible = true;
-        this.dataSourceDB.instance.refresh();
-        // this.getWorkOrderData();
+        this.getdata();
         this.showMessage('success', '更新完成', 3000);
         // if (this.workOrderHeadId !== undefined) {
         //     this.readProcess(null, this.workOrderHeadId);
@@ -171,12 +177,12 @@ export class MachineorderComponent implements OnInit {
             }
         }, type, val);
     }
-
-    orderbtnDisabled(data){
+    //判斷完工按鈕是否顯示
+    orderbtnDisabled(data) {
         debugger;
-        if(data.No){
+        if (data.No) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
