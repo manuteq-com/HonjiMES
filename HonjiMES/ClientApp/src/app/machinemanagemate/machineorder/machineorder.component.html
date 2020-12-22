@@ -31,7 +31,7 @@
                         [visible]="editVisible" [disabled]="btnDisabled" (onClick)="viewProcess()">
                     </dx-button>
                     <dx-button class="btn-primary order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110"
-                        [visible]="orderbtnDisabled" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
+                        [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
                     </dx-button>
                 </div>
             </div>

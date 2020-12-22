@@ -16,7 +16,6 @@ export class MachineorderComponent implements OnInit {
     popupVisibleWorkorderList: any;
     editVisible: boolean;
     btnDisabled: boolean;
-    orderbtnDisabled: boolean;
     checkVisible: boolean;
     itemkey: any;
     itemtdkey: any;
@@ -31,7 +30,6 @@ export class MachineorderComponent implements OnInit {
     constructor(private SignalRService: SignalRService, private _ngZone: NgZone, private http: HttpClient, public app: AppComponent) {
         this.editVisible = true;
         this.btnDisabled = false;
-        this.orderbtnDisabled = true;
         this.loadingVisible = true;
         this.ReportHeight = 750;
         this.subscribeToEvents();
@@ -172,5 +170,14 @@ export class MachineorderComponent implements OnInit {
                 at: 'center top'
             }
         }, type, val);
+    }
+
+    orderbtnDisabled(data){
+        debugger;
+        if(data.No){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
