@@ -4,6 +4,7 @@ import notify from 'devextreme/ui/notify';
 import { AppComponent } from 'src/app/app.component';
 import { HubMessage } from 'src/app/model/viewmodels';
 import { SignalRService } from 'src/app/service/signal-r.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-machineorder',
@@ -56,6 +57,7 @@ export class MachineorderComponent implements OnInit {
         }, 60000)
     }
     getdata() {
+        debugger;
         this.app.GetData('/MachineManagement/GetMachineData').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
@@ -86,7 +88,6 @@ export class MachineorderComponent implements OnInit {
 
     //製程頁面
     viewWorkorderList(data) {
-        debugger;
         this.popupVisibleWorkorderList = true;
         this.itemtdkey = data.Id;
         this.serialkey = data.SerialNumber;
@@ -178,11 +179,44 @@ export class MachineorderComponent implements OnInit {
     }
     //判斷完工按鈕是否顯示
     orderbtnDisabled(data) {
-        debugger;
         if (data.No) {
             return true;
         } else {
             return false;
         }
     }
+    startbtnDisabled(data) {
+        if (data.No) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    startProcess(data) {
+        debugger;
+        Swal.fire({
+            showCloseButton: true,
+            allowEnterKey: false,
+            allowOutsideClick: false,
+            title: '開工回報',
+            html: `請問要開工${data.machineOrderList[0].WorkOrderNo}嗎?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#71c016',
+            cancelButtonColor: '#9D9D9D',
+            cancelButtonText: '取消',
+            confirmButtonText: '確定'
+        }).then(async (result) => {
+            // if (result.value) {
+            //     this.mod = 'add';
+            //     this.popupVisibleSale = true;
+            // } else if (result.dismiss === Swal.DismissReason.cancel) {
+            //     this.mod = 'merge';
+            //     this.popupVisibleSale = true;
+            // } else if (result.dismiss === Swal.DismissReason.close) {
+            //     this.popupVisibleSale = false;
+            // }
+        });
+    }
+
 }

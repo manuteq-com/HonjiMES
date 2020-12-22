@@ -63,7 +63,7 @@ a{
     font-size: 16px;
     position: absolute;
     right:20px;
-    top:50px;
+    bottom:20px;
 }
 
 .alert-time{
