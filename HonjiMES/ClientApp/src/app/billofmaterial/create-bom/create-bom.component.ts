@@ -72,6 +72,7 @@ export class CreateBomComponent implements OnInit {
                         searchEnabled: true,
                         displayExpr: 'Name',
                         valueExpr: 'TempId',
+                        onValueChanged: this.onSelectionChanged.bind(this)
                     };
                 }
             }
@@ -84,11 +85,19 @@ export class CreateBomComponent implements OnInit {
             min: 0.001
         };
     }
-
+    onSelectionChanged(e){
+        debugger;
+        this.formData = this.myform.instance.option('formData');
+        this.BasicDataList.forEach(element => {
+            debugger;
+            if(element.TempId == e.value){
+                this.formData.Name = element.Name;
+            }
+        });
+    }
     ngOnInit() {
     }
     ngOnChanges() {
-        
     }
     onComponentSelectionChanged(e) {
     }
