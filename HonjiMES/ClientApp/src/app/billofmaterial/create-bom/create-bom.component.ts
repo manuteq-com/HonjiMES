@@ -122,10 +122,13 @@ export class CreateBomComponent implements OnInit {
             this.buttondisabled = false;
             return;
         }
-        this.formData = this.myform.instance.option('formData');
+        this.PostBom = this.myform.instance.option('formData');
+        const basicData = this.BasicDataList.find(z => z.TempId === this.PostBom.TempId);
+        this.PostBom.BasicType = basicData.DataType;
+        this.PostBom.BasicId = basicData.DataId;
         const sendRequest = await SendService.sendRequest(
             this.http,
-            '/BillOfMaterials/PostBomlist/' + this.formData.Id,'POST',{ values: this.formData });
+            '/BillOfMaterials/PostBomlist/' + this.PostBom.Id,'POST',{ values: this.PostBom });
         if (sendRequest) {
             this.myform.instance.resetValues();
             e.preventDefault();
