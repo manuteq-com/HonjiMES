@@ -306,6 +306,7 @@ export class OrderListComponent {
         }, 'error', 3000);
     }
 
+    //detail只能展開一個下拉式視窗
     onFocusedRowChanging(e) {
         // debugger;
         const rowsCount = e.component.getVisibleRows().length;
