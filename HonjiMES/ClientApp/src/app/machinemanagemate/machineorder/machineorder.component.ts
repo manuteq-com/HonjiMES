@@ -193,7 +193,6 @@ export class MachineorderComponent implements OnInit {
         }
     }
     startProcess(data) {
-        debugger;
         Swal.fire({
             showCloseButton: true,
             allowEnterKey: false,
@@ -218,5 +217,10 @@ export class MachineorderComponent implements OnInit {
             // }
         });
     }
-
+    //已安排製程按鈕背景反紅
+    getworkOrderNoClass(data){
+        if (data < 100){
+            return 'dx-button-content';
+        }
+    }
 }

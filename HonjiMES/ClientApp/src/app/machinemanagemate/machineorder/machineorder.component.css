@@ -43,7 +43,6 @@ a{
 
 .card-text{
     font-size: 18px;
-    margin-bottom: 10px;
 }
 
 .machineOrderList-box{
@@ -56,14 +55,14 @@ a{
     font-size: 16px;
     position: absolute;
     right:20px;
-    bottom:20px;
+    top:20px;
 }
 
 .order-btn{
     font-size: 16px;
     position: absolute;
     right:20px;
-    bottom:20px;
+    top:20px;
 }
 
 .alert-time{
@@ -76,4 +75,9 @@ a{
 
 .Alert-text{
     color: red;
+}
+
+.dx-button-content{
+    background-color:#f1abbd;
+    border: none;
 }
