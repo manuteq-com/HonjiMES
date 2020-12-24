@@ -86,12 +86,20 @@ export class MachineorderComponent implements OnInit {
         this.randomkey = new Date().getTime();
     }
 
-    //製程頁面
+    //回報完工
     viewWorkorderList(data) {
         this.popupVisibleWorkorderList = true;
         this.itemtdkey = data.Id;
         this.serialkey = data.SerialNumber;
         this.mod = 'report';
+    }
+    //回報開工
+    startProcess(data) {
+        debugger;
+        this.popupVisibleWorkorderList = true;
+        this.itemtdkey = data.Id;
+        this.serialkey = data.DetailSerialNumber;
+        this.mod = 'start';
     }
     //機台詳情、回報完工頁面關閉後
     creatpopup_result(e) {
@@ -192,35 +200,12 @@ export class MachineorderComponent implements OnInit {
             return true;
         }
     }
-    startProcess(data) {
-        Swal.fire({
-            showCloseButton: true,
-            allowEnterKey: false,
-            allowOutsideClick: false,
-            title: '開工回報',
-            html: `請問要開工${data.machineOrderList[0].WorkOrderNo}嗎?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#71c016',
-            cancelButtonColor: '#9D9D9D',
-            cancelButtonText: '取消',
-            confirmButtonText: '確定'
-        }).then(async (result) => {
-            // if (result.value) {
-            //     this.mod = 'add';
-            //     this.popupVisibleSale = true;
-            // } else if (result.dismiss === Swal.DismissReason.cancel) {
-            //     this.mod = 'merge';
-            //     this.popupVisibleSale = true;
-            // } else if (result.dismiss === Swal.DismissReason.close) {
-            //     this.popupVisibleSale = false;
-            // }
-        });
-    }
     //已安排製程按鈕背景反紅
     getworkOrderNoClass(data){
         if (data < 100){
             return 'dx-button-content';
         }
     }
+
+
 }

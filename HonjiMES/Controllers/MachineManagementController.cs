@@ -114,8 +114,9 @@ namespace HonjiMES.Controllers
                         {
                             machineData.machineOrderList.Add(new machineOrder
                             {
-                                Id = itemdata.Id,
-                                WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName
+                                Id = itemdata.WorkOrderHead.Id,
+                                WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName,
+                                DetailSerialNumber = itemdata.SerialNumber
                             });
                         }
 

@@ -24,6 +24,9 @@
                         <ul>
                             <li *ngFor="let itemd of item.machineOrderList">
                                 <dx-button [ngClass]="getworkOrderNoClass(item.TotalTime)" class="card-text No-btn"> {{itemd.WorkOrderNo}}</dx-button>
+                                <dx-button class="card-text" (onClick)="startProcess(itemd)">
+                                    {{itemd.WorkOrderNo}}
+                                </dx-button>
                             </li>
                         </ul>
                     </div>
@@ -33,9 +36,9 @@
                     <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110"
                         [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
                     </dx-button>
-                    <dx-button class="insertbtn detail-btn" stylingMode="contained" text="回報開工" type="default" [width]="110"
+                    <!-- <dx-button class="insertbtn detail-btn" stylingMode="contained" text="回報開工" type="default" [width]="110"
                         [visible]="startbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="startProcess(item)">
-                    </dx-button>
+                    </dx-button> -->
                 </div>
             </div>
         </div>
