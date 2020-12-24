@@ -1182,6 +1182,7 @@ namespace HonjiMES.Models
     public class machineOrder{
         public int Id { get; set; }
         public string WorkOrderNo { get; set; }
+        public int DetailSerialNumber { get; set; }
     }
 
 
