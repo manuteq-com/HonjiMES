@@ -30,9 +30,11 @@
     </dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
-            [customizeText]="customizeText"
-            column="SupplierId"
-            summaryType="count">
+            [customizeText]="customizeText" column="SupplierId" summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item i-total-item displayFormat="{0}元" column="PriceAll" summaryType="sum">
+        </dxi-total-item>
+        <dxi-total-item i-total-item displayFormat="{0}個" column="Quantity" summaryType="sum">
         </dxi-total-item>
     </dxo-summary>
     <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
