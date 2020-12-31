@@ -99,9 +99,11 @@
             <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit"></dxo-editing>
             <dxo-summary [recalculateWhileEditing]="true">
                 <dxi-total-item
-                    [customizeText]="customizeText"
-                    column="CustomerNo"
-                    summaryType="count">
+                    [customizeText]="customizeText" column="CustomerNo" summaryType="count">
+                </dxi-total-item>
+                <dxi-total-item i-total-item displayFormat="{0}元" column="Price" summaryType="sum">
+                </dxi-total-item>
+                <dxi-total-item i-total-item displayFormat="{0}個" column="Quantity" summaryType="sum">
                 </dxi-total-item>
             </dxo-summary>
             <dxi-column dataField="CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>

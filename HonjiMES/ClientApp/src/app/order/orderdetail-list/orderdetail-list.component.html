@@ -3,9 +3,9 @@
     <div class="col-md-6 col-sm-8">
     </div>
     <div class="col-md-2 col-sm-2">
-        <div class="input-group">
+        <!-- <div class="input-group">
             <label class="pt-2">總數量：{{totalcount}}</label>
-          </div>
+          </div> -->
         <!-- <div class="dx-field">
             <div class="dx-field-label">總數量</div>
             <div class="dx-field-value-static" dataField="TotalCount"></div>
@@ -73,9 +73,11 @@
 
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
-            [customizeText]="customizeText"
-            column="MachineNo"
-            summaryType="count">
+            [customizeText]="customizeText" column="MachineNo" summaryType="count">
+        </dxi-total-item>
+        <dxi-total-item i-total-item displayFormat="{0}元" column="Price" summaryType="sum">
+        </dxi-total-item>
+        <dxi-total-item i-total-item displayFormat="{0}個" column="Quantity" summaryType="sum">
         </dxi-total-item>
     </dxo-summary>
 
