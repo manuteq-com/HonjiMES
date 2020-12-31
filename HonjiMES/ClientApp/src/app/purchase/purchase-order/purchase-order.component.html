@@ -50,25 +50,25 @@
     <dxi-column dataField="PurchaseNo" caption="採購單號" [minWidth]="160">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Type" caption="採購種類" alignment="center" [minWidth]="80">
+    <dxi-column dataField="Type" caption="採購種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="TypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="SupplierId" caption="供應商" [minWidth]="100">
+    <dxi-column dataField="SupplierId" caption="供應商" [width]="220">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="Status" caption="狀態" alignment="center" [minWidth]="100">
+    <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="listPurchaseOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [minWidth]="160"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="150"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc"
         [width]="220"></dxi-column>
     <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [minWidth]="220">
     </dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [minWidth]="120">
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="UpdateUser" caption="更新人員" alignment="center" [minWidth]="120">
+    <dxi-column dataField="UpdateUser" caption="更新人員" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="90"></dxi-column>
