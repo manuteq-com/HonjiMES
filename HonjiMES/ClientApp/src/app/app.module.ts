@@ -139,6 +139,7 @@ import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.compo
 import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
 import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 
 
 export function tokenGetter() {
@@ -294,7 +295,8 @@ export function tokenGetter() {
         HeaderfontComponent,
         CreateBomComponent,
         MachineorderReportComponent,
-        ChatHubComponent
+        ChatHubComponent,
+        MaintenanceComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
