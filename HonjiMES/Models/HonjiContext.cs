@@ -53,6 +53,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         public virtual DbSet<System> Systems { get; set; }
+        public virtual DbSet<ToolManagement> ToolManagements { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -2599,6 +2600,36 @@ namespace HonjiMES.Models
                     .HasComment("值")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+            });
+
+            modelBuilder.Entity<ToolManagement>(entity =>
+            {
+                entity.HasComment("刀具清單");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("current_timestamp()");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ToolName)
+                    .HasComment("名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ToolSpecification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Type).HasComment("種類");
+
+                entity.Property(e => e.UpdateTime).HasDefaultValueSql("current_timestamp()");
             });
 
             modelBuilder.Entity<User>(entity =>
