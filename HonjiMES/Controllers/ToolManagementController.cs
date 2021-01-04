@@ -26,12 +26,12 @@ namespace HonjiMES.Controllers
             _context = context;
         }
         /// <summary>
-        /// 查詢顧客列表
+        /// 查詢刀具基本資料列表
         /// </summary>
         /// <returns></returns>
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<ToolManagement>>> GetToolManagements()
         {
             var data = _context.ToolManagements.AsQueryable().Where(x => x.DeleteFlag == 0);
             var toolmanagement = await data.ToListAsync();
@@ -39,13 +39,13 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 使用ID查詢顧客列表
+        /// 使用ID查詢刀具基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<ToolManagement>> GetToolManagement(int id)
         {
             var toolmanagement = await _context.ToolManagements.FindAsync(id);
 
@@ -56,7 +56,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(toolmanagement));
         }
         /// <summary>
-        /// 修改顧客列表
+        /// 修改刀具基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <param name="toolmanagement"></param>
@@ -106,7 +106,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(toolmanagement));
         }
         /// <summary>
-        /// 新增顧客列表
+        /// 新增刀具基本資料列表
         /// </summary>
         /// <param name="toolmanagement"></param>
         /// <returns></returns>
@@ -126,7 +126,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(toolmanagement));
         }
         /// <summary>
-        /// 刪除顧客列表
+        /// 刪除刀具基本資料列表
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
