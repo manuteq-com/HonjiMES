@@ -75,9 +75,9 @@
         <dxi-total-item
             [customizeText]="customizeText" column="MachineNo" summaryType="count">
         </dxi-total-item>
-        <dxi-total-item i-total-item displayFormat="{0}元" column="Price" summaryType="sum">
+        <dxi-total-item i-total-item column="Price" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)">
         </dxi-total-item>
-        <dxi-total-item i-total-item displayFormat="{0}個" column="Quantity" summaryType="sum">
+        <dxi-total-item i-total-item displayFormat="{0}" column="Quantity" summaryType="sum">
         </dxi-total-item>
     </dxo-summary>
 
