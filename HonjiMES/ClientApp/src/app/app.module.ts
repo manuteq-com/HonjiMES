@@ -140,6 +140,7 @@ import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
 import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { ToolmanagementComponent } from './setting/toolmanagement/toolmanagement.component';
 
 
 export function tokenGetter() {
@@ -296,8 +297,7 @@ export function tokenGetter() {
         CreateBomComponent,
         MachineorderReportComponent,
         ChatHubComponent,
-        MaintenanceComponent,
-    ],
+        MaintenanceComponent,    ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: NZ_I18N, useValue: zh_TW }
