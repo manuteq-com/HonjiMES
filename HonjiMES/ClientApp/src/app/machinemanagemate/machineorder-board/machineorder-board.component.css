@@ -1,0 +1,115 @@
+.buttongroup {
+    padding-top: 10px;
+    position: absolute;
+    right: 10px;
+}
+
+.insertbtn {
+    margin-top: -6px;
+    border-radius: 2px;
+}
+
+.card-header{
+    background-color:#c8c8c8;
+    padding: 12px 30px;
+}
+
+ul{
+    padding: 0px;
+}
+
+li{
+    list-style-type:none;
+}
+
+a{
+    float: right;
+}
+
+*{
+    font-weight: 900;
+    font-size: 26px;
+    color: black;
+    box-sizing: border-box;
+}
+
+.card{
+    padding: 0px;
+    min-height: 30vw;
+    width: 100%;
+}
+
+.card-body{
+    text-align:left;
+    padding: 30px;
+}
+
+.card-text{
+    margin: 0 0 15px 0;
+}
+
+.machineOrderList-box{
+    height: 500px;
+    overflow: auto;
+}
+
+.alert-time{
+    color: red;
+}
+
+.Alert{
+    background-color:#f1d9ab
+}
+
+.Alert-text{
+    color: red;
+}
+
+.dx-button-content{
+    background-color:#f1d9ab;
+    border: none;
+}
+
+.machineOrderList-box .card-text{
+    font-size: 26px;
+}
+
+span:nth-child(1){
+    float: left;
+    font-size: 34px;
+}
+
+span:nth-child(2){
+    float: right;
+    margin: 0px !important;
+    font-size: 34px;
+}
+
+::ng-deep .dx-gallery .dx-gallery-nav-button-next:before{
+    width: 50px;
+    font-size: 50px;
+    color: black;
+}
+
+::ng-deep .dx-gallery .dx-gallery-nav-button-prev:before {
+    width: 50px;
+    font-size: 50px;
+    color: black;
+}
+
+::ng-deep .topbar{
+    display: none !important;
+}
+
+::ng-deep .layout-menu-container{
+    display: none !important;
+}
+
+::ng-deep .layout-main{
+    padding: 30px !important;
+    padding-bottom: 0px !important;
+}
+
+.layout-main::-webkit-scrollbar {
+    display: none;
+}

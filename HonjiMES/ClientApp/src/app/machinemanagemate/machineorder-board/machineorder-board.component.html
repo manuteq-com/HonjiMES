@@ -1,0 +1,41 @@
+<dx-gallery [dataSource]="dataSourceDB2" height=100% [loop]="true" [showIndicator]="false" [showNavButtons]="false"
+    [slideshowDelay]="slideshowDelay">
+    <div *dxTemplate="let dbItem of 'item'">
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6" *ngFor="let galleryItem of dbItem">
+                <div class="card" [ngClass]="getClass(galleryItem.TotalTime)">
+                    <h5 class="card-header">
+                        <span>{{galleryItem.MachineName}}</span>
+                        <span *ngIf="galleryItem.RemainingTime > 0 " class="card-text">
+                            {{formattime(galleryItem.RemainingTime)}}
+                        </span>
+                        <span *ngIf="galleryItem.DelayTime > 0 " class="card-text alert-time">
+                            {{formattime(galleryItem.DelayTime)}}
+                        </span>
+                    </h5>
+
+                    <div class="card-body">
+                        <p class="card-text">品號 : {{galleryItem.DataNo}}</p>
+                        <p class="card-text">工單號 : {{galleryItem.No}}</p>
+                        <p class="card-text">製程名稱 : {{galleryItem.ProcessName}}</p>
+                        <p class="card-text" [ngClass]="sendAlert(galleryItem.ProcessTotal)">已安排製程數 :
+                            {{galleryItem.ProcessTotal}}</p>
+                        <p class="card-text">已安排製程剩餘時間 : {{formattime(galleryItem.TotalTime)}}</p>
+                        <div class="machineOrderList-box">
+                            <ul>
+                                <li *ngFor="let itemd of galleryItem.machineOrderList">
+                                    <div [ngClass]="getworkOrderNoClass(galleryItem.TotalTime)" class="card-text No-btn"
+                                        (onClick)="startProcess(itemd)">
+                                        {{itemd.WorkOrderNo}}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</dx-gallery>

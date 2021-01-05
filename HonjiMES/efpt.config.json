@@ -57,7 +57,19 @@
          "ObjectType": 0
       },
       {
+         "Name": "machine_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "machine_maintenance",
+         "ObjectType": 0
+      },
+      {
          "Name": "machine_workdate",
+         "ObjectType": 0
+      },
+      {
+         "Name": "maintenance_log",
          "ObjectType": 0
       },
       {

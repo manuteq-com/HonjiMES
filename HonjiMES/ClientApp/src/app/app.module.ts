@@ -22,7 +22,7 @@ import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
     DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule,
-    DxSchedulerModule, DxTabPanelModule
+    DxSchedulerModule, DxTabPanelModule, DxGalleryModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -139,10 +139,13 @@ import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.compo
 import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
 import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
-import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { ToolmanagementComponent } from './setting/toolmanagement/toolmanagement.component';
+import { MachineorderBoardComponent } from './machinemanagemate/machineorder-board/machineorder-board.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { MaintenanceDetailComponent } from './maintenance/maintenance-detail/maintenance-detail.component';
 import { CreatemaintenanceComponent } from './maintenance/createmaintenance/createmaintenance.component';
+
+
 
 
 export function tokenGetter() {
@@ -184,7 +187,8 @@ export function tokenGetter() {
                 tokenGetter
             }
         }),
-        NgZorroAntdModule
+        NgZorroAntdModule,
+        DxGalleryModule
     ],
     declarations: [
         AppComponent,
@@ -299,9 +303,12 @@ export function tokenGetter() {
         CreateBomComponent,
         MachineorderReportComponent,
         ChatHubComponent,
+        ToolmanagementComponent,
+        MachineorderBoardComponent,
         MaintenanceComponent,
         MaintenanceDetailComponent,
-        CreatemaintenanceComponent,    ],
+        CreatemaintenanceComponent,
+    ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: NZ_I18N, useValue: zh_TW }

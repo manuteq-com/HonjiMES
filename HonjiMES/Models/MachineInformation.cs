@@ -12,6 +12,11 @@ namespace HonjiMES.Models
     [Table("machine_informations")]
     public partial class MachineInformation
     {
+        public MachineInformation()
+        {
+            MachineMaintenances = new HashSet<MachineMaintenance>();
+        }
+
         /// <summary>
         /// 唯一碼
         /// </summary>
@@ -74,5 +79,8 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+
+        [InverseProperty(nameof(MachineMaintenance.Machine))]
+        public virtual ICollection<MachineMaintenance> MachineMaintenances { get; set; }
     }
 }

@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HonjiMES.Models
 {
     /// <summary>
-    /// &#20992;&#20855;&#28165;&#21934;
+    /// &#27231;&#21488;&#20445;&#39178;&#32000;&#37636;
     /// </summary>
-    [Table("tool_management")]
-    public partial class ToolManagement
+    [Table("maintenance_log")]
+    public partial class MaintenanceLog
     {
         /// <summary>
         /// 唯一碼
@@ -19,41 +19,34 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         /// <summary>
-        /// &#21517;&#31281;
+        /// &#27231;&#21488;ID
+        /// </summary>
+        [Column("machine_id", TypeName = "int(11)")]
+        public int MachineId { get; set; }
+        /// <summary>
+        /// &#27231;&#21488;&#21517;&#31281;
         /// </summary>
         [Required]
-        [Column("tool_name", TypeName = "varchar(50)")]
-        public string ToolName { get; set; }
+        [Column("machine_name", TypeName = "varchar(50)")]
+        public string MachineName { get; set; }
         /// <summary>
-        /// &#20992;&#20855;&#32232;&#34399;
+        /// &#20445;&#39178;&#38917;&#30446;
         /// </summary>
         [Required]
-        [Column("tool_serialno", TypeName = "varchar(50)")]
-        public string ToolSerialno { get; set; }
+        [Column("item", TypeName = "varchar(50)")]
+        public string Item { get; set; }
         /// <summary>
-        /// &#35215;&#26684;
+        /// &#32173;&#35703;&#26178;&#38291;
         /// </summary>
-        [Required]
-        [Column("tool_specification", TypeName = "varchar(50)")]
-        public string ToolSpecification { get; set; }
+        [Column("recent_time", TypeName = "timestamp")]
+        public DateTime RecentTime { get; set; }
         /// <summary>
-        /// &#31278;&#39006;
+        /// &#38283;&#22987;&#26178;&#38291;
         /// </summary>
-        [Column("type", TypeName = "tinyint(4)")]
-        public sbyte Type { get; set; }
-        /// <summary>
-        /// &#20633;&#35387;
-        /// </summary>
-        [Column("remarks", TypeName = "varchar(50)")]
-        public string Remarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
-        [Column("update_time", TypeName = "timestamp")]
-        public DateTime UpdateTime { get; set; }
-        [Column("update_user", TypeName = "int(11)")]
-        public int? UpdateUser { get; set; }
         /// <summary>
         /// &#21034;&#38500;&#35387;&#35352;
         /// </summary>
