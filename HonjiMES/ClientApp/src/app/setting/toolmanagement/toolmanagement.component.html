@@ -1,1 +1,50 @@
-<p>toolmanagement works!</p>
+<div class="headerblock">
+    <app-headerfont></app-headerfont>
+    <!-- <div class="buttongroup">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增刀具" type="success" [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+    </div> -->
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true" [rowAlternationEnabled]="true">
+
+    <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form>
+            <dxi-item dataField="Type"></dxi-item>
+            <dxi-item dataField="ToolSerialno"></dxi-item>
+            <dxi-item dataField="ToolSpecification"></dxi-item>
+        </dxo-form>
+        <dxo-popup>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            </dxi-toolbar-item>
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            </dxi-toolbar-item>
+        </dxo-popup>
+    </dxo-editing>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true"></dxo-pager>
+
+    <dxi-column dataField="Type" caption="元件種類">
+        <dxo-lookup [dataSource]="ToolTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ToolSerialno" caption="元件編號"></dxi-column>
+    <dxi-column dataField="ToolSpecification" caption="元件規格"></dxi-column>
+
+    <dxi-column type="buttons">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+</dx-data-grid>
