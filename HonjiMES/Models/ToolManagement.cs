@@ -25,6 +25,12 @@ namespace HonjiMES.Models
         [Column("tool_name", TypeName = "varchar(50)")]
         public string ToolName { get; set; }
         /// <summary>
+        /// &#20992;&#20855;&#32232;&#34399;
+        /// </summary>
+        [Required]
+        [Column("tool_serialno", TypeName = "varchar(50)")]
+        public string ToolSerialno { get; set; }
+        /// <summary>
         /// &#35215;&#26684;
         /// </summary>
         [Required]

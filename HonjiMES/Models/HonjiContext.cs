@@ -2733,6 +2733,11 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.ToolSerialno)
+                    .HasComment("刀具編號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.ToolSpecification)
                     .HasComment("規格")
                     .HasCharSet("utf8mb4")
