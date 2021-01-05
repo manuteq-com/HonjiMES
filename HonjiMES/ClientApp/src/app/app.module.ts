@@ -86,7 +86,7 @@ import { UserRolesComponent } from './setting/user-roles/user-roles.component';
 import { AdjustListComponent } from './inventory/adjust-list/adjust-list.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule, NzDrawerModule } from 'ng-zorro-antd';
 import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.component';
 import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
@@ -148,7 +148,6 @@ import { StaffmanagementComponent } from './staffmanagement/staffmanagement.comp
 
 
 
-
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
@@ -188,8 +187,7 @@ export function tokenGetter() {
                 tokenGetter
             }
         }),
-        NgZorroAntdModule,
-        DxGalleryModule
+        NgZorroAntdModule
     ],
     declarations: [
         AppComponent,

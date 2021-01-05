@@ -92,41 +92,16 @@
             <li #messages [ngClass]="{'active-top-menu':app.activeTopbarItem === messages}">
                 <a href="#" (click)="app.onTopbarItemClick($event,messages)">
                     <i class="topbar-icon animated swing fa fa-fw fa-bell"></i>
-                    <span class="topbar-badge animated rubberBand">10</span>
+                    <span class="topbar-badge animated rubberBand">{{message.length}}</span>
                     <span class="topbar-item-name">Messages</span>
                 </a>
-                <!-- <ul class="layout-menu fadeInDown">
-                    <li role="menuitem">
-                        <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
-                            <img src="assets/layout/images/avatar1.png" width="35" />
-                            <span>Give me a call</span>
+                <ul class="layout-menu fadeInDown">
+                    <li *ngFor="let item of message" role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>{{item}}</span>
                         </a>
                     </li>
-                    <li role="menuitem">
-                        <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
-                            <img src="assets/layout/images/avatar2.png" width="35" />
-                            <span>Sales reports attached</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
-                            <img src="assets/layout/images/avatar3.png" width="35" />
-                            <span>About your invoice</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
-                            <img src="assets/layout/images/avatar2.png" width="35" />
-                            <span>Meeting today at 10pm</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
-                            <img src="assets/layout/images/avatar4.png" width="35" />
-                            <span>Out of office</span>
-                        </a>
-                    </li>
-                </ul> -->
+                </ul>
             </li>
             <!-- <li #messages [ngClass]="{'active-top-menu':app.activeTopbarItem === messages}">
                 <a href="#" (click)="app.onTopbarItemClick($event,messages)">
@@ -210,3 +185,10 @@
         </ul>
     </div>
 </div>
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="close()">
+    <ng-container *nzDrawerContent>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+    </ng-container>
+</nz-drawer>

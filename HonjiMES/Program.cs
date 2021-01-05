@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HonjiMES.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,10 @@ namespace HonjiMES
                     //    options.UrlPrefixes.Add("http://10.10.10.220:5000");
                     //});
                     webBuilder.UseStartup<Startup>();
-                });
+                }).ConfigureServices(services =>
+       {
+           //加入背景服務
+           services.AddHostedService<MemoryUsageMonitor>();
+       });
     }
 }

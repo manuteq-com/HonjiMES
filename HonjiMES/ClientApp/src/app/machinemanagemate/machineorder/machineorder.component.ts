@@ -162,7 +162,7 @@ export class MachineorderComponent implements OnInit {
     private subscribeToEvents() {
         this.SignalRService.messageReceived.subscribe((message: HubMessage) => {
             this._ngZone.run(() => {
-                if (message.message === 'ReloadBillboard') {
+                if (message.type === 'ReloadBillboard') {
                     notify({
                         message: '資料更新',
                         position: {
@@ -201,8 +201,8 @@ export class MachineorderComponent implements OnInit {
         }
     }
     //已安排製程按鈕背景反紅
-    getworkOrderNoClass(data){
-        if (data < 100){
+    getworkOrderNoClass(data) {
+        if (data < 100) {
             return 'dx-button-content';
         }
     }
