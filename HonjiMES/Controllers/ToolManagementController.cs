@@ -74,6 +74,10 @@ namespace HonjiMES.Controllers
             {
                 COtoolmanagement.ToolName = toolmanagement.ToolName;
             }
+            if (!string.IsNullOrWhiteSpace(toolmanagement.ToolSerialno))
+            {
+                COtoolmanagement.ToolSerialno = toolmanagement.ToolSerialno;
+            }
             if (!string.IsNullOrWhiteSpace(toolmanagement.ToolSpecification))
             {
                 COtoolmanagement.ToolSpecification = toolmanagement.ToolSpecification;
