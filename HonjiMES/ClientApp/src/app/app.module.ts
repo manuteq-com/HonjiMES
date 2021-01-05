@@ -144,6 +144,7 @@ import { MachineorderBoardComponent } from './machinemanagemate/machineorder-boa
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { MaintenanceDetailComponent } from './maintenance/maintenance-detail/maintenance-detail.component';
 import { CreatemaintenanceComponent } from './maintenance/createmaintenance/createmaintenance.component';
+import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
 
 
 
@@ -308,6 +309,7 @@ export function tokenGetter() {
         MaintenanceComponent,
         MaintenanceDetailComponent,
         CreatemaintenanceComponent,
+        StaffmanagementComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

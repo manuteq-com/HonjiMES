@@ -44,6 +44,7 @@ import { ChatHubComponent } from './chatHub/chat-hub.component';
 import { MachineorderBoardComponent } from './machinemanagemate/machineorder-board/machineorder-board.component';
 import { ToolmanagementComponent } from './setting/toolmanagement/toolmanagement.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -89,6 +90,7 @@ export const routes: Routes = [
     { path: 'machineorderboard', component: MachineorderBoardComponent },
     { path: 'toolmanagement', component: ToolmanagementComponent },
     { path: 'maintenance', component: MaintenanceComponent },
+    { path: 'staffmanagement', component: StaffmanagementComponent },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
