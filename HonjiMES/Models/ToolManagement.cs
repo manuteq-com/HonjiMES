@@ -21,7 +21,6 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#21517;&#31281;
         /// </summary>
-        [Required]
         [Column("tool_name", TypeName = "varchar(50)")]
         public string ToolName { get; set; }
         /// <summary>
