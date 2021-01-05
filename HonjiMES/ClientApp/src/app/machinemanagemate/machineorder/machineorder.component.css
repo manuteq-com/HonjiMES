@@ -11,6 +11,7 @@
 
 .container{
     max-width: 1950px;
+    font-size: 20px;
 }
 
 .card-header{
@@ -42,7 +43,8 @@ a{
 }
 
 .card-text{
-    font-size: 18px;
+    font-size: 20px;
+    margin: 0 0 18px 0;
 }
 
 .machineOrderList-box{
@@ -59,7 +61,7 @@ a{
 }
 
 .order-btn{
-    font-size: 16px;
+    font-size: 18px;
     position: absolute;
     right:20px;
     top:20px;
@@ -70,7 +72,7 @@ a{
 }
 
 .Alert{
-    background-color:#f1abbd;
+    background-color:#f1abbd
 }
 
 .Alert-text{
@@ -80,4 +82,8 @@ a{
 .dx-button-content{
     background-color:#f1abbd;
     border: none;
+}
+
+.machineOrderList-box .card-text{
+    font-size: 20px;
 }
