@@ -21,7 +21,9 @@ namespace HonjiMES.Models
         public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
         public virtual DbSet<MachineInformation> MachineInformations { get; set; }
         public virtual DbSet<MachineLog> MachineLogs { get; set; }
+        public virtual DbSet<MachineMaintenance> MachineMaintenances { get; set; }
         public virtual DbSet<MachineWorkdate> MachineWorkdates { get; set; }
+        public virtual DbSet<MaintenanceLog> MaintenanceLogs { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -887,6 +889,54 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
             });
 
+            modelBuilder.Entity<MachineMaintenance>(entity =>
+            {
+                entity.HasComment("機台保養與維護");
+
+                entity.HasIndex(e => e.MachineId)
+                    .HasName("machine_id");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
+
+                entity.Property(e => e.CycleTime).HasComment("週期(月)");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Item)
+                    .HasComment("保養項目")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MachineId).HasComment("機台ID");
+
+                entity.Property(e => e.NextTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("下次保養時間");
+
+                entity.Property(e => e.RecentTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("近期保養時間");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("更新時間");
+
+                entity.HasOne(d => d.Machine)
+                    .WithMany(p => p.MachineMaintenances)
+                    .HasForeignKey(d => d.MachineId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("machine_maintenance_ibfk_1");
+            });
+
             modelBuilder.Entity<MachineWorkdate>(entity =>
             {
                 entity.Property(e => e.CreateTime).HasDefaultValueSql("current_timestamp()");
@@ -906,6 +956,35 @@ namespace HonjiMES.Models
                 entity.Property(e => e.WorkTimeStart)
                     .HasDefaultValueSql("current_timestamp()")
                     .HasComment("起始時間");
+            });
+
+            modelBuilder.Entity<MaintenanceLog>(entity =>
+            {
+                entity.HasComment("機台保養紀錄");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Item)
+                    .HasComment("保養項目")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MachineId).HasComment("機台ID");
+
+                entity.Property(e => e.MachineName)
+                    .HasComment("機台名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.RecentTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("維護時間");
             });
 
             modelBuilder.Entity<Material>(entity =>
