@@ -1,5 +1,4 @@
 import { NgModule, Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
@@ -11,7 +10,6 @@ import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 import { Myservice } from 'src/app/service/myservice';
-
 
 @Component({
     selector: 'app-toolmanagement',
@@ -27,7 +25,6 @@ export class ToolmanagementComponent implements OnInit {
     editpopupVisible: boolean;
     itemkey: number;
     mod: string;
-    uploadUrl: string;
     exceldata: any;
     ToolTypeList: any;
 
@@ -45,13 +42,6 @@ export class ToolmanagementComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutToolManagement', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteToolManagement/' + key, 'DELETE')
         });
-        // this.ToolTypeList = {
-        //     items: myservice.getToolTypes(),
-        //     displayExpr: 'Name',
-        //     valueExpr: 'Id',
-        //     searchEnabled: true,
-        //     // onValueChanged: this.onValueChanged.bind(this)
-        // };
     }
     ngOnInit() {
         this.titleService.setTitle('刀具基本資料');
@@ -68,7 +58,6 @@ export class ToolmanagementComponent implements OnInit {
     //     }, 'success', 3000);
     // }
     onUploaded(e) {
-        //    debugger;
         const response = JSON.parse(e.request.response) as APIResponse;
         if (response.success) {
             this.mod = 'excel';
