@@ -141,6 +141,8 @@ import { MachineorderReportComponent } from './machinemanagemate/machineorder-re
 import { ChatHubComponent } from './chatHub/chat-hub.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { ToolmanagementComponent } from './setting/toolmanagement/toolmanagement.component';
+import { MaintenanceDetailComponent } from './maintenance/maintenance-detail/maintenance-detail.component';
+import { CreatemaintenanceComponent } from './maintenance/createmaintenance/createmaintenance.component';
 
 
 export function tokenGetter() {
@@ -297,7 +299,9 @@ export function tokenGetter() {
         CreateBomComponent,
         MachineorderReportComponent,
         ChatHubComponent,
-        MaintenanceComponent,    ],
+        MaintenanceComponent,
+        MaintenanceDetailComponent,
+        CreatemaintenanceComponent,    ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: NZ_I18N, useValue: zh_TW }

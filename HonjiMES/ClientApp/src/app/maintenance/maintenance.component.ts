@@ -17,8 +17,9 @@ import { Title } from '@angular/platform-browser';
     styleUrls: ['./maintenance.component.css']
 })
 export class MaintenanceComponent implements OnInit {
-    dataSourceDB
-    testtime = new Date();
+    dataSourceDB;
+    creatpopupVisible: boolean;
+    buttondisabled = false;
     constructor() {
 
         this.dataSourceDB = [{ "Id":1,"item": "A", "cycle": 1, "machine": "A1","lastTime":"2020-12-15T00:30:00","nextTime":"2020-12-15T00:40:00" }, {"Id":2, "item": "A", "cycle": 1, "machine": "A2","nextTime":"2020-12-15T00:00:00","lastTime":"2020-12-15T00:00:00" }, { "Id":3,"item": "AB", "cycle": 1, "machine": "A3","lastTime":"2020-12-16T00:01:00","nextTime":"2020-12-15T00:03:00" }]
@@ -36,7 +37,10 @@ export class MaintenanceComponent implements OnInit {
         //this.dataGridnobom.instance.saveEditData();
     }
     creatdata(){
-
+        this.creatpopupVisible = true;
+    }
+    creatpopup_result(){
+        this.creatpopupVisible = false;
     }
 
 }

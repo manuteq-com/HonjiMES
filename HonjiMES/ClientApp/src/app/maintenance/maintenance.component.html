@@ -14,7 +14,7 @@
 </div>
 <dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
     [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" [masterDetail]="{ enabled: false, template: 'detail' }">
+    [columnAutoWidth]="false" [showBorders]="true" [masterDetail]="{ enabled: true, template: 'detail' }">
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-paging [enabled]="true" [pageSize]="15">
@@ -45,23 +45,21 @@
     <dxi-column dataField="lastTime" caption="最近保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
     <dxi-column dataField="nextTime" caption="下次保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
 
-    <dxi-column caption="保養" cellTemplate="cellTemplatem" alignment="center" width="90" [allowEditing]="false">
-        <div *dxTemplate="let data of 'cellTemplatem'">
-            <a
-                class="insertbtn ml-2 dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-text">保養</a>
-        </div>
-    </dxi-column>
-    <dxi-column caption="歷史紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
-    <div *dxTemplate="let data of 'cellTemplate'">
-        <dx-button icon="detailslayout" type="normal"></dx-button>
-    </div>
+
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
     </dxi-column>
 
-    <!-- <div *dxTemplate="let item of 'detail'">
-            <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
-        </div> -->
+    <div *dxTemplate="let item of 'detail'">
+            <app-maintenance-detail></app-maintenance-detail>
+    </div>
 </dx-data-grid>
+<dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-createmaintenance></app-createmaintenance>
+        <!-- <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true"
+            [exceldata]="exceldata"></app-creatmaterial-basic> -->
+    </div>
+</dx-popup>
