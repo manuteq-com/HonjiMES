@@ -70,10 +70,6 @@ namespace HonjiMES.Controllers
             toolmanagement.Id = id;
             var Otoolmanagement = _context.ToolManagements.Find(id);
             var COtoolmanagement = Otoolmanagement;
-            if (!string.IsNullOrWhiteSpace(toolmanagement.ToolName))
-            {
-                COtoolmanagement.ToolName = toolmanagement.ToolName;
-            }
             if (!string.IsNullOrWhiteSpace(toolmanagement.ToolSerialno))
             {
                 COtoolmanagement.ToolSerialno = toolmanagement.ToolSerialno;
@@ -121,7 +117,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<ToolManagement>> PostToolManagement(ToolManagement toolmanagement)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.ToolManagements.AsQueryable().Where(x => (x.ToolName == toolmanagement.ToolName || x.ToolSpecification == toolmanagement.ToolSpecification) && x.DeleteFlag == 0).Any())
+            if (_context.ToolManagements.AsQueryable().Where(x => (x.ToolSerialno == toolmanagement.ToolSerialno || x.ToolSpecification == toolmanagement.ToolSpecification) && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("客戶的 [代號] 或 [名稱] 已存在!", toolmanagement));
             }
