@@ -41,6 +41,7 @@ import { WorkorderEstimateComponent } from './workorder/workorder-estimate/worko
 import { MachineorderComponent } from './machinemanagemate/machineorder/machineorder.component';
 import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
+import { MachineorderBoardComponent } from './machinemanagemate/machineorder-board/machineorder-board.component';
 
 
 
@@ -86,6 +87,7 @@ export const routes: Routes = [
     { path: 'machineorder', component: MachineorderComponent },
     { path: 'createbom', component: CreateBomComponent },
     { path: 'chatHub', component: ChatHubComponent },
+    { path: 'machineorderboard', component: MachineorderBoardComponent },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

@@ -22,7 +22,7 @@ import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
     DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule,
-    DxSchedulerModule, DxTabPanelModule
+    DxSchedulerModule, DxTabPanelModule, DxGalleryModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -139,6 +139,7 @@ import { CreateBomComponent } from './billofmaterial/create-bom/create-bom.compo
 import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
 import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
+import { MachineorderBoardComponent } from './machinemanagemate/machineorder-board/machineorder-board.component';
 
 
 export function tokenGetter() {
@@ -180,7 +181,8 @@ export function tokenGetter() {
                 tokenGetter
             }
         }),
-        NgZorroAntdModule
+        NgZorroAntdModule,
+        DxGalleryModule
     ],
     declarations: [
         AppComponent,
@@ -294,7 +296,8 @@ export function tokenGetter() {
         HeaderfontComponent,
         CreateBomComponent,
         MachineorderReportComponent,
-        ChatHubComponent
+        ChatHubComponent,
+        MachineorderBoardComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
