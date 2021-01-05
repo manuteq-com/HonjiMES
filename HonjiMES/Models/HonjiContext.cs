@@ -20,6 +20,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<MBillOfMaterial> MBillOfMaterials { get; set; }
         public virtual DbSet<MachineInformation> MachineInformations { get; set; }
+        public virtual DbSet<MachineLog> MachineLogs { get; set; }
         public virtual DbSet<MachineWorkdate> MachineWorkdates { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
@@ -53,6 +54,7 @@ namespace HonjiMES.Models
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         public virtual DbSet<System> Systems { get; set; }
+        public virtual DbSet<ToolManagement> ToolManagements { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -852,6 +854,37 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UserId).HasComment("負責人ID");
+            });
+
+            modelBuilder.Entity<MachineLog>(entity =>
+            {
+                entity.HasComment("機台警示");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.AlarmMessage)
+                    .HasComment("警報訊息")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.AlarmNumber).HasComment("警報號碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.EndTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("結束時間");
+
+                entity.Property(e => e.MachineId).HasComment("機台ID");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
             });
 
             modelBuilder.Entity<MachineWorkdate>(entity =>
@@ -2599,6 +2632,36 @@ namespace HonjiMES.Models
                     .HasComment("值")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+            });
+
+            modelBuilder.Entity<ToolManagement>(entity =>
+            {
+                entity.HasComment("刀具清單");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("current_timestamp()");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ToolName)
+                    .HasComment("名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ToolSpecification)
+                    .HasComment("規格")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Type).HasComment("種類");
+
+                entity.Property(e => e.UpdateTime).HasDefaultValueSql("current_timestamp()");
             });
 
             modelBuilder.Entity<User>(entity =>

@@ -140,6 +140,7 @@ import { HeaderfontComponent } from './layout/headerfont/headerfont.component';
 import { MachineorderReportComponent } from './machinemanagemate/machineorder-report/machineorder-report.component';
 import { ChatHubComponent } from './chatHub/chat-hub.component';
 import { MachineorderBoardComponent } from './machinemanagemate/machineorder-board/machineorder-board.component';
+import { ToolmanagementComponent } from './setting/toolmanagement/toolmanagement.component';
 
 
 export function tokenGetter() {
@@ -297,6 +298,7 @@ export function tokenGetter() {
         CreateBomComponent,
         MachineorderReportComponent,
         ChatHubComponent,
+        ToolmanagementComponent
         MachineorderBoardComponent
     ],
     providers: [
