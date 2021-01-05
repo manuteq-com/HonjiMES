@@ -298,7 +298,7 @@ export function tokenGetter() {
         CreateBomComponent,
         MachineorderReportComponent,
         ChatHubComponent,
-        ToolmanagementComponent
+        ToolmanagementComponent,
         MachineorderBoardComponent
     ],
     providers: [
