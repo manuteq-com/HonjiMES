@@ -1,4 +1,5 @@
 ﻿using System;
+using DevExtreme.AspNet.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,11 +32,14 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MachineMaintenance>>> GetMachineMaintenances()
+        public async Task<ActionResult<IEnumerable<MachineMaintenance>>> GetMachineMaintenances(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter
+        )
         {
             var data = _context.MachineMaintenances.AsQueryable().Where(x => x.DeleteFlag == 0);
-            var machinemaintenance = await data.ToListAsync();
-            return Ok(MyFun.APIResponseOK(machinemaintenance));
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>
@@ -193,6 +197,8 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(maintenancelog));
         }
+
+        
 
         private bool MachineMaintenanceExists(int id)
         {
