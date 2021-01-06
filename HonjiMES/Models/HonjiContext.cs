@@ -991,6 +991,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("current_timestamp()")
                     .HasComment("更新時間");
+
+                entity.Property(e => e.UserId).HasComment("操作人員");
             });
 
             modelBuilder.Entity<Material>(entity =>

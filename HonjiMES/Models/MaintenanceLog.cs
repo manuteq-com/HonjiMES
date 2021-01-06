@@ -19,6 +19,11 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         /// <summary>
+        /// &#25805;&#20316;&#20154;&#21729;
+        /// </summary>
+        [Column("user_id", TypeName = "int(11)")]
+        public int UserId { get; set; }
+        /// <summary>
         /// &#27231;&#21488;ID
         /// </summary>
         [Column("machine_id", TypeName = "int(11)")]
