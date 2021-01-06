@@ -19,13 +19,11 @@ export class ToolsetComponent implements OnInit, OnChanges {
     dataSourceDB: any;
     HolderList = [];
     ToolList = [];
-    List: any;
     constructor(private http: HttpClient, public app: AppComponent) {
 
         this.app.GetData('/ToolManagement/GetToolManagements').subscribe(s => {
             if (s.success) {
-                this.List = s.data;
-                s.data.forEach(x => {
+                s.data.data.forEach(x => {
                     if (x.Type === 1) {
                         this.ToolList.push(x);
                     } else if (x.Type === 2) {
@@ -40,10 +38,8 @@ export class ToolsetComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.getdata();
-
     }
     ngOnInit() {
-        debugger
     }
     onInitNewRow(e) {
         e.data.ProcessId = this.ProcessId;
