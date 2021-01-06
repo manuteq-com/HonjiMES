@@ -76,14 +76,14 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="170" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="200" sortOrder="desc"></dxi-column>
     <dxi-column dataField="Message" caption="種類" [width]="140"></dxi-column>
     <dxi-column dataField="DataNo" caption="品號" [width]="220"></dxi-column>
     <dxi-column dataField="DataName" caption="名稱" [width]="220"></dxi-column>
-    <dxi-column dataField="DataType" caption="品號類別" [width]="100" alignment="center">
+    <dxi-column dataField="DataType" caption="品號類別" [width]="80" alignment="center">
         <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="倉別" [width]="120">
+    <dxi-column dataField="WarehouseId" caption="倉別" [width]="130">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="No" caption="關聯單號/調整單號" [width]="240"></dxi-column>
