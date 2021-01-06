@@ -167,6 +167,41 @@ namespace HonjiMES.Controllers
             }
             return Ok(MyFun.APIResponseOK(user));
         }
-
+        /// <summary>
+        /// 取得警示訊息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [JWTAuthorize]
+        public async Task<ActionResult<IEnumerable<string>>> GetAlertMsgList()
+        {
+            var message = new List<string>();
+            #region 機台狀況
+            var MachineManagementController = new MachineManagementController(_context);
+            var MachineData = await MachineManagementController.GetMachineData();
+            var result = (APIResponse)((OkObjectResult)MachineData.Result).Value;
+            foreach (var item in (IEnumerable<machine>)result.data)
+            {
+                if (item.DelayTime > 0)
+                {
+                    var msg = item.MachineName + "機台已逾時 ";
+                    TimeSpan ts = new TimeSpan(0, Decimal.ToInt32(item.DelayTime), 0);
+                    if (ts.Hours > 0)
+                    {
+                        msg += ts.Hours.ToString("00") + ":";
+                    }
+                    if (ts.Minutes > 0)
+                    {
+                        msg += ts.Minutes.ToString("00") + "分";
+                    }
+                    message.Add(msg);
+                }
+            }
+            #endregion
+            #region 保養狀況
+           
+            #endregion
+            return Ok(MyFun.APIResponseOK(message));
+        }
     }
 }

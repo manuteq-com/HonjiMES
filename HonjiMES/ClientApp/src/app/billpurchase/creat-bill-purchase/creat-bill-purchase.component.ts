@@ -52,14 +52,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     PurchaseselectBoxOptions: any;
     changeMode: boolean;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
-    Quantityval: any;
-    OriginPriceval: any;
-    Priceval: any;
-    PriceAllval: number;
-    UnitQuantityval: any;
-    UnitPriceval: any;
-    UnitPriceAllval: any;
-    WorkPriceval: any;
+    // Quantityval: any;
+    // OriginPriceval: any;
+    // Priceval: any;
+    // PriceAllval: number;
+    // UnitQuantityval: any;
+    // UnitPriceval: any;
+    // UnitPriceAllval: any;
+    // WorkPriceval: any;
     allMode: string;
     checkBoxesMode: string;
     postval: any;
@@ -245,14 +245,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
 
         this.Purchaseval = null;
         this.Warehouseval = null;
-        this.Quantityval = 0;
-        this.OriginPriceval = 0;
-        this.Priceval = 0;
-        this.PriceAllval = 0;
-        this.UnitQuantityval = null;
-        this.UnitPriceval = null;
-        this.UnitPriceAllval = null;
-        this.WorkPriceval = null;
+        // this.Quantityval = 0;
+        // this.OriginPriceval = 0;
+        // this.Priceval = 0;
+        // this.PriceAllval = 0;
+        // this.UnitQuantityval = null;
+        // this.UnitPriceval = null;
+        // this.UnitPriceAllval = null;
+        // this.WorkPriceval = null;
         // this.BasicDataList = null;
         this.BasicDataListTemp = [];
         this.WarehouseList = null;
@@ -269,10 +269,10 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         data.setValue(e.value);
         this.BasicDataListTemp.find(x => {
             if (x.TempId === e.value) {
-                this.Quantityval = x.Quantity;
-                this.OriginPriceval = x.OriginPrice;
-                this.Priceval = x.OriginPrice;
-                this.PriceAllval = x.Quantity * x.OriginPrice;
+                // this.Quantityval = x.Quantity;
+                // this.OriginPriceval = x.OriginPrice;
+                // this.Priceval = x.OriginPrice;
+                // this.PriceAllval = x.Quantity * x.OriginPrice;
                 this.Warehouseval = x.WarehouseId;
                 this.GetWarehouseByBasicData(x.DataType, x.DataId);
             }
@@ -281,37 +281,37 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     // WarehousevalvalueChanged(e, data) {
     //     data.setValue(e.value);
     // }
-    QuantityValueChanged(e, data) {
-        data.setValue(e.value);
-        this.Quantityval = e.value;
-        this.PriceAllval = this.Quantityval * this.Priceval;
-    }
-    PriceValueChanged(e, data) {
-        data.setValue(e.value);
-        this.Priceval = e.value;
-        this.PriceAllval = this.Quantityval * this.Priceval;
-    }
-    UnitQuantityValueChanged(e, data) {
-        data.setValue(e.value);
-        this.UnitQuantityval = e.value;
-        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
-    }
-    UnitPriceValueChanged(e, data) {
-        data.setValue(e.value);
-        this.UnitPriceval = e.value;
-        this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
-    }
+    // QuantityValueChanged(e, data) {
+    //     data.setValue(e.value);
+    //     this.Quantityval = e.value;
+    //     this.PriceAllval = this.Quantityval * this.Priceval;
+    // }
+    // PriceValueChanged(e, data) {
+    //     data.setValue(e.value);
+    //     this.Priceval = e.value;
+    //     this.PriceAllval = this.Quantityval * this.Priceval;
+    // }
+    // UnitQuantityValueChanged(e, data) {
+    //     data.setValue(e.value);
+    //     this.UnitQuantityval = e.value;
+    //     this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    // }
+    // UnitPriceValueChanged(e, data) {
+    //     data.setValue(e.value);
+    //     this.UnitPriceval = e.value;
+    //     this.UnitPriceAllval = this.UnitQuantityval * this.UnitPriceval;
+    // }
     onInitNewRow(e) {
         this.Supplierval = this.SupplierIdVal;
         this.Purchaseval = this.PurchaseIdVal;
-        this.Quantityval = e.data.Quantity;
-        this.OriginPriceval = e.data.OriginPrice;
-        this.Priceval = e.data.Price;
-        this.PriceAllval = e.data.PriceAll;
-        this.UnitQuantityval = e.data.UnitQuantityval;
-        this.UnitPriceval = e.data.UnitPriceval;
-        this.UnitPriceAllval = e.data.UnitPriceAllval;
-        this.WorkPriceval = e.data.WorkPrice;
+        // this.Quantityval = e.data.Quantity;
+        // this.OriginPriceval = e.data.OriginPrice;
+        // this.Priceval = e.data.Price;
+        // this.PriceAllval = e.data.PriceAll;
+        // this.UnitQuantityval = e.data.UnitQuantityval;
+        // this.UnitPriceval = e.data.UnitPriceval;
+        // this.UnitPriceAllval = e.data.UnitPriceAllval;
+        // this.WorkPriceval = e.data.WorkPrice;
         this.WarehouseList = null;
         // debugger;
         // const dataGrid = e.component;
@@ -337,14 +337,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         });
         if (e.cancel === false) {
             this.Warehouseval = 0;
-            this.Quantityval = 0;
-            this.OriginPriceval = 0;
-            this.Priceval = 0;
-            this.PriceAllval = 0;
-            this.UnitQuantityval = null;
-            this.UnitPriceval = null;
-            this.UnitPriceAllval = null;
-            this.WorkPriceval = null;
+            // this.Quantityval = 0;
+            // this.OriginPriceval = 0;
+            // this.Priceval = 0;
+            // this.PriceAllval = 0;
+            // this.UnitQuantityval = null;
+            // this.UnitPriceval = null;
+            // this.UnitPriceAllval = null;
+            // this.WorkPriceval = null;
             this.WarehouseList = null;
         }
     }
@@ -355,14 +355,14 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
         debugger;
         this.Supplierval = e.data.SupplierId;
         this.Purchaseval = e.data.PurchaseId;
-        this.Quantityval = e.data.Quantity;
-        this.OriginPriceval = e.data.OriginPrice;
-        this.Priceval = e.data.Price;
-        this.PriceAllval = e.data.PriceAll;
-        this.UnitQuantityval = e.data.UnitQuantityval;
-        this.UnitPriceval = e.data.UnitPriceval;
-        this.UnitPriceAllval = e.data.UnitPriceAllval;
-        this.WorkPriceval = e.data.WorkPrice;
+        // this.Quantityval = e.data.Quantity;
+        // this.OriginPriceval = e.data.OriginPrice;
+        // this.Priceval = e.data.Price;
+        // this.PriceAllval = e.data.PriceAll;
+        // this.UnitQuantityval = e.data.UnitQuantityval;
+        // this.UnitPriceval = e.data.UnitPriceval;
+        // this.UnitPriceAllval = e.data.UnitPriceAllval;
+        // this.WorkPriceval = e.data.WorkPrice;
         this.Warehouseval = e.data.WarehouseId;
         this.GetPurchasesBySupplier(e.data.SupplierId);
         this.GetBasicDatasByPurchase(e.data.PurchaseId);
@@ -428,36 +428,36 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
     }
     GetWarehouseByBasicData(Type, Id) {
         // if (Type === 1) {
-            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + Id).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                    if (Type === 1) {
-                        this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
-                    } else if (Type === 2) {
-                        this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
-                    } else {
-                        this.Warehouseval = this.WarehouseList[0].Id;
-                    }
+        this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + Id).subscribe(
+            (s) => {
+                this.WarehouseList = s.data;
+                if (Type === 1) {
+                    this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+                } else if (Type === 2) {
+                    this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+                } else {
+                    this.Warehouseval = this.WarehouseList[0].Id;
                 }
-            );
-            // this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
-            //     (s) => {
-            //         this.WarehouseList = [];
-            //         s.data.forEach((element, index) => {
-            //             element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
-            //             this.WarehouseList[index] = element.Warehouse;
-            //         });
-            //         this.BasicDataListTemp.forEach(element => {
-            //             if (element.Id === Id) {
-            //                 if (element.WarehouseId !== null) {
-            //                     this.Warehouseval = element.WarehouseId;
-            //                 } else {
-            //                     this.Warehouseval = this.WarehouseList[0].Id;
-            //                 }
-            //             }
-            //         });
-            //     }
-            // );
+            }
+        );
+        // this.app.GetData('/Warehouses/GetWarehouseByMaterialBasic/' + Id).subscribe(
+        //     (s) => {
+        //         this.WarehouseList = [];
+        //         s.data.forEach((element, index) => {
+        //             element.Warehouse.Name = element.Warehouse.Code + element.Warehouse.Name + ' (庫存 ' + element.Quantity + ')';
+        //             this.WarehouseList[index] = element.Warehouse;
+        //         });
+        //         this.BasicDataListTemp.forEach(element => {
+        //             if (element.Id === Id) {
+        //                 if (element.WarehouseId !== null) {
+        //                     this.Warehouseval = element.WarehouseId;
+        //                 } else {
+        //                     this.Warehouseval = this.WarehouseList[0].Id;
+        //                 }
+        //             }
+        //         });
+        //     }
+        // );
         // } else if (Type === 2) {
         //     this.app.GetData('/Warehouses/GetWarehouseByProductBasic/' + Id).subscribe(
         //         (s) => {
@@ -574,6 +574,41 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
             this.CustomerVal = null;
             e.preventDefault();
             this.childOuter.emit(true);
+        }
+    }
+    QuantityCellValue(newData, value, currentRowData) {
+        newData.Quantity = value;
+        newData.PriceAll = currentRowData.Price * value;
+        if (isNaN(newData.PriceAll)) {
+            newData.PriceAll = null;
+        }
+    }
+    OriginPriceCellValue(newData, value, currentRowData) {
+        newData.OriginPrice = value;
+        newData.PriceAll = currentRowData.Quantity * value;
+        if (isNaN(newData.PriceAll)) {
+            newData.PriceAll = null;
+        }
+    }
+    PriceCellValue(newData, value, currentRowData) {
+        newData.Price = value;
+        newData.PriceAll = currentRowData.Quantity * value;
+        if (isNaN(newData.PriceAll)) {
+            newData.PriceAll = null;
+        }
+    }
+    UnitCountCellValue(newData, value, currentRowData) {
+        newData.UnitCount = value;
+        newData.UnitPriceAll = currentRowData.UnitPrice * value;
+        if (isNaN(newData.UnitPriceAll)) {
+            newData.UnitPriceAll = null;
+        }
+    }
+    UnitPriceCellValue(newData, value, currentRowData) {
+        newData.UnitPrice = value;
+        newData.UnitPriceAll = currentRowData.UnitCount * value;
+        if (isNaN(newData.UnitPriceAll)) {
+            newData.UnitPriceAll = null;
         }
     }
 }
