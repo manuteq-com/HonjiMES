@@ -2518,6 +2518,10 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.ProcessId).HasComment("工序ID");
 
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("更新時間");
+
                 entity.Property(e => e.UserId).HasComment("人員ID");
 
                 entity.Property(e => e.WorkOrderId).HasComment("工單ID");
