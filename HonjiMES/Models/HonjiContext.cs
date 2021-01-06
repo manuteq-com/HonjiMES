@@ -51,12 +51,14 @@ namespace HonjiMES.Models
         public virtual DbSet<SaleDetailNew> SaleDetailNews { get; set; }
         public virtual DbSet<SaleHead> SaleHeads { get; set; }
         public virtual DbSet<SaleLog> SaleLogs { get; set; }
+        public virtual DbSet<StaffManagement> StaffManagements { get; set; }
         public virtual DbSet<StockDetail> StockDetails { get; set; }
         public virtual DbSet<StockHead> StockHeads { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<ToolManagement> ToolManagements { get; set; }
+        public virtual DbSet<Toolset> Toolsets { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -2493,6 +2495,40 @@ namespace HonjiMES.Models
                 entity.Property(e => e.UpdateUser).HasComment("更新者id");
             });
 
+            modelBuilder.Entity<StaffManagement>(entity =>
+            {
+                entity.HasComment("人員排班");
+
+                entity.HasIndex(e => e.MachineId)
+                    .HasName("machine_id");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.EndTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("結束時間");
+
+                entity.Property(e => e.MachineId).HasComment("機台ID");
+
+                entity.Property(e => e.ProcessId).HasComment("工序ID");
+
+                entity.Property(e => e.UserId).HasComment("人員ID");
+
+                entity.Property(e => e.WorkOrderId).HasComment("工單ID");
+
+                entity.HasOne(d => d.Machine)
+                    .WithMany(p => p.StaffManagements)
+                    .HasForeignKey(d => d.MachineId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("staff_management_ibfk_1");
+            });
+
             modelBuilder.Entity<StockDetail>(entity =>
             {
                 entity.HasIndex(e => e.StockHeadId)
@@ -2750,6 +2786,55 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Type).HasComment("種類");
 
                 entity.Property(e => e.UpdateTime).HasDefaultValueSql("current_timestamp()");
+            });
+
+            modelBuilder.Entity<Toolset>(entity =>
+            {
+                entity.HasComment("製程刀具表");
+
+                entity.HasIndex(e => e.HolderId)
+                    .HasName("fk_toolset_tool_management_holder_id");
+
+                entity.HasIndex(e => e.ProcessId)
+                    .HasName("fk_toolset_process_idx");
+
+                entity.HasIndex(e => e.ToolId)
+                    .HasName("fk_toolset_tool_management_tool_id");
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("current_timestamp()");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.HolderId).HasComment("刀桿ID");
+
+                entity.Property(e => e.ProcessId).HasComment("製程ID");
+
+                entity.Property(e => e.Remarks)
+                    .HasComment("備註")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.ToolId).HasComment("刀具ID");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                entity.HasOne(d => d.Holder)
+                    .WithMany(p => p.ToolsetHolders)
+                    .HasForeignKey(d => d.HolderId)
+                    .HasConstraintName("fk_toolset_tool_management_holder_id");
+
+                entity.HasOne(d => d.Process)
+                    .WithMany(p => p.Toolsets)
+                    .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_toolset_process");
+
+                entity.HasOne(d => d.Tool)
+                    .WithMany(p => p.ToolsetTools)
+                    .HasForeignKey(d => d.ToolId)
+                    .HasConstraintName("fk_toolset_tool_management_tool_id");
             });
 
             modelBuilder.Entity<User>(entity =>
