@@ -5,7 +5,7 @@
 <div class="col-md-6 offset-md-3 mt-5">
     <form action="" (submit)="onFormSubmit($event)">
         <div class="card">
-            <h4 class="card-header">選擇欲新增BOM資料之品號</h4>
+            <h3 class="card-header">選擇欲新增BOM資料之品號</h3>
             <div class="card-body">
                 <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
                     [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
@@ -31,7 +31,7 @@
                 </dx-form>
 
                 <div class="col-auto-12 mt-2">
-                    <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+                    <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 savebtn" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
                         [disabled]="buttondisabled"></dx-button>
                 </div>
 

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { APIResponse } from 'src/app/app.module';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class CreateBomComponent implements OnInit {
     NameVisible: boolean;
     selectData: any;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
@@ -96,6 +97,7 @@ export class CreateBomComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.titleService.setTitle('快速建BOM');
     }
     ngOnChanges() {
     }
