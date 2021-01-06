@@ -1,1 +1,83 @@
-<p>staffmanagement works!</p>
+<div class="headerblock">
+    <app-headerfont></app-headerfont>
+    <!-- <div class="buttongroup">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增刀具" type="success" [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+    </div> -->
+</div>
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Serial"
+    (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
+    (onRowInserted)="onRowInserted($event)" (onEditingStart)="onEditingStart($event)"
+    (onCellPrepared)="onCellPrepared($event)" (onRowValidating)="onRowValidating($event)">
+    <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-form colCount=4>
+            <dxi-item dataField="TempId"></dxi-item>
+            <dxi-item dataField="ProducingMachine"></dxi-item>
+            <dxi-item dataField="WorkOrderNo"></dxi-item>
+            <dxi-item dataField="ProcessId"></dxi-item>
+            <dxi-item dataField="DueStartTime"></dxi-item>
+            <dxi-item dataField="DueEndTime"></dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+        [enterKeyDirection]="enterKeyDirection">
+    </dxo-keyboard-navigation>
+    <dxo-paging [enabled]="false">
+    </dxo-paging>
+
+
+    <dxi-column dataField="TempId" caption="操作人員" [width]="300" editCellTemplate="TempIdEditCellTemplate">
+        <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="操作機台" editCellTemplate="ProducingMachineTemplate" [width]="150">
+        <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="WorkOrderNo" caption="工單號" editCellTemplate="WorkOrderNoCellTemplate">
+        <dxo-lookup [dataSource]="WorkOrderNoList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate">
+        <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="DueStartTime" caption="開始時間" dataType="date" editCellTemplate="DueStartTimeTemplate">
+    </dxi-column>
+    <dxi-column dataField="DueEndTime" caption="結束時間" dataType="date" editCellTemplate="DueEndTimeTemplate">
+    </dxi-column>
+
+    <dxi-column type="buttons">
+        <dxi-button name="save" text="存檔"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
+    <div *dxTemplate="let data of 'TempIdEditCellTemplate'">
+        <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+            [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'TempId' } }"
+            valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
+    </div>
+    <div *dxTemplate="let data of 'ProducingMachineTemplate'">
+        <dx-select-box [value]="data.value" (onValueChanged)="selectMachineChanged($event,data)"
+            [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }" valueExpr="Name"
+            displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+    </div>
+    <div *dxTemplate="let data of 'WorkOrderNoCellTemplate'">
+        <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+            [dataSource]="{ paginate: true, store: { type: 'array', data: WorkOrderNoList, key:'Id' } }" valueExpr="Id"
+            displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+    </div>
+    <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
+        <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+            [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }" valueExpr="Id"
+            displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+    </div>
+    <div *dxTemplate="let data of 'DueStartTimeTemplate'">
+        <dx-date-box [value]="DueStartTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
+    </div>
+    <div *dxTemplate="let data of 'DueEndTimeTemplate'">
+        <dx-date-box [value]="DueEndTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
+    </div>
+
+</dx-data-grid>
