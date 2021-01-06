@@ -1,4 +1,5 @@
 ﻿using System;
+using DevExtreme.AspNet.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using HonjiMES.Filter;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 顧客列表
+    /// 機台保養列表
     /// </summary>
     [JWTAuthorize]
     [Consumes("application/json")]
@@ -31,11 +32,14 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MachineMaintenance>>> GetMachineMaintenances()
+        public async Task<ActionResult<IEnumerable<MachineMaintenance>>> GetMachineMaintenances(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter
+        )
         {
             var data = _context.MachineMaintenances.AsQueryable().Where(x => x.DeleteFlag == 0);
-            var machinemaintenance = await data.ToListAsync();
-            return Ok(MyFun.APIResponseOK(machinemaintenance));
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>
@@ -136,7 +140,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 修改機台保養列表
+        /// 修改機台保養紀錄列表
         /// </summary>
         /// <param name="id"></param>
         /// <param name="maintenancelog"></param>
@@ -176,7 +180,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(maintenancelog));
         }
         /// <summary>
-        /// 新增機台保養列表
+        /// 新增機台保養紀錄列表
         /// </summary>
         /// <param name="maintenancelog"></param>
         /// <returns></returns>
@@ -193,6 +197,8 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(maintenancelog));
         }
+
+        
 
         private bool MachineMaintenanceExists(int id)
         {

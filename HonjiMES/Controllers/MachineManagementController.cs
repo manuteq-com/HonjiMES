@@ -24,6 +24,7 @@ namespace HonjiMES.Controllers
         public MachineManagementController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;
         }
         /// <summary>
         /// 查詢顧客列表
@@ -130,7 +131,7 @@ namespace HonjiMES.Controllers
 
         public async Task<ActionResult<IEnumerable<machine>>> GetProcessDatas()
         {
-            var Data = _context.WorkOrderDetails.Include(x => x.WorkOrderHead);
+            var Data = await _context.WorkOrderDetails.Include(x => x.WorkOrderHead).ToListAsync();
             return Ok(MyFun.APIResponseOK(Data));
         }
 

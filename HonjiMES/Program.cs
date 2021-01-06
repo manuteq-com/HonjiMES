@@ -32,9 +32,9 @@ namespace HonjiMES
                     //});
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureServices(services =>
-       {
-           //加入背景服務
-           services.AddHostedService<MemoryUsageMonitor>();
-       });
+                {
+                    //加入背景服務
+                    services.AddHostedService<MemoryUsageMonitor>();
+                });
     }
 }
