@@ -106,8 +106,8 @@
                 <dxi-total-item i-total-item displayFormat="{0}個" column="Quantity" summaryType="sum">
                 </dxi-total-item>
             </dxo-summary>
-            <dxi-column dataField="CustomerNo" caption="客戶單號"  [allowEditing]="false"></dxi-column>
-            <dxi-column dataField="OrderNo" caption="訂單單號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="CustomerNo" caption="客戶單號"  [allowEditing]="false" [width]="150"></dxi-column>
+            <dxi-column dataField="OrderNo" caption="訂單單號" [allowEditing]="false" [width]="150"></dxi-column>
             <dxi-column dataField="Serial" caption="訂單序號" [allowEditing]="false" width="80"></dxi-column>
             <dxi-column dataField="MachineNo" caption="機號" [allowEditing]="false" width="200"></dxi-column>
             <dxi-column dataField="MaterialBasicId" caption="品號" [allowEditing]="false">
@@ -122,10 +122,10 @@
             <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="OriginPriceEditCellTemplate">
+            <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70" editCellTemplate="PriceEditCellTemplate">
+            <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
             <!-- <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
@@ -136,7 +136,7 @@
                 <dxi-button hint="單筆銷貨" text="銷貨" [onClick]="to_dsaleClick"></dxi-button>
                 <dxi-button hint="單筆銷貨退回" text="銷貨退回" [onClick]="to_dsaleClick"></dxi-button>
             </dxi-column> -->
-            <dxi-column type="buttons">
+            <dxi-column type="buttons" [width]="50">
                 <dxi-button name="save" text="存檔" icon="save"></dxi-button>
                 <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
