@@ -185,6 +185,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "staff_management",
+         "ObjectType": 0
+      },
+      {
          "Name": "stock_detail",
          "ObjectType": 0
       },
@@ -202,6 +206,10 @@
       },
       {
          "Name": "system",
+         "ObjectType": 0
+      },
+      {
+         "Name": "toolset",
          "ObjectType": 0
       },
       {
