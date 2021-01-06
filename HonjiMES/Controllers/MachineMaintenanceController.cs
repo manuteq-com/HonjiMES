@@ -34,8 +34,7 @@ namespace HonjiMES.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MachineMaintenance>>> GetMachineMaintenances(
                 [FromQuery] DataSourceLoadOptions FromQuery,
-                [FromQuery(Name = "detailfilter")] string detailfilter
-        )
+                [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             var data = _context.MachineMaintenances.AsQueryable().Where(x => x.DeleteFlag == 0);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);

@@ -1,4 +1,5 @@
 ﻿using System;
+using DevExtreme.AspNet.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,11 +32,13 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToolManagement>>> GetToolManagements()
+        public async Task<ActionResult<IEnumerable<ToolManagement>>> GetToolManagements(
+                [FromQuery] DataSourceLoadOptions FromQuery,
+                [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             var data = _context.ToolManagements.AsQueryable().Where(x => x.DeleteFlag == 0);
-            var toolmanagement = await data.ToListAsync();
-            return Ok(MyFun.APIResponseOK(toolmanagement));
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
         /// <summary>
