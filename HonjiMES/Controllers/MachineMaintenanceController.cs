@@ -11,7 +11,7 @@ using HonjiMES.Filter;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 顧客列表
+    /// 機台保養列表
     /// </summary>
     [JWTAuthorize]
     [Consumes("application/json")]
@@ -136,7 +136,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 修改機台保養列表
+        /// 修改機台保養紀錄列表
         /// </summary>
         /// <param name="id"></param>
         /// <param name="maintenancelog"></param>
@@ -176,7 +176,7 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(maintenancelog));
         }
         /// <summary>
-        /// 新增機台保養列表
+        /// 新增機台保養紀錄列表
         /// </summary>
         /// <param name="maintenancelog"></param>
         /// <returns></returns>
