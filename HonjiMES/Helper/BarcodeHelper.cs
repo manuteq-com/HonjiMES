@@ -18,7 +18,7 @@ namespace HonjiMES.Helper
         /// <returns></returns>
         public static byte[] CreateQrCode(string text,int width,int height)
         {
-            BarcodeWriter writer = new BarcodeWriter
+            ZXing.BarcodeWriter writer = new ZXing.BarcodeWriter
             {
                 Format = BarcodeFormat.QR_CODE,
                 Options = new QrCodeEncodingOptions

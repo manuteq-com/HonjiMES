@@ -34,8 +34,11 @@ export class ProcessListComponent implements OnInit {
     Supplierlist: any;
     ProcessTypeList: any;
     NumberBoxOptions: any;
+    ToolsVisible: boolean;
+    ProcessId: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+        this.ToolsVisible = false;
         this.ProcessTypeList = myservice.getProcessType();
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
         this.cancelClickHandler = this.cancelClickHandler.bind(this);
@@ -145,11 +148,15 @@ export class ProcessListComponent implements OnInit {
     }
     onEditorPreparing(e) {
         // debugger;
-        if (e.parentType === 'dataRow' && e.dataField === 'Code' ) {
+        if (e.parentType === 'dataRow' && e.dataField === 'Code') {
             e.editorOptions.readOnly = true;
         }
     }
     selectionChanged(e) {
     }
+    readTools(e, data) {
+        this.ProcessId = data.key
+        this.ToolsVisible = true;
 
+    }
 }

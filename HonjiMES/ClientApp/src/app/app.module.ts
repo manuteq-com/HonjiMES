@@ -145,6 +145,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { MaintenanceDetailComponent } from './maintenance/maintenance-detail/maintenance-detail.component';
 import { CreatemaintenanceComponent } from './maintenance/createmaintenance/createmaintenance.component';
 import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
+import { ToolsetComponent } from './process/toolset/toolset.component';
 
 
 
@@ -309,6 +310,7 @@ export function tokenGetter() {
         MaintenanceDetailComponent,
         CreatemaintenanceComponent,
         StaffmanagementComponent,
+        ToolsetComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
