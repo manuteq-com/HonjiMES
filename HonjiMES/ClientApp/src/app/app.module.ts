@@ -187,7 +187,8 @@ export function tokenGetter() {
                 tokenGetter
             }
         }),
-        NgZorroAntdModule
+        NgZorroAntdModule,
+        DxGalleryModule
     ],
     declarations: [
         AppComponent,
