@@ -14,7 +14,7 @@ namespace HonjiMES.Models
     {
         public User()
         {
-            MaintenanceLogs = new HashSet<MaintenanceLog>();
+            MaintenanceDetails = new HashSet<MaintenanceDetail>();
             StaffManagements = new HashSet<StaffManagement>();
             UserRoles = new HashSet<UserRole>();
         }
@@ -75,8 +75,8 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [InverseProperty(nameof(MaintenanceLog.User))]
-        public virtual ICollection<MaintenanceLog> MaintenanceLogs { get; set; }
+        [InverseProperty(nameof(MaintenanceDetail.User))]
+        public virtual ICollection<MaintenanceDetail> MaintenanceDetails { get; set; }
         [InverseProperty(nameof(StaffManagement.User))]
         public virtual ICollection<StaffManagement> StaffManagements { get; set; }
         [InverseProperty(nameof(UserRole.Users))]

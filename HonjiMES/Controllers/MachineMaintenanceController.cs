@@ -111,7 +111,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<MachineMaintenance>> PostMachineMaintenance(MachineMaintenance machinemaintenance)
         {
             //新增時檢查[代號][名稱]是否重複
-            if (_context.MachineMaintenances.AsQueryable().Where(x => x.MachineId == machinemaintenance.MachineId && x.DeleteFlag == 0).Any())
+            if (_context.MachineMaintenances.AsQueryable().Where(x => x.MachineId == machinemaintenance.MachineId 
+            && x.Item == machinemaintenance.Item && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("該機台已存在!", machinemaintenance));
             }
@@ -133,35 +134,35 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MachineMaintenance>> GetMaintenanceLogs(int id)
+        public async Task<ActionResult<MaintenanceDetail>> GetMaintenanceLogs(int id)
         {
-            var maintenancelogs = await _context.MaintenanceLogs.Where(x => x.MachineId == id).ToListAsync();
-            return Ok(MyFun.APIResponseOK(maintenancelogs));
+            var maintenancedetails = await _context.MaintenanceDetails.Where(x => x.MaintenanceId == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(maintenancedetails));
         }
 
         /// <summary>
         /// 修改機台保養紀錄列表
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="maintenancelog"></param>
+        /// <param name="maintenancedetail"></param>
         /// <returns></returns>
         // PUT: api/Customers/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMaintenanceLog(int id, MaintenanceLog maintenancelog)
+        public async Task<IActionResult> PutMaintenanceLog(int id, MaintenanceDetail maintenancedetail)
         {
-            maintenancelog.Id = id;
-            var Omaintenancelog = _context.MaintenanceLogs.Find(id);
-            var COmaintenancelog = Omaintenancelog;
-            if (!string.IsNullOrWhiteSpace(maintenancelog.Item))
-            {
-                COmaintenancelog.Item = maintenancelog.Item;
-            }
+            maintenancedetail.Id = id;
+            var Omaintenancedetail = _context.MaintenanceDetails.Find(id);
+            var COmaintenancedetail = Omaintenancedetail;
+            // if ()
+            // {
+                
+            // }
 
-            var Msg = MyFun.MappingData(ref Omaintenancelog, maintenancelog);
-            Omaintenancelog.UpdateTime = DateTime.Now;
-            Omaintenancelog.UpdateUser = MyFun.GetUserID(HttpContext);
+            var Msg = MyFun.MappingData(ref Omaintenancedetail, maintenancedetail);
+            Omaintenancedetail.UpdateTime = DateTime.Now;
+            Omaintenancedetail.UpdateUser = MyFun.GetUserID(HttpContext);
             try
             {
                 await _context.SaveChangesAsync();
@@ -177,7 +178,7 @@ namespace HonjiMES.Controllers
                     throw;
                 }
             }
-            return Ok(MyFun.APIResponseOK(maintenancelog));
+            return Ok(MyFun.APIResponseOK(maintenancedetail));
         }
         /// <summary>
         /// 新增機台保養紀錄列表
@@ -197,6 +198,7 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(maintenancelog));
         }
+    
 
         
 

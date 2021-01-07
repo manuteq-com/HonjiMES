@@ -15,7 +15,6 @@ namespace HonjiMES.Models
         public MachineInformation()
         {
             MachineMaintenances = new HashSet<MachineMaintenance>();
-            MaintenanceLogs = new HashSet<MaintenanceLog>();
             StaffManagements = new HashSet<StaffManagement>();
         }
 
@@ -84,8 +83,6 @@ namespace HonjiMES.Models
 
         [InverseProperty(nameof(MachineMaintenance.Machine))]
         public virtual ICollection<MachineMaintenance> MachineMaintenances { get; set; }
-        [InverseProperty(nameof(MaintenanceLog.Machine))]
-        public virtual ICollection<MaintenanceLog> MaintenanceLogs { get; set; }
         [InverseProperty(nameof(StaffManagement.Machine))]
         public virtual ICollection<StaffManagement> StaffManagements { get; set; }
     }

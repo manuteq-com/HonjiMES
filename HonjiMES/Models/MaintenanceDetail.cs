@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HonjiMES.Models
 {
     /// <summary>
-    /// &#27231;&#21488;&#20445;&#39178;&#32000;&#37636;
+    /// &#20445;&#39178;&#26126;&#32048;
     /// </summary>
-    [Table("maintenance_log")]
-    public partial class MaintenanceLog
+    [Table("maintenance_detail")]
+    public partial class MaintenanceDetail
     {
         /// <summary>
         /// 唯一碼
@@ -19,26 +19,21 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         /// <summary>
+        /// &#27231;&#21488;&#20445;&#39178;ID
+        /// </summary>
+        [Column("maintenance_id", TypeName = "int(11)")]
+        public int MaintenanceId { get; set; }
+        /// <summary>
         /// &#25805;&#20316;&#20154;&#21729;
         /// </summary>
         [Column("user_id", TypeName = "int(11)")]
         public int UserId { get; set; }
         /// <summary>
-        /// &#27231;&#21488;ID
-        /// </summary>
-        [Column("machine_id", TypeName = "int(11)")]
-        public int MachineId { get; set; }
-        /// <summary>
-        /// &#27231;&#21488;&#21517;&#31281;
+        /// &#20445;&#39178;&#38917;&#30446;
         /// </summary>
         [Required]
-        [Column("machine_name", TypeName = "varchar(50)")]
-        public string MachineName { get; set; }
-        /// <summary>
-        /// &#27231;&#21488;&#20445;&#39178;ID
-        /// </summary>
-        [Column("maintenance_id", TypeName = "int(11)")]
-        public int MaintenanceId { get; set; }
+        [Column("item", TypeName = "varchar(50)")]
+        public string Item { get; set; }
         /// <summary>
         /// &#32173;&#35703;&#26178;&#38291;
         /// </summary>
@@ -64,14 +59,11 @@ namespace HonjiMES.Models
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
 
-        [ForeignKey(nameof(MachineId))]
-        [InverseProperty(nameof(MachineInformation.MaintenanceLogs))]
-        public virtual MachineInformation Machine { get; set; }
         [ForeignKey(nameof(MaintenanceId))]
-        [InverseProperty(nameof(MachineMaintenance.MaintenanceLogs))]
+        [InverseProperty(nameof(MachineMaintenance.MaintenanceDetails))]
         public virtual MachineMaintenance Maintenance { get; set; }
         [ForeignKey(nameof(UserId))]
-        [InverseProperty("MaintenanceLogs")]
+        [InverseProperty("MaintenanceDetails")]
         public virtual User User { get; set; }
     }
 }
