@@ -74,7 +74,7 @@ export class StaffmanagementComponent implements OnInit {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
         this.getData();
-        this.app.GetData('/Users/GetUser').subscribe(
+        this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
                     debugger;
