@@ -134,8 +134,8 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MachineMaintenance>> GetMaintenanceLogs(int id)
         {
-            var machinelogs = await _context.MachineLogs.Where(x => x.MachineId == id).ToListAsync();
-            return Ok(MyFun.APIResponseOK(machinelogs));
+            var maintenancelogs = await _context.MaintenanceLogs.Where(x => x.MachineId == id).ToListAsync();
+            return Ok(MyFun.APIResponseOK(maintenancelogs));
         }
 
         /// <summary>

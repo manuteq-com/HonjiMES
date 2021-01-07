@@ -66,5 +66,14 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(MachineId))]
         [InverseProperty(nameof(MachineInformation.StaffManagements))]
         public virtual MachineInformation Machine { get; set; }
+        [ForeignKey(nameof(ProcessId))]
+        [InverseProperty("StaffManagements")]
+        public virtual Process Process { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty("StaffManagements")]
+        public virtual User User { get; set; }
+        [ForeignKey(nameof(WorkOrderId))]
+        [InverseProperty(nameof(WorkOrderHead.StaffManagements))]
+        public virtual WorkOrderHead WorkOrder { get; set; }
     }
 }
