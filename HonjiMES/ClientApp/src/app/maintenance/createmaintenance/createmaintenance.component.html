@@ -1,20 +1,20 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="false" [showColonAfterLabel]="true"
         [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-        <dxi-item dataField="machine" [editorOptions]="{ disabled: true }">
-            <dxi-validation-rule type="required" message="元件品號 必填"></dxi-validation-rule>
+        <dxi-item dataField="MachineId"  editorType="dxSelectBox" [editorOptions]="editorOptions">
+            <dxi-validation-rule type="required" message="機台"></dxi-validation-rule>
             <dxo-label text="機台"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="item" [editorOptions]="{ disabled: true }">
-            <dxi-validation-rule type="required" message="元件品名 必填"></dxi-validation-rule>
+        <dxi-item dataField="Item" [editorOptions]="{ disabled: false }">
+            <dxi-validation-rule type="required" message="項目"></dxi-validation-rule>
             <dxo-label text="項目"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="Quantity"  dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             <dxi-validation-rule type="required" message="庫存量 必填"></dxi-validation-rule>
             <dxo-label text="庫存量"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="cycle" [editorOptions]="{ disabled: true }">
-            <dxi-validation-rule type="required" message="規格 必填"></dxi-validation-rule>
+        <dxi-item dataField="CycleTime" [editorOptions]="{ disabled: false }" dataType="number" editorType="dxNumberBox">
+            <dxi-validation-rule type="required" message="週期(月)"></dxi-validation-rule>
             <dxo-label text="週期(月)"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="lastTime" [editorOptions]="{ disabled: true }">

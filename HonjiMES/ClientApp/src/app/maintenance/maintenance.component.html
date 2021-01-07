@@ -12,9 +12,13 @@
         </dx-button>
     </div>
 </div>
-<dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-    [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [columnAutoWidth]="false" [showBorders]="true" [masterDetail]="{ enabled: true, template: 'detail' }">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-paging [enabled]="true" [pageSize]="15">
@@ -37,13 +41,18 @@
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
-    <dxi-column dataField="machine" caption="機台" [filterValue]="" dataType="string" >
+    <dxi-column dataField="MachineId" caption="機台" [filterValue]="" dataType="string" >
+        <dxo-lookup
+                [dataSource]="MachineList"
+                valueExpr="Id"
+                displayExpr="Name">
+            </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="item" caption="項目" dataType="string" ></dxi-column>
-    <dxi-column dataField="cycle" caption="週期(月)" dataType="string" ></dxi-column>
+    <dxi-column dataField="Item" caption="項目" dataType="string" ></dxi-column>
+    <dxi-column dataField="CycleTime" caption="週期(月)" dataType="string" ></dxi-column>
 
-    <dxi-column dataField="lastTime" caption="最近保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
-    <dxi-column dataField="nextTime" caption="下次保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
+    <dxi-column dataField="RecentTime" caption="最近保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
+    <dxi-column dataField="NextTime" caption="下次保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
 
 
     <dxi-column type="buttons">
@@ -53,13 +62,12 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-            <app-maintenance-detail></app-maintenance-detail>
+            <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item" [bentest]="'test'" [itemval]="item.row"></app-maintenance-detail>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-createmaintenance></app-createmaintenance>
-        <!-- <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true"
-            [exceldata]="exceldata"></app-creatmaterial-basic> -->
+        <app-createmaintenance ></app-createmaintenance>
+
     </div>
 </dx-popup>

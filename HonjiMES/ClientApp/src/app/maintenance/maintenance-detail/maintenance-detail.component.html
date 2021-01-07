@@ -1,8 +1,17 @@
 <dx-data-grid
 [dataSource]="dataSourceDB"
 showBorders="true"
-keyExpr="id"
+keyExpr="Id"
 [focusedRowEnabled]="true"
+(onDataErrorOccurred)="onDataErrorOccurred($event)"
+[(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+(onFocusedRowChanging)="onFocusedRowChanging($event)"
+(onFocusedRowChanged)="onFocusedRowChanged($event)"
+(onEditorPreparing)="onEditorPreparing($event)"
+(onSelectionChanged)="selectionChanged($event)"
+(onCellClick)="cellClick($event)"
+(onRowUpdated)="onRowUpdated($event)"
+(onRowPrepared)="onRowPrepared($event)"
 hoverStateEnabled="true"
 [rowAlternationEnabled]="true">
 
@@ -14,10 +23,10 @@ hoverStateEnabled="true"
 <dxo-paging [pageSize]="20"></dxo-paging>
 <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
 </dxo-pager>
-<dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+<dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="false">
     <dxo-form>
-        <dxi-item dataField="time" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="pcharge" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="RecentTime" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="CreateUser" [editorOptions]="{ disabled: true }"></dxi-item>
 
         <!-- <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item> -->
         <!-- <dxi-item dataField="Unit"></dxi-item> -->
@@ -30,8 +39,8 @@ hoverStateEnabled="true"
         </dxi-toolbar-item>
     </dxo-popup> -->
 </dxo-editing>
-<dxi-column dataField="time" caption="維護時間" dataType="date" format="shortDateShortTime" [visible]="true"></dxi-column>
-<dxi-column dataField="pcharge" caption="執行人員" [visible]="true"></dxi-column>
+<dxi-column dataField="RecentTime" caption="維護時間0" dataType="date" format="shortDateShortTime" [visible]="true"></dxi-column>
+<dxi-column dataField="CreateUser" caption="執行人員" [visible]="true"></dxi-column>
 
 <!-- <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)"></dxi-column> -->
 <!-- <dxi-column dataField="Unit" caption="單位"></dxi-column> -->
