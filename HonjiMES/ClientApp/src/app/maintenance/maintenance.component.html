@@ -18,7 +18,7 @@
     (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
     (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
-    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="true">
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-paging [enabled]="true" [pageSize]="15">
@@ -62,7 +62,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-            <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item" [bentest]="'test'" [itemval]="item.row"></app-maintenance-detail>
+            <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item.data.MachineId" [itemval]="item.row"></app-maintenance-detail>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">

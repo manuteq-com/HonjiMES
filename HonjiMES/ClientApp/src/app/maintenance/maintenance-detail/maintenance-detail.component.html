@@ -26,7 +26,9 @@ hoverStateEnabled="true"
 <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="false">
     <dxo-form>
         <dxi-item dataField="RecentTime" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="CreateUser" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="UserId" [editorOptions]="{ disabled: true }">
+            <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+        </dxi-item>
 
         <!-- <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item> -->
         <!-- <dxi-item dataField="Unit"></dxi-item> -->
@@ -39,8 +41,10 @@ hoverStateEnabled="true"
         </dxi-toolbar-item>
     </dxo-popup> -->
 </dxo-editing>
-<dxi-column dataField="RecentTime" caption="維護時間0" dataType="date" format="shortDateShortTime" [visible]="true"></dxi-column>
-<dxi-column dataField="CreateUser" caption="執行人員" [visible]="true"></dxi-column>
+<dxi-column dataField="RecentTime" caption="維護時間" dataType="date" format="shortDateShortTime" [visible]="true"></dxi-column>
+<dxi-column dataField="UserId" caption="執行人員" [visible]="true">
+    <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+</dxi-column>
 
 <!-- <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)"></dxi-column> -->
 <!-- <dxi-column dataField="Unit" caption="單位"></dxi-column> -->

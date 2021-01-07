@@ -9,6 +9,7 @@ import notify from 'devextreme/ui/notify';
 import { APIResponse } from 'src/app/app.module';
 import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
+import moment from 'moment';
 
 @Component({
     selector: 'app-maintenance-detail',
@@ -23,12 +24,21 @@ export class MaintenanceDetailComponent implements OnInit {
     @Input() masterkey: any;
     @Input() itemval: any;
     @Input() bentest:any;
-
+    UserList:any;
+    editorOptions:any;
 
     Controller = '/MachineMaintenance';
     detailfilter: any;
     autoNavigateToFocusedRow = true;
     constructor(private http: HttpClient, public app: AppComponent) {
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
+                    //this.getdata();
+                }
+            }
+        );
     }
     ngOnInit(): void {
 
@@ -38,19 +48,17 @@ export class MaintenanceDetailComponent implements OnInit {
             key: 'Id',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetMaintenanceLogs/' + this.masterkey),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetMaterial', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostMaintenanceLog', 'POST', { values }),
+            insert: (values) => {
+                values.item = this.itemval.data.Item;
+                values.MachineId = this.itemval.data.MachineId;
+                values.CreateTime = new Date();
+                return SendService.sendRequest(this.http, this.Controller + '/PostMaintenanceLog', 'POST', { values })
+            },
             update: (key, values) => {
-                if (values.Price === null) {
-                    values.Price = 0;
-                }
-                if (values.QuantityLimit === null) {
-                    values.QuantityLimit = 0;
-                }
                 return SendService.sendRequest(this.http, this.Controller + '/PutMaintenanceLog', 'PUT', { key, values });
             },
             //remove: (key) => SendService.sendRequest(http, this.Controller + '/Delete/' + key, 'DELETE')
         });
-
     }
     cancelClickHandler(e) { }
     onDataErrorOccurred(e) { }
@@ -61,6 +69,7 @@ export class MaintenanceDetailComponent implements OnInit {
     cellClick(e) { }
     onRowUpdated(e) { }
     onRowPrepared(e) { }
+
 
 
 }
