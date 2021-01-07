@@ -17,18 +17,64 @@ import { Title } from '@angular/platform-browser';
     styleUrls: ['./maintenance.component.css']
 })
 export class MaintenanceComponent implements OnInit {
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     dataSourceDB;
     creatpopupVisible: boolean;
     buttondisabled = false;
-    constructor() {
+    Controller = '/MachineMaintenance';
+    detailfilter: any;
+    itemkey: any;
+    bentest:any;
+    autoNavigateToFocusedRow = true;
+    remoteOperations : boolean;
+    MachineList: any
+    constructor(private http: HttpClient, public app: AppComponent) {
+        this.remoteOperations = true;
+        this.getdata();
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                console.log(s);
+                this.MachineList = s.data;
+                if (s.success) {
 
-        this.dataSourceDB = [{ "Id":1,"item": "A", "cycle": 1, "machine": "A1","lastTime":"2020-12-15T00:30:00","nextTime":"2020-12-15T00:40:00" }, {"Id":2, "item": "A", "cycle": 1, "machine": "A2","nextTime":"2020-12-15T00:00:00","lastTime":"2020-12-15T00:00:00" }, { "Id":3,"item": "AB", "cycle": 1, "machine": "A3","lastTime":"2020-12-16T00:01:00","nextTime":"2020-12-15T00:03:00" }]
+                }
+            }
+        );
     }
 
     ngOnInit(): void {
 
 
     }
+
+    getdata() {
+        this.dataSourceDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) => {
+                // loadOptions.sort = [{ selector: 'WorkOrderNo', desc: true }];
+                // if (loadOptions.searchValue) {
+                // loadOptions.filter = [
+                //     ['CreateTime', '>=', oldDay],
+                //     'and',
+                //     ['CreateTime', '<=', toDay],
+                // ];
+                // }
+                return SendService.sendRequest(
+                    this.http,
+                    this.Controller + '/GetMachineMaintenances',
+                    'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter });
+            },
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetMachineMaintenance', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostMachineMaintenance', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutMachineMaintenance', 'PUT', { key, values }),
+            //remove: (key) => SendService.sendRequest(this.http, this.Controller + '/Delete/' + key, 'DELETE')
+        });
+    }
+
+
+
+
 
     cancelClickHandler(e) {
         //this.dataGridnobom.instance.cancelEditData();
@@ -42,5 +88,16 @@ export class MaintenanceComponent implements OnInit {
     creatpopup_result(){
         this.creatpopupVisible = false;
     }
+    onRowChanged() {
+        this.dataGrid.instance.refresh();
+    }
+    onDataErrorOccurred(e){}
+    onFocusedRowChanging(e){}
+    onRowPrepared(e){}
+    onFocusedRowChanged(e){}
+    onEditorPreparing(e){}
+    onEditingStart(e){}
+    selectionChanged(e){}
+    onCellPrepared(e){}
 
 }
