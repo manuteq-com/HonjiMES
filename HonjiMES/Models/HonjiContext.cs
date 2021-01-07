@@ -967,6 +967,9 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.MachineId)
                     .HasName("machine_id");
 
+                entity.HasIndex(e => e.MaintenanceId)
+                    .HasName("maintenance_id");
+
                 entity.HasIndex(e => e.UserId)
                     .HasName("user_id");
 
@@ -978,17 +981,14 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
-                entity.Property(e => e.Item)
-                    .HasComment("保養項目")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
                 entity.Property(e => e.MachineId).HasComment("機台ID");
 
                 entity.Property(e => e.MachineName)
                     .HasComment("機台名稱")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MaintenanceId).HasComment("機台保養ID");
 
                 entity.Property(e => e.RecentTime)
                     .HasDefaultValueSql("current_timestamp()")
@@ -1005,6 +1005,12 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.MachineId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("maintenance_log_ibfk_2");
+
+                entity.HasOne(d => d.Maintenance)
+                    .WithMany(p => p.MaintenanceLogs)
+                    .HasForeignKey(d => d.MaintenanceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("maintenance_log_ibfk_3");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.MaintenanceLogs)

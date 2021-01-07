@@ -35,11 +35,10 @@ namespace HonjiMES.Models
         [Column("machine_name", TypeName = "varchar(50)")]
         public string MachineName { get; set; }
         /// <summary>
-        /// &#20445;&#39178;&#38917;&#30446;
+        /// &#27231;&#21488;&#20445;&#39178;ID
         /// </summary>
-        [Required]
-        [Column("item", TypeName = "varchar(50)")]
-        public string Item { get; set; }
+        [Column("maintenance_id", TypeName = "int(11)")]
+        public int MaintenanceId { get; set; }
         /// <summary>
         /// &#32173;&#35703;&#26178;&#38291;
         /// </summary>
@@ -68,6 +67,9 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(MachineId))]
         [InverseProperty(nameof(MachineInformation.MaintenanceLogs))]
         public virtual MachineInformation Machine { get; set; }
+        [ForeignKey(nameof(MaintenanceId))]
+        [InverseProperty(nameof(MachineMaintenance.MaintenanceLogs))]
+        public virtual MachineMaintenance Maintenance { get; set; }
         [ForeignKey(nameof(UserId))]
         [InverseProperty("MaintenanceLogs")]
         public virtual User User { get; set; }

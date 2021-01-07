@@ -12,6 +12,11 @@ namespace HonjiMES.Models
     [Table("machine_maintenance")]
     public partial class MachineMaintenance
     {
+        public MachineMaintenance()
+        {
+            MaintenanceLogs = new HashSet<MaintenanceLog>();
+        }
+
         /// <summary>
         /// 唯一碼
         /// </summary>
@@ -72,5 +77,7 @@ namespace HonjiMES.Models
         [ForeignKey(nameof(MachineId))]
         [InverseProperty(nameof(MachineInformation.MachineMaintenances))]
         public virtual MachineInformation Machine { get; set; }
+        [InverseProperty(nameof(MaintenanceLog.Maintenance))]
+        public virtual ICollection<MaintenanceLog> MaintenanceLogs { get; set; }
     }
 }
