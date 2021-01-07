@@ -50,7 +50,8 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime);
-            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).Include(x => x.WorkOrderDetails)
+            .OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
             {
                 Id = x.Id,
                 WorkOrderNo = x.WorkOrderNo,
@@ -74,6 +75,7 @@ namespace HonjiMES.Controllers
                 CreateUser = x.CreateUser,
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
+                WorkOrderDetails = x.WorkOrderDetails,
                 OrderCount = x.OrderDetailAndWorkOrderHeads.Where(y => y.DataType == x.DataType && y.DataId == x.DataId && y.DeleteFlag == 0).Sum(y => y.OrdeCount),
             });
 
