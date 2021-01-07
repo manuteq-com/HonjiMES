@@ -25,6 +25,7 @@ namespace HonjiMES.Controllers
         public MachineMaintenanceController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 查詢機台保養列表
