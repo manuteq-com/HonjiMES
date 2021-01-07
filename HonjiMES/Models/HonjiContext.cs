@@ -964,6 +964,12 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("機台保養紀錄");
 
+                entity.HasIndex(e => e.MachineId)
+                    .HasName("machine_id");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("user_id");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -993,6 +999,18 @@ namespace HonjiMES.Models
                     .HasComment("更新時間");
 
                 entity.Property(e => e.UserId).HasComment("操作人員");
+
+                entity.HasOne(d => d.Machine)
+                    .WithMany(p => p.MaintenanceLogs)
+                    .HasForeignKey(d => d.MachineId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("maintenance_log_ibfk_2");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.MaintenanceLogs)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("maintenance_log_ibfk_1");
             });
 
             modelBuilder.Entity<Material>(entity =>
