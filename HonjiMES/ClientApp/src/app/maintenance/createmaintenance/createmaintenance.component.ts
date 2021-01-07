@@ -28,7 +28,6 @@ export class CreatemaintenanceComponent implements OnInit {
     editorOptions: any;
     Postdata: any;
     constructor(private http: HttpClient, public app: AppComponent) {
-        this.getdata();
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
@@ -50,32 +49,6 @@ export class CreatemaintenanceComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
-
-    }
-
-    getdata() {
-        // this.dataSourceDB = new CustomStore({
-        //     key: 'Id',
-        //     load: (loadOptions) => {
-        //         // loadOptions.sort = [{ selector: 'WorkOrderNo', desc: true }];
-        //         // if (loadOptions.searchValue) {
-        //         // loadOptions.filter = [
-        //         //     ['CreateTime', '>=', oldDay],
-        //         //     'and',
-        //         //     ['CreateTime', '<=', toDay],
-        //         // ];
-        //         // }
-        //         return SendService.sendRequest(
-        //             this.http,
-        //             this.Controller + '/GetOrderHeads',
-        //             'GET', { loadOptions, remote: true, detailfilter: this.detailfilter });
-        //     },
-        //     byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetOrderHead', 'GET', { key }),
-        //     insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostOrderHead', 'POST', { values }),
-        //     update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutOrderHead', 'PUT', { key, values }),
-        //     remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteOrderHead/' + key, 'DELETE')
-        // });
     }
 
     ngOnChanges() {
@@ -96,7 +69,7 @@ export class CreatemaintenanceComponent implements OnInit {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
             notify({
-                message: '請注意訂單內容必填的欄位',
+                message: '請注意保養內容必填的欄位',
                 position: {
                     my: 'center top',
                     at: 'center top'

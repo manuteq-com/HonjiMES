@@ -25,13 +25,13 @@ hoverStateEnabled="true"
 </dxo-pager>
 <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="false">
     <dxo-form>
-        <dxi-item dataField="RecentTime" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="RecentTime" [editorOptions]="{ disabled: true }">
+            <dxi-validation-rule type="required" message="必填"></dxi-validation-rule>
+        </dxi-item>
         <dxi-item dataField="UserId" [editorOptions]="{ disabled: true }">
             <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="必填"></dxi-validation-rule>
         </dxi-item>
-
-        <!-- <dxi-item dataField="Price" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item> -->
-        <!-- <dxi-item dataField="Unit"></dxi-item> -->
 
     </dxo-form>
     <!-- <dxo-popup [showTitle]="true" title="修改明細資訊" [width]="800" [height]="410">
@@ -41,22 +41,17 @@ hoverStateEnabled="true"
         </dxi-toolbar-item>
     </dxo-popup> -->
 </dxo-editing>
-<dxi-column dataField="RecentTime" caption="維護時間" dataType="date" format="shortDateShortTime" [visible]="true"></dxi-column>
+<dxi-column dataField="RecentTime" caption="維護時間" dataType="date" format="shortDateShortTime" [visible]="true">
+    <dxi-validation-rule type="required" message="必填"></dxi-validation-rule>
+
+</dxi-column>
 <dxi-column dataField="UserId" caption="執行人員" [visible]="true">
     <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    <dxi-validation-rule type="required" message="必填"></dxi-validation-rule>
+
 </dxi-column>
 
-<!-- <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)"></dxi-column> -->
-<!-- <dxi-column dataField="Unit" caption="單位"></dxi-column> -->
-<!-- <dxi-column dataField="Supplier" caption="供應商">
-    <dxo-lookup [dataSource]="Supplierlist" displayExpr="Name" valueExpr="Id">
-    </dxo-lookup>
-</dxi-column> -->
-<!-- <dxi-column dataField="SubInventory" caption="存放庫別"></dxi-column> -->
-<!-- <dxi-column dataField="WarehouseId" caption="存放庫別">
-    <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id">
-    </dxo-lookup>
-</dxi-column> -->
+
 <dxi-column type="buttons" caption="" [width]="200">
     <!-- <dxi-button text="複製" hint="複製" icon="repeat" [onClick]="cloneIconClick"></dxi-button> -->
     <dxi-button name="save" text="存檔" icon="save"></dxi-button>

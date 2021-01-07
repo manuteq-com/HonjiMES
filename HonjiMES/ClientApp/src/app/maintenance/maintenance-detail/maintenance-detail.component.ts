@@ -53,9 +53,35 @@ export class MaintenanceDetailComponent implements OnInit {
                 values.MaintenanceId = this.masterkey;
                 values.item = this.itemval.data.Item;
                 values.MachineId = this.itemval.data.MachineId;
+                let end_date = moment(new Date());
+                let start_date  = moment(new Date(values.RecentTime));
+                let diffday = end_date.diff(start_date,'days');
+                if(diffday > 30){
+                    notify({
+                        message: '執行日期超過30天前不可新增!! ',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'warning', 6000);
+                    return;
+                }
                 return SendService.sendRequest(this.http, this.Controller + '/PostMaintenanceDetail', 'POST', { values })
             },
             update: (key, values) => {
+                let end_date = moment(new Date());
+                let start_date  = moment(new Date(values.RecentTime));
+                let diffday = end_date.diff(start_date,'days');
+                if(diffday > 30){
+                    notify({
+                        message: '執行日期超過30天前不可更新!! ',
+                        position: {
+                            my: 'center top',
+                            at: 'center top'
+                        }
+                    }, 'warning', 6000);
+                    return;
+                }
                 return SendService.sendRequest(this.http, this.Controller + '/PutMaintenanceDetail', 'PUT', { key, values });
             },
             //remove: (key) => SendService.sendRequest(http, this.Controller + '/Delete/' + key, 'DELETE')
