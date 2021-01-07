@@ -44,18 +44,19 @@ export class MaintenanceDetailComponent implements OnInit {
 
     }
     ngOnChanges(){
+        debugger;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetMaintenanceLogs/' + this.masterkey),
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetMaintenanceDetails/' + this.masterkey),
             byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetMaterial', 'GET', { key }),
             insert: (values) => {
+                values.MaintenanceId = this.masterkey;
                 values.item = this.itemval.data.Item;
                 values.MachineId = this.itemval.data.MachineId;
-                values.CreateTime = new Date();
-                return SendService.sendRequest(this.http, this.Controller + '/PostMaintenanceLog', 'POST', { values })
+                return SendService.sendRequest(this.http, this.Controller + '/PostMaintenanceDetail', 'POST', { values })
             },
             update: (key, values) => {
-                return SendService.sendRequest(this.http, this.Controller + '/PutMaintenanceLog', 'PUT', { key, values });
+                return SendService.sendRequest(this.http, this.Controller + '/PutMaintenanceDetail', 'PUT', { key, values });
             },
             //remove: (key) => SendService.sendRequest(http, this.Controller + '/Delete/' + key, 'DELETE')
         });

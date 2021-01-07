@@ -62,7 +62,7 @@
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
-            <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item.data.MachineId" [itemval]="item.row"></app-maintenance-detail>
+            <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item.data.Id" [itemval]="item.row"></app-maintenance-detail>
     </div>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">

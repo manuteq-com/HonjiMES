@@ -88,7 +88,8 @@ export class MaintenanceComponent implements OnInit {
     creatpopup_result(){
         this.creatpopupVisible = false;
     }
-    onRowChanged() {
+    onRowChanged(e) {
+        debugger;
         this.dataGrid.instance.refresh();
     }
     onDataErrorOccurred(e){}

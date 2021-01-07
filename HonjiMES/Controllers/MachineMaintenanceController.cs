@@ -117,7 +117,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("該機台已存在!", machinemaintenance));
             }
             machinemaintenance.RecentTime = DateTime.Now;
-            machinemaintenance.NextTime = DateTime.Now.AddMonths(machinemaintenance.CycleTime);
+            machinemaintenance.NextTime = machinemaintenance.RecentTime.AddMonths(machinemaintenance.CycleTime);
             machinemaintenance.CreateTime = DateTime.Now;
             machinemaintenance.CreateUser = MyFun.GetUserID(HttpContext);
             _context.MachineMaintenances.Add(machinemaintenance);
@@ -134,7 +134,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MaintenanceDetail>> GetMaintenanceLogs(int id)
+        public async Task<ActionResult<MaintenanceDetail>> GetMaintenanceDetails(int id)
         {
             var maintenancedetails = await _context.MaintenanceDetails.Where(x => x.MaintenanceId == id).ToListAsync();
             return Ok(MyFun.APIResponseOK(maintenancedetails));
@@ -150,16 +150,11 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMaintenanceLog(int id, MaintenanceDetail maintenancedetail)
+        public async Task<IActionResult> PutMaintenanceDetail(int id, MaintenanceDetail maintenancedetail)
         {
             maintenancedetail.Id = id;
             var Omaintenancedetail = _context.MaintenanceDetails.Find(id);
             var COmaintenancedetail = Omaintenancedetail;
-            // if ()
-            // {
-                
-            // }
-
             var Msg = MyFun.MappingData(ref Omaintenancedetail, maintenancedetail);
             Omaintenancedetail.UpdateTime = DateTime.Now;
             Omaintenancedetail.UpdateUser = MyFun.GetUserID(HttpContext);
@@ -183,20 +178,22 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 新增機台保養紀錄列表
         /// </summary>
-        /// <param name="maintenancelog"></param>
+        /// <param name="maintenancedetail"></param>
         /// <returns></returns>
         // POST: api/Customers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<MaintenanceLog>> PostMaintenanceLog(MaintenanceLog maintenancelog)
+        public async Task<ActionResult<MaintenanceDetail>> PostMaintenanceDetail(MaintenanceDetail maintenancedetail)
         {
-            var machinemaintenance = _context.MachineMaintenances.Find(maintenancelog.MachineId);
-            machinemaintenance.RecentTime = maintenancelog.RecentTime;
-            machinemaintenance.NextTime = DateTime.Now.AddMonths(machinemaintenance.CycleTime);
-            _context.MaintenanceLogs.Add(maintenancelog);
+            var machinemaintenance = _context.MachineMaintenances.Find(maintenancedetail.MaintenanceId);
+            // machinemaintenance.RecentTime = maintenancedetail.RecentTime;
+            // machinemaintenance.NextTime = machinemaintenance.RecentTime.AddMonths(machinemaintenance.CycleTime);
+            maintenancedetail.CreateTime = DateTime.Now;
+            maintenancedetail.CreateUser = MyFun.GetUserID(HttpContext);
+            _context.MaintenanceDetails.Add(maintenancedetail);
             await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK(maintenancelog));
+            return Ok(MyFun.APIResponseOK(maintenancedetail));
         }
     
 
