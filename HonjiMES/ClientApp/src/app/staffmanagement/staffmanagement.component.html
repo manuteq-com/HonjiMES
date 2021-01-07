@@ -30,7 +30,7 @@
 
 
     <dxi-column dataField="UserId" caption="操作人員" [width]="300">
-        <dxo-lookup [dataSource]="StaffList" displayExpr="Username" valueExpr="Id"></dxo-lookup>
+        <dxo-lookup [dataSource]="StaffList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MachineId" caption="操作機台" [width]="150">
         <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Id"></dxo-lookup>

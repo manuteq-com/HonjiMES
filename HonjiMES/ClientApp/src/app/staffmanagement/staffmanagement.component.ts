@@ -18,7 +18,7 @@ import { CreateNumberInfo } from 'src/app/model/viewmodels';
 })
 export class StaffmanagementComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
-    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    // @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     dataSource: any;
     dataSourceDB: any;
     modval: any;
@@ -30,21 +30,9 @@ export class StaffmanagementComponent implements OnInit {
     readOnly: boolean;
     showColon: boolean;
     CreateTimeDateBoxOptions: any;
-    PurchaseDateBoxOptions: any;
-    SupplierselectBoxOptions: any;
-    MaterialselectBoxOptions: any;
-    TypeselectBoxOptions: any;
-    DataType: number;
-    Priceval: number;
-    addRow = true;
-    eformData: any;
     CreateNumberInfoVal: any;
-    Quantityvalmax: number;
     saveCheck = true;
-    showdisabled: boolean;
     Purchaselist: any;
-    selectBoxOptions: any;
-    DeliveryTime: Date;
     TypeDisabled: boolean;
     gridsaveCheck: boolean;
 
@@ -138,7 +126,6 @@ export class StaffmanagementComponent implements OnInit {
         this.CreateTimeValueChange(e);
     }
     CreateTimeValueChange = async function (e) {
-        // this.formData = this.myform.instance.option('formData');
         if (this.formData.CreateTime != null) {
             if (this.formData.Type === 30) {
                 this.WarehouseIdAVisible = true;
