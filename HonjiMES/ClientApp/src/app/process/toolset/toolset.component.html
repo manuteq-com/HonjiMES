@@ -1,0 +1,29 @@
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" [rowAlternationEnabled]="true"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true"
+    (onInitNewRow)="onInitNewRow($event)">
+
+    <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+
+    </dxo-editing>
+
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-header-filter [visible]="false"></dxo-header-filter>
+    <dxi-column dataField="ToolId" caption="刀具">
+        <dxo-lookup [dataSource]="ToolList" displayExpr="ToolSerialno" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="HolderId" caption="刀桿">
+        <dxo-lookup [dataSource]="HolderList" displayExpr="ToolSerialno" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Remark" caption="備註"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+        <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+    </dxi-column>
+
+
+
+</dx-data-grid>

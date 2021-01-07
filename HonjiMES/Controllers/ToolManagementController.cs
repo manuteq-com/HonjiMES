@@ -12,7 +12,7 @@ using HonjiMES.Filter;
 namespace HonjiMES.Controllers
 {
     /// <summary>
-    /// 顧客列表
+    /// 刀具基本資料列表
     /// </summary>
     [JWTAuthorize]
     [Consumes("application/json")]
@@ -25,6 +25,7 @@ namespace HonjiMES.Controllers
         public ToolManagementController(HonjiContext context)
         {
             _context = context;
+            _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
         }
         /// <summary>
         /// 查詢刀具基本資料列表
@@ -82,7 +83,7 @@ namespace HonjiMES.Controllers
                 COtoolmanagement.ToolSpecification = toolmanagement.ToolSpecification;
             }
             //修改時檢查[代號][名稱]是否重複
-            if (_context.ToolManagements.AsQueryable().Where(x => x.Id != id && (x.ToolName == COtoolmanagement.ToolName 
+            if (_context.ToolManagements.AsQueryable().Where(x => x.Id != id && (x.ToolName == COtoolmanagement.ToolName
             || x.ToolSpecification == COtoolmanagement.ToolSpecification) && x.DeleteFlag == 0).Any())
             {
                 return Ok(MyFun.APIResponseError("刀具的 [刀具名稱] 或 [刀具規格] 重複!", COtoolmanagement));
@@ -122,7 +123,7 @@ namespace HonjiMES.Controllers
             //新增時檢查[代號][名稱]是否重複
             if (_context.ToolManagements.AsQueryable().Where(x => (x.ToolSerialno == toolmanagement.ToolSerialno || x.ToolSpecification == toolmanagement.ToolSpecification) && x.DeleteFlag == 0).Any())
             {
-                return Ok(MyFun.APIResponseError("客戶的 [代號] 或 [名稱] 已存在!", toolmanagement));
+                return Ok(MyFun.APIResponseError("刀具的 [刀具名稱] 或 [刀具規格] 已存在!", toolmanagement));
             }
             _context.ToolManagements.Add(toolmanagement);
             await _context.SaveChangesAsync();

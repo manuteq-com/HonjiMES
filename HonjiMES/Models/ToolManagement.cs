@@ -12,6 +12,12 @@ namespace HonjiMES.Models
     [Table("tool_management")]
     public partial class ToolManagement
     {
+        public ToolManagement()
+        {
+            ToolsetHolders = new HashSet<Toolset>();
+            ToolsetTools = new HashSet<Toolset>();
+        }
+
         /// <summary>
         /// 唯一碼
         /// </summary>
@@ -58,5 +64,10 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+
+        [InverseProperty(nameof(Toolset.Holder))]
+        public virtual ICollection<Toolset> ToolsetHolders { get; set; }
+        [InverseProperty(nameof(Toolset.Tool))]
+        public virtual ICollection<Toolset> ToolsetTools { get; set; }
     }
 }

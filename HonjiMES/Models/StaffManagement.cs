@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HonjiMES.Models
 {
     /// <summary>
-    /// &#27231;&#21488;&#20445;&#39178;&#32000;&#37636;
+    /// &#20154;&#21729;&#25490;&#29677;
     /// </summary>
-    [Table("maintenance_log")]
-    public partial class MaintenanceLog
+    [Table("staff_management")]
+    public partial class StaffManagement
     {
         /// <summary>
         /// 唯一碼
@@ -19,7 +19,7 @@ namespace HonjiMES.Models
         [Column("id", TypeName = "int(11)")]
         public int Id { get; set; }
         /// <summary>
-        /// &#25805;&#20316;&#20154;&#21729;
+        /// &#20154;&#21729;ID
         /// </summary>
         [Column("user_id", TypeName = "int(11)")]
         public int UserId { get; set; }
@@ -29,27 +29,25 @@ namespace HonjiMES.Models
         [Column("machine_id", TypeName = "int(11)")]
         public int MachineId { get; set; }
         /// <summary>
-        /// &#27231;&#21488;&#21517;&#31281;
+        /// &#24037;&#21934;ID
         /// </summary>
-        [Required]
-        [Column("machine_name", TypeName = "varchar(50)")]
-        public string MachineName { get; set; }
+        [Column("work_order_id", TypeName = "int(11)")]
+        public int WorkOrderId { get; set; }
         /// <summary>
-        /// &#20445;&#39178;&#38917;&#30446;
+        /// &#24037;&#24207;ID
         /// </summary>
-        [Required]
-        [Column("item", TypeName = "varchar(50)")]
-        public string Item { get; set; }
-        /// <summary>
-        /// &#32173;&#35703;&#26178;&#38291;
-        /// </summary>
-        [Column("recent_time", TypeName = "timestamp")]
-        public DateTime RecentTime { get; set; }
+        [Column("process_id", TypeName = "int(11)")]
+        public int ProcessId { get; set; }
         /// <summary>
         /// &#38283;&#22987;&#26178;&#38291;
         /// </summary>
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
+        /// <summary>
+        /// &#32080;&#26463;&#26178;&#38291;
+        /// </summary>
+        [Column("end_time", TypeName = "timestamp")]
+        public DateTime EndTime { get; set; }
         [Column("create_user", TypeName = "int(11)")]
         public int CreateUser { get; set; }
         /// <summary>
@@ -64,5 +62,9 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
+
+        [ForeignKey(nameof(MachineId))]
+        [InverseProperty(nameof(MachineInformation.StaffManagements))]
+        public virtual MachineInformation Machine { get; set; }
     }
 }

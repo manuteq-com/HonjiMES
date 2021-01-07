@@ -257,5 +257,5 @@ const MachineWorkDateVal: Selectitem[] = [
 ];
 const tooltypes: Selectitem[] = [
     { Id: 1, Name: '刀具' },
-    { Id: 2, Name: '刀把' }
+    { Id: 2, Name: '刀桿' }
 ];

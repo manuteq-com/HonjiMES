@@ -12,6 +12,7 @@ namespace HonjiMES.Models
         public Process()
         {
             MBillOfMaterials = new HashSet<MBillOfMaterial>();
+            Toolsets = new HashSet<Toolset>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
         }
 
@@ -95,6 +96,8 @@ namespace HonjiMES.Models
 
         [InverseProperty(nameof(MBillOfMaterial.Process))]
         public virtual ICollection<MBillOfMaterial> MBillOfMaterials { get; set; }
+        [InverseProperty(nameof(Toolset.Process))]
+        public virtual ICollection<Toolset> Toolsets { get; set; }
         [InverseProperty(nameof(WorkOrderDetail.Process))]
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
     }
