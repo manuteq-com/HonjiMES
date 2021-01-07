@@ -2504,6 +2504,15 @@ namespace HonjiMES.Models
                 entity.HasIndex(e => e.MachineId)
                     .HasName("machine_id");
 
+                entity.HasIndex(e => e.ProcessId)
+                    .HasName("process_id");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("user_id");
+
+                entity.HasIndex(e => e.WorkOrderId)
+                    .HasName("work_order_id");
+
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -2533,6 +2542,24 @@ namespace HonjiMES.Models
                     .HasForeignKey(d => d.MachineId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("staff_management_ibfk_1");
+
+                entity.HasOne(d => d.Process)
+                    .WithMany(p => p.StaffManagements)
+                    .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("staff_management_ibfk_4");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.StaffManagements)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("staff_management_ibfk_2");
+
+                entity.HasOne(d => d.WorkOrder)
+                    .WithMany(p => p.StaffManagements)
+                    .HasForeignKey(d => d.WorkOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("staff_management_ibfk_3");
             });
 
             modelBuilder.Entity<StockDetail>(entity =>
