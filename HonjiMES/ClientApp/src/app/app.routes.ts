@@ -87,7 +87,7 @@ export const routes: Routes = [
     { path: 'machineorder', component: MachineorderComponent },
     { path: 'createbom', component: CreateBomComponent },
     { path: 'chatHub', component: ChatHubComponent },
-    { path: 'machineorderboard', component: MachineorderBoardComponent },
+    { path: 'board', component: MachineorderBoardComponent },
     { path: 'toolmanagement', component: ToolmanagementComponent },
     { path: 'maintenance', component: MaintenanceComponent },
     { path: 'staffmanagement', component: StaffmanagementComponent },
