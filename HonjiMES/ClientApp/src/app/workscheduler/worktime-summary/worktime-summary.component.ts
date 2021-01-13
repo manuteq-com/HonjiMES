@@ -26,7 +26,7 @@ export class WorktimeSummaryComponent implements OnInit {
     MaterialBasicList: any;
     itemkey: number;
     mod: string;
-    Controller = '/WorkOrders';
+    Controller = '/WorkScheduler';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     listBillofPurchaseOrderStatus: any;
 
@@ -55,7 +55,7 @@ export class WorktimeSummaryComponent implements OnInit {
             // load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHeads'),
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetWorkOrderHeads',
+                this.Controller + '/GetWorkOrderHeadSummarys',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
         });
     }
