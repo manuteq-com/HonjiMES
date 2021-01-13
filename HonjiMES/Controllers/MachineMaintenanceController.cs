@@ -136,7 +136,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MaintenanceDetail>> GetMaintenanceDetails(int id)
         {
-            var maintenancedetails = await _context.MaintenanceDetails.Where(x => x.MaintenanceId == id).ToListAsync();
+            var maintenancedetails = await _context.MaintenanceDetails.Where(x => x.MaintenanceId == id).OrderBy(x => x.RecentTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(maintenancedetails));
         }
 
@@ -187,8 +187,8 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<MaintenanceDetail>> PostMaintenanceDetail(MaintenanceDetail maintenancedetail)
         {
             var machinemaintenance = _context.MachineMaintenances.Find(maintenancedetail.MaintenanceId);
-            // machinemaintenance.RecentTime = maintenancedetail.RecentTime;
-            // machinemaintenance.NextTime = machinemaintenance.RecentTime.AddMonths(machinemaintenance.CycleTime);
+            machinemaintenance.RecentTime = maintenancedetail.RecentTime;
+            machinemaintenance.NextTime = machinemaintenance.RecentTime.AddMonths(machinemaintenance.CycleTime);
             maintenancedetail.CreateTime = DateTime.Now;
             maintenancedetail.CreateUser = MyFun.GetUserID(HttpContext);
             _context.MaintenanceDetails.Add(maintenancedetail);

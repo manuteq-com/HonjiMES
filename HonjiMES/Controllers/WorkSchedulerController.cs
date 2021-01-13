@@ -277,5 +277,20 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(MachineWorkDate));
         }
 
+
+        // GET: api/WorkOrderReportLogs
+        /// <summary>
+        /// 工序工時明細
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<WorkSchedulerVM>> GetWorkOrderDetailSummary(int Id)
+        {
+            var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == Id).ToListAsync();
+            var total = data.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
     }
 }
