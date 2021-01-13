@@ -113,9 +113,9 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
-    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate" [allowEditing]="false" [width]="180"></dxi-column>
-    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="180"></dxi-column>
-    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate" [allowEditing]="false" [width]="150"></dxi-column>
+    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150"></dxi-column>
+    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="150"></dxi-column>
 
     <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
