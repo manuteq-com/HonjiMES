@@ -18,18 +18,18 @@ export class WorktimeListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() status: boolean;
     @Input() itemkey: number;
-    @Input() SupplierList: any;
-    @Input() MaterialBasicList: any;
-    allMode: string;
-    checkBoxesMode: string;
+    // @Input() SupplierList: any;
+    // @Input() MaterialBasicList: any;
+    // allMode: string;
+    // checkBoxesMode: string;
     dataSourceDB: CustomStore;
     Controller = '/WorkScheduler';
     StatusList: any;
     ProcessBasicList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
-        this.allMode = 'allPages';
-        this.checkBoxesMode = 'always'; // 'onClick';
+        // this.allMode = 'allPages';
+        // this.checkBoxesMode = 'always'; // 'onClick';
         this.StatusList = myservice.getWorkOrderStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',

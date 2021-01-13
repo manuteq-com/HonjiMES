@@ -3,9 +3,7 @@ import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
-import { Observable } from 'rxjs';
 import { SendService } from 'src/app/shared/mylib';
-import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
@@ -19,24 +17,16 @@ export class WorktimeSummaryComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
 
-    creatpopupVisible: boolean;
-    autoNavigateToFocusedRow = true;
     dataSourceDB: any;
-    SupplierList: any;
-    MaterialBasicList: any;
     itemkey: number;
     mod: string;
-    Controller = '/WorkOrders';
+    Controller = '/WorkScheduler';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
-    listBillofPurchaseOrderStatus: any;
-
     remoteOperations: boolean;
     formData: any;
     editorOptions: any;
     detailfilter = [];
     DetailsDataSourceStorage: any;
-    newpopupVisible: boolean;
-    UserList: any;
     WorkOrderTypeList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
@@ -55,23 +45,9 @@ export class WorktimeSummaryComponent implements OnInit {
             // load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHeads'),
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetWorkOrderHeads',
+                this.Controller + '/GetWorkOrderHeadSummarys',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
         });
-    }
-    newdata() {
-        this.newpopupVisible = true;
-    }
-    newpopup_result(e) {
-        this.newpopupVisible = false;
-        this.dataGrid.instance.refresh();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
     }
     allowEdit(e) {
         if (e.row.data.Status === 0) {
@@ -79,20 +55,6 @@ export class WorktimeSummaryComponent implements OnInit {
         } else {
             return false;
         }
-    }
-    creatdata() {
-        this.creatpopupVisible = true;
-    }
-    creatpopup_result(e) {
-        this.creatpopupVisible = false;
-        this.dataGrid.instance.refresh();
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
     }
     updatepopup_result(e) {
         this.dataGrid.instance.refresh();
@@ -121,7 +83,6 @@ export class WorktimeSummaryComponent implements OnInit {
         }, 'error', 3000);
     }
     onFocusedRowChanging(e) {
-        // debugger;
         const rowsCount = e.component.getVisibleRows().length;
         const pageCount = e.component.pageCount();
         const pageIndex = e.component.pageIndex();
@@ -141,13 +102,6 @@ export class WorktimeSummaryComponent implements OnInit {
             }
         }
     }
-    // onClickQuery(e) {
-    //     debugger;
-    //     alert('!!');
-    //     this.detailfilter = this.myform.instance.option('formData');
-    //     // this.getdata();
-    //     this.dataGrid.instance.refresh();
-    // }
     onValueChanged(e) {
         debugger;
         this.detailfilter = this.myform.instance.option('formData');
@@ -173,11 +127,9 @@ export class WorktimeSummaryComponent implements OnInit {
         }
     }
     onEditingStart(e) {
-
     }
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
-
     }
 }

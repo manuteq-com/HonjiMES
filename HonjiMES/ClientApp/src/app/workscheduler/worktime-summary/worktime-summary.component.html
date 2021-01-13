@@ -10,7 +10,6 @@
     (onEditorPreparing)="onEditorPreparing($event)"
     (onSelectionChanged)="selectionChanged($event)"
     (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
     (onFocusedRowChanging)="onFocusedRowChanging($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
@@ -31,18 +30,18 @@
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
 
-    <dxi-column dataField="WorkOrderNo" caption="工單號" [allowEditing]="false">
+    <dxi-column dataField="WorkOrderNo" caption="工單號" [allowEditing]="false" [width]="300">
     </dxi-column>
     <dxi-column dataField="Count" caption="數量" dataType="number"></dxi-column>
     <dxi-column dataField="Count" caption="總工時" dataType="number"></dxi-column>
-    <dxi-column dataField="Status" caption="狀態" alignment="center" width="200">
+    <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="200">
         <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
-    </dxi-column><dxi-column dataField="DueStartTime" caption="預計開工日" [width]="180" dataType="date">
+    </dxi-column><dxi-column dataField="DueStartTime" caption="預計開工日" [width]="200" dataType="date">
     </dxi-column>
-    <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="180" dataType="date">
+    <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="200" dataType="date">
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc">
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="300">
     </dxi-column>
 
     <div *dxTemplate="let item of 'detail'">
