@@ -30,47 +30,23 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
-        <dxo-form [colCount]=4>
-            <dxi-item dataField="BillofPurchaseNo"></dxi-item>
-            <dxi-item dataField="Status"></dxi-item>
-            <dxi-item dataField="BillofPurchaseDate"></dxi-item>
-            <dxi-item dataField="Remarks" [colSpan]=3></dxi-item>
-        </dxo-form>
-    </dxo-editing>
 
-    <dxi-column dataField="BillofPurchaseNo" caption="工單號" [allowEditing]="false">
+    <dxi-column dataField="WorkOrderNo" caption="工單號" [allowEditing]="false">
     </dxi-column>
+    <dxi-column dataField="Count" caption="數量" dataType="number"></dxi-column>
+    <dxi-column dataField="Count" caption="總工時" dataType="number"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" alignment="center" width="200">
-        <dxo-lookup [dataSource]="listBillofPurchaseOrderStatus" displayExpr="Name" valueExpr="Id">
+        <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
+    </dxi-column><dxi-column dataField="DueStartTime" caption="預計開工日" [width]="180" dataType="date">
+    </dxi-column>
+    <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="180" dataType="date">
     </dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc">
     </dxi-column>
-    <dxi-column dataField="BillofPurchaseDate" caption="進貨日期" dataType="date"></dxi-column>
-    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
-        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="UpdateUser" caption="更新人員" alignment="center" [width]="120">
-        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column type="buttons">
-        <!-- <dxi-button text="複製" hint="複製" icon="copy" [onClick]="cloneIconClick"></dxi-button> -->
-        <dxi-button name="save" text="存檔" icon="save"></dxi-button>
-        <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-        <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-        <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-    </dxi-column>
-    <!-- <dxi-column type="buttons">
-        <dxi-button hint="轉進貨" text="轉進貨" [onClick]="to_purchaseClick"></dxi-button>
-    </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-bill-purchase-detail [itemkey]="item.key" [SupplierList]="SupplierList"
-            [MaterialBasicList]="MaterialBasicList" (childOuter)="updatepopup_result($event)">
-        </app-bill-purchase-detail>
+        <app-worktime-list [itemkey]="item.key" (childOuter)="updatepopup_result($event)"></app-worktime-list>
     </div>
 
 </dx-data-grid>

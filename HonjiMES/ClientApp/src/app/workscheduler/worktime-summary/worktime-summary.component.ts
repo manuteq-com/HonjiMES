@@ -26,7 +26,7 @@ export class WorktimeSummaryComponent implements OnInit {
     MaterialBasicList: any;
     itemkey: number;
     mod: string;
-    Controller = '/BillofPurchaseHeads';
+    Controller = '/WorkOrders';
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     listBillofPurchaseOrderStatus: any;
 
@@ -37,38 +37,14 @@ export class WorktimeSummaryComponent implements OnInit {
     DetailsDataSourceStorage: any;
     newpopupVisible: boolean;
     UserList: any;
+    WorkOrderTypeList: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
-        this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
+        this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
-
-        this.app.GetData('/Suppliers/GetSuppliers').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.SupplierList = s.data;
-                    this.SupplierList.forEach(x => {
-                        x.Name = x.Code + x.Name.substring(0, 4);
-                    });
-                }
-            }
-        );
-        this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.MaterialBasicList = s.data.data;
-                }
-            }
-        );
-        this.app.GetData('/Users/GetUsers').subscribe(
-            (s2) => {
-                if (s2.success) {
-                    this.UserList = s2.data;
-                    this.getdata();
-                }
-            }
-        );
+        this.getdata();
     }
     ngOnInit() {
         this.titleService.setTitle('總工時統計');
@@ -79,12 +55,8 @@ export class WorktimeSummaryComponent implements OnInit {
             // load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHeads'),
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
-                this.Controller + '/GetBillofPurchaseHeads',
+                this.Controller + '/GetWorkOrderHeads',
                 'GET', { loadOptions, remote: this.remoteOperations, detailfilter: this.detailfilter }),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHead', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostBillofPurchaseHead', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutBillofPurchaseHead', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteBillofPurchaseHead/' + key, 'DELETE')
         });
     }
     newdata() {
