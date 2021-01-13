@@ -732,6 +732,7 @@ namespace HonjiMES.Models
     {
         public string StockCount { get; set; }
         public decimal OrderCount { get; set; }
+        public decimal? Total { get; set; }
     }
     public class OrderToWorkCheckData
     {

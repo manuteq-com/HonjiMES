@@ -277,6 +277,38 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(MachineWorkDate));
         }
 
+        /// <summary>
+        /// 查詢所有工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WorkOrderHead>>> GetWorkOrderHeadSummarys(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails)
+            .OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
+            {
+                Id = x.Id,
+                WorkOrderNo = x.WorkOrderNo,
+                Count = x.Count,
+                Status = x.Status,
+                DueStartTime = x.DueStartTime,
+                DueEndTime = x.DueEndTime,
+                DeleteFlag = x.DeleteFlag,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                Total = x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)
+                .Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))))
+            });
+            var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
 
         // GET: api/WorkOrderReportLogs
         /// <summary>
