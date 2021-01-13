@@ -18,10 +18,6 @@ export class WorktimeListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @Input() status: boolean;
     @Input() itemkey: number;
-    // @Input() SupplierList: any;
-    // @Input() MaterialBasicList: any;
-    // allMode: string;
-    // checkBoxesMode: string;
     dataSourceDB: CustomStore;
     Controller = '/WorkScheduler';
     StatusList: any;
