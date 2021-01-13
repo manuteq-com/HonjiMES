@@ -1,13 +1,12 @@
-
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
         <dx-button
             class="insertbtn"
             stylingMode="contained"
-            text="新增保養"
+            text="新增保養項目"
             type="success"
-            [width]="120"
+            [width]="130"
             (onClick)="creatdata()">
         </dx-button>
     </div>
@@ -65,7 +64,7 @@
             <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item.data.Id" [itemval]="item.row"></app-maintenance-detail>
     </div>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="240" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-createmaintenance ></app-createmaintenance>
 

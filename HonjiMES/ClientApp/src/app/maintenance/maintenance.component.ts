@@ -29,7 +29,7 @@ export class MaintenanceComponent implements OnInit {
     autoNavigateToFocusedRow = true;
     remoteOperations : boolean;
     MachineList: any
-    constructor(private http: HttpClient, public app: AppComponent) {
+    constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
         this.getdata();
         this.app.GetData('/Machines/GetMachines').subscribe(
@@ -44,8 +44,7 @@ export class MaintenanceComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
-
+        this.titleService.setTitle('機台保養');
     }
 
     getdata() {
