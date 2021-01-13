@@ -147,6 +147,7 @@ import { CreatemaintenanceComponent } from './maintenance/createmaintenance/crea
 import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
 import { ToolsetComponent } from './process/toolset/toolset.component';
 import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/worktime-summary.component';
+import { WorktimeListComponent } from './workscheduler/worktime-list/worktime-list.component';
 
 
 
@@ -313,6 +314,7 @@ export function tokenGetter() {
         StaffmanagementComponent,
         ToolsetComponent,
         WorktimeSummaryComponent,
+        WorktimeListComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

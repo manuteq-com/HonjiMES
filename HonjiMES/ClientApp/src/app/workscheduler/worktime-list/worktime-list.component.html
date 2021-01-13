@@ -1,0 +1,24 @@
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
+(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" [rowAlternationEnabled]="true">
+    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing>
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item i-total-item column="ProcessLeadTime" summaryType="sum">
+        </dxi-total-item>
+        <dxi-total-item i-total-item column="ProcessTime" summaryType="sum">
+        </dxi-total-item>
+    </dxo-summary>
+
+    <dxi-column dataField="SerialNumber" caption="序號" alignment="center" [allowEditing]="false" [width]="70">
+    </dxi-column>
+    <dxi-column dataField="ProcessId" caption="工序" [allowEditing]="false">
+        <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="Status" caption="狀態" [allowEditing]="false">
+        <dxo-lookup [dataSource]="StatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="加工機台" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ProcessLeadTime" caption="前置時間" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="ProcessTime" caption="標準工時" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="ActualStartTime" caption="實際開工日" [allowEditing]="false" dataType="datetime"></dxi-column>
+    <dxi-column dataField="ActualEndTime" caption="實際完工日" [allowEditing]="false" dataType="datetime"></dxi-column>
+</dx-data-grid>
