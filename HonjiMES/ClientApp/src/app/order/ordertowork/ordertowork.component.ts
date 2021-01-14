@@ -137,7 +137,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
     CancerOnClick(e) {
         this.modName = 'cancer';
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         this.dataGrid.instance.saveEditData();
         this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
         if (this.topurchasekey.length === 0) {

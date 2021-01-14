@@ -387,6 +387,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         };
     }
     ShowQCReportView(Status, Type) { // QC報工畫面
+        debugger
         if (Status === 1) { // 未開工
             this.startBtnVisible = true;
         } else if (Status === 2) { // 已開工
