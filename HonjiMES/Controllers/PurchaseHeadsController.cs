@@ -169,7 +169,7 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
-        /// 用供應商取未結案採購單(表處)列表
+        /// 用供應商取未結案採購單(外包、表處)列表
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -177,7 +177,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseHead>> GetNotEndPurchaseHeadsSurfaceBySupplier(int id)
         {
-            var data = _context.PurchaseHeads.AsQueryable().Where(x => x.Status == 0 && x.Type == 30 && x.DeleteFlag == 0 && x.SupplierId == id);
+            var data = _context.PurchaseHeads.AsQueryable().Where(x => x.Status == 0 && (x.Type == 20 || x.Type == 30) && x.DeleteFlag == 0 && x.SupplierId == id);
             var PurchaseHeads = await data.OrderByDescending(x => x.CreateTime).ToListAsync();
             return Ok(MyFun.APIResponseOK(PurchaseHeads));
         }
