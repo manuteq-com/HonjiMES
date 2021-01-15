@@ -23,7 +23,7 @@
                     <div class="machineOrderList-box">
                         <ul>
                             <li *ngFor="let itemd of item.machineOrderList">
-                                <dx-button [ngClass]="getworkOrderNoClass(item.TotalTime)" class="card-text No-btn" (onClick)="startProcess(itemd)">
+                                <dx-button [ngClass]="getworkOrderNoClass(item.TotalTime)" class="box-card-text No-btn" (onClick)="startProcess(itemd)">
                                     {{itemd.WorkOrderNo}}
                                 </dx-button>
                             </li>

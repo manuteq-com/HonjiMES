@@ -91,8 +91,10 @@ a{
 ::ng-deep.dx-button-content{
      line-height: unset;
      text-align: left;
+     padding: none;
 }
 
-.machineOrderList-box .card-text{
+.machineOrderList-box .box-card-text{
     font-size: 20px;
+    margin-bottom: 10px;
 }
