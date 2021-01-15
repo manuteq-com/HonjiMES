@@ -25,7 +25,7 @@
                         <div class="machineOrderList-box">
                             <ul>
                                 <li *ngFor="let itemd of galleryItem.machineOrderList">
-                                    <div [ngClass]="getworkOrderNoClass(galleryItem.TotalTime)" class="card-text No-btn"
+                                    <div [ngClass]="getworkOrderNoClass(galleryItem.TotalTime)" class="card-text"
                                         (onClick)="startProcess(itemd)">
                                         {{itemd.WorkOrderNo}}
                                     </div>

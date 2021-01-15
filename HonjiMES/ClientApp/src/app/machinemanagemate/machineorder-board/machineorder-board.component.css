@@ -113,3 +113,7 @@ span:nth-child(2){
 .layout-main::-webkit-scrollbar {
     display: none;
 }
+
+::ng-deep .dx-button-content{
+    line-height: unset;
+}
