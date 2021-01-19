@@ -742,6 +742,7 @@ namespace HonjiMES.Models
     public class WorkOrderDetailData : WorkOrderDetail
     {
         public int? ProcessType { get; set; }
+        public decimal? ActualTotalTime { get; set; }
     }
     public class WorkOrderData
     {

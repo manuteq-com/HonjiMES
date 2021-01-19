@@ -317,11 +317,50 @@ namespace HonjiMES.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<WorkSchedulerVM>> GetWorkOrderDetailSummary(int Id)
+        public async Task<ActionResult<WorkOrderDetailData>> GetWorkOrderDetailSummary(int Id)
         {
             var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == Id).ToListAsync();
-            var total = data.Sum(y => (y.ProcessTime + y.ProcessLeadTime) * (y.Count <= y.ReCount ? 0 : (y.Count - (y.ReCount ?? 0))));
-            return Ok(MyFun.APIResponseOK(data));
+            var dt = DateTime.Now;
+            var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
+            foreach (var item in data)
+            {
+                WorkOrderDetailDataList.Add(new WorkOrderDetailData{
+                    Id = item.Id,
+                    WorkOrderHeadId = item.WorkOrderHeadId,
+                    SerialNumber = item.SerialNumber,
+                    ProcessId = item.ProcessId,
+                    ProcessNo = item.ProcessNo,
+                    ProcessName = item.ProcessName,
+                    ProcessLeadTime = item.ProcessLeadTime,
+                    ProcessTime = item.ProcessTime,
+                    ProcessCost = item.ProcessCost,
+                    Count = item.Count,
+                    PurchaseId = item.PurchaseId,
+                    SupplierId = item.SupplierId,
+                    DrawNo = item.DrawNo,
+                    CodeNo = item.CodeNo,
+                    Manpower = item.Manpower,
+                    ProducingMachine = item.ProducingMachine,
+                    Status = item.Status,
+                    Type = item.Type,
+                    Remarks = item.Remarks,
+                    ReCount = item.ReCount,
+                    RePrice = item.RePrice,
+                    NgCount = item.NgCount,
+                    TotalTime = item.TotalTime,
+                    DueStartTime = item.DueStartTime,
+                    DueEndTime = item.DueEndTime,
+                    ActualStartTime = item.ActualStartTime,
+                    ActualEndTime = item.ActualEndTime,
+                    DeleteFlag = item.DeleteFlag,
+                    CreateTime = item.CreateTime,
+                    CreateUser = item.CreateUser,
+                    UpdateTime = item.UpdateTime,
+                    UpdateUser = item.UpdateUser,
+                    ActualTotalTime = Convert.ToDecimal(((item.ActualEndTime ?? dt)  - (item.ActualStartTime ?? dt)).TotalMinutes)
+                });
+            }
+            return Ok(MyFun.APIResponseOK(WorkOrderDetailDataList));
         }
 
     }
