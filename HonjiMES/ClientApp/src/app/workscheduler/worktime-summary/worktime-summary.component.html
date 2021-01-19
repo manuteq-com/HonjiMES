@@ -37,9 +37,9 @@
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="200">
         <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
-    </dxi-column><dxi-column dataField="DueStartTime" caption="預計開工日" [width]="200" dataType="date">
+    </dxi-column><dxi-column dataField="ActualStartTime" caption="實計開工日" [width]="200" dataType="date">
     </dxi-column>
-    <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="200" dataType="date">
+    <dxi-column dataField="ActualEndTime" caption="實計完工日" [width]="200" dataType="date">
     </dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="300">
     </dxi-column>

@@ -40,6 +40,7 @@ export class WorktimeSummaryComponent implements OnInit {
         this.titleService.setTitle('總工時統計');
     }
     getdata() {
+        debugger;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             // load: () => SendService.sendRequest(this.http, this.Controller + '/GetBillofPurchaseHeads'),
@@ -103,7 +104,7 @@ export class WorktimeSummaryComponent implements OnInit {
         }
     }
     onValueChanged(e) {
-        debugger;
+        //debugger;
         this.detailfilter = this.myform.instance.option('formData');
         this.dataGrid.instance.refresh();
     }
