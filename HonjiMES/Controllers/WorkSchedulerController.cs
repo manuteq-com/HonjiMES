@@ -357,7 +357,7 @@ namespace HonjiMES.Controllers
                     CreateUser = item.CreateUser,
                     UpdateTime = item.UpdateTime,
                     UpdateUser = item.UpdateUser,
-                    ActualTotalTime = Convert.ToDecimal(((item.ActualEndTime ?? dt)  - (item.ActualStartTime ?? dt)).TotalMinutes)
+                    ActualTotalTime = Convert.ToInt32(((item.ActualEndTime ?? dt)  - (item.ActualStartTime ?? dt)).TotalMinutes)
                 });
             }
             return Ok(MyFun.APIResponseOK(WorkOrderDetailDataList));
