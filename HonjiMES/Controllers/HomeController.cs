@@ -186,9 +186,9 @@ namespace HonjiMES.Controllers
                 {
                     var msg = item.MachineName + "機台已逾時 ";
                     TimeSpan ts = new TimeSpan(0, Decimal.ToInt32(item.DelayTime), 0);
-                    if (ts.Hours > 0)
+                    if (ts.TotalHours > 0)
                     {
-                        msg += ts.Hours.ToString("00") + ":";
+                        msg += ts.TotalHours.ToString("00") + ":";
                     }
                     if (ts.Minutes > 0)
                     {
@@ -199,7 +199,7 @@ namespace HonjiMES.Controllers
             }
             #endregion
             #region 保養狀況
-           
+
             #endregion
             return Ok(MyFun.APIResponseOK(message));
         }

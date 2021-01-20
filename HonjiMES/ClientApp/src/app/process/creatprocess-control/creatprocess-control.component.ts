@@ -48,6 +48,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     MaterialBasicList: any;
     ProcessBasicList: any;
     NumberBoxOptions: any;
+    zNumberBoxOptions: any;
     SerialNo: any;
     saveDisabled: boolean;
     runVisible: boolean;
@@ -71,11 +72,16 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     listWorkOrderTypes: any;
     MachineList: any;
     processVisible: boolean;
+    countVal: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
+        this.ProcessLeadTimesetCellValue = this.ProcessLeadTimesetCellValue.bind(this);
+        this.ProcessTimesetCellValue = this.ProcessTimesetCellValue.bind(this);
+        this.Countchange = this.Countchange.bind(this);
+
         // this.CustomerVal = null;
         // this.formData = null;
         this.editOnkeyPress = true;
@@ -104,13 +110,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
-        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1 };
-
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1, onValueChanged: this.Countchange };
+        this.zNumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
                     if (s.success) {
-                        s.data.unshift({Id: null, Name: ''}); // 加入第一行
+                        s.data.unshift({ Id: null, Name: '' }); // 加入第一行
                         this.MachineList = s.data;
                     }
                 }
@@ -448,7 +454,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     CancelOnClick(e) {
         this.modName = 'cancel';
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // debugger;
         if (this.modName !== 'cancel') {
             this.dataGrid2.instance.saveEditData();
@@ -544,5 +550,27 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             }, 'success', 3000);
         }
+    }
+    ProcessLeadTimesetCellValue(newData, value, currentRowData) {
+        newData.ProcessLeadTime = value;
+        newData.ExpectedlTotalTime = (currentRowData.ProcessTime + value) * this.formData.Count
+        if (isNaN(newData.ExpectedlTotalTime)) {
+            newData.ExpectedlTotalTime = 0;
+        }
+    }
+    ProcessTimesetCellValue(newData, value, currentRowData) {
+        newData.ProcessTime = value;
+        newData.ExpectedlTotalTime = (currentRowData.ProcessLeadTime + value) * this.formData.Count;
+        if (isNaN(newData.ExpectedlTotalTime)) {
+            newData.ExpectedlTotalTime = 0;
+        }
+    }
+    Countchange(e) {
+        debugger;
+        this.dataGrid2.instance.saveEditData();
+        this.dataSourceDB.forEach(item => {
+            item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * e.value;
+        });
+        this.dataGrid2.instance.refresh();
     }
 }
