@@ -64,6 +64,9 @@
         <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
             [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
+            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="2">
+                <dxo-label text="可製造數量"></dxo-label>
+            </dxi-item>
             <dxi-item dataField="CodeNo" [colSpan]="2" [disabled]="false" [visible]="HasCodeNoVisible">
                 <dxo-label text="加工程式"></dxo-label>
             </dxi-item>
@@ -93,7 +96,7 @@
             <dxi-item dataField="ProcessTime" [disabled]="true">
                 <dxo-label text="標準工時(分)"></dxo-label>
             </dxi-item> -->
-            <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="4" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
+            <dxi-item dataField="Message" editorType="dxTextArea" [colSpan]="2" [editorOptions]="{ height: 60 }" [visible]="RemarkVisible">
                 <dxo-label text="回報說明"></dxo-label>
             </dxi-item>
 
@@ -141,6 +144,11 @@
                 <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
                 <dxo-label text="NG"></dxo-label>
             </dxi-item>
+            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="1"
+             [visible]="NcCountVisible">
+                <dxi-validation-rule type="required" message="NC未加工 必填"></dxi-validation-rule>
+                <dxo-label text="NC未加工"></dxo-label>
+            </dxi-item>
 
 
             <dxi-item dataField="ReportType" editorType="dxSelectBox" [editorOptions]="selectQcType" [colSpan]="2" [visible]="HasQCVisible">
@@ -163,10 +171,10 @@
                 <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
                 <dxo-label text="NG數量"></dxo-label>
             </dxi-item>
-            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
+            <!-- <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="CountEditorOptions" [visible]="HasQCVisible">
                 <dxi-validation-rule type="required" message="NC未完工量 必填"></dxi-validation-rule>
                 <dxo-label text="NC未完工"></dxo-label>
-            </dxi-item>
+            </dxi-item> -->
             <!-- <dxi-item dataField="DrawNo" [visible]="HasQCVisible">
                 <dxo-label text="加工圖號"></dxo-label>
             </dxi-item> -->
@@ -174,7 +182,7 @@
                 <dxi-validation-rule type="required" message="檢驗結果 必填"></dxi-validation-rule>
                 <dxo-label text="檢驗結果"></dxo-label>
             </dxi-item> -->
-            <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="3" [visible]="HasQCVisible">
+            <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="2" [visible]="HasQCVisible">
                 <dxo-label text="回報說明"></dxo-label>
             </dxi-item>
 

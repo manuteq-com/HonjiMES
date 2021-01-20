@@ -95,6 +95,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     dataSourceDB: any;
     autoNavigateToFocusedRow = true;
     remoteOperations: boolean;
+    NcCountVisible: boolean;
+
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
             if (e.key === 'Enter') {
@@ -213,7 +215,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.HasProducingMachineVisible = false;
         this.HasQCVisible = false;
         this.PurchaseHeadList = [];
-
+        this.NcCountVisible = false;
         this.UserList = [];
         this.SetUserEditorOptions(this.UserList, null);
 
@@ -387,7 +389,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         };
     }
     ShowQCReportView(Status, Type) { // QC報工畫面
-        debugger
         if (Status === 1) { // 未開工
             this.startBtnVisible = true;
         } else if (Status === 2) { // 已開工
@@ -413,6 +414,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.NgCountVisible = true;
             this.RemarkVisible = true;
             this.endBtnVisible = true;
+            this.NcCountVisible = true;
 
             // 可重複報開工 2020/09/09
             this.restartedBtnVisible = true;
@@ -434,6 +436,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 this.endBtnVisible = true;
                 this.ReCountVisible = true;
                 this.NgCountVisible = true;
+                this.NcCountVisible = true;
             }
         }
     }
