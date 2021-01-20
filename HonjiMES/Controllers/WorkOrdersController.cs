@@ -17,6 +17,7 @@ using DevExpress.XtraReports.UI;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Newtonsoft.Json;
 using NPOI.POIFS.NIO;
+using AutoMapper;
 
 namespace HonjiMES.Controllers
 {
@@ -31,9 +32,10 @@ namespace HonjiMES.Controllers
     {
         private readonly HonjiContext _context;
         private readonly IWebHostEnvironment _IWebHostEnvironment;
-
-        public WorkOrdersController(HonjiContext context, IWebHostEnvironment environment)
+        private readonly IMapper _mapper;
+        public WorkOrdersController(HonjiContext context, IWebHostEnvironment environment, IMapper mapper)
         {
+            _mapper = mapper;
             _IWebHostEnvironment = environment;
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
@@ -177,21 +179,35 @@ namespace HonjiMES.Controllers
         {
             // var data = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.WorkOrderHeadId == id && x.DeleteFlag == 0).ToListAsync();
             // return Ok(MyFun.APIResponseOK(data));
-            var workOrderHead = await _context.WorkOrderHeads.Where(x => x.Id == id && x.DeleteFlag == 0).ToListAsync();
-            if (workOrderHead.Count == 1)
+            try
             {
-                var WorkOrderDetail = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
-                var data = new WorkOrderData
+                var workOrderHead = await _context.WorkOrderHeads.FindAsync(id);
+                if (workOrderHead != null)
                 {
-                    WorkOrderHead = workOrderHead.FirstOrDefault(),
-                    WorkOrderDetail = WorkOrderDetail
-                };
-                return Ok(MyFun.APIResponseOK(data));
+                    var WorkOrderDetail = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToList();
+                    var WorkOrderDetailDatalist = _mapper.Map<List<WorkOrderDetailData>>(WorkOrderDetail);
+                    foreach (var item in WorkOrderDetailDatalist)
+                    {
+                        item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * workOrderHead.Count;
+                    }
+                    var data = new WorkOrderData
+                    {
+                        WorkOrderHead = workOrderHead,
+                        WorkOrderDetailData = WorkOrderDetailDatalist
+                    };
+                    return Ok(MyFun.APIResponseOK(data));
+                }
+                else
+                {
+                    return Ok(MyFun.APIResponseError("工單查詢失敗!"));
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                return Ok(MyFun.APIResponseError("工單查詢失敗!"));
+
+                throw;
             }
+
         }
 
         /// <summary>

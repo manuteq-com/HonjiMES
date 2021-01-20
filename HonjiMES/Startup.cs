@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HonjiMES.Hubs;
+using AutoMapper;
 
 namespace HonjiMES
 {
@@ -46,6 +47,7 @@ namespace HonjiMES
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() { NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy() };
             });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //services.AddControllersWithViews(options =>
             //{
             //    options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());

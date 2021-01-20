@@ -154,6 +154,7 @@ export class ProcessControlComponent implements OnInit {
             this.workOrderHeadId = dataId;
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + dataId).subscribe(
                 (s) => {
+                    debugger;
                     if (s.success) {
                         if (this.app.checkUpdateRoles()) {
                             this.editVisible = true;
@@ -173,10 +174,10 @@ export class ProcessControlComponent implements OnInit {
                             this.btnDisabled = false;
                         }
 
-                        s.data.WorkOrderDetail.forEach(element => {
+                        s.data.WorkOrderDetailData.forEach(element => {
                             element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
                         });
-                        this.dataSourceDB_Process = s.data.WorkOrderDetail;
+                        this.dataSourceDB_Process = s.data.WorkOrderDetailData;
                         this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
                         // this.workOrderHeadId = s.data.WorkOrderHead.Id;
                         this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;

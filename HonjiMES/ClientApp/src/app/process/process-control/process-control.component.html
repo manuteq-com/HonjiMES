@@ -20,7 +20,7 @@
         <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
             [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-            [remoteOperations]="remoteOperations" >
+            [remoteOperations]="remoteOperations">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
@@ -39,12 +39,15 @@
             <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="DueStartTime" caption="預計開工" dataType="date" [width]="120" [visible]="true"></dxi-column>
-            <dxi-column dataField="DueEndTime" caption="預計完工" dataType="date" [width]="120" [visible]="true"></dxi-column>
+            <dxi-column dataField="DueStartTime" caption="預計開工" dataType="date" [width]="120" [visible]="true">
+            </dxi-column>
+            <dxi-column dataField="DueEndTime" caption="預計完工" dataType="date" [width]="120" [visible]="true">
+            </dxi-column>
             <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false" [width]="150"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false"
+                [width]="150"></dxi-column>
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
 
@@ -53,7 +56,8 @@
                 <!-- <dx-button class="runbtn" icon="runner" type="default" (onClick)="runProcess($event,data)"
                 [disabled]="!(data.data.Status === 0 || data.data.Status === 4)"></dx-button>
                 <dx-button class="editbtn" icon="edit" type="default" (onClick)="editProcess($event,data)"></dx-button> -->
-                <dx-button icon="chevrondoubleright" type="default" (onClick)="readProcess($event, data.data.Id)"></dx-button>
+                <dx-button icon="chevrondoubleright" type="default" (onClick)="readProcess($event, data.data.Id)">
+                </dx-button>
             </div>
 
             <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
@@ -121,7 +125,8 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="35" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="35" [allowEditing]="false">
+            </dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
@@ -137,10 +142,12 @@
             </dxi-column>
             <dxi-column dataField="Count" caption="良品/NG" alignment="center" [width]="75"></dxi-column>
             <!-- <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80"></dxi-column> -->
-            <dxi-column dataField="TotalTime" caption="預計工時(分)" dataType="number" [width]="95">
+            <dxi-column dataField="ExpectedlTotalTime" caption="預計工時(分)" dataType="number" [width]="95">
             </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="180"> </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime"
+                [width]="180"> </dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime"
+                [width]="180"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" [width]="30"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -153,11 +160,14 @@
                 <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
-
+            <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}">
+                </dxi-total-item>
+            </dxo-summary>
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" [title]="showTitleValue" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
-            [height]="700" [(visible)]="logpopupVisible">
+        <dx-popup [showTitle]="true" [title]="showTitleValue" [dragEnabled]="false" [closeOnOutsideClick]="false"
+            [width]="1700" [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-workorder-report-log [itemkeyval]="itemkey" [randomkey]="lograndomkey"></app-workorder-report-log>
             </div>
@@ -167,10 +177,11 @@
 
 </div>
 
-<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700"
-    [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1700" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey" [modval]="mod">
+        <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey"
+            [itemkeyval]="itemkey" [modval]="mod">
         </app-creatprocess-control>
     </div>
 </dx-popup>
@@ -180,9 +191,12 @@
     <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
 </nz-modal>
 
-<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
+<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600"
+    [height]="310" [(visible)]="closepopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId"
+            [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
+            [popupkeyval]="closepopupVisible"></app-workorder-close>
     </div>
 </dx-popup>
 
