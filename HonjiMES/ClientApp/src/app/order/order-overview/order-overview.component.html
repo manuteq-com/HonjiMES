@@ -29,7 +29,7 @@
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" ></dxi-column>
+    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" style="position:sticky" [fixed]="true"></dxi-column >
     <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
