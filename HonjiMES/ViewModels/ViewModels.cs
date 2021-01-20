@@ -430,7 +430,7 @@ namespace HonjiMES.Models
         public int Group { get; set; }
         public sbyte? Type { get; set; }
         public string Remarks { get; set; }
-        public int Master  { get; set; }
+        public int Master { get; set; }
         public int? MaterialBasicId { get; set; }
         public string MaterialName { get; set; }
         public string MaterialNo { get; set; }
@@ -741,8 +741,18 @@ namespace HonjiMES.Models
     }
     public class WorkOrderDetailData : WorkOrderDetail
     {
+        /// <summary>
+        /// 工序的種類
+        /// </summary>
         public int? ProcessType { get; set; }
-        public int? ActualTotalTime { get; set; }
+        /// <summary>
+        /// 實際總工時
+        /// </summary>
+        public decimal? ActualTotalTime { get; set; }
+        /// <summary>
+        /// 預計總工時
+        /// </summary>
+        public decimal? ExpectedlTotalTime { get; set; }
     }
     public class WorkOrderData
     {
@@ -782,13 +792,13 @@ namespace HonjiMES.Models
         public string CodeNo { get; set; }
         public int CreateUser { get; set; }
         public int Type { get; set; }
-        
-        public int ReportType { get; set; } 
-        public int CkCount { get; set; } 
-        public int OkCount { get; set; } 
-        public int NcCount { get; set; } 
-        public string DrawNo { get; set; } 
-        public int CheckResult { get; set; } 
+
+        public int ReportType { get; set; }
+        public int CkCount { get; set; }
+        public int OkCount { get; set; }
+        public int NcCount { get; set; }
+        public string DrawNo { get; set; }
+        public int CheckResult { get; set; }
     }
     public class WorkOrderReportDataAll
     {
@@ -935,7 +945,7 @@ namespace HonjiMES.Models
         public TempString Temp18 { get; set; }
         public TempString Temp19 { get; set; }
     }
-    
+
     /// <summary>
     /// 製成進度
     /// </summary>
@@ -994,7 +1004,7 @@ namespace HonjiMES.Models
         public TempString Temp18 { get; set; }
         public TempString Temp19 { get; set; }
     }
-    
+
     public class TempString
     {
         public string value0 { get; set; }
@@ -1033,7 +1043,7 @@ namespace HonjiMES.Models
         /// 物件類型
         /// </summary>
         public string BomType { get; set; }
-        
+
         /// <summary>
         /// 主件
         /// </summary>
@@ -1155,19 +1165,22 @@ namespace HonjiMES.Models
         public string No { get; set; }
     }
 
-    public class PurchaseDetailVM {
+    public class PurchaseDetailVM
+    {
         public int Id { get; set; }
         public PurchaseDetail PurchaseDetails { get; set; }
         public MaterialBasic MaterialBasics { get; set; }
     }
 
-    public class SaleDetailNewVM {
+    public class SaleDetailNewVM
+    {
         public int Id { get; set; }
         public int? Quantity { get; set; }
         public decimal? OriginPrice { get; set; }
     }
 
-    public class machine {
+    public class machine
+    {
         public int Id { get; set; }
         public string MachineName { get; set; }
         public string DataNo { get; set; }
@@ -1181,14 +1194,16 @@ namespace HonjiMES.Models
         public List<machineOrder> machineOrderList { get; set; }
     }
 
-    public class machineOrder{
+    public class machineOrder
+    {
         public int Id { get; set; }
         public string WorkOrderNo { get; set; }
         public int DetailSerialNumber { get; set; }
     }
 
 
-    public class ProcessesList{
+    public class ProcessesList
+    {
         public int Id { get; set; }
         public string Name { get; set; }
         public string WorkOrderNo { get; set; }

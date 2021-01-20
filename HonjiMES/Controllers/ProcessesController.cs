@@ -259,9 +259,9 @@ namespace HonjiMES.Controllers
                     var BasicDataName = "";
                     // if (item.DataType == 1)
                     // {
-                        var BasicData = _context.MaterialBasics.Find(item.DataId);
-                        BasicDataNo = BasicData.MaterialNo;
-                        BasicDataName = BasicData.Name;
+                    var BasicData = _context.MaterialBasics.Find(item.DataId);
+                    BasicDataNo = BasicData.MaterialNo;
+                    BasicDataName = BasicData.Name;
                     // }
                     // else if (item.DataType == 2)
                     // {
@@ -343,7 +343,8 @@ namespace HonjiMES.Controllers
             var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
             foreach (var item in WorkOrderDetails)
             {
-                WorkOrderDetailDataList.Add(new WorkOrderDetailData{
+                WorkOrderDetailDataList.Add(new WorkOrderDetailData
+                {
                     Id = item.Id,
                     WorkOrderHeadId = item.WorkOrderHeadId,
                     SerialNumber = item.SerialNumber,
@@ -377,8 +378,8 @@ namespace HonjiMES.Controllers
                     UpdateTime = item.UpdateTime,
                     UpdateUser = item.UpdateUser,
                     ProcessType = item.Process.Type,
-
-                    WorkOrderHead = item.WorkOrderHead
+                    WorkOrderHead = item.WorkOrderHead,
+                    ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * WorkOrderHeads.Count,
                 });
             }
             var WorkOrderData = new WorkOrderData2
@@ -403,7 +404,7 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderHead(int id)
         {
-            var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);      
+            var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
             if (WorkOrderHeads == null)
             {
                 return NotFound();
@@ -458,11 +459,11 @@ namespace HonjiMES.Controllers
                 var BasicDataName = "";
                 // if (DataType == 1)
                 // {
-                    var BasicData = _context.MaterialBasics.Find(WorkOrderData.WorkOrderHead.DataId);
-                    BasicDataID = BasicData.Id;
-                    BasicDataNo = BasicData.MaterialNo;
-                    BasicDataName = BasicData.Name;
-                    // DataType = BasicData.MaterialType == 1 ? 1 : 2;
+                var BasicData = _context.MaterialBasics.Find(WorkOrderData.WorkOrderHead.DataId);
+                BasicDataID = BasicData.Id;
+                BasicDataNo = BasicData.MaterialNo;
+                BasicDataName = BasicData.Name;
+                // DataType = BasicData.MaterialType == 1 ? 1 : 2;
                 // }
                 // else if (DataType == 2)
                 // {
@@ -694,9 +695,9 @@ namespace HonjiMES.Controllers
             {
                 // if (item.DataType == 1)
                 // {
-                    var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
-                    item.DataNo = BasicData.MaterialNo;
-                    item.DataName = BasicData.Name;
+                var BasicData = MaterialBasics.Find(x => x.Id == item.DataId);
+                item.DataNo = BasicData.MaterialNo;
+                item.DataName = BasicData.Name;
                 // }
                 // else if (item.DataType == 2)
                 // {

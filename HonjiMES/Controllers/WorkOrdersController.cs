@@ -320,7 +320,8 @@ namespace HonjiMES.Controllers
                 foreach (var item in OrderData.OrderDetail)
                 {
                     // var CheckWorkOrder = await _context.WorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DeleteFlag == 0).AnyAsync();
-                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
+                    var CheckWorkOrder = await _context.OrderDetailAndWorkOrderHeads.Where(x => x.OrderDetailId == item.Id 
+                    && x.OrderDetail.DueDate == item.DueDate && x.DataId == item.MaterialBasicId && x.DeleteFlag == 0).AnyAsync();
                     var CheckMaterialBasic = OrderDetailList.Where(x => x.MaterialBasicId == item.MaterialBasicId && x.DeleteFlag == 0);
                     if (CheckMaterialBasic.Count() == 0 || CheckWorkOrder)
                     {
