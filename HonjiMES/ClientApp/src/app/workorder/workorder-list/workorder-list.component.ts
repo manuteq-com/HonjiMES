@@ -152,7 +152,7 @@ export class WorkorderListComponent implements OnInit {
                     if (e[colData.key].value3 === 1) {
                         this.ReportHeight = 680;
                     } else if (e[colData.key].value3 === 2) {
-                        this.ReportHeight = 800;
+                        this.ReportHeight = 850;
                     } else if (e[colData.key].value3 === 3) {
                         this.ReportHeight = 680;
                     }
