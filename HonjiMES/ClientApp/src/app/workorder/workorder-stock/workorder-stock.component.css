@@ -16,3 +16,7 @@
 .toolinput {
     margin-top: 8px;
 }
+
+::ng-deep .dx-texteditor-container{
+    width: 250px;
+}
