@@ -85,7 +85,7 @@
 
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="40" [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260">
+        <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="250">
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
         </dxi-column>
@@ -109,7 +109,7 @@
         </dxi-column>
         <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="TotalTime" caption="預計工時" dataType="number"[width]="80">
+        <dxi-column dataField="TotalTime" caption="預計工時(分)" dataType="number"[width]="110">
         </dxi-column>
         <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate" [width]="100">
         </dxi-column>

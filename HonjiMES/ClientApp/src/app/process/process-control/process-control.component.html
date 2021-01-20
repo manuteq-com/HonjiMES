@@ -121,26 +121,28 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="35" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <!-- <dxi-column dataField="Remarks" caption="備註">
             </dxi-column> -->
 
-            <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="50"></dxi-column>
-            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80">
+            <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="45"></dxi-column>
+            <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="70">
                 <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Type" caption="委外" alignment="center" [width]="50">
+            <dxi-column dataField="Type" caption="委外" alignment="center" [width]="45">
                 <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Count" caption="良品/NG" alignment="center" [width]="80"></dxi-column>
+            <dxi-column dataField="Count" caption="良品/NG" alignment="center" [width]="75"></dxi-column>
             <!-- <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80"></dxi-column> -->
+            <dxi-column dataField="TotalTime" caption="預計工時(分)" dataType="number" [width]="95">
+            </dxi-column>
             <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="180"> </dxi-column>
             <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" [width]="30"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
                 <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
             </div>
