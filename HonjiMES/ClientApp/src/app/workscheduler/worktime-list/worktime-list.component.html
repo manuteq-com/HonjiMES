@@ -3,13 +3,13 @@
     [rowAlternationEnabled]="true">
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status"></dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item i-total-item column="ProcessLeadTime" summaryType="sum">
+        <dxi-total-item i-total-item column="ProcessLeadTime" summaryType="sum" displayFormat="總共:{0}分" valueFormat="###,##0">
         </dxi-total-item>
-        <dxi-total-item i-total-item column="ProcessTime" summaryType="sum">
+        <dxi-total-item i-total-item column="ProcessTime" summaryType="sum" displayFormat="總共:{0}分" valueFormat="###,##0">
         </dxi-total-item>
-        <dxi-total-item i-total-item column="TotalTime" summaryType="sum">
+        <dxi-total-item i-total-item column="TotalTime" summaryType="sum" displayFormat="總共:{0}分" valueFormat="###,##0">
         </dxi-total-item>
-        <dxi-total-item i-total-item column="ActualTotalTime" summaryType="sum">
+        <dxi-total-item i-total-item column="ActualTotalTime" summaryType="sum" displayFormat="總共:{0}分" valueFormat="###,##0">
         </dxi-total-item>
     </dxo-summary>
 

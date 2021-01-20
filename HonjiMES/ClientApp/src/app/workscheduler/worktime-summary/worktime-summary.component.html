@@ -33,7 +33,7 @@
     <dxi-column dataField="WorkOrderNo" caption="工單號" [allowEditing]="false" [width]="300">
     </dxi-column>
     <dxi-column dataField="Count" caption="數量" dataType="number"></dxi-column>
-    <dxi-column dataField="Total" caption="預計總工時" dataType="number"></dxi-column>
+    <dxi-column dataField="Total" caption="預計總工時(分)" dataType="number"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="200">
         <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
