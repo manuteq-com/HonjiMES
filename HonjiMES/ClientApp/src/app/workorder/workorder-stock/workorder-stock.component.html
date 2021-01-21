@@ -54,7 +54,8 @@
             <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column> -->
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime"
+                sortOrder="desc" [width]="180"></dxi-column>
             <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" sortOrder="desc" [width]="120" [visible]="false"></dxi-column> -->
 
             <!-- <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
@@ -80,24 +81,33 @@
 
             <div class="col-5">
                 <div class="input-group">
-                    <label class="pt-3"><h5>工單號查詢：</h5></label>
-                    <dx-text-box class="toolinput" [value]="workOrderHeadNo" [showClearButton]="true" valueChangeEvent="keyup"
-                    (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
+                    <label class="pt-3">
+                        <h5>工單號查詢：</h5>
+                    </label>
+                    <dx-text-box class="toolinput" [value]="workOrderHeadNo" [showClearButton]="true"
+                        valueChangeEvent="keyup" (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
                 </div>
                 <div class="input-group">
-                    <label class="pt-0"><h6>工單品號：{{workOrderHeadDataNo}}</h6></label>
+                    <label class="pt-0">
+                        <h6>工單品號：{{workOrderHeadDataNo}}</h6>
+                    </label>
                 </div>
                 <div class="input-group">
-                    <label class="pt-0"><h6>工單狀態：{{workOrderHeadStatus}}</h6></label>
+                    <label class="pt-0">
+                        <h6>工單狀態：{{workOrderHeadStatus}}</h6>
+                    </label>
                 </div>
                 <div class="input-group">
-                    <label class="pt-0"><h6>工單數量：{{workOrderHeadCount}}</h6></label>
+                    <label class="pt-0">
+                        <h6>工單數量：{{workOrderHeadCount}}</h6>
+                    </label>
                 </div>
                 <div class="input-group">
-                    <label class="pt-3"><h5>工單內容：</h5></label>
+                    <label class="pt-3">
+                        <h5>工單內容：</h5>
+                    </label>
                 </div>
             </div>
-
             <div class="col-7">
                 <!-- <dx-button class="toolbtn" stylingMode="contained" text="結案" type="success" [width]="80"
                     [disabled]="btnDisabled" (onClick)="overdata()">
@@ -109,7 +119,6 @@
                     [disabled]="false" (onClick)="searchdata()">
                 </dx-button>
             </div>
-
         </div>
 
         <!-- <div class="row">
@@ -159,7 +168,8 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
+            </dxi-column>
             <dxi-column dataField="ProcessId" caption="製程名稱">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
@@ -172,8 +182,10 @@
             </dxi-column>
             <dxi-column dataField="Count" caption="良品/NG" alignment="center" [width]="80"></dxi-column>
             <!-- <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80"></dxi-column> -->
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime"
+                [width]="170"></dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime"
+                [width]="170"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -189,17 +201,24 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="470" [(visible)]="stockpopupVisible">
+        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false"
+            [(visible)]="stockpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
+                <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId"
+                    [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
+                    [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
+        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600"
+            [height]="310" [(visible)]="closepopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+                <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId"
+                    [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
+                    [popupkeyval]="closepopupVisible"></app-workorder-close>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="700" [(visible)]="logpopupVisible">
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
+            [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
             </div>

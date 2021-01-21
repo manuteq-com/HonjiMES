@@ -24,6 +24,7 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
     @Input() randomkeyval: any;
     @Input() popupkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
     formData: any;
     postval: any;
@@ -62,8 +63,14 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
     typeOptions: {
         items: any; displayExpr: string; valueExpr: string; value: any; // 預設成品倉301
     };
+    editorOptions = {
+        showSpinButtons: true,
+        mode: 'number',
+        min: '1',
+    };
     StockType: any;
-
+    dataSourceDB = [];
+    gridsaveCheck = true;
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
             if (e.key === 'Enter') {
@@ -129,6 +136,8 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
         this.minColWidth = 100;
         this.colCount = 1;
         this.warehousesList = [];
+        this.dataSourceDB = [];
+        this.onRowValidating = this.onRowValidating.bind(this);
     }
     ngOnInit() {
     }
@@ -215,18 +224,18 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
     }
     GetDataInfo() {
         // if (this.modkeyval === 'material') {
-            this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.itemkeyval).subscribe(
-                (s) => {
-                    console.log(s);
-                    if (s.success) {
-                        const totalCount = this.GetTotalCount(s.data.Materials);
-                        this.itemval1 = '　　　　　品號：' + s.data.MaterialNo;
-                        this.itemval2 = '　　　　　品名：' + s.data.Name;
-                        this.itemval3 = '　　　　　規格：' + s.data.Specification;
-                        this.itemval4 = '　　　總庫存數：' + totalCount;
-                    }
+        this.app.GetData('/MaterialBasics/GetMaterialBasic/' + this.itemkeyval).subscribe(
+            (s) => {
+                console.log(s);
+                if (s.success) {
+                    const totalCount = this.GetTotalCount(s.data.Materials);
+                    this.itemval1 = '　　　　　品號：' + s.data.MaterialNo;
+                    this.itemval2 = '　　　　　品名：' + s.data.Name;
+                    this.itemval3 = '　　　　　規格：' + s.data.Specification;
+                    this.itemval4 = '　　　總庫存數：' + totalCount;
                 }
-            );
+            }
+        );
         // } else if (this.modkeyval === 'product') {
         //     this.app.GetData('/ProductBasics/GetProductBasic/' + this.itemkeyval).subscribe(
         //         (s) => {
@@ -298,28 +307,61 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // this.buttondisabled = true;
-        if (this.validate_before() === false) {
+        this.dataGrid.instance.saveEditData();
+        if (this.validate_before() === false || this.gridsaveCheck === false) {
             this.buttondisabled = false;
             return;
         }
         this.formData = this.myform.instance.option('formData');
         const Data = new workOrderReportData();
-        Data.CreateUser = this. formData.CreateUser;
-        Data.ReCount = this.formData.Quantity;
-        Data.WarehouseId = this.formData.WarehouseId;
-        Data.Type = this.formData.Type;
-        if (Data.ReCount === 0) {
-            this.showMessage('warning', '增減數量不能為 "0" !', 3000);
-            return;
+        Data.CreateUser = this.formData.CreateUser;
+        // Data.ReCount = this.formData.Quantity;
+        // Data.WarehouseId = this.formData.WarehouseId;
+        // Data.Type = this.formData.Type;
+
+        // if (Data.ReCount === 0) {
+        //     this.showMessage('warning', '增減數量不能為 "0" !', 3000);
+        //     return;
+        // }
+        let sendRequest = [];
+        debugger;
+        for (let i = 0; i < this.dataSourceDB.length; i++) {
+            const item = this.dataSourceDB[i];
+            Data.ReCount = item.Quantity;
+            Data.WarehouseId = item.WarehouseId;
+            Data.Type = item.Type;
+            let sendRequestitem = await SendService.sendRequest(this.http, '/WorkOrders/StockWorkOrder', 'PUT', { key: this.workorderkeyval, values: Data });
+            if (sendRequest) {
+                sendRequest.push(sendRequestitem);
+                if (this.dataSourceDB.length === sendRequest.length) {
+                    this.childOuter.emit(true);
+                }
+            }
         }
-        // tslint:disable-next-line: max-line-length
-        const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/StockWorkOrder', 'PUT', { key: this.workorderkeyval, values: Data });
+
+
+        // this.dataSourceDB.map(async item => {
+        //     Data.ReCount = item.Quantity;
+        //     Data.WarehouseId = item.WarehouseId;
+        //     Data.Type = item.Type;
+        //     let sendRequestitem = await SendService.sendRequest(this.http, '/WorkOrders/StockWorkOrder', 'PUT', { key: this.workorderkeyval, values: Data });
+        //     if (sendRequest) {
+        //         sendRequest.push(sendRequestitem);
+        //         if (this.dataSourceDB.length === sendRequest.length) {
+        //             this.childOuter.emit(true);
+        //         }
+        //     }
+        // });
+
+        // Promise.all(
+        //     sendRequest
+        // ).then(resultList => {
+        //     allRun.push(resultList);
+        // });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
-        if (sendRequest) {
-            this.childOuter.emit(true);
-        }
+
     };
     showMessage(type, data, val) {
         notify({
@@ -329,5 +371,14 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
                 at: 'center top'
             }
         }, type, val);
+    }
+    onInitNewRow(e) {
+        e.data.WarehouseId = this.warehousesList.find(x => x.Code === '301')?.Id ?? null // 預設成品倉301
+        e.data.Type = 1;
+    }
+    onRowValidating(e) {
+        if (!e.isValid) {
+            this.gridsaveCheck = false;
+        }
     }
 }

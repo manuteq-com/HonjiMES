@@ -12,28 +12,72 @@
             <dxi-validation-rule type="required" message="操作人員 必填"></dxi-validation-rule>
             <dxo-label text="操作人員"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Type" dataType="number" editorType="dxSelectBox" [editorOptions]="typeOptions">
+        <!-- <dxi-item dataField="Type" dataType="number" editorType="dxSelectBox" [editorOptions]="typeOptions">
             <dxi-validation-rule type="required" message="入庫種類 必填"></dxi-validation-rule>
             <dxo-label text="入庫種類"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="WarehouseId" dataType="number" editorType="dxSelectBox" [editorOptions]="warehousesOptions">
+        </dxi-item> -->
+        <!-- <dxi-item dataField="WarehouseId" dataType="number" editorType="dxSelectBox"
+            [editorOptions]="warehousesOptions">
             <dxi-validation-rule type="required" message="入庫倉別 必填"></dxi-validation-rule>
             <dxo-label text="入庫倉別"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions">
+        </dxi-item> -->
+        <!-- <dxi-item dataField="Quantity" dataType="number" editorType="dxNumberBox"
+            [editorOptions]="QuantityEditorOptions">
             <dxi-validation-rule type="required" message="增減數量 必填"></dxi-validation-rule>
             <dxo-label text="入庫數量"></dxo-label>
-        </dxi-item>
+        </dxi-item> -->
 
     </dx-form>
+    <br>
+    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+        (onInitNewRow)="onInitNewRow($event)" (onRowValidating)="onRowValidating($event)">
+
+        <dxo-row-dragging [allowReordering]="false" [showDragIcons]="false">
+        </dxo-row-dragging>
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+
+        </dxo-editing>
+        <dxo-filter-row [visible]="false"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+            [enterKeyDirection]="enterKeyDirection">
+        </dxo-keyboard-navigation>
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+
+        <dxi-column dataField="Type" caption="入庫種類">
+            <dxo-lookup [dataSource]="StockType" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="入庫種類 必填"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="WarehouseId" caption="入庫倉別">
+            <dxo-lookup [dataSource]="warehousesList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="入庫倉別 必填"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="Quantity" caption="入庫數量" dataType="number" editorType="dxNumberBox"
+            [editorOptions]="editorOptions">
+            <dxi-validation-rule type="required" message="入庫數量 必填"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column type="buttons">
+            <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+        </dxi-column>
+        <dxo-summary [recalculateWhileEditing]="true">
+            <dxi-total-item column="Quantity" summaryType="sum" displayFormat="{0}">
+            </dxi-total-item>
+        </dxo-summary>
+    </dx-data-grid>
 
     <div class="current-value">
         <span>{{CustomerVal}}</span>
     </div>
     <br>
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
-            [disabled]="buttondisabled"></dx-button>
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
     </div>
 
 </form>
