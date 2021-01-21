@@ -317,14 +317,7 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
         this.formData = this.myform.instance.option('formData');
         const Data = new workOrderReportData();
         Data.CreateUser = this.formData.CreateUser;
-        // Data.ReCount = this.formData.Quantity;
-        // Data.WarehouseId = this.formData.WarehouseId;
-        // Data.Type = this.formData.Type;
 
-        // if (Data.ReCount === 0) {
-        //     this.showMessage('warning', '增減數量不能為 "0" !', 3000);
-        //     return;
-        // }
         let sendRequest = [];
         debugger;
         for (let i = 0; i < this.dataSourceDB.length; i++) {
