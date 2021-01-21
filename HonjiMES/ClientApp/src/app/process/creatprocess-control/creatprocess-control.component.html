@@ -75,7 +75,7 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="40"
+        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="35"
             [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="250">
@@ -84,15 +84,15 @@
         </dxi-column>
 
         <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" [editorOptions]="zNumberBoxOptions"
-            [setCellValue]="ProcessLeadTimesetCellValue" [width]="80">
+            [setCellValue]="ProcessLeadTimesetCellValue" [width]="75">
         </dxi-column>
         <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" [setCellValue]="ProcessTimesetCellValue"
-            [editorOptions]="zNumberBoxOptions" [width]="80">
+            [editorOptions]="zNumberBoxOptions" [width]="75">
         </dxi-column>
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"
-            editCellTemplate="ProcessCostTemplate" [width]="80">
+            editCellTemplate="ProcessCostTemplate" [width]="75">
         </dxi-column>
-        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [width]="50">
+        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [width]="45">
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
@@ -100,27 +100,27 @@
         </dxi-column>
         <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="50">
         </dxi-column>
-        <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="80">
+        <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="75">
         </dxi-column>
         <dxi-column dataField="ExpectedlTotalTime" caption="預計工時(分)" dataType="number" [width]="110">
         </dxi-column>
         <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate"
-            [width]="100">
+            [width]="110">
         </dxi-column>
         <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" editCellTemplate="DueEndTimeTemplate"
-            [width]="100">
+            [width]="110">
         </dxi-column>
         <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
-            [allowEditing]="false" [width]="180">
+            [allowEditing]="false" [width]="190">
         </dxi-column>
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
-            [allowEditing]="false" [width]="180">
+            [allowEditing]="false" [width]="190">
         </dxi-column>
-        <dxi-column dataField="Type" caption="委外" [width]="50">
+        <dxi-column dataField="Type" caption="委外" [width]="45">
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column type="buttons" [width]="50" [visible]="!processVisible">
+        <dxi-column type="buttons" [width]="45" [visible]="!processVisible">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
@@ -134,7 +134,7 @@
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column>
         <dxo-summary [recalculateWhileEditing]="true">
-            <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}">
+            <dxi-total-item column="ExpectedlTotalTime" summaryType="sum"  displayFormat="{0}分" valueFormat="###,##0">
             </dxi-total-item>
         </dxo-summary>
         <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
