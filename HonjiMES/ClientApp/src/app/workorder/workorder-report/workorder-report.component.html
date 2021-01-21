@@ -137,14 +137,14 @@
                 <dxo-label text="需求數量"></dxo-label>
             </dxi-item> -->
             <dxi-item dataField="ReCount" dataType="number" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
-                <dx-number-box #numberBox id="numberBox" [value]="this.value - numberBox2.value" [max]="this.value" [min]="0"
-                    [showSpinButtons]="true" (onKeyDown)="keyDown($event)"></dx-number-box>
+                <dx-number-box #numberBox [value]="this.value" (onKeyDown)="keyDown($event)"
+                    [showSpinButtons]="true" ></dx-number-box>
                 <dxi-validation-rule type="required" message="良品數量 必填"></dxi-validation-rule>
                 <dxo-label text="良品"></dxo-label>
             </dxi-item>
             <dxi-item dataField="NgCount" dataType="number" [editorOptions]="NgEditorOptions"[colSpan]="1" [visible]="NgCountVisible">
-                <dx-number-box #numberBox2 id="numberBox2" [value]="this.value - numberBox.value" (onKeyDown)="keyDown($event)"
-                    [max]="this.value" [min]="0" [showSpinButtons]="true" ></dx-number-box>
+                <dx-number-box #numberBox2 [value]="this.value - numberBox.value"  (onKeyDown)="keyDown($event)"
+                    [showSpinButtons]="true" ></dx-number-box>
                 <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
                 <dxo-label text="NG"></dxo-label>
             </dxi-item>
