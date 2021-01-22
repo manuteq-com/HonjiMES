@@ -580,6 +580,23 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         }
         return true;
     }
+    viewRefresh(e, result) {
+        if (result) {
+            this.myform.instance.resetValues();
+            this.CustomerVal = null;
+            e.preventDefault();
+            this.childOuter.emit(true);
+        }
+    }
+    showMessage(type, data, val) {
+        notify({
+            message: data,
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, type, val);
+    }
     async onFormSubmit(e) {
         this.buttondisabled = true;
         if (this.validate_before() === false) {
@@ -587,6 +604,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             return;
         }
         this.formData = this.myform.instance.option('formData');
+
         // this.postval = this.formData;
         // tslint:disable-next-line: new-parens
         this.postval = new workOrderReportData;
@@ -617,9 +635,36 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportStart', 'POST', { values: this.postval });
                 this.viewRefresh(e, sendRequest);
             } else if (this.modval === 'end') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
-                this.viewRefresh(e, sendRequest);
+                this.formData = this.myform.instance.option('formData');
+                if ((this.formData.ReCount + this.formData.NgCount + this.formData.NcCount) === this.formData.Count) {
+
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
+                    this.viewRefresh(e, sendRequest);
+
+                } else {
+                    Swal.fire({
+                        showCloseButton: true,
+                        allowEnterKey: false,
+                        allowOutsideClick: false,
+                        title: '注意',
+                        html: '回報數量與需求數量不符!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#D0D0D0',
+                        cancelButtonText: '不回填',
+                        confirmButtonText: '確認回填'
+
+                    }).then(async (result) => {
+                        if (result.value) {
+                            // tslint:disable-next-line: max-line-length
+                            const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportEnd', 'POST', { values: this.postval });
+                            this.viewRefresh(e, sendRequest);
+                        }
+                    })
+                }
+
             } else if (this.modval === 'restart') {
                 // tslint:disable-next-line: max-line-length7
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/WorkOrderReportRestart', 'POST', { values: this.postval });
@@ -665,26 +710,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             } else if (this.modval === 'newpurchase') {
                 this.GetPurchaseDetailData();
             }
-        } catch (error) {
-
-        }
+        } catch (error) {}
         this.buttondisabled = false;
-    }
-    viewRefresh(e, result) {
-        if (result) {
-            this.myform.instance.resetValues();
-            this.CustomerVal = null;
-            e.preventDefault();
-            this.childOuter.emit(true);
-        }
-    }
-    showMessage(type, data, val) {
-        notify({
-            message: data,
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, type, val);
     }
 }
