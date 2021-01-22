@@ -170,7 +170,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.colCount = 4;
         this.labelLocation = 'left';
         this.remoteOperations = true;
-        this.keyDown = this.keyDown.bind(this)
+        // this.keyDown = this.keyDown.bind(this)
 
         this.DateBoxOptions = {
             displayFormat: 'yyyy/MM/dd HH:mm:ss',
@@ -206,14 +206,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     }
     ngOnInit() {
     }
-    keyDown(e) {
-        debugger;
-        const event = e.event;
-        const str = event.key || String.fromCharCode(event.which);
-        if(/^[.,e]$/.test(str)) {
-            event.preventDefault();
-        }
-    }
+    // keyDown(e) {
+    //     debugger;
+    //     const event = e.event;
+    //     const str = event.key || String.fromCharCode(event.which);
+    //     if(/^[.,e]$/.test(str)) {
+    //         event.preventDefault();
+    //     }
+    // }
     ngOnChanges() {
         this.HasCodeNoVisible = false;
         this.ReCountVisible = false;
@@ -309,7 +309,22 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         //     }
         // );
 
-
+        this.NgEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            // format: '#0',
+            value: '0',
+            min: '0',
+            // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
+        this.NcEditorOptions = {
+            showSpinButtons: true,
+            mode: 'number',
+            // format: '#0',
+            value: '0',
+            min: '0',
+            // onValueChanged: this.QuantityValueChanged.bind(this)
+        };
         if (this.itemkeyval != null) {
             this.dataSourceDB = [];
             this.app.GetData('/WorkOrders/GetBomDataByWorkOrderId/' + this.itemkeyval).subscribe(
@@ -363,37 +378,22 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     min: '0',
                                     // onValueChanged: this.QuantityValueChanged.bind(this)
                                 };
-                                this.NgEditorOptions = {
-                                    showSpinButtons: true,
-                                    mode: 'number',
-                                    // format: '#0',
-                                    value: '0',
-                                    min: '0',
-                                    // onValueChanged: this.QuantityValueChanged.bind(this)
-                                };
-                                this.NcEditorOptions = {
-                                    showSpinButtons: true,
-                                    mode: 'number',
-                                    // format: '#0',
-                                    value: '0',
-                                    min: '0',
-                                    // onValueChanged: this.QuantityValueChanged.bind(this)
-                                };
+
                                 debugger;
                                 this.formData = element;
                                 this.formData.ReCount = reCount > 0 ? reCount : 0;
                                 this.formData.NgCount = 0;
                                 this.formData.NcCount = 0;
                                 findProcess = true;
-                                this.ReCount = this.formData.ReCount;
-                                this.NgCount = this.formData.NgCount;
+                                // this.ReCount = this.formData.ReCount;
+                                // this.NgCount = this.formData.NgCount;
                                 // $('#numberBox').dxNumberBox('setValue', this.formData.ReCount);
                                 // $('#numberBox2').dxNumberBox('setValue', this.formData.NgCount);
-                                if(this.formData.Count != 0 || this.formData.Count != null){
-                                    this.value = this.formData.Count;
-                                } else if(this.formData.Count == 0 || this.formData.Count == null) {
-                                    this.value = this.formData.MCount
-                                }
+                                // if(this.formData.Count != 0 || this.formData.Count != null){
+                                //     this.value = this.formData.Count;
+                                // } else if(this.formData.Count == 0 || this.formData.Count == null) {
+                                //     this.value = this.formData.MCount
+                                // }
                                 // 依照製程種類決定顯示報工畫面
                                 if (element.ProcessType === 20) { // QC檢驗
                                     this.ShowQCReportView(element.Status, element.Type);
