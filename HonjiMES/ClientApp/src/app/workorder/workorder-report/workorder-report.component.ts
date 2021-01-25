@@ -62,6 +62,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     itemval17: string;
     itemval18: string;
     itemval19: string;
+    itemval20: string;
 
     value: any;
     ReCount: any;
@@ -100,6 +101,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     autoNavigateToFocusedRow = true;
     remoteOperations: boolean;
     NcCountVisible: boolean;
+
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval) {
@@ -338,13 +340,15 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                     }
                 }
             );
-
+            debugger;
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
+
                 (s) => {
                     if (s.success) {
                         this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
+                        this.itemval19 = '　　　　訂單數量：　' + s.data.WorkOrderHead.OrderDetail.Quantity;
                         // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         this.itemval4 = '';
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
@@ -367,7 +371,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval16 = '　　　實際開工日：　' + (element?.ActualStartTime ?? '');
                                 this.itemval17 = '　　　實際完工日：　' + (element?.ActualEndTime ?? '');
                                 this.itemval18 = '　　　　需求數量：　' + (element?.Count ?? '0');
-                                this.itemval19 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
+                                this.itemval20 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
                                 const reCount = (element?.Count ?? '0') - (element?.ReCount ?? '0');
                                 this.QuantityEditorOptions = {
@@ -379,7 +383,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     // onValueChanged: this.QuantityValueChanged.bind(this)
                                 };
 
-                                debugger;
                                 this.formData = element;
                                 this.formData.ReCount = reCount > 0 ? reCount : 0;
                                 this.formData.NgCount = 0;
