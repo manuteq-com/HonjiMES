@@ -340,9 +340,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                     }
                 }
             );
-            debugger;
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
-
                 (s) => {
                     if (s.success) {
                         this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
