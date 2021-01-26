@@ -128,48 +128,48 @@ export class WorkorderListComponent implements OnInit {
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)
                 if (e[colData.key].value3 === 3 || e[colData.key].value3 === 4) {
-                    this.ReportHeight = 770;
+                    this.ReportHeight = 800;
                     // this.ReportByPurchaseNo(this.itemkey, this.serialkey);
                 } else {
-                    this.ReportHeight = 770;
+                    this.ReportHeight = 800;
                     // this.ReportByPurchaseNo(this.itemtdkey, this.serialkey);
                 }
             } else if (e[colData.key].value4 === 2) { // 委外(無採購單)
                 this.creatpopupVisible = true;
                 // 判斷該工序目前狀態(Status)，決定顯示內容
                 if (e[colData.key].value3 === 1) {
-                    this.ReportHeight = 750;
+                    this.ReportHeight = 770;
                 } else if (e[colData.key].value3 === 2) {
-                    this.ReportHeight = 850;
+                    this.ReportHeight = 870;
                 } else if (e[colData.key].value3 === 3) {
-                    this.ReportHeight = 800;
+                    this.ReportHeight = 820;
                 } else if (e[colData.key].value3 === 4) {
-                    this.ReportHeight = 850;
+                    this.ReportHeight = 870;
                 }
             } else {
                 this.creatpopupVisible = true;
                 if (e[colData.key].value5 === 20) { // 判斷製程種類 (10)NC加工(20)QC檢驗
                     if (e[colData.key].value3 === 1) {
-                        this.ReportHeight = 680;
+                        this.ReportHeight = 700;
                     } else if (e[colData.key].value3 === 2) {
-                        this.ReportHeight = 850;
+                        this.ReportHeight = 870;
                     } else if (e[colData.key].value3 === 3) {
-                        this.ReportHeight = 680;
+                        this.ReportHeight = 700;
                     }
                 } else if (e[colData.key].value5 === null || e[colData.key].value5 === 10) {
                     // 判斷該工序目前狀態(Status)，決定顯示內容
                     if (e[colData.key].value3 === 1) {
                         this.ReportHeight = 750;
                     } else if (e[colData.key].value3 === 2) {
-                        this.ReportHeight = 800;
+                        this.ReportHeight = 820;
                     } else if (e[colData.key].value3 === 3) {
-                        this.ReportHeight = 800;
+                        this.ReportHeight = 820;
                     } else if (e[colData.key].value3 === 4) {
-                        this.ReportHeight = 800;
+                        this.ReportHeight = 820;
                     } else if (e[colData.key].value3 === 6) {
-                        this.ReportHeight = 800;
+                        this.ReportHeight = 820;
                     } else if (e[colData.key].value3 === 7) {
-                        this.ReportHeight = 750;
+                        this.ReportHeight = 770;
                     }
                 }
             }
