@@ -5,6 +5,7 @@ import { AppComponent } from 'src/app/app.component';
 import { HubMessage } from 'src/app/model/viewmodels';
 import { SignalRService } from 'src/app/service/signal-r.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-machineorder',
@@ -28,7 +29,7 @@ export class MachineorderComponent implements OnInit {
     messages = new Array<HubMessage>();
     message = new HubMessage();
     uniqueID: string = new Date().getTime().toString();
-    constructor(private SignalRService: SignalRService, private _ngZone: NgZone, private http: HttpClient, public app: AppComponent) {
+    constructor(private SignalRService: SignalRService, private _ngZone: NgZone, private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.editVisible = true;
         this.btnDisabled = false;
         this.loadingVisible = true;
@@ -40,6 +41,7 @@ export class MachineorderComponent implements OnInit {
     ngOnInit() {
         this.getdata();
         this.startInterval()
+        this.titleService.setTitle('機台看板');
     }
     startInterval() {
         setInterval(() => {
