@@ -78,6 +78,11 @@ namespace HonjiMES.Models
         [Column("ng_count", TypeName = "int(11)")]
         public int NgCount { get; set; }
         /// <summary>
+        /// NC&#26410;&#21152;&#24037;
+        /// </summary>
+        [Column("nc_count", TypeName = "int(11)")]
+        public int NcCount { get; set; }
+        /// <summary>
         /// &#22238;&#22577;&#35498;&#26126;
         /// </summary>
         [Column("message", TypeName = "varchar(50)")]

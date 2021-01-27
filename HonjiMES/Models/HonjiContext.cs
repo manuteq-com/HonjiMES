@@ -3340,6 +3340,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Manpower).HasComment("所需人力	");
 
+                entity.Property(e => e.NcCount).HasComment("NC未加工");
+
                 entity.Property(e => e.NgCount).HasComment("NG數量");
 
                 entity.Property(e => e.ProcessCost).HasComment("成本	");
@@ -3597,6 +3599,8 @@ namespace HonjiMES.Models
                     .HasComment("回報說明")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.NcCount).HasComment("NC未加工");
 
                 entity.Property(e => e.NgCount).HasComment("NG數量");
 
