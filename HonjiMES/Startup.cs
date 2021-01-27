@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HonjiMES.Hubs;
 using AutoMapper;
+using HonjiMES.CncModels;
 
 namespace HonjiMES
 {
@@ -36,6 +37,7 @@ namespace HonjiMES
         public void ConfigureServices(IServiceCollection services)
         {
             var ConnectionStringMyDB = Configuration.GetConnectionString("MyDB");
+            var ConnectionStringMyDBCnc = Configuration.GetConnectionString("MyDBCnc");
             //services.AddMvc().AddNewtonsoftJson(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
             services.AddControllers().AddJsonOptions(o =>
             {
@@ -59,6 +61,7 @@ namespace HonjiMES
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddDbContext<HonjiContext>(options => options.UseLazyLoadingProxies().UseMySql(ConnectionStringMyDB, x => x.ServerVersion("8.0.19-mysql"))); //將原本ConnectString移到appsettings.json
+            services.AddDbContext<HonjiCncContext>(options => options.UseLazyLoadingProxies().UseMySql(ConnectionStringMyDBCnc, x => x.ServerVersion("8.0.19-mysql"))); //將原本ConnectString移到appsettings.json
             services.AddMvc().AddJsonOptions(o =>
             {
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;

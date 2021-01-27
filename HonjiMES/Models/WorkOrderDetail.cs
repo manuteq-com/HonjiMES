@@ -123,6 +123,11 @@ namespace HonjiMES.Models
         [Column("ng_count", TypeName = "int(11)")]
         public int NgCount { get; set; }
         /// <summary>
+        /// NC&#26410;&#21152;&#24037;
+        /// </summary>
+        [Column("nc_count", TypeName = "int(11)")]
+        public int NcCount { get; set; }
+        /// <summary>
         /// &#32317;&#24037;&#26178;
         /// </summary>
         [Column("total_time", TypeName = "timestamp")]
