@@ -66,6 +66,7 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
                                 this.app.GetData('/Users/GetUsers').subscribe(
                                     (s) => {
                                         if (s.success) {
+                                            debugger;
                                             this.UserList = [];
                                             // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
                                             s.data.forEach(element => {
@@ -107,7 +108,6 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
     }
 
     constructor(private http: HttpClient, public app: AppComponent) {
-        // debugger;
         this.CustomerVal = null;
         this.formData = null;
         this.editOnkeyPress = true;
@@ -118,6 +118,19 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 1;
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    debugger;
+                    this.UserList = [];
+                    // 此寫法無法過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        this.UserList.push(element);
+                    });
+                    this.SetUserEditorOptions(this.UserList, null);
+                }
+            }
+        );
     }
     ngOnInit() {
     }
@@ -130,7 +143,7 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
         if (this.itemkeyval !== 0) {
             this.GetDataInfo();
         }
-        this.UserList = [];
+        // this.UserList = [];
         this.SetUserEditorOptions(this.UserList, null);
     }
     GetDataInfo() {
@@ -182,6 +195,7 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
         return totalCount;
     }
     SetUserEditorOptions(List, IdVal) {
+        debugger;
         this.UserEditorOptions = {
             items: List,
             displayExpr: 'Realname',

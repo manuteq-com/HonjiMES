@@ -146,6 +146,7 @@ export class SendService {
             params: null
         };
         let result;
+        debugger
         switch (method) {
             case 'GET':
                 let params: HttpParams = new HttpParams();

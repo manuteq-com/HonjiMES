@@ -65,7 +65,7 @@
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <!-- <dxi-column dataField="CreateTime" caption="建立時間"></dxi-column> -->
     <dxi-column dataField="UpdateTime" caption="更新時間" [allowEditing]="false"></dxi-column>
-    <dxi-column caption="刀具" cellTemplate="cellTemplate" width="100"></dxi-column>
+    <dxi-column caption="刀具" cellTemplate="cellTemplate" width="100" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button icon="detailslayout" type="normal" (onClick)="readTools($event,data)"></dx-button>
     </div>
@@ -80,14 +80,14 @@
 </dx-data-grid>
 
 <dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700"
-    [height]="520" [(visible)]="creatpopupVisible">
+    [height]="540" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatprocess>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760"
     [(visible)]="ToolsVisible">
     <div *dxTemplate="let data of 'content'">
         <app-toolset [ProcessId]="ProcessId"></app-toolset>

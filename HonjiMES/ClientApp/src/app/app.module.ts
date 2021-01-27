@@ -148,6 +148,8 @@ import { StaffmanagementComponent } from './staffmanagement/staffmanagement.comp
 import { ToolsetComponent } from './process/toolset/toolset.component';
 import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/worktime-summary.component';
 import { WorktimeListComponent } from './workscheduler/worktime-list/worktime-list.component';
+import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
+import { MachineLogsDetailsComponent } from './machine-logs/machine-logs-details/machine-logs-details.component';
 
 
 
@@ -315,6 +317,8 @@ export function tokenGetter() {
         ToolsetComponent,
         WorktimeSummaryComponent,
         WorktimeListComponent,
+        MachineLogsComponent,
+        MachineLogsDetailsComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
