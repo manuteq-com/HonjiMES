@@ -28,6 +28,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
     DataTypeList: any;
     modName: string;
     disabledValues: any;
+    DueEndTime: any;
     EditorOptions: { showSpinButtons: boolean; mode: string; format: string; value: number; min: number; };
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -36,6 +37,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         this.DataTypeList = myservice.getlistAdjustStatus();
         this.dataSourceDB = [];
         this.disabledValues = [];
+        this.DueEndTime = new Date();
         this.EditorOptions = {
             showSpinButtons: true,
             mode: 'number',
@@ -52,6 +54,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
             this.itemkeyval.forEach((element, index) => {
                 element.Id = index + 1;
                 element.OrderCount = element.Count;
+                element.DueEndTime = new Date();
             });
         }
         this.dataSourceDB = this.itemkeyval;
@@ -98,7 +101,6 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         }, 'error', 3000);
     }
     onEditingStart(e) {
-
     }
     onFocusedRowChanged(e) {
     }
