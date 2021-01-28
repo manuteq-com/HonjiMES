@@ -61,7 +61,6 @@
     </div>
 
     <div class="col-12">
-
         <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
             [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
@@ -137,25 +136,25 @@
             <!-- <dxi-item dataField="Count" [disabled]="true">
                 <dxo-label text="需求數量"></dxo-label>
             </dxi-item> -->
-            <dxi-item dataField="ReCount" dataType="number" [colSpan]="1" [visible]="ReCountVisible">
+            <dxi-item dataField="ReCount" dataType="number" editorType="dxNumberBox" [editorOptions]="QuantityEditorOptions" [colSpan]="1" [visible]="ReCountVisible">
                 <!-- <dx-number-box #numberBox [value]="this.value" (onKeyDown)="keyDown($event)"
                     [showSpinButtons]="true" ></dx-number-box> -->
                 <dxi-validation-rule type="required" message="良品數量 必填"></dxi-validation-rule>
                 <dxo-label text="良品"></dxo-label>
             </dxi-item>
-            <dxi-item dataField="NgCount" dataType="number"[colSpan]="1" [visible]="NgCountVisible">
+            <dxi-item dataField="NgCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NgEditorOptions" [colSpan]="1" [visible]="NgCountVisible">
                 <!-- <dx-number-box #numberBox2 [value]="this.value - numberBox.value"  (onKeyDown)="keyDown($event)"
                     [showSpinButtons]="true" ></dx-number-box> -->
                 <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
                 <dxo-label text="NG"></dxo-label>
             </dxi-item>
-            <!-- <dxi-item dataField="NcCount" dataType="number" [editorOptions]="NcEditorOptions" [colSpan]="1"
+            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NcEditorOptions" [colSpan]="1"
              [visible]="NcCountVisible">
-                <dx-number-box #numberBox3 [max]="this.formData.Count - numberBox.value - numberBox2.value"
-                    [min]="0" [showSpinButtons]="true" (onKeyDown)="keyDown($event)"></dx-number-box>
+                <!-- <dx-number-box #numberBox3 [max]="this.formData.Count - numberBox.value - numberBox2.value"
+                    [min]="0" [showSpinButtons]="true" (onKeyDown)="keyDown($event)"></dx-number-box> -->
                 <dxi-validation-rule type="required" message="NC未加工 必填"></dxi-validation-rule>
                 <dxo-label text="NC未加工"></dxo-label>
-            </dxi-item> -->
+            </dxi-item>
 
 
             <dxi-item dataField="ReportType" editorType="dxSelectBox" [editorOptions]="selectQcType" [colSpan]="2" [visible]="HasQCVisible">

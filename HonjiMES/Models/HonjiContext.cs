@@ -3600,6 +3600,8 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.NcCount).HasComment("NC未加工");
+
                 entity.Property(e => e.NgCount).HasComment("NG數量");
 
                 entity.Property(e => e.ProducingMachine)
