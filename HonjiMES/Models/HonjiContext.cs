@@ -3338,6 +3338,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DueStartTime).HasComment("預計開工日");
 
+                entity.Property(e => e.MCount).HasComment("可製造數量");
+
                 entity.Property(e => e.Manpower).HasComment("所需人力	");
 
                 entity.Property(e => e.NcCount).HasComment("NC未加工");

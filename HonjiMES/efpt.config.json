@@ -1,39 +1,55 @@
 ﻿{
-   "ContextClassName": "HonjiCncContext",
+   "ContextClassName": "HonjiContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "CncModels",
+   "OutputPath": "Models",
    "ProjectRootNamespace": "HonjiMES",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "cnc_models",
+         "Name": "adjust_detail",
          "ObjectType": 0
       },
       {
-         "Name": "control_brands",
+         "Name": "adjust_head",
          "ObjectType": 0
       },
       {
-         "Name": "department",
+         "Name": "billof_purchase",
          "ObjectType": 0
       },
       {
-         "Name": "machine_current_status",
+         "Name": "billof_purchase_checkin",
          "ObjectType": 0
       },
       {
-         "Name": "machine_groups",
+         "Name": "billof_purchase_detail",
          "ObjectType": 0
       },
       {
-         "Name": "machine_group__machine_information",
+         "Name": "billof_purchase_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase_return",
+         "ObjectType": 0
+      },
+      {
+         "Name": "bill_of_material",
+         "ObjectType": 0
+      },
+      {
+         "Name": "bill_of_material_ver",
+         "ObjectType": 0
+      },
+      {
+         "Name": "customer",
          "ObjectType": 0
       },
       {
@@ -41,35 +57,67 @@
          "ObjectType": 0
       },
       {
-         "Name": "machine_logs",
+         "Name": "machine_log",
          "ObjectType": 0
       },
       {
-         "Name": "maintain",
+         "Name": "machine_maintenance",
          "ObjectType": 0
       },
       {
-         "Name": "maintain_info",
+         "Name": "machine_workdate",
          "ObjectType": 0
       },
       {
-         "Name": "nc_file_informations",
+         "Name": "maintenance_detail",
          "ObjectType": 0
       },
       {
-         "Name": "nc_file_logs",
+         "Name": "material",
          "ObjectType": 0
       },
       {
-         "Name": "one_day_data",
+         "Name": "material_basic",
          "ObjectType": 0
       },
       {
-         "Name": "operate_logs",
+         "Name": "material_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "mbom_model_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "mbom_model_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "menu",
+         "ObjectType": 0
+      },
+      {
+         "Name": "message",
+         "ObjectType": 0
+      },
+      {
+         "Name": "m_bill_of_material",
          "ObjectType": 0
       },
       {
          "Name": "order",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_detail_and_work_order_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_head",
          "ObjectType": 0
       },
       {
@@ -81,11 +129,19 @@
          "ObjectType": 0
       },
       {
-         "Name": "process_rule",
+         "Name": "product",
          "ObjectType": 0
       },
       {
-         "Name": "property",
+         "Name": "product_basic",
+         "ObjectType": 0
+      },
+      {
+         "Name": "product_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "product_sn",
          "ObjectType": 0
       },
       {
@@ -93,15 +149,71 @@
          "ObjectType": 0
       },
       {
-         "Name": "purchase_info",
+         "Name": "purchase_detail",
          "ObjectType": 0
       },
       {
-         "Name": "status",
+         "Name": "purchase_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "receive",
+         "ObjectType": 0
+      },
+      {
+         "Name": "requisition",
+         "ObjectType": 0
+      },
+      {
+         "Name": "requisition_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "return_sale",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_detail_new",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "staff_management",
+         "ObjectType": 0
+      },
+      {
+         "Name": "stock_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "stock_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "supplier",
+         "ObjectType": 0
+      },
+      {
+         "Name": "supplier_of_material",
          "ObjectType": 0
       },
       {
          "Name": "system",
+         "ObjectType": 0
+      },
+      {
+         "Name": "toolset",
+         "ObjectType": 0
+      },
+      {
+         "Name": "tool_management",
          "ObjectType": 0
       },
       {
@@ -113,7 +225,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "vendor",
+         "Name": "user_roles",
+         "ObjectType": 0
+      },
+      {
+         "Name": "warehouse",
          "ObjectType": 0
       },
       {
@@ -121,12 +237,36 @@
          "ObjectType": 0
       },
       {
-         "Name": "work_time_group",
+         "Name": "wiproduct",
          "ObjectType": 0
       },
       {
-         "Name": "work_time_spec",
+         "Name": "wiproduct_basic",
          "ObjectType": 0
+      },
+      {
+         "Name": "wiproduct_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_qc_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_report_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "all_stock_log",
+         "ObjectType": 3
       }
    ],
    "UseBoolPropertiesWithoutDefaultSql": false,

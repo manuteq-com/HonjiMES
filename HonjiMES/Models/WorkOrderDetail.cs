@@ -108,6 +108,11 @@ namespace HonjiMES.Models
         [Column("remarks", TypeName = "varchar(50)")]
         public string Remarks { get; set; }
         /// <summary>
+        /// &#21487;&#35069;&#36896;&#25976;&#37327;
+        /// </summary>
+        [Column("m_count", TypeName = "int(11)")]
+        public int? MCount { get; set; }
+        /// <summary>
         /// &#23526;&#38555;&#23436;&#24037;&#25976;&#37327;
         /// </summary>
         [Column("re_count", TypeName = "int(11)")]
