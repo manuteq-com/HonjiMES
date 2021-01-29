@@ -63,6 +63,11 @@ namespace HonjiMES.Models
         [Column("producing_machine", TypeName = "varchar(50)")]
         public string ProducingMachine { get; set; }
         /// <summary>
+        /// &#21487;&#35069;&#36896;&#25976;&#37327;
+        /// </summary>
+        [Column("m_count", TypeName = "int(11)")]
+        public int? MCount { get; set; }
+        /// <summary>
         /// &#22238;&#22577;&#25976;&#37327;
         /// </summary>
         [Column("re_count", TypeName = "int(11)")]
