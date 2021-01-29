@@ -385,6 +385,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.ReCount = reCount > 0 ? reCount : 0;
                                 this.formData.NgCount = 0;
                                 this.formData.NcCount = 0;
+                                this.formData.MCount = element?.MCount ?? '0';
                                 findProcess = true;
                                 // this.ReCount = this.formData.ReCount;
                                 // this.NgCount = this.formData.NgCount;

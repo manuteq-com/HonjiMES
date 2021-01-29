@@ -378,6 +378,7 @@ namespace HonjiMES.Controllers
                     CreateUser = item.CreateUser,
                     UpdateTime = item.UpdateTime,
                     UpdateUser = item.UpdateUser,
+                    MCount = item.MCount,
                     ProcessType = item.Process.Type,
                     WorkOrderHead = item.WorkOrderHead,
                     ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * WorkOrderHeads.Count,
