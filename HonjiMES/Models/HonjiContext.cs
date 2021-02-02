@@ -2056,6 +2056,11 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.WarehouseId).HasComment("倉別id");
 
+                entity.Property(e => e.WorkOrderLog)
+                    .HasComment("工單紀錄")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.HasOne(d => d.OrderDetail)
                     .WithMany(p => p.PurchaseDetails)
                     .HasForeignKey(d => d.OrderDetailId)
@@ -3507,6 +3512,8 @@ namespace HonjiMES.Models
                     .HasComment("圖號")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.MCount).HasComment("可製造數量");
 
                 entity.Property(e => e.Message)
                     .HasComment("回報說明")
