@@ -798,6 +798,7 @@ namespace HonjiMES.Models
         public int CkCount { get; set; }
         public int OkCount { get; set; }
         public int NcCount { get; set; }
+        public int MCount { get; set; }
         public string DrawNo { get; set; }
         public int CheckResult { get; set; }
     }

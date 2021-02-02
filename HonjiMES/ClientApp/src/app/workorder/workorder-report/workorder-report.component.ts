@@ -612,6 +612,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.postval = new workOrderReportData;
         this.postval.WorkOrderID = this.itemkeyval;
         this.postval.WorkOrderSerial = this.serialkeyval;
+        this.postval.MCount = this.formData?.MCount ?? 0;
         this.postval.ReCount = this.formData.ReCount;
         this.postval.RePrice = this.formData?.RePrice ?? 0;
         this.postval.NgCount = this.formData.NgCount;

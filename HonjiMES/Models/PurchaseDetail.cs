@@ -103,6 +103,11 @@ namespace HonjiMES.Models
         [Column("purchased_count", TypeName = "int(11)")]
         public int PurchasedCount { get; set; }
         /// <summary>
+        /// &#24037;&#21934;&#32000;&#37636;
+        /// </summary>
+        [Column("work_order_log", TypeName = "text")]
+        public string WorkOrderLog { get; set; }
+        /// <summary>
         /// &#20633;&#35387;
         /// </summary>
         [Column("remarks", TypeName = "varchar(50)")]
