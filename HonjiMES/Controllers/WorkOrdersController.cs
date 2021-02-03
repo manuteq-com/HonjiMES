@@ -919,8 +919,10 @@ namespace HonjiMES.Controllers
                                 Price = WorkOrderReportData.ReCount * BasicData.Price,
                                 WarehouseId = BasicData.WarehouseId,
                                 CreateTime = DateTime.Now,
-                                CreateUser = WorkOrderReportData.CreateUser
+                                CreateUser = WorkOrderReportData.CreateUser,
+                                WorkOrderLog = item.WorkOrderHead.WorkOrderNo + ",",
                             });
+
                         }
                         else // 如果已有相同成品，則增加數量並調整金額。
                         {
@@ -970,6 +972,7 @@ namespace HonjiMES.Controllers
                             PurchaseDetails.FirstOrDefault().Quantity += WorkOrderReportData.ReCount;
                             PurchaseDetails.FirstOrDefault().Price = PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
                             PurchaseDetails.FirstOrDefault().UpdateUser = WorkOrderReportData.CreateUser;
+                            PurchaseDetails.FirstOrDefault().WorkOrderLog +=  OWorkOrderHead.WorkOrderNo+ ",";
                         }
                         PurchaseHeads.PriceAll = PurchaseHeads.PurchaseDetails.Where(x => x.DeleteFlag == 0).Sum(x => x.Quantity * x.OriginPrice);
                     }

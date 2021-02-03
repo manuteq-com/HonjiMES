@@ -52,5 +52,12 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
+
+    <dxi-column dataField="PurchaseDetails.WorkOrderLog" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150"></dxi-column>
+    <div *dxTemplate="let d of 'diffCellTemplate2'" >
+        <ul style="list-style-type:none; text-align: left;">
+            <li *ngFor ="let item of distinct(d)">{{item}}</li>
+        </ul>
+    </div>
 </dx-data-grid>
 
