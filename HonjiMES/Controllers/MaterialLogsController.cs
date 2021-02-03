@@ -68,15 +68,36 @@ namespace HonjiMES.Controllers
             //     FileName = NcFileInformations.Name
             // }).Where(x => !string.IsNullOrWhiteSpace(x.FileName)).Take(20).ToList();
 
-
-            var data = _context.MachineLogs.Where(x => x.Status == 1 && x.MachineId == id).Select(x => new CncLogVM
+            var data = _context.MachineLogs.Where(x => x.Status == 1 && x.MachineId == id && x.FileId.HasValue).GroupBy(x => x.FileId).Select(x => new CncLogVM
             {
-                Id = x.Id,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                CompletedNumber = x.CompletedNumber,
-                FileInf = _context.NcFileInformations.Where(y => y.Source == x.MachineId && y.Id == x.FileId && !(y.Comment == null || y.Comment.Trim() == "") && y.Comment != "()").First()
-            }).Where(x => x.FileInf != null).OrderByDescending(x => x.Id).Take(200);
+
+                Id = x.Key.Value,
+                StartTime = x.Min(y => y.StartTime),
+                EndTime = x.Max(y => y.EndTime),
+                CompletedNumber = x.Sum(y => y.CompletedNumber),
+                // Name = _context.NcFileInformations.Where(y => y.Source == id && y.Id == x.Key.Value).FirstOrDefault().Name,
+                // Comment = _context.NcFileInformations.Where(y => y.Source == id && y.Id == x.Key.Value).FirstOrDefault().Comment
+            }).ToList();
+            //var trim = new char[] { '(', ')' };
+            foreach (var item in data)
+            {
+                var FileInf = _context.NcFileInformations.Where(y => y.Source == id && y.Id == item.Id).FirstOrDefault();
+                if (FileInf != null)
+                {
+                    item.FileInf = FileInf;
+                    item.Name = FileInf.Name;
+                    item.Comment = FileInf.Comment.Replace("(", "").Replace(")", "");
+                }
+            }
+            // var data = _context.MachineLogs.Where(x => x.Status == 1 && x.MachineId == id).Select(x => new CncLogVM
+            // {
+            //     Id = x.Id,
+            //     StartTime = x.StartTime,
+            //     EndTime = x.EndTime,
+            //     CompletedNumber = x.CompletedNumber,
+            //     Name = _context.NcFileInformations.Where(y => y.Source == x.MachineId && y.Id == x.FileId).First().Name,
+            //     Comment = _context.NcFileInformations.Where(y => y.Source == x.MachineId && y.Id == x.FileId).First().Comment
+            // }).ToList();
             //var sql = data.ToSql();
             // var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(data));

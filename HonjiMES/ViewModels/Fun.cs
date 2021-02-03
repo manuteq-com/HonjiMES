@@ -137,7 +137,7 @@ namespace HonjiMES.Models
         internal static int GetUserID(HttpContext httpContext)
         {
             var UserID = 1;
-            int.TryParse(httpContext.User.Claims.Where(x => x.Type == "UserID").FirstOrDefault()?.Value, out UserID);        
+            int.TryParse(httpContext.User.Claims.Where(x => x.Type == "UserID").FirstOrDefault()?.Value, out UserID);
             return UserID;
         }
 
@@ -585,17 +585,28 @@ namespace HonjiMES.Models
                             dbQuery = dbQuery.OrderBy(Sortitem.Selector);
                         }
                     }
-                    // else
-                    // {
-                    //     if (Sortitem.Desc)
-                    //     {
-                    //         dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
-                    //     }
-                    //     else
-                    //     {
-                    //         dbQuery = dbQuery.OrderBy(x => x.GetType().GetProperty(item.Selector).GetValue(x));
-                    //     }
-                    // }
+                    else
+                    {
+                        if (Sortitem.Desc)
+                        {
+                            dbQuery = dbQuery.ThenBy(Sortitem.Selector, true);
+                        }
+                        else
+                        {
+                            dbQuery = dbQuery.ThenBy(Sortitem.Selector);
+                        }
+                    }
+                    //else
+                    //{
+                    //    if (Sortitem.Desc)
+                    //    {
+                    //        dbQuery = dbQuery.OrderByDescending(x => x.GetType().GetProperty(Sortitem.Selector).GetValue(x));
+                    //    }
+                    //    else
+                    //    {
+                    //        dbQuery = dbQuery.ThenBy(x => x.GetType().GetProperty(item.Selector).GetValue(x));
+                    //    }
+                    //}
                     firstSort = false;
                 }
             }
@@ -793,7 +804,7 @@ namespace HonjiMES.Models
         internal static string ImgToBase64String(byte[] bQrCode)
         {
             return Convert.ToBase64String(bQrCode);
-           // return $"data:image/png;base64,{Convert.ToBase64String(bQrCode)}";
+            // return $"data:image/png;base64,{Convert.ToBase64String(bQrCode)}";
         }
     }
 }

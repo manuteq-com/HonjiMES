@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace HonjiMES.Models
 {
@@ -281,6 +280,14 @@ namespace HonjiMES.Models
         {
             return QueryableHelper<T>.OrderBy(queryable, propertyName, desc);
         }
+        public static IQueryable<T> ThenBy<T>(this IQueryable<T> queryable, string propertyName)
+        {
+            return QueryableHelper<T>.ThenBy(queryable, propertyName, false);
+        }
+        public static IQueryable<T> ThenBy<T>(this IQueryable<T> queryable, string propertyName, bool desc)
+        {
+            return QueryableHelper<T>.ThenBy(queryable, propertyName, desc);
+        }
         static class QueryableHelper<T>
         {
             private static MemberExpression GetMemberExpression(ParameterExpression parameter, string propName)
@@ -297,6 +304,12 @@ namespace HonjiMES.Models
                 dynamic keySelector = GetLambdaExpression(propertyName);
                 return desc ? Queryable.OrderByDescending(queryable, keySelector) : Queryable.OrderBy(queryable, keySelector);
             }
+            public static IQueryable<T> ThenBy(IQueryable<T> queryable, string propertyName, bool desc)
+            {
+                dynamic keySelector = GetLambdaExpression(propertyName);
+                return  desc? ApplyOrder<T>(queryable, propertyName, "ThenByDescending") :ApplyOrder<T>(queryable, propertyName, "ThenBy");
+                //return desc ? Queryable.ThenByDescending(queryable, keySelector) : Queryable.ThenBy(queryable, keySelector);
+            }
             private static LambdaExpression GetLambdaExpression(string propertyName)
             {
                 if (cache.ContainsKey(propertyName)) return cache[propertyName];
@@ -306,6 +319,34 @@ namespace HonjiMES.Models
                 cache[propertyName] = keySelector;
                 return keySelector;
             }
+        }
+        static IOrderedQueryable<T> ApplyOrder<T>(
+    IQueryable<T> source,
+    string property,
+    string methodName)
+        {
+            string[] props = property.Split('.');
+            Type type = typeof(T);
+            ParameterExpression arg = Expression.Parameter(type, "x");
+            Expression expr = arg;
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                expr = Expression.Property(expr, pi);
+                type = pi.PropertyType;
+            }
+            Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
+            LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
+
+            object result = typeof(Queryable).GetMethods().Single(
+                    method => method.Name == methodName
+                            && method.IsGenericMethodDefinition
+                            && method.GetGenericArguments().Length == 2
+                            && method.GetParameters().Length == 2)
+                    .MakeGenericMethod(typeof(T), type)
+                    .Invoke(null, new object[] { source, lambda });
+            return (IOrderedQueryable<T>)result;
         }
     }
     public static class IQueryableExtensions

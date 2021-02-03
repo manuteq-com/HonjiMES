@@ -32,6 +32,13 @@ namespace HonjiMES.ViewModels
         /// 加工數量
         /// </summary>
         public int? CompletedNumber { get; set; }
-
+        /// <summary>
+        /// 加工程式碼
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 加工備註
+        /// </summary>
+        public string Comment { get; set; }
     }
 }
