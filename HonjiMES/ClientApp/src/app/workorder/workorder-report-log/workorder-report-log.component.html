@@ -1,5 +1,5 @@
-<dx-data-grid [dataSource]="dataSourceDB" [showColumnLines]="true" [showRowLines]="true"
-[showBorders]="true" height="580">
+<dx-data-grid [dataSource]="dataSourceDB" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+    height="580">
 
     <!-- <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder" [showDragIcons]="false"></dxo-row-dragging> -->
 
@@ -23,19 +23,20 @@
         </dxi-total-item>
         <dxi-total-item displayFormat="{0}個" column="NgCount" summaryType="sum">
         </dxi-total-item>
-        <dxi-total-item column="RePrice" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)"
-            displayFormat="{0}元">
+        <dxi-total-item column="RePrice" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)" displayFormat="{0}元">
         </dxi-total-item>
     </dxo-summary>
 
-    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="回報日期" dataType="date" format="shortDateShortTime" [allowEditing]="false"
+        [width]="180"></dxi-column>
     <dxi-column dataField="CreateUser" caption="回報人員" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="ReportType" caption="回報種類" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="ReportTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="70" [visible]="NCVisible"></dxi-column>
+    <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="70" [visible]="NCVisible">
+    </dxi-column>
     <dxi-column dataField="ReCount" caption="回報良品數量" [width]="110" [visible]="NCVisible"></dxi-column>
     <dxi-column dataField="NgCount" caption="回報NG數量" [width]="100" [visible]="NCVisible"></dxi-column>
     <!-- <dxi-column dataField="RePrice" caption="回報金額" format="$ #,##0.##;($ #,##0.##)" [width]="100" [visible]="NCVisible"></dxi-column> -->
@@ -70,9 +71,14 @@
     </dxi-column>
     <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date">
     </dxi-column> -->
-    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
-    <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="180"></dxi-column>
-
+    <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
+        [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
+        [allowEditing]="false" [width]="180"></dxi-column>
+    <dxi-column dataField="MachineStartTime" caption="機台開工" dataType="date" format="shortDateShortTime" [width]="180">
+    </dxi-column>
+    <dxi-column dataField="MachineEndTime" caption="機台完工" dataType="date" format="shortDateShortTime" [width]="180">
+    </dxi-column>
     <dxi-column type="buttons" [visible]="false">
         <dxi-button name="save" text="存檔"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
