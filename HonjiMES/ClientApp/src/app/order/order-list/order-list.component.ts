@@ -47,7 +47,7 @@ export class OrderListComponent {
     OrderTypeList: any;
     overviewpopupVisible = false;
     overRandomkey: number;
-
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -86,7 +86,7 @@ export class OrderListComponent {
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnInit() {
         this.titleService.setTitle('客戶訂單');
-   }
+    }
     getdata() {
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -346,7 +346,7 @@ export class OrderListComponent {
         }
     }
     checkData(e, data) {
-        const sendRequest = SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: data.key});
+        const sendRequest = SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', { key: data.key });
         if (sendRequest) {
             this.dataGrid.instance.refresh();
         }
@@ -376,7 +376,7 @@ export class OrderListComponent {
     }
     async CheckFlagIconClick(e) {
         try {
-            const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', {key: e.row.key});
+            const sendRequest = await SendService.sendRequest(this.http, this.Controller + '/CheckData', 'PUT', { key: e.row.key });
             if (sendRequest) {
                 this.dataGrid.instance.refresh();
             }
