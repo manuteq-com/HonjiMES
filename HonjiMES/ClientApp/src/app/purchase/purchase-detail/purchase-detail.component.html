@@ -9,7 +9,7 @@
 </div>
 
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
-(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" [rowAlternationEnabled]="true">
+(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" [rowAlternationEnabled]="true"><dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
