@@ -50,8 +50,10 @@
     <dxi-column dataField="Item" caption="項目" dataType="string" ></dxi-column>
     <dxi-column dataField="CycleTime" caption="週期(月)" dataType="string" ></dxi-column>
 
-    <dxi-column dataField="RecentTime" caption="最近保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
-    <dxi-column dataField="NextTime" caption="下次保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220" ></dxi-column>
+    <dxi-column dataField="RecentTime" caption="最近保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220"
+        [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="NextTime" caption="下次保養時間" dataType="date" format="shortDateShortTime" [minWidth]="220"
+        [(selectedFilterOperation)]="selectedOperation"></dxi-column>
 
 
     <dxi-column type="buttons">

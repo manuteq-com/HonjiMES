@@ -34,6 +34,7 @@ export class ResourceProcessComponent implements OnInit, OnChanges {
     labelLocation: string;
     ProcessList: any;
     selectStatus: any;
+    selectedOperation: string = "between";
     ProcessEditorOptions: {
         dataSource: { store: { type: string; data: any; key: string; }; }; searchEnabled: boolean;
         // items: this.MaterialList,

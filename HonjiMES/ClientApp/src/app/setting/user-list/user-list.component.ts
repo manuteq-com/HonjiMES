@@ -36,6 +36,7 @@ export class UserListComponent implements OnInit, OnChanges {
     UserList: any;
     qrcodepopupVisible: boolean;
     randomkey: number;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);

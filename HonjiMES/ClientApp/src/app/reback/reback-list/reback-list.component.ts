@@ -44,6 +44,7 @@ export class RebackListComponent implements OnInit {
     iteminfokey: any;
     keyup = '';
     UserList: any;
+    selectedOperation: string = "between";
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.infopopupVisible) {

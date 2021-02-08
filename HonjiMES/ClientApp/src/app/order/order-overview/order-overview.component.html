@@ -51,8 +51,8 @@
     <dxi-column dataField="Unit" caption="單位" alignment="center" [width]="50"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="價格" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
-    <dxi-column dataField="DueDate" caption="預交日" [width]="120" dataType="date"></dxi-column>
-    <dxi-column dataField="ReplyDate" caption="回覆交期" [width]="120" dataType="date"></dxi-column>
+    <dxi-column dataField="DueDate" caption="預交日" [width]="120" dataType="date" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="ReplyDate" caption="回覆交期" [width]="120" dataType="date" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="Remark" caption="備註" [width]="100"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100"></dxi-column>
     <dxi-column dataField="SaleCount" caption="銷單" [width]="80"></dxi-column>

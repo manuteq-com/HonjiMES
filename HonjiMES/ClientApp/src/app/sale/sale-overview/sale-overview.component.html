@@ -56,7 +56,7 @@
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="80" [allowEditing]="false">
         <dxo-lookup [dataSource]="SaleOrderDetailStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="160" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Serial" caption="序號" [width]="50" [allowEditing]="false"></dxi-column>

@@ -40,6 +40,7 @@ export class AdjustListComponent implements OnInit {
     dataSourceDBDetail: CustomStore;
     ItemTypeList: any;
     WarehouseList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();

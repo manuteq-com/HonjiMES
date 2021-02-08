@@ -33,7 +33,8 @@
     <dxi-column dataField="Quantity" caption="原始數量" [width]="80"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="價格" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="BillofPurchase.BillofPurchaseDate" caption="進貨日期" dataType="date" [width]="120"></dxi-column>
+    <dxi-column dataField="BillofPurchase.BillofPurchaseDate" caption="進貨日期" dataType="date" [width]="120"
+    [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 
 </dx-data-grid>

@@ -46,6 +46,8 @@ export class PurchaseOrderComponent implements OnInit {
     Url = '';
     purchaseHeadId: any;
     UserList: any;
+    selectedOperation: string = "between";
+
     // tslint:disable-next-line: max-line-length
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
         this.TypeList = myservice.getpurchasetypes();

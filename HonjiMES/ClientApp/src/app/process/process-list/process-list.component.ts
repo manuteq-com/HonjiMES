@@ -36,6 +36,7 @@ export class ProcessListComponent implements OnInit {
     NumberBoxOptions: any;
     ToolsVisible: boolean;
     ProcessId: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.ToolsVisible = false;

@@ -41,6 +41,7 @@ export class BiilpurchaseReturnComponent implements OnInit {
     WarehouseList: any;
     ItemTypeList: any;
     ResponsibilityTypeList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseStatus = myservice.getBillofPurchaseOrderStatus();

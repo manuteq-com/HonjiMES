@@ -30,7 +30,8 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="ReturnCreateTime" caption="銷退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180"></dxi-column>
+    <dxi-column dataField="ReturnCreateTime" caption="銷退時間" dataType="date" format="shortDateShortTime"
+    sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
 
     <dxi-column dataField="SaleNo" caption="銷貨單號" [width]="150"></dxi-column>
     <!-- <dxi-column dataField="SaleDate" caption="銷貨單日期" dataType="date" [width]="120"></dxi-column> -->

@@ -44,6 +44,7 @@ export class SaleOverviewComponent implements OnInit, OnChanges {
     tosalekey: any;
     disabledValues: any;
     ToSaleList: ToSaleInfo[];
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.readOnly = true;

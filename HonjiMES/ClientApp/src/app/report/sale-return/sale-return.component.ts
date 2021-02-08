@@ -37,6 +37,7 @@ export class SaleReturnComponent implements OnInit {
     editorOptions: any;
     detailfilter: any;
     UserList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
 

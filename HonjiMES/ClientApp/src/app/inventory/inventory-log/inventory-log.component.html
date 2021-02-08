@@ -76,7 +76,8 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="200" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime"
+        [(selectedFilterOperation)]="selectedOperation" [width]="200" sortOrder="desc"></dxi-column>
     <dxi-column dataField="Message" caption="種類" [width]="140"></dxi-column>
     <dxi-column dataField="DataNo" caption="品號" [width]="220"></dxi-column>
     <dxi-column dataField="DataName" caption="名稱" [width]="220"></dxi-column>

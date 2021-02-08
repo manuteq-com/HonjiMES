@@ -37,6 +37,7 @@ export class BillPurchaseComponent implements OnInit {
     DetailsDataSourceStorage: any;
     newpopupVisible: boolean;
     UserList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();

@@ -64,7 +64,7 @@
     <dxi-column dataField="ProducingMachine" caption="機台" [visible]="false"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <!-- <dxi-column dataField="CreateTime" caption="建立時間"></dxi-column> -->
-    <dxi-column dataField="UpdateTime" caption="更新時間" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="UpdateTime" caption="更新時間" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column caption="刀具" cellTemplate="cellTemplate" width="100" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'cellTemplate'">
         <dx-button icon="detailslayout" type="normal" (onClick)="readTools($event,data)"></dx-button>

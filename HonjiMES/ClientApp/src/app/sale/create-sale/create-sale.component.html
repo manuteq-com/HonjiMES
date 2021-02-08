@@ -51,6 +51,7 @@
         <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
 
         <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [(selectedFilterOperation)]="selectedOperation"
             [calculateFilterExpression]="calculateFilterExpression"
             [(selectedFilterOperation)]="selectedFilterOperation"
             [(filterValue)]="filterValue"
@@ -82,7 +83,7 @@
         <dxi-column dataField="Unit" caption="單位" [width]="60" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="true"></dxi-column>
         <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
         <!-- <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="100" [allowEditing]="false"></dxi-column> -->
         <!-- <dxi-column dataField="Remark" caption="備註" [width]="100" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column> -->
@@ -113,6 +114,7 @@
         <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column> -->
 
         <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [(selectedFilterOperation)]="selectedOperation"
             [calculateFilterExpression]="calculateFilterExpression"
             [(selectedFilterOperation)]="selectedFilterOperation"
             [(filterValue)]="filterValue"
@@ -140,7 +142,7 @@
         <dxi-column dataField="Unit" caption="單位" [width]="60" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="100" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
         <!-- <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="100" [allowEditing]="false"></dxi-column> -->
         <!-- <dxi-column dataField="Remark" caption="備註" [width]="100" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100" [allowEditing]="false"></dxi-column> -->
