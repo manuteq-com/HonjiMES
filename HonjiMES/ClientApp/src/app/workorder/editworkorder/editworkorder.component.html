@@ -143,7 +143,7 @@
     </div>
 </form>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
     [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible"
