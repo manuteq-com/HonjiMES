@@ -44,6 +44,7 @@ export class QualityRecordComponent implements OnInit, OnChanges {
     remoteOperations: any;
     detailfilter: any;
     ProductList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
 

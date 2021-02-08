@@ -32,6 +32,7 @@ export class ResourceWorkorderComponent implements OnInit, OnChanges {
     colCount: number;
     labelLocation: string;
     ProcessList: any;
+    selectedOperation: string = "between";
     ProcessEditorOptions: {
         dataSource: { store: { type: string; data: any; key: string; }; }; searchEnabled: boolean;
         // items: this.MaterialList,

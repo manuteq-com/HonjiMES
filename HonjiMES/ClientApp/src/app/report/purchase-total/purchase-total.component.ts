@@ -38,6 +38,7 @@ export class PurchaseTotalComponent implements OnInit {
     UserList: any;
     MaterialBasicList: any;
     key: any;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.TypeList = myservice.getpurchasetypes();
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();

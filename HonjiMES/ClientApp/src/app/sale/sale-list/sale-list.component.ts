@@ -59,6 +59,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     UserList: any;
     overviewpopupVisible: boolean;
     overRandomkey: number;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();

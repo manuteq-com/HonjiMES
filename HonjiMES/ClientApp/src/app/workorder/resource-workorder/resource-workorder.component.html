@@ -51,9 +51,11 @@
         <!-- <dxi-column dataField="StatusN" caption="更新狀態" dataType="string" [width]="100">
             <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column> -->
-        <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [width]="120"></dxi-column>
-        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [width]="120"></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="回報開工時間" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="回報完工時間" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+        <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [width]="120" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [width]="120" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="回報開工時間" dataType="date" format="shortDateShortTime"
+        [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="回報完工時間" dataType="date" format="shortDateShortTime"
+        [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     </dx-data-grid>
 </form>

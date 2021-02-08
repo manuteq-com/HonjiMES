@@ -35,6 +35,7 @@ export class StaffmanagementComponent implements OnInit {
     Purchaselist: any;
     TypeDisabled: boolean;
     gridsaveCheck: boolean;
+    selectedOperation: string = "between";
 
     Controller = '/StaffManagement';
     StaffList: any;

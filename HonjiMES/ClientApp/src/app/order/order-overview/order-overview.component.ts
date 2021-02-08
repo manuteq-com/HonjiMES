@@ -43,11 +43,13 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     popupVisiblePurchase: boolean;
     popupVisibleSale: boolean;
     Otoworkkey: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
+
     }
     ngOnInit() {
 

@@ -27,6 +27,7 @@ export class BillofmateriallistComponent implements OnInit {
     //dataGrid: any;
     creatpopupVisible: boolean;
     dataSourceDB2: any;
+    selectedOperation: string = "between";
     @ViewChild('dsDB', { static: false }) dataGrid: DxDataGridComponent;
     @ViewChild('dsDB2', { static: false }) dataGridnobom: DxDataGridComponent;
 

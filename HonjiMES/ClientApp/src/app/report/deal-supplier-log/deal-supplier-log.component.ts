@@ -39,6 +39,7 @@ export class DealSupplierLogComponent implements OnInit {
     ProductList: any;
     UserList: any;
     logpopupVisible: boolean;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
         this.remoteOperations = true;

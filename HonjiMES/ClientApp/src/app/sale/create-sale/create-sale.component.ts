@@ -47,6 +47,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     remoteOperations: boolean;
     loadOptions: any;
     SaleTimeDateBoxOptions: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.labelLocation = 'left';

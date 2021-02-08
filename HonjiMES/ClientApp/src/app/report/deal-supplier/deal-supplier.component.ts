@@ -39,6 +39,7 @@ export class DealSupplierComponent implements OnInit {
     listPurchaseOrderStatus: any;
     listStatus: any;
     warehousesList: any;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listPurchaseStatus = myservice.getpurchasetypes();
         this.listPurchaseOrderStatus = myservice.getPurchaseOrderStatus();

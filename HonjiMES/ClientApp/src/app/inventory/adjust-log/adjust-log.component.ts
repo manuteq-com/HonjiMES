@@ -38,6 +38,7 @@ export class AdjustLogComponent implements OnInit {
     editorOptions: any;
     detailfilter: any;
     UserList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();

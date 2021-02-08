@@ -39,6 +39,7 @@ export class DealPriceComponent implements OnInit {
     UserList: any;
     logpopupVisible: boolean;
     MaterialBasicList: any;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listSaleOrderStatus = myservice.getSaleOrderHeadStatus();
         this.remoteOperations = true;

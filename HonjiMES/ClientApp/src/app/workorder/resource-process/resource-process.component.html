@@ -47,7 +47,9 @@
         </dxi-column> -->
         <dxi-column dataField="Count" caption="訂單數量" dataType="string" [width]="80"></dxi-column>
         <dxi-column dataField="ReCount" caption="完工數量" dataType="string" [width]="80"></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
+        [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
+        [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     </dx-data-grid>
 </form>

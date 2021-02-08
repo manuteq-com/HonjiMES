@@ -42,7 +42,8 @@
         <dxi-column dataField="ActualSpecification" caption="實際規格" dataType="string"></dxi-column>
         <dxi-column dataField="Property" caption="廠內規格" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc"
+        [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
 
         <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
         <div *dxTemplate="let data of 'cellTemplate'">

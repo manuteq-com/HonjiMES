@@ -28,6 +28,7 @@ export class WorktimeSummaryComponent implements OnInit {
     detailfilter = [];
     DetailsDataSourceStorage: any;
     WorkOrderTypeList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();

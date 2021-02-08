@@ -28,7 +28,8 @@ export class MaintenanceComponent implements OnInit {
     bentest:any;
     autoNavigateToFocusedRow = true;
     remoteOperations : boolean;
-    MachineList: any
+    MachineList: any;
+    selectedOperation: string = "between";
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
         this.getdata();

@@ -41,9 +41,9 @@
     <dxi-column dataField="ProcessId" caption="製程名稱">
         <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="開始時間" dataType="date">
+    <dxi-column dataField="CreateTime" caption="開始時間" dataType="date" [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>
-    <dxi-column dataField="EndTime" caption="結束時間" dataType="date">
+    <dxi-column dataField="EndTime" caption="結束時間" dataType="date" [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>
 
     <dxi-column type="buttons">

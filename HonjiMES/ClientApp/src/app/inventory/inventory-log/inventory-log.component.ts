@@ -42,6 +42,7 @@ export class InventoryLogComponent implements OnInit {
     AdjustTypeList: any;
     WarehouseList: any;
     UserList: any;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.listAdjustStatus = myservice.getlistAdjustStatus();

@@ -26,7 +26,8 @@
     <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180"
+    [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="SupplierId" caption="廠商名稱" [width]="220">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -37,7 +38,7 @@
 
     <dxi-column dataField="Quantity" caption="數量" [width]="50"></dxi-column>
     <dxi-column dataField="Price" caption="價格" [width]="50"></dxi-column>
-    <dxi-column dataField="DeliveryDate" caption="預交日"  dataType="date" [width]="100"></dxi-column>
+    <dxi-column dataField="DeliveryDate" caption="預交日"  dataType="date" [width]="100" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>

@@ -42,6 +42,7 @@ export class BillPurchaseSupplierComponent implements OnInit, OnChanges {
     WarehouseList: any;
     DataTypeList: any;
     randomkey: number;
+    selectedOperation: string = "between";
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.PrintQrCode = this.PrintQrCode.bind(this);

@@ -32,7 +32,8 @@
         <dxi-column dataField="PurchaseType" caption="採購種類" alignment="center" [width]="60">
             <dxo-lookup [dataSource]="PurchaseTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="DeliveryTime" caption="預計交期" [width]="120" dataType="date"></dxi-column>
+        <dxi-column dataField="DeliveryTime" caption="預計交期" [width]="120" dataType="date"
+            [(selectedFilterOperation)]="selectedOperation"></dxi-column>
         <dxi-column dataField="DataType" caption="種類" alignment="center" [width]="80">
             <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>

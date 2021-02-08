@@ -53,6 +53,7 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
     closepopupVisible: boolean;
     clearCheck: any;
     listType: any;
+    selectedOperation: string = "between";
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.stockpopupVisible && !this.closepopupVisible && !this.logpopupVisible) {

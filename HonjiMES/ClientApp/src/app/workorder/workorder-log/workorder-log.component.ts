@@ -37,9 +37,10 @@ export class WorkorderLogComponent implements OnInit {
     listAdjustStatus: any;
     WorkOrderTypeList: any;
     ReportTypeList: any;
+    selectedOperation: string = "between";
     UserList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-
+        // debugger;
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.ReportTypeList = myservice.getReportType();
         this.remoteOperations = true;
