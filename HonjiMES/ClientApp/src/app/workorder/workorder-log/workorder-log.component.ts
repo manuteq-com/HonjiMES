@@ -37,8 +37,9 @@ export class WorkorderLogComponent implements OnInit {
     listAdjustStatus: any;
     WorkOrderTypeList: any;
     ReportTypeList: any;
+    UserList: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-        // debugger;
+
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();
         this.ReportTypeList = myservice.getReportType();
         this.remoteOperations = true;
@@ -47,13 +48,21 @@ export class WorkorderLogComponent implements OnInit {
             load: (loadOptions) => SendService.sendRequest(
                 this.http,
                 this.Controller + '/GetWorkOrderReportLog',
-                'GET', { loadOptions, remote: this.remoteOperations }),
+                'GET', {
+                    loadOptions, remote: this.remoteOperations }),
             // load: () => SendService.sendRequest(http, this.Controller + '/GetWorkOrderReportLog'),
             byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetWorkOrderReportLog', 'GET', { key }),
             insert: (values) => SendService.sendRequest(http, this.Controller + '/PostAdjustLog', 'POST', { values }),
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutAdjustLog', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteAdjustLog/' + key, 'DELETE')
         });
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.UserList = s.data;
+                }
+            }
+        );
     }
 
     creatdata() {

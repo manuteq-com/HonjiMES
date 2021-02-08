@@ -88,7 +88,7 @@
     <dxi-column
         dataField="ReportType"
         caption="回報種類"
-        [width]="120"
+        [width]="100"
     >
         <dxo-lookup
             [dataSource]="ReportTypeList"
@@ -99,7 +99,7 @@
     <dxi-column
         dataField="PurchaseNo"
         caption="採購單號"
-        [width]="120"
+        [width]="150"
     ></dxi-column>
     <dxi-column
         dataField="DrawNo"
@@ -114,7 +114,7 @@
     <dxi-column
         dataField="ProducingMachine"
         caption="加工機台"
-        [width]="100"
+        [width]="80"
     ></dxi-column>
     <dxi-column
         dataField="ReCount"
@@ -124,7 +124,6 @@
     <dxi-column
         dataField="Remarks"
         caption="備註"
-        [width]="100"
     ></dxi-column>
     <dxi-column
         dataField="StatusO"
@@ -151,13 +150,13 @@
     <dxi-column
         dataField="DueStartTime"
         caption="預計開工日"
-        [width]="180"
+        [width]="120"
         dataType="date"
     ></dxi-column>
     <dxi-column
         dataField="DueEndTime"
         caption="預計完工日"
-        [width]="180"
+        [width]="120"
         dataType="date"
     ></dxi-column>
     <dxi-column
@@ -175,12 +174,11 @@
     <dxi-column
         dataField="CreateTime"
         caption="建立日期"
-        [width]="180"
+        [width]="120"
         sortOrder="desc"
         dataType="date"
     ></dxi-column>
-    <dxi-column
-        dataField="CreateUser"
-        caption="使用者"
-    ></dxi-column>
+    <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
 </dx-data-grid>
