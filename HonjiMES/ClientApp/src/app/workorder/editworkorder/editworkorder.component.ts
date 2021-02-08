@@ -411,15 +411,15 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         if (e.data.Type === 1) { // 委外(含採購單)
             this.creatpopupVisible = true;
             if (e.data.Status === 3) {
-                this.ReportHeight = 770;
+                this.ReportHeight = 800;
                 // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             } else {
-                this.ReportHeight = 770;
+                this.ReportHeight = 800;
                 // this.ReportByPurchaseNo(e.data.WorkOrderHeadId, e.data.SerialNumber);
             }
         } else if (e.data.Type === 2 && e.data.Status === 2) { // 委外(無採購單)
             this.creatpopupVisible = true;
-            this.ReportHeight = 850;
+            this.ReportHeight = 870;
         } else {
             const arr =  this.dataGrid2.instance.getSelectedRowKeys();
             if (e.isSelected) {
