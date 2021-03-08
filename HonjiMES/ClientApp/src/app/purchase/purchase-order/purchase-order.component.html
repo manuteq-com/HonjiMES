@@ -62,7 +62,7 @@
     <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="150"></dxi-column>
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc"
         [width]="220" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
-    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [minWidth]="220"
+    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDate" [minWidth]="220"
         [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
