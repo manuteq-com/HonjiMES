@@ -505,6 +505,7 @@ namespace HonjiMES.Controllers
             // 檢查該銷貨單各個明細狀態，更新銷貨單(head)狀態。
             var checkStatus = true;
             var SaleHeadData = _context.SaleHeads.Find(saleId);
+            var OrderData = _context.OrderHeads.Find(SaleHeadData.SaleDetailNews.FirstOrDefault().OrderId);
             SaleHeadData.UpdateUser = MyFun.GetUserID(HttpContext);
             foreach (var SaleDetail in SaleHeadData.SaleDetailNews)
             {
@@ -516,11 +517,11 @@ namespace HonjiMES.Controllers
             if (checkStatus == true)
             {
                 SaleHeadData.Status = 2; // 完成銷貨
+                OrderData.Status = 1;
             }
             else
             {
                 SaleHeadData.Status = 1; // 銷貨一半(未完成)
-
             }
 
             if (oversale.Any())
