@@ -347,8 +347,9 @@ export class OrderdetailListComponent implements OnInit {
         }
     }
     onCellPrepared(e: any) {
+        debugger;
         if (e.rowType === 'data' && e.column.command === 'select') {
-            if (e.data.Quantity === e.data.SaleCount) {
+            if (e.data.Quantity === e.data.SaleCount || e.data.TotalCount < e.data.Quantity) {
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);

@@ -225,6 +225,18 @@ namespace HonjiMES.Models
         public DateTime CreateTime { get; set; }
         public string SaleNo { get; set; }
     }
+
+    /// <summary>
+    /// 訂單明細
+    /// </summary>
+    public class OrderDetailData : OrderDetail
+    {
+        public decimal TotalCount { get; set; }
+        public string OrderNo { get; set; }
+
+    }
+
+
     public class ToSalesOrderDetail : OrderDetail
     {
         public DateTime SaleDate { get; set; }

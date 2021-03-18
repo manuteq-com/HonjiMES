@@ -45,16 +45,44 @@ namespace HonjiMES.Controllers
         /// <returns>訂單明細</returns>
         // GET: api/OrderDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int? OrderId)
+        public async Task<ActionResult<IEnumerable<OrderDetailData>>> GetOrderDetailsByOrderId(int? OrderId)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
-            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads).Include(x => x.OrderDetailAndWorkOrderHeads).Include(x => x.PurchaseDetails).AsQueryable();
+            var OrderDetails = _context.OrderDetails.Include(x => x.SaleDetailNews).Include(x => x.WorkOrderHeads)
+            .Include(x => x.OrderDetailAndWorkOrderHeads).Include(x => x.PurchaseDetails).Include(x => x.MaterialBasic).AsQueryable();
 
             if (OrderId.HasValue)
             {
                 OrderDetails = OrderDetails.Where(x => x.OrderId == OrderId).OrderBy(x => x.Serial);
             }
-            var data = await OrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var data = await OrderDetails.Where(x => x.DeleteFlag == 0).Select(x => new OrderDetailData
+            {
+                TotalCount = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                Id = x.Id,
+                OrderId = x.OrderId,
+                MaterialBasicId = x.MaterialBasicId,
+                MaterialId = x.MaterialId,
+                CustomerNo = x.Order.CustomerNo,
+                OrderNo = x.Order.OrderNo,
+                Serial = x.Serial,
+                MachineNo = x.MachineNo,
+                DueDate = x.DueDate,
+                ReplyDate = x.ReplyDate,
+                Remark = x.Remark,
+                ReplyRemark = x.ReplyRemark,
+                Quantity = x.Quantity,
+                OriginPrice = x.OriginPrice,
+                Price = x.Price,
+                SaleCount = x.SaleCount,
+                SaledCount = x.SaledCount,
+                SaleDetailNews = x.SaleDetailNews,
+                CreateTime = x.CreateTime,
+                CreateUser = x.CreateUser,
+                UpdateTime = x.UpdateTime,
+                UpdateUser = x.UpdateUser,
+                DeleteFlag = x.DeleteFlag,
+            }).ToListAsync();
+            
             foreach (var Detailitem in data)
             {
                 //取得銷貨單號
