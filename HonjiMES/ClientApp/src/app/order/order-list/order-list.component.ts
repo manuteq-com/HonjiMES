@@ -48,6 +48,7 @@ export class OrderListComponent {
     overviewpopupVisible = false;
     overRandomkey: number;
     selectedOperation: string = "between";
+    saleunfinshedVisible = false;
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -423,5 +424,9 @@ export class OrderListComponent {
     //         throw e && e.error && e.error.Message;
     //       });
     //   }
+    saleunfinishedpopup(e) {
+        this.overRandomkey = new Date().getTime();
+        this.saleunfinshedVisible = true;
+    }
 
 }
