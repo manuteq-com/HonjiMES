@@ -150,6 +150,7 @@ import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/workt
 import { WorktimeListComponent } from './workscheduler/worktime-list/worktime-list.component';
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
 import { MachineLogsDetailsComponent } from './machine-logs/machine-logs-details/machine-logs-details.component';
+import { OrderSaleunfinishedComponent } from './order/order-saleunfinished/order-saleunfinished.component';
 
 
 
@@ -319,6 +320,7 @@ export function tokenGetter() {
         WorktimeListComponent,
         MachineLogsComponent,
         MachineLogsDetailsComponent,
+        OrderSaleunfinishedComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
