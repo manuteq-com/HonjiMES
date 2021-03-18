@@ -29,6 +29,7 @@
     <br/>
         <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
         (onEditorPreparing)="onEditorPreparing($event)" (onCellPrepared)="onCellPrepared($event)">
+            <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
             <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
             <dxi-column dataField="MaterialBasicId" caption="品號" [allowEditing]="false">
                 <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
@@ -46,5 +47,6 @@
             <dxi-column dataField="Quantity" caption="數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions"></dxi-column>
             <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
             <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="DueDate" caption="預交日" dataType="date"></dxi-column>
         </dx-data-grid>
 </form>
