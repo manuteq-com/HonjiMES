@@ -44,6 +44,8 @@ export class OrderSaleunfinishedComponent implements OnInit {
     popupVisibleSale: boolean;
     Otoworkkey: any;
     selectedOperation: string = "between";
+    tosalekey: any;
+    mod: string;
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
@@ -137,35 +139,35 @@ export class OrderSaleunfinishedComponent implements OnInit {
         //     });
         // }
     }
-    async to_workClick(e) {
-        this.topurchasekey = null;
-        this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
-        if (this.topurchasekey.length === 0) {
-            Swal.fire({
-                allowEnterKey: false,
-                allowOutsideClick: false,
-                title: '沒有勾選任何訂單項目',
-                html: '請勾選要轉工單的訂單項目',
-                icon: 'warning',
-                timer: 3000
-            });
-        } else {
-            try {
-                const OrderData = new PostOrderMaster_Detail();
-                OrderData.orderDetail = this.topurchasekey;
+    // async to_workClick(e) {
+    //     this.topurchasekey = null;
+    //     this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
+    //     if (this.topurchasekey.length === 0) {
+    //         Swal.fire({
+    //             allowEnterKey: false,
+    //             allowOutsideClick: false,
+    //             title: '沒有勾選任何訂單項目',
+    //             html: '請勾選要轉工單的訂單項目',
+    //             icon: 'warning',
+    //             timer: 3000
+    //         });
+    //     } else {
+    //         try {
+    //             const OrderData = new PostOrderMaster_Detail();
+    //             OrderData.orderDetail = this.topurchasekey;
 
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST', { values: OrderData });
-                if (sendRequest.length !== 0) {
-                    this.toworkkey = sendRequest;
-                    this.Otoworkkey = this.topurchasekey;
-                    this.popupVisibleWork = true;
-                }
-            } catch (error) {
+    //             // tslint:disable-next-line: max-line-length
+    //             const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST', { values: OrderData });
+    //             if (sendRequest.length !== 0) {
+    //                 this.toworkkey = sendRequest;
+    //                 this.Otoworkkey = this.topurchasekey;
+    //                 this.popupVisibleSale = true;
+    //             }
+    //         } catch (error) {
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
     to_purchaseClick(e) {
         // this.topurchasekey = null;
         // this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
@@ -214,42 +216,42 @@ export class OrderSaleunfinishedComponent implements OnInit {
         // }
     }
     to_saleClick(e) {
-        // this.tosalekey = null;
-        // this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
-        // if (this.tosalekey.length === 0) {
-        //     Swal.fire({
-        //         allowEnterKey: false,
-        //         allowOutsideClick: false,
-        //         title: '沒有勾選任何訂單項目',
-        //         html: '請勾選要轉銷貨的訂單項目',
-        //         icon: 'warning',
-        //         timer: 3000
-        //     });
-        // } else {
-        //     Swal.fire({
-        //         showCloseButton: true,
-        //         allowEnterKey: false,
-        //         allowOutsideClick: false,
-        //         title: '轉銷貨',
-        //         html: '如需合併銷貨單，請點選[輸入銷貨單]!',
-        //         icon: 'question',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#71c016',
-        //         cancelButtonText: '輸入銷貨單',
-        //         confirmButtonText: '新建銷貨單'
-        //     }).then(async (result) => {
-        //         if (result.value) {
-        //             this.mod = 'add';
-        //             this.popupVisibleSale = true;
-        //         } else if (result.dismiss === Swal.DismissReason.cancel) {
-        //             this.mod = 'merge';
-        //             this.popupVisibleSale = true;
-        //         } else if (result.dismiss === Swal.DismissReason.close) {
-        //             this.popupVisibleSale = false;
-        //         }
-        //     });
-        // }
+        this.tosalekey = null;
+        this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
+        if (this.tosalekey.length === 0) {
+            Swal.fire({
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '沒有勾選任何訂單項目',
+                html: '請勾選要轉銷貨的訂單項目',
+                icon: 'warning',
+                timer: 3000
+            });
+        } else {
+            Swal.fire({
+                showCloseButton: true,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '轉銷貨',
+                html: '如需合併銷貨單，請點選[輸入銷貨單]!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#71c016',
+                cancelButtonText: '輸入銷貨單',
+                confirmButtonText: '新建銷貨單'
+            }).then(async (result) => {
+                if (result.value) {
+                    this.mod = 'add';
+                    this.popupVisibleSale = true;
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.mod = 'merge';
+                    this.popupVisibleSale = true;
+                } else if (result.dismiss === Swal.DismissReason.close) {
+                    this.popupVisibleSale = false;
+                }
+            });
+        }
     }
     popup_result(e) {
         this.popupVisiblePurchase = false;
