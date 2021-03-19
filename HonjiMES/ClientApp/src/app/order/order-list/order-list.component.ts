@@ -429,4 +429,9 @@ export class OrderListComponent {
         this.saleunfinshedVisible = true;
     }
 
+    unsalepopup_result(e) {
+        this.saleunfinshedVisible = false;
+        this.dataGrid.instance.refresh();
+    }
+
 }

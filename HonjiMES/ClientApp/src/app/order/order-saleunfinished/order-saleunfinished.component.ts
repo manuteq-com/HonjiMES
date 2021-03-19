@@ -260,13 +260,13 @@ export class OrderSaleunfinishedComponent implements OnInit {
         this.childOuter.emit(true);
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.clearSelection();
-        // notify({
-        //     message: '存檔完成',
-        //     position: {
-        //         my: 'center top',
-        //         at: 'center top'
-        //     }
-        // }, 'success', 3000);
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
     }
     onFocusedRowChanging(e) {
         const rowsCount = e.component.getVisibleRows().length;

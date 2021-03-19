@@ -139,6 +139,6 @@
 <dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
     [(visible)]="saleunfinshedVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-saleunfinished (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
+        <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
     </div>
 </dx-popup>
