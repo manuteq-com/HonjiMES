@@ -1,3 +1,5 @@
+import { element } from 'protractor';
+import { Material } from './../../model/viewmodels';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
@@ -38,6 +40,8 @@ export class OrderdetailListComponent implements OnInit {
     totalcount: any;
     Otoworkkey: any;
     autoNavigateToFocusedRow = true;
+    MaterialData: any;
+    Material: any;
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.popupVisiblePurchase = false;
@@ -49,6 +53,7 @@ export class OrderdetailListComponent implements OnInit {
         this.checkBoxesMode = 'always'; // 'onClick';
         this.controller = '/OrderDetails';
         this.totalcount = 0;
+        this.MaterialData = '';
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: () => SendService.sendRequest(http, this.controller + '/GetOrderDetailsByOrderId?OrderId=' + this.itemkey),
@@ -186,6 +191,11 @@ export class OrderdetailListComponent implements OnInit {
         debugger;
         this.tosalekey = null;
         this.tosalekey = this.dataGrid.instance.getSelectedRowsData();
+        this.MaterialData = '';
+        this.tosalekey.forEach(element => {
+            this.MaterialData +=  element.MaterialBasicId + ' ';
+        });
+
         if (this.tosalekey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
@@ -196,6 +206,29 @@ export class OrderdetailListComponent implements OnInit {
                 timer: 3000
             });
         } else {
+            this.app.GetData('/Materials/GetMaterialByWarehouse/'+ this.MaterialData).subscribe(
+                (s) => {
+                    if (s.success) {
+                        debugger;
+                        this.Material ='';
+                        s.data.forEach(element => {
+                            this.Material += element.MaterialNo + '/' + element.Name + ' ,'
+                        });
+                        const shtml = '品號 / 品名庫存量不足!<br/>';
+                        Swal.fire({
+                            allowEnterKey: false,
+                            allowOutsideClick: false,
+                            width: 600,
+                            title: '警告',
+                            html: shtml + this.Material,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            cancelButtonText: '取消',
+                            confirmButtonText: '確認'
+                        });
+                    }
+                }
+            );
             Swal.fire({
                 showCloseButton: true,
                 allowEnterKey: false,
@@ -219,32 +252,9 @@ export class OrderdetailListComponent implements OnInit {
                     this.popupVisibleSale = false;
                 }
             });
-            // const response = JSON.parse(e.request.response) as APIResponse;
-            // if (response.success) {
-            //     if (response.message) {
-            //         const shtml = '品號 / 品名庫存量不足!<br/>';
-            //         Swal.fire({
-            //             allowEnterKey: false,
-            //             allowOutsideClick: false,
-            //             width: 600,
-            //             title: '警告',
-            //             html: shtml + response.message,
-            //             icon: 'warning',
-            //             showCancelButton: true,
-            //             cancelButtonText: '取消',
-            //             confirmButtonText: '確認'
-            //         }).then(async (result) => {
-            //             if (result.value) {
-            //                 // tslint:disable-next-line: max-line-length
-            //                 const postval = { OrderNo: response.data.OrderNo, Materials: response.message, CustomerNo: response.data.CustomerNo };
-            //                 // tslint:disable-next-line: max-line-length
-            //             }
-
-            //         })
-            //     }
-            // }
         }
     }
+
     GetDataFun(BasicData, SelectData) {
         let serial = 1;
         const tempdataSource = [];

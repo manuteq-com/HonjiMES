@@ -216,6 +216,24 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(material));
         }
 
+        // GET: api/GetMaterialByWarehouse/5
+        //用成品ID抓倉別為成品倉之成品庫存
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByWarehouse(string id)
+        {
+           string[] MaterialData = id.Split(' ');
+           var data = new List<Material>();
+           foreach (var item in MaterialData)
+           {
+               var orderData = await _context.OrderDetails.AsQueryable().Where(x => x.MaterialBasicId == int.Parse(item) && x.DeleteFlag == 0).FirstAsync();
+               var material = await _context.Materials.AsQueryable().Where(x => x.MaterialBasicId == int.Parse(item) && x.WarehouseId == 2 && x.DeleteFlag == 0).FirstAsync();
+               if(material.Quantity < orderData.Quantity){
+                data.Add(material);
+               }
+           }
+            return Ok(MyFun.APIResponseOK(data));
+        }
+
         private bool MaterialExists(int id)
         {
             return _context.Materials.Any(e => e.Id == id);
