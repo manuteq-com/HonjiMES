@@ -21,9 +21,9 @@
     </dxo-editing>
 
     <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" style="position:sticky" [fixed]="true"></dxi-column>
-    <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
+    <!-- <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
+    </dxi-column> -->
     <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="200"></dxi-column>
     <dxi-column dataField="Customer" caption="客戶名稱" [width]="200">
         <dxo-lookup [dataSource]="CustomerList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
@@ -48,8 +48,8 @@
         [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="Remark" caption="備註" [width]="100"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="100"></dxi-column>
-    <dxi-column dataField="SaleCount" caption="銷單" [width]="80"></dxi-column>
-    <dxi-column dataField="SaledCount" caption="已銷" [width]="80"></dxi-column>
+    <!-- <dxi-column dataField="SaleCount" caption="銷單" [width]="80"></dxi-column>
+    <dxi-column dataField="SaledCount" caption="已銷" [width]="80"></dxi-column> -->
 
 </dx-data-grid>
 
@@ -63,9 +63,6 @@
     </div>
     <div class="col-md-4 col-sm-1">
         <dx-button text="建立銷貨單" type="default" (onClick)="to_saleClick($event)"></dx-button>
-        <!-- <dx-button text="建立採購單" type="default" (onClick)="to_purchaseClick($event)"></dx-button> -->
-        <!-- <dx-button text="建立銷貨單" type="default" (onClick)="to_saleClick($event)"></dx-button> -->
-        <!-- <dx-button text="建立托工單" type="default" (onClick)="to_outsideClick($event)"></dx-button> -->
     </div>
 </div>
 

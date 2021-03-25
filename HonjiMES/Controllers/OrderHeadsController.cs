@@ -668,6 +668,59 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 查詢尚未銷貨的訂單全部資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDataWithNoSale(
+                 [FromQuery] DataSourceLoadOptions FromQuery,
+                 [FromQuery(Name = "detailfilter")] string detailfilter)
+        {
+            // _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = _context.OrderDetails.Where(x => x.DeleteFlag == 0 && x.Order.Status == 0 && x.SaleCount == 0)
+                .OrderByDescending(x => x.Order.OrderNo).ThenBy(x => x.Serial).Select(x => new OrderDetailInfo
+                {
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    CustomerNo = x.CustomerNo,
+                    Serial = x.Serial,
+                    MaterialBasicId = x.MaterialBasicId,
+                    MaterialId = x.MaterialId,
+                    Quantity = x.Quantity,
+                    OriginPrice = x.OriginPrice,
+                    Discount = x.Discount,
+                    DiscountPrice = x.DiscountPrice,
+                    Price = x.Price,
+                    Delivered = x.Delivered,
+                    Unit = x.Unit,
+                    DueDate = x.DueDate,
+                    Remark = x.Remark,
+                    ReplyDate = x.ReplyDate,
+                    ReplyRemark = x.ReplyRemark,
+                    MachineNo = x.MachineNo,
+                    Drawing = x.Drawing,
+                    Ink = x.Ink,
+                    Label = x.Label,
+                    Package = x.Package,
+                    Reply = x.Reply,
+                    SaleCount = x.SaleCount,
+                    SaledCount = x.SaledCount,
+                    DeleteFlag = x.DeleteFlag,
+                    CreateTime = x.CreateTime,
+                    CreateUser = x.CreateUser,
+                    UpdateTime = x.UpdateTime,
+                    UpdateUser = x.UpdateUser,
+
+                    OrderNo = x.Order.OrderNo,
+                    OrderType = x.Order.OrderType,
+                    Customer = x.Order.Customer
+                });
+            var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
+            // _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(FromQueryResult));
+        }
+
+        /// <summary>
         /// 交易單價紀錄報表_old
         /// </summary>
         /// <returns></returns>
