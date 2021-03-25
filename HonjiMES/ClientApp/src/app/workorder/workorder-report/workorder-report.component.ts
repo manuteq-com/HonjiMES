@@ -1,3 +1,4 @@
+import { WorkOrderHead } from './../../model/viewmodels';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, HostListener } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
@@ -9,6 +10,7 @@ import { HubMessage, workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 
 @Component({
@@ -85,10 +87,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     mod: any;
     dataSource: any[];
     ProductBasicList: any;
-    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean; };
+    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean;};
     UserList: any;
     keyup = '';
-    MachineEditorOptions: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; };
+    MachineEditorOptions: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; readOnly: boolean };
     HasProducingMachineVisible: boolean;
     HasCodeNoVisible: boolean;
     QcTypeList: any;
@@ -284,6 +286,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             }
         );
+
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
@@ -292,11 +295,13 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         items: s.data,
                         displayExpr: 'Name',
                         valueExpr: 'Name',
-                        searchEnabled: true
+                        searchEnabled: true,
+                        readOnly: false,
                     };
                 }
             }
         );
+
         // this.app.GetData('/PurchaseHeads/GetNotEndPurchaseHeads').subscribe(
         //     (s) => {
         //         if (s.success) {
@@ -346,7 +351,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
-                        this.itemval19 = '　　　　訂單數量：　' + (s.data.WorkOrderHead.OrderDetail?.Quantity?? '0');
+                        this.itemval19 = '　　　　訂單數量：　' + (s.data.WorkOrderHead.OrderDetail?.Quantity ?? '0');
                         // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         this.itemval4 = '';
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
@@ -404,6 +409,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 }
                             }
                         });
+                        debugger;
+                        if(s.data.WorkOrderHead.Status == 2){
+                            this.MachineEditorOptions.readOnly = true;
+                        }
                     }
                 }
             );
@@ -713,7 +722,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             } else if (this.modval === 'newpurchase') {
                 this.GetPurchaseDetailData();
             }
-        } catch (error) {}
+        } catch (error) { }
         this.buttondisabled = false;
     }
 }
