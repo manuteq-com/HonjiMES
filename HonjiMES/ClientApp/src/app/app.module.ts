@@ -151,6 +151,10 @@ import { WorktimeListComponent } from './workscheduler/worktime-list/worktime-li
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
 import { MachineLogsDetailsComponent } from './machine-logs/machine-logs-details/machine-logs-details.component';
 import { OrderSaleunfinishedComponent } from './order/order-saleunfinished/order-saleunfinished.component';
+import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
+import { SurfaceDetailComponent } from './surface-treatment/surface-detail/surface-detail.component';
+import { CreateSurfaceComponent } from './surface-treatment/create-surface/create-surface.component';
+import { SufacetoworkComponent } from './surface-treatment/sufacetowork/sufacetowork.component';
 
 
 
@@ -321,6 +325,10 @@ export function tokenGetter() {
         MachineLogsComponent,
         MachineLogsDetailsComponent,
         OrderSaleunfinishedComponent,
+        SurfaceTreatmentComponent,
+        SurfaceDetailComponent,
+        CreateSurfaceComponent,
+        SufacetoworkComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

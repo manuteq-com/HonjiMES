@@ -55,6 +55,60 @@ export class PostOrderMaster_Detail {
     orderDetail: OrderDetail[];
     workOrderHead: WorkOrderHead[];
 }
+
+export class SufaceHead {
+    id: number;
+    orderNo: string;
+    customerNo: string;
+    orderDate: Date;
+    replyDate: Date;
+    startDate: Date;
+    finishDate: Date;
+    customer: number;
+    createDate: Date;
+    createUser: number;
+}
+export class SufaceDetail {
+    id: number;
+    orderId: number;
+    productId: number;
+    serial: number;
+    originPrice: number;
+    price: number;
+    unit: string;
+    quantity: number;
+    dueDate: Date;
+    replyDate: Date;
+    machineNo: number;
+    remark: string;
+    replyRemark: string;
+    createDate: Date;
+}
+export class WorkSufacerHead {
+    Id: number;
+    WorkOrderNo: string;
+    OrderDetailId: number;
+    MachineNo: string;
+    DataType: number;
+    DataId: number;
+    DataNo: string;
+    DataName: string;
+    Count: number;
+    ReCount: number;
+    Status: number;
+    TotalTime: number;
+    DispatchTime: Date;
+    DueStartTime: Date;
+    DueEndTime: Date;
+    ActualStartTime: Date;
+    ActualEndTime: Date;
+}
+
+export class PostSufaceMaster_Detail {
+    surfaceHead: SufaceHead;
+    surfaceDetail: SufaceDetail[];
+    worksurfaceHead: WorkSufacerHead[];
+}
 export class InventoryChange {
     id: number;
     mod: string;

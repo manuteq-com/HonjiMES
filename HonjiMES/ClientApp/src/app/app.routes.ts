@@ -47,6 +47,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
 import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/worktime-summary.component';
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
+import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -95,6 +96,7 @@ export const routes: Routes = [
     { path: 'staffmanagement', component: StaffmanagementComponent },
     { path: 'worktimesummary', component: WorktimeSummaryComponent },
     { path: 'machinelogs', component: MachineLogsComponent },
+    { path: 'surfacetreat', component: SurfaceTreatmentComponent },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

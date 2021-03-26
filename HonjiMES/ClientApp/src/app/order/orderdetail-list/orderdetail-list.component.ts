@@ -1,4 +1,4 @@
-import { element } from 'protractor';
+// import { element } from 'protractor';
 import { Material } from './../../model/viewmodels';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
