@@ -63,7 +63,7 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 s.data.data.forEach(e => {
-                    e.MaterialNo = e.MaterialNo + ' / ' +  e.Specification;
+                    e.MaterialNo = e.MaterialNo + ' / ' + e.Specification;
                 });
                 this.MaterialList = s.data.data;
             }
@@ -117,10 +117,9 @@ export class PurchaseDetailComponent implements OnInit, OnChanges {
     }
 
     distinct(value) {
-        debugger;
-        if(value.value){
+        if (value.value) {
             return value.value.split(",");
-        }else{
+        } else {
             return null;
         }
     }
