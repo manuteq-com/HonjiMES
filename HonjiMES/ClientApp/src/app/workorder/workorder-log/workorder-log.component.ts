@@ -39,6 +39,7 @@ export class WorkorderLogComponent implements OnInit {
     ReportTypeList: any;
     selectedOperation: string = "between";
     UserList: any;
+    TimeSpan: any;
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         // debugger;
         this.WorkOrderTypeList = myservice.getWorkOrderStatus();

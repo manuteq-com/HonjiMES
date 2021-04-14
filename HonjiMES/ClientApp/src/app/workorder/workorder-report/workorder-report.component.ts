@@ -80,9 +80,11 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     NoPurchaseVisible: any;
     selectBoxOptions: any;
     HasPurchaseVisible: boolean;
+    HasStockVisible: boolean;
     PurchaseHeadList: any;
     editorOptions: any;
     creatpopupVisible: boolean;
+    stockpopupVisible: boolean;
     itemkey: any;
     mod: any;
     dataSource: any[];
@@ -103,6 +105,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     autoNavigateToFocusedRow = true;
     remoteOperations: boolean;
     NcCountVisible: boolean;
+    workorderkey: any;
 
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
@@ -228,6 +231,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.restartedBtnVisible = false;
         this.NoPurchaseVisible = false;
         this.HasPurchaseVisible = false;
+        this.HasStockVisible = false;
         this.HasProducingMachineVisible = false;
         this.HasQCVisible = false;
         this.PurchaseHeadList = [];
@@ -436,6 +440,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.HasQCVisible = true;
         } else if (Status === 3 || Status === 4 || Status === 6) {
             this.restartedBtnVisible = true;
+            this.HasStockVisible = true;//新增入庫單按鈕
         }
     }
     ShowNCReportView(Status, Type) { // NC報工畫面
@@ -470,6 +475,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 this.HasPurchaseVisible = true;
             } else {
                 this.restartedBtnVisible = true;
+                this.HasStockVisible = true;//新增入庫單按鈕
                 this.RemarkVisible = true;
 
                 // 因重複報開工，所以重複完工 2020/09/09
@@ -531,11 +537,19 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     onPurchaseClick(e) {
         this.modval = 'purchase';
     }
+    onStockClick(e) {
+        debugger;
+        this.modval = 'stock';
+    }
     onNewPurchaseClick(e) {
         this.modval = 'newpurchase';
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
+        this.showMessage('success', '存檔完成', 3000);
+    }
+    stockpopup_result(e) {
+        this.stockpopupVisible = false;
         this.showMessage('success', '存檔完成', 3000);
     }
     onSupplierSelectionChanged(e) {
@@ -562,7 +576,9 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         x.DataType === this.formData.WorkOrderHead.DataType &&
                         x.DataId === this.formData.WorkOrderHead.DataId
                     );
+                    debugger;
                     if (result) {
+                        debugger;
                         this.dataSource.push({
                             Serial: 1,
                             TempId: result.TempId,
@@ -579,6 +595,28 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                     }
                     this.mod = 'workorder';
                     this.creatpopupVisible = true;
+                }
+            }
+        );
+    }
+
+    GetStockData() {
+        this.dataSource = [];
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    debugger;
+                    const result = s.data.find(x =>
+                        x.DataType === this.formData.WorkOrderHead.DataType &&
+                        x.DataId === this.formData.WorkOrderHead.DataId
+                    );
+                    if (result) {
+                    debugger;
+                        this.itemkey =  result.DataId;
+                        this.workorderkey = this.formData.WorkOrderHead.Id;
+                    }
+                    this.mod = 'workorder';
+                    this.stockpopupVisible = true;
                 }
             }
         );
@@ -721,7 +759,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             } else if (this.modval === 'newpurchase') {
                 this.GetPurchaseDetailData();
+            }else if (this.modval === 'stock') {
+                this.GetStockData();
             }
+
         } catch (error) { }
         this.buttondisabled = false;
     }

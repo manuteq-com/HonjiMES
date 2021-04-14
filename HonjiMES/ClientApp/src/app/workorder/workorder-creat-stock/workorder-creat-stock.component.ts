@@ -23,6 +23,8 @@ export class WorkorderCreatStockComponent implements OnInit, OnChanges {
     @Input() modkeyval: any;
     @Input() randomkeyval: any;
     @Input() popupkeyval: any;
+    @Input() dataSource: any;
+    @Input() modval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     buttondisabled = false;
