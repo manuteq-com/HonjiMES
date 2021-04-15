@@ -1,0 +1,34 @@
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+
+        <dxi-item dataField="Code">
+            <dxi-validation-rule type="required" message="機台名稱 必填"></dxi-validation-rule>
+            <dxo-label text="機台名稱"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="連線地址 必填"></dxi-validation-rule>
+            <dxo-label text="連線地址"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="連線埠號 必填"></dxi-validation-rule>
+            <dxo-label text="連線埠號"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="機台種類 必填"></dxi-validation-rule>
+            <dxo-label text="機台種類"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Name">
+            <dxi-validation-rule type="required" message="控制器種類 必填"></dxi-validation-rule>
+            <dxo-label text="控制器種類"></dxo-label>
+        </dxi-item>
+
+    </dx-form>
+
+    <div class="col-auto-12 mt-4">
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='清除' type='danger' icon='refresh'
+            [useSubmitBehavior]="true" (onClick)="removeBtn($event)"></dx-button>
+    </div>
+</form>

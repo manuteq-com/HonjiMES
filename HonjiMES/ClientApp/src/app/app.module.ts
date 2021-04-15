@@ -156,6 +156,7 @@ import { SurfaceDetailComponent } from './surface-treatment/surface-detail/surfa
 import { CreateSurfaceComponent } from './surface-treatment/create-surface/create-surface.component';
 import { SufacetoworkComponent } from './surface-treatment/sufacetowork/sufacetowork.component';
 import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
+import { CreatmachineComponent } from './machinemanagemate/creatmachine/creatmachine.component';
 
 
 
@@ -331,6 +332,7 @@ export function tokenGetter() {
         CreateSurfaceComponent,
         SufacetoworkComponent,
         MachineInformationComponent,
+        CreatmachineComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
