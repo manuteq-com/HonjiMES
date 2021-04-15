@@ -33,6 +33,8 @@ export class MachineInformationComponent implements OnInit {
     verpopupVisible: boolean;
     bomverdata: any;
 
+    MachineList: any;
+
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         // debugger;
         this.Inventory_Change_Click = this.Inventory_Change_Click.bind(this);
@@ -46,6 +48,17 @@ export class MachineInformationComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutSupplier', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteSupplier/' + key, 'DELETE')
         });
+
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        s.data.unshift({ Id: null, Name: '' }); // 加入第一行
+                        this.MachineList = s.data;
+                    }
+                }
+            }
+        );
     }
     creatdata() {
         this.creatpopupVisible = true;
