@@ -66,7 +66,7 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(MachineInformation machineInformation)
+        public async Task<ActionResult<Customer>> PostMachineInformation(MachineInformation machineInformation)
         {
             //新增時檢查[代號][名稱]是否重複
             if (_context.MachineInformations.AsQueryable().Where(x => (x.Name == machineInformation.Name || x.Url == machineInformation.Url) && x.EnableState == 1).Any())
@@ -88,7 +88,7 @@ namespace HonjiMES.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, MachineInformation machineInformation)
+        public async Task<IActionResult> PutMachineInformation(int id, MachineInformation machineInformation)
         {
             machineInformation.Id = id;
             var OmachineInformation = _context.MachineInformations.Find(id);
@@ -135,7 +135,7 @@ namespace HonjiMES.Controllers
         /// <returns></returns>
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<MachineInformation>> DeleteCustomer(int id)
+        public async Task<ActionResult<MachineInformation>> DeleteMachineInformation(int id)
         {
             var machineInformation = await _context.MachineInformations.FindAsync(id);
             if (machineInformation == null)
