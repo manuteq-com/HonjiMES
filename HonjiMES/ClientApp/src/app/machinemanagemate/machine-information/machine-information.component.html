@@ -36,11 +36,12 @@
     </dxo-pager>
     <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item  dataField="Address"></dxi-item>
-            <dxi-item  dataField="Code"></dxi-item>
             <dxi-item  dataField="Name"></dxi-item>
-            <dxi-item  dataField="ShortName"></dxi-item>
-            <dxi-item  dataField="ContactName"></dxi-item>
+            <dxi-item  dataField="Url"></dxi-item>
+            <dxi-item  dataField="Port"></dxi-item>
+            <dxi-item  dataField="ModelId"></dxi-item>
+            <dxi-item  dataField="ControlBrandId"></dxi-item>
+            <dxi-item dataField="UserId"></dxi-item>
         </dxo-form>
         <dxo-popup>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
@@ -50,14 +51,14 @@
         </dxo-popup>
     </dxo-editing>
 
-    <dxi-column dataField="ProducingMachineTemplate" alignment="center" caption="機台" sortOrder="asc">
+    <dxi-column dataField="Name" alignment="center" caption="機台" sortOrder="asc">
         <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
      </dxi-column>
-     <dxi-column dataField="Address" caption="連線地址" ></dxi-column>
-    <dxi-column dataField="Code" caption="連線埠號" ></dxi-column>
-    <dxi-column dataField="Name" caption="機台種類" ></dxi-column>
-    <dxi-column dataField="ShortName" caption="控制器種類"></dxi-column>
-    <dxi-column dataField="ContactName" caption="負責人" ></dxi-column>
+     <dxi-column dataField="Url" caption="連線地址" ></dxi-column>
+    <dxi-column dataField="Port" caption="連線埠號" ></dxi-column>
+    <dxi-column dataField="ModelId" caption="機台種類" ></dxi-column>
+    <dxi-column dataField="ControlBrandId" caption="控制器種類"></dxi-column>
+    <dxi-column dataField="UserId" caption="負責人" ></dxi-column>
 
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>

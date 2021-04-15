@@ -22,7 +22,7 @@ export class MachineInformationComponent implements OnInit {
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     formData: any;
-    Controller = '/Suppliers';
+    Controller = '/MachineInformation';
     creatpopupVisible: boolean;
     editpopupVisible: boolean;
     itemkey: number;
@@ -42,11 +42,11 @@ export class MachineInformationComponent implements OnInit {
         this.saveClickHandler = this.saveClickHandler.bind(this);
         this.dataSourceDB = new CustomStore({
             key: 'Id',
-            load: () => SendService.sendRequest(http, this.Controller + '/GetSuppliers'),
-            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetSupplier', 'GET', { key }),
-            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostSupplier', 'POST', { values }),
-            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutSupplier', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteSupplier/' + key, 'DELETE')
+            load: () => SendService.sendRequest(http, this.Controller + '/GetMachineInformations'),
+            byKey: (key) => SendService.sendRequest(http, this.Controller + '/GetMachineInformationById', 'GET', { key }),
+            insert: (values) => SendService.sendRequest(http, this.Controller + '/PostMachineInformation', 'POST', { values }),
+            update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMachineInformation', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMachineInformation/' + key, 'DELETE')
         });
 
         this.app.GetData('/Machines/GetMachines').subscribe(
@@ -67,7 +67,7 @@ export class MachineInformationComponent implements OnInit {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
         notify({
-            message: '供應商新增完成',
+            message: '機台新增完成',
             position: {
                 my: 'center top',
                 at: 'center top'
@@ -121,7 +121,7 @@ export class MachineInformationComponent implements OnInit {
         this.itemkey = data.data;
     }
     ngOnInit() {
-        this.titleService.setTitle('供應商資料');
+        this.titleService.setTitle('機台管理');
     }
     cancelClickHandler(e) {
         this.dataGrid.instance.cancelEditData();

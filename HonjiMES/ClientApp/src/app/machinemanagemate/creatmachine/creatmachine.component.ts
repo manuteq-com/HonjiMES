@@ -39,22 +39,16 @@ export class CreatmachineComponent implements OnInit {
 
     constructor(private http: HttpClient, public app: AppComponent) {
         this.formData = null;
-        // this.editOnkeyPress = true;
-        // this.enterKeyAction = 'moveFocus';
-        // this.enterKeyDirection = 'row';
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 100;
         this.colCount = 1;
-
     }
-
 
     ngOnInit() {
     }
     ngOnChanges() {
-
     }
     saveBtn(e) {
         this.btnMod = 'save';
