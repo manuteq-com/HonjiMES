@@ -78,11 +78,8 @@ export class CreatmachineComponent implements OnInit {
                     return;
                 }
                 this.formData = this.myform.instance.option('formData');
-                // this.postval = new Supplier();
-                // this.postval = this.formData as Supplier;
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/Suppliers/PostSupplier', 'POST', { values: this.formData });
-                // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
+                const sendRequest = await SendService.sendRequest(this.http, '/MachineInformation/PostMachineInformation', 'POST', { values: this.formData });
+
                 if (sendRequest) {
                     this.myform.instance.resetValues();
                     e.preventDefault();

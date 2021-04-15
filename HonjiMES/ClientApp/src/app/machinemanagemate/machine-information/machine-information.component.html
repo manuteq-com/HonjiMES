@@ -34,9 +34,8 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item  dataField="Name"></dxi-item>
             <dxi-item  dataField="Url"></dxi-item>
             <dxi-item  dataField="Port"></dxi-item>
             <dxi-item  dataField="ModelId"></dxi-item>
@@ -52,12 +51,12 @@
     </dxo-editing>
 
     <dxi-column dataField="Name" alignment="center" caption="機台" sortOrder="asc">
-        <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
+        <!-- <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup> -->
      </dxi-column>
      <dxi-column dataField="Url" caption="連線地址" ></dxi-column>
-    <dxi-column dataField="Port" caption="連線埠號" ></dxi-column>
-    <dxi-column dataField="ModelId" caption="機台種類" ></dxi-column>
-    <dxi-column dataField="ControlBrandId" caption="控制器種類"></dxi-column>
+    <!-- <dxi-column dataField="Port" caption="連線埠號" ></dxi-column> -->
+    <!-- <dxi-column dataField="ModelId" caption="機台種類" ></dxi-column>
+    <dxi-column dataField="ControlBrandId" caption="控制器種類"></dxi-column> -->
     <dxi-column dataField="UserId" caption="負責人" ></dxi-column>
 
     <dxi-column type="buttons">
