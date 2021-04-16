@@ -32,7 +32,7 @@ export class MachineInformationComponent implements OnInit {
     Supplierlist: any;
     verpopupVisible: boolean;
     bomverdata: any;
-
+    UserList: any;
     MachineList: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
@@ -48,17 +48,23 @@ export class MachineInformationComponent implements OnInit {
             update: (key, values) => SendService.sendRequest(http, this.Controller + '/PutMachineInformation', 'PUT', { key, values }),
             remove: (key) => SendService.sendRequest(http, this.Controller + '/DeleteMachineInformation/' + key, 'DELETE')
         });
-
-        this.app.GetData('/Machines/GetMachines').subscribe(
-            (s) => {
-                if (s.success) {
-                    if (s.success) {
-                        s.data.unshift({ Id: null, Name: '' }); // 加入第一行
-                        this.MachineList = s.data;
-                    }
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s2) => {
+                if (s2.success) {
+                    this.UserList = s2.data;
                 }
             }
         );
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                console.log(s);
+                this.MachineList = s.data;
+                if (s.success) {
+
+                }
+            }
+        );
+
     }
     creatdata() {
         this.creatpopupVisible = true;

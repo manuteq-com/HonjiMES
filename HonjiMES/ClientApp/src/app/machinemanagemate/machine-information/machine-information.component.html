@@ -36,10 +36,11 @@
     </dxo-pager>
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
+            <dxi-item dataField="Name"></dxi-item>
             <dxi-item  dataField="Url"></dxi-item>
-            <dxi-item  dataField="Port"></dxi-item>
+            <!-- <dxi-item  dataField="Port"></dxi-item>
             <dxi-item  dataField="ModelId"></dxi-item>
-            <dxi-item  dataField="ControlBrandId"></dxi-item>
+            <dxi-item  dataField="ControlBrandId"></dxi-item> -->
             <dxi-item dataField="UserId"></dxi-item>
         </dxo-form>
         <dxo-popup>
@@ -57,7 +58,9 @@
     <!-- <dxi-column dataField="Port" caption="連線埠號" ></dxi-column> -->
     <!-- <dxi-column dataField="ModelId" caption="機台種類" ></dxi-column>
     <dxi-column dataField="ControlBrandId" caption="控制器種類"></dxi-column> -->
-    <dxi-column dataField="UserId" caption="負責人" ></dxi-column>
+    <dxi-column dataField="UserId" caption="負責人">
+        <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
 
     <dxi-column type="buttons">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
@@ -68,7 +71,7 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增機台" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="400"
+<dx-popup [showTitle]="true" title="新增機台" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="500" [height]="250"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmachine (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
