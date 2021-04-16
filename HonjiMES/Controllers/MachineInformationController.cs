@@ -74,6 +74,7 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseError("機台的 [名稱] 或 [連線IP] 已存在!", machineInformation));
             }
             _context.MachineInformations.Add(machineInformation);
+            machineInformation.UserId = MyFun.GetUserID(HttpContext);
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(machineInformation));
         }
