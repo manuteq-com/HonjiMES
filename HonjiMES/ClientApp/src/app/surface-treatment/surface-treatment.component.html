@@ -2,7 +2,7 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="新增採購單" type="success" [width]="120"
+        <dx-button class="insertbtn" stylingMode="contained" text="新增表處單" type="success" [width]="120"
             (onClick)="creatdata()">
         </dx-button>
     </div>
@@ -50,9 +50,9 @@
     <dxi-column dataField="PurchaseNo" caption="採購單號" [minWidth]="160">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Type" caption="採購種類" alignment="center" [width]="80">
+    <!-- <dxi-column dataField="Type" caption="採購種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="TypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
+    </dxi-column> -->
     <dxi-column dataField="SupplierId" caption="供應商" [width]="220">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -95,7 +95,7 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="新增表處單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-create-surface (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">

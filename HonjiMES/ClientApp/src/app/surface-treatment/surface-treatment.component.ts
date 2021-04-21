@@ -1,5 +1,4 @@
-import { style } from '@angular/animations';
-//import { PurchaseDetailComponent } from './../purchase-detail/purchase-detail.component';
+// import { PurchaseDetailComponent } from './../purchase-detail/purchase-detail.component';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
@@ -14,10 +13,10 @@ import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-surface-treatment',
-  templateUrl: './surface-treatment.component.html',
-  styleUrls: ['./surface-treatment.component.css'],
-  providers: [DatePipe]
+    selector: 'app-surface-treatment',
+    templateUrl: './surface-treatment.component.html',
+    styleUrls: ['./surface-treatment.component.css'],
+    providers: [DatePipe]
 })
 export class SurfaceTreatmentComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -38,7 +37,7 @@ export class SurfaceTreatmentComponent implements OnInit {
     remoteOperations: boolean;
     formData: any;
     editorOptions: any;
-    detailfilter = [];
+    detailfilter = { Type: 30 };
     DetailsDataSourceStorage: any;
     hint: boolean;
     date: any;
@@ -46,7 +45,7 @@ export class SurfaceTreatmentComponent implements OnInit {
     Url = '';
     purchaseHeadId: any;
     UserList: any;
-    selectedOperation: string = "between";
+    selectedOperation = 'between';
 
     // tslint:disable-next-line: max-line-length
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe, private titleService: Title) {
@@ -194,7 +193,6 @@ export class SurfaceTreatmentComponent implements OnInit {
         this.dataGrid.instance.refresh();
     }
     onRowPrepared(e) {
-        // debugger;
         if (e.data !== undefined) {
             this.hint = false;
             if (e.data.Status === 1) {

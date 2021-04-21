@@ -269,6 +269,11 @@ namespace HonjiMES.Models
         public string SupplierCode { get; set; }
         public string MaterialNo { get; set; }
         public string WorkOrderNo { get; set; }
+        /// <summary>
+        /// 查詢種類
+        /// </summary>
+        /// <value></value>
+        public int? Type { get; set; }
     }
     /// <summary>
     /// 銷貨單銷貨

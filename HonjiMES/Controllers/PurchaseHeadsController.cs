@@ -113,7 +113,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             var purchaselists = await _context.PurchaseDetails
-            .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier 
+            .Where(x => x.DeleteFlag == 0 && x.Quantity > x.PurchaseCount && x.SupplierId == supplier
             && x.DataType != 0 && x.Purchase.DeleteFlag == 0 && x.Purchase.Status != 1)
             .Include(x => x.Purchase).Include(x => x.Warehouse).Select(x => new PuschaseList
             {
@@ -199,6 +199,14 @@ namespace HonjiMES.Controllers
             if (!string.IsNullOrWhiteSpace(qSearchValue.MaterialNo))
             {
                 data = data.Where(x => x.PurchaseDetails.Where(y => y.DataNo.Contains(qSearchValue.MaterialNo, StringComparison.InvariantCultureIgnoreCase)).Any());
+            }
+            if (qSearchValue.Type.HasValue)
+            {
+                data = data.Where(x => x.Type == qSearchValue.Type);
+            }
+            else
+            {
+                data = data.Where(x => x.Type != 30);
             }
             data = data.Include(x => x.PurchaseDetails);
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
@@ -410,7 +418,7 @@ namespace HonjiMES.Controllers
         {
             return _context.PurchaseHeads.Any(e => e.Id == id);
         }
-        
+
         /// <summary>
         /// 廠商交易紀錄
         /// </summary>
@@ -441,9 +449,9 @@ namespace HonjiMES.Controllers
                 {
                     Id = index,
                     Type = item.Key,
-                    New = item.Where( x => x.Status == 0 && x.Type == item.Key).Count(),
-                    PurchaseFinished = item.Where( x => x.Status == 1 && x.Type == item.Key).Count(),
-                    Undone = item.Where( x => x.Status == 2 && x.Type == item.Key).Count(),
+                    New = item.Where(x => x.Status == 0 && x.Type == item.Key).Count(),
+                    PurchaseFinished = item.Where(x => x.Status == 1 && x.Type == item.Key).Count(),
+                    Undone = item.Where(x => x.Status == 2 && x.Type == item.Key).Count(),
                 });
                 index++;
             }
