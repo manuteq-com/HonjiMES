@@ -1,4 +1,5 @@
 ﻿{
+   "CodeGenerationMode": 1,
    "ContextClassName": "HonjiContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
@@ -7,6 +8,7 @@
    "ModelNamespace": null,
    "OutputContextPath": null,
    "OutputPath": "Models",
+   "ProceduresReturnList": false,
    "ProjectRootNamespace": "HonjiMES",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
@@ -205,6 +207,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "surface_wokorder",
+         "ObjectType": 0
+      },
+      {
          "Name": "system",
          "ObjectType": 0
       },
@@ -269,6 +275,7 @@
          "ObjectType": 3
       }
    ],
+   "UiHint": ".honji",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,
@@ -276,6 +283,10 @@
    "UseHandleBars": true,
    "UseInflector": true,
    "UseLegacyPluralizer": false,
+   "UseNoConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
    "UseNodaTime": false,
+   "UseNullableReferences": false,
    "UseSpatial": false
 }

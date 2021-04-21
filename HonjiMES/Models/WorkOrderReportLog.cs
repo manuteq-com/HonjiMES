@@ -122,6 +122,16 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("actual_end_time", TypeName = "timestamp")]
         public DateTime? ActualEndTime { get; set; }
+        /// <summary>
+        /// &#27231;&#21488;&#38283;&#24037;&#26085;
+        /// </summary>
+        [Column("machine_start_time", TypeName = "timestamp")]
+        public DateTime? MachineStartTime { get; set; }
+        /// <summary>
+        /// &#27231;&#21488;&#23436;&#24037;&#26085;
+        /// </summary>
+        [Column("machinel_end_time", TypeName = "timestamp")]
+        public DateTime? MachinelEndTime { get; set; }
         [Column("delete_flag", TypeName = "int(11)")]
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
