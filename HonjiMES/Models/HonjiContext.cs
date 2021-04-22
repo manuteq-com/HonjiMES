@@ -56,7 +56,7 @@ namespace HonjiMES.Models
         public virtual DbSet<StockHead> StockHeads { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
-        public virtual DbSet<SurfaceWokorder> SurfaceWokorders { get; set; }
+        public virtual DbSet<SurfaceWorkorder> SurfaceWorkorders { get; set; }
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<ToolManagement> ToolManagements { get; set; }
         public virtual DbSet<Toolset> Toolsets { get; set; }
@@ -2775,7 +2775,7 @@ namespace HonjiMES.Models
                     .HasConstraintName("supplier_of_material_ibfk_1");
             });
 
-            modelBuilder.Entity<SurfaceWokorder>(entity =>
+            modelBuilder.Entity<SurfaceWorkorder>(entity =>
             {
                 entity.HasComment("表處工單關聯紀錄");
 
