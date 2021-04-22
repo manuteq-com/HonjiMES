@@ -80,7 +80,7 @@ export class SurfaceTreatmentComponent implements OnInit {
         );
     }
     ngOnInit() {
-        this.titleService.setTitle('採購單');
+        this.titleService.setTitle('表面處理');
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
