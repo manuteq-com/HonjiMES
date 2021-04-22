@@ -9,8 +9,8 @@ namespace HonjiMES.Models
     /// <summary>
     /// &#34920;&#34389;&#24037;&#21934;&#38364;&#32879;&#32000;&#37636;
     /// </summary>
-    [Table("surface_wokorder")]
-    public partial class SurfaceWokorder
+    [Table("surface_workorder")]
+    public partial class SurfaceWorkorder
     {
         /// <summary>
         /// 唯一碼
