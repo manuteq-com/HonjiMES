@@ -104,22 +104,7 @@ export class SurfaceDetailComponent implements OnInit {
         this.childOuter.emit(true);
     }
     onRowPrepared(e) {
-        // debugger;
-        // if (e.data !== undefined) {
-        //     let hint = false;
-        //     if (e.data.Purchase.Status !== 1) {
-        //         if (e.data !== undefined) {
-        //             const DeliverydateBefore = new Date(e.data.DeliveryTime);
-        //             const DeliverydateAfter = new Date(new Date().setDate(new Date().getDate() - 1));
-        //             if (DeliverydateBefore <= DeliverydateAfter && e.data.PurchasedCount < e.data.Quantity) {
-        //                 hint = true;
-        //             }
-        //             if (hint) {
-        //                 e.rowElement.style.color = '#d9534f';
-        //             }
-        //         }
-        //     }
-        // }
+
     }
 
     distinct(value) {
@@ -155,6 +140,7 @@ export class SurfaceDetailComponent implements OnInit {
                     this.Otoworkkey = this.topurchasekey;
                     this.popupVisibleWork = true;
                 //}
+                this.topurchasekey = [];
             } catch (error) {
 
             }
