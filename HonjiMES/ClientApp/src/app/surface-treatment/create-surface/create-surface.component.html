@@ -93,7 +93,7 @@
                 message="轉入倉別 必填" pattern="WarehouseIdB">
             </dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="實際規格" [minWidth]="80">
+        <dxi-column dataField="TempId" caption="實際規格" [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="TempId" caption="品名" editCellTemplate="TempIdEditCellTemplate"[minWidth]="80">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
