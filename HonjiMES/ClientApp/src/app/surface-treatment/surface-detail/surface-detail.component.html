@@ -10,7 +10,11 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
 (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" [rowAlternationEnabled]="true"><dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing>
+    <!-- <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing> -->
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status">
+        <dxo-form colCount=4 [width]="1500">
+        </dxo-form>
+    </dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
         <dxi-total-item
             [customizeText]="customizeText" column="PurchaseDetails.DataId" summaryType="count">
@@ -55,7 +59,7 @@
     <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
     </div>
-    <dxi-column type="buttons" [width]="50">
+    <dxi-column type="buttons" [width]="80">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
@@ -68,7 +72,7 @@
     <div *dxTemplate="let d of 'diffCellTemplate2'" >
         <ul style="list-style-type:none; text-align: left;">
             <li *ngFor ="let item of distinct(d)">
-                <dx-check-box  [value]="checkBoxValue" text={{item}}></dx-check-box>
+                <dx-check-box  [value]="checkBoxValue" text={{item}} (click)="clickCheckBox($event)"></dx-check-box>
             </li>
         </ul>
     </div>

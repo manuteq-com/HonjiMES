@@ -2,3 +2,12 @@
     margin: 0px;
     padding: 0px;
 }
+
+::ng-deep .dx-datagrid-form-buttons-container{
+width : 1500px;
+float : left;
+}
+
+::ng-deep .dx-datagrid-form-buttons-container .dx-button {
+float : right;
+}

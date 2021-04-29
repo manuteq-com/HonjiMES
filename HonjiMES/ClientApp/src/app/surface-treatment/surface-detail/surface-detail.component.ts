@@ -42,10 +42,11 @@ export class SurfaceDetailComponent implements OnInit {
     popupVisibleWork : boolean;
     WO: any;
     checkBoxValue:any;
+    checkBoxarray: any = [];
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
-        this.checkBoxValue = "false";
+        this.checkBoxValue = false;
         this.ItemTypeList = myservice.getlistAdjustStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -57,7 +58,6 @@ export class SurfaceDetailComponent implements OnInit {
         });
     }
     ngOnInit() {
-        this.checkBoxValue = "false";
     }
     ngOnChanges() {
 
@@ -111,7 +111,6 @@ export class SurfaceDetailComponent implements OnInit {
     }
 
     distinct(value) {
-        //debugger;
         if(value.value){
             this.WO = value.value.split(",");
             return this.WO;
@@ -136,8 +135,12 @@ export class SurfaceDetailComponent implements OnInit {
 
     async to_workClick(e) {
         debugger;
+        if (this.checkBoxValue == true) {
+            this.checkBoxarray.push();
+        }
+        console.log(this.checkBoxarray);
         this.toworkorderkey = null;
-        this.toworkorderkey = this.WO;
+        this.toworkorderkey = this.checkBoxarray;
         if (this.toworkorderkey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
@@ -161,6 +164,15 @@ export class SurfaceDetailComponent implements OnInit {
             } catch (error) {
 
             }
+        }
+    }
+
+    clickCheckBox(e) {
+        debugger;
+        if (this.checkBoxValue == false) {
+            this.checkBoxarray.push(e.currentTarget.innerText);
+        } else {
+            this.checkBoxarray.pop();
         }
     }
 }
