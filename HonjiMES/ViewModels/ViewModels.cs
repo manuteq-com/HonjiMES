@@ -776,6 +776,7 @@ namespace HonjiMES.Models
         public WorkOrderHead WorkOrderHead { get; set; }
         public List<WorkOrderDetail> WorkOrderDetail { get; set; }
         public List<WorkOrderDetailData> WorkOrderDetailData { get; set; }
+        public string mod { get; set; }
     }
     public class WorkOrderData2
     {
