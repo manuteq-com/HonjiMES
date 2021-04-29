@@ -436,15 +436,21 @@ namespace HonjiMES.Controllers
         /// <param name="WorkOrderData"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<WorkOrderData>> PostWorkOrderList(WorkOrderData WorkOrderData)
+        public async Task<ActionResult<WorkOrderData>> PostWorkOrderList(WorkOrderData WorkOrderData, String mod)
         {
             if (WorkOrderData.WorkOrderHead.DataId != 0)
             {
                 //取得工單號
                 var key = "HJ";
+                var workOrderNo = "";//新建工單的工單號
                 var WorkOrderNo = WorkOrderData.WorkOrderHead.CreateTime.ToString("yyMMdd");
+                //計算工單在同個日期有幾筆資料
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
                 var NoCount = NoData.Count() + 1;
+                //計算表處轉工單的工單有幾筆資料
+                var sNoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 14 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var sNoCount = sNoData.Count() + 1;
+
                 if (NoCount != 1)
                 {
                     var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
@@ -453,7 +459,20 @@ namespace HonjiMES.Controllers
                     NoCount = NoLast + 1;
                     // }
                 }
-                var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+                if (mod == "new")
+                {
+                    workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+                }
+                else if (mod == "surfacetreat")
+                {
+                    if (sNoCount != 1)
+                    {
+                        var sLastWorkOrderNo = sNoData.FirstOrDefault().WorkOrderNo;
+                        var sNoLast = Int32.Parse(sLastWorkOrderNo.Substring(sLastWorkOrderNo.Length - 2, 2));
+                        sNoCount = sNoLast + 1;
+                    }
+                    workOrderNo = key + WorkOrderNo + '-' + sNoCount.ToString("00");
+                }
 
                 // var DataType = 0;
                 var BasicDataID = 0;

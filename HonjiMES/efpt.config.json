@@ -1,13 +1,13 @@
 ﻿{
-   "CodeGenerationMode": 0,
-   "ContextClassName": "HonjiCncContext",
+   "CodeGenerationMode": 1,
+   "ContextClassName": "HonjiContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "CncModels",
+   "OutputPath": "Models",
    "ProceduresReturnList": false,
    "ProjectRootNamespace": "HonjiMES",
    "Schemas": null,
@@ -15,11 +15,111 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
+         "Name": "adjust_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "adjust_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase_checkin",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "billof_purchase_return",
+         "ObjectType": 0
+      },
+      {
+         "Name": "bill_of_material",
+         "ObjectType": 0
+      },
+      {
+         "Name": "bill_of_material_ver",
+         "ObjectType": 0
+      },
+      {
+         "Name": "customer",
+         "ObjectType": 0
+      },
+      {
          "Name": "machine_informations",
          "ObjectType": 0
       },
       {
+         "Name": "machine_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "machine_maintenance",
+         "ObjectType": 0
+      },
+      {
+         "Name": "machine_workdate",
+         "ObjectType": 0
+      },
+      {
+         "Name": "maintenance_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "material",
+         "ObjectType": 0
+      },
+      {
+         "Name": "material_basic",
+         "ObjectType": 0
+      },
+      {
+         "Name": "material_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "mbom_model_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "mbom_model_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "menu",
+         "ObjectType": 0
+      },
+      {
+         "Name": "message",
+         "ObjectType": 0
+      },
+      {
+         "Name": "m_bill_of_material",
+         "ObjectType": 0
+      },
+      {
          "Name": "order",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_detail_and_work_order_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "order_head",
          "ObjectType": 0
       },
       {
@@ -31,11 +131,95 @@
          "ObjectType": 0
       },
       {
+         "Name": "product",
+         "ObjectType": 0
+      },
+      {
+         "Name": "product_basic",
+         "ObjectType": 0
+      },
+      {
+         "Name": "product_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "product_sn",
+         "ObjectType": 0
+      },
+      {
          "Name": "purchase",
          "ObjectType": 0
       },
       {
+         "Name": "purchase_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "purchase_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "receive",
+         "ObjectType": 0
+      },
+      {
+         "Name": "requisition",
+         "ObjectType": 0
+      },
+      {
+         "Name": "requisition_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "return_sale",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_detail_new",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "sale_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "staff_management",
+         "ObjectType": 0
+      },
+      {
+         "Name": "stock_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "stock_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "supplier",
+         "ObjectType": 0
+      },
+      {
+         "Name": "supplier_of_material",
+         "ObjectType": 0
+      },
+      {
+         "Name": "surface_workorder",
+         "ObjectType": 0
+      },
+      {
          "Name": "system",
+         "ObjectType": 0
+      },
+      {
+         "Name": "toolset",
+         "ObjectType": 0
+      },
+      {
+         "Name": "tool_management",
          "ObjectType": 0
       },
       {
@@ -47,6 +231,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "user_roles",
+         "ObjectType": 0
+      },
+      {
+         "Name": "warehouse",
+         "ObjectType": 0
+      },
+      {
          "Name": "web_sessions",
          "ObjectType": 0
       },
@@ -55,7 +247,7 @@
          "ObjectType": 3
       }
    ],
-   "UiHint": ".cnctalkbox",
+   "UiHint": ".honji",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

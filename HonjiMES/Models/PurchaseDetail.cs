@@ -78,6 +78,46 @@ namespace HonjiMES.Models
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         /// <summary>
+        /// &#24050;&#20132;&#25976;&#37327;
+        /// </summary>
+        [Column("delivered", TypeName = "int(11)")]
+        public int? Delivered { get; set; }
+        /// <summary>
+        /// &#26410;&#20132;&#25976;&#37327;
+        /// </summary>
+        [Column("undelivered", TypeName = "int(11)")]
+        public int? Undelivered { get; set; }
+        /// <summary>
+        /// &#21512;&#26684;&#25976;&#37327;
+        /// </summary>
+        [Column("ok", TypeName = "int(11)")]
+        public int? Ok { get; set; }
+        /// <summary>
+        /// &#19981;&#21512;&#26684;&#25976;&#37327;
+        /// </summary>
+        [Column("not_ok", TypeName = "int(11)")]
+        public int? NotOk { get; set; }
+        /// <summary>
+        /// &#21487;&#20462;&#25976;&#37327;
+        /// </summary>
+        [Column("repair", TypeName = "int(11)")]
+        public int? Repair { get; set; }
+        /// <summary>
+        /// &#19981;&#21487;&#20462;&#25976;&#37327;
+        /// </summary>
+        [Column("unrepair", TypeName = "int(11)")]
+        public int? Unrepair { get; set; }
+        /// <summary>
+        /// &#24288;&#20839;NG&#25976;&#37327;
+        /// </summary>
+        [Column("in_NG", TypeName = "int(11)")]
+        public int? InNg { get; set; }
+        /// <summary>
+        /// &#24288;&#22806;NG&#25976;&#37327;
+        /// </summary>
+        [Column("out_NG", TypeName = "int(11)")]
+        public int? OutNg { get; set; }
+        /// <summary>
         /// &#21407;&#21934;&#20729;	
         /// </summary>
         [Column("originPrice", TypeName = "decimal(10,2)")]
