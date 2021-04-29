@@ -49,6 +49,7 @@ import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/workt
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
 import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
 import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
+import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -99,6 +100,7 @@ export const routes: Routes = [
     { path: 'machinelogs', component: MachineLogsComponent },
     { path: 'surfacetreat', component: SurfaceTreatmentComponent },
     { path: 'machineinformation', component: MachineInformationComponent },
+    { path: 'machineprocesstime', component: MachineProcessTimeComponent },
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });

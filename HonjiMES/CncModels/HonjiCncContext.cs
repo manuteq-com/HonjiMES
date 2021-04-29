@@ -15,6 +15,8 @@ namespace HonjiMES.CncModels
         public virtual DbSet<MachineGroupMachineInformation> MachineGroupMachineInformations { get; set; }
         public virtual DbSet<MachineInformation> MachineInformations { get; set; }
         public virtual DbSet<MachineLog> MachineLogs { get; set; }
+
+        public virtual DbSet<MachineProcessTime> MachineProcessTimes { get; set; }
         public virtual DbSet<Maintain> Maintains { get; set; }
         public virtual DbSet<MaintainInfo> MaintainInfos { get; set; }
         public virtual DbSet<NcFileInformation> NcFileInformations { get; set; }
@@ -323,6 +325,38 @@ namespace HonjiMES.CncModels
                     .WithMany(p => p.MachineLogs)
                     .HasForeignKey(d => d.MachineId)
                     .HasConstraintName("machine_logs_ibfk_1");
+            });
+
+
+            modelBuilder.Entity<MachineProcessTime>(entity =>
+            {
+                entity.ToView("machine_process_time");
+
+                entity.Property(e => e.Comment)
+                    .HasDefaultValueSql("'()'")
+                    .HasComment("程式註解")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.EndTime).HasComment("結束時間");
+
+                entity.Property(e => e.Filename)
+                    .HasComment("檔案名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.Machineid).HasComment("唯一碼");
+
+                entity.Property(e => e.Machinename)
+                    .HasComment("機台名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.StartTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
             });
 
             modelBuilder.Entity<Maintain>(entity =>

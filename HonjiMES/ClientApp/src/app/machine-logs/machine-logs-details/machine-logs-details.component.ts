@@ -14,7 +14,7 @@ import { SendService } from 'src/app/shared/mylib';
 export class MachineLogsDetailsComponent implements OnInit {
     @Input() itemkey: number;
     dataSourceDB: any;
-    Controller = "/MaterialLogs";
+    Controller = '/MaterialLogs';
     remoteOperations = false;
     detailfilter: any;
     autoNavigateToFocusedRow = true;

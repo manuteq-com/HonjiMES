@@ -157,6 +157,7 @@ import { CreateSurfaceComponent } from './surface-treatment/create-surface/creat
 import { SufacetoworkComponent } from './surface-treatment/sufacetowork/sufacetowork.component';
 import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
 import { CreatmachineComponent } from './machinemanagemate/creatmachine/creatmachine.component';
+import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
 
 
 
@@ -333,6 +334,7 @@ export function tokenGetter() {
         SufacetoworkComponent,
         MachineInformationComponent,
         CreatmachineComponent,
+        MachineProcessTimeComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

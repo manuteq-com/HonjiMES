@@ -20,10 +20,10 @@ namespace HonjiMES.Controllers
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class MaterialLogsController : ControllerBase
+    public class MachineProcessTimesController : ControllerBase
     {
         private readonly HonjiCncContext _context;
-        public MaterialLogsController(HonjiCncContext context)
+        public MachineProcessTimesController(HonjiCncContext context)
         {
             _context = context;
             _context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
@@ -34,12 +34,12 @@ namespace HonjiMES.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CncModels.MachineInformation>>> GetMachineLogs([FromQuery] DataSourceLoadOptions FromQuery)
+        public async Task<ActionResult<IEnumerable<CncModels.MachineProcessTime>>> GetMachineProcessTimes([FromQuery] DataSourceLoadOptions FromQuery)
         {
             // var data = await _context.MachineLogs.AsQueryable().Where(x => x.Status == 1)
             // .Include(x => x.Machine)
             // .ThenInclude(x => x.NcFileInformations).Where(x => x.Machine.NcFileInformations.Where(y => string.IsNullOrWhiteSpace(y.Comment)).Any()).Take(10).ToListAsync();
-            var data = _context.MachineInformations.AsQueryable();
+            var data = _context.MachineProcessTimes.AsQueryable();
             var FromQueryResult = await MyFun.ExFromQueryResultAsync(data, FromQuery);
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
