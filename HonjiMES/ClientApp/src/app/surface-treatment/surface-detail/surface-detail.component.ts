@@ -27,7 +27,6 @@ export class SurfaceDetailComponent implements OnInit {
     @Input() SupplierList: any;
     @Input() MaterialBasicList: any;
     allMode: string;
-    checkBoxesMode: string;
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     dataSourceDB: CustomStore;
     Controller = '/PurchaseDetails';
@@ -37,14 +36,16 @@ export class SurfaceDetailComponent implements OnInit {
     WarehouseList: any;
     ItemTypeList: any;
     MaterialList: any;
-    topurchasekey: any;
+    toworkorderkey: any;
     toworkkey : any;
-    Otoworkkey : any;
+    mod: any;
     popupVisibleWork : boolean;
+    WO: any;
+    checkBoxValue:any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
-        this.checkBoxesMode = 'always'; // 'onClick';
+        this.checkBoxValue = "false";
         this.ItemTypeList = myservice.getlistAdjustStatus();
         this.dataSourceDB = new CustomStore({
             key: 'Id',
@@ -56,8 +57,10 @@ export class SurfaceDetailComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.checkBoxValue = "false";
     }
     ngOnChanges() {
+
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(
             (s) => {
                 s.data.forEach(e => {
@@ -110,16 +113,32 @@ export class SurfaceDetailComponent implements OnInit {
     distinct(value) {
         //debugger;
         if(value.value){
-            return value.value.split(",");
+            this.WO = value.value.split(",");
+            return this.WO;
         }else{
             return null;
         }
     }
 
+    popup_result(e) {
+        this.popupVisibleWork = false;
+        this.childOuter.emit(true);
+        this.dataGrid.instance.refresh();
+        this.dataGrid.instance.clearSelection();
+        notify({
+            message: '存檔完成',
+            position: {
+                my: 'center top',
+                at: 'center top'
+            }
+        }, 'success', 3000);
+    }
+
     async to_workClick(e) {
-        this.topurchasekey = null;
-        this.topurchasekey = this.dataGrid.instance.getSelectedRowsData();
-        if (this.topurchasekey.length === 0) {
+        debugger;
+        this.toworkorderkey = null;
+        this.toworkorderkey = this.WO;
+        if (this.toworkorderkey.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
                 allowOutsideClick: false,
@@ -131,16 +150,14 @@ export class SurfaceDetailComponent implements OnInit {
         } else {
             try {
                 const SurfaceData = new PostSufaceMaster_Detail();
-                SurfaceData.surfaceDetail = this.topurchasekey;
-
-                // tslint:disable-next-line: max-line-length
-                //const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST', { values: OrderData });
+                SurfaceData.surfaceDetail = this.toworkorderkey;
+                //const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST',
+                // { values: OrderData });
                 //if (sendRequest.length !== 0) {
-                    //this.toworkkey = sendRequest;
-                    this.Otoworkkey = this.topurchasekey;
+                    this.mod = "surfacetreat";
                     this.popupVisibleWork = true;
                 //}
-                this.topurchasekey = [];
+                this.toworkorderkey = [];
             } catch (error) {
 
             }

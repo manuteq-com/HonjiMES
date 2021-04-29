@@ -31,14 +31,21 @@
     <dxi-column dataField="MaterialBasics.ActualSpecification" caption="實際規格" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="PurchaseDetails.DataName" caption="品名" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="PurchaseDetails.DeliveryTime" caption="預交日期" dataType="date"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.WarehouseId" caption="倉別" [allowEditing]="false">
+    <dxi-column dataField="PurchaseDetails.WarehouseId" caption="入庫倉別" [allowEditing]="false">
+        <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+    </dxi-column>
+    <dxi-column dataField="PurchaseDetails.WarehouseId" caption="出庫倉別" [allowEditing]="false">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="PurchaseDetails.PurchaseCount" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
     <dxi-column dataField="PurchaseDetails.PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Quantity" caption="數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Quantity" caption="退貨數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Quantity" caption="NG入庫數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="不合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="不可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="廠內NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="廠外NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="未交數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
 
     <dxi-column dataField="PurchaseDetails.OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
@@ -61,7 +68,7 @@
     <div *dxTemplate="let d of 'diffCellTemplate2'" >
         <ul style="list-style-type:none; text-align: left;">
             <li *ngFor ="let item of distinct(d)">
-                <input type="checkbox"> {{item}}
+                <dx-check-box  [value]="checkBoxValue" text={{item}}></dx-check-box>
             </li>
         </ul>
     </div>
@@ -70,7 +77,7 @@
 <dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
     [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
-        <app-sufacetowork></app-sufacetowork>
+        <app-creatprocess-control (childOuter)="popup_result($event)" [modval]="mod"></app-creatprocess-control>
         <!-- <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork> -->
     </div>
 </dx-popup>
