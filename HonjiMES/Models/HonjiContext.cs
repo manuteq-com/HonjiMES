@@ -2021,13 +2021,23 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
 
+                entity.Property(e => e.Delivered).HasComment("已交數量");
+
                 entity.Property(e => e.DeliveryTime)
                     .HasDefaultValueSql("current_timestamp()")
                     .HasComment("預計交期");
 
+                entity.Property(e => e.InNg).HasComment("廠內NG數量");
+
+                entity.Property(e => e.NotOk).HasComment("不合格數量");
+
+                entity.Property(e => e.Ok).HasComment("合格數量");
+
                 entity.Property(e => e.OrderDetailId).HasComment("訂單明細id");
 
                 entity.Property(e => e.OriginPrice).HasComment("原單價	");
+
+                entity.Property(e => e.OutNg).HasComment("廠外NG數量");
 
                 entity.Property(e => e.Price).HasComment("價格");
 
@@ -2046,12 +2056,18 @@ namespace HonjiMES.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.Repair).HasComment("可修數量");
+
                 entity.Property(e => e.Specification)
                     .HasComment("規格")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.SupplierId).HasComment("供應商id");
+
+                entity.Property(e => e.Undelivered).HasComment("未交數量");
+
+                entity.Property(e => e.Unrepair).HasComment("不可修數量");
 
                 entity.Property(e => e.UpdateTime)
                     .HasDefaultValueSql("current_timestamp()")
