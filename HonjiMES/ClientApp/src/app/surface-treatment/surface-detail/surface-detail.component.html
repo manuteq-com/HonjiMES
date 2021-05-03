@@ -25,11 +25,11 @@
         </dxi-total-item>
     </dxo-summary>
 
-    <dxi-column dataField="PurchaseDetails.DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
+    <dxi-column dataField="PurchaseDetails.DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70" [fixed]="true">
         <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="PurchaseDetails.DataId" caption="品號/規格" [allowEditing]="false">
+    <dxi-column dataField="PurchaseDetails.DataId" caption="品號/規格" [allowEditing]="false" [fixed]="true">
         <dxo-lookup [dataSource]="MaterialList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MaterialBasics.ActualSpecification" caption="實際規格" [allowEditing]="false"></dxi-column>
@@ -59,15 +59,15 @@
     <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
     </div>
-    <dxi-column type="buttons" [width]="80">
+    <dxi-column type="buttons" [width]="80" [fixed]="true">
         <dxi-button name="save" text="存檔" icon="save"></dxi-button>
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
-    <dxi-column dataField="" caption="工單" cellTemplate="" [allowEditing]="false" [width]="150"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.WorkOrderLog" caption="原工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150"></dxi-column>
+    <dxi-column dataField="" caption="工單" cellTemplate="" [allowEditing]="false" [width]="150" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.WorkOrderLog" caption="原工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
 
     <div *dxTemplate="let d of 'diffCellTemplate2'" >
         <ul style="list-style-type:none; text-align: left;">
