@@ -135,10 +135,6 @@ export class SurfaceDetailComponent implements OnInit {
 
     async to_workClick(e) {
         debugger;
-        if (this.checkBoxValue == true) {
-            this.checkBoxarray.push();
-        }
-        console.log(this.checkBoxarray);
         this.toworkorderkey = null;
         this.toworkorderkey = this.checkBoxarray;
         if (this.toworkorderkey.length === 0) {
@@ -167,13 +163,32 @@ export class SurfaceDetailComponent implements OnInit {
         }
     }
 
-    clickCheckBox(e) {
+    handleValueChange(e) {
         debugger;
-        if (this.checkBoxValue == false) {
-            this.checkBoxarray.push(e.currentTarget.innerText);
-        } else {
-            this.checkBoxarray.pop();
+        const previousValue = e.previousValue;
+        const newValue = e.value;
+        if (newValue == true){
+            this.checkBoxarray.push(e.element.innerText);
+        }else{
+            this.checkBoxarray.forEach(function (item, index, arr) {
+                if (newValue == false) {
+                    arr.splice(index, 1);
+                }
+            });
         }
+        console.log(this.checkBoxarray)
     }
+
+    // handleValueChange(e) {
+    //     debugger;
+    //     const previousValue = e.previousValue;
+    //     const newValue = e.value;
+    //     if (newValue == true) {
+    //         this.checkBoxarray.push(e.element.innerText);
+    //     } else {
+    //         this.checkBoxarray.splice(0, 1);
+    //     }
+    //     console.log(this.checkBoxarray)
+    // }
 }
 
