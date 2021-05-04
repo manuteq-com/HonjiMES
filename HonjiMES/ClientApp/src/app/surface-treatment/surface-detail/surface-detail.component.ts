@@ -43,6 +43,14 @@ export class SurfaceDetailComponent implements OnInit {
     WO: any;
     checkBoxValue:any;
     checkBoxarray: any = [];
+    Deliveredval: number;
+    Undeliveredval: number;
+    Okval: number;
+    NotOkval: number;
+    Repairval: number;
+    Unrepairval: number;
+    InNGval: number;
+    OutNGval: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
@@ -81,15 +89,64 @@ export class SurfaceDetailComponent implements OnInit {
     to_purchaseClick(e) {
         this.topurchase = this.dataGrid.instance.getSelectedRowsData();
     }
+
+    onEditingStart(e) {
+        debugger;
+        this.Quantityval = e.data.PurchaseDetails.Quantity;
+        this.Deliveredval = e.data.PurchaseDetails.Delivered;
+        this.Undeliveredval = e.data.PurchaseDetails.Undelivered;
+        this.Okval = e.data.PurchaseDetails.Ok;
+        this.NotOkval = e.data.PurchaseDetails.NotOk;
+        this.Repairval = e.data.PurchaseDetails.Repair;
+        this.Unrepairval = e.data.PurchaseDetails.Unrepair;
+        this.InNGval = e.data.PurchaseDetails.InNg;
+        this.OutNGval = e.data.PurchaseDetails.OutNg;
+    }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
-        // this.Quantityval = e.value;
-        // this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    DeliveredValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Deliveredval = e.value;
+        this.Undeliveredval = this.Quantityval - this.Deliveredval;
+    }
+    UndeliveredValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Undeliveredval = e.value;
+        this.Deliveredval = this.Quantityval - this.Undeliveredval;
+    }
+    OkValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Okval = e.value;
+        this.NotOkval = this.Quantityval - this.Okval;
+    }
+    NotOkValueChanged(e, data) {
+        data.setValue(e.value);
+        this.NotOkval = e.value;
+        this.Okval = this.Quantityval - this.NotOkval;
+    }
+    RepairValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Repairval = e.value;
+        this.Unrepairval = this.NotOkval - this.Repairval;
+    }
+    UnRepairValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Unrepairval = e.value;
+        this.Repairval = this.NotOkval - this.Unrepairval;
+    }
+    InNGValueChanged(e, data) {
+        data.setValue(e.value);
+        this.InNGval = e.value;
+        this.OutNGval = this.Unrepairval - this.InNGval;
+    }
+    OutNGValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OutNGval = e.value;
+        this.InNGval = this.Unrepairval - this.OutNGval;
     }
     OriginValueChanged(e, data) {
         data.setValue(e.value);
-        // this.OriginPriceval = e.value;
-        // this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     onDataErrorOccurred(e) {
         notify({
@@ -179,6 +236,13 @@ export class SurfaceDetailComponent implements OnInit {
         console.log(this.checkBoxarray)
     }
 
+    QuantitysetCellValue(newData, value, currentRowData) {
+        newData.Quantity = value;
+        newData.Price = value * currentRowData.OriginPrice;
+        if (isNaN(newData.Price)) {
+            newData.Price = null;
+        }
+    }
     // handleValueChange(e) {
     //     debugger;
     //     const previousValue = e.previousValue;
