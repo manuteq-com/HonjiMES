@@ -41,8 +41,8 @@
     <dxi-column dataField="PurchaseDetails.WarehouseId" caption="出庫倉別" [allowEditing]="true">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PurchaseDetails.PurchaseCount" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="表處數量" dataType="number" [allowEditing]="true" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
