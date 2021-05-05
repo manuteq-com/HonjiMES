@@ -110,28 +110,28 @@
             editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="Delivered" caption="已交數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="80">
+            editCellTemplate="DeliveredEditCellTemplate"  [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="Undelivered" caption="未交數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="80">
+            editCellTemplate="UnDeliveredEditCellTemplate" [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="Ok" caption="合格數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="80">
+            editCellTemplate="OkEditCellTemplate" [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="NotOk" caption="不合格數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="100">
+            editCellTemplate="NotOkEditCellTemplate"  [minWidth]="100">
         </dxi-column>
         <dxi-column dataField="Repair" caption="可修數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="80">
+            editCellTemplate="RepairEditCellTemplate" [minWidth]="80">
         </dxi-column>
         <dxi-column dataField="Unrepair" caption="不可修數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="100">
+            editCellTemplate="UnRepairEditCellTemplate" [minWidth]="100">
         </dxi-column>
         <dxi-column dataField="InNg" caption="廠內NG數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="110">
+            editCellTemplate="InNGEditCellTemplate" [minWidth]="110">
         </dxi-column>
         <dxi-column dataField="OutNg" caption="廠外NG數量" dataType="number" format="#,##0.##;($ #,##0.##)"
-            editCellTemplate="QuantityEditCellTemplate" [setCellValue]="QuantitysetCellValue" [minWidth]="110">
+            editCellTemplate="OutNGEditCellTemplate"  [minWidth]="110">
         </dxi-column>
 
 
@@ -177,6 +177,38 @@
         </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
             <dx-number-box [value]='Quantityval' (onValueChanged)="QuantityValueChanged($event,data)" min="1"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'DeliveredEditCellTemplate'">
+            <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="1"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'UnDeliveredEditCellTemplate'">
+            <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="1"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'OkEditCellTemplate'">
+            <dx-number-box [value]='Okval' (onValueChanged)="OkValueChanged($event,data)" min="0"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'NotOkEditCellTemplate'">
+            <dx-number-box [value]='NotOkval' (onValueChanged)="NotOkValueChanged($event,data)" min="0"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'RepairEditCellTemplate'">
+            <dx-number-box [value]='Repairval' (onValueChanged)="RepairValueChanged($event,data)" min="0"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'UnRepairEditCellTemplate'">
+            <dx-number-box [value]='Unrepairval' (onValueChanged)="UnRepairValueChanged($event,data)" min="0"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'InNGEditCellTemplate'">
+            <dx-number-box [value]='InNGval' (onValueChanged)="InNGValueChanged($event,data)" min="0"
+                [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'OutNGEditCellTemplate'">
+            <dx-number-box [value]='OutNGval' (onValueChanged)="OutNGValueChanged($event,data)" min="0"
                 [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">

@@ -436,7 +436,7 @@ namespace HonjiMES.Controllers
         /// <param name="WorkOrderData"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<WorkOrderData>> PostWorkOrderList(WorkOrderData WorkOrderData, String mod)
+        public async Task<ActionResult<WorkOrderData>> PostWorkOrderList(WorkOrderData WorkOrderData)
         {
             if (WorkOrderData.WorkOrderHead.DataId != 0)
             {
@@ -459,11 +459,11 @@ namespace HonjiMES.Controllers
                     NoCount = NoLast + 1;
                     // }
                 }
-                if (mod == "new")
+                if (WorkOrderData.mod == "new")
                 {
                     workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
                 }
-                else if (mod == "surfacetreat")
+                else if (WorkOrderData.mod == "surfacetreat")
                 {
                     if (sNoCount != 1)
                     {

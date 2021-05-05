@@ -1,3 +1,5 @@
+import { FormBuilder } from '@angular/forms';
+import { element } from 'protractor';
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
@@ -65,6 +67,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
     Quantityvalmax: number;
     saveCheck = true;
     showdisabled: boolean;
+    supplierdisabled: boolean;
     Serial: number;
     Purchaselist: any;
     selectBoxOptions: any;
@@ -75,6 +78,14 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
     DeliveryTime: Date;
     TypeDisabled: boolean;
     gridsaveCheck: boolean;
+    Okval: number;
+    NotOkval: number;
+    Repairval: number;
+    Unrepairval: number;
+    InNGval: number;
+    OutNGval: number;
+    Deliveredval: number;
+    Undeliveredval: number;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.requiredfun = this.requiredfun.bind(this);
@@ -194,11 +205,13 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         }
         this.app.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
+                debugger;
                 if (s.success) {
                     this.TypeDisabled = false;
                     this.formData = s.data;
                     this.formData.Id = 0;
                     this.formData.SupplierId = null;
+                    this.formData.CreateTime = new Date();
                     this.formData.PurchaseDate = new Date();
                     if (this.modval === 'workorder') {
                         this.formData.Type = 30;
@@ -283,6 +296,14 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         const dataId = basicData.DataId;
         this.Quantityvalmax = 999;
         this.Quantityval = 1;
+        this.Deliveredval = 0;
+        this.Undeliveredval = 0;
+        this.Okval = 0;
+        this.NotOkval = 0;
+        this.Repairval = 0;
+        this.Unrepairval = 0;
+        this.InNGval = 0;
+        this.OutNGval = 0;
         this.OriginPriceval = basicData.Price ? basicData.Price : 0;
         this.Priceval = basicData.Price ? basicData.Price : 0;
 
@@ -332,6 +353,46 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         data.setValue(e.value);
         this.Quantityval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
+    }
+    DeliveredValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Deliveredval = e.value;
+        this.Undeliveredval = this.Quantityval - this.Deliveredval;
+    }
+    UndeliveredValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Undeliveredval = e.value;
+        this.Deliveredval = this.Quantityval - this.Undeliveredval;
+    }
+    OkValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Okval = e.value;
+        this.NotOkval = this.Quantityval - this.Okval;
+    }
+    NotOkValueChanged(e, data) {
+        data.setValue(e.value);
+        this.NotOkval = e.value;
+        this.Okval = this.Quantityval - this.NotOkval;
+    }
+    RepairValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Repairval = e.value;
+        this.Unrepairval = this.NotOkval - this.Repairval;
+    }
+    UnRepairValueChanged(e, data) {
+        data.setValue(e.value);
+        this.Unrepairval = e.value;
+        this.Repairval = this.NotOkval - this.Unrepairval;
+    }
+    InNGValueChanged(e, data) {
+        data.setValue(e.value);
+        this.InNGval = e.value;
+        this.OutNGval = this.Unrepairval - this.InNGval;
+    }
+    OutNGValueChanged(e, data) {
+        data.setValue(e.value);
+        this.OutNGval = e.value;
+        this.InNGval = this.Unrepairval - this.OutNGval;
     }
     OriginValueChanged(e, data) {
         debugger;
@@ -449,10 +510,14 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         }
         this.formData = this.myform.instance.option('formData');
         let dataCheck = true;
+        debugger;
         this.dataSourceDB.forEach(element => {
             const basicData = this.BasicDataList.find(z => z.TempId === element.TempId);
             element.DataType = basicData.DataType;
             element.DataId = basicData.DataId;
+            element.DataNo = basicData.DataNo;
+            element.DataName = basicData.Name;
+            element.Specification = basicData.Specification;
 
             // 如採購單種類為[表處]，則需確認倉別資訊。
             if (this.formData.Type === 30) {
@@ -472,9 +537,12 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         } else {
+            debugger;
             // if (this.formData.SupplierId == null) {
             //     this.formData.SupplierId = 0;
             // }
+            this.formData.UpdateTime = this.formData.CreateTime;
+            this.formData.SupplierId = 0;
             this.postval = {
                 PurchaseHead: this.formData,
                 PurchaseDetails: this.dataSourceDB
@@ -525,6 +593,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             this.gridsaveCheck = false;
         }
     }
+
     QuantitysetCellValue(newData, value, currentRowData) {
         newData.Quantity = value;
         newData.Price = value * currentRowData.OriginPrice;
