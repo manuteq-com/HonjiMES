@@ -546,7 +546,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             //     this.formData.SupplierId = 0;
             // }
             this.formData.UpdateTime = this.formData.CreateTime;
-            this.formData.SupplierId = 0;
             this.postval = {
                 PurchaseHead: this.formData,
                 PurchaseDetails: this.dataSourceDB
