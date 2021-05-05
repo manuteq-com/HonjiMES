@@ -117,6 +117,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         };
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
+                debugger;
                 if (s.success) {
                     this.SupplierList = s.data;
                     this.SupplierList.forEach(x => {
@@ -213,12 +214,15 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
                     this.formData.SupplierId = null;
                     this.formData.CreateTime = new Date();
                     this.formData.PurchaseDate = new Date();
-                    if (this.modval === 'workorder') {
-                        this.formData.Type = 30;
-                    } else if (this.modval === 'add-outside') {
-                        this.formData.Type = 20;
-                        this.TypeDisabled = true;
-                    }
+                    //新增表處單採購類別固定為表處
+                    this.formData.Type = 30;
+                    this.TypeDisabled = true;
+                    // if (this.modval === 'workorder') {
+                    //     this.formData.Type = 30;
+                    // } else if (this.modval === 'add-outside') {
+                    //     this.formData.Type = 20;
+                    //     this.TypeDisabled = true;
+                    // }
                     this.TypeselectBoxOptions = {
                         items: this.PurchasetypeList,
                         displayExpr: 'Name',

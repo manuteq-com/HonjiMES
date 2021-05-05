@@ -42,15 +42,15 @@
     <dxi-column dataField="PurchaseDetails.WarehouseId" caption="出庫倉別" [allowEditing]="true">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PurchaseDetails.Quantity" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [width]="100" editCellTemplate="DeliveredEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="OkEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="NotOkEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="RepairEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Unrepair" caption="不可修數量" dataType="number" editCellTemplate="UnRepairEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.InNg" caption="廠內NG數量" dataType="number" editCellTemplate="InNGEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.OutNg" caption="廠外NG數量" dataType="number" editCellTemplate="OutNGEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Undelivered" caption="未交數量" dataType="number" editCellTemplate="UnDeliveredEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.PurchaseCount" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Unrepair" caption="不可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.InNg" caption="廠內NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.OutNg" caption="廠外NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Undelivered" caption="未交數量" dataType="number" editCellTemplate="QuantityEditCellTemplate" [allowEditing]="false"></dxi-column>
 
     <dxi-column dataField="PurchaseDetails.OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
