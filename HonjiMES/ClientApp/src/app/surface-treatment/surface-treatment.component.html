@@ -95,7 +95,7 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增表處單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+<dx-popup [showTitle]="true" title="新增表處單" [dragEnabled]="false" [closeOnOutsideClick]="false"  [width]="1600" [height]="760"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-create-surface (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">

@@ -42,28 +42,30 @@
     <dxi-column dataField="PurchaseDetails.WarehouseId" caption="出庫倉別" [allowEditing]="true">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="PurchaseDetails.PurchaseCount" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.PurchasedCount" caption="已交貨數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Unrepair" caption="不可修數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.InNg" caption="廠內NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.OutNg" caption="廠外NG數量" dataType="number" editCellTemplate="QuantityEditCellTemplate"></dxi-column>
-    <dxi-column dataField="PurchaseDetails.Undelivered" caption="未交數量" dataType="number" editCellTemplate="QuantityEditCellTemplate" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Quantity" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
+    <!-- <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="true" [width]="100" editCellTemplate="DeliveredEditCellTemplate" max = {{ DeliveredMaxValue }}></dxi-column> -->
+    <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="true" [width]="100"
+        editCellTemplate="DeliveredEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="OkEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="NotOkEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="RepairEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Unrepair" caption="不可修數量" dataType="number" editCellTemplate="UnRepairEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.InNg" caption="廠內NG數量" dataType="number" editCellTemplate="InNGEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.OutNg" caption="廠外NG數量" dataType="number" editCellTemplate="OutNGEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Undelivered" caption="未交數量" dataType="number" editCellTemplate="UnDeliveredEditCellTemplate" id="input"></dxi-column>
 
     <dxi-column dataField="PurchaseDetails.OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="1"
+        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="0"
         [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'DeliveredEditCellTemplate'">
-        <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="1"
+        <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="0"
             [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'UnDeliveredEditCellTemplate'">
-        <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="1"
+        <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="0"
             [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'OkEditCellTemplate'">

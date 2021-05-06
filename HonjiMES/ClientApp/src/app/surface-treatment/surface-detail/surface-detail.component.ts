@@ -51,6 +51,7 @@ export class SurfaceDetailComponent implements OnInit {
     Unrepairval: number;
     InNGval: number;
     OutNGval: number;
+    DeliveredMaxValue : string;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
@@ -106,8 +107,12 @@ export class SurfaceDetailComponent implements OnInit {
         data.setValue(e.value);
     }
     DeliveredValueChanged(e, data) {
+        debugger
         data.setValue(e.value);
         this.Deliveredval = e.value;
+        if (this.Deliveredval > this.Quantityval){
+            this.Deliveredval = this.Quantityval;
+        };
         this.Undeliveredval = this.Quantityval - this.Deliveredval;
     }
     UndeliveredValueChanged(e, data) {

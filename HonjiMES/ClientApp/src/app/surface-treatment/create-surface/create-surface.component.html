@@ -45,7 +45,7 @@
         (onRowInserted)="onRowInserted($event)" (onEditingStart)="onEditingStart($event)"
         (onCellPrepared)="onCellPrepared($event)" (onRowValidating)="onRowValidating($event)">
         <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
-            <dxo-form colCount=4>
+            <dxo-form colCount=4 [width]="1500">
                 <!-- <dxi-item dataField="DataId"></dxi-item> -->
                 <dxi-item dataField="TempId"></dxi-item>
                 <dxi-item dataField="WarehouseIdA" [visible]="WarehouseIdAVisible"></dxi-item>
@@ -75,19 +75,19 @@
         </dxo-paging>
 
 
-        <dxi-column dataField="TempId" caption="品號/規格" editCellTemplate="TempIdEditCellTemplate" [minWidth]="100">
+        <dxi-column dataField="TempId" caption="品號/規格" editCellTemplate="TempIdEditCellTemplate" [minWidth]="150">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="WarehouseIdA" caption="轉出倉別" editCellTemplate="WarehouseAEditCellTemplate"
-            [visible]="WarehouseIdAVisible" [minWidth]="30">
+            [visible]="WarehouseIdAVisible" [minWidth]="100">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="custom" [validationCallback]="requiredfun" pattern="WarehouseIdA"
                 message="轉出倉別 必填" pattern="WarehouseIdA">
             </dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="WarehouseIdB" caption="轉入倉別" editCellTemplate="WarehouseBEditCellTemplate"
-            [visible]="WarehouseIdBVisible" [minWidth]="30">
+            [visible]="WarehouseIdBVisible" [minWidth]="100">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="custom" [validationCallback]="requiredfun" pattern="WarehouseIdB"
                 message="轉入倉別 必填" pattern="WarehouseIdB">
@@ -95,15 +95,15 @@
         </dxi-column>
         <dxi-column dataField="TempId" caption="實際規格" [minWidth]="80">
         </dxi-column>
-        <dxi-column dataField="TempId" caption="品名" editCellTemplate="TempIdEditCellTemplate"[minWidth]="80">
+        <dxi-column dataField="TempId" caption="品名" editCellTemplate="TempIdEditCellTemplate"[minWidth]="100">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate" [minWidth]="100">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="入庫倉別 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date"
-            editCellTemplate="DeliveryTimeEditCellTemplate" [width]="120">
+            editCellTemplate="DeliveryTimeEditCellTemplate" [width]="100">
             <dxi-validation-rule type="required" message="預交日期 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="表處數量" dataType="number" format="#,##0.##;($ #,##0.##)"
@@ -133,8 +133,6 @@
         <dxi-column dataField="OutNg" caption="廠外NG數量" dataType="number" format="#,##0.##;($ #,##0.##)"
             editCellTemplate="OutNGEditCellTemplate"  [minWidth]="110">
         </dxi-column>
-
-
         <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
             [setCellValue]="OriginPricesetCellValue" [minWidth]="80" editCellTemplate="OriginPriceEditCellTemplate">
             <!-- <dxi-validation-rule type="required" message="原單價 必填"></dxi-validation-rule> -->
@@ -142,7 +140,7 @@
         <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [minWidth]="100">
             <!-- <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="Remark" caption="備註"></dxi-column>
+        <dxi-column dataField="Remark" caption="備註" [minWidth]="80"></dxi-column>
 
         <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
@@ -180,11 +178,11 @@
                 [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'DeliveredEditCellTemplate'">
-            <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="1"
+            <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="0"
                 [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'UnDeliveredEditCellTemplate'">
-            <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="1"
+            <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="0"
                 [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OkEditCellTemplate'">

@@ -117,7 +117,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         };
         this.app.GetData('/Suppliers/GetSuppliers').subscribe(
             (s) => {
-                debugger;
                 if (s.success) {
                     this.SupplierList = s.data;
                     this.SupplierList.forEach(x => {
@@ -335,20 +334,20 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         // }
     }
     UpdateVal() {
-        if (this.DataType === 1 && this.formData.Type === 10) {
-            this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
-        } else if (this.DataType === 1) {
-            this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
-        } else {
-            this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
-        }
+        // if (this.DataType === 1 && this.formData.Type === 10) {
+        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
+        // } else if (this.DataType === 1) {
+        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+        // } else {
+        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        // }
 
-        if (this.formData.Type === 30) { // 表處採購
-            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
-            this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
-        } else if (this.formData.Type === 40) { // 傳統銑床採購
-            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
-        }
+        // if (this.formData.Type === 30) { // 表處採購
+        //     this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+        //     this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        // } else if (this.formData.Type === 40) { // 傳統銑床採購
+        //     this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
+        // }
     }
     WarehousevalvalueChanged(e, data) {
         data.setValue(e.value);
@@ -371,32 +370,32 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
     OkValueChanged(e, data) {
         data.setValue(e.value);
         this.Okval = e.value;
-        this.NotOkval = this.Quantityval - this.Okval;
+        // this.NotOkval = this.Quantityval - this.Okval;
     }
     NotOkValueChanged(e, data) {
         data.setValue(e.value);
         this.NotOkval = e.value;
-        this.Okval = this.Quantityval - this.NotOkval;
+        // this.Okval = this.Quantityval - this.NotOkval;
     }
     RepairValueChanged(e, data) {
         data.setValue(e.value);
         this.Repairval = e.value;
-        this.Unrepairval = this.NotOkval - this.Repairval;
+        // this.Unrepairval = this.NotOkval - this.Repairval;
     }
     UnRepairValueChanged(e, data) {
         data.setValue(e.value);
         this.Unrepairval = e.value;
-        this.Repairval = this.NotOkval - this.Unrepairval;
+        // this.Repairval = this.NotOkval - this.Unrepairval;
     }
     InNGValueChanged(e, data) {
         data.setValue(e.value);
         this.InNGval = e.value;
-        this.OutNGval = this.Unrepairval - this.InNGval;
+        // this.OutNGval = this.Unrepairval - this.InNGval;
     }
     OutNGValueChanged(e, data) {
         data.setValue(e.value);
         this.OutNGval = e.value;
-        this.InNGval = this.Unrepairval - this.OutNGval;
+        // this.InNGval = this.Unrepairval - this.OutNGval;
     }
     OriginValueChanged(e, data) {
         debugger;
@@ -439,12 +438,12 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
         }
 
-        if (this.formData.Type === 30) { // 表處採購
-            e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
-            e.data.WarehouseIdB = this.WarehouseListAll.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
-        } else if (this.formData.Type === 40) { // 傳統銑床採購
-            e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
-        }
+        // if (this.formData.Type === 30) { // 表處採購
+        //     e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+        //     e.data.WarehouseIdB = this.WarehouseListAll.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        // } else if (this.formData.Type === 40) { // 傳統銑床採購
+        //     e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
+        // }
     }
     onRowInserted(e) {
         if (this.dataSourceDB.length !== 0) {
@@ -546,7 +545,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             //     this.formData.SupplierId = 0;
             // }
             this.formData.UpdateTime = this.formData.CreateTime;
-            this.formData.SupplierId = 0;
             this.postval = {
                 PurchaseHead: this.formData,
                 PurchaseDetails: this.dataSourceDB
@@ -561,7 +559,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
                     this.formData.CreateTime = new Date();
                     this.formData.PurchaseDate = new Date();
                     this.formData.SupplierId = null;
-                    this.formData.Type = 10;
+                    this.formData.Type = 30;
                     this.formData.Remarks = '';
                     e.preventDefault();
                     this.childOuter.emit(true);
