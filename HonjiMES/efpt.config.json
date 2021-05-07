@@ -243,7 +243,35 @@
          "ObjectType": 0
       },
       {
-         "Name": "machine_process_time",
+         "Name": "wiproduct",
+         "ObjectType": 0
+      },
+      {
+         "Name": "wiproduct_basic",
+         "ObjectType": 0
+      },
+      {
+         "Name": "wiproduct_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_detail",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_head",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_qc_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "work_order_report_log",
+         "ObjectType": 0
+      },
+      {
+         "Name": "all_stock_log",
          "ObjectType": 3
       }
    ],
