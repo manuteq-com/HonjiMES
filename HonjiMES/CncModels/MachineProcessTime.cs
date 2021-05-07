@@ -42,6 +42,9 @@ namespace HonjiMES.CncModels
         [Column("comment", TypeName = "varchar(255)")]
         public string Comment { get; set; }
 
+        [Column("procedure")]
+        [StringLength(255)]
+        public string Procedure { get; set; }
         /// <summary>
         /// &#38283;&#22987;&#26178;&#38291;
         /// </summary>

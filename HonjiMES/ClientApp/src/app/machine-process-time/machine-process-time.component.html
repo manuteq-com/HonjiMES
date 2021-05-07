@@ -28,12 +28,11 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
-
-    </dxo-editing>
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false"></dxo-editing>
     <dxi-column dataField="Machinename" caption="機台"></dxi-column>
     <dxi-column dataField="Filename" caption="加工程式碼"></dxi-column>
     <dxi-column dataField="Comment" caption="加工品項"></dxi-column>
+    <dxi-column dataField="Procedure" caption="工序"></dxi-column>
     <dxi-column dataField="StartTime" caption="開始時間" dataType="date" format="shortDateShortTime"></dxi-column>
     <dxi-column dataField="EndTime" caption="結束時間" dataType="date" format="shortDateShortTime"></dxi-column>
 </dx-data-grid>
