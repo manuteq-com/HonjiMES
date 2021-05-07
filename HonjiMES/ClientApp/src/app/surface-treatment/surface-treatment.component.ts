@@ -5,8 +5,6 @@ import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from '../shared/mylib';
-import { APIResponse } from '../app.module';
-import { Observable, interval } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
