@@ -14,10 +14,10 @@ import { PostSufaceMaster_Detail } from 'src/app/model/viewmodels';
 
 
 @Component({
-  selector: 'app-surface-detail',
-  templateUrl: './surface-detail.component.html',
-  styleUrls: ['./surface-detail.component.css'],
-  providers: [DatePipe]
+    selector: 'app-surface-detail',
+    templateUrl: './surface-detail.component.html',
+    styleUrls: ['./surface-detail.component.css'],
+    providers: [DatePipe]
 })
 export class SurfaceDetailComponent implements OnInit {
     @Output() childOuter = new EventEmitter();
@@ -37,11 +37,11 @@ export class SurfaceDetailComponent implements OnInit {
     ItemTypeList: any;
     MaterialList: any;
     toworkorderkey: any;
-    toworkkey : any;
+    toworkkey: any;
     mod: any;
-    popupVisibleWork : boolean;
+    popupVisibleWork: boolean;
     WO: any;
-    checkBoxValue:any;
+    checkBoxValue: any;
     checkBoxarray: any = [];
     Deliveredval: number;
     Undeliveredval: number;
@@ -51,7 +51,7 @@ export class SurfaceDetailComponent implements OnInit {
     Unrepairval: number;
     InNGval: number;
     OutNGval: number;
-    DeliveredMaxValue : string;
+    DeliveredMaxValue: string;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
@@ -81,7 +81,7 @@ export class SurfaceDetailComponent implements OnInit {
         this.app.GetData('/MaterialBasics/GetMaterialBasics').subscribe(
             (s) => {
                 s.data.data.forEach(e => {
-                    e.MaterialNo = e.MaterialNo + ' / ' +  e.Specification;
+                    e.MaterialNo = e.MaterialNo + ' / ' + e.Specification;
                 });
                 this.MaterialList = s.data.data;
             }
@@ -107,12 +107,8 @@ export class SurfaceDetailComponent implements OnInit {
         data.setValue(e.value);
     }
     DeliveredValueChanged(e, data) {
-        debugger
         data.setValue(e.value);
         this.Deliveredval = e.value;
-        if (this.Deliveredval > this.Quantityval){
-            this.Deliveredval = this.Quantityval;
-        };
         this.Undeliveredval = this.Quantityval - this.Deliveredval;
     }
     UndeliveredValueChanged(e, data) {
@@ -123,34 +119,35 @@ export class SurfaceDetailComponent implements OnInit {
     OkValueChanged(e, data) {
         data.setValue(e.value);
         this.Okval = e.value;
-        this.NotOkval = this.Quantityval - this.Okval;
+        // this.NotOkval = this.Quantityval - this.Okval;
     }
     NotOkValueChanged(e, data) {
         data.setValue(e.value);
         this.NotOkval = e.value;
-        this.Okval = this.Quantityval - this.NotOkval;
+        // this.Okval = this.Quantityval - this.NotOkval;
     }
     RepairValueChanged(e, data) {
         data.setValue(e.value);
         this.Repairval = e.value;
-        this.Unrepairval = this.NotOkval - this.Repairval;
+        // this.Unrepairval = this.NotOkval - this.Repairval;
     }
     UnRepairValueChanged(e, data) {
         data.setValue(e.value);
         this.Unrepairval = e.value;
-        this.Repairval = this.NotOkval - this.Unrepairval;
+        // this.Repairval = this.NotOkval - this.Unrepairval;
     }
     InNGValueChanged(e, data) {
         data.setValue(e.value);
         this.InNGval = e.value;
-        this.OutNGval = this.Unrepairval - this.InNGval;
+        // this.OutNGval = this.Unrepairval - this.InNGval;
     }
     OutNGValueChanged(e, data) {
         data.setValue(e.value);
         this.OutNGval = e.value;
-        this.InNGval = this.Unrepairval - this.OutNGval;
+        // this.InNGval = this.Unrepairval - this.OutNGval;
     }
     OriginValueChanged(e, data) {
+        debugger;
         data.setValue(e.value);
     }
     onDataErrorOccurred(e) {
@@ -173,10 +170,10 @@ export class SurfaceDetailComponent implements OnInit {
     }
 
     distinct(value) {
-        if(value.value){
+        if (value.value) {
             this.WO = value.value.split(",");
             return this.WO;
-        }else{
+        } else {
             return null;
         }
     }
@@ -215,8 +212,8 @@ export class SurfaceDetailComponent implements OnInit {
                 //const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST',
                 // { values: OrderData });
                 //if (sendRequest.length !== 0) {
-                    this.mod = "surfacetreat";
-                    this.popupVisibleWork = true;
+                this.mod = "surfacetreat";
+                this.popupVisibleWork = true;
                 //}
                 this.toworkorderkey = [];
             } catch (error) {
@@ -229,9 +226,9 @@ export class SurfaceDetailComponent implements OnInit {
         debugger;
         const previousValue = e.previousValue;
         const newValue = e.value;
-        if (newValue == true){
+        if (newValue == true) {
             this.checkBoxarray.push(e.element.innerText);
-        }else{
+        } else {
             this.checkBoxarray.forEach(function (item, index, arr) {
                 if (newValue == false) {
                     arr.splice(index, 1);

@@ -205,7 +205,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         }
         this.app.GetData('/PurchaseHeads/GetPurchaseNumber').subscribe(
             (s) => {
-                debugger;
+
                 if (s.success) {
                     this.TypeDisabled = false;
                     this.formData = s.data;
@@ -334,20 +334,21 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         // }
     }
     UpdateVal() {
-        // if (this.DataType === 1 && this.formData.Type === 10) {
-        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
-        // } else if (this.DataType === 1) {
-        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
-        // } else {
-        //     this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
-        // }
+        debugger;
+        if (this.DataType === 1 && this.formData.Type === 10) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
+        } else if (this.DataType === 1) {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
+        } else {
+            this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        }
 
-        // if (this.formData.Type === 30) { // 表處採購
-        //     this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
-        //     this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
-        // } else if (this.formData.Type === 40) { // 傳統銑床採購
-        //     this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
-        // }
+        if (this.formData.Type === 30) { // 表處採購
+            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
+            this.WarehousevalB = this.WarehouseList.find(x => x.Code === '202')?.Id ?? null; // 預設轉入倉202
+        } else if (this.formData.Type === 40) { // 傳統銑床採購
+            this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
+        }
     }
     WarehousevalvalueChanged(e, data) {
         data.setValue(e.value);
@@ -398,7 +399,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         // this.InNGval = this.Unrepairval - this.OutNGval;
     }
     OriginValueChanged(e, data) {
-        debugger;
+
         data.setValue(e.value);
         this.OriginPriceval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
@@ -418,7 +419,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         return true;
     }
     onInitNewRow(e) {
-        debugger;
+
         this.saveCheck = false;
         // this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
@@ -430,13 +431,13 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
 
         e.data.DeliveryTime = new Date();
         //
-        if (this.DataType === 1 && this.formData.Type === 10) {
-            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null;
-        } else if (this.DataType === 1) {
-            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '101')?.Id ?? null;
-        } else {
-            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
-        }
+        // if (this.DataType === 1 && this.formData.Type === 10) {
+        //     e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '100')?.Id ?? null;
+        // } else if (this.DataType === 1) {
+        //     e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '101')?.Id ?? null;
+        // } else {
+        //     e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+        // }
 
         // if (this.formData.Type === 30) { // 表處採購
         //     e.data.WarehouseIdA = this.WarehouseListAll.find(x => x.Code === '201')?.Id ?? null; // 預設轉出倉201
@@ -466,11 +467,11 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             this.DeliveryTime = e.data.DeliveryTime;
 
             // if (this.DataType === 1) {   // 查詢原料
-            this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
-                (s) => {
-                    this.WarehouseList = s.data;
-                }
-            );
+            // this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+            //     (s) => {
+            //         this.WarehouseList = s.data;
+            //     }
+            // );
         }
         // } else if (this.DataType === 2) {    // 查詢成品
         //     this.app.GetData('/Warehouses/GetWarehouseListByProductBasic/' + dataId).subscribe(
@@ -513,7 +514,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         }
         this.formData = this.myform.instance.option('formData');
         let dataCheck = true;
-        debugger;
         this.dataSourceDB.forEach(element => {
             const basicData = this.BasicDataList.find(z => z.TempId === element.TempId);
             element.DataType = basicData.DataType;
@@ -540,7 +540,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         } else {
-            debugger;
             // if (this.formData.SupplierId == null) {
             //     this.formData.SupplierId = 0;
             // }
