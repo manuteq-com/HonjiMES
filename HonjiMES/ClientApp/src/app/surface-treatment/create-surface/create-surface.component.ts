@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild,ChangeDetectorRef } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
@@ -82,7 +82,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
     Deliveredval: number;
     Undeliveredval: number;
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private cd: ChangeDetectorRef) {
         this.requiredfun = this.requiredfun.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
         this.onInitNewRow = this.onInitNewRow.bind(this);
@@ -604,5 +604,9 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             newData.Price = null;
         }
     }
+
+    ngAfterViewInit() {
+        this.cd.detectChanges();
+        }
 }
 
