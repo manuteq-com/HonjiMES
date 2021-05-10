@@ -21,6 +21,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() modval: any;
+    @Input() checkBoxarray: any;
     @Input() randomkeyval: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
@@ -166,6 +167,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
+        console.log("checkBoxarray",this.checkBoxarray);
         // debugger;
         this.dataSourceDB = [];
         this.newVisible = false;

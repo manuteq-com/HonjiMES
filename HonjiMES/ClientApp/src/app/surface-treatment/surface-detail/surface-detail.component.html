@@ -4,21 +4,20 @@
     <div class="col-md-2 col-sm-2">
     </div>
     <div class="col-md-4 col-sm-1" style="text-align: right;">
-            <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)" location="after"></dx-button>
+        <dx-button text="建立工單" type="default" (onClick)="to_workClick($event)" location="after"></dx-button>
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
-(onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)"
-(onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)"[rowAlternationEnabled]="true"><dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onRowUpdated)="onRowUpdated($event)" (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)"
+    [rowAlternationEnabled]="true">
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <!-- <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status" ></dxo-editing> -->
     <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="status" [allowDeleting]="status">
         <dxo-form colCount=4 [width]="1500">
         </dxo-form>
     </dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item
-            [customizeText]="customizeText" column="PurchaseDetails.DataId" summaryType="count">
+        <dxi-total-item [customizeText]="customizeText" column="PurchaseDetails.DataId" summaryType="count">
         </dxi-total-item>
         <dxi-total-item i-total-item valueFormat="$ #,##0.##;($ #,##0.##)" column="PurchaseDetails.Price" summaryType="sum">
         </dxi-total-item>
@@ -44,8 +43,7 @@
     </dxi-column>
     <dxi-column dataField="PurchaseDetails.Quantity" caption="表處數量" dataType="number" [allowEditing]="false" [width]="100"></dxi-column>
     <!-- <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="true" [width]="100" editCellTemplate="DeliveredEditCellTemplate" max = {{ DeliveredMaxValue }}></dxi-column> -->
-    <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="true" [width]="100"
-        editCellTemplate="DeliveredEditCellTemplate"></dxi-column>
+    <dxi-column dataField="PurchaseDetails.Delivered" caption="已交貨數量" dataType="number" [allowEditing]="true" [width]="100" editCellTemplate="DeliveredEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Ok" caption="合格數量" dataType="number" editCellTemplate="OkEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.NotOk" caption="不合格數量" dataType="number" editCellTemplate="NotOkEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Repair" caption="可修數量" dataType="number" editCellTemplate="RepairEditCellTemplate"></dxi-column>
@@ -57,40 +55,31 @@
     <dxi-column dataField="PurchaseDetails.OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="OriginPriceEditCellTemplate"></dxi-column>
     <dxi-column dataField="PurchaseDetails.Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
     <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-        <dx-number-box [value]='data.value'  (onValueChanged)="QuantityValueChanged($event,data)" min="0"
-        [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='data.value' (onValueChanged)="QuantityValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'DeliveredEditCellTemplate'">
-        <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="0"
-           [max]="Quantityval" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Deliveredval' (onValueChanged)="DeliveredValueChanged($event,data)" min="0" [max]="Quantityval" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'UnDeliveredEditCellTemplate'">
-        <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="0"
-            [max]="Quantityval" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Undeliveredval' (onValueChanged)="UndeliveredValueChanged($event,data)" min="0" [max]="Quantityval" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'OkEditCellTemplate'">
-        <dx-number-box [value]='Okval' (onValueChanged)="OkValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Okval' (onValueChanged)="OkValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'NotOkEditCellTemplate'">
-        <dx-number-box [value]='NotOkval' (onValueChanged)="NotOkValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='NotOkval' (onValueChanged)="NotOkValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'RepairEditCellTemplate'">
-        <dx-number-box [value]='Repairval' (onValueChanged)="RepairValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Repairval' (onValueChanged)="RepairValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'UnRepairEditCellTemplate'">
-        <dx-number-box [value]='Unrepairval' (onValueChanged)="UnRepairValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='Unrepairval' (onValueChanged)="UnRepairValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'InNGEditCellTemplate'">
-        <dx-number-box [value]='InNGval' (onValueChanged)="InNGValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='InNGval' (onValueChanged)="InNGValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'OutNGEditCellTemplate'">
-        <dx-number-box [value]='OutNGval' (onValueChanged)="OutNGValueChanged($event,data)" min="0"
-            [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
+        <dx-number-box [value]='OutNGval' (onValueChanged)="OutNGValueChanged($event,data)" min="0" [format]="'#0'" [showSpinButtons]="true"></dx-number-box>
     </div>
     <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
         <dx-number-box [value]='data.value' (onValueChanged)="OriginValueChanged($event,data)" [showSpinButtons]="true"></dx-number-box>
@@ -105,20 +94,18 @@
     <dxi-column dataField="" caption="工單" cellTemplate="" [allowEditing]="false" [width]="150" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
     <dxi-column dataField="PurchaseDetails.WorkOrderLog" caption="原工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
 
-    <div *dxTemplate="let d of 'diffCellTemplate2'" >
+    <div *dxTemplate="let d of 'diffCellTemplate2'">
         <ul style="list-style-type:none; text-align: left;">
-            <li *ngFor ="let item of distinct(d)">
-                <dx-check-box  [value]="checkBoxValue" text={{item}}  (onValueChanged)="handleValueChange($event)"></dx-check-box>
+            <li *ngFor="let item of distinct(d)">
+                <dx-check-box [value]="checkBoxValue" text={{item}} (onValueChanged)="handleValueChange($event)"></dx-check-box>
             </li>
         </ul>
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="popupVisibleWork">
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess-control (childOuter)="popup_result($event)" [modval]="mod"></app-creatprocess-control>
+        <app-creatprocess-control (childOuter)="popup_result($event)" [modval]="mod" [checkBoxarray]="checkBoxarray"></app-creatprocess-control>
         <!-- <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork> -->
     </div>
 </dx-popup>
-

@@ -207,15 +207,15 @@ export class SurfaceDetailComponent implements OnInit {
             });
         } else {
             try {
-                const SurfaceData = new PostSufaceMaster_Detail();
-                SurfaceData.surfaceDetail = this.toworkorderkey;
+                //const SurfaceData = new PostSufaceMaster_Detail();
+                //SurfaceData.surfaceDetail = this.toworkorderkey;
                 //const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST',
                 // { values: OrderData });
                 //if (sendRequest.length !== 0) {
                 this.mod = "surfacetreat";
                 this.popupVisibleWork = true;
                 //}
-                this.toworkorderkey = [];
+                //this.toworkorderkey = [];
             } catch (error) {
 
             }
@@ -223,17 +223,18 @@ export class SurfaceDetailComponent implements OnInit {
     }
 
     handleValueChange(e) {
-        debugger;
+        //debugger;
         const previousValue = e.previousValue;
         const newValue = e.value;
         if (newValue == true) {
-            this.checkBoxarray.push(e.element.innerText);
+            if(e.element.innerText){
+                this.checkBoxarray.push(e.element.innerText);
+            }
         } else {
-            this.checkBoxarray.forEach(function (item, index, arr) {
-                if (newValue == false) {
-                    arr.splice(index, 1);
-                }
-            });
+            let selectindex = this.checkBoxarray.indexOf(e.element.innerText);
+            if(selectindex > -1){
+                this.checkBoxarray.splice(selectindex, 1);
+            }
         }
         console.log(this.checkBoxarray)
     }
