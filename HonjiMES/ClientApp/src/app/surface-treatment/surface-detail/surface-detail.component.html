@@ -105,7 +105,7 @@
 
 <dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess-control (childOuter)="popup_result($event)" [modval]="mod" [checkBoxarray]="checkBoxarray"></app-creatprocess-control>
-        <!-- <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork> -->
+        <app-sufacetowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey">
+        </app-sufacetowork>
     </div>
 </dx-popup>

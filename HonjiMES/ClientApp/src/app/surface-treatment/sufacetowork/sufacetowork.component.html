@@ -7,8 +7,7 @@
         (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
         (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
         (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-        [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)"
-        [height]="630">
+        [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [height]="630">
 
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxo-filter-row [visible]="false"></dxo-filter-row>
@@ -21,23 +20,24 @@
 
         <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="false" useIcons="false"></dxo-editing>
 
-        <dxi-column dataField="Status" caption="工單號" [allowEditing]="false" [width]="200">
+        <dxi-column dataField="Status" caption="狀態" alignment="center" [allowEditing]="false" [width]="120">
             <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="WorkOrderNo" caption="工序名稱" [allowEditing]="false" [width]="200">
+        <dxi-column dataField="WorkOrderNo" caption="預產生之工單號" sortOrder="asc" [allowEditing]="true" [width]="160">
         </dxi-column>
-        <dxi-column dataField="Status" caption="工單狀態" alignment="center" [allowEditing]="false" [width]="200">
-            <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="true" [width]="100">
+            <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="DataNo" caption="品號" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="DataName" caption="名稱" [allowEditing]="false"></dxi-column>
         <!-- <dxi-column dataField="MachineNo" caption="機號"></dxi-column> -->
-        <!-- <dxi-column dataField="OrderCount" caption="訂單數量" [allowEditing]="false" [width]="100"></dxi-column>
-        <dxi-column dataField="StockCount" caption="庫存數量" [allowEditing]="false" [width]="200"></dxi-column> -->
-        <dxi-column dataField="Count" caption="工單數量" dataType="number" [editorOptions]="EditorOptions"
+        <dxi-column dataField="OrderCount" caption="訂單數量" [allowEditing]="false" [width]="100"></dxi-column>
+        <dxi-column dataField="StockCount" caption="庫存數量" [allowEditing]="false" [width]="200"></dxi-column>
+        <dxi-column dataField="Count" caption="工單數量" dataType="number" [width]="100" [editorOptions]="EditorOptions"
             [allowEditing]="true"></dxi-column>
-        <!-- <dxi-column dataField="DueEndTime" caption="廠內預計完工日期" dataType="date" [width]="150" [allowEditing]="true">
-        </dxi-column> -->
+        <dxi-column dataField="DueEndTime" caption="廠內預計完工日期" dataType="date" [width]="150" [allowEditing]="true">
+        </dxi-column>
         <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="180"></dxi-column>
         <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column> -->
 
