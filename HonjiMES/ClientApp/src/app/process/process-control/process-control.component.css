@@ -3,9 +3,11 @@
     display: inline-block;
     vertical-align: middle;
 }
+
 ::ng-deep.dx-fileuploader-input-container {
     display: none;
 }
+
 ::ng-deep.dx-fileuploader-wrapper,
 .dx-fileuploader-input-wrapper {
     border: none;
@@ -14,17 +16,19 @@
 .headerblock {
     position: relative;
 }
+
 .buttongroup {
-    padding-top: 10px;
     position: absolute;
     right: 4px;
     top: 0px;
 }
+
 .insertbtn {
     margin-top: -6px;
     border-radius: 2px;
     /* margin-left: 30px; */
 }
+
 .pdfbtn {
     float: right;
     margin-right: 6px;
@@ -33,18 +37,21 @@
     color: #1e90ff;
     background-color: #ebe8e8;
 }
+
 .editbtn {
     float: right;
     margin-right: 6px;
     border-radius: 2px;
     background-color: #ff831e;
 }
+
 .endbtn {
     float: right;
     margin-right: 6px;
     border-radius: 2px;
     background-color: #ce312c;
 }
+
 .runbtn {
     float: right;
     margin-right: 6px;
@@ -52,6 +59,7 @@
     color: #fff;
     background-color: #058a00;
 }
+
 .qrcodebtn {
     margin-top: -6px;
     margin-right: 6px;
@@ -59,6 +67,7 @@
     color: #fff;
     background-color: #1e90ff;
 }
+
 .viewbtn {
     margin-top: -6px;
     margin-right: 6px;
@@ -71,18 +80,23 @@
     color: #ff9500;
     /* background-color: #eaeaf1; */
 }
+
 .process_started {
     background-color: #f8f691;
 }
+
 .process_ended {
     background-color: #9afd97;
 }
+
 .process_finish {
     background-color: #91e0f8;
 }
+
 .process_start {
     background-color: #fdf90d21;
 }
+
 .process_end {
     background-color: #15fd0d21;
 }
