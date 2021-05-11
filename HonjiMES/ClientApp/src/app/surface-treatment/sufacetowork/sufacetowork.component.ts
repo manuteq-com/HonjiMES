@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
-import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent } from 'devextreme-angular';
@@ -47,7 +46,6 @@ export class SufacetoworkComponent implements OnInit, OnChanges {
         };
     }
     ngOnInit() {
-        
     }
     ngOnChanges() {
         this.disabledValues = [];

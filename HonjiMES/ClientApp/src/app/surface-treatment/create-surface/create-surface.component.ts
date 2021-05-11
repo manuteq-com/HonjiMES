@@ -307,6 +307,7 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
 
         // if (this.DataType === 1) {   // 查詢原料
         this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
+
             (s) => {
                 this.WarehouseList = s.data;
                 this.UpdateVal();
@@ -329,7 +330,6 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         // }
     }
     UpdateVal() {
-        debugger;
         if (this.DataType === 1 && this.formData.Type === 10) {
             this.Warehouseval = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null;
         } else if (this.DataType === 1) {
@@ -345,8 +345,15 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
             this.WarehousevalA = this.WarehouseList.find(x => x.Code === '100')?.Id ?? null; // 預設轉出倉100
         }
     }
-    WarehousevalvalueChanged(e, data) {
+    WarehousevalAvalueChanged(e, data) {
+        debugger;
         data.setValue(e.value);
+        this.WarehousevalA = e.value;
+    }
+    WarehousevalBvalueChanged(e, data){
+        debugger;
+        data.setValue(e.value);
+        this.WarehousevalB = e.value;
     }
     QuantityValueChanged(e, data) {
         data.setValue(e.value);
@@ -584,26 +591,25 @@ export class CreateSurfaceComponent implements OnInit, OnChanges {
         }
     }
     onRowValidating(e) {
-        debugger;
         if (!e.isValid) {
             this.gridsaveCheck = false;
         }
     }
 
-    QuantitysetCellValue(newData, value, currentRowData) {
-        newData.Quantity = value;
-        newData.Price = value * currentRowData.OriginPrice;
-        if (isNaN(newData.Price)) {
-            newData.Price = null;
-        }
-    }
-    OriginPricesetCellValue(newData, value, currentRowData) {
-        newData.OriginPrice = value;
-        newData.Price = currentRowData.Quantity * value;
-        if (isNaN(newData.Price)) {
-            newData.Price = null;
-        }
-    }
+    // QuantitysetCellValue(newData, value, currentRowData) {
+    //     newData.Quantity = value;
+    //     newData.Price = value * currentRowData.OriginPrice;
+    //     if (isNaN(newData.Price)) {
+    //         newData.Price = null;
+    //     }
+    // }
+    // OriginPricesetCellValue(newData, value, currentRowData) {
+    //     newData.OriginPrice = value;
+    //     newData.Price = currentRowData.Quantity * value;
+    //     if (isNaN(newData.Price)) {
+    //         newData.Price = null;
+    //     }
+    // }
 
     ngAfterViewInit() {
         this.cd.detectChanges();
