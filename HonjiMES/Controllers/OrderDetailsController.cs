@@ -58,6 +58,8 @@ namespace HonjiMES.Controllers
             var data = await OrderDetails.Where(x => x.DeleteFlag == 0).Select(x => new OrderDetailData
             {
                 TotalCount = x.MaterialBasic.Materials.Where(y => y.DeleteFlag == 0 && y.Warehouse.Code == "301").Sum(y => y.Quantity),
+                WorkOrderHeads = x.WorkOrderHeads,
+                OrderDetailAndWorkOrderHeads = x.OrderDetailAndWorkOrderHeads.ToList(),
                 Id = x.Id,
                 OrderId = x.OrderId,
                 MaterialBasicId = x.MaterialBasicId,
@@ -82,7 +84,7 @@ namespace HonjiMES.Controllers
                 UpdateUser = x.UpdateUser,
                 DeleteFlag = x.DeleteFlag,
             }).ToListAsync();
-            
+
             foreach (var Detailitem in data)
             {
                 //取得銷貨單號
@@ -99,10 +101,10 @@ namespace HonjiMES.Controllers
                     }
                 }
                 //取得工單號
-                foreach (var WorkOrderHeaditem in Detailitem.WorkOrderHeads.ToList()) // 先清空所有工單關聯資料。
-                {
-                    Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
-                }
+                // foreach (var WorkOrderHeaditem in Detailitem.WorkOrderHeads.ToList()) // 先清空所有工單關聯資料。
+                // {
+                //     Detailitem.WorkOrderHeads.Remove(WorkOrderHeaditem);
+                // }
                 foreach (var WorkOrderHeaditem in Detailitem.OrderDetailAndWorkOrderHeads.ToList()) // 重新取得工單關聯資料。
                 {
                     var WorkOrderHead = _context.WorkOrderHeads.Find(WorkOrderHeaditem.WorkHeadId);
@@ -211,7 +213,7 @@ namespace HonjiMES.Controllers
             orderDetail.Serial = Serial + 1;
             orderDetail.OrderId = PID;
             orderDetail.CreateTime = DateTime.Now;
-            orderDetail. CreateUser = MyFun.GetUserID(HttpContext);
+            orderDetail.CreateUser = MyFun.GetUserID(HttpContext);
             _context.OrderDetails.Add(orderDetail);
             _context.ChangeTracker.LazyLoadingEnabled = false;//停止關連，減少資料
             await _context.SaveChangesAsync();
@@ -248,14 +250,17 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<MaterialBasicData>> GetStockCountByMaterialBasicId(int id)//OrderDetails.id
         {
             var OrderDetails = await _context.OrderDetails.FindAsync(id);//Find OrderDetails.MaterialBasicId
-            var materialBasic  = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.MaterialBasicId).Select(x => new MaterialBasicData
+            var materialBasic = await _context.MaterialBasics.Where(x => x.DeleteFlag == 0 && x.Id == OrderDetails.MaterialBasicId).Select(x => new MaterialBasicData
             {
                 TotalCount = x.Materials.Where(y => y.DeleteFlag == 0).Sum(y => y.Quantity),
                 Materials = x.Materials.Where(y => y.DeleteFlag == 0).ToList()
             }).FirstOrDefaultAsync();
-            if (materialBasic.Materials.Count() == 0) {
+            if (materialBasic.Materials.Count() == 0)
+            {
                 return Ok(MyFun.APIResponseError("尚未建立品號明細!"));
-            } else {
+            }
+            else
+            {
                 return Ok(MyFun.APIResponseOK(materialBasic));
             }
         }
