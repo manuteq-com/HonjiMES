@@ -54,36 +54,34 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             //這裡只是為了快速的產生工序，之後看情況要拿掉就拿掉
-            var WorkOrderHeads = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToList();
-            var MbomModelDetails = _context.MbomModelDetails.Where(x => x.DeleteFlag == 0 && x.MbomModelHeadId == 3).ToList();
-            foreach (var item in WorkOrderHeads)
-            {
-                if (!item.WorkOrderDetails.Any())
-                {
-                    foreach (var bomitem in MbomModelDetails)
-                    {
-                        item.WorkOrderDetails.Add(new WorkOrderDetail
-                        {
-                            SerialNumber = bomitem.SerialNumber,
-                            ProcessId = bomitem.ProcessId,
-                            ProcessNo = bomitem.ProcessNo,
-                            ProcessName = bomitem.ProcessName,
-                            ProcessLeadTime = bomitem.ProcessLeadTime,
-                            ProcessTime = bomitem.ProcessTime,
-                            ProcessCost = bomitem.ProcessCost,
-                            DrawNo = bomitem.DrawNo,
-                            Manpower = bomitem.Manpower,
-                            ProducingMachine = bomitem.ProducingMachine,
-                            Remarks = bomitem.Remarks,
-                            DeleteFlag = 0,
-                            CreateUser = MyFun.GetUserID(HttpContext),
-                        });
-                    }
-                    _context.SaveChanges();
-                }
-            }
-
-
+            // var WorkOrderHeads = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToList();
+            // var MbomModelDetails = _context.MbomModelDetails.Where(x => x.DeleteFlag == 0 && x.MbomModelHeadId == 3).ToList();
+            // foreach (var item in WorkOrderHeads)
+            // {
+            //     if (!item.WorkOrderDetails.Any())
+            //     {
+            //         foreach (var bomitem in MbomModelDetails)
+            //         {
+            //             item.WorkOrderDetails.Add(new WorkOrderDetail
+            //             {
+            //                 SerialNumber = bomitem.SerialNumber,
+            //                 ProcessId = bomitem.ProcessId,
+            //                 ProcessNo = bomitem.ProcessNo,
+            //                 ProcessName = bomitem.ProcessName,
+            //                 ProcessLeadTime = bomitem.ProcessLeadTime,
+            //                 ProcessTime = bomitem.ProcessTime,
+            //                 ProcessCost = bomitem.ProcessCost,
+            //                 DrawNo = bomitem.DrawNo,
+            //                 Manpower = bomitem.Manpower,
+            //                 ProducingMachine = bomitem.ProducingMachine,
+            //                 Remarks = bomitem.Remarks,
+            //                 DeleteFlag = 0,
+            //                 CreateUser = MyFun.GetUserID(HttpContext),
+            //             });
+            //         }
+            //         _context.SaveChanges();
+            //     }
+            // }
             // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime);
             var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).Include(x => x.WorkOrderDetails)
             .OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
@@ -2444,10 +2442,64 @@ namespace HonjiMES.Controllers
                             {
                                 for (var i = 1; i < sheet.LastRowNum; i++)//筆數
                                 {
-                                    var CellNum = sheet.GetRow(i).LastCellNum;
-                                    for (var j = 0; j < CellNum; j++)
+                                    var WorkOrderNo = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(1));//工單號
+                                    var CreateOrderTime = DateTime.Now;//工單號建立日期
+                                    var sCreateOrderTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(2));
+                                    DateTime.TryParse(sCreateOrderTime, out CreateOrderTime);
+                                    var DataType = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(3));//類別
+                                    var Supplier = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(4));//廠商
+                                    var OrderNo = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(5)).Replace("-", "");//訂單號
+                                    var DueEndTime = DateTime.Now;//預計完成日
+                                    var sDueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(6));
+                                    if (!string.IsNullOrWhiteSpace(sDueEndTime))
                                     {
-                                        var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
+                                        DateTime.TryParse(sDueEndTime, out DueEndTime);
+                                    }
+                                    var DataNo = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(7));//品號
+                                    var BOM = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(8));//BOM
+                                    var BOMName = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(9));//品名
+                                    var OrderCount = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(10));//訂單數量
+                                    var workCount = 0;//加工數量
+                                    int.TryParse(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(11)), out workCount);
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(12));//料件
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(13));//領料數
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(14));//領料日
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(15));//倉庫
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(16));//現場
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(17));//備註
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(18));//完工
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(19));//建檔人員
+                                    var CreateTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(20));//建檔日期
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(21));//修改人員
+                                    // var DueEndTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(22));//修改日期
+
+                                    var BasicData = _context.MaterialBasics.Where(x => x.MaterialNo == DataNo).FirstOrDefault();//讀取品項檔
+                                    if (BasicData != null)
+                                    {
+                                        var OrderDetails = _context.OrderDetails.Where(x => x.MaterialBasicId == BasicData.Id).OrderByDescending(XRAppearanceObject => XRAppearanceObject.Id).ToList();
+                                        foreach (var OrderDetaillitem in OrderDetails)
+                                        {
+                                            if (!_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderNo).Any())//沒有加工單號才能加進來
+                                            {
+                                                if (BasicData != null)
+                                                {
+                                                    var nWorkOrderHead = new WorkOrderHead
+                                                    {
+                                                        WorkOrderNo = WorkOrderNo,
+                                                        DataType = 2,
+                                                        DataId = BasicData.Id,
+                                                        DataName = BasicData.Name,
+                                                        DataNo = BasicData.MaterialNo,
+                                                        Count = workCount,
+                                                        DueEndTime = DueEndTime,
+                                                        CreateUser = 1,
+                                                        CreateTime = CreateOrderTime
+                                                    };
+                                                    OrderDetaillitem.WorkOrderHeads.Add(nWorkOrderHead);
+                                                    _context.SaveChanges();
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
