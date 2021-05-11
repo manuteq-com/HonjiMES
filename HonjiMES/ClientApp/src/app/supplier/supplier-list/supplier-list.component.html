@@ -85,7 +85,7 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="600"
+<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="650"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatsupplier (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
