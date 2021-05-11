@@ -20,7 +20,7 @@
 .buttongroup {
     position: absolute;
     right: 4px;
-    top: 0px;
+    top: -6px;
 }
 
 .insertbtn {
