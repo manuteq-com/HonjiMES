@@ -74,8 +74,9 @@ namespace HonjiMES.Controllers
         {
             if (!string.IsNullOrWhiteSpace(MbomModelData.MbomModelHead.ModelCode) && !string.IsNullOrWhiteSpace(MbomModelData.MbomModelHead.ModelName))
             {
-                var MbomModelHeads= await _context.MbomModelHeads.Where(x=>x.ModelCode == MbomModelData.MbomModelHead.ModelCode && x.ModelName == MbomModelData.MbomModelHead.ModelName && x.DeleteFlag == 0).ToListAsync();
-                if(MbomModelHeads.Count()==0){
+                var MbomModelHeads = await _context.MbomModelHeads.Where(x => x.ModelCode == MbomModelData.MbomModelHead.ModelCode && x.ModelName == MbomModelData.MbomModelHead.ModelName && x.DeleteFlag == 0).ToListAsync();
+                if (MbomModelHeads.Count() == 0)
+                {
                     var nMbomModelHead = new MbomModelHead
                     {
                         ModelCode = MbomModelData.MbomModelHead.ModelCode,
@@ -108,12 +109,14 @@ namespace HonjiMES.Controllers
                     _context.MbomModelHeads.Add(nMbomModelHead);
                     await _context.SaveChangesAsync();
                     return Ok(MyFun.APIResponseOK("OK"));
-                }else{
-                    
+                }
+                else
+                {
+
                     return Ok(MyFun.APIResponseError("代號名稱已經存在!"));
                 }
 
-                
+
             }
             else
             {
@@ -142,7 +145,6 @@ namespace HonjiMES.Controllers
                     {
                         updataCheck.Add(item.Id);
                         var OMbomModelDetail = OMbomModelHeads.MbomModelDetails.Where(x => x.Id == item.Id).FirstOrDefault();
-                        OMbomModelDetail.SerialNumber = item.SerialNumber;
                         OMbomModelDetail.SerialNumber = item.SerialNumber;
                         OMbomModelDetail.ProcessId = item.ProcessId;
                         OMbomModelDetail.ProcessNo = ProcessInfo.Code;

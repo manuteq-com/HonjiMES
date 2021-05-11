@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFileUploaderComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import { HttpClient } from '@angular/common/http';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from 'src/app/service/auth.service';
+import { APIResponse } from 'src/app/app.module';
 
 @Component({
     selector: 'app-process-control',
@@ -17,6 +19,7 @@ import { Title } from '@angular/platform-browser';
 export class ProcessControlComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid1') dataGrid1: DxDataGridComponent;
+    @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
     Controller = '/WorkOrders';
     dataSourceDB: any;
     dataSourceDB_Process: any[];
@@ -50,8 +53,17 @@ export class ProcessControlComponent implements OnInit {
     lograndomkey: number;
     showTitleValue: string;
     workOrderHeadDataNo: any;
+    uploadUrl: string;
+    uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+        const authenticationService = new AuthService(http);
+        const currentUser = authenticationService.currentUserValue;
+        this.uploadHeaders = {
+            Authorization: 'Bearer ' + currentUser.Token,
+            routerLink: location.pathname,
+            apitype: 'POST'
+        };
         this.listStatus = myservice.getWorkOrderStatus();
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.editOnkeyPress = true;
@@ -63,7 +75,7 @@ export class ProcessControlComponent implements OnInit {
         this.btnDisabled = true;
         this.postval = {};
         this.showTitleValue = '報工紀錄';
-
+        this.uploadUrl = location.origin + '/api/WorkOrders/PostWorkOrdeByExcel';
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
@@ -276,6 +288,14 @@ export class ProcessControlComponent implements OnInit {
             this.app.downloadfile('/Report/GetWorkOrderPDF/' + this.workOrderHeadId);
             // this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
             // window.open(this.Url, '_blank');
+        }
+    }
+    onUploaded(e) {
+        const response = JSON.parse(e.request.response) as APIResponse;
+        if (response.success) {
+
+        } else {
+
         }
     }
 }

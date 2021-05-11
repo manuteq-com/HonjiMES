@@ -1,6 +1,11 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
+        <dx-file-uploader #fileUploader selectButtonText="匯入工單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
+            [width]="130" [uploadHeaders]="uploadHeaders"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+            uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
+        </dx-file-uploader>
         <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
             (onClick)="qrcodedata()" [visible]="app.checkAddRoles()">
         </dx-button>

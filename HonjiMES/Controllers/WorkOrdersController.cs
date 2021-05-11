@@ -18,6 +18,8 @@ using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Newtonsoft.Json;
 using NPOI.POIFS.NIO;
 using AutoMapper;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace HonjiMES.Controllers
 {
@@ -51,6 +53,37 @@ namespace HonjiMES.Controllers
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
+            //這裡只是為了快速的產生工序，之後看情況要拿掉就拿掉
+            var WorkOrderHeads = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToList();
+            var MbomModelDetails = _context.MbomModelDetails.Where(x => x.DeleteFlag == 0 && x.MbomModelHeadId == 3).ToList();
+            foreach (var item in WorkOrderHeads)
+            {
+                if (!item.WorkOrderDetails.Any())
+                {
+                    foreach (var bomitem in MbomModelDetails)
+                    {
+                        item.WorkOrderDetails.Add(new WorkOrderDetail
+                        {
+                            SerialNumber = bomitem.SerialNumber,
+                            ProcessId = bomitem.ProcessId,
+                            ProcessNo = bomitem.ProcessNo,
+                            ProcessName = bomitem.ProcessName,
+                            ProcessLeadTime = bomitem.ProcessLeadTime,
+                            ProcessTime = bomitem.ProcessTime,
+                            ProcessCost = bomitem.ProcessCost,
+                            DrawNo = bomitem.DrawNo,
+                            Manpower = bomitem.Manpower,
+                            ProducingMachine = bomitem.ProducingMachine,
+                            Remarks = bomitem.Remarks,
+                            DeleteFlag = 0,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                        });
+                    }
+                    _context.SaveChanges();
+                }
+            }
+
+
             // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime);
             var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).Include(x => x.WorkOrderDetails)
             .OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
@@ -972,7 +1005,7 @@ namespace HonjiMES.Controllers
                             PurchaseDetails.FirstOrDefault().Quantity += WorkOrderReportData.ReCount;
                             PurchaseDetails.FirstOrDefault().Price = PurchaseDetails.FirstOrDefault().Quantity * PurchaseDetails.FirstOrDefault().OriginPrice;
                             PurchaseDetails.FirstOrDefault().UpdateUser = WorkOrderReportData.CreateUser;
-                            PurchaseDetails.FirstOrDefault().WorkOrderLog +=  OWorkOrderHead.WorkOrderNo+ ",";
+                            PurchaseDetails.FirstOrDefault().WorkOrderLog += OWorkOrderHead.WorkOrderNo + ",";
                         }
                         PurchaseHeads.PriceAll = PurchaseHeads.PurchaseDetails.Where(x => x.DeleteFlag == 0).Sum(x => x.Quantity * x.OriginPrice);
                     }
@@ -1798,7 +1831,7 @@ namespace HonjiMES.Controllers
             string sMessage = "";
             if (OrderToWorkCheckData.OrderDetail.MaterialBasicId != 0)
             {
-                //取得工單號
+                // 取得工單號
                 var key = "HJ";
                 var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
                 var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
@@ -1812,6 +1845,7 @@ namespace HonjiMES.Controllers
                     // }
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+
 
                 // var DataType = 0;
                 var BasicDataID = 0;
@@ -2383,6 +2417,51 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(BillOfMaterial));
         }
 
+        /// <summary>
+        /// 匯入加工單
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        public ActionResult<OrderHead> PostWorkOrdeByExcel()
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var myFile = Request.Form.Files;
+            if (myFile.Any())
+            {
+                foreach (var Fileitem in myFile)
+                {
+                    try
+                    {
+                        using (var ms = new FileStream(Path.GetTempFileName(), FileMode.Create))
+                        {
+                            Fileitem.CopyTo(ms);
+                            ms.Position = 0; // <-- Add this, to make it work
+                            IWorkbook workBook = new XSSFWorkbook(ms);//xlsx格式
+                            IFormulaEvaluator formulaEvaluator = new XSSFFormulaEvaluator(workBook); // Important!! 取公式值的時候會用到
+                            foreach (ISheet sheet in workBook)
+                            {
+                                for (var i = 1; i < sheet.LastRowNum; i++)//筆數
+                                {
+                                    var CellNum = sheet.GetRow(i).LastCellNum;
+                                    for (var j = 0; j < CellNum; j++)
+                                    {
+                                        var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return Ok(MyFun.APIResponseError(ex.Message));
+                    }
+                }
+            }
+            return Ok(MyFun.APIResponseOK(""));
+        }
 
     }
 }

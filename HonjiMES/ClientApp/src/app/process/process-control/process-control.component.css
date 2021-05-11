@@ -1,3 +1,16 @@
+::ng-deep.dx-fileuploader,
+.dx-fileuploader * {
+    display: inline-block;
+    vertical-align: middle;
+}
+::ng-deep.dx-fileuploader-input-container {
+    display: none;
+}
+::ng-deep.dx-fileuploader-wrapper,
+.dx-fileuploader-input-wrapper {
+    border: none;
+}
+
 .headerblock {
     position: relative;
 }
@@ -5,7 +18,7 @@
     padding-top: 10px;
     position: absolute;
     right: 4px;
-    top:0px;
+    top: 0px;
 }
 .insertbtn {
     margin-top: -6px;
@@ -30,7 +43,7 @@
     float: right;
     margin-right: 6px;
     border-radius: 2px;
-    background-color: #CE312C;
+    background-color: #ce312c;
 }
 .runbtn {
     float: right;

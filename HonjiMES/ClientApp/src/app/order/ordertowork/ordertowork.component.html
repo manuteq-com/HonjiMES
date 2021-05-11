@@ -7,8 +7,7 @@
         (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
         (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
         (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-        [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" 
-        [height]="630">
+        [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [height]="630">
 
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxo-filter-row [visible]="false"></dxo-filter-row>
@@ -24,9 +23,9 @@
         <dxi-column dataField="Status" caption="狀態" alignment="center" [allowEditing]="false" [width]="120">
             <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="WorkOrderNo" caption="預產生之工單號" sortOrder="asc" [allowEditing]="false" [width]="160">
+        <dxi-column dataField="WorkOrderNo" caption="預產生之工單號" sortOrder="asc" [allowEditing]="true" [width]="160">
         </dxi-column>
-        <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="100">
+        <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="true" [width]="100">
             <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>

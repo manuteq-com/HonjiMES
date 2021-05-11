@@ -52,6 +52,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
         this.disabledValues = [];
         if (this.itemkeyval !== null && this.itemkeyval !== undefined) {
             this.itemkeyval.forEach((element, index) => {
+                debugger
                 element.Id = index + 1;
                 element.OrderCount = element.Count;
                 element.DueEndTime = new Date();
