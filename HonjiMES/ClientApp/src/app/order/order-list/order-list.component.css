@@ -1,22 +1,28 @@
-
-::ng-deep .dx-datagrid-rowsview .dx-row > .dx-master-detail-cell {
+::ng-deep .dx-datagrid-rowsview .dx-row>.dx-master-detail-cell {
     padding: 5px;
-  }
-::ng-deep #fileuploader-container{
+}
+
+::ng-deep #fileuploader-container {
     border: 1px solid #d3d3d3;
 }
-::ng-deep.dx-fileuploader, .dx-fileuploader * {
+
+::ng-deep.dx-fileuploader,
+.dx-fileuploader * {
     display: inline-block;
     margin: 0;
     vertical-align: middle;
 }
+
 ::ng-deep.dx-fileuploader-input-container {
     display: none;
 }
-::ng-deep.dx-fileuploader-wrapper, .dx-fileuploader-input-wrapper{
+
+::ng-deep.dx-fileuploader-wrapper,
+.dx-fileuploader-input-wrapper {
     padding: 0;
     border: none;
 }
+
 .headerblock {
     position: relative;
 }
@@ -24,28 +30,33 @@
 .buttongroup {
     position: absolute;
     right: 4px;
-    top:0px;
+    top: 0px;
     padding: 0px !important;
 }
+
 .insertbtn {
     margin-top: -6px;
     border-radius: 2px;
 }
+
 .overviewbtn {
     margin-top: -6px;
-    margin-right: 6px;
+    margin-right: 12px;
     border-radius: 2px;
     color: #fff;
     background-color: #1e90ff;
 }
+
 .searchbtn {
     margin-top: -6px;
     margin-right: 3px;
     border-radius: 2px;
 }
+
 .style {
-    height:auto;
+    height: auto;
 }
+
 .dx-button-mode-contained .dx-icon {
     color: #ffdd1e !important;
 }

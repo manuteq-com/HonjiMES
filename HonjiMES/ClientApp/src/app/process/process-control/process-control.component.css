@@ -41,7 +41,7 @@
 
 .overviewbtn {
     margin-top: -6px;
-    margin-right: 6px;
+    margin-right: 12px;
     border-radius: 2px;
     color: #fff;
     background-color: #1e90ff;
@@ -59,4 +59,60 @@
 
 .dx-button-mode-contained .dx-icon {
     color: #ffdd1e !important;
+}
+
+.pdfbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    font-weight: bold;
+    color: #1e90ff;
+    background-color: #ebe8e8;
+}
+
+.editbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    background-color: #ff831e;
+}
+
+.endbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    background-color: #ce312c;
+}
+
+.runbtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #058a00;
+}
+
+.table-hover tbody tr:hover {
+    color: #ff9500;
+    /* background-color: #eaeaf1; */
+}
+
+.process_started {
+    background-color: #f8f691;
+}
+
+.process_ended {
+    background-color: #9afd97;
+}
+
+.process_finish {
+    background-color: #91e0f8;
+}
+
+.process_start {
+    background-color: #fdf90d21;
+}
+
+.process_end {
+    background-color: #15fd0d21;
 }
