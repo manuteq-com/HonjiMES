@@ -43,7 +43,7 @@ namespace HonjiMES.Controllers
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
-            var machineName = _context.MachineInformations.Where(x => x.EnableState == 1).Select(x => x.Name).ToList();
+            var machineName = _context.MachineInformations.Where(x => x.EnableState == 1).OrderBy(X => X.Name).Select(x => x.Name).ToList();
             var machine = _context.WorkOrderDetails.AsEnumerable()
             .Where(y => y.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(y.ProducingMachine) && (y.Status == 1 || y.Status == 2))
             .OrderByDescending(x => x.Status).ThenBy(x => x.WorkOrderHead.OrderDetail?.DueDate).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
@@ -80,7 +80,8 @@ namespace HonjiMES.Controllers
                         var tasktime = Convert.ToDecimal((dt - (x.ActualStartTime ?? dt)).TotalMinutes);//目前加工時間
                         var remain = processtime - tasktime;
                         // machineData.Id = no + 1;
-                        if(item.Where(x => x.Status == 2).Any()){
+                        if (item.Where(x => x.Status == 2).Any())
+                        {
                             machineData.Id = x.WorkOrderHead.Id;
                             machineData.No = x.WorkOrderHead.WorkOrderNo;
                             machineData.SerialNumber = x.SerialNumber;
@@ -112,7 +113,7 @@ namespace HonjiMES.Controllers
                         }
                         machineData.ProcessTotal = AssignCount;
                         machineData.machineOrderList = new List<machineOrder>();
-                        foreach (var itemdata in item.Where(x=>x.Status == 1))
+                        foreach (var itemdata in item.Where(x => x.Status == 1))
                         {
                             machineData.machineOrderList.Add(new machineOrder
                             {
