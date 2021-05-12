@@ -44,16 +44,16 @@ a {
 
 .card-text {
     font-size: 20px;
-    margin: 0 0 18px 0;
+    margin: 0 0 10px 0;
 }
 
 .machineOrderList-box {
-    height: 120px;
+    height: 170px;
     overflow: auto;
 }
 
 .machineOrderList-box.noalert {
-    height: 172px;
+    height: 225px;
     overflow: auto;
 }
 
