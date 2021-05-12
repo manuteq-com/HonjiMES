@@ -52,6 +52,11 @@ a {
     overflow: auto;
 }
 
+.machineOrderList-box.noalert {
+    height: 172px;
+    overflow: auto;
+}
+
 .detail-btn {
     font-size: 16px;
     position: absolute;
@@ -92,6 +97,7 @@ a {
     line-height: unset;
     text-align: left;
     padding: none;
+    display: inline-block;
 }
 
 .machineOrderList-box .box-card-text {

@@ -15,12 +15,11 @@
                     <p class="card-text">製程名稱 : {{item.ProcessName}}</p>
                     <p *ngIf="item.RemainingTime > 0 " class="card-text">目前製程剩餘時間 : {{formattime(item.RemainingTime)}}
                     </p>
-                    <p *ngIf="item.DelayTime > 0 " class="card-text alert-time">目前製程已逾時 :
-                        {{formattime(item.DelayTime)}}
+                    <p *ngIf="item.DelayTime > 0 " class="card-text alert-time">目前製程已逾時 : {{formattime(item.DelayTime)}}
                     </p>
                     <p class="card-text" [ngClass]="sendAlert(item.ProcessTotal)">已安排製程數 : {{item.ProcessTotal}}</p>
                     <p class="card-text">已安排製程剩餘時間 : {{formattime(item.TotalTime)}}</p>
-                    <div class="machineOrderList-box">
+                    <div class="machineOrderList-box" [ngClass]="{'noalert': item.DelayTime <= 0}">
                         <ul>
                             <li *ngFor="let itemd of item.machineOrderList">
                                 <dx-button [ngClass]="getworkOrderNoClass(item.TotalTime)" class="box-card-text No-btn" (onClick)="startProcess(itemd)">
@@ -32,8 +31,7 @@
                     <!-- <dx-button class="insertbtn detail-btn" stylingMode="contained" text="機台詳情" type="default" [width]="110"
                         [visible]="editVisible" [disabled]="btnDisabled" (onClick)="viewProcess()">
                     </dx-button> -->
-                    <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110"
-                        [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
+                    <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110" [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
                     </dx-button>
                     <!-- <dx-button class="insertbtn detail-btn" stylingMode="contained" text="回報開工" type="default" [width]="110"
                         [visible]="startbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="startProcess(item)">
@@ -45,20 +43,16 @@
     </div>
 </div>
 
-<dx-popup [showTitle]="true" title="機台編號" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [width]="1700" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="機台編號" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-machinedetail (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey"
-            [modval]="mod">
+        <app-machinedetail (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey" [modval]="mod">
         </app-machinedetail>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
-    [height]="ReportHeight" [(visible)]="popupVisibleWorkorderList">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="ReportHeight" [(visible)]="popupVisibleWorkorderList">
     <div *dxTemplate="let data of 'content'">
-        <app-machineorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey"
-            [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
+        <app-machineorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
         </app-machineorder-report>
     </div>
 </dx-popup>
