@@ -9,92 +9,92 @@
     border-radius: 2px;
 }
 
-.container{
+.container {
     max-width: 1950px;
     font-size: 20px;
 }
 
-.card-header{
-    background-color:#5c72b5;
-    color:white
+.card-header {
+    background-color: #5c72b5;
+    color: white
 }
 
-ul{
+ul {
     padding: 0px;
 }
 
-li{
-    list-style-type:none;
+li {
+    list-style-type: none;
     /* margin-bottom: 10px; */
 }
 
-a{
+a {
     float: right;
 }
 
-.card{
+.card {
     padding: 0px;
     min-height: 510px;
     margin-bottom: 25px;
 }
 
-.card-body{
+.card-body {
     position: relative;
 }
 
-.card-text{
+.card-text {
     font-size: 20px;
     margin: 0 0 18px 0;
 }
 
-.machineOrderList-box{
+.machineOrderList-box {
     height: 120px;
     overflow: auto;
 }
 
-.detail-btn{
+.detail-btn {
     font-size: 16px;
     position: absolute;
-    right:20px;
-    top:20px;
+    right: 20px;
+    top: 20px;
 }
 
-.order-btn{
+.order-btn {
     font-size: 18px;
     position: absolute;
-    right:20px;
-    top:20px;
+    right: 20px;
+    top: 20px;
 }
 
-.alert-time{
+.alert-time {
     color: red;
 }
 
-.Alert{
-    background-color:#f1abbd
+.Alert {
+    background-color: #f1abbd
 }
 
-.Alert-text{
+.Alert-text {
     color: red;
 }
 
-.dx-button-content{
-    background-color:#f1abbd;
+.dx-button-content {
+    background-color: #f1abbd;
     border: none;
 }
 
-::ng-deep .dx-button .dx-button-content{
+::ng-deep .dx-button .dx-button-content {
+    text-align: left;
+    padding: 0px;
+}
+
+::ng-deep.dx-button-content {
+    line-height: unset;
     text-align: left;
     padding: none;
 }
 
-::ng-deep.dx-button-content{
-     line-height: unset;
-     text-align: left;
-     padding: none;
-}
-
-.machineOrderList-box .box-card-text{
+.machineOrderList-box .box-card-text {
     font-size: 20px;
-    margin-bottom: 10px;
+    padding: 0px;
 }
