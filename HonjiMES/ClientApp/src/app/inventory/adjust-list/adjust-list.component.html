@@ -1,9 +1,10 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120" (onClick)="creatAdjust()">
-        </dx-button>
-        <!-- <dx-button
+        <div class="row" style="margin-right: 10px;">
+            <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120" (onClick)="creatAdjust()">
+            </dx-button>
+            <!-- <dx-button
             class="insertbtn"
             stylingMode="contained"
             text="新增物料"
@@ -11,6 +12,7 @@
             [width]="120"
             (onClick)="creatdata()">
         </dx-button> -->
+        </div>
     </div>
 </div>
 
@@ -34,7 +36,7 @@
 
 <div class="row">
 
-    <div class="col-4">
+    <div class="col-12 col-lg-4">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
             [height]="740" [remoteOperations]="remoteOperations">
@@ -45,6 +47,7 @@
             <dxo-sorting mode="multiple"></dxo-sorting>
             <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
             <dxo-paging [enabled]="true" [pageSize]="20">
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             </dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
@@ -91,7 +94,7 @@
 
     </div>
 
-    <div class="col-8">
+    <div class="col-12 col-lg-8">
 
         <div class="row">
 
@@ -115,7 +118,7 @@
         <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [height]="700" keyExpr="id">
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
-
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
                 <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
                 <dxi-validation-rule type="required"></dxi-validation-rule>
