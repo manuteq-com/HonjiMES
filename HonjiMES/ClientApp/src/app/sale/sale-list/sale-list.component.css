@@ -1,17 +1,21 @@
 ::ng-deep .dx-toast-message {
     white-space: pre-line;
 }
-::ng-deep .dx-error-message{
+
+::ng-deep .dx-error-message {
     white-space: pre-line;
 }
+
 .headerblock {
     position: relative;
 }
+
 .insertbtn {
     margin-top: -6px;
     border-radius: 2px;
     /* margin-left: 30px; */
 }
+
 .overviewbtn {
     margin-top: -6px;
     margin-right: 6px;
@@ -19,14 +23,15 @@
     color: #fff;
     background-color: #1e90ff;
 }
+
 .buttongroup {
     padding-top: 10px;
-    position: absolute;
+    position: relative;
     right: 4px;
-    top:0px;
+    top: 0px;
 }
 
-.dx-template-wrapper{
+.dx-template-wrapper {
     display: flex;
     justify-content: center;
 }
