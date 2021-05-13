@@ -1,12 +1,13 @@
 .headerblock {
     position: relative;
 }
+
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 4px;
-    top:0px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
+
 .searchbtn {
     margin-top: -6px;
     /* margin-right: 0px; */

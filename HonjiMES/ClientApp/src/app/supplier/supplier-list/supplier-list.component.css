@@ -1,17 +1,18 @@
 .headerblock {
     position: relative;
 }
+
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 4px;
-    top:0px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
+
 .insertbtn {
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
 }
 
-.materialbutton{
+.materialbutton {
     text-align: center;
 }

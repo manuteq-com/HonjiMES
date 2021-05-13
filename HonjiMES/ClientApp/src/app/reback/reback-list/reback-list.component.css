@@ -1,37 +1,43 @@
-::ng-deep .dx-datagrid-rowsview .dx-row > .dx-master-detail-cell {
+::ng-deep .dx-datagrid-rowsview .dx-row>.dx-master-detail-cell {
     padding: 5px;
 }
+
 ::ng-deep #fileuploader-container {
     border: 1px solid #d3d3d3;
 }
+
 ::ng-deep.dx-fileuploader,
 .dx-fileuploader * {
     display: inline-block;
     margin: 0;
     vertical-align: middle;
 }
+
 ::ng-deep.dx-fileuploader-input-container {
     display: none;
 }
+
 ::ng-deep.dx-fileuploader-wrapper,
 .dx-fileuploader-input-wrapper {
     padding: 0;
     border: none;
 }
+
 .headerblock {
     position: relative;
 }
-.buttongroup {
-    position: absolute;
-    right: 4px;
-    top:0px;
-    padding: 0px !important;
 
+.buttongroup {
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
+
 .insertbtn {
     margin-top: 4px;
     border-radius: 2px;
 }
+
 .infobtn {
     margin-top: 4px;
     margin-right: 6px;

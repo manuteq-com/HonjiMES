@@ -1,23 +1,26 @@
 .headerblock {
     position: relative;
 }
+
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 4px;
-    top:0px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
+
 .insertbtn {
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
 }
-.adjustbtn {
-    margin-top: -6px;
-    /* margin-right: 6px; */
+
+.overviewbtn {
+    margin-top: 4px;
+    margin-right: 12px;
     border-radius: 2px;
     color: #fff;
     background-color: #1e90ff;
 }
+
 .savebtn {
     float: right;
     margin-left: 4px;

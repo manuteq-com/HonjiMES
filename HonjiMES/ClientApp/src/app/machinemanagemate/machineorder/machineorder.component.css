@@ -1,11 +1,11 @@
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 10px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
 
 .insertbtn {
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
 }
 
