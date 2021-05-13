@@ -1,0 +1,49 @@
+.dx-widget {
+    display: block;
+    -ms-content-zooming: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: none;
+    -webkit-touch-callout: none;
+    padding: 0;
+    outline: 0;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    color: rgba(0, 0, 0, .87);
+    font-weight: 400;
+    font-size: 14px;
+    font-family: Roboto, RobotoFallback, "Noto Kufi Arabic", Helvetica, Arial, sans-serif;
+    line-height: 1.2857;
+}
+
+.dx-swatch-additional .dx-scrollable-wrapper {
+    background-color: rgba(0, 0, 0, .87);
+}
+
+.dx-loadpanel-content::before {
+    display: inline-block;
+    height: 100%;
+    content: "";
+    vertical-align: middle;
+}
+
+.dx-loadpanel-content-wrapper {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.dx-loadpanel-message {
+    text-align: center;
+    display: block;
+}
+
+.dx-loadindicator {
+    margin: auto;
+}
+
+.dx-loadpanel-content.dx-loadpanel-pane-hidden {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    background: 0 0;
+}

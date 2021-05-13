@@ -1,3 +1,4 @@
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -20,7 +21,7 @@ import { MaterialBasicListComponent } from './material/material-basic-list/mater
 import { ReceiveListComponent } from './receive/receive-list/receive-list.component';
 import { ProcessListComponent } from './process/process-list/process-list.component';
 import { AuthGuard } from './helpers/auth.guard';
-import { LoginComponent } from './login/login/login.component';
+//import { LoginComponent } from './login/login/login.component';
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { WorkorderListComponent } from './workorder/workorder-list/workorder-list.component';
 import { WorkorderLogComponent } from './workorder/workorder-log/workorder-log.component';
@@ -47,13 +48,12 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { StaffmanagementComponent } from './staffmanagement/staffmanagement.component';
 import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/worktime-summary.component';
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
-import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
-import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
-import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
+import { LoginFormComponent, ResetPasswordFormComponent, CreateAccountFormComponent, ChangePasswordFormComponent } from './shared/components';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
-    { path: 'login', component: LoginComponent },
+    { path: 'login',component: LoginFormComponent },
+    //{ path: 'login', component: LoginComponent },
     { path: 'orderlist', component: OrderListComponent, canActivate: [AuthGuard] },
     { path: 'materiallist', component: MaterialListComponent, canActivate: [AuthGuard] },
     { path: 'productbasiclist', component: ProductBasicListComponent, canActivate: [AuthGuard] },
@@ -93,14 +93,18 @@ export const routes: Routes = [
     { path: 'createbom', component: CreateBomComponent },
     { path: 'chatHub', component: ChatHubComponent },
     { path: 'board', component: MachineorderBoardComponent },
-    { path: 'toolmanagement', component: ToolmanagementComponent },
+    { path: 'machineinfo', component: ToolmanagementComponent },
     { path: 'maintenance', component: MaintenanceComponent },
     { path: 'staffmanagement', component: StaffmanagementComponent },
     { path: 'worktimesummary', component: WorktimeSummaryComponent },
     { path: 'machinelogs', component: MachineLogsComponent },
-    { path: 'surfacetreat', component: SurfaceTreatmentComponent },
-    { path: 'machineinformation', component: MachineInformationComponent },
-    { path: 'machineprocesstime', component: MachineProcessTimeComponent },
+
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
+//export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
+
+@NgModule({
+    imports: [ RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }) ],
+    exports: [ RouterModule ],
+  })
+  export class AppRoutingModule {}

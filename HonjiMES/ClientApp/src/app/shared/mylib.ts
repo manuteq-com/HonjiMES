@@ -107,7 +107,6 @@ export class SendService {
     //     return [];
     // }
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
-        debugger;
         const gurl = location.pathname;
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -147,6 +146,7 @@ export class SendService {
             params: null
         };
         let result;
+        debugger
         switch (method) {
             case 'GET':
                 let params: HttpParams = new HttpParams();

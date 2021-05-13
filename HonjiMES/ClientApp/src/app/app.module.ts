@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
-import { AppRoutes } from './app.routes';
+import { AppRoutingModule } from './app.routes';
 
 import { MenuModule } from 'primeng/menu';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -14,6 +15,9 @@ import { AppComponent } from './app.component';
 import { AppMenuComponent, AppSubMenuComponent } from './layout/app.menu.component';
 import { AppTopBarComponent } from './layout/app.topbar.component';
 import { AppFooterComponent } from './layout/app.footer.component';
+import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule } from './layout';
+import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangePasswordFormModule } from './shared/components';
+import { ScreenService, AppInfoService } from './shared/services';
 import { AppProfileComponent } from './app.profile.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
@@ -22,7 +26,7 @@ import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
     DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule,
-    DxSchedulerModule, DxTabPanelModule, DxGalleryModule
+    DxSchedulerModule, DxTabPanelModule, DxGalleryModule, DxScrollViewModule, DxTabsModule,
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -87,6 +91,7 @@ import { AdjustListComponent } from './inventory/adjust-list/adjust-list.compone
 import { ProcessControlComponent } from './process/process-control/process-control.component';
 import { MbillofmateriallistComponent } from './mbillofmaterial/mbillofmateriallist/mbillofmateriallist.component';
 import { NgZorroAntdModule, NzDrawerModule } from 'ng-zorro-antd';
+import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NZ_I18N, zh_TW } from 'ng-zorro-antd/i18n';
 import { BomverlistComponent } from './billofmaterial/bomverlist/bomverlist.component';
 import { CreatprocessControlComponent } from './process/creatprocess-control/creatprocess-control.component';
@@ -150,25 +155,18 @@ import { WorktimeSummaryComponent } from './workscheduler/worktime-summary/workt
 import { WorktimeListComponent } from './workscheduler/worktime-list/worktime-list.component';
 import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-logs.component';
 import { MachineLogsDetailsComponent } from './machine-logs/machine-logs-details/machine-logs-details.component';
-import { OrderSaleunfinishedComponent } from './order/order-saleunfinished/order-saleunfinished.component';
-import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
-import { SurfaceDetailComponent } from './surface-treatment/surface-detail/surface-detail.component';
-import { CreateSurfaceComponent } from './surface-treatment/create-surface/create-surface.component';
-import { SufacetoworkComponent } from './surface-treatment/sufacetowork/sufacetowork.component';
-import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
-import { CreatmachineComponent } from './machinemanagemate/creatmachine/creatmachine.component';
-import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
-
-
-
+import { LoginFormComponent } from './shared/components/login-form/login-form.component'
+import { UnauthenticatedContentComponent } from './unauthenticated-content'
+import { NotAuthorizedContainerComponent } from './not-authorized-container';
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
 @NgModule({
     imports: [
+        CommonModule,
         BrowserModule,
         FormsModule,
-        AppRoutes,
+        AppRoutingModule,
         NgbModule,
         HttpClientModule,
         BrowserAnimationsModule,
@@ -194,6 +192,15 @@ export function tokenGetter() {
         DxLoadPanelModule,
         DxSchedulerModule,
         DxTabPanelModule,
+        SideNavOuterToolbarModule,
+        FooterModule,
+        ResetPasswordFormModule,
+        CreateAccountFormModule,
+        ChangePasswordFormModule,
+        SideNavInnerToolbarModule,
+        SingleCardModule,
+        DxScrollViewModule,
+        DxTabsModule,
         SweetAlert2Module.forRoot(),
         JwtModule.forRoot({
             config: {
@@ -201,6 +208,7 @@ export function tokenGetter() {
             }
         }),
         NgZorroAntdModule,
+        NzButtonModule,
         DxGalleryModule
     ],
     declarations: [
@@ -327,18 +335,14 @@ export function tokenGetter() {
         WorktimeListComponent,
         MachineLogsComponent,
         MachineLogsDetailsComponent,
-        OrderSaleunfinishedComponent,
-        SurfaceTreatmentComponent,
-        SurfaceDetailComponent,
-        CreateSurfaceComponent,
-        SufacetoworkComponent,
-        MachineInformationComponent,
-        CreatmachineComponent,
-        MachineProcessTimeComponent,
+        LoginFormComponent,
+        UnauthenticatedContentComponent,
+        NotAuthorizedContainerComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
-        { provide: NZ_I18N, useValue: zh_TW }
+        { provide: NZ_I18N, useValue: zh_TW },
+        ScreenService,
     ],
     bootstrap: [AppComponent]
 })
