@@ -1,14 +1,19 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+        <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
+            [width]="130" [uploadHeaders]="uploadHeaders"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
         </dx-file-uploader>
-        <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130" (onClick)="qrcodedata()">
+        <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130"
+            (onClick)="qrcodedata()">
         </dx-button>
-        <dx-button class="overviewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="130" (onClick)="viewdata()">
+        <dx-button class="overviewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="130"
+            (onClick)="viewdata()">
         </dx-button>
-        <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="130" (onClick)="creatdata()" [visible]="app.checkAddRoles()">
+        <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="130"
+            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
         </dx-button>
     </div>
 </div>
@@ -18,13 +23,16 @@
 
     <div class="col-6">
 
-        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false"
-            [showBorders]="true" [remoteOperations]="remoteOperations">
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
-            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
+                [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
             </dxo-remote-operations> -->
@@ -44,7 +52,8 @@
             <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false" [width]="150"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false"
+                [width]="150"></dxi-column>
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
 
@@ -79,13 +88,17 @@
                 </div>
             </div>
             <div class="col-6 pt-2">
-                <dx-button class="pdfbtn" stylingMode="contained" text="下載" type="default" [width]="70" [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
+                <dx-button class="pdfbtn" stylingMode="contained" text="下載" type="default" [width]="70"
+                    [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
                 </dx-button>
-                <dx-button class="endbtn" stylingMode="contained" text="工單結案" type="danger" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">
+                <dx-button class="endbtn" stylingMode="contained" text="工單結案" type="danger" [width]="110"
+                    [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">
                 </dx-button>
-                <dx-button class="editbtn" stylingMode="contained" text="編輯工單" type="default" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="editProcess()">
+                <dx-button class="editbtn" stylingMode="contained" text="編輯工單" type="default" [width]="110"
+                    [visible]="editVisible" [disabled]="btnDisabled" (onClick)="editProcess()">
                 </dx-button>
-                <dx-button class="runbtn" stylingMode="contained" text="派工" type="success" [width]="80" [visible]="runVisible" (onClick)="runProcess()">
+                <dx-button class="runbtn" stylingMode="contained" text="派工" type="success" [width]="80"
+                    [visible]="runVisible" (onClick)="runProcess()">
                 </dx-button>
 
                 <!-- <div class="buttongroup">
@@ -96,7 +109,8 @@
             </div>
         </div>
 
-        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600" [showColumnLines]="true" [showRowLines]="true">
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
+            [showColumnLines]="true" [showRowLines]="true">
 
             <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
             </dxo-row-dragging>
@@ -111,7 +125,8 @@
             </dxo-editing>
             <dxo-filter-row [visible]="false"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+                [enterKeyDirection]="enterKeyDirection">
             </dxo-keyboard-navigation>
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
@@ -155,12 +170,14 @@
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
             <dxo-summary [recalculateWhileEditing]="true">
-                <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分" valueFormat="###,##0">
+                <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分"
+                    valueFormat="###,##0">
                 </dxi-total-item>
             </dxo-summary>
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" [title]="showTitleValue" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="700" [(visible)]="logpopupVisible">
+        <dx-popup [showTitle]="true" [title]="showTitleValue" [dragEnabled]="false" [closeOnOutsideClick]="false"
+            [width]="1700" [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-workorder-report-log [itemkeyval]="itemkey" [randomkey]="lograndomkey"></app-workorder-report-log>
             </div>
@@ -170,20 +187,26 @@
 
 </div>
 
-<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1700" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey" [modval]="mod">
+        <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey"
+            [itemkeyval]="itemkey" [modval]="mod">
         </app-creatprocess-control>
     </div>
 </dx-popup>
 
-<nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="1800" [nzStyle]="{ top: '20px' }" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="1800" [nzStyle]="{ top: '20px' }" [nzFooter]="null"
+    (nzOnCancel)="handleCancel()">
     <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
 </nz-modal>
 
-<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
+<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600"
+    [height]="310" [(visible)]="closepopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId"
+            [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
+            [popupkeyval]="closepopupVisible"></app-workorder-close>
     </div>
 </dx-popup>
 
@@ -196,7 +219,8 @@
     </div>
 </dx-popup> -->
 
-<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="830" [(visible)]="qrcodepopupVisible">
+<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="830"
+    [(visible)]="qrcodepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-qrcode [itemkeyval]="randomkey"></app-qrcode>
     </div>

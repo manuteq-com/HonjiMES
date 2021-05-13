@@ -238,6 +238,12 @@ export class ProcessControlComponent implements OnInit {
         this.qrcodepopupVisible = true;
         this.randomkey = new Date().getTime();
     }
+    popup_hidden(e) {
+        this.dataGrid1.instance.refresh();
+        if (this.workOrderHeadId !== undefined) {
+            this.readProcess(null, this.workOrderHeadId);
+        }
+    }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.itemkey = null;
