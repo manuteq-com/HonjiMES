@@ -1,150 +1,153 @@
-<form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="200" colCount="auto" [colCountByScreen]="colCountByScreen" [screenByWidth]="screen">
+<div class="popupcss">
+    <form action="" (submit)="onFormSubmit($event)">
+        <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="170" colCount="auto" [colCountByScreen]="colCountByScreen" [screenByWidth]="screen">
 
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
-            <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
-            <dxo-label text="建立日期"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="OrderNo" [disabled]="true">
-            <dxi-validation-rule type="required" message="訂單單號 必填"></dxi-validation-rule>
-            <dxo-label text="訂單單號"></dxo-label>
-        </dxi-item>
-        <!-- <dxi-item dataField="CustomerNo">
+            <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
+                <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
+                <dxo-label text="建立日期"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="OrderNo" [disabled]="true">
+                <dxi-validation-rule type="required" message="訂單單號 必填"></dxi-validation-rule>
+                <dxo-label text="訂單單號"></dxo-label>
+            </dxi-item>
+            <!-- <dxi-item dataField="CustomerNo">
             <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
             <dxo-label text="客戶單號"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="OrderType" editorType="dxSelectBox" [editorOptions]="TypeSelectBoxOptions" [(visible)]="OrderTypeVisible">
-            <dxi-validation-rule type="required" message="訂單類別 必填"></dxi-validation-rule>
-            <dxo-label text="訂單類別"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
-            <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
-            <dxo-label text="客戶名稱"></dxo-label>
-        </dxi-item>
-        <!-- <div class="widget-container">
+            <dxi-item dataField="OrderType" editorType="dxSelectBox" [editorOptions]="TypeSelectBoxOptions" [(visible)]="OrderTypeVisible">
+                <dxi-validation-rule type="required" message="訂單類別 必填"></dxi-validation-rule>
+                <dxo-label text="訂單類別"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
+                <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
+                <dxo-label text="客戶名稱"></dxo-label>
+            </dxi-item>
+            <!-- <div class="widget-container">
             <div>客戶名稱</div>
             <dx-select-box #Customer
                 displayExpr="Name"
                 valueExpr= 'Id'
                 [(dataSource)]="Customerlist"></dx-select-box>
         </div> -->
-        <dxi-item dataField="OrderDate" editorType="dxDateBox">
-            <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
-            <dxo-label text="預交日"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="ReplyDate" editorType="dxDateBox">
-            <dxi-validation-rule type="required" message="回覆日期 必填"></dxi-validation-rule>
-            <dxo-label text="回覆日期"></dxo-label>
-        </dxi-item>
-        <!-- <dxi-item [label]="{text: CustomerVal1}">
+            <dxi-item dataField="OrderDate" editorType="dxDateBox">
+                <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
+                <dxo-label text="預交日"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ReplyDate" editorType="dxDateBox">
+                <dxi-validation-rule type="required" message="回覆日期 必填"></dxi-validation-rule>
+                <dxo-label text="回覆日期"></dxo-label>
+            </dxi-item>
+            <!-- <dxi-item [label]="{text: CustomerVal1}">
         </dxi-item>
         <dxi-item [label]="{text: CustomerVal2}">
         </dxi-item>
         <dxi-item [label]="{text: CustomerVal3}">
         </dxi-item> -->
-    </dx-form>
-    <div class="long-title">
-        <br>
-        <span style="font-size:12px;padding:10px;">
+        </dx-form>
+        <div class="long-title">
+            <br>
+            <span style="font-size:12px;padding:10px;">
             {{CustomerVal}}
         </span>
-    </div>
-    <br>
-    <div class="long-title">
-        <h5>訂單內容</h5>
-    </div>
-    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" height="450" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
+        </div>
+        <br>
+        <div class="long-title">
+            <h5>訂單內容</h5>
+        </div>
+        <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" height="450" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
 
-        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" startEditAction="click">
-        </dxo-editing>
-        <dxo-filter-row [visible]="false"></dxo-filter-row>
-        <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
-        </dxo-keyboard-navigation>
-        <dxo-paging [enabled]="false">
-        </dxo-paging>
+            <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" startEditAction="click">
+            </dxo-editing>
+            <dxo-filter-row [visible]="false"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
+            </dxo-keyboard-navigation>
+            <dxo-paging [enabled]="false">
+            </dxo-paging>
 
 
-        <dxi-column dataField="RowIndex" caption="" [visible]="false">
-        </dxi-column>
-        <dxi-column dataField="CustomerNo" caption="客戶單號" width="200">
-            <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="Serial" caption="序號" width="50">
-            <dxi-validation-rule type="required" message="序號 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="MaterialBasicId" caption="品號" width="200" editCellTemplate="MaterialBasicIdEditCellTemplate">
-            <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
-            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
-        </dxi-column>
-        <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
-            <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
-        </dxi-column>
-        <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantitysetCellValue" editCellTemplate="QuantityEditCellTemplate" width="70">
-            <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="Unit" caption="單位" width="50">
-            <dxi-validation-rule type="required" message="單位 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="DBOriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="DBOriginPricesetCellValue" editCellTemplate="DBOriginPriceEditCellTemplate" width="80">
-        </dxi-column>
-        <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="OriginPricesetCellValue" editCellTemplate="OriginPriceEditCellTemplate" width="80">
-            <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="DBPrice" caption="原價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="DBPriceEditCellTemplate" width="80">
-        </dxi-column>
-        <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate" width="80">
-            <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="DueDate" caption="預交日" dataType="date" width="100">
-            <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" width="100">
-            <dxi-validation-rule type="required" message="回覆交期 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="MachineNo" caption="機號">
-            <dxi-validation-rule type="required" message="機號 必填"></dxi-validation-rule>
-        </dxi-column>
-        <dxi-column dataField="Remark" caption="備註"></dxi-column>
-        <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
-        <dxi-column type="buttons">
-            <dxi-button name="save" text="存檔"></dxi-button>
-            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-        </dxi-column>
-        <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="onValueChanged($event, data)" [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
-        </div>
+            <dxi-column dataField="RowIndex" caption="" [visible]="false">
+            </dxi-column>
+            <dxi-column dataField="CustomerNo" caption="客戶單號" width="200">
+                <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="Serial" caption="序號" width="50">
+                <dxi-validation-rule type="required" message="序號 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="MaterialBasicId" caption="品號" width="200" editCellTemplate="MaterialBasicIdEditCellTemplate">
+                <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
+                <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
+                <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantitysetCellValue" editCellTemplate="QuantityEditCellTemplate" width="70">
+                <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="Unit" caption="單位" width="50">
+                <dxi-validation-rule type="required" message="單位 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="DBOriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="DBOriginPricesetCellValue" editCellTemplate="DBOriginPriceEditCellTemplate" width="80">
+            </dxi-column>
+            <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="OriginPricesetCellValue" editCellTemplate="OriginPriceEditCellTemplate" width="80">
+                <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="DBPrice" caption="原價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="DBPriceEditCellTemplate" width="80">
+            </dxi-column>
+            <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate" width="80">
+                <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="DueDate" caption="預交日" dataType="date" width="100">
+                <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" width="100">
+                <dxi-validation-rule type="required" message="回覆交期 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="MachineNo" caption="機號">
+                <dxi-validation-rule type="required" message="機號 必填"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="Remark" caption="備註"></dxi-column>
+            <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
+            <dxi-column type="buttons">
+                <dxi-button name="save" text="存檔"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
+            <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
+                <dx-select-box [value]="data.value" (onValueChanged)="onValueChanged($event, data)" [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
+            </div>
 
-        <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-            <dx-number-box [value]='Quantity' (onValueChanged)="QuantityonValueChanged($event, data)" [showSpinButtons]="true">
-            </dx-number-box>
-        </div>
-        <div *dxTemplate="let data of 'DBOriginPriceEditCellTemplate'">
-            <dx-number-box [value]='DBOriginPrice' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
-            </dx-number-box>
-        </div>
-        <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
-            <dx-number-box [value]='OriginPrice' (onValueChanged)="OriginPriceonValueChanged($event, data)" [showSpinButtons]="false">
-            </dx-number-box>
-        </div>
-        <div *dxTemplate="let data of 'DBPriceEditCellTemplate'">
-            <dx-number-box [value]='DBPrice' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
-            </dx-number-box>
-        </div>
-        <div *dxTemplate="let data of 'PriceEditCellTemplate'">
-            <dx-number-box [value]='Price' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
-            </dx-number-box>
-        </div>
-        <!-- <div *dxTemplate="let data of 'DBOriginPriceEditCellTemplate'">
+            <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
+                <dx-number-box [value]='Quantity' (onValueChanged)="QuantityonValueChanged($event, data)" [showSpinButtons]="true">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'DBOriginPriceEditCellTemplate'">
+                <dx-number-box [value]='DBOriginPrice' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
+                <dx-number-box [value]='OriginPrice' (onValueChanged)="OriginPriceonValueChanged($event, data)" [showSpinButtons]="false">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'DBPriceEditCellTemplate'">
+                <dx-number-box [value]='DBPrice' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'PriceEditCellTemplate'">
+                <dx-number-box [value]='Price' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
+                </dx-number-box>
+            </div>
+            <!-- <div *dxTemplate="let data of 'DBOriginPriceEditCellTemplate'">
             <dx-text-box [value]="DBOriginPrice" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
         </div> -->
-    </dx-data-grid>
-    <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='清除' type='danger' icon='refresh' [useSubmitBehavior]="true" (onClick)="removeBtn($event)"></dx-button>
-        <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+        </dx-data-grid>
+        <div class="col-auto-12 mt-1">
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
+            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='清除' type='danger' icon='refresh' [useSubmitBehavior]="true" (onClick)="removeBtn($event)"></dx-button>
+            <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
-    </div>
-</form>
+        </div>
+    </form>
+
+</div>
