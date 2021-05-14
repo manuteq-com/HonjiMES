@@ -1,21 +1,9 @@
-<dx-data-grid
-
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations" [columnAutoWidth]="true" [height]="620">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true"
+    [height]="'90%'">
 
     <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
-    <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
+    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
@@ -29,7 +17,7 @@
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" style="position:sticky" [fixed]="true"></dxi-column >
+    <dxi-column dataField="OrderNo" caption="訂單單號" [width]="140" style="position:sticky" [fixed]="islg"></dxi-column>
     <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
         <dxo-lookup [dataSource]="OrderTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -41,10 +29,10 @@
     <dxi-column dataField="MaterialBasicId" caption="品號" [width]="200">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品名" >
+    <dxi-column dataField="MaterialBasicId" caption="品名">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="規格" >
+    <dxi-column dataField="MaterialBasicId" caption="規格">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="Quantity" caption="數量" [width]="50"></dxi-column>
@@ -88,8 +76,7 @@
         <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
     </div>
 </dx-popup> -->
-<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="popupVisibleWork">
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
         <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork>
     </div>

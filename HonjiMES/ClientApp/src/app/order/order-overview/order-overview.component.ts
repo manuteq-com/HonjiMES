@@ -13,6 +13,7 @@ import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
+import { ScreenService } from '../../shared/services';
 
 @Component({
     selector: 'app-order-overview',
@@ -44,15 +45,16 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     popupVisibleSale: boolean;
     Otoworkkey: any;
     selectedOperation: string = "between";
+    islg: boolean;
 
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
+    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title,private screen: ScreenService) {
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };
 
     }
     ngOnInit() {
-
+        this.islg = this.screen.sizes['screen-large'];
     }
     ngOnChanges() {
         this.getdata();
