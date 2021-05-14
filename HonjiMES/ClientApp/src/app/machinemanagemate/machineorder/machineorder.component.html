@@ -6,10 +6,14 @@
 <div class="container">
     <div class="row justify-content-start align-items-center machineid">
 
-        <div class="col-sm-6 col-md-3" *ngFor="let item of dataSourceDB">
+        <div class="col-sm-12 col-lg-3" *ngFor="let item of dataSourceDB">
             <div class="card" [ngClass]="getClass(item.TotalTime)">
                 <h5 class="card-header">{{item.MachineName}}</h5>
                 <div class="card-body">
+                    <div style="display:flex;justify-content: flex-end;">
+                        <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110" [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
+                        </dx-button>
+                    </div>
                     <p class="card-text">品號 : {{item.DataNo}}</p>
                     <p class="card-text">工單號 : {{item.No}}</p>
                     <p class="card-text">製程名稱 : {{item.ProcessName}}</p>
@@ -31,8 +35,7 @@
                     <!-- <dx-button class="insertbtn detail-btn" stylingMode="contained" text="機台詳情" type="default" [width]="110"
                         [visible]="editVisible" [disabled]="btnDisabled" (onClick)="viewProcess()">
                     </dx-button> -->
-                    <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110" [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
-                    </dx-button>
+
                     <!-- <dx-button class="insertbtn detail-btn" stylingMode="contained" text="回報開工" type="default" [width]="110"
                         [visible]="startbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="startProcess(item)">
                     </dx-button> -->

@@ -1,22 +1,21 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="infobtn" stylingMode="contained" text="領退料紀錄查詢" type="normal" [width]="150"
-            (onClick)="infodata()">
-        </dx-button>
+        <div class="row" style="margin-right: 10px;">
+            <dx-button class="infobtn" stylingMode="contained" text="領退料紀錄查詢" type="normal" [width]="150" (onClick)="infodata()">
+            </dx-button>
+        </div>
     </div>
 </div>
 
-<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [width]="1700" [(visible)]="infopopupVisible">
+<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>
 
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed"
-    [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
+<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '800px', y: '700px' }">
     <thead>
 
         <tr>
@@ -43,8 +42,7 @@
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.OrderCount}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)"
-                    nzEllipsis>
+                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)" nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
                             <span title={{data[col.key]?.value0}}>
@@ -54,13 +52,11 @@
                         </ng-container>
                         <ng-container *ngIf="data[col.key]?.value1">
                             <br />
-                            <hr />
-                            {{data[col.key]?.value1}}
+                            <hr /> {{data[col.key]?.value1}}
                         </ng-container>
                         <ng-container *ngIf="data[col.key]?.value2">
                             <br />
-                            <hr />
-                            {{data[col.key]?.value2}}
+                            <hr /> {{data[col.key]?.value2}}
                         </ng-container>
                         <!-- {{data[col.key]}}
                         <br />
@@ -72,20 +68,16 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
-    [height]="ReportHeight" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible"
-            [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1600"
-    [(visible)]="editpopupVisible">
+<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1600" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtrkey" [modval]="mod" [randomkeyval]="randomkey" [popupkeyval]="editpopupVisible">
         </app-editworkorder>
     </div>
 </dx-popup>
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
-    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>
