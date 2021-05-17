@@ -1,50 +1,41 @@
-<div class="row">
+<div style="margin: 1px;">
+    <div class="row">
 
-    <div class="col-12">
+        <div class="col-12">
 
-        <div class="buttongroup">
-            <a>
-            </a>
-            <dx-button class="insertbtn" stylingMode="contained" text="產生QRCode" type="success" [width]="140"
-                (onClick)="download()"></dx-button>
+            <div class="buttongroup">
+                <a>
+                </a>
+                <dx-button class="insertbtn" stylingMode="contained" text="產生QRCode" type="success" [width]="140" (onClick)="download()"></dx-button>
+            </div>
+
         </div>
 
     </div>
 
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+
+        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+        <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc"></dxi-column>
+        <dxi-column dataField="DataNo" caption="品號"></dxi-column>
+        <dxi-column dataField="DataName" caption="名稱"></dxi-column>
+        <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
+        <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="100">
+            <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="Count" caption="數量" [width]="100"></dxi-column>
+        <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [calculateFilterExpression]="calculateFilterExpression" [(selectedFilterOperation)]="selectedFilterOperation" [(filterValue)]="filterValue" [width]="180">
+        </dxi-column>
+        <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column>
+
+    </dx-data-grid>
 </div>
-
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
-    (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-    [remoteOperations]="remoteOperations" [height]="700">
-
-    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-header-filter [visible]="false"></dxo-header-filter>
-    <dxo-sorting mode="multiple"></dxo-sorting>
-    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [enabled]="false">
-    </dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-
-    <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc"></dxi-column>
-    <dxi-column dataField="DataNo" caption="品號"></dxi-column>
-    <dxi-column dataField="DataName" caption="名稱"></dxi-column>
-    <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
-    <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="100">
-        <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="Count" caption="數量" [width]="100"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"
-        [calculateFilterExpression]="calculateFilterExpression"
-        [(selectedFilterOperation)]="selectedFilterOperation"
-        [(filterValue)]="filterValue"
-        [width]="180">
-    </dxi-column>
-    <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column>
-
-</dx-data-grid>

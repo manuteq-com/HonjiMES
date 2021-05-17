@@ -1,6 +1,4 @@
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" [rowAlternationEnabled]="true"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true"
-    (onInitNewRow)="onInitNewRow($event)">
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" [rowAlternationEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true" (onInitNewRow)="onInitNewRow($event)">
 
     <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
 

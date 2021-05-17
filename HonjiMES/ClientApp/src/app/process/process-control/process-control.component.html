@@ -2,9 +2,11 @@
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
         <div class="row" style="margin-right: 10px;">
-            <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [height]="35" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-                uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
-            </dx-file-uploader>
+            <div *ngIf="islg">
+                <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [height]="35" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+                    uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
+                </dx-file-uploader>
+            </div>
             <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130" [height]="35" (onClick)="qrcodedata()">
             </dx-button>
             <dx-button class="overviewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="130" [height]="35" (onClick)="viewdata()">
@@ -174,20 +176,24 @@
 
 </div>
 
-<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey" [modval]="mod">
-        </app-creatprocess-control>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey" [itemkeyval]="itemkey" [modval]="mod">
+            </app-creatprocess-control>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="1800" [nzStyle]="{ top: '20px' }" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="viewpopupVisible" nzTitle="檢視工單" [nzWidth]="'90%'" [nzStyle]="{ top: '60px' }" [nzFooter]="null" (nzOnCancel)="handleCancel()">
     <app-process-control-view [itemkeyval]="randomkey"></app-process-control-view>
 </nz-modal>
 
-<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
+<dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="closepopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+        <dx-scroll-view width="100%" height="100%">
+            <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
@@ -200,8 +206,10 @@
     </div>
 </dx-popup> -->
 
-<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="830" [(visible)]="qrcodepopupVisible">
+<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="qrcodepopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-qrcode [itemkeyval]="randomkey"></app-qrcode>
+        <dx-scroll-view width="100%" height="100%">
+            <app-qrcode [itemkeyval]="randomkey"></app-qrcode>
+        </dx-scroll-view>
     </div>
 </dx-popup>

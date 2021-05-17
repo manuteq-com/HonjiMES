@@ -69,14 +69,18 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="540" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatprocess>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatprocess>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="ToolsVisible">
+<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="ToolsVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-toolset [ProcessId]="ProcessId"></app-toolset>
+        <dx-scroll-view width="100%" height="100%">
+            <app-toolset [ProcessId]="ProcessId"></app-toolset>
+        </dx-scroll-view>
     </div>
 </dx-popup>

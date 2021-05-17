@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/service/auth.service';
 import { APIResponse } from 'src/app/app.module';
+import { ScreenService } from '../../shared/services';
 
 @Component({
     selector: 'app-process-control',
@@ -56,7 +57,7 @@ export class ProcessControlComponent implements OnInit {
     uploadUrl: string;
     uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
 
-    constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
+    constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title, private screen: ScreenService) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
@@ -101,6 +102,7 @@ export class ProcessControlComponent implements OnInit {
         this.titleService.setTitle('工單管理');
         this.runVisible = false;
         this.editVisible = false;
+        this.islg = this.screen.sizes['screen-large'];
     }
     onReorder(e) {
         debugger;
