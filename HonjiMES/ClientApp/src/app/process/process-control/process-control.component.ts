@@ -56,6 +56,7 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadDataNo: any;
     uploadUrl: string;
     uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
+    islg=true;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title, private screen: ScreenService) {
         const authenticationService = new AuthService(http);
