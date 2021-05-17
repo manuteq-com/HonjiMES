@@ -1,8 +1,10 @@
 .dx-button {
-    float: right;
+    float: left;
 }
+
 .editbtn {
     margin-top: 0px;
     margin-left: 3px;
     border-radius: 2px;
+    margin-bottom: 5px;
 }

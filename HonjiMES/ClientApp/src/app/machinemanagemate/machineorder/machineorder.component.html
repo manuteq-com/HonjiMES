@@ -8,12 +8,14 @@
 
         <div class="col-sm-12 col-lg-3" *ngFor="let item of dataSourceDB">
             <div class="card" [ngClass]="getClass(item.TotalTime)">
-                <h5 class="card-header">{{item.MachineName}}</h5>
-                <div class="card-body">
+                <h5 class="card-header">{{item.MachineName}}
                     <div style="display:flex;justify-content: flex-end;">
                         <dx-button class="insertbtn order-btn" stylingMode="contained" text="回報完工" type="success" [width]="110" [visible]="orderbtnDisabled(item)" [disabled]="btnDisabled" (onClick)="viewWorkorderList(item)">
                         </dx-button>
                     </div>
+                </h5>
+                <div class="card-body">
+
                     <p class="card-text">品號 : {{item.DataNo}}</p>
                     <p class="card-text">工單號 : {{item.No}}</p>
                     <p class="card-text">製程名稱 : {{item.ProcessName}}</p>
@@ -53,9 +55,11 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="ReportHeight" [(visible)]="popupVisibleWorkorderList">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="popupVisibleWorkorderList" [showCloseButton]="true">
     <div *dxTemplate="let data of 'content'">
-        <app-machineorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
-        </app-machineorder-report>
+        <dx-scroll-view width="100%" height="100%">
+            <app-machineorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
+            </app-machineorder-report>
+        </dx-scroll-view>
     </div>
 </dx-popup>
