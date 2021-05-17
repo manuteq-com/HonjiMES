@@ -157,9 +157,11 @@
 
     </form>
 
-    <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="creatpopupVisible">
+    <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
         <div *dxTemplate="let data of 'content'">
-            <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+            <dx-scroll-view width="100%" height="100%">
+                <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+            </dx-scroll-view>
         </div>
     </dx-popup>
 

@@ -1,12 +1,10 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
         <dxi-item dataField="WorkOrderHeadId" [visible]="false">
             <dxo-label text="工單主檔ID"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions"
-            [visible]="modVisible">
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [visible]="modVisible">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
@@ -52,24 +50,9 @@
     <!-- <div class="long-title">
         <h5>採購內容</h5>
     </div> -->
-    <dx-data-grid #dataGrid2
-        [dataSource]="dataSourceDB"
-        [showBorders]="true"
-        keyExpr="Id"
-        height="580"
-        (onFocusedCellChanging)="onFocusedCellChanging($event)"
-        (onInitNewRow)="onInitNewRow($event)"
-        (onEditingStart)="onEditingStart($event)"
-        (onCellPrepared)="onCellPrepared($event)"
-        (onRowRemoved)="onRowRemoved($event)"
-        (onRowPrepared)="onRowPrepared($event)"
-        (onSelectionChanged)="onSelectionChanged($event)"
-        (onToolbarPreparing)="onToolbarPreparing($event)"
-        (onEditorPreparing)="editorPreparing($event)"
-        (onRowClick)="onRowClick($event)"
-        [showColumnLines]="true"
-        [showRowLines]="true"
-        hoverStateEnabled="true">
+    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" height="580" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
+        (onRowRemoved)="onRowRemoved($event)" (onRowPrepared)="onRowPrepared($event)" (onSelectionChanged)="onSelectionChanged($event)" (onToolbarPreparing)="onToolbarPreparing($event)" (onEditorPreparing)="editorPreparing($event)" (onRowClick)="onRowClick($event)"
+        [showColumnLines]="true" [showRowLines]="true" hoverStateEnabled="true">
 
         <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
             <dxo-form colCount=4>
@@ -125,28 +108,23 @@
         </dxi-column> -->
 
         <div *dxTemplate="let data of 'ProducingMachineTemplate'">
-            <dx-select-box [value]="data.value"
-                [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }"
-                valueExpr="Name" displayExpr="Name" [searchEnabled]="true" (onValueChanged)="data.setValue($event.value)"></dx-select-box>
+            <dx-select-box [value]="data.value" [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }" valueExpr="Name" displayExpr="Name" [searchEnabled]="true" (onValueChanged)="data.setValue($event.value)"></dx-select-box>
             <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
         </div>
 
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='批次報工' type='default' icon='runner'
-            [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="onReportClick($event)" (focusStateEnabledChange)="true"></dx-button>
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mr-3" stylingMode="outlined" type='default' text='工序暫停' icon='square'
-            [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStopClick($event)" (focusStateEnabledChange)="true"></dx-button>
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mr-1" stylingMode="outlined" type='default' text='回復加工' icon='pulldown'
-            [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStartClick($event)" (focusStateEnabledChange)="true"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='批次報工' type='default' icon='runner' [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="onReportClick($event)" (focusStateEnabledChange)="true"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mr-3" stylingMode="outlined" type='default' text='工序暫停' icon='square' [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStopClick($event)" (focusStateEnabledChange)="true"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1 mr-1" stylingMode="outlined" type='default' text='回復加工' icon='pulldown' [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStartClick($event)" (focusStateEnabledChange)="true"></dx-button>
     </div>
 </form>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
-    [height]="ReportHeight" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible"
-            [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
+        <dx-scroll-view width="100%" height="100%">
+            <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
+        </dx-scroll-view>
     </div>
 </dx-popup>

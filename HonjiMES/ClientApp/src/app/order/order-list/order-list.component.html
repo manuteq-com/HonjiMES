@@ -126,15 +126,19 @@
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="'80%'" [(visible)]="overviewpopupVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="'80%'" [(visible)]="saleunfinshedVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="saleunfinshedVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey">
-        </app-order-saleunfinished>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey">
+            </app-order-saleunfinished>
+        </dx-scroll-view>
     </div>
 </dx-popup>

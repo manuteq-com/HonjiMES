@@ -48,8 +48,10 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="銷貨交易明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="800" [(visible)]="logpopupVisible">
+<dx-popup [showTitle]="true" title="銷貨交易明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="logpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-deal-log [itemkeyval]="itemkey"></app-deal-log>
+        <dx-scroll-view width="100%" height="100%">
+            <app-deal-log [itemkeyval]="itemkey"></app-deal-log>
+        </dx-scroll-view>
     </div>
 </dx-popup>

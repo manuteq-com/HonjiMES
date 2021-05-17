@@ -18,24 +18,10 @@
         <dx-button text="建立托工單" type="default" (onClick)="to_outsideClick($event)"></dx-button>
     </div>
 </div>
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    [showBorders]="true"
-    keyExpr="Id"
-    (onCellClick)="cellClick($event)"
-    (onRowClick)="rowClick($event)"
-    (onRowPrepared)="onRowPrepared($event)"
-    (onCellPrepared)="onCellPrepared($event)"
-    (onSelectionChanged)="onSelectionChanged($event)"
-    (onRowUpdated)="onRowUpdated($event)"
-    [rowAlternationEnabled]="true"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    [columnAutoWidth]="true">
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onRowClick)="rowClick($event)" (onRowPrepared)="onRowPrepared($event)" (onCellPrepared)="onCellPrepared($event)" (onSelectionChanged)="onSelectionChanged($event)"
+    (onRowUpdated)="onRowUpdated($event)" [rowAlternationEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true">
 
-    <dxo-editing mode="batch"
-        [allowAdding]="false"
-        [allowUpdating]="true"
-        [allowDeleting]="true">
+    <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form colCount=5>
             <dxi-item dataField="MaterialBasicId">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -72,8 +58,7 @@
     <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
 
     <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item
-            [customizeText]="customizeText" column="MachineNo" summaryType="count">
+        <dxi-total-item [customizeText]="customizeText" column="MachineNo" summaryType="count">
         </dxi-total-item>
         <dxi-total-item i-total-item column="Price" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)">
         </dxi-total-item>
@@ -93,7 +78,7 @@
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
     </dxi-column>
 
-    <dxi-column dataField="Quantity" caption="數量" dataType="number"  [width]="70"></dxi-column>
+    <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="70"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="50"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
     <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
@@ -118,42 +103,43 @@
     <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="150"></dxi-column>
 
     <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
-        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)"
-            [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }"
-            valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
+        <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>
     </div>
-    <div *dxTemplate="let d of 'diffCellTemplate'" >
+    <div *dxTemplate="let d of 'diffCellTemplate'">
         <ul style="list-style-type:none">
-            <li *ngFor ="let item of distinct(d.value)">{{item.Sale.SaleNo}}</li>
+            <li *ngFor="let item of distinct(d.value)">{{item.Sale.SaleNo}}</li>
         </ul>
     </div>
-    <div *dxTemplate="let d of 'diffCellTemplate2'" >
+    <div *dxTemplate="let d of 'diffCellTemplate2'">
         <ul style="list-style-type:none; text-align: left;">
-            <li *ngFor ="let item of d.value">{{item.WorkOrderNo}}</li>
+            <li *ngFor="let item of d.value">{{item.WorkOrderNo}}</li>
         </ul>
     </div>
-    <div *dxTemplate="let d of 'diffCellTemplate3'" >
+    <div *dxTemplate="let d of 'diffCellTemplate3'">
         <ul style="list-style-type:none">
-            <li *ngFor ="let item of (d.value)">{{item.Purchase.PurchaseNo}}</li>
+            <li *ngFor="let item of (d.value)">{{item.Purchase.PurchaseNo}}</li>
         </ul>
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="popupVisiblePurchase">
+<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisiblePurchase">
     <div *dxTemplate="let data of 'content'">
-        <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creat-purchase (childOuter)="popup_result($event)" [itemkeyval]="topurchasekey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+        </dx-scroll-view>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="popupVisibleSale">
+<dx-popup [showTitle]="true" title="轉銷貨" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisibleSale">
     <div *dxTemplate="let data of 'content'">
-        <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
+        <dx-scroll-view width="100%" height="100%">
+            <app-ordertosale (childOuter)="popup_result($event)" [itemkeyval]="tosalekey" [modval]="mod"></app-ordertosale>
+        </dx-scroll-view>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="popupVisibleWork">
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
-        <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork>
+        <dx-scroll-view width="100%" height="100%">
+            <app-ordertowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey"></app-ordertowork>
+        </dx-scroll-view>
     </div>
 </dx-popup>

@@ -64,8 +64,10 @@
 
     <dx-popup [showTitle]="true" title="新增領料資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisible">
         <div *dxTemplate="let data of 'content'">
-            <app-editbom (childOuter)="popup_result($event)" [modval]="popupMod" [randomkeyval]="randomkey">
-            </app-editbom>
+            <dx-scroll-view width="100%" height="100%">
+                <app-editbom (childOuter)="popup_result($event)" [modval]="popupMod" [randomkeyval]="randomkey">
+                </app-editbom>
+            </dx-scroll-view>
         </div>
     </dx-popup>
 </div>
