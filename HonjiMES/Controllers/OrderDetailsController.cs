@@ -72,6 +72,7 @@ namespace HonjiMES.Controllers
                 ReplyDate = x.ReplyDate,
                 Remark = x.Remark,
                 ReplyRemark = x.ReplyRemark,
+                ReplyPrice = x.ReplyPrice,
                 Quantity = x.Quantity,
                 OriginPrice = x.OriginPrice,
                 Price = x.Price,
@@ -264,7 +265,6 @@ namespace HonjiMES.Controllers
                 return Ok(MyFun.APIResponseOK(materialBasic));
             }
         }
-
         private bool OrderDetailExists(int id)
         {
             return _context.OrderDetails.Any(e => e.Id == id);

@@ -49,6 +49,7 @@ namespace HonjiMES.Models
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Ink", ExcelName = "噴墨", TableName = "OrderDetail", ExcelOrder = 20 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Label", ExcelName = "標籤", TableName = "OrderDetail", ExcelOrder = 21 });
             ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "Package", ExcelName = "包裝數", TableName = "OrderDetail", ExcelOrder = 22 });
+            ExcelOrderModellist.Add(new ExcelOrderModel { ModelName = "ReplyPrice", ExcelName = "回覆單價", TableName = "OrderDetail", ExcelOrder = 23 });
             #endregion
 
             //foreach (var excel in Allexcel)
@@ -241,76 +242,84 @@ namespace HonjiMES.Models
                         OrderHeadlist.Add(nOrderHead);
                         for (var i = 0; i < sheet.LastRowNum; i++)//筆數
                         {
-                            var nOrderDetail = new OrderDetail();
-                            nOrderHead.OrderDetails.Add(nOrderDetail);
-                            var CellNum = sheet.GetRow(i).LastCellNum;
-                            for (var j = 0; j < CellNum; j++)
+                            var grow = sheet.GetRow(i);
+                            if (grow != null)
                             {
-                                //抓出表頭及順序
-                                if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
+                                var CellNum = sheet.GetRow(i).LastCellNum;
+                                var nOrderDetail = new OrderDetail();
+                                nOrderHead.OrderDetails.Add(nOrderDetail);
+                                for (var j = 0; j < CellNum; j++)
                                 {
-                                    var val = sheet.GetRow(i).GetCell(j);
-                                    if (val != null)
+                                    //抓出表頭及順序
+                                    if (!MappingExtelToModel.Any() || CellNum > MappingExtelToModel.Count())
                                     {
-                                        var ExcelName = DBHelper.MappingExtelToModelData().Where(x => x.ExcelName == val.ToString()).FirstOrDefault();
-                                        if (ExcelName != null)
+                                        var val = sheet.GetRow(i).GetCell(j);
+                                        if (val != null)
                                         {
-                                            MappingExtelToModel.Add(ExcelName);
-                                        }
-                                        else
-                                        {
-                                            MappingExtelToModel.Add(new ExcelOrderModel { });//使數量一樣
+                                            var ExcelName = DBHelper.MappingExtelToModelData().Where(x => x.ExcelName == val.ToString()).FirstOrDefault();
+                                            if (ExcelName != null)
+                                            {
+                                                MappingExtelToModel.Add(ExcelName);
+                                            }
+                                            else
+                                            {
+                                                MappingExtelToModel.Add(new ExcelOrderModel { });//使數量一樣
+                                            }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    var Mappingitem = MappingExtelToModel[j];
-                                    var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
+                                    else
+                                    {
+                                        var Mappingitem = MappingExtelToModel[j];
+                                        var Cellval = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j));//ExcelCell內容
 
-                                    if (Mappingitem.TableName == "OrderHead" && Mappingitem.ModelName == "CustomerNo")
-                                    {
-                                        DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
-                                        DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
-                                    }
-                                    else if (Mappingitem.TableName == "OrderHead")
-                                    {
-                                        DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
-                                        //foreach (var Props in nOrderHead.GetType().GetProperties())
-                                        //{
-                                        //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                        //    {
-                                        //        Props.SetValue(nOrderHead, Cellval);
-                                        //    }
-                                        //}
-                                    }
-                                    else if (Mappingitem.TableName == "OrderDetail")
-                                    {
-                                        switch (Mappingitem.Change)
+                                        if (Mappingitem.TableName == "OrderHead" && Mappingitem.ModelName == "CustomerNo" && Cellval.StartsWith("330-"))
                                         {
-                                            case "MaterialBasic":
-                                                // 2020/10/27 品號合併(使用Material資料表)
-                                                // Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
-                                                Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
-                                                if (string.IsNullOrWhiteSpace(Cellval) && !lostMaterialNoList.Contains(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j))))
-                                                {
-                                                    lostMaterialNoList.Add(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)));
-                                                    sLostMaterial += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
-                                                        + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
-                                                        + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
-                                                }
-                                                break;
-                                            default:
-                                                break;
+                                            DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
+                                            DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
                                         }
-                                        DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
-                                        //foreach (var Props in nOrderDetail.GetType().GetProperties())
-                                        //{
-                                        //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
-                                        //    {
-                                        //        Props.SetValue(nOrderDetail, Cellval);
-                                        //    }
-                                        //}
+                                        else if (Mappingitem.TableName == "OrderHead")
+                                        {
+                                            DBHelper.MappingExtelToModel<OrderHead>(ref nOrderHead, Cellval, Mappingitem.ModelName.ToLower());
+                                            //foreach (var Props in nOrderHead.GetType().GetProperties())
+                                            //{
+                                            //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
+                                            //    {
+                                            //        Props.SetValue(nOrderHead, Cellval);
+                                            //    }
+                                            //}
+                                        }
+                                        else if (Mappingitem.TableName == "OrderDetail")
+                                        {
+                                            if (Mappingitem.ModelName == "ReplyPrice")
+                                            {
+
+                                            }
+                                            switch (Mappingitem.Change)
+                                            {
+                                                case "MaterialBasic":
+                                                    // 2020/10/27 品號合併(使用Material資料表)
+                                                    // Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                    Cellval = _context.MaterialBasics.AsQueryable().Where(x => x.MaterialNo == Cellval && x.DeleteFlag == 0).FirstOrDefault()?.Id.ToString() ?? null;
+                                                    if (string.IsNullOrWhiteSpace(Cellval) && !lostMaterialNoList.Contains(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j))))
+                                                    {
+                                                        lostMaterialNoList.Add(DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)));
+                                                        sLostMaterial += DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j)) + " ; "
+                                                            + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 1)) + " ; "
+                                                            + DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(j + 2)) + "<br/>";
+                                                    }
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            DBHelper.MappingExtelToModel<OrderDetail>(ref nOrderDetail, Cellval, Mappingitem.ModelName.ToLower());
+                                            //foreach (var Props in nOrderDetail.GetType().GetProperties())
+                                            //{
+                                            //    if (Props.Name.ToLower() == Mappingitem.ModelName.ToLower())
+                                            //    {
+                                            //        Props.SetValue(nOrderDetail, Cellval);
+                                            //    }
+                                            //}
+                                        }
                                     }
                                 }
                             }

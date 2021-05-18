@@ -54,7 +54,7 @@ namespace HonjiMES.Models
         [Column("quantity", TypeName = "int(11)")]
         public int Quantity { get; set; }
         /// <summary>
-        /// &#21934;&#20729;
+        /// &#21407;&#21934;&#20729;
         /// </summary>
         [Column("originPrice", TypeName = "decimal(10,2)")]
         public decimal OriginPrice { get; set; }
@@ -99,6 +99,11 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("reply_date", TypeName = "timestamp")]
         public DateTime ReplyDate { get; set; }
+        /// <summary>
+        /// &#22238;&#35206;&#21934;&#20729;
+        /// </summary>
+        [Column("reply_price", TypeName = "decimal(10,2)")]
+        public decimal ReplyPrice { get; set; }
         /// <summary>
         /// &#22238;&#35206;&#20633;&#35387;
         /// </summary>

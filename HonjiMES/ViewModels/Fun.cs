@@ -347,7 +347,12 @@ namespace HonjiMES.Models
             wb.Write(excelDatas);
             return excelDatas;
         }
-
+        /// <summary>
+        /// 依路徑取得檔案
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
         internal static string[] ProcessGetTempExcelAsync(string dir, string orderNo)
         {
             var sPath = $"{dir}\\TempFile\\" + orderNo;

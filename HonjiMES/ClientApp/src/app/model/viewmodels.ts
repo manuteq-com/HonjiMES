@@ -25,6 +25,7 @@ export class OrderDetail {
     quantity: number;
     dueDate: Date;
     replyDate: Date;
+    replyPrice: number;
     machineNo: number;
     remark: string;
     replyRemark: string;
