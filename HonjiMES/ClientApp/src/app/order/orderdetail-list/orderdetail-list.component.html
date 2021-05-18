@@ -18,8 +18,10 @@
         <dx-button text="建立托工單" type="default" (onClick)="to_outsideClick($event)"></dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)" (onRowClick)="rowClick($event)" (onRowPrepared)="onRowPrepared($event)" (onCellPrepared)="onCellPrepared($event)" (onSelectionChanged)="onSelectionChanged($event)"
-    (onRowUpdated)="onRowUpdated($event)" [rowAlternationEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true">
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onCellClick)="cellClick($event)"
+    (onRowClick)="rowClick($event)" (onRowPrepared)="onRowPrepared($event)" (onCellPrepared)="onCellPrepared($event)"
+    (onSelectionChanged)="onSelectionChanged($event)" (onRowUpdated)="onRowUpdated($event)"
+    [rowAlternationEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [columnAutoWidth]="true">
 
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form colCount=5>
@@ -68,7 +70,8 @@
 
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="180"></dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="180" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="180" [allowEditing]="false"
+        editCellTemplate="MaterialBasicIdEditCellTemplate">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="150">
@@ -80,10 +83,13 @@
 
     <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="70"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="50"></dxi-column>
-    <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
-    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        [allowEditing]="false"></dxi-column>
     <dxi-column dataField="DueDate" caption="預交日" dataType="date"></dxi-column>
     <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date"></dxi-column>
+    <dxi-column dataField="ReplyPrice" caption="回覆單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
 
@@ -98,9 +104,12 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
 
-    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate" [allowEditing]="false" [width]="150"></dxi-column>
-    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false" [width]="150"></dxi-column>
-    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false" [width]="150"></dxi-column>
+    <dxi-column dataField="SaleDetailNews" caption="銷貨單" cellTemplate="diffCellTemplate" [allowEditing]="false"
+        [width]="150"></dxi-column>
+    <dxi-column dataField="WorkOrderHeads" caption="工單" cellTemplate="diffCellTemplate2" [allowEditing]="false"
+        [width]="150"></dxi-column>
+    <dxi-column dataField="PurchaseDetails" caption="採購單" cellTemplate="diffCellTemplate3" [allowEditing]="false"
+        [width]="150"></dxi-column>
 
     <div *dxTemplate="let data of 'MaterialBasicIdEditCellTemplate'">
         <dx-select-box [value]="data.value" (onValueChanged)="data.setValue($event.value)" [dataSource]="{ paginate: true, store: { type: 'array', data: MaterialBasicList, key:'Id' } }" valueExpr="Id" displayExpr="MaterialNo" [searchEnabled]="true"></dx-select-box>

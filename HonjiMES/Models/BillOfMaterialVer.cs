@@ -5,9 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HonjiMES.Models
 {
-    /// <summary>
-    /// &#29986;&#21697;&#32068;&#25104;&#34920; &#29256;&#26412;
-    /// </summary>
     [Table("bill_of_material_ver")]
     public partial class BillOfMaterialVer
     {
