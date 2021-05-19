@@ -18,30 +18,6 @@
     </div>
 
     <div class="layout-main">
-        <!-- breadcrumb -->
-        <!-- <div class="headerblock"> breadcrumb未完成
-            <div class="headerfont font1">訂單管理</div>
-            <div class="triangle"></div>
-            <div class="lefttriangle">
-                <div class="lefttriangle1"></div>
-                <div class="lefttriangle2"></div>
-            </div>
-            <div class="headerfont font2">銷貨單</div>
-            <div class="buttongroup">
-            </div>
-        </div> -->
-
-        <!-- <div class="col">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item" *ngFor="let item of breadcrumbList; let i = index"
-                    [class.active]="i===breadcrumbList.length-1">
-                    <a [routerLink]="item.path" *ngIf="i!==breadcrumbList.length-1">
-                        {{ item.name }}
-                    </a>
-                    <span *ngIf="i===breadcrumbList.length-1">{{ item.name }}</span>
-                </li>
-            </ol>
-        </div> -->
         <router-outlet></router-outlet>
     </div>
 
@@ -49,7 +25,6 @@
 
 
 </div>
-
 
 <!-- 單側邊 navbar -->
 <!-- <ng-container *ngIf="login$; else unauthenticated">
