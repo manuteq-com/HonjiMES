@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import "./styles_rusin.scss";
+
 * {
-    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei", "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体", "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial, "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
+    font-family: "Meiryo", "Microsoft JhengHei UI", "Microsoft JhengHei",
+        "微軟正黑體", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑体",
+        "微軟雅黑體", "Helvetica Neue", Helvetica, "Lucida Grande", Arial,
+        "WenQuanYi Micro Hei", sans-serif, "黑体", "黑體";
 }
 
 body {
@@ -12,8 +15,10 @@ body {
 // button{
 //     width: 120px;
 // }
+
 .swal2-container {
     z-index: 16000 !important;
+
 }
 
 // 查詢表單統一 Layout
@@ -21,7 +26,6 @@ body {
     display: flex;
     margin-bottom: 10px;
 }
-
 .mt-field-label {
     flex: 3;
     font-size: 1rem;
@@ -31,24 +35,16 @@ body {
     // text-align: right;
     font-weight: bold;
 }
-
 .mt-field-label::after {
     content: ":";
 }
-
 .mt-field-value {
     flex: 5;
 }
-
-.table_tit {
-    white-space: nowrap; //禁止td換行
-    overflow: hidden; //隱藏X,Y滾動條
-    text-overflow: ellipsis; //將顯示不完的以...顯示
-}
-
-::ng-deep .popupcss {
-    margin: 0px 5px;
-    padding: 0px;
+.table_tit{
+    white-space: nowrap;  //禁止td換行
+    overflow: hidden;  //隱藏X,Y滾動條
+    text-overflow: ellipsis;//將顯示不完的以...顯示
 }
 
 // 查詢表單統一 Layout

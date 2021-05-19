@@ -22,8 +22,7 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
     (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations"
-    [columnAutoWidth]="true">
+    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -89,11 +88,9 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="creatpopupVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
-            </app-creat-purchase>
-        </dx-scroll-view>
+        <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
+        </app-creat-purchase>
     </div>
 </dx-popup>
