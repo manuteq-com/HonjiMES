@@ -32,10 +32,7 @@
                             "src/styles.scss",
                             "src/styles_rusin_dx.scss",
                             "src/styles_rusin.scss",
-                            "src/styles_rusin_primeng.scss",
-                            "src/themes/generated/theme.base.css",
-                            "src/themes/generated/theme.additional.css",
-                            "src/dx-styles.scss"
+                            "src/styles_rusin_primeng.scss"
                         ],
                         "scripts": [
                             "node_modules/chart.js/dist/Chart.js",
@@ -52,11 +49,14 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
-                            "fileReplacements": [{
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.prod.ts"
-                            }],
-                            "budgets": [{
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "budgets": [
+                                {
                                     "type": "initial",
                                     "maximumWarning": "5mb",
                                     "maximumError": "15mb"
