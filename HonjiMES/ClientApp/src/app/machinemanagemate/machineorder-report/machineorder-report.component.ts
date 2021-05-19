@@ -9,7 +9,6 @@ import { workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
-import { ScreenService } from '../../shared/services';
 
 @Component({
     selector: 'app-machineorder-report',
@@ -157,8 +156,8 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
         }
     }
 
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private screen: ScreenService) {
-        this.islg = this.screen.sizes['screen-large'];
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        //this.islg = this.screen.sizes['screen-large'];
         this.QcTypeList = myservice.getQcType();
         this.QcResultList = myservice.getQcResult();
         this.readOnly = false;

@@ -13,7 +13,6 @@ import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { AuthService } from 'src/app/service/auth.service';
 import { Title } from '@angular/platform-browser';
-import { ScreenService } from '../../shared/services';
 
 @Component({
     selector: 'app-order-list',
@@ -51,7 +50,7 @@ export class OrderListComponent {
     selectedOperation: string = "between";
     saleunfinshedVisible = false;
     islg: boolean;
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title, private screen: ScreenService) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
@@ -89,7 +88,6 @@ export class OrderListComponent {
     // tslint:disable-next-line: use-lifecycle-interface
     ngOnInit() {
         this.titleService.setTitle('客戶訂單');
-        this.islg = this.screen.sizes['screen-large'];
     }
     getdata() {
         this.dataSourceDB = new CustomStore({
