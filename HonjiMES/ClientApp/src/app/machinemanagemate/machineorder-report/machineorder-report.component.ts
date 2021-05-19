@@ -9,6 +9,7 @@ import { workOrderReportData } from 'src/app/model/viewmodels';
 import { AppComponent } from 'src/app/app.component';
 import { Myservice } from 'src/app/service/myservice';
 import Swal from 'sweetalert2';
+
 @Component({
     selector: 'app-machineorder-report',
     templateUrl: './machineorder-report.component.html',
@@ -154,7 +155,8 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
         }
     }
 
-                this.QcTypeList = myservice.getQcType();
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
+        this.QcTypeList = myservice.getQcType();
         this.QcResultList = myservice.getQcResult();
         this.readOnly = false;
         this.showColon = true;
@@ -340,9 +342,12 @@ export class MachineorderReportComponent implements OnInit, OnChanges {
                                 this.itemval13 = '　標準工時（分）：　' + (element?.ProcessTime ?? '');
                                 // this.itemval14 = '　　　預計開工日：　' + (element?.DueStartTime ?? '');
                                 this.itemval14 = '';
-                                this.itemval15 = '　　　預計完工日：　' + (element?.DueEndTime ?? '');
-                                this.itemval16 = '　　　實際開工日：　' + (element?.ActualStartTime ?? '');
-                                this.itemval17 = '　　　實際完工日：　' + (element?.ActualEndTime ?? '');
+                                // this.itemval15 = '　　　預計完工日：　' + (this.islg ? '':"<br>")+  (element?.DueEndTime ?? '');
+                                // this.itemval16 = '　　　實際開工日：　' + (this.islg ? '':"<br>")+ (element?.ActualStartTime ?? '');
+                                // this.itemval17 = '　　　實際完工日：　' + (this.islg ? '':"<br>")+ (element?.ActualEndTime ?? '');
+                                this.itemval15 = (element?.DueEndTime ?? '');
+                                this.itemval16 = (element?.ActualStartTime ?? '');
+                                this.itemval17 = (element?.ActualEndTime ?? '');
                                 this.itemval18 = '　　　　需求數量：　' + (element?.Count ?? '0');
                                 this.itemval19 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
