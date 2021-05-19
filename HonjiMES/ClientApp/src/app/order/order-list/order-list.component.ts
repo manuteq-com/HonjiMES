@@ -49,8 +49,6 @@ export class OrderListComponent {
     overRandomkey: number;
     selectedOperation: string = "between";
     saleunfinshedVisible = false;
-    islg: boolean;
-    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
         this.uploadHeaders = {
