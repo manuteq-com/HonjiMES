@@ -10,9 +10,13 @@
         <h5>採購單內容</h5>
     </div>
 
-    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" (onCellPrepared)="onCellPrepared($event)"
-        (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [height]="570" [columnAutoWidth]="true">
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+        (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [height]="570">
 
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -28,7 +32,8 @@
         <dxi-column dataField="PurchaseType" caption="採購種類" alignment="center" [width]="60">
             <dxo-lookup [dataSource]="PurchaseTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="DeliveryTime" caption="預計交期" [width]="120" dataType="date" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+        <dxi-column dataField="DeliveryTime" caption="預計交期" [width]="120" dataType="date"
+            [(selectedFilterOperation)]="selectedOperation"></dxi-column>
         <dxi-column dataField="DataType" caption="種類" alignment="center" [width]="80">
             <dxo-lookup [dataSource]="DataTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
@@ -45,15 +50,18 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='確認' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="false"></dx-button>
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='確認' type='success' icon='save' [useSubmitBehavior]="true"
+            [disabled]="false"></dx-button>
         <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
     </div>
 
 </form>
 
-<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700"
+    [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creat-bill-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [DetailDataList]="topurchasekey" [randomkeyval]="randomkey"></app-creat-bill-purchase>
+        <app-creat-bill-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [DetailDataList]="topurchasekey"
+            [randomkeyval]="randomkey"></app-creat-bill-purchase>
     </div>
 </dx-popup>

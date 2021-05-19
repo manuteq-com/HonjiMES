@@ -1,6 +1,8 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [visible]="!fromSupplier">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions"
+            [visible]="!fromSupplier">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
@@ -26,8 +28,10 @@
     <div class="long-title">
         <h5>進貨單內容</h5>
     </div>
-    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" height="500" (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
-        (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)" [columnAutoWidth]="true">
+    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" height="500"
+        (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
+        (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)">
 
         <dxo-paging [enabled]="false">
         </dxo-paging>
@@ -54,7 +58,8 @@
         </dxo-editing>
         <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
-        <dxi-column dataField="SupplierId" caption="供應商代號" editCellTemplate="SupplierEditCellTemplate" [width]="100" [allowEditing]="!fromSupplier">
+        <dxi-column dataField="SupplierId" caption="供應商代號" editCellTemplate="SupplierEditCellTemplate" [width]="100"
+            [allowEditing]="!fromSupplier">
             <dxo-lookup [dataSource]="SupplierList" displayExpr="Code" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
@@ -62,7 +67,8 @@
             <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="PurchaseId" caption="採購單號" editCellTemplate="PurchaseEditCellTemplate" [allowEditing]="!fromSupplier">
+        <dxi-column dataField="PurchaseId" caption="採購單號" editCellTemplate="PurchaseEditCellTemplate"
+            [allowEditing]="!fromSupplier">
             <dxo-lookup [dataSource]="PurchaseList" displayExpr="PurchaseNo" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
@@ -71,7 +77,8 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column> -->
-        <dxi-column dataField="TempId" caption="品號" editCellTemplate="BasicEditCellTemplate" [allowEditing]="!fromSupplier">
+        <dxi-column dataField="TempId" caption="品號" editCellTemplate="BasicEditCellTemplate"
+            [allowEditing]="!fromSupplier">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
@@ -86,21 +93,26 @@
         <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantityCellValue">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="OriginPrice" caption="原單價" [visible]="false" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="OriginPriceCellValue">
+        <dxi-column dataField="OriginPrice" caption="原單價" [visible]="false" dataType="number"
+            format="$ #,##0.##;($ #,##0.##)" [setCellValue]="OriginPriceCellValue">
             <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="PriceCellValue">
+        <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+            [setCellValue]="PriceCellValue">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false">
+        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+            [allowEditing]="false">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" [setCellValue]="UnitCountCellValue">
         </dxi-column>
         <dxi-column dataField="Unit" caption="單位"></dxi-column>
-        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [setCellValue]="UnitPriceCellValue">
+        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+            [setCellValue]="UnitPriceCellValue">
         </dxi-column>
-        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [allowEditing]="false">
+        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+            [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)">
         </dxi-column>
@@ -115,21 +127,30 @@
         </dxi-column>
 
         <div *dxTemplate="let data of 'SupplierEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectSupplierValueChanged($event,data)" (onInitialized)="onInitialized(Supplierval,data)" [dataSource]="SupplierListEdit" valueExpr="Id" displayExpr="Name" [searchEnabled]="true" [disabled]="fromSupplier"></dx-select-box>
+            <dx-select-box [value]="data.value" (onValueChanged)="selectSupplierValueChanged($event,data)"
+                (onInitialized)="onInitialized(Supplierval,data)" [dataSource]="SupplierListEdit" valueExpr="Id"
+                displayExpr="Name" [searchEnabled]="true" [disabled]="fromSupplier"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'PurchaseEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectPurchaseValueChanged($event,data)" (onInitialized)="onInitialized(Purchaseval,data)" [dataSource]="PurchaseTempList" valueExpr="Id" displayExpr="PurchaseNo" [searchEnabled]="true" [disabled]="fromSupplier"></dx-select-box>
+            <dx-select-box [value]="data.value" (onValueChanged)="selectPurchaseValueChanged($event,data)"
+                (onInitialized)="onInitialized(Purchaseval,data)" [dataSource]="PurchaseTempList" valueExpr="Id"
+                displayExpr="PurchaseNo" [searchEnabled]="true" [disabled]="fromSupplier"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'BasicEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectMateriaValueChanged($event,data)" [dataSource]="BasicDataListTemp" valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true" [disabled]="fromSupplier"></dx-select-box>
+            <dx-select-box [value]="data.value" (onValueChanged)="selectMateriaValueChanged($event,data)"
+                [dataSource]="BasicDataListTemp" valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"
+                [disabled]="fromSupplier"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-            <dx-select-box [value]="Warehouseval" (onValueChanged)="data.setValue($event.value)" (onInitialized)="onInitialized(Warehouseval,data)" [dataSource]="WarehouseList" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+            <dx-select-box [value]="Warehouseval" (onValueChanged)="data.setValue($event.value)"
+                (onInitialized)="onInitialized(Warehouseval,data)" [dataSource]="WarehouseList" valueExpr="Id"
+                displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
         <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
     </div>

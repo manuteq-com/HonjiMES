@@ -2,13 +2,14 @@
 
     <div class="row">
 
-        <div class="col-12 col-lg-6">
+        <div class="col-6">
             <div class="long-title">
                 <h5>銷貨內容</h5>
             </div>
         </div>
-        <div class="col-12 col-lg-6">
-            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <div class="col-6">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
                 <dxi-item dataField="SaleDate" editorType="dxDateBox" [editorOptions]="SaleTimeDateBoxOptions">
                     <dxi-validation-rule type="required" message="銷貨日期 必填"></dxi-validation-rule>
@@ -20,9 +21,23 @@
 
     </div>
 
-    <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onToolbarPreparing)="onToolbarPreparing($event)" (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)"
-        [showColumnLines]="true" [showRowLines]="false" [height]="290" [columnAutoWidth]="true">
+    <dx-data-grid #dataGrid1
+        [dataSource]="dataSourceDB1"
+        showBorders="true"
+        keyExpr="Id"
+        [focusedRowEnabled]="true"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)"
+        [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)"
+        (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)"
+        [showColumnLines]="true"
+        [showRowLines]="false"
+        [height]="290">
 
         <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
         <!-- <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection> -->
@@ -30,11 +45,17 @@
         <dxo-header-filter [visible]="false"></dxo-header-filter>
         <dxo-sorting mode="multiple"></dxo-sorting>
         <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
+        <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
         <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
 
-        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation" [calculateFilterExpression]="calculateFilterExpression" [(selectedFilterOperation)]="selectedFilterOperation"
-            [(filterValue)]="filterValue" [width]="100">
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [(selectedFilterOperation)]="selectedOperation"
+            [calculateFilterExpression]="calculateFilterExpression"
+            [(selectedFilterOperation)]="selectedFilterOperation"
+            [(filterValue)]="filterValue"
+            [width]="100">
         </dxi-column>
         <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
@@ -69,24 +90,35 @@
 
     </dx-data-grid>
 
-    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" [focusedRowEnabled]="false" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="onSelectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)" (onToolbarPreparing)="onToolbarPreparing($event)"
-        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [height]="400" [columnAutoWidth]="true">
+    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" [focusedRowEnabled]="false"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="onSelectionChanged($event)"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
+        [height]="400">
 
         <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
-        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-selection mode="multiple" showCheckBoxesMode="always" ></dxo-selection>
         <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-header-filter [visible]="false"></dxo-header-filter>
         <dxo-sorting mode="multiple"></dxo-sorting>
         <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
+        <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
         <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
 
         <!-- <dxi-column dataField="SaleDate" caption="銷貨日期" [width]="120" dataType="date" editorType="dxDateBox" [allowEditing]="true"></dxi-column>
         <dxi-column dataField="SaleQuantity" caption="銷貨數量" [width]="80" dataType="number" editorType="dxNumberBox" [allowEditing]="true" [editorOptions]="editorOptions"></dxi-column> -->
 
-        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation" [calculateFilterExpression]="calculateFilterExpression" [(selectedFilterOperation)]="selectedFilterOperation"
-            [(filterValue)]="filterValue" [width]="100">
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" sortOrder="desc" [allowEditing]="false"
+            [(selectedFilterOperation)]="selectedOperation"
+            [calculateFilterExpression]="calculateFilterExpression"
+            [(selectedFilterOperation)]="selectedFilterOperation"
+            [(filterValue)]="filterValue"
+            [width]="100">
         </dxi-column>
         <dxi-column dataField="MachineNo" caption="機號" [width]="160" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Order.CustomerNo" caption="客戶單號" [width]="140" [allowEditing]="false"></dxi-column>
@@ -118,7 +150,8 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text="產生銷貨單" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="false"></dx-button>
+        <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text="產生銷貨單" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        [disabled]="false"></dx-button>
     </div>
 
 </form>
