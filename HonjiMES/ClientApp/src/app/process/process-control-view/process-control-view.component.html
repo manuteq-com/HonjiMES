@@ -1,4 +1,5 @@
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="scrollValue" nsAutoHeightTable>
+<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed"
+    [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="scrollValue">
     <thead>
         <tr>
             <th nzWidth="140px" nzLeft>工單號</th>
@@ -24,18 +25,21 @@
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
 
             <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
-                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data)" nzEllipsis>
+                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data)"
+                    nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
                             {{data[col.key]?.value0}}
                         </ng-container>
                         <ng-container *ngIf="data[col.key]?.value1">
                             <br />
-                            <hr /> {{data[col.key]?.value1}}
+                            <hr />
+                            {{data[col.key]?.value1}}
                         </ng-container>
                         <ng-container *ngIf="data[col.key]?.value2">
                             <br />
-                            <hr /> {{data[col.key]?.value2}}
+                            <hr />
+                            {{data[col.key]?.value2}}
                         </ng-container>
                         <!-- {{data[col.key]}}
                         <br />
@@ -47,12 +51,14 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="'90%'" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
         </app-creatprocess-control>
     </div>
 </dx-popup>
 
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>

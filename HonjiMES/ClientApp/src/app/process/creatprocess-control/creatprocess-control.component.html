@@ -1,137 +1,155 @@
-<div style="margin:1px">
-    <form action="" (submit)="onFormSubmit($event)">
-        <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+<form action="" (submit)="onFormSubmit($event)">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-            <dxi-item dataField="WorkOrderHeadId" [visible]="false">
-                <dxo-label text="工單主檔ID"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [colSpan]="4" [visible]="newVisible">
-                <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
-                <dxo-label text="建立日期"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="WorkOrderNo" [colSpan]="4">
-                <dxo-label text="工單號"></dxo-label>
-            </dxi-item>
-            <!-- <dxi-item dataField="WorkOrderNo" [colSpan]="4" [disabled]="true" [visible]="!newVisible">
+        <dxi-item dataField="WorkOrderHeadId" [visible]="false">
+            <dxo-label text="工單主檔ID"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions" [colSpan]="4"
+            [visible]="newVisible">
+            <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
+            <dxo-label text="建立日期"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="WorkOrderNo" [colSpan]="4">
+            <dxo-label text="工單號"></dxo-label>
+        </dxi-item>
+        <!-- <dxi-item dataField="WorkOrderNo" [colSpan]="4" [disabled]="true" [visible]="!newVisible">
                     <dxo-label text="工單號"></dxo-label>
                 </dxi-item> -->
-            <!-- <dxi-item dataField="OrderDetailId" dataType="number" editorType="dxSelectBox"
+        <!-- <dxi-item dataField="OrderDetailId" dataType="number" editorType="dxSelectBox"
             [editorOptions]="ProductBasicSelectBoxOptions">
             <dxi-validation-rule type="required" message="訂單 必填"></dxi-validation-rule>
             <dxo-label text="訂單"></dxo-label>
         </dxi-item> -->
-            <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="!newVisible" [editorOptions]="MaterialBasicSelectBoxOptions" [colSpan]="6" [disabled]="!newVisible">
-                <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
-                <dxo-label text="成品項目"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" [colSpan]="3">
-                <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
-                <dxo-label text="數量"></dxo-label>
-            </dxi-item>
-            <!-- <dxi-item dataField="MachineNo" [colSpan]="2" [disabled]="editVisible">
+        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="!newVisible"
+            [editorOptions]="MaterialBasicSelectBoxOptions" [colSpan]="6" [disabled]="!newVisible">
+            <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
+            <dxo-label text="成品項目"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"
+            [colSpan]="3">
+            <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
+            <dxo-label text="數量"></dxo-label>
+        </dxi-item>
+        <!-- <dxi-item dataField="MachineNo" [colSpan]="2" [disabled]="editVisible">
             <dxo-label text="機號"></dxo-label>
         </dxi-item> -->
-            <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible">
-                <dxo-label text="備註"></dxo-label>
-            </dxi-item>
+        <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible">
+            <dxo-label text="備註"></dxo-label>
+        </dxi-item>
 
-            <dxi-item dataField="DueStartTime" editorType="dxDateBox" [colSpan]="4" [disabled]="editVisible">
-                <dxo-label text="預計開工日"></dxo-label>
-            </dxi-item>
-            <dxi-item dataField="DueEndTime" editorType="dxDateBox" [colSpan]="4" [disabled]="editVisible">
-                <dxo-label text="預計完工日"></dxo-label>
-            </dxi-item>
+        <dxi-item dataField="DueStartTime" editorType="dxDateBox" [colSpan]="4" [disabled]="editVisible">
+            <dxo-label text="預計開工日"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="DueEndTime" editorType="dxDateBox" [colSpan]="4" [disabled]="editVisible">
+            <dxo-label text="預計完工日"></dxo-label>
+        </dxi-item>
 
-        </dx-form>
+    </dx-form>
 
-        <!-- <br> -->
-        <!-- <div class="long-title">
+    <!-- <br> -->
+    <!-- <div class="long-title">
         <h5>採購內容</h5>
     </div> -->
-        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" height="580" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onEditorPreparing)="editorPreparing($event)"
-            (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)" (onToolbarPreparing)="onToolbarPreparing($event)" (onRowRemoved)="onRowRemoved($event)" [columnAutoWidth]="true">
+    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" height="580"
+        (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
+        (onEditingStart)="onEditingStart($event)" (onEditorPreparing)="editorPreparing($event)"
+        (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)" (onRowRemoved)="onRowRemoved($event)">
 
-            <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="allowReordering">
-            </dxo-row-dragging>
+        <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="allowReordering">
+        </dxo-row-dragging>
 
-            <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
-                <dxo-form colCount=4>
-                    <dxi-item dataField="SerialNumber"></dxi-item>
-                    <dxi-item dataField="ProcessId"></dxi-item>
-                    <dxi-item dataField="ProcessLeadTime"></dxi-item>
-                    <dxi-item dataField="ProcessTime"></dxi-item>
-                    <dxi-item dataField="ProcessCost"></dxi-item>
-                    <dxi-item dataField="ProducingMachine"></dxi-item>
-                </dxo-form>
-            </dxo-editing>
-            <dxo-filter-row [visible]="false"></dxo-filter-row>
-            <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
-            </dxo-keyboard-navigation>
-            <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
+            <dxo-form colCount=4>
+                <dxi-item dataField="SerialNumber"></dxi-item>
+                <dxi-item dataField="ProcessId"></dxi-item>
+                <dxi-item dataField="ProcessLeadTime"></dxi-item>
+                <dxi-item dataField="ProcessTime"></dxi-item>
+                <dxi-item dataField="ProcessCost"></dxi-item>
+                <dxi-item dataField="ProducingMachine"></dxi-item>
+            </dxo-form>
+        </dxo-editing>
+        <dxo-filter-row [visible]="false"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+            [enterKeyDirection]="enterKeyDirection">
+        </dxo-keyboard-navigation>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="35" [allowEditing]="false">
-            </dxi-column>
-            <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="250">
-                <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-                <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
-            </dxi-column>
+        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="35"
+            [allowEditing]="false">
+        </dxi-column>
+        <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="250">
+            <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
+        </dxi-column>
 
-            <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" [editorOptions]="zNumberBoxOptions" [setCellValue]="ProcessLeadTimesetCellValue" [width]="75">
-            </dxi-column>
-            <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" [setCellValue]="ProcessTimesetCellValue" [editorOptions]="zNumberBoxOptions" [width]="75">
-            </dxi-column>
-            <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="ProcessCostTemplate" [width]="75">
-            </dxi-column>
-            <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [minWidth]="85">
-                <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
-                <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
-            </dxi-column>
-            <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
-            </dxi-column>
-            <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="50">
-            </dxi-column>
-            <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="75">
-            </dxi-column>
-            <dxi-column dataField="ExpectedlTotalTime" caption="預計工時(分)" dataType="number" [width]="110">
-            </dxi-column>
-            <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate" [width]="110">
-            </dxi-column>
-            <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" editCellTemplate="DueEndTimeTemplate" [width]="110">
-            </dxi-column>
-            <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="190">
-            </dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [allowEditing]="false" [width]="190">
-            </dxi-column>
-            <dxi-column dataField="Type" caption="委外" [width]="45">
-                <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-            </dxi-column>
+        <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" [editorOptions]="zNumberBoxOptions"
+            [setCellValue]="ProcessLeadTimesetCellValue" [width]="75">
+        </dxi-column>
+        <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" [setCellValue]="ProcessTimesetCellValue"
+            [editorOptions]="zNumberBoxOptions" [width]="75">
+        </dxi-column>
+        <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+            editCellTemplate="ProcessCostTemplate" [width]="75">
+        </dxi-column>
+        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
+            [minWidth]="85">
+            <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
+            <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
+        </dxi-column>
+        <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
+        </dxi-column>
+        <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="50">
+        </dxi-column>
+        <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="75">
+        </dxi-column>
+        <dxi-column dataField="ExpectedlTotalTime" caption="預計工時(分)" dataType="number" [width]="110">
+        </dxi-column>
+        <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" editCellTemplate="DueStartTimeTemplate"
+            [width]="110">
+        </dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" editCellTemplate="DueEndTimeTemplate"
+            [width]="110">
+        </dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime"
+            [allowEditing]="false" [width]="190">
+        </dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
+            [allowEditing]="false" [width]="190">
+        </dxi-column>
+        <dxi-column dataField="Type" caption="委外" [width]="45">
+            <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
 
-            <dxi-column type="buttons" [width]="45" [visible]="!processVisible">
-                <dxi-button name="save" text="存檔"></dxi-button>
-                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-                <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
-            </dxi-column>
+        <dxi-column type="buttons" [width]="45" [visible]="!processVisible">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+        </dxi-column>
 
-            <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod" [visible]="processVisible">
-                <dxi-button name="save" text="存檔"></dxi-button>
-                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-                <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
-            </dxi-column>
-            <dxo-summary [recalculateWhileEditing]="true">
-                <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分" valueFormat="###,##0">
-                </dxi-total-item>
-            </dxo-summary>
-            <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
-                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
-            </div>
+        <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod" [visible]="processVisible">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+        </dxi-column>
+        <dxo-summary [recalculateWhileEditing]="true">
+            <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分" valueFormat="###,##0">
+            </dxi-total-item>
+        </dxo-summary>
+        <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
+                valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        </div>
 
-            <!-- <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
+        <!-- <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
             <dx-number-box [value]="ProcessLeadTime" (onValueChanged)="data.setValue($event.value)"
                 [showSpinButtons]="true" [min]='0'></dx-number-box>
         </div>
@@ -139,39 +157,46 @@
             <dx-number-box [value]="ProcessTime" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"
                 [min]='0'></dx-number-box>
         </div> -->
-            <div *dxTemplate="let data of 'ProcessCostTemplate'">
-                <dx-number-box [value]="ProcessCost" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true" [min]='0'></dx-number-box>
-            </div>
-            <div *dxTemplate="let data of 'ProducingMachineTemplate'">
-                <dx-select-box [value]="data.value" (onValueChanged)="selectMachineChanged($event,data)" [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }" valueExpr="Name" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
-                <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
-            </div>
-            <div *dxTemplate="let data of 'RemarksTemplate'">
-                <dx-text-box [value]="Remarks" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
-            </div>
-            <div *dxTemplate="let data of 'DrawNoTemplate'">
-                <dx-text-box [value]="DrawNo" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
-            </div>
-            <div *dxTemplate="let data of 'ManpowerTemplate'">
-                <dx-number-box [value]="Manpower" (onValueChanged)="data.setValue($event.value)"></dx-number-box>
-            </div>
-            <div *dxTemplate="let data of 'DueStartTimeTemplate'">
-                <dx-date-box [value]="DueStartTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
-            </div>
-            <div *dxTemplate="let data of 'DueEndTimeTemplate'">
-                <dx-date-box [value]="DueEndTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
-            </div>
-
-        </dx-data-grid>
-        <div class="col-auto-12 mt-1">
-            <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1 mb-1" text='新建存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="saveDisabled" [visible]="newVisible"></dx-button>
-            <dx-button horizontalAlignment="right" text='取消變更' type='warring' icon='close' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1 mb-1" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button>
-            <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1 mb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
-            <dx-button horizontalAlignment="right" text='刪除工單' type='danger' icon='trash' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1 mb-1" (onClick)="DeleteOnClick($event)" [visible]="runVisible"></dx-button>
-            <dx-button horizontalAlignment="right" text='重設製程' type='danger' icon='pulldown' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1 mb-1" (onClick)="ResetOnClick($event)" [visible]="runVisible"></dx-button>
-            <!-- <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button> -->
+        <div *dxTemplate="let data of 'ProcessCostTemplate'">
+            <dx-number-box [value]="ProcessCost" (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="true"
+                [min]='0'></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'ProducingMachineTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="selectMachineChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }"
+                valueExpr="Name" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+            <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
+        </div>
+        <div *dxTemplate="let data of 'RemarksTemplate'">
+            <dx-text-box [value]="Remarks" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
+        </div>
+        <div *dxTemplate="let data of 'DrawNoTemplate'">
+            <dx-text-box [value]="DrawNo" (onValueChanged)="data.setValue($event.value)"></dx-text-box>
+        </div>
+        <div *dxTemplate="let data of 'ManpowerTemplate'">
+            <dx-number-box [value]="Manpower" (onValueChanged)="data.setValue($event.value)"></dx-number-box>
+        </div>
+        <div *dxTemplate="let data of 'DueStartTimeTemplate'">
+            <dx-date-box [value]="DueStartTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
+        </div>
+        <div *dxTemplate="let data of 'DueEndTimeTemplate'">
+            <dx-date-box [value]="DueEndTime" (onValueChanged)="data.setValue($event.value)"></dx-date-box>
         </div>
 
-    </form>
-</div>
+    </dx-data-grid>
+    <div class="col-auto-12 mt-1">
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新建存檔' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="saveDisabled" [visible]="newVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='取消變更' type='warring' icon='close' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='刪除工單' type='danger' icon='trash' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="runVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='重設製程' type='danger' icon='pulldown' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="ResetOnClick($event)" [visible]="runVisible"></dx-button>
+        <!-- <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button> -->
+    </div>
+
+</form>

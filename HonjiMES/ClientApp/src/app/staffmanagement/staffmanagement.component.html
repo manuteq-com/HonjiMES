@@ -7,7 +7,7 @@
     </div> -->
 </div>
 <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="Id" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onRowInserted)="onRowInserted($event)" (onEditingStart)="onEditingStart($event)"
-    (onCellPrepared)="onCellPrepared($event)" (onRowValidating)="onRowValidating($event)" [columnAutoWidth]="true">
+    (onCellPrepared)="onCellPrepared($event)" (onRowValidating)="onRowValidating($event)" [columnWidth]="150">
     <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form colCount=4>
             <dxi-item dataField="UserId"></dxi-item>
@@ -25,10 +25,10 @@
     <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-    <dxi-column dataField="UserId" caption="操作人員">
+    <dxi-column dataField="UserId" caption="操作人員" [width]="300">
         <dxo-lookup [dataSource]="StaffList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MachineId" caption="操作機台">
+    <dxi-column dataField="MachineId" caption="操作機台" [width]="150">
         <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="WorkOrderId" caption="工單號" editCellTemplate="WorkOrderNoCellTemplate">

@@ -51,10 +51,9 @@
         <app-maintenance-detail (childOuter)="onRowChanged($event)" [masterkey]="item.data.Id" [itemval]="item.row"></app-maintenance-detail>
     </div>
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增保養" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="240" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-createmaintenance></app-createmaintenance>
-        </dx-scroll-view>
+        <app-createmaintenance></app-createmaintenance>
+
     </div>
 </dx-popup>

@@ -1,8 +1,9 @@
-<form action="">
+<form action="" >
     <div class="row mb-4">
 
-        <div class="col-12 col-lg-3">
-            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <div class="col-3">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
                 <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
                     <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
@@ -16,7 +17,7 @@
 
 <div class="row">
 
-    <div class="col-12 col-lg-4">
+    <div class="col-4">
 
         <div class="row">
             <div class="col-12">
@@ -28,8 +29,9 @@
             </div>
         </div>
 
-        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-            [height]="560">
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB1" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [height]="560">
 
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
@@ -47,7 +49,7 @@
         </dx-data-grid>
     </div>
 
-    <div class="col-12 col-lg-8">
+    <div class="col-8">
 
         <div class="row">
             <div class="col-12">
@@ -59,8 +61,9 @@
             </div>
         </div>
 
-        <dx-data-grid #dataGrid12 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-            [height]="560">
+        <dx-data-grid #dataGrid12 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [columnAutoWidth]="false" [showBorders]="true" [height]="560">
 
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
@@ -84,3 +87,5 @@
     </div>
 
 </div>
+
+
