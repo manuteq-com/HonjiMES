@@ -1,8 +1,25 @@
 <!-- <p>所有訂單</p> -->
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" (onCellPrepared)="onCellPrepared($event)"
-    (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)" (onRowUpdated)="onRowUpdated($event)" [showColumnLines]="true" [showRowLines]="false">
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onCellClick)="cellClick($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onEditingStart)="onEditingStart($event)"
+    (onRowUpdated)="onRowUpdated($event)"
+    [showColumnLines]="true"
+    [showRowLines]="false">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="visible"></dxo-filter-row>
@@ -26,9 +43,11 @@
             <dxi-item dataField="ProductNumber" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxo-form>
         <dxo-popup [showTitle]="true" title="修改成品明細資訊" [width]="800" [height]="450">
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
@@ -61,17 +80,17 @@
     </dxi-column>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增成品明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增成品明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+    [height]="400" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-creatproduct (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod" [exceldata]="exceldata"></app-creatproduct>
-        </dx-scroll-view>
+        <app-creatproduct (childOuter)="creatpopup_result($event)" [itemdata]="itemdata" [modval]="mod"
+            [exceldata]="exceldata"></app-creatproduct>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="調整成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="editpopupVisible">
+<dx-popup [showTitle]="true" title="調整成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700"
+    [height]="600" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-change>
-        </dx-scroll-view>
+        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-change>
     </div>
 </dx-popup>

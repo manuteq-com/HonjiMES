@@ -190,25 +190,19 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="stockpopupVisible">
+        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="stockpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <dx-scroll-view width="100%" height="100%">
-                    <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
-                </dx-scroll-view>
+                <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="closepopupVisible">
+        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600" [height]="310" [(visible)]="closepopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <dx-scroll-view width="100%" height="100%">
-                    <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
-                </dx-scroll-view>
+                <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="logpopupVisible">
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="700" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <dx-scroll-view width="100%" height="100%">
-                    <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
-                </dx-scroll-view>
+                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
             </div>
         </dx-popup>
 

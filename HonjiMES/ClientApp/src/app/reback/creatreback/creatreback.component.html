@@ -2,7 +2,8 @@
     <div class="row mb-4">
 
         <div class="col-12">
-            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+            <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
                 <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions" editorType="dxSelectBox">
                     <dxi-validation-rule type="required" message="工單號 必填"></dxi-validation-rule>
                     <dxo-label text="工單號"></dxo-label>
@@ -15,13 +16,14 @@
 
     </div>
 
-    <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-        [height]="560" (onCellClick)="cellClick($event)" (onToolbarPreparing)="onToolbarPreparing($event)">
+    <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+        [columnAutoWidth]="false" [showBorders]="true" [height]="560" (onCellClick)="cellClick($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
 
         <dxo-editing mode="cell" [allowUpdating]="true" useIcons="false">
             <dxo-texts saveAllChanges="退料"></dxo-texts>
         </dxo-editing>
-        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
         <dxi-column dataField="NameType" caption="類型" dataType="string" alignment="center" [allowEditing]="false" [width]="80"></dxi-column>
         <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
@@ -38,7 +40,8 @@
         <dxi-column dataField="WarehouseId" caption="庫存量" dataType="number" [allowEditing]="false" [width]="80" cellTemplate="StockQtyCellTemplate" [visible]="false"></dxi-column>
 
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)" [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
+            <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
+                [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
             </dx-select-box>
         </div>
         <div *dxTemplate="let data of 'StockQtyCellTemplate'">
@@ -47,7 +50,9 @@
     </dx-data-grid>
 
     <div class="col-12">
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pt-2 pb-2 mt-2" text='建立退料單' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pt-2 pb-2 mt-2" text='建立退料單' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
     </div>
 
 </form>
+

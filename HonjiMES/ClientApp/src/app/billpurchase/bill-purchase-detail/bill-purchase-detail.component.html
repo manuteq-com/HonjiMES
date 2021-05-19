@@ -8,8 +8,11 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true" (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onInitNewRow)="onInitNewRow($event)"
-    (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" (onEditorPreparing)="onEditorPreparing($event)">
+<dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" [columnAutoWidth]="true"
+    (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" keyExpr="id" (onInitNewRow)="onInitNewRow($event)"
+    (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)"
+    (onCellPrepared)="onCellPrepared($event)" (onEditorPreparing)="onEditorPreparing($event)">
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
         <dxo-form>
             <dxi-item dataField="SupplierId"></dxi-item>
@@ -26,7 +29,8 @@
         </dxo-form>
     </dxo-editing>
     <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item [customizeText]="customizeText" column="SupplierId" summaryType="count">
+        <dxi-total-item
+            [customizeText]="customizeText" column="SupplierId" summaryType="count">
         </dxi-total-item>
         <dxi-total-item i-total-item valueFormat="$ #,##0.##;($ #,##0.##)" column="PriceAll" summaryType="sum">
         </dxi-total-item>
@@ -63,7 +67,7 @@
     <dxi-column dataField="Quantity" caption="數量" dataType="number" [width]="80" editCellTemplate="QuantityEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" editCellTemplate="PriceEditCellTemplate">
+    <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"  editCellTemplate="PriceEditCellTemplate">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)">
@@ -94,7 +98,7 @@
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column>
-    <dxi-column dataField='CheckStatus' caption="" cellTemplate="cellTemplate" width="100"></dxi-column>
+    <dxi-column  dataField='CheckStatus' caption="" cellTemplate="cellTemplate" width="100"></dxi-column>
 
     <div *dxTemplate="let data of 'cellTemplate'">
         <ng-template [ngIf]="data.value === 0">
@@ -136,19 +140,17 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisibleTo">
+<dx-popup [showTitle]="true" title="進貨單驗收" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="390"
+    [(visible)]="popupVisibleTo">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">
-            </app-bill-purchase-checkin>
-        </dx-scroll-view>
+        <app-bill-purchase-checkin (childOuter)="popup_result($event)" [itemkeyval]="keyID" [modval]="mod">
+        </app-bill-purchase-checkin>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="進貨單驗退" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisibleRe">
+<dx-popup [showTitle]="true" title="進貨單驗退" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="470"
+    [(visible)]="popupVisibleRe">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-bill-purchase-return (childOuter)="popup_result($event)" [itemkeyval]="bopData" [modval]="mod">
-            </app-bill-purchase-return>
-        </dx-scroll-view>
+        <app-bill-purchase-return (childOuter)="popup_result($event)" [itemkeyval]="bopData" [modval]="mod">
+        </app-bill-purchase-return>
     </div>
 </dx-popup>
