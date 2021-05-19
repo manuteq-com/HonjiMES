@@ -103,9 +103,11 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [(visible)]="popupVisibleWork">
+<dx-popup [showTitle]="true" title="轉工單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="popupVisibleWork">
     <div *dxTemplate="let data of 'content'">
-        <app-sufacetowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey">
-        </app-sufacetowork>
+        <dx-scroll-view width="100%" height="100%">
+            <app-sufacetowork (childOuter)="popup_result($event)" [Oitemkeyval]="Otoworkkey" [itemkeyval]="toworkkey">
+            </app-sufacetowork>
+        </dx-scroll-view>
     </div>
 </dx-popup>

@@ -1,17 +1,15 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="insertbtn" stylingMode="contained" text="新增製程" type="success" [width]="120"
-            (onClick)="creatdata()">
-        </dx-button>
+        <div class="row" style="margin-right: 10px;">
+            <dx-button class="insertbtn" stylingMode="contained" text="新增製程" type="success" [width]="120" (onClick)="creatdata()">
+            </dx-button>
+        </div>
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true" [rowAlternationEnabled]="true">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [columnWidth]="100">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -19,30 +17,26 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
             <dxi-item dataField="Code"></dxi-item>
             <dxi-item dataField="Name"></dxi-item>
-            <dxi-item dataField="LeadTime" dataType="number" editorType="dxNumberBox"
-                [editorOptions]="NumberBoxOptions"></dxi-item>
-            <dxi-item dataField="WorkTime" dataType="number" editorType="dxNumberBox"
-                [editorOptions]="NumberBoxOptions"></dxi-item>
+            <dxi-item dataField="LeadTime" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
+            <dxi-item dataField="WorkTime" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
             <dxi-item dataField="Cost" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             </dxi-item>
             <dxi-item dataField="DrawNo"></dxi-item>
-            <dxi-item dataField="Manpower" dataType="number" editorType="dxNumberBox"
-                [editorOptions]="NumberBoxOptions"></dxi-item>
+            <dxi-item dataField="Manpower" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-item>
             <dxi-item dataField="ProducingMachine"></dxi-item>
             <dxi-item dataField="Remark"></dxi-item>
         </dxo-form>
         <dxo-popup>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
-                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
-                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
@@ -52,15 +46,11 @@
     <dxi-column dataField="Type" caption="製程種類" alignment="center" [width]="140">
         <dxo-lookup [dataSource]="ProcessTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="LeadTime" caption="前置時間(分)" dataType="number" editorType="dxNumberBox"
-        [editorOptions]="NumberBoxOptions"></dxi-column>
-    <dxi-column dataField="WorkTime" caption="標準工時(分)" dataType="number" editorType="dxNumberBox"
-        [editorOptions]="NumberBoxOptions"></dxi-column>
-    <dxi-column dataField="Cost" caption="單位成本(元/分)" dataType="number" editorType="dxNumberBox"
-        [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
+    <dxi-column dataField="LeadTime" caption="前置時間(分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
+    <dxi-column dataField="WorkTime" caption="標準工時(分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
+    <dxi-column dataField="Cost" caption="單位成本(元/分)" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions" format="$ #,##0.##;($ #,##0.##)"></dxi-column>
     <dxi-column dataField="DrawNo" caption="圖號" [visible]="false"></dxi-column>
-    <dxi-column dataField="Manpower" caption="人力" dataType="number" editorType="dxNumberBox"
-        [editorOptions]="NumberBoxOptions"></dxi-column>
+    <dxi-column dataField="Manpower" caption="人力" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"></dxi-column>
     <dxi-column dataField="ProducingMachine" caption="機台" [visible]="false"></dxi-column>
     <dxi-column dataField="Remark" caption="備註"></dxi-column>
     <!-- <dxi-column dataField="CreateTime" caption="建立時間"></dxi-column> -->
@@ -79,17 +69,18 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700"
-    [height]="540" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增製程" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-            [exceldata]="exceldata"></app-creatprocess>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatprocess (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatprocess>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760"
-    [(visible)]="ToolsVisible">
+<dx-popup [showTitle]="true" title="刀具" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="ToolsVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-toolset [ProcessId]="ProcessId"></app-toolset>
+        <dx-scroll-view width="100%" height="100%">
+            <app-toolset [ProcessId]="ProcessId"></app-toolset>
+        </dx-scroll-view>
     </div>
 </dx-popup>

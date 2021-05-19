@@ -1,15 +1,10 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button
-            class="adjustbtn"
-            stylingMode="contained"
-            text="庫存調整單"
-            type="normal"
-            [width]="120"
-            (onClick)="creatAdjust()">
-        </dx-button>
-        <!-- <dx-button
+        <div class="row" style="margin-right: 10px;">
+            <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120" (onClick)="creatAdjust()">
+            </dx-button>
+            <!-- <dx-button
             class="insertbtn"
             stylingMode="contained"
             text="新增物料"
@@ -17,6 +12,7 @@
             [width]="120"
             (onClick)="creatdata()">
         </dx-button> -->
+        </div>
     </div>
 </div>
 
@@ -40,30 +36,19 @@
 
 <div class="row">
 
-    <div class="col-4">
+    <div class="col-12 col-lg-4">
 
-        <dx-data-grid
-            [dataSource]="dataSourceDB"
-            showBorders="true"
-            keyExpr="id"
-            dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
-            hoverStateEnabled="true"
-            [showColumnLines]="true"
-            [showRowLines]="false"
-            [rowAlternationEnabled]="true"
-            [focusedRowEnabled]="true"
-            [height]="740"
-            [remoteOperations]="remoteOperations">
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [height]="740" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
 
             <dxo-selection mode="single"></dxo-selection>
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-sorting mode="multiple"></dxo-sorting>
             <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-            <dxo-paging [enabled]="true" [pageSize]="20">
-            </dxo-paging>
-            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
-                [showNavigationButtons]="true" visible="true">
+            <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-selection mode="multiple"></dxo-selection> -->
             <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
@@ -81,8 +66,7 @@
                 </dxo-lookup>
             </dxi-column> -->
             <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [allowEditing]="false" [width]="120"
-                [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [allowEditing]="false" [width]="120" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
             <!-- <dxi-column dataField="CreateUser" caption="建立人員" [allowEditing]="false" [width]="100"></dxi-column> -->
 
             <dxi-column type="buttons" [visible]="false">
@@ -101,56 +85,41 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
+        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="adjustpopupVisible" [showCloseButton]="true">
             <div *dxTemplate="let data of 'content'">
-                <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-                    [exceldata]="exceldata"></app-inventory-list>
+                <dx-scroll-view width="100%" height="100%">
+                    <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
+                </dx-scroll-view>
             </div>
         </dx-popup>
 
     </div>
 
-    <div class="col-8">
+    <div class="col-12 col-lg-8">
 
         <div class="row">
 
             <div class="col-5">
                 <div class="input-group">
-                  <label class="pt-2"><h5>調整單明細：</h5></label>
+                    <label class="pt-2"><h5>調整單明細：</h5></label>
                 </div>
             </div>
             <div class="col-5">
                 <div class="input-group">
-                  <label class="pt-2"></label>
+                    <label class="pt-2"></label>
                 </div>
             </div>
             <div class="col-2">
-                <dx-button
-                    class="savebtn"
-                    stylingMode="contained"
-                    text="更新"
-                    type="success"
-                    [width]="80"
-                    [disabled]="true"
-                    [visible]="false"
-                    (onClick)="savedata()">
+                <dx-button class="savebtn" stylingMode="contained" text="更新" type="success" [width]="80" [disabled]="true" [visible]="false" (onClick)="savedata()">
                 </dx-button>
             </div>
 
         </div>
 
-        <dx-data-grid
-            [dataSource]="dataSourceDBDetail"
-            [showBorders]="true"
-            [columnAutoWidth]="true"
-            [showColumnLines]="true"
-            [showRowLines]="true"
-            (onDataErrorOccurred)="onDataErrorOccurred($event)"
-            [height]="700"
-            keyExpr="id">
+        <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [height]="700" keyExpr="id" [columnAutoWidth]="true">
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
-
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             <dxi-column dataField="DataType" caption="類別" alignment="center" [allowEditing]="false" [width]="70">
                 <dxo-lookup [dataSource]="ItemTypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
                 <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -213,6 +182,3 @@
     </div>
 
 </div>
-
-
-

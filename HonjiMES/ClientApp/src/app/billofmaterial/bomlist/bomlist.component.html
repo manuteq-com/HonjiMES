@@ -1,9 +1,6 @@
-<dx-tree-list [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-    [autoExpandAll]="true" parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true"
-    [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-    (onCellClick)="cellClick($event)" [showColumnLines]="true">
-    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="btnVisible"
-        [allowReordering]="btnVisible" [showDragIcons]="true"></dxo-row-dragging>
+<dx-tree-list [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [autoExpandAll]="true" parentIdExpr="Pid" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+    [columnAutoWidth]="false" [showBorders]="true" (onCellClick)="cellClick($event)" [showColumnLines]="true">
+    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="btnVisible" [allowReordering]="btnVisible" [showDragIcons]="true"></dxo-row-dragging>
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="false">
         <dxo-form colCount=1>
             <dxi-item dataField="Name"></dxi-item>
@@ -49,24 +46,25 @@
     </div>
 
 </dx-tree-list>
-<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="30%"
-    [width]="600" [(visible)]="popupVisible">
+<dx-popup [showTitle]="true" title="新增組成資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" height="30%" [width]="600" [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-editbom (childOuter)="popup_result($event)" [itemkeyval]="itemkeyval" [randomkeyval]="randomkey" (childOuter2)="emiterReloadBOM()">
         </app-editbom>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="原料基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="500"
-    [(visible)]="materialpopupVisible">
+<dx-popup [showTitle]="true" title="原料基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="materialpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial-basic [masterkey]="MaterialKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatmaterial-basic [masterkey]="MaterialKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
+        </dx-scroll-view>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="500"
-    [(visible)]="productpopupVisible">
+<dx-popup [showTitle]="true" title="成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="productpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatmaterial-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatmaterial-basic [masterkey]="ProductKey" [btnVisibled]="false" [editStatus]="true"></app-creatmaterial-basic>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 <!-- <dx-popup [showTitle]="true" title="半成品基本資料" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"

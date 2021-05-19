@@ -17,7 +17,7 @@ export class ProcessControlViewComponent implements OnInit, OnChanges {
     itemkey: number;
     mod: string;
     loadingVisible = false;
-    scrollValue = { x: '1800', y: '700px' };
+    scrollValue = { x: '90%', y: '90%' };
     constructor(public app: AppComponent) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;

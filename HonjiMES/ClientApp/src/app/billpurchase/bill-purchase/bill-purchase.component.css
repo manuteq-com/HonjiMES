@@ -1,29 +1,33 @@
 .headerblock {
     position: relative;
+    width: 100vw;
 }
+
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 4px;
-    top:0px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
 
 .insertbtn {
-
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
     /* margin-left: 30px; */
 }
 
-.newbtn {
-    margin-top: -6px;
+.overviewbtn {
+    margin-top: 4px;
+    margin-right: 12px;
     border-radius: 2px;
-    margin-left: 4px;
     color: #fff;
     background-color: #1e90ff;
 }
 
-.newbtn:hover{
-    border:1px solid #fff;
+.overviewbtn:hover {
+    border: 1px solid #fff;
     background-color: #1e90ff;
+}
+
+.billmargin {
+    margin-left: 11px;
 }

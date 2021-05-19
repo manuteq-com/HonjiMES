@@ -9,18 +9,19 @@
         </dx-button>
     </div> -->
 </div>
-<nz-tabset>
-    <nz-tab nzTitle="有BOM資料">
-        <dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-        [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-        [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
-        [masterDetail]="{ enabled: true, template: 'detail' }">
+
+<div id="longtabs">
+    <!-- <div class="caption">Tabs</div> -->
+    <dx-tabs [dataSource]="longtabs" [selectedIndex]="0" (onItemClick)="selectTab($event)"></dx-tabs>
+</div>
+<div *ngIf="selectindex == 0">
+    <dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="true" [showBorders]="true"
+        [remoteOperations]="remoteOperations" [masterDetail]="{ enabled: true, template: 'detail' }">
         <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-paging [enabled]="true" [pageSize]="15">
-        </dxo-paging>
-        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true"
-            [showNavigationButtons]="true" visible="true">
+        <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
         </dxo-pager>
         <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
         </dxo-remote-operations> -->
@@ -35,16 +36,14 @@
                 </dxi-toolbar-item>
             </dxo-popup>
         </dxo-editing>
-        <dxi-column dataField="MaterialNo" caption="品號"  [filterValue]="" dataType="string" [allowEditing]="false">
+        <dxi-column dataField="MaterialNo" caption="品號" [filterValue]="" dataType="string" [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="Name" caption="品名" dataType="string" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Specification" caption="規格" dataType="string" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ActualSpecification" caption="實際規格" dataType="string"></dxi-column>
         <dxi-column dataField="Property" caption="廠內規格" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc"
-        [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
-
+        <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
         <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
         <div *dxTemplate="let data of 'cellTemplate'">
             <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
@@ -54,23 +53,20 @@
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         </dxi-column>
-
         <div *dxTemplate="let item of 'detail'">
             <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
         </div>
-        </dx-data-grid>
-    </nz-tab>
-    <nz-tab nzTitle="尚未建立BOM資料">
-        <dx-data-grid #dsDB2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-        [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-        [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
-        [masterDetail]="{ enabled: true, template: 'detail' }">
+    </dx-data-grid>
+</div>
+<div *ngIf="selectindex == 1">
+    <dx-data-grid #dsDB2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [showBorders]="true" [remoteOperations]="remoteOperations"
+        [columnAutoWidth]="true" [masterDetail]="{ enabled: true, template: 'detail2' }">
         <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-paging [enabled]="true" [pageSize]="15">
-        </dxo-paging>
-        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true"
-            [showNavigationButtons]="true" visible="true">
+        <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+        <dxo-scrolling [useNative]="false" [scrollByContent]="true" [scrollByThumb]="true" showScrollbar="always" columnRenderingMode="virtual">
+        </dxo-scrolling>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
         </dxo-pager>
         <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
         </dxo-remote-operations> -->
@@ -85,8 +81,7 @@
                 </dxi-toolbar-item>
             </dxo-popup>
         </dxo-editing>
-
-        <dxi-column dataField="MaterialNo" caption="成品品號"  [filterValue]="" dataType="string" [allowEditing]="false">
+        <dxi-column dataField="MaterialNo" caption="成品品號" [filterValue]="" dataType="string" [allowEditing]="false">
         </dxi-column>
         <dxi-column dataField="Name" caption="成品品名" dataType="string" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Specification" caption="成品規格" dataType="string" [allowEditing]="false"></dxi-column>
@@ -95,8 +90,8 @@
         <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false"></dxi-column>
 
-        <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
-        <div *dxTemplate="let data of 'cellTemplate'">
+        <dxi-column caption="版本紀錄" cellTemplate="cellTemplate2" width="100"></dxi-column>
+        <div *dxTemplate="let data of 'cellTemplate2'">
             <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
         </div>
         <dxi-column type="buttons">
@@ -104,14 +99,109 @@
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         </dxi-column>
-
-
-        <div *dxTemplate="let item of 'detail'">
+        <div *dxTemplate="let item of 'detail2'">
             <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (childOuterBOM)="refreshBM()"></app-bomlist>
         </div>
+    </dx-data-grid>
+</div>
+
+<!-- nz-tabs 排序的第二個無法載入-->
+<!-- <nz-tabset>
+    <nz-tab nzTitle="有BOM資料">
+        <dx-data-grid #dsDB [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="true" [showBorders]="true"
+            [remoteOperations]="remoteOperations" [masterDetail]="{ enabled: true, template: 'detail' }">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
+            </dxo-pager>
+            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
+                <dxo-form>
+                    <dxi-item dataField="ActualSpecification"></dxi-item>
+                </dxo-form>
+                <dxo-popup>
+                    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+                    </dxi-toolbar-item>
+                    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+                    </dxi-toolbar-item>
+                </dxo-popup>
+            </dxo-editing>
+            <dxi-column dataField="MaterialNo" caption="品號" [filterValue]="" dataType="string" [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="Name" caption="品名" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Specification" caption="規格" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="ActualSpecification" caption="實際規格" dataType="string"></dxi-column>
+            <dxi-column dataField="Property" caption="廠內規格" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+
+            <dxi-column caption="版本紀錄" cellTemplate="cellTemplate" width="100"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">
+                <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
+            </div>
+            <dxi-column type="buttons">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            </dxi-column>
+
+            <div *dxTemplate="let item of 'detail'">
+                <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod"></app-bomlist>
+            </div>
         </dx-data-grid>
     </nz-tab>
-  </nz-tabset>
+
+    <nz-tab nzTitle="尚未建立BOM資料">
+        <dx-data-grid #dsDB2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [showBorders]="true" [remoteOperations]="remoteOperations"
+            [columnAutoWidth]="true" [masterDetail]="{ enabled: true, template: 'detail2' }">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+            <dxo-scrolling [useNative]="false" [scrollByContent]="true" [scrollByThumb]="true" showScrollbar="always" columnRenderingMode="virtual">
+            </dxo-scrolling>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
+            </dxo-pager>
+
+            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
+                <dxo-form>
+                    <dxi-item dataField="ActualSpecification"></dxi-item>
+                </dxo-form>
+                <dxo-popup>
+                    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+                    </dxi-toolbar-item>
+                    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+                    </dxi-toolbar-item>
+                </dxo-popup>
+            </dxo-editing>
+
+            <dxi-column dataField="MaterialNo" caption="成品品號" [filterValue]="" dataType="string" [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="Name" caption="成品品名" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="Specification" caption="成品規格" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="ActualSpecification" caption="實際規格" dataType="string"></dxi-column>
+            <dxi-column dataField="Property" caption="廠內規格" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="MaterialNumber" caption="廠內品號" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="UpdateTime" caption="更新時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [allowEditing]="false"></dxi-column>
+
+            <dxi-column caption="版本紀錄" cellTemplate="cellTemplate2" width="100"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate2'">
+                <dx-button icon="detailslayout" type="normal" (onClick)="readBomVer($event,data)"></dx-button>
+            </div>
+            <dxi-column type="buttons">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            </dxi-column>
+
+
+            <div *dxTemplate="let item of 'detail2'">
+                <app-bomlist [itemkeyval]="item.key" [bomMod]="bomMod" (childOuterBOM)="refreshBM()"></app-bomlist>
+            </div>
+        </dx-data-grid>
+    </nz-tab>
+
+</nz-tabset> -->
 
 
 <!-- <dx-popup [showTitle]="true" title="新增成品資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1800" [height]="800"
@@ -122,9 +212,10 @@
     </div>
 </dx-popup> -->
 
-<dx-popup [showTitle]="true" title="變更紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="verpopupVisible">
+<dx-popup [showTitle]="true" title="變更紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="verpopupVisible" [showCloseButton]="true">
     <div *dxTemplate="let data of 'content'">
-        <app-bomverlist [bomverdata]="bomverdata"></app-bomverlist>
+        <dx-scroll-view width="100%" height="100%">
+            <app-bomverlist [bomverdata]="bomverdata"></app-bomverlist>
+        </dx-scroll-view>
     </div>
 </dx-popup>

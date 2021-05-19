@@ -2,24 +2,9 @@
     <app-headerfont></app-headerfont>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
-    [masterDetail]="{ enabled: true, template: 'detail' }"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onRowPrepared)="onRowPrepared($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true"
-    [showColumnLines]="true"
-    [showRowLines]="false"
-    [rowAlternationEnabled]="true"
-    [focusedRowEnabled]="true"
-    [remoteOperations]="remoteOperations">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
+    hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -27,17 +12,19 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
 
     <dxi-column dataField="WorkOrderNo" caption="工單號" [allowEditing]="false" [width]="300">
     </dxi-column>
-    <dxi-column dataField="Count" caption="數量" dataType="number"></dxi-column>
-    <dxi-column dataField="Total" caption="預計總工時(分)" dataType="number"></dxi-column>
+    <dxi-column dataField="Count" caption="數量" dataType="number" [width]="200"></dxi-column>
+    <dxi-column dataField="Total" caption="預計總工時(分)" dataType="number" [width]="200"></dxi-column>
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="200">
         <dxo-lookup [dataSource]="WorkOrderTypeList" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
-    </dxi-column><dxi-column dataField="ActualStartTime" caption="實計開工日" [width]="200" dataType="date" [(selectedFilterOperation)]="selectedOperation">
+    </dxi-column>
+    <dxi-column dataField="ActualStartTime" caption="實計開工日" [width]="200" dataType="date" [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>
     <dxi-column dataField="ActualEndTime" caption="實計完工日" [width]="200" dataType="date" [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>

@@ -1,50 +1,45 @@
-<div class="row">
+<div style="margin:1px">
+    <div class="row">
 
-    <div class="col-12">
+        <div class="col-12">
 
-        <div class="buttongroup">
-            <a>
-            </a>
-            <dx-button class="insertbtn" stylingMode="contained" text="產生QRCode" type="success" [width]="140"
-                (onClick)="download()"></dx-button>
+            <div class="buttongroup">
+                <a>
+                </a>
+                <dx-button class="insertbtn" stylingMode="contained" text="產生QRCode" type="success" [width]="140" (onClick)="download()"></dx-button>
+            </div>
+
         </div>
 
     </div>
 
-</div>
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
-    (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
-    (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
-    [remoteOperations]="remoteOperations" [height]="600">
+        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="false"></dxo-header-filter>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-header-filter [visible]="false"></dxo-header-filter>
-    <dxo-sorting mode="multiple"></dxo-sorting>
-    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-    <dxo-paging [enabled]="false">
-    </dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-
-    <dxi-column dataField="Username" caption="帳號" sortOrder="asc"></dxi-column>
-    <dxi-column dataField="Realname" caption="姓名"></dxi-column>
-    <dxi-column dataField="Permission" caption="身分" [width]="160">
-        <dxo-lookup [dataSource]="PermissionList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="Department" caption="部門" [width]="160">
-        <dxo-lookup [dataSource]="DepartmentList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
-    </dxi-column>
-    <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"
+        <dxi-column dataField="Username" caption="帳號" sortOrder="asc"></dxi-column>
+        <dxi-column dataField="Realname" caption="姓名"></dxi-column>
+        <dxi-column dataField="Permission" caption="身分" [width]="160">
+            <dxo-lookup [dataSource]="PermissionList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="Department" caption="部門" [width]="160">
+            <dxo-lookup [dataSource]="DepartmentList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+        </dxi-column>
+        <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"
         [calculateFilterExpression]="calculateFilterExpression"
         [(selectedFilterOperation)]="selectedFilterOperation"
         [(filterValue)]="filterValue"
         [width]="180">
     </dxi-column> -->
-    <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column> -->
+        <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column> -->
 
-</dx-data-grid>
+    </dx-data-grid>
+</div>

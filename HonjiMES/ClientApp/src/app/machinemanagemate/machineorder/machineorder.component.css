@@ -1,11 +1,11 @@
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 10px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
 
 .insertbtn {
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
 }
 
@@ -34,7 +34,7 @@ a {
 
 .card {
     padding: 0px;
-    min-height: 510px;
+    min-height: 500px;
     margin-bottom: 25px;
 }
 
@@ -67,8 +67,8 @@ a {
 .order-btn {
     font-size: 18px;
     position: absolute;
-    right: 20px;
-    top: 20px;
+    top: 2px;
+    right: 5px;
 }
 
 .alert-time {

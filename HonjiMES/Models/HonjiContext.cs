@@ -55,7 +55,6 @@ namespace HonjiMES.Models
         public virtual DbSet<StockHead> StockHeads { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierOfMaterial> SupplierOfMaterials { get; set; }
-        public virtual DbSet<SurfaceWorkorder> SurfaceWorkorders { get; set; }
         public virtual DbSet<System> Systems { get; set; }
         public virtual DbSet<ToolManagement> ToolManagements { get; set; }
         public virtual DbSet<Toolset> Toolsets { get; set; }
@@ -190,7 +189,7 @@ namespace HonjiMES.Models
                 entity.Property(e => e.NameLog)
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_unicode_ci");
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Reason)
                     .HasCharSet("utf8mb4")
@@ -230,8 +229,6 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.Master).HasComment("主件");
 
-                entity.Property(e => e.MaterialBasicId).HasComment("materialbasic原料");
-
                 entity.Property(e => e.Name)
                     .HasComment("名稱")
                     .HasCharSet("utf8mb4")
@@ -240,8 +237,6 @@ namespace HonjiMES.Models
                 entity.Property(e => e.Outsource).HasComment("外包註記");
 
                 entity.Property(e => e.Pid).HasComment("父ID");
-
-                entity.Property(e => e.ProductBasicId).HasComment("materialbasic成品");
 
                 entity.Property(e => e.Quantity).HasComment("數量");
 
@@ -283,8 +278,6 @@ namespace HonjiMES.Models
                 entity.HasKey(e => new { e.Id, e.Bomid })
                     .HasName("PRIMARY")
                     .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                entity.HasComment("產品組成表 版本");
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
@@ -824,7 +817,7 @@ namespace HonjiMES.Models
                     .HasDefaultValueSql("current_timestamp()")
                     .HasComment("新增時間");
 
-                entity.Property(e => e.EnableState).HasDefaultValueSql("'1'");
+                entity.Property(e => e.EnableState).HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.ModelId).HasComment("機台種類ID");
 
@@ -966,12 +959,6 @@ namespace HonjiMES.Models
             {
                 entity.HasComment("保養明細");
 
-                entity.HasIndex(e => e.MaintenanceId)
-                    .HasName("maintenance_id");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("user_id");
-
                 entity.Property(e => e.Id).HasComment("唯一碼");
 
                 entity.Property(e => e.CreateTime)
@@ -996,18 +983,6 @@ namespace HonjiMES.Models
                     .HasComment("更新時間");
 
                 entity.Property(e => e.UserId).HasComment("操作人員");
-
-                entity.HasOne(d => d.Maintenance)
-                    .WithMany(p => p.MaintenanceDetails)
-                    .HasForeignKey(d => d.MaintenanceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("maintenance_detail_ibfk_1");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.MaintenanceDetails)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("maintenance_detail_ibfk_2");
             });
 
             modelBuilder.Entity<Material>(entity =>
@@ -1488,7 +1463,7 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.OrderId).HasComment("訂單id");
 
-                entity.Property(e => e.OriginPrice).HasComment("單價");
+                entity.Property(e => e.OriginPrice).HasComment("原單價");
 
                 entity.Property(e => e.Package).HasComment("包裝數");
 
@@ -1506,6 +1481,8 @@ namespace HonjiMES.Models
                 entity.Property(e => e.ReplyDate)
                     .HasDefaultValueSql("current_timestamp()")
                     .HasComment("回覆交期");
+
+                entity.Property(e => e.ReplyPrice).HasComment("回覆單價");
 
                 entity.Property(e => e.ReplyRemark)
                     .HasComment("回覆備註")
@@ -2790,38 +2767,6 @@ namespace HonjiMES.Models
                     .HasConstraintName("supplier_of_material_ibfk_1");
             });
 
-            modelBuilder.Entity<SurfaceWorkorder>(entity =>
-            {
-                entity.HasComment("表處工單關聯紀錄");
-
-                entity.Property(e => e.Id).HasComment("唯一碼");
-
-                entity.Property(e => e.CreateTime)
-                    .HasDefaultValueSql("current_timestamp()")
-                    .HasComment("新增時間");
-
-                entity.Property(e => e.CreateUser).HasComment("新增人員");
-
-                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
-
-                entity.Property(e => e.ProcessId).HasComment("工序ID");
-
-                entity.Property(e => e.PurchaseId).HasComment("採購單ID");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasDefaultValueSql("current_timestamp()")
-                    .HasComment("更新時間");
-
-                entity.Property(e => e.UpdateUser).HasComment("更新人員");
-
-                entity.Property(e => e.WorkOrderId).HasComment("工單ID");
-
-                entity.Property(e => e.WorkOrderNo)
-                    .HasComment("工單號")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-            });
-
             modelBuilder.Entity<System>(entity =>
             {
                 entity.HasComment("系統參數");
@@ -2875,7 +2820,7 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.ToolSerialno)
-                    .HasComment("刀具編號")
+                    .HasComment("編號")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 

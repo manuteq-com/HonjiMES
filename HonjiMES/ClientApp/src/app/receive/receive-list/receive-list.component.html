@@ -2,42 +2,40 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="infobtn" stylingMode="contained" text="紀錄查詢" type="normal" [width]="120"
-            (onClick)="infodata()">
-        </dx-button>
-        <dx-button class="insertbtn" stylingMode="contained" text="新增領料單" type="success" [width]="120"
-            (onClick)="creatdata()">
-        </dx-button>
+        <div class="row" style="margin-right: 10px;">
+            <dx-button class="infobtn" stylingMode="contained" text="紀錄查詢" type="normal" [width]="120" (onClick)="infodata()">
+            </dx-button>
+            <dx-button class="insertbtn" stylingMode="contained" text="新增領料單" type="success" [width]="120" (onClick)="creatdata()">
+            </dx-button>
+        </div>
     </div>
 </div>
 
-<dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [width]="1000" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增領料單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatreceive (childOuter)="creatpopup_result($event)" [itemkeyval]="itemcreatkey" [randomkeyval]="randomkey" [popupkeyval]="creatpopupVisible">
-        </app-creatreceive>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creatreceive (childOuter)="creatpopup_result($event)" [itemkeyval]="itemcreatkey" [randomkeyval]="randomkey" [popupkeyval]="creatpopupVisible">
+            </app-creatreceive>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [width]="1700" [(visible)]="infopopupVisible">
+<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
-        </app-receive-info>
+        <dx-scroll-view width="100%" height="100%">
+            <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
+            </app-receive-info>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
 <div class="row">
 
-    <div class="col-9">
+    <div class="col-12 colg-lg-9">
 
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
-            (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
-            (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
-            (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)"
-            [remoteOperations]="remoteOperations">
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations" (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="onRowInserting($event)"
+            (onEditingStart)="onEditingStart($event)" [remoteOperations]="remoteOperations">
 
             <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-popup title="新增領料單" [showTitle]="true" [width]="700" [height]="275">
@@ -60,23 +58,22 @@
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
-            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
-                [showNavigationButtons]="true" visible="true">
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
             </dxo-remote-operations> -->
 
-            <dxi-column dataField="RequisitionNo" caption="領料單號" [allowEditing]="false" [filterValue]=""
-                dataType="string" [width]="140">
+            <dxi-column dataField="RequisitionNo" caption="領料單號" [allowEditing]="false" [filterValue]="" dataType="string" [width]="140">
             </dxi-column>
             <dxi-column dataField="WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [visible]="false">
             </dxi-column>
             <dxi-column dataField="WorkOrderHead.WorkOrderNo" caption="工單號" [filterValue]="" dataType="string" [width]="140">
             </dxi-column>
             <dxi-column dataField="Name" caption="領料單名稱" dataType="string" [visible]="false"></dxi-column>
-            <dxi-column dataField="MaterialNo" caption="品號" dataType="string"></dxi-column>
-            <dxi-column dataField="MaterialNumber" caption="廠內品號" dataType="string"></dxi-column>
-            <dxi-column dataField="Specification" caption="規格" dataType="string"></dxi-column>
+            <dxi-column dataField="MaterialNo" caption="品號" dataType="string" [width]="200"></dxi-column>
+            <dxi-column dataField="MaterialNumber" caption="廠內品號" dataType="string" [width]="200"></dxi-column>
+            <dxi-column dataField="Specification" caption="規格" dataType="string" [width]="200"></dxi-column>
             <dxi-column dataField="Quantity" caption="生產數量" dataType="number" [width]="80"></dxi-column>
             <dxi-column dataField="MaterialBasicId" caption="成品名稱" dataType="number" [visible]="false"></dxi-column>
             <dxi-column dataField="CreateUser" caption="發料人" dataType="string" alignment="center" [width]="100">
@@ -85,8 +82,7 @@
             <dxi-column dataField="ReceiveUser" caption="領料人" dataType="string" alignment="center" [width]="100">
                 <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc"
-            [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="領用時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
 
             <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod"> -->
             <dxi-column type="buttons" [visible]="false">
@@ -100,8 +96,7 @@
             <div *dxTemplate="let data of 'cellTemplate'">
                 <!-- <dx-button class="" icon="trash" type="danger" (onClick)="deleteReceiveList($event,data)"></dx-button> -->
                 <dx-button class="" icon="search" type="normal" (onClick)="searchRequisitionData($event,data)"></dx-button>
-                <dx-button class="ml-1" icon="chevrondoubleright" type="default"
-                    (onClick)="readRequisitionData($event,data)"></dx-button>
+                <dx-button class="ml-1" icon="chevrondoubleright" type="default" (onClick)="readRequisitionData($event,data)"></dx-button>
             </div>
 
             <!-- <div *dxTemplate="let item of 'detail'">
@@ -112,18 +107,17 @@
 
     </div>
 
-    <div class="col-3">
-        <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id"
-            hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
-            [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true" [height]="740"
-            (onCellClick)="cellClick($event)" (onToolbarPreparing)="onToolbarPreparingAll($event)">
+    <div class="col-12 colg-lg-3">
+        <dx-data-grid #dataGridAll [dataSource]="dataSourceAllDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [height]="740" (onCellClick)="cellClick($event)" (onToolbarPreparing)="onToolbarPreparingAll($event)">
             <!--
             <dxo-editing mode="batch" [allowUpdating]="true" useIcons="false">
                 <dxo-texts saveAllChanges="領料"></dxo-texts>
             </dxo-editing> -->
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
             <dxi-column dataField="NameType" caption="類別" dataType="string" alignment="center" [allowEditing]="false" [width]="70"></dxi-column>
-            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="NameNo" caption="品項" dataType="string" [allowEditing]="false" [width]="240"></dxi-column>
             <dxi-column dataField="Quantity" caption="組成數量" dataType="number" [allowEditing]="false" [width]="80" [visible]="false"></dxi-column>
             <dxi-column dataField="ReceiveQty" caption="領用數量" dataType="number" [allowEditing]="false" [width]="80"></dxi-column>
             <!-- <dxi-column dataField="RQty" caption="領取數量" dataType="number" [width]="80">
@@ -138,8 +132,7 @@
             </dxi-column> -->
 
             <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
-                <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)"
-                    [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
+                <dx-select-box [value]="data.value" (onValueChanged)="WarehouseselectvalueChanged($event,data)" [dataSource]="GetWarehouselistbyNo(data)" valueExpr="ID" displayExpr="Name" [searchEnabled]="true">
                 </dx-select-box>
             </div>
             <div *dxTemplate="let data of 'StockQtyCellTemplate'">

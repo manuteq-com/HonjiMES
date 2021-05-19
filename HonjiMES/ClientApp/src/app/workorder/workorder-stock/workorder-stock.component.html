@@ -15,17 +15,16 @@
 
 <div class="row">
 
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
 
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations">
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
-            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
-                [showNavigationButtons]="true" visible="true">
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
             </dxo-remote-operations> -->
@@ -35,7 +34,7 @@
             <dxi-column dataField="Type" caption="入庫種類" alignment="center" [width]="110">
                 <dxo-lookup [dataSource]="listType" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="DataNo" caption="品號"></dxi-column>
+            <dxi-column dataField="DataNo" caption="品號" [width]="140"></dxi-column>
             <dxi-column dataField="Original" caption="庫存量" [width]="70"></dxi-column>
             <dxi-column dataField="Quantity" caption="入庫量" [width]="70"></dxi-column>
 
@@ -51,8 +50,7 @@
             <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column> -->
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime"
-                sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
             <!-- <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" sortOrder="desc" [width]="120" [visible]="false"></dxi-column> -->
 
             <!-- <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
@@ -72,7 +70,7 @@
     </div>
 
 
-    <div class="col-6">
+    <div class="col-12 col-lg-6 ">
 
         <div class="row">
 
@@ -81,8 +79,7 @@
                     <label class="pt-3">
                         <h5>工單號查詢：</h5>
                     </label>
-                    <dx-text-box class="toolinput" [value]="workOrderHeadNo" [showClearButton]="true"
-                        valueChangeEvent="keyup" (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
+                    <dx-text-box class="toolinput" [value]="workOrderHeadNo" [showClearButton]="true" valueChangeEvent="keyup" (onValueChanged)="valueChanged($event)" [height]="40"></dx-text-box>
                 </div>
                 <div class="input-group">
                     <label class="pt-0">
@@ -110,11 +107,9 @@
                 <!-- <dx-button class="toolbtn" stylingMode="contained" text="結案" type="success" [width]="80"
                     [disabled]="btnDisabled" (onClick)="overdata()">
                 </dx-button> -->
-                <dx-button class="toolbtn" stylingMode="contained" text="建立入庫單" type="success" [width]="120"
-                    [disabled]="btnDisabled" (onClick)="stockdata(null)">
+                <dx-button class="toolbtn" stylingMode="contained" text="建立入庫單" type="success" [width]="120" [disabled]="btnDisabled" (onClick)="stockdata(null)">
                 </dx-button>
-                <dx-button class="toolbtn" stylingMode="contained" text="查詢工單" type="default" [width]="120"
-                    [disabled]="false" (onClick)="searchdata()">
+                <dx-button class="toolbtn" stylingMode="contained" text="查詢工單" type="default" [width]="120" [disabled]="false" (onClick)="searchdata()">
                 </dx-button>
             </div>
         </div>
@@ -144,8 +139,7 @@
 
         </div> -->
 
-        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="500"
-            [showColumnLines]="true" [showRowLines]="true">
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="500" [showColumnLines]="true" [showRowLines]="true">
 
             <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
             </dxo-row-dragging>
@@ -160,8 +154,7 @@
             </dxo-editing>
             <dxo-filter-row [visible]="false"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
-                [enterKeyDirection]="enterKeyDirection">
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
             </dxo-keyboard-navigation>
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
@@ -180,10 +173,8 @@
             </dxi-column>
             <dxi-column dataField="Count" caption="良品/NG" alignment="center" [width]="80"></dxi-column>
             <!-- <dxi-column dataField="ReCount" caption="完工數量" dataType="number" [width]="80"></dxi-column> -->
-            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime"
-                [width]="170"></dxi-column>
-            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime"
-                [width]="170"></dxi-column>
+            <dxi-column dataField="ActualStartTime" caption="實際開工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
+            <dxi-column dataField="ActualEndTime" caption="實際完工" dataType="date" format="shortDateShortTime" [width]="170"></dxi-column>
 
             <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
@@ -199,26 +190,25 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false"
-            [(visible)]="stockpopupVisible">
+        <dx-popup [showTitle]="true" title="入庫確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="stockpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId"
-                    [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
-                    [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
+                <dx-scroll-view width="100%" height="100%">
+                    <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="stockpopupVisible"></app-workorder-creat-stock>
+                </dx-scroll-view>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600"
-            [height]="310" [(visible)]="closepopupVisible">
+        <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="closepopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId"
-                    [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey"
-                    [popupkeyval]="closepopupVisible"></app-workorder-close>
+                <dx-scroll-view width="100%" height="100%">
+                    <app-workorder-close (childOuter)="closepopup_result($event)" [workorderkeyval]="workOrderHeadId" [itemkeyval]="itemkey" [userkeyval]="userkey" [modkeyval]="modkey" [randomkeyval]="randomkey" [popupkeyval]="closepopupVisible"></app-workorder-close>
+                </dx-scroll-view>
             </div>
         </dx-popup>
-        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
-            [height]="700" [(visible)]="logpopupVisible">
+        <dx-popup [showTitle]="true" title="報工紀錄" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="logpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
+                <dx-scroll-view width="100%" height="100%">
+                    <app-workorder-report-log [itemkeyval]="itemkey"></app-workorder-report-log>
+                </dx-scroll-view>
             </div>
         </dx-popup>
 

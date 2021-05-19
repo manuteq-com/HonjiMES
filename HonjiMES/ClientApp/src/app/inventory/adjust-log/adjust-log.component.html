@@ -12,20 +12,8 @@
     </div>
 </div>
 
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
 
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
@@ -36,26 +24,26 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
         <dxo-form>
-            <dxi-item  dataField="AdjustNo"></dxi-item>
-            <dxi-item  dataField="LinkOrder"></dxi-item>
-            <dxi-item  dataField="DataId"></dxi-item>
-            <dxi-item  dataField="Original"></dxi-item>
-            <dxi-item  dataField="Quantity"></dxi-item>
-            <dxi-item  dataField="Price"></dxi-item>
-            <dxi-item  dataField="PriceAll"></dxi-item>
-            <dxi-item  dataField="Unit"></dxi-item>
-            <dxi-item  dataField="UnitCount"></dxi-item>
-            <dxi-item  dataField="UnitPrice"></dxi-item>
-            <dxi-item  dataField="UnitPriceAll"></dxi-item>
-            <dxi-item  dataField="WorkPrice"></dxi-item>
-            <dxi-item  dataField="Reason"></dxi-item>
-            <dxi-item  dataField="Message"></dxi-item>
-            <dxi-item  dataField="CreateTime"></dxi-item>
-            <dxi-item  dataField="CreateUser"></dxi-item>
-            <dxi-item  dataField="NameLog"></dxi-item>
-            <dxi-item  dataField="NameType"></dxi-item>
+            <dxi-item dataField="AdjustNo"></dxi-item>
+            <dxi-item dataField="LinkOrder"></dxi-item>
+            <dxi-item dataField="DataId"></dxi-item>
+            <dxi-item dataField="Original"></dxi-item>
+            <dxi-item dataField="Quantity"></dxi-item>
+            <dxi-item dataField="Price"></dxi-item>
+            <dxi-item dataField="PriceAll"></dxi-item>
+            <dxi-item dataField="Unit"></dxi-item>
+            <dxi-item dataField="UnitCount"></dxi-item>
+            <dxi-item dataField="UnitPrice"></dxi-item>
+            <dxi-item dataField="UnitPriceAll"></dxi-item>
+            <dxi-item dataField="WorkPrice"></dxi-item>
+            <dxi-item dataField="Reason"></dxi-item>
+            <dxi-item dataField="Message"></dxi-item>
+            <dxi-item dataField="CreateTime"></dxi-item>
+            <dxi-item dataField="CreateUser"></dxi-item>
+            <dxi-item dataField="NameLog"></dxi-item>
+            <dxi-item dataField="NameType"></dxi-item>
         </dxo-form>
         <dxo-popup>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
@@ -105,5 +93,3 @@
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
     </dxi-column> -->
 </dx-data-grid>
-
-

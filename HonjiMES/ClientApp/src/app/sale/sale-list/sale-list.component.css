@@ -1,32 +1,36 @@
 ::ng-deep .dx-toast-message {
     white-space: pre-line;
 }
-::ng-deep .dx-error-message{
+
+::ng-deep .dx-error-message {
     white-space: pre-line;
 }
+
 .headerblock {
     position: relative;
 }
+
 .insertbtn {
-    margin-top: -6px;
+    margin-top: 4px;
     border-radius: 2px;
     /* margin-left: 30px; */
 }
+
 .overviewbtn {
-    margin-top: -6px;
-    margin-right: 6px;
+    margin-top: 4px;
+    margin-right: 12px;
     border-radius: 2px;
     color: #fff;
     background-color: #1e90ff;
 }
+
 .buttongroup {
-    padding-top: 10px;
-    position: absolute;
-    right: 4px;
-    top:0px;
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
 }
 
-.dx-template-wrapper{
+.dx-template-wrapper {
     display: flex;
     justify-content: center;
 }

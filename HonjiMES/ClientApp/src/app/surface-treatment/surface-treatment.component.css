@@ -1,10 +1,9 @@
 .headerblock {
     position: relative;
 }
-.buttongroup {
-    padding-top: 4px;
-    position: absolute;
-    right: 4px;
-    top:0px;
-}
 
+.buttongroup {
+    position: relative;
+    margin-left: 16px;
+    margin-bottom: 10px;
+}

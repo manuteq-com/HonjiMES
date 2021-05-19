@@ -2,7 +2,7 @@
 
     <div class="row">
 
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
             <label>{{itemval1}}</label><br>
             <label>{{itemval2}}</label><br>
             <label>{{itemval3}}</label><br>
@@ -25,22 +25,10 @@
             <label>{{itemval20}}</label><br>
         </div>
 
-        <div class="col-6">
-            <dx-data-grid
-                #dataGrid1
-                [dataSource]="dataSourceDB"
-                showBorders="true"
-                keyExpr="Id"
-                [focusedRowEnabled]="true"
-                (onDataErrorOccurred)="onDataErrorOccurred($event)"
-                [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-                (onFocusedRowChanging)="onFocusedRowChanging($event)"
-                (onEditorPreparing)="onEditorPreparing($event)"
-                (onToolbarPreparing)="onToolbarPreparing($event)"
-                (onValueChanged)="onValueChanged($event)"
-                hoverStateEnabled="true"
-                [rowAlternationEnabled]="true"
-                [remoteOperations]="remoteOperations"  [columnAutoWidth]="true" [height]="400">
+        <div class="col-12 col-lg-6">
+            <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+                (onEditorPreparing)="onEditorPreparing($event)" (onToolbarPreparing)="onToolbarPreparing($event)" (onValueChanged)="onValueChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true"
+                [height]="400">
 
                 <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
                 <dxo-filter-row [visible]="false"></dxo-filter-row>
@@ -61,8 +49,7 @@
     </div>
 
     <div class="col-12">
-        <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-            [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
             <dxi-item dataField="MCount" dataType="number" editorType="dxNumberBox" [colSpan]="2">
                 <dxo-label text="可製造數量"></dxo-label>
@@ -117,8 +104,7 @@
             <dxi-item dataField="ProcessCost" format="$ #,##0.##;($ #,##0.##)" [colSpan]="1" [disabled]="true" [visible]="false">
                 <dxo-label text="成本"></dxo-label>
             </dxi-item>
-            <dxi-item dataField="ProducingMachine" dataType="number" editorType="dxSelectBox" [editorOptions]="MachineEditorOptions" [colSpan]="1"
-            [visible]="HasProducingMachineVisible" >
+            <dxi-item dataField="ProducingMachine" dataType="number" editorType="dxSelectBox" [editorOptions]="MachineEditorOptions" [colSpan]="1" [visible]="HasProducingMachineVisible">
                 <dxo-label text="機台"></dxo-label>
             </dxi-item>
 
@@ -149,8 +135,7 @@
                 <dxi-validation-rule type="required" message="NG數量 必填"></dxi-validation-rule>
                 <dxo-label text="NG"></dxo-label>
             </dxi-item>
-            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NcEditorOptions" [colSpan]="1"
-             [visible]="NcCountVisible">
+            <dxi-item dataField="NcCount" dataType="number" editorType="dxNumberBox" [editorOptions]="NcEditorOptions" [colSpan]="1" [visible]="NcCountVisible">
                 <!-- <dx-number-box #numberBox3 [max]="this.formData.Count - numberBox.value - numberBox2.value"
                     [min]="0" [showSpinButtons]="true" (onKeyDown)="keyDown($event)"></dx-number-box> -->
                 <dxi-validation-rule type="required" message="NC未加工 必填"></dxi-validation-rule>
@@ -204,35 +189,32 @@
     </div> -->
 
     <!-- <div class="row"> -->
-        <div class="col-auto-12 mt-1">
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='完工回報' type='success' icon='check' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="endBtnVisible" (onClick)="onEndClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="startBtnVisible" (onClick)="onStartClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="restartedBtnVisible" (onClick)="onRestartClick($event)"></dx-button>
+    <div class="col-auto-12 mt-1">
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='完工回報' type='success' icon='check' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="endBtnVisible" (onClick)="onEndClick($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='開工回報' type='default' icon='runner' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="startBtnVisible" (onClick)="onStartClick($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='再開工回報' type='default' icon='repeat' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="restartedBtnVisible" (onClick)="onRestartClick($event)"></dx-button>
 
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='採購單回報' type='default' icon='check' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onPurchaseClick($event)"></dx-button>
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增採購單' type='success' icon='plus' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onNewPurchaseClick($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='採購單回報' type='default' icon='check' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onPurchaseClick($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增採購單' type='success' icon='plus' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="HasPurchaseVisible" (onClick)="onNewPurchaseClick($event)"></dx-button>
 
-            <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增入庫單' type='default' icon='plus' [useSubmitBehavior]="true"
-                [disabled]="buttondisabled" [visible]="HasStockVisible" (onClick)="onStockClick($event)"></dx-button>
-        </div>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新增入庫單' type='default' icon='plus' [useSubmitBehavior]="true" [disabled]="buttondisabled" [visible]="HasStockVisible" (onClick)="onStockClick($event)"></dx-button>
+    </div>
     <!-- </div> -->
 
 </form>
 
-<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+        <dx-scroll-view width="100%" height="100%">
+            <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [dataSource]="dataSource" [modval]="mod"></app-creat-purchase>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="新增入庫單" [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="stockpopupVisible">
+<dx-popup [showTitle]="true" title="新增入庫單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="stockpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [itemkeyval]="itemkey" [workorderkeyval]="workorderkey" [modval]="mod"></app-workorder-creat-stock>
+        <dx-scroll-view width="100%" height="100%">
+            <app-workorder-creat-stock (childOuter)="stockpopup_result($event)" [itemkeyval]="itemkey" [workorderkeyval]="workorderkey" [modval]="mod"></app-workorder-creat-stock>
+        </dx-scroll-view>
     </div>
 </dx-popup>
