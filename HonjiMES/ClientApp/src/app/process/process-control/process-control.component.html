@@ -1,31 +1,29 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <div class="row" style="margin-right: 10px;">
-            <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [height]="35" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-                uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
-            </dx-file-uploader>
-            <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130" [height]="35" (onClick)="qrcodedata()">
-            </dx-button>
-            <dx-button class="overviewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="130" [height]="35" (onClick)="viewdata()">
-            </dx-button>
-            <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="130" [height]="35" (onClick)="creatdata()" [visible]="app.checkAddRoles()">
-            </dx-button>
-        </div>
+        <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+            uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
+        </dx-file-uploader>
+        <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130" (onClick)="qrcodedata()">
+        </dx-button>
+        <dx-button class="overviewbtn" stylingMode="contained" text="檢視工單" type="normal" [width]="130" (onClick)="viewdata()">
+        </dx-button>
+        <dx-button class="insertbtn" stylingMode="contained" text="建立工單" type="success" [width]="130" (onClick)="creatdata()" [visible]="app.checkAddRoles()">
+        </dx-button>
     </div>
 </div>
 
 
 <div class="row">
 
-    <div class="col-12 col-lg-6">
+    <div class="col-6">
 
         <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false"
-            [showBorders]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+            [showBorders]="true" [remoteOperations]="remoteOperations">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
-            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-paging [enabled]="true" [pageSize]="20">
+            </dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
@@ -71,7 +69,7 @@
     </div>
 
 
-    <div class="col-12 col-lg-6">
+    <div class="col-6">
         <div class="row">
             <div class="col-6">
                 <div class="input-group">
@@ -80,27 +78,25 @@
                     </label>
                 </div>
             </div>
-            <div class="col-10 col-lg-6 pt-2">
-                <div class="row" style="margin-right: 10px;">
-                    <dx-button class="pdfbtn mb-1" stylingMode="contained" text="下載" type="default" [width]="70" [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
-                    </dx-button>
-                    <dx-button class="endbtn mb-1" stylingMode="contained" text="工單結案" type="danger" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">
-                    </dx-button>
-                    <dx-button class="editbtn mb-1" stylingMode="contained" text="編輯工單" type="default" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="editProcess()">
-                    </dx-button>
-                    <dx-button class="runbtn mb-1" stylingMode="contained" text="派工" type="success" [width]="80" [visible]="runVisible" (onClick)="runProcess()">
-                    </dx-button>
+            <div class="col-6 pt-2">
+                <dx-button class="pdfbtn" stylingMode="contained" text="下載" type="default" [width]="70" [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
+                </dx-button>
+                <dx-button class="endbtn" stylingMode="contained" text="工單結案" type="danger" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">
+                </dx-button>
+                <dx-button class="editbtn" stylingMode="contained" text="編輯工單" type="default" [width]="110" [visible]="editVisible" [disabled]="btnDisabled" (onClick)="editProcess()">
+                </dx-button>
+                <dx-button class="runbtn" stylingMode="contained" text="派工" type="success" [width]="80" [visible]="runVisible" (onClick)="runProcess()">
+                </dx-button>
 
-                    <!-- <div class="buttongroup">
+                <!-- <div class="buttongroup">
                     <a style="color: dodgerblue;text-decoration:underline;font-size: medium;float: right;" [href]="Url" target="_blank"
                     (click)="downloadWorkOrder($event)">產生工單報表
                     </a>
                 </div> -->
-                </div>
             </div>
         </div>
 
-        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600" [showColumnLines]="true" [showRowLines]="true" [columnAutoWidth]="true">
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600" [showColumnLines]="true" [showRowLines]="true">
 
             <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
             </dxo-row-dragging>
