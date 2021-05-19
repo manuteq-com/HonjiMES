@@ -1,13 +1,12 @@
 .headerblock {
     position: relative;
 }
-
 .buttongroup {
-    position: relative;
-    margin-left: 16px;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    position: absolute;
+    right: 4px;
+    top:0px;
 }
-
 .toolbtn {
     float: right;
     height: 40px;
@@ -15,11 +14,9 @@
     margin-top: 8px;
     border-radius: 2px;
 }
-
 .toolinput {
     margin-top: 8px;
 }
-
 .dx-button {
     float: right;
 }

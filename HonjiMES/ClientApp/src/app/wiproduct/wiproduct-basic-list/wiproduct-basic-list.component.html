@@ -2,9 +2,21 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120" (onClick)="creatAdjust()">
+        <dx-button
+            class="adjustbtn"
+            stylingMode="contained"
+            text="庫存調整單"
+            type="normal"
+            [width]="120"
+            (onClick)="creatAdjust()">
         </dx-button>
-        <dx-button class="insertbtn" stylingMode="contained" text="新增半成品" type="success" [width]="120" (onClick)="creatdata()">
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增半成品"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
         </dx-button>
         <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
@@ -12,9 +24,13 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true" [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)"
+    (onSelectionChanged)="selectionChanged($event)" (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true"
+    [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -39,10 +55,12 @@
             <dxi-item dataField="SupplierId"></dxi-item>
             <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
-        <dxo-popup [showTitle]="true" title="修改半成品基本資訊" [width]="800" [height]="360">
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+        <dxo-popup [showTitle]="true" title="修改半成品基本資訊"  [width]="800" [height]="360">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
@@ -82,18 +100,23 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增半成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增半成品" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800"
+    [height]="360" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatwiproduct-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [btnVisibled]="true" [exceldata]="exceldata"></app-creatwiproduct-basic>
+        <app-creatwiproduct-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [btnVisibled]="true"
+            [exceldata]="exceldata"></app-creatwiproduct-basic>
     </div>
 </dx-popup>
 <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
+        <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-list>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="調整半成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400" [height]="350" [(visible)]="editpopupVisible">
+<dx-popup [showTitle]="true" title="調整半成品庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400"
+    [height]="350" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-change>
+        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-inventory-change>
     </div>
 </dx-popup>

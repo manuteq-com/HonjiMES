@@ -1,22 +1,21 @@
 .headerblock {
     position: relative;
 }
-
 .buttongroup {
-    position: relative;
-    margin-left: 16px;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    position: absolute;
+    right: 4px;
+    top:0px;
 }
-
 .insertbtn {
-    margin-top: 4px;
+    margin-top: -6px;
     border-radius: 2px;
 }
-
-.overviewbtn {
-    margin-top: 4px;
-    margin-right: 12px;
+.adjustbtn {
+    margin-top: -6px;
+    margin-right: 6px;
     border-radius: 2px;
     color: #fff;
     background-color: #1e90ff;
 }
+

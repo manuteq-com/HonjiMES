@@ -30,8 +30,9 @@
 
 .buttongroup {
     position: relative;
-    margin-left: 16px;
-    margin-bottom: 10px;
+    right: 4px;
+    top: 0px;
+    padding: 0px !important;
 }
 
 .insertbtn {

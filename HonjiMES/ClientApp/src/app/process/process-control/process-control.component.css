@@ -28,18 +28,19 @@
 }
 
 .buttongroup {
-    position: relative;
-    margin-left: 16px;
-    margin-bottom: 10px;
+    position: absolute;
+    right: 4px;
+    top: 0px;
+    padding: 0px !important;
 }
 
 .insertbtn {
-    margin-top: 4px;
+    margin-top: -6px;
     border-radius: 2px;
 }
 
 .overviewbtn {
-    margin-top: 4px;
+    margin-top: -6px;
     margin-right: 12px;
     border-radius: 2px;
     color: #fff;

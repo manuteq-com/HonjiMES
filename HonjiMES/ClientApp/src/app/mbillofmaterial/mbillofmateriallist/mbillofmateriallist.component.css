@@ -1,13 +1,12 @@
 .headerblock {
     position: relative;
 }
-
 .buttongroup {
-    position: relative;
-    margin-left: 16px;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    position: absolute;
+    right: 4px;
+    top:10px;
 }
-
 .toolbtn {
     float: right;
     margin-left: 4px;
