@@ -3,9 +3,9 @@
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
         <div class="row" style="margin-right: 10px;">
-            <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="130" [height]="35" (onClick)="creatAdjust()">
+            <dx-button class="overviewbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120" [height]="35" (onClick)="creatAdjust()">
             </dx-button>
-            <dx-button class="insertbtn" stylingMode="contained" text="新增品號" type="success" [width]="130" [height]="35" (onClick)="creatdata()">
+            <dx-button class="insertbtn" stylingMode="contained" text="新增品號" type="success" [width]="120" [height]="35" (onClick)="creatdata()">
             </dx-button>
             <!-- <dx-file-uploader #fileUploader selectButtonText="匯入" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
@@ -16,7 +16,7 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
     (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onEditingStart)="onEditingStart($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true" [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+    (onCellPrepared)="onCellPrepared($event)" [showColumnLines]="true" [showRowLines]="false" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -89,24 +89,18 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="creatpopupVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true" [exceldata]="exceldata"></app-creatmaterial-basic>
-        </dx-scroll-view>
+        <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true" [exceldata]="exceldata"></app-creatmaterial-basic>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="adjustpopupVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
-        </dx-scroll-view>
+        <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="調整品號庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="editpopupVisible" [showCloseButton]="true">
+<dx-popup [showTitle]="true" title="調整品號庫存" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="400" [height]="350" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view width="100%" height="100%">
-            <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-change>
-        </dx-scroll-view>
+        <app-inventory-change (childOuter)="editpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-change>
     </div>
 </dx-popup>

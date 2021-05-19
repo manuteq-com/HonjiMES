@@ -39,15 +39,16 @@
     <div class="col-12 col-lg-4">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [height]="740" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+            [height]="740" [remoteOperations]="remoteOperations">
 
             <dxo-selection mode="single"></dxo-selection>
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-sorting mode="multiple"></dxo-sorting>
             <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-            <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
-            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-paging [enabled]="true" [pageSize]="20">
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            </dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -85,11 +86,9 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [(visible)]="adjustpopupVisible" [showCloseButton]="true">
+        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <dx-scroll-view width="100%" height="100%">
-                    <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
-                </dx-scroll-view>
+                <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-inventory-list>
             </div>
         </dx-popup>
 
@@ -116,7 +115,7 @@
 
         </div>
 
-        <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [height]="700" keyExpr="id" [columnAutoWidth]="true">
+        <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [height]="700" keyExpr="id">
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
