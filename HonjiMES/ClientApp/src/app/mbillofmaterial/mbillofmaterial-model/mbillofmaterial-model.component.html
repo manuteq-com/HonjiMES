@@ -1,7 +1,9 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="MbomModelHeadId" dataType="number" editorType="dxSelectBox" [visible]="!modeVisible" [editorOptions]="MbomModelHeadSelectBoxOptions">
+        <dxi-item dataField="MbomModelHeadId" dataType="number" editorType="dxSelectBox" [visible]="!modeVisible"
+            [editorOptions]="MbomModelHeadSelectBoxOptions">
             <dxi-validation-rule type="required" message="模型項目 必填"></dxi-validation-rule>
             <dxo-label text="模型"></dxo-label>
         </dxi-item>
@@ -21,10 +23,22 @@
     <!-- <div class="long-title">
         <h5>採購內容</h5>
     </div> -->
-    <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB" [showBorders]="true" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)"
-        (onRowRemoved)="onRowRemoved($event)" [width]="'90%'" [height]="'90%'" [columnAutoWidth]="true">
+    <dx-data-grid
+        #dataGrid2
+        [dataSource]="dataSourceDB"
+        [showBorders]="true"
+        height="580"
+        (onFocusedCellChanging)="onFocusedCellChanging($event)"
+        (onInitNewRow)="onInitNewRow($event)"
+        (onEditingStart)="onEditingStart($event)"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowRemoved)="onRowRemoved($event)">
 
-        <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder" [showDragIcons]="true"></dxo-row-dragging>
+        <dxo-row-dragging
+            [allowReordering]="true"
+            [onReorder]="onReorder"
+            [showDragIcons]="true"
+        ></dxo-row-dragging>
 
         <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">
             <dxo-form colCount=4>
@@ -38,10 +52,11 @@
         </dxo-editing>
         <dxo-filter-row [visible]="false"></dxo-filter-row>
         <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
+        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+            [enterKeyDirection]="enterKeyDirection">
         </dxo-keyboard-navigation>
-        <dxo-paging [enabled]="false"></dxo-paging>
-        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-paging [enabled]="false">
+        </dxo-paging>
 
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="50" [allowEditing]="false">
         </dxi-column>
@@ -73,7 +88,9 @@
         </dxi-column>
 
         <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
-            <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+            <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
+                valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
         </div>
 
         <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
@@ -101,12 +118,20 @@
     </dx-data-grid>
 
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="right" text='新增模型' type='default' icon='newfolder' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1" (onClick)="NewOnClick($event)" [visible]="NewVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='複製模型' type='default' icon='newfolder' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1" (onClick)="CopyOnClick($event)" [visible]="CopyVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='更新模型' type='success' icon='save' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="UpdateVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='刪除模型' type='danger' icon='trash' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="DeleteVisible"></dx-button>
-        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" (onClick)="PostOnClick($event)" [disabled]="saveDisabled" [visible]="saveVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='取消' type='danger' icon='close' [useSubmitBehavior]="true" class="editbtn pl-3 pr-3 pb-1" (onClick)="CancelOnClick($event)" [visible]="CancelVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='取消' type='danger' icon='close' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="CancelOnClick($event)" [visible]="CancelVisible"></dx-button>
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+            (onClick)="PostOnClick($event)" [disabled]="saveDisabled" [visible]="saveVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='刪除模型' type='danger' icon='trash' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="DeleteVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='更新模型' type='success' icon='save' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="UpdateVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='複製模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="CopyOnClick($event)" [visible]="CopyVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='新增模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="NewOnClick($event)" [visible]="NewVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='插入' type='default' icon='download' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="InsertOnClick($event)" [visible]="InsertVisible"></dx-button>
     </div>
 
 </form>

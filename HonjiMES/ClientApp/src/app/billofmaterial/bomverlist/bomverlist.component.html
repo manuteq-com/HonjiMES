@@ -1,6 +1,8 @@
-<dx-tree-list id="tasks" [dataSource]="dataSourceDB" showBorders="true" keyExpr="ShowLV" hoverStateEnabled="true" rootValue="0" [autoExpandAll]="false" parentIdExpr="ShowPLV" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true"
-    [focusedRowEnabled]="true" [columnAutoWidth]="true" [showBorders]="true">
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+<dx-tree-list id="tasks" [dataSource]="dataSourceDB" showBorders="true" keyExpr="ShowLV" hoverStateEnabled="true"
+    rootValue="0" [autoExpandAll]="false" parentIdExpr="ShowPLV" [showColumnLines]="false" [showRowLines]="true"
+    [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true">
+    <dxo-scrolling [useNative]="true">
+    </dxo-scrolling>
 
     <dxi-column dataField="Version" caption="版本紀錄" dataType="string"></dxi-column>
     <dxi-column dataField="Lv" caption="階層" dataType="string" [allowEditing]="false"></dxi-column>

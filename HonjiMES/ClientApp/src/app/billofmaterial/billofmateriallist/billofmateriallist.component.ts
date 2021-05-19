@@ -10,9 +10,7 @@ import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent, DxFormComponent, DxPopupComponent, DxFileUploaderComponent } from 'devextreme-angular';
-export interface Longtab {
-    text: string;
-}
+
 @Component({
     selector: 'app-billofmateriallist',
     templateUrl: './billofmateriallist.component.html',
@@ -32,10 +30,6 @@ export class BillofmateriallistComponent implements OnInit {
     selectedOperation: string = "between";
     @ViewChild('dsDB', { static: false }) dataGrid: DxDataGridComponent;
     @ViewChild('dsDB2', { static: false }) dataGridnobom: DxDataGridComponent;
-    longtabs: Longtab[] = [
-        { text: "有BOM資料" },
-        { text: "尚未建立BOM資料" }];
-    selectindex: number;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.bomMod = 'PBOM';
@@ -70,13 +64,9 @@ export class BillofmateriallistComponent implements OnInit {
     }
     ngOnInit() {
         this.titleService.setTitle('物料清單管理');
-        this.selectindex = 0;
     }
     creatdata() {
         this.creatpopupVisible = true;
-    }
-    selectTab(e) {
-        this.selectindex = e.itemIndex;
     }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
