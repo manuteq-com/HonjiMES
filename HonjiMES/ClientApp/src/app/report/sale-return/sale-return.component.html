@@ -2,23 +2,36 @@
     <app-headerfont></app-headerfont>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
+    >
 
-
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="false"></dxo-header-filter>
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="ReturnCreateTime" caption="銷退時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="ReturnCreateTime" caption="銷退時間" dataType="date" format="shortDateShortTime"
+    sortOrder="desc" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
 
     <dxi-column dataField="SaleNo" caption="銷貨單號" [width]="150"></dxi-column>
     <!-- <dxi-column dataField="SaleDate" caption="銷貨單日期" dataType="date" [width]="120"></dxi-column> -->
@@ -40,3 +53,4 @@
     <dxi-column dataField="Price" caption="金額" [width]="80"></dxi-column> -->
 
 </dx-data-grid>
+

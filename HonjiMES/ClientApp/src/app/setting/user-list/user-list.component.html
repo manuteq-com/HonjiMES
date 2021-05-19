@@ -1,17 +1,24 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <div class="row" style="margin-right: 10px;">
-            <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130" [height]="35" (onClick)="qrcodedata()">
-            </dx-button>
-            <dx-button class="insertbtn" stylingMode="contained" text="新增帳戶" type="success" [width]="130" [height]="35" (onClick)="creatdata()">
-            </dx-button>
-        </div>
+        <dx-button class="qrcodebtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="140"
+            (onClick)="qrcodedata()">
+        </dx-button>
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增帳戶"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
     </div>
 </div>
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
-    [columnWidth]="130">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true"
+    [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -19,7 +26,6 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
@@ -33,9 +39,11 @@
             <dxi-item dataField="Department"></dxi-item>
         </dxo-form>
         <dxo-popup [width]="800" [height]="300">
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
             </dxi-toolbar-item>
-            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
+            <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+                [options]="{ type:'danger', text: '取消', onClick: cancelClickHandler }">
             </dxi-toolbar-item>
         </dxo-popup>
     </dxo-editing>
@@ -49,7 +57,8 @@
     <dxi-column dataField="Department" caption="部門" [width]="160">
         <dxo-lookup [dataSource]="DepartmentList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="新增時間" dataType="date" format="shortDateShortTime" sortOrder="desc" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="新增時間" dataType="date" format="shortDateShortTime" sortOrder="desc"
+    [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="CreateUser" caption="新增人員">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -67,12 +76,15 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false"
+    [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatuser (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatuser>
+        <app-creatuser (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
+            [exceldata]="exceldata"></app-creatuser>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="730" [width]="800" [(visible)]="qrcodepopupVisible">
+<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="730" [width]="800"
+    [(visible)]="qrcodepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-user-qrcode [itemkeyval]="randomkey"></app-user-qrcode>
     </div>

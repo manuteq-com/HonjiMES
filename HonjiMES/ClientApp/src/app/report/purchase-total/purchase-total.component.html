@@ -2,8 +2,21 @@
     <app-headerfont></app-headerfont>
 </div>
 
-<dx-data-grid #dataGrid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [columnAutoWidth]="true" [height]="200">
+<dx-data-grid
+    #dataGrid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    [focusedRowEnabled]="true"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    hoverStateEnabled="true"
+    [rowAlternationEnabled]="true"
+    [columnAutoWidth]="true"
+    [height]="200">
 
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
@@ -14,18 +27,32 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false"></dxo-editing>
+    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false"></dxo-editing>
 
     <dxi-column dataField="Type" caption="採購種類">
         <dxo-lookup [dataSource]="TypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="New" caption="新建"></dxi-column>
-    <dxi-column dataField="PurchaseFinished" caption="完成採購"></dxi-column>
+    <dxi-column dataField="PurchaseFinished" caption="完成採購" ></dxi-column>
     <dxi-column dataField="Undone" caption="未完成"></dxi-column>
 </dx-data-grid>
 <br>
-<dx-data-grid #dataGrid2 [dataSource]="dataSourceDB2" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true">
+<dx-data-grid
+    #dataGrid2
+    [dataSource]="dataSourceDB2"
+    showBorders="true"
+    keyExpr="id"
+    dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
+    [masterDetail]="{ enabled: true, template: 'detail' }"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    hoverStateEnabled="true"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    [rowAlternationEnabled]="true"
+    [focusedRowEnabled]="true"
+    [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -33,7 +60,6 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -44,17 +70,19 @@
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Type" caption="採購種類" alignment="center" [width]="80">
-        <dxo-lookup [dataSource]="TypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+         <dxo-lookup [dataSource]="TypeList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="SupplierId" caption="供應商">
-        <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="listPurchaseOrderStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="160"></dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [(selectedFilterOperation)]="selectedOperation" [width]="220"></dxi-column>
-    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime" [width]="220" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc"
+    [(selectedFilterOperation)]="selectedOperation" [width]="220"></dxi-column>
+    <dxi-column dataField="PurchaseDate" caption="採購日期" dataType="date" format="shortDateShortTime"
+    [width]="220" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
