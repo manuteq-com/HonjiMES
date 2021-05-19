@@ -44,7 +44,6 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     popupVisibleSale: boolean;
     Otoworkkey: any;
     selectedOperation: string = "between";
-    islg: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
@@ -53,7 +52,7 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
-        //this.islg = this.screen.sizes['screen-large'];
+       
     }
     ngOnChanges() {
         this.getdata();

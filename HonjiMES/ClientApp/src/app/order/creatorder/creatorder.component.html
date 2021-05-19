@@ -1,11 +1,13 @@
 <form action="" (submit)="onFormSubmit($event)">
-    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="200" colCount="auto" [colCountByScreen]="colCountByScreen" [screenByWidth]="screen">
+    <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
-        <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions">
+        <dxi-item dataField="CreateTime" editorType="dxDateBox" [colSpan]="4"
+            [editorOptions]="CreateTimeDateBoxOptions">
             <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
             <dxo-label text="建立日期"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="OrderNo" [disabled]="true">
+        <dxi-item dataField="OrderNo" [colSpan]="4" [disabled]="true">
             <dxi-validation-rule type="required" message="訂單單號 必填"></dxi-validation-rule>
             <dxo-label text="訂單單號"></dxo-label>
         </dxi-item>
@@ -13,11 +15,13 @@
             <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
             <dxo-label text="客戶單號"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="OrderType" editorType="dxSelectBox" [editorOptions]="TypeSelectBoxOptions" [(visible)]="OrderTypeVisible">
+        <dxi-item dataField="OrderType" editorType="dxSelectBox" [editorOptions]="TypeSelectBoxOptions" [colSpan]="4"
+            [(visible)]="OrderTypeVisible">
             <dxi-validation-rule type="required" message="訂單類別 必填"></dxi-validation-rule>
             <dxo-label text="訂單類別"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox" [editorOptions]="selectBoxOptions">
+        <dxi-item dataField="Customer" dataType="number" editorType="dxSelectBox" [colSpan]="5"
+            [editorOptions]="selectBoxOptions">
             <dxi-validation-rule type="required" message="客戶名稱 必填"></dxi-validation-rule>
             <dxo-label text="客戶名稱"></dxo-label>
         </dxi-item>
@@ -28,11 +32,11 @@
                 valueExpr= 'Id'
                 [(dataSource)]="Customerlist"></dx-select-box>
         </div> -->
-        <dxi-item dataField="OrderDate" editorType="dxDateBox">
+        <dxi-item dataField="OrderDate" editorType="dxDateBox" [colSpan]="4">
             <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
             <dxo-label text="預交日"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="ReplyDate" editorType="dxDateBox">
+        <dxi-item dataField="ReplyDate" editorType="dxDateBox" [colSpan]="4">
             <dxi-validation-rule type="required" message="回覆日期 必填"></dxi-validation-rule>
             <dxo-label text="回覆日期"></dxo-label>
         </dxi-item>
@@ -53,29 +57,35 @@
     <div class="long-title">
         <h5>訂單內容</h5>
     </div>
-    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" height="450" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
+    <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" height="480"
+        (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)"
+        (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
 
-        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" startEditAction="click">
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true"
+            startEditAction="click">
         </dxo-editing>
         <dxo-filter-row [visible]="false"></dxo-filter-row>
         <dxo-header-filter [visible]="false"></dxo-header-filter>
-        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
+        <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+            [enterKeyDirection]="enterKeyDirection">
         </dxo-keyboard-navigation>
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
 
-            </div>
         <div *dxTemplate="let data of 'QuantityEditCellTemplate'">
-            <dx-number-box [value]='Quantity' (onValueChanged)="QuantityonValueChanged($event, data)" [showSpinButtons]="true">
+            <dx-number-box [value]='Quantity' (onValueChanged)="QuantityonValueChanged($event, data)"
+                [showSpinButtons]="true">
             </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'DBOriginPriceEditCellTemplate'">
-            <dx-number-box [value]='DBOriginPrice' (onValueChanged)="data.setValue($event.value)" [showSpinButtons]="false">
+            <dx-number-box [value]='DBOriginPrice' (onValueChanged)="data.setValue($event.value)"
+                [showSpinButtons]="false">
             </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'OriginPriceEditCellTemplate'">
-            <dx-number-box [value]='OriginPrice' (onValueChanged)="OriginPriceonValueChanged($event, data)" [showSpinButtons]="false">
+            <dx-number-box [value]='OriginPrice' (onValueChanged)="OriginPriceonValueChanged($event, data)"
+                [showSpinButtons]="false">
             </dx-number-box>
         </div>
         <div *dxTemplate="let data of 'DBPriceEditCellTemplate'">
@@ -91,8 +101,10 @@
         </div> -->
     </dx-data-grid>
     <div class="col-auto-12 mt-1">
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='清除' type='danger' icon='refresh' [useSubmitBehavior]="true" (onClick)="removeBtn($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save'
+            [useSubmitBehavior]="true" [disabled]="buttondisabled" (onClick)="saveBtn($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='清除' type='danger' icon='refresh'
+            [useSubmitBehavior]="true" (onClick)="removeBtn($event)"></dx-button>
         <!-- <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
             </dxi-item> -->
     </div>

@@ -68,7 +68,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
     OrderTypeList: any;
     TypeSelectBoxOptions: any;
     gridsaveCheck: any;
-    colCountByScreen: Object;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.OrderTypeList = myservice.getOrderType();
@@ -80,8 +79,8 @@ export class CreatorderComponent implements OnInit, OnChanges {
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
-        //this.minColWidth = 300;
-        //this.colCount = 25;
+        this.minColWidth = 300;
+        this.colCount = 25;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.Quantity = 0;
@@ -99,11 +98,6 @@ export class CreatorderComponent implements OnInit, OnChanges {
             items: myservice.getOrderType(),
             displayExpr: 'Name',
             valueExpr: 'Id',
-        };
-
-        this.colCountByScreen = {
-            md: 3,
-            sm: 1
         };
 
         // this.Customerlist = SendRequest.sendRequest(this.http, this.url + '/Customers/GetCustomers' );
@@ -410,9 +404,5 @@ export class CreatorderComponent implements OnInit, OnChanges {
         if (isNaN(newData.DBPrice)) {
             newData.DBPrice = null;
         }
-    }
-
-    screen(width) {
-        return width < 720 ? "sm" : "md";
     }
 }

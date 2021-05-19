@@ -435,10 +435,4 @@ export class OrderListComponent {
         this.dataGrid.instance.refresh();
     }
 
-    onContentReady(e) {
-        var contentElement = e.component.content();
-        contentElement.style.padding = '0px';
-        contentElement.style.margin = '5px';
-      }
-
 }
