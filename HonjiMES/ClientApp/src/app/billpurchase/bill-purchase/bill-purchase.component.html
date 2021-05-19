@@ -2,12 +2,17 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <div class="row" style="margin-right: 10px;">
-            <dx-button class="insertbtn" stylingMode="contained" text="新增進貨單" type="success" [width]="120" (onClick)="creatdata()">
-            </dx-button>
-            <dx-button class="newbtn" stylingMode="contained" text="以供應商新增" type="success" [width]="140" (onClick)="newdata()">
-            </dx-button>
-        </div>
+        <dx-button
+            class="insertbtn"
+            stylingMode="contained"
+            text="新增進貨單"
+            type="success"
+            [width]="120"
+            (onClick)="creatdata()">
+        </dx-button>
+        <dx-button class="newbtn" stylingMode="contained" text="以供應商新增" type="success" [width]="140"
+            (onClick)="newdata()">
+        </dx-button>
     </div>
 </div>
 <div id="form-container">
@@ -28,10 +33,27 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations"
-    [columnHidingEnabled]="false">
+<dx-data-grid
+    [dataSource]="dataSourceDB"
+    showBorders="true"
+    keyExpr="id"
+    dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
+    [masterDetail]="{ enabled: true, template: 'detail' }"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="selectionChanged($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)"
+    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+    (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditingStart)="onEditingStart($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    hoverStateEnabled="true"
+    [showColumnLines]="true"
+    [showRowLines]="false"
+    [rowAlternationEnabled]="true"
+    [focusedRowEnabled]="true"
+    [remoteOperations]="remoteOperations">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -39,7 +61,6 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -52,17 +73,18 @@
         </dxo-form>
     </dxo-editing>
 
-    <dxi-column dataField="BillofPurchaseNo" caption="進貨單號" [allowEditing]="false" [width]="200">
+    <dxi-column dataField="BillofPurchaseNo" caption="進貨單號" [allowEditing]="false">
         <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
-    <dxi-column dataField="Status" caption="狀態" alignment="center" [width]="200">
+    <dxi-column dataField="Status" caption="狀態" alignment="center" width="200">
         <dxo-lookup [dataSource]="listBillofPurchaseOrderStatus" displayExpr="Name" valueExpr="Id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc" [(selectedFilterOperation)]="selectedOperation" [width]="120"></dxi-column>
-    <dxi-column dataField="BillofPurchaseDate" caption="進貨日期" dataType="date" [(selectedFilterOperation)]="selectedOperation" [width]="120">
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" sortOrder="desc"
+        [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="BillofPurchaseDate" caption="進貨日期" dataType="date" [(selectedFilterOperation)]="selectedOperation">
     </dxi-column>
-    <dxi-column dataField="Remarks" caption="備註" [width]="120"></dxi-column>
+    <dxi-column dataField="Remarks" caption="備註"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="120">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -81,18 +103,21 @@
     </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-bill-purchase-detail [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList" (childOuter)="updatepopup_result($event)"></app-bill-purchase-detail>
+        <app-bill-purchase-detail  [itemkey]="item.key" [SupplierList]="SupplierList" [MaterialBasicList]="MaterialBasicList" (childOuter)="updatepopup_result($event)"></app-bill-purchase-detail>
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700"
+    [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creat-bill-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-creat-bill-purchase>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="以供應商新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800" [(visible)]="newpopupVisible">
+<dx-popup [showTitle]="true" title="以供應商新增進貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
+    [(visible)]="newpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-bill-purchase-supplier (childOuter)="newpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-bill-purchase-supplier>
     </div>
 </dx-popup>
+
