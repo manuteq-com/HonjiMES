@@ -317,6 +317,7 @@ namespace HonjiMES.Controllers
                                     DueDate = item.DueDate,
                                     Remark = item.Remark,
                                     ReplyDate = item.ReplyDate,
+                                    ReplyPrice = item.ReplyPrice,
                                     ReplyRemark = item.ReplyRemark,
                                     MachineNo = item.MachineNo,
                                     Package = item.Package,
@@ -374,7 +375,7 @@ namespace HonjiMES.Controllers
             var myFile = Request.Form.Files;
             if (myFile.Any())
             {
-                var MappingList = DBHelper.MappingExtelToModelData();
+                // var MappingList = DBHelper.MappingExtelToModelData();
                 foreach (var item in myFile)
                 {
                     try
@@ -402,9 +403,10 @@ namespace HonjiMES.Controllers
                     }
                 }
             }
+            var dt = DateTime.Now;
             foreach (var Headitem in OrderHeadlist.ToList())
             {
-                var len = ("000-000000000").Length; // 客戶單號格式
+                var len = ("000-0000000000").Length; // 客戶單號格式
                 Headitem.OrderNo = DirName;
                 if (!string.IsNullOrWhiteSpace(Headitem.CustomerNo) && Headitem.CustomerNo.Length > len)
                     Headitem.CustomerNo = Headitem.CustomerNo.Substring(0, len);
@@ -414,9 +416,21 @@ namespace HonjiMES.Controllers
                     {
                         Headitem.OrderDetails.Remove(Detailitem);
                     }
+                    else
+                    {
+
+                        if (Detailitem.DueDate <= dt)
+                        {
+                            Detailitem.DueDate = dt;
+                        }
+                        if (Detailitem.ReplyDate <= dt)
+                        {
+                            Detailitem.ReplyDate = dt;
+                        }
+                    }
                 }
-                Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? DateTime.Now;
-                Headitem.ReplyDate = Headitem.OrderDetails.OrderBy(x => x.ReplyDate).FirstOrDefault()?.ReplyDate ?? DateTime.Now;
+                Headitem.OrderDate = Headitem.OrderDetails.OrderBy(x => x.DueDate).FirstOrDefault()?.DueDate ?? dt;
+                Headitem.ReplyDate = Headitem.OrderDetails.OrderBy(x => x.ReplyDate).FirstOrDefault()?.ReplyDate ?? dt;
             }
             return Ok(MyFun.APIResponseOK(OrderHeadlist.FirstOrDefault(), sLostProduct));
         }
@@ -455,7 +469,8 @@ namespace HonjiMES.Controllers
 
                         // 自動新增Material資料。(2020/08/20 確認自動新增)
                         var Warehouses = await _context.Warehouses.Where(x => x.DeleteFlag == 0 && x.Code == "301").FirstAsync();// 固定新增301成品倉
-                        if (Warehouses != null) {
+                        if (Warehouses != null)
+                        {
                             var nMaterial = new Material
                             {
                                 MaterialNo = Materialitemlist[0].Trim(),
@@ -477,7 +492,7 @@ namespace HonjiMES.Controllers
                                 CreateTime = dt,
                                 CreateUser = MyFun.GetUserID(HttpContext)
                             });
-                        nMaterialBasics.Materials.Add(nMaterial);
+                            nMaterialBasics.Materials.Add(nMaterial);
                         }
                         nMaterialBasicslist.Add(nMaterialBasics);
                     }
@@ -560,7 +575,7 @@ namespace HonjiMES.Controllers
         {
             //從明細中找出有多少[客戶單號]。
             var list = new List<OrderHead>();
-            var len = ("000-000000000").Length;
+            var len = ("000-0000000000").Length;
             foreach (var item in Data.OrderDetail)
             {
                 if (!string.IsNullOrWhiteSpace(item.CustomerNo) && item.CustomerNo.Length >= len)

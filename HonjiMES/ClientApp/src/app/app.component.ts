@@ -433,6 +433,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnChanges {
         // message.message = "ReloadBillboard";
         // message.date = new Date();
         // this.SignalRService.sendMessage(message);
+        // testbranch
     }
 }
 

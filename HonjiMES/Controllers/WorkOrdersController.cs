@@ -53,35 +53,39 @@ namespace HonjiMES.Controllers
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;
+
             //這裡只是為了快速的產生工序，之後看情況要拿掉就拿掉
-            // var WorkOrderHeads = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.WorkOrderDetails).ToList();
-            // var MbomModelDetails = _context.MbomModelDetails.Where(x => x.DeleteFlag == 0 && x.MbomModelHeadId == 3).ToList();
-            // foreach (var item in WorkOrderHeads)
-            // {
-            //     if (!item.WorkOrderDetails.Any())
-            //     {
-            //         foreach (var bomitem in MbomModelDetails)
-            //         {
-            //             item.WorkOrderDetails.Add(new WorkOrderDetail
-            //             {
-            //                 SerialNumber = bomitem.SerialNumber,
-            //                 ProcessId = bomitem.ProcessId,
-            //                 ProcessNo = bomitem.ProcessNo,
-            //                 ProcessName = bomitem.ProcessName,
-            //                 ProcessLeadTime = bomitem.ProcessLeadTime,
-            //                 ProcessTime = bomitem.ProcessTime,
-            //                 ProcessCost = bomitem.ProcessCost,
-            //                 DrawNo = bomitem.DrawNo,
-            //                 Manpower = bomitem.Manpower,
-            //                 ProducingMachine = bomitem.ProducingMachine,
-            //                 Remarks = bomitem.Remarks,
-            //                 DeleteFlag = 0,
-            //                 CreateUser = MyFun.GetUserID(HttpContext),
-            //             });
-            //         }
-            //         _context.SaveChanges();
-            //     }
-            // }
+            var WorkOrderHeads = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && !x.WorkOrderDetails.Where(y => y.DeleteFlag == 0 && (x.Status == 0 || x.Status == 4)).Any()).Include(x => x.WorkOrderDetails).ToList();// 工單Head為[新建、轉單] 才自動補回
+            foreach (var item in WorkOrderHeads)
+            {
+                if (!item.WorkOrderDetails.Any())
+                {
+                    var billOfMaterial = _context.MBillOfMaterials.AsQueryable().Where(x => x.MaterialBasicId == item.DataId).OrderBy(x => x.SerialNumber).ToList();
+                    if (billOfMaterial.Any())
+                    {
+                        foreach (var bomitem in billOfMaterial)
+                        {
+                            item.WorkOrderDetails.Add(new WorkOrderDetail
+                            {
+                                SerialNumber = bomitem.SerialNumber,
+                                ProcessId = bomitem.ProcessId,
+                                ProcessNo = bomitem.ProcessNo,
+                                ProcessName = bomitem.ProcessName,
+                                ProcessLeadTime = bomitem.ProcessLeadTime,
+                                ProcessTime = bomitem.ProcessTime,
+                                ProcessCost = bomitem.ProcessCost,
+                                DrawNo = bomitem.DrawNo,
+                                Manpower = bomitem.Manpower,
+                                ProducingMachine = bomitem.ProducingMachine,
+                                Remarks = bomitem.Remarks,
+                                DeleteFlag = 0,
+                                CreateUser = MyFun.GetUserID(HttpContext),
+                            });
+                        }
+                        _context.SaveChanges();
+                    }
+                }
+            }
             // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime);
             var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0).Include(x => x.OrderDetail).Include(x => x.WorkOrderDetails)
             .OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo

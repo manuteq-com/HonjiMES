@@ -52,7 +52,7 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
-
+       
     }
     ngOnChanges() {
         this.getdata();

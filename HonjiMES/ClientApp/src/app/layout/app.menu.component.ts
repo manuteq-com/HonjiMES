@@ -25,7 +25,7 @@ export class AppMenuComponent implements OnInit {
     version = 'v4';
     breadcrumbs: string[] = [];
     constructor(public app: AppComponent, route: ActivatedRoute, router: Router, private authenticationService: AuthService) {
-        //  this.changeLayout('cyan');
+        //  this.changeLayout('cyan');//
 
         this.changeLayout('joomla', true);
         this.changeVersion('v4');
