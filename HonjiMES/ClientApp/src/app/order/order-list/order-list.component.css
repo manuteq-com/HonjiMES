@@ -60,3 +60,7 @@
 .dx-button-mode-contained .dx-icon {
     color: #ffdd1e !important;
 }
+
+.buttonlocation {
+    position: relative;
+}

@@ -1,7 +1,7 @@
 <!-- <p>所有訂單</p> -->
 <div class="headerblock">
     <app-headerfont></app-headerfont>
-    <div class="buttongroup">
+    <div class="buttongroup" [ngClass]="{'buttonlocation':!app.isDesktop()}">
         <dx-file-uploader #fileUploader selectButtonText="匯入訂單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
         </dx-file-uploader>
@@ -33,7 +33,8 @@
 
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
     (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations">
+    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations"
+    [columnAutoWidth]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -41,6 +42,7 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -108,20 +110,28 @@
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder>
+        <dx-scroll-view width="100%" height="100%">
+            <!-- <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder> -->
+
+            <app-creatorder></app-creatorder>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800" [(visible)]="overviewpopupVisible">
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800" [(visible)]="saleunfinshedVisible">
+<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="saleunfinshedVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
+        </dx-scroll-view>
     </div>
 </dx-popup>

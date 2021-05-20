@@ -8,8 +8,7 @@
 
     <app-topbar *ngIf="login$"></app-topbar>
 
-    <div *ngIf="login$" class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}"
-        (click)="onMenuClick($event)">
+    <div *ngIf="login$" class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
         <p-scrollPanel #layoutMenuScroller [style]="{height: '100%' }">
             <div class="menu-scroll-content">
                 <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></app-inline-profile>

@@ -41,7 +41,7 @@ body {
 }
 
 .card {
-    width: 700px;
+    width: 80%;
     padding: 0px;
     margin: auto;
     border: unset !important;
