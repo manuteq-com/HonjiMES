@@ -22,7 +22,7 @@ import {
     DxDataGridModule, DxButtonModule, DxTreeViewModule, DxDropDownBoxModule, DxSelectBoxModule,
     DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, DxFormModule, DxMultiViewModule, DxTemplateModule,
     DxCheckBoxModule, DxFileUploaderModule, DxPopupModule, DxNumberBoxModule, DxTreeListModule, DxLoadPanelModule,
-    DxSchedulerModule, DxTabPanelModule, DxGalleryModule, DxTabsModule
+    DxSchedulerModule, DxTabPanelModule, DxGalleryModule, DxTabsModule, DxScrollViewModule
 } from 'devextreme-angular';
 
 import { HomepageComponent } from './globalpage/homepage.component';
@@ -188,6 +188,7 @@ export function tokenGetter() {
         DxTemplateModule,
         DxFileUploaderModule,
         DxPopupModule,
+        DxScrollViewModule,
         DxNumberBoxModule,
         DxCheckBoxModule,
         BreadcrumbModule,
