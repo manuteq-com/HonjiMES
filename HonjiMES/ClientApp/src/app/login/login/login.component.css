@@ -1,61 +1,63 @@
-::ng-deep .layout-wrapper{
+::ng-deep .layout-wrapper {
     height: 100% !important;
 }
 
-::ng-deep .layout-main{
-    padding: 0px !important;
+::ng-deep .layout-main {
     height: 100%;
 }
 
-*{
-    overflow-x:hidden;
+* {
+    overflow-x: hidden;
 }
 
-html,body{
+html,
+body {
     height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.bg-img{
+.bg-img {
+    position: absolute;
     width: 100%;
     height: 100%;
-    background-image:url(../../../../../wwwroot/image/login_bg.png);
+    background-image: url(../../../../../wwwroot/image/login_bg.png);
     background-repeat: no-repeat;
     background-size: cover;
+    top: 0px;
 }
 
-.box{
+.box {
     padding-top: 150px;
 }
 
-.logo{
+.logo {
     width: 300px;
     height: 200px;
-    background-image:url(../../../../../wwwroot/image/logo.png);
+    background-image: url(../../../../../wwwroot/image/logo.png);
     background-repeat: no-repeat;
     background-size: contain;
     margin: auto;
 }
 
-.card{
+.card {
     width: 700px;
     padding: 0px;
     margin: auto;
     border: unset !important;
 }
 
-.card-header{
+.card-header {
     font-size: 20px;
-    background-color: #5C72B5 ;
+    background-color: #5C72B5;
     color: white;
 }
 
-.login-btn{
-    float:right
+.login-btn {
+    float: right
 }
 
-.text{
+.text {
     margin-top: 200px;
     font-size: 30px;
     color: white;
