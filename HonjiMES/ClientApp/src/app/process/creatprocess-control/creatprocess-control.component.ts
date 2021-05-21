@@ -499,13 +499,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             WorkOrderDetail: this.dataSourceDB,
             mod: this.modval
         };
-
+        debugger;
         try {
             if (this.modName === 'run') {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
                 this.viewRefresh(e, sendRequest);
-            } else if (this.modName === 'new') {
+            } else if (this.modName === 'new' || this.modName === 'surfacetreat') {
                 // tslint:disable-next-line: max-line-length
                 const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval});
                 this.viewRefresh(e, sendRequest);
