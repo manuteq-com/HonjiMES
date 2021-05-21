@@ -56,8 +56,8 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadDataNo: any;
     uploadUrl: string;
     uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
-    islg=true;
-
+    islg = true;
+    loadingVisible = false;
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -298,10 +298,14 @@ export class ProcessControlComponent implements OnInit {
             // window.open(this.Url, '_blank');
         }
     }
+    onProgress(e) {
+        this.loadingVisible = true;
+    }
     onUploaded(e) {
         const response = JSON.parse(e.request.response) as APIResponse;
+        this.loadingVisible = false;
         if (response.success) {
-
+            this.dataGrid1.instance.refresh();
         } else {
 
         }

@@ -4,7 +4,8 @@
         <dx-file-uploader #fileUploader selectButtonText="匯入工單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false"
             [width]="130" [uploadHeaders]="uploadHeaders"
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
-            uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
+            uploadMode="instantly" (onUploaded)="onUploaded($event)" (onProgress)="onProgress($event)"
+            [visible]="app.checkAddRoles()">
         </dx-file-uploader>
         <dx-button class="overviewbtn" stylingMode="contained" text="產生QRCode" type="normal" [width]="130"
             (onClick)="qrcodedata()">
@@ -110,9 +111,10 @@
         </div>
 
         <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
-            [showColumnLines]="true" [showRowLines]="true">
+            [showColumnLines]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+            [columnAutoWidth]="true" [showBorders]="true">
 
-            <dxo-row-dragging [allowReordering]="false" [onReorder]="onReorder" [showDragIcons]="false">
+            <dxo-row-dragging [allowReordering]=" false" [onReorder]="onReorder" [showDragIcons]="false">
             </dxo-row-dragging>
             <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
                 <dxo-form colCount=2>
@@ -131,9 +133,10 @@
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="35" [allowEditing]="false">
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="35" [allowEditing]="false"
+                [fixed]="true">
             </dxi-column>
-            <dxi-column dataField="ProcessId" caption="製程名稱">
+            <dxi-column dataField="ProcessId" caption="製程名稱" [fixed]="true">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             </dxi-column>
             <!-- <dxi-column dataField="Remarks" caption="備註">
@@ -158,7 +161,9 @@
             </dxi-column>
             <dxi-column dataField="MachineEndTime" caption="機台完工" dataType="date" format="shortDateShortTime">
             </dxi-column>
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" [minWidth]="30"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" [minWidth]="30" [fixed]="true"
+                fixedPosition="right">
+            </dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
                 <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
             </div>
@@ -225,3 +230,6 @@
         <app-qrcode [itemkeyval]="randomkey"></app-qrcode>
     </div>
 </dx-popup>
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+</dx-load-panel>

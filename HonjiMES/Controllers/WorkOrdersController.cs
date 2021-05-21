@@ -2564,7 +2564,7 @@ namespace HonjiMES.Controllers
                                         var CreateOrderTime = DateTime.Now;//工單號建立日期
                                         var sCreateOrderTime = DBHelper.GrtCellval(formulaEvaluator, sheet.GetRow(i).GetCell(1));
                                         DateTime.TryParse(sCreateOrderTime, out CreateOrderTime);
-                                        if (CreateOrderTime < DateTime.Now)
+                                        if (CreateOrderTime.Year < 2020)
                                         {
                                             CreateOrderTime = DateTime.Now;
                                         }
@@ -2621,10 +2621,15 @@ namespace HonjiMES.Controllers
                                 {
                                     System.Globalization.CultureInfo culTW = new System.Globalization.CultureInfo("zh-TW", true);
 
-                                    string[] sDtPattern = new string[]{
-                "yyyy/M/d 上午 hh:mm:ss","yyyy/M/d 下午 hh:mm:ss",
+                                    var sDtPattern = new string[]
+                                    {
+                "yyyy/M/d 上午 hh:mm:ss",
+                "yyyy/M/d 下午 hh:mm:ss",
                 "yyyy/M/d tt hh:mm:ss",
-                "yyyy/MM/dd 上午 HH:mm:ss","yyyy/MM/dd 下午 HH:mm:ss","yyyy/MM/dd tt hh:mm:ss","yyyy年M月d日 tt hh:mm:ss"
+                "yyyy/MM/dd 上午 HH:mm:ss",
+                "yyyy/MM/dd 下午 HH:mm:ss",
+                "yyyy/MM/dd tt hh:mm:ss",
+                "yyyy年M月d日 tt hh:mm:ss"
     };
                                     for (var i = 1; i < sheet.LastRowNum; i++)//筆數
                                     {
@@ -2666,11 +2671,11 @@ namespace HonjiMES.Controllers
                                                                 var MachineStartTimedt = new DateTime(Machinedt.Year, Machinedt.Month, Machinedt.Day, MachineStartTime.Hour, MachineStartTime.Minute, MachineStartTime.Second);
                                                                 var MachineEndTimedt = new DateTime(Machinedt.Year, Machinedt.Month, Machinedt.Day, MachineEndTime.Hour, MachineEndTime.Minute, MachineEndTime.Second);
 
-                                                                if (MachineStartTimedt < DateTime.Now)
+                                                                if (MachineStartTimedt.Year < 2020)
                                                                 {
                                                                     MachineStartTimedt = DateTime.Now;
                                                                 }
-                                                                if (MachineEndTimedt < DateTime.Now)
+                                                                if (MachineEndTimedt.Year < 2020)
                                                                 {
                                                                     MachineEndTimedt = DateTime.Now;
                                                                 }
