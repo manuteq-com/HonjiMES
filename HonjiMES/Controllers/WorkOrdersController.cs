@@ -1713,6 +1713,7 @@ namespace HonjiMES.Controllers
             }
         }
 
+        //檢查有無工單，沒有的話給工單號。
         public async Task<List<WorkOrderHead>> NewWorkOrderByOrderCheck(OrderDetail OrderDetail, int TempNo)
         {
             var WorkOrderHeadList = new List<WorkOrderHead>();
