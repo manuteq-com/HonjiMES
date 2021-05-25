@@ -51,7 +51,7 @@ export class SurfaceDetailComponent implements OnInit {
     Unrepairval: number;
     InNGval: number;
     OutNGval: number;
-    DeliveredMaxValue: string;
+    Otoworkkey: any;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, public datepipe: DatePipe) {
         this.allMode = 'allPages';
@@ -200,21 +200,22 @@ export class SurfaceDetailComponent implements OnInit {
             Swal.fire({
                 allowEnterKey: false,
                 allowOutsideClick: false,
-                title: '沒有勾選任何表處項目',
+                title: '沒有勾選任何訂單項目',
                 html: '請勾選要轉工單的訂單項目',
                 icon: 'warning',
                 timer: 3000
             });
         } else {
             try {
-                //const SurfaceData = new PostSufaceMaster_Detail();
-                //SurfaceData.surfaceDetail = this.toworkorderkey;
-                //const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST',
-                // { values: OrderData });
-                //if (sendRequest.length !== 0) {
-                this.mod = "surfacetreat";
+                const SurfaceData = new PostSufaceMaster_Detail();
+                SurfaceData.surfaceDetail = this.toworkorderkey;
+                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrderCheck', 'POST',{ values: SurfaceData });
+                if (sendRequest.length !== 0) {
+
+                // this.toworkkey = sendRequest;
+                this.Otoworkkey = this.toworkorderkey;
                 this.popupVisibleWork = true;
-                //}
+                }
                 //this.toworkorderkey = [];
             } catch (error) {
 
@@ -246,16 +247,5 @@ export class SurfaceDetailComponent implements OnInit {
             newData.Price = null;
         }
     }
-    // handleValueChange(e) {
-    //     debugger;
-    //     const previousValue = e.previousValue;
-    //     const newValue = e.value;
-    //     if (newValue == true) {
-    //         this.checkBoxarray.push(e.element.innerText);
-    //     } else {
-    //         this.checkBoxarray.splice(0, 1);
-    //     }
-    //     console.log(this.checkBoxarray)
-    // }
 }
 
