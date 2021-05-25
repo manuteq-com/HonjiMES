@@ -11,6 +11,7 @@ import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/service/auth.service';
 import { APIResponse } from 'src/app/app.module';
 
+
 @Component({
     selector: 'app-process-control',
     templateUrl: './process-control.component.html',
@@ -55,7 +56,8 @@ export class ProcessControlComponent implements OnInit {
     workOrderHeadDataNo: any;
     uploadUrl: string;
     uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
-
+    islg = true;
+    loadingVisible = false;
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -238,6 +240,12 @@ export class ProcessControlComponent implements OnInit {
         this.qrcodepopupVisible = true;
         this.randomkey = new Date().getTime();
     }
+    popup_hidden(e) {
+        this.dataGrid1.instance.refresh();
+        if (this.workOrderHeadId !== undefined) {
+            this.readProcess(null, this.workOrderHeadId);
+        }
+    }
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.itemkey = null;
@@ -290,10 +298,14 @@ export class ProcessControlComponent implements OnInit {
             // window.open(this.Url, '_blank');
         }
     }
+    onProgress(e) {
+        this.loadingVisible = true;
+    }
     onUploaded(e) {
         const response = JSON.parse(e.request.response) as APIResponse;
+        this.loadingVisible = false;
         if (response.success) {
-
+            this.dataGrid1.instance.refresh();
         } else {
 
         }

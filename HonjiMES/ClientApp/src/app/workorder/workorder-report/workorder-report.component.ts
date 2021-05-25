@@ -89,7 +89,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     mod: any;
     dataSource: any[];
     ProductBasicList: any;
-    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean;};
+    UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disable: boolean; };
     UserList: any;
     keyup = '';
     MachineEditorOptions: { items: any; displayExpr: string; valueExpr: string; searchEnabled: boolean; readOnly: boolean };
@@ -377,7 +377,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval15 = '　　　預計完工日：　' + (element?.DueEndTime ?? '');
                                 this.itemval16 = '　　　實際開工日：　' + (element?.ActualStartTime ?? '');
                                 this.itemval17 = '　　　實際完工日：　' + (element?.ActualEndTime ?? '');
-                                this.itemval18 = '　　　　需求數量：　' + (element?.Count ?? '0');
+                                this.itemval18 = '　　　　工單數量：　' + (element?.Count ?? '0');
                                 this.itemval20 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
 
                                 const reCount = (element?.Count ?? '0') - (element?.ReCount ?? '0');
@@ -414,7 +414,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                             }
                         });
                         debugger;
-                        if(s.data.WorkOrderHead.Status == 2){
+                        if (s.data.WorkOrderHead.Status == 2) {
                             this.MachineEditorOptions.readOnly = true;
                         }
                     }
@@ -611,8 +611,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         x.DataId === this.formData.WorkOrderHead.DataId
                     );
                     if (result) {
-                    debugger;
-                        this.itemkey =  result.DataId;
+                        debugger;
+                        this.itemkey = result.DataId;
                         this.workorderkey = this.formData.WorkOrderHead.Id;
                     }
                     this.mod = 'workorder';
@@ -759,7 +759,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 }
             } else if (this.modval === 'newpurchase') {
                 this.GetPurchaseDetailData();
-            }else if (this.modval === 'stock') {
+            } else if (this.modval === 'stock') {
                 this.GetStockData();
             }
 
