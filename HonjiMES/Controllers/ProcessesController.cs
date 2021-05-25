@@ -559,6 +559,18 @@ namespace HonjiMES.Controllers
         {
             if (id != 0)
             {
+                if (string.IsNullOrWhiteSpace(WorkOrderData.WorkOrderHead.WorkOrderNo))
+                {
+                    return Ok(MyFun.APIResponseError("工單更新失敗! 工單號不可以為空"));
+                }
+                else
+                {
+                    if (_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderData.WorkOrderHead.WorkOrderNo && x.Id != id).Any())
+                    {
+                        return Ok(MyFun.APIResponseError("工單更新失敗! 工單號不可以重覆"));
+                    }
+                }
+
                 _context.ChangeTracker.LazyLoadingEnabled = true;
                 var updataCheck = new List<int>();
                 var OWorkOrderHeads = _context.WorkOrderHeads.Find(id);
@@ -739,5 +751,34 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(FromQueryResult));
         }
 
+        /// <summary>
+        /// 重設加工製成
+        /// </summary>
+        /// <param name="id">WorkOrderHead ID</param>
+        /// <returns></returns>
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<WorkOrderHead>> ResetWorkOrderList(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var data = await _context.WorkOrderHeads.FindAsync(id);
+            if (data.WorkOrderDetails.Any())
+            {
+                foreach (var item in data.WorkOrderDetails.ToList())
+                {
+                    _context.WorkOrderDetails.Remove(item);
+                }
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (System.Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(data));
+        }
     }
 }

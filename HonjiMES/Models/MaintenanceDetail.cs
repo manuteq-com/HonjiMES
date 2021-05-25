@@ -57,12 +57,5 @@ namespace HonjiMES.Models
         /// </summary>
         [Column("delete_flag", TypeName = "tinyint(4)")]
         public sbyte DeleteFlag { get; set; }
-
-        [ForeignKey(nameof(MaintenanceId))]
-        [InverseProperty(nameof(MachineMaintenance.MaintenanceDetails))]
-        public virtual MachineMaintenance Maintenance { get; set; }
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty("MaintenanceDetails")]
-        public virtual User User { get; set; }
     }
 }

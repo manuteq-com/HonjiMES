@@ -8,9 +8,8 @@
 
     <app-topbar *ngIf="login$"></app-topbar>
 
-    <div *ngIf="login$" class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}"
-        (click)="onMenuClick($event)">
-        <p-scrollPanel #layoutMenuScroller>
+    <div *ngIf="login$" class="layout-menu-container" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
+        <p-scrollPanel #layoutMenuScroller [style]="{height: '100%' }">
             <div class="menu-scroll-content">
                 <app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></app-inline-profile>
                 <app-menu [reset]="resetMenu"></app-menu>
@@ -19,30 +18,6 @@
     </div>
 
     <div class="layout-main">
-        <!-- breadcrumb -->
-        <!-- <div class="headerblock"> breadcrumb未完成
-            <div class="headerfont font1">訂單管理</div>
-            <div class="triangle"></div>
-            <div class="lefttriangle">
-                <div class="lefttriangle1"></div>
-                <div class="lefttriangle2"></div>
-            </div>
-            <div class="headerfont font2">銷貨單</div>
-            <div class="buttongroup">
-            </div>
-        </div> -->
-
-        <!-- <div class="col">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item" *ngFor="let item of breadcrumbList; let i = index"
-                    [class.active]="i===breadcrumbList.length-1">
-                    <a [routerLink]="item.path" *ngIf="i!==breadcrumbList.length-1">
-                        {{ item.name }}
-                    </a>
-                    <span *ngIf="i===breadcrumbList.length-1">{{ item.name }}</span>
-                </li>
-            </ol>
-        </div> -->
         <router-outlet></router-outlet>
     </div>
 
@@ -50,3 +25,20 @@
 
 
 </div>
+
+<!-- 單側邊 navbar -->
+<!-- <ng-container *ngIf="login$; else unauthenticated">
+    <app-side-nav-outer-toolbar title="Honji">
+        <router-outlet></router-outlet>
+        <app-footer>
+        Copyright © 2011- Inc.
+        <br/>
+        All trademarks or registered trademarks are property of their respective owners.
+      </app-footer>
+   </app-side-nav-outer-toolbar>
+</ng-container>
+
+<ng-template #unauthenticated>
+    <app-unauthenticated-content></app-unauthenticated-content>
+</ng-template> -->
+<!-- 純側邊 navbar -->

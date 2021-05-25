@@ -1,8 +1,13 @@
 <form action="" (submit)="onFormSubmit($event)">
 
-    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="false" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-        (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="onSelectionChanged($event)" (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" (onCellPrepared)="onCellPrepared($event)"
-        (onRowPrepared)="onRowPrepared($event)" (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [height]="630">
+    <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" [focusedRowEnabled]="false"
+        (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+        (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+        (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="onSelectionChanged($event)"
+        (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false"
+        [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [height]="630">
 
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
         <dxo-filter-row [visible]="false"></dxo-filter-row>
@@ -29,7 +34,8 @@
         <!-- <dxi-column dataField="MachineNo" caption="機號"></dxi-column> -->
         <dxi-column dataField="OrderCount" caption="訂單數量" [allowEditing]="false" [width]="100"></dxi-column>
         <dxi-column dataField="StockCount" caption="庫存數量" [allowEditing]="false" [width]="200"></dxi-column>
-        <dxi-column dataField="Count" caption="工單數量" dataType="number" [width]="100" [editorOptions]="EditorOptions" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="Count" caption="工單數量" dataType="number" [width]="100" [editorOptions]="EditorOptions"
+            [allowEditing]="true"></dxi-column>
         <dxi-column dataField="DueEndTime" caption="廠內預計完工日期" dataType="date" [width]="150" [allowEditing]="true">
         </dxi-column>
         <!-- <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" [width]="180"></dxi-column>
@@ -44,7 +50,8 @@
     <div class="col-auto-12 mt-1">
         <!-- <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='取消' type='danger' icon='close' [useSubmitBehavior]="true"
             (onClick)="CancerOnClick($event)"></dx-button> -->
-        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='確認建立' type='success' icon='save' [useSubmitBehavior]="true" (onClick)="SaveOnClick($event)"></dx-button>
+        <dx-button horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='確認建立' type='success' icon='save'
+            [useSubmitBehavior]="true" (onClick)="SaveOnClick($event)"></dx-button>
     </div>
 
 </form>

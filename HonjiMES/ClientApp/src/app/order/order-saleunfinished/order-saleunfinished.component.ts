@@ -47,7 +47,7 @@ export class OrderSaleunfinishedComponent implements OnInit {
     tosalekey: any;
     mod: string;
 
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
     }

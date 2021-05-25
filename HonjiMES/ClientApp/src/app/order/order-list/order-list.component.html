@@ -1,20 +1,15 @@
 <!-- <p>所有訂單</p> -->
 <div class="headerblock">
     <app-headerfont></app-headerfont>
-    <div class="buttongroup">
-        <dx-file-uploader #fileUploader selectButtonText="匯入訂單" abelText="" [uploadUrl]="uploadUrl" [multiple]="false"
-            [width]="130" [uploadHeaders]="uploadHeaders"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+    <div class="buttongroup" [ngClass]="{'buttonlocation':!app.isDesktop()}">
+        <dx-file-uploader #fileUploader selectButtonText="匯入訂單" labelText="" [uploadUrl]="uploadUrl" [multiple]="false" [width]="130" [uploadHeaders]="uploadHeaders" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
             uploadMode="instantly" (onUploaded)="onUploaded($event)" [visible]="app.checkAddRoles()">
         </dx-file-uploader>
-        <dx-button class="overviewbtn" stylingMode="contained" text="訂單總覽" type="normal" [width]="130"
-            (onClick)="overviewpopup($event)">
+        <dx-button class="overviewbtn" stylingMode="contained" text="訂單總覽" type="normal" [width]="130" (onClick)="overviewpopup($event)">
         </dx-button>
-        <dx-button class="overviewbtn" stylingMode="contained" text="未銷貨總覽" type="normal" [width]="130"
-            (onClick)="saleunfinishedpopup($event)">
+        <dx-button class="overviewbtn" stylingMode="contained" text="未銷貨總覽" type="normal" [width]="130" (onClick)="saleunfinishedpopup($event)">
         </dx-button>
-        <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130"
-            (onClick)="creatdata()" [visible]="app.checkAddRoles()">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增訂單" type="success" [width]="130" (onClick)="creatdata()" [visible]="app.checkAddRoles()">
         </dx-button>
     </div>
 </div>
@@ -36,14 +31,10 @@
     </div>
 </div>
 
-<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
-    [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)" (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true"
-    [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-    [remoteOperations]="remoteOperations">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" dateSerializationFormat='yyyy/MM/dd HH:mm:ss' [masterDetail]="{ enabled: true, template: 'detail' }" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
+    (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)" (onRowPrepared)="onRowPrepared($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onEditingStart)="onEditingStart($event)" (onCellPrepared)="onCellPrepared($event)" hoverStateEnabled="true" [showColumnLines]="true" [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [remoteOperations]="remoteOperations"
+    [columnAutoWidth]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -51,12 +42,12 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
     <!-- <dxo-editing mode="form" [allowAdding]="app.checkAddRoles()" [allowUpdating]="app.checkUpdateRoles()" [allowDeleting]="app.checkDelRoles()"> -->
-    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="app.checkUpdateRoles()"
-        [allowDeleting]="app.checkDelRoles()">
+    <dxo-editing mode="form" [allowAdding]="false" [allowUpdating]="app.checkUpdateRoles()" [allowDeleting]="app.checkDelRoles()">
         <dxo-form colCount=4>
             <dxi-item dataField="OrderNo"></dxi-item>
             <dxi-item dataField="CustomerNo"></dxi-item>
@@ -78,8 +69,7 @@
     <dxi-column type="buttons" alignment="center" [visible]="true" [width]="40">
         <dxi-button name="upload" text=" " icon=" " [visible]="unCheckFlagVisible" [onClick]="CheckFlagIconClick">
         </dxi-button>
-        <dxi-button name="upload" text="標記" icon="favorites" [visible]="CheckFlagVisible"
-            [onClick]="CheckFlagIconClick"></dxi-button>
+        <dxi-button name="upload" text="標記" icon="favorites" [visible]="CheckFlagVisible" [onClick]="CheckFlagIconClick"></dxi-button>
     </dxi-column>
 
     <dxi-column dataField="OrderType" caption="訂單種類" alignment="center" [width]="80">
@@ -116,29 +106,32 @@
     </dxi-column> -->
 
     <div *dxTemplate="let item of 'detail'">
-        <app-orderdetail-list [itemkey]="item.key" [MaterialBasicList]="MaterialBasicList"
-            (childOuter)="updatepopup_result($event)"></app-orderdetail-list>
+        <app-orderdetail-list [itemkey]="item.key" [MaterialBasicList]="MaterialBasicList" (childOuter)="updatepopup_result($event)"></app-orderdetail-list>
     </div>
 
 </dx-data-grid>
-<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-            [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder>
+        <dx-scroll-view width="100%" height="100%">
+            <!-- <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder> -->
+
+            <app-creatorder></app-creatorder>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
-    [(visible)]="overviewpopupVisible">
+<dx-popup [showTitle]="true" title="訂單總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="overviewpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-overview (childOuter)="overpopup_result($event)" [randomkeyval]="overRandomkey"></app-order-overview>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
-    [(visible)]="saleunfinshedVisible">
+<dx-popup [showTitle]="true" title="未銷貨總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="saleunfinshedVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
+        <dx-scroll-view width="100%" height="100%">
+            <app-order-saleunfinished (childOuter)="unsalepopup_result($event)" [randomkeyval]="overRandomkey"></app-order-saleunfinished>
+        </dx-scroll-view>
     </div>
 </dx-popup>

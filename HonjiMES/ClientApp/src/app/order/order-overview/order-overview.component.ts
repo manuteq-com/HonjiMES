@@ -45,7 +45,7 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     Otoworkkey: any;
     selectedOperation: string = "between";
 
-    constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
+    constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
         this.OrderTypeList = myservice.getOrderTypeShow();
         this.editorOptions = { onValueChanged: this.onValueChanged.bind(this) };

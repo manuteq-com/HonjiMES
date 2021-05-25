@@ -167,7 +167,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        console.log("checkBoxarray",this.checkBoxarray);
+        console.log('checkBoxarray', this.checkBoxarray);
         // debugger;
         this.dataSourceDB = [];
         this.newVisible = false;
@@ -447,6 +447,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     DeleteOnClick(e) {
         this.modName = 'delete';
     }
+    ResetOnClick(e) {
+        this.modName = 'reset';
+    }
     UpdateOnClick(e) {
         this.dataGrid2.instance.saveEditData();
         this.modName = 'update';
@@ -459,83 +462,120 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     onFormSubmit = async function (e) {
         // debugger;
-        if (this.modName !== 'cancel') {
-            this.dataGrid2.instance.saveEditData();
-        } else {
-            this.dataGrid2.instance.cancelEditData();
-            this.childOuter.emit(true);
-        }
-        this.buttondisabled = true;
-        if (this.validate_before() === false) {
-            this.buttondisabled = false;
-            return;
-        }
-        if (!this.saveCheck) {
-            return;
-        }
-        this.dataGrid2.instance.saveEditData();
-        if (this.dataSourceDB.length === 0) {
-            notify({
-                message: '製程內容不能為空!',
-                position: {
-                    my: 'center top',
-                    at: 'center top'
-                }
-            }, 'error', 3000);
-            return false;
-        }
-        this.postval = {
-            WorkOrderHead: {
-                Id: this.formData.WorkOrderHeadId,
-                WorkOrderNo: this.formData.WorkOrderNo,
-                CreateTime: this.formData.CreateTime,
-                // DataType: 2,
-                DataId: this.formData.MaterialBasicId,
-                Count: this.formData.Count,
-                MachineNo: this.formData.MachineNo,
-                DueStartTime: this.formData.DueStartTime,
-                DueEndTime: this.formData.DueEndTime
-            },
-            WorkOrderDetail: this.dataSourceDB,
-            mod: this.modval
-        };
-        debugger;
-        try {
-            if (this.modName === 'run') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modName === 'new' || this.modName === 'surfacetreat') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval});
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modName === 'update') {
-                // tslint:disable-next-line: max-line-length
-                const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.formData.WorkOrderHeadId, values: this.postval });
-                this.viewRefresh(e, sendRequest);
-            } else if (this.modName === 'delete') {
-                Swal.fire({
-                    showCloseButton: true,
-                    allowEnterKey: false,
-                    allowOutsideClick: false,
-                    title: '確認刪除?',
-                    html: '刪除後將無法復原!',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#296293',
-                    cancelButtonColor: '#CE312C',
-                    confirmButtonText: '確認',
-                    cancelButtonText: '取消'
-                }).then(async (result) => {
-                    if (result.value) {
-                        // tslint:disable-next-line: max-line-length
-                        const sendRequest = await SendService.sendRequest(this.http, '/Processes/DeleteWorkOrderList/' + this.formData.WorkOrderHeadId, 'DELETE');
-                        this.viewRefresh(e, sendRequest);
-                    }
-                });
-            }
-        } catch (error) {
 
+        if (this.modName === 'reset') {
+            Swal.fire({
+                showCloseButton: true,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '確認重設製程?',
+                html: '重設製程後將無法復原!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#296293',
+                cancelButtonColor: '#CE312C',
+                confirmButtonText: '確認',
+                cancelButtonText: '取消'
+            }).then(async (result) => {
+                if (result.value) {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/ResetWorkOrderList/' + this.formData.WorkOrderHeadId);
+                    this.viewRefresh(e, sendRequest);
+                } else {
+                    return false;
+                }
+            });
+        } else {
+
+            if (this.modName !== 'cancel') {
+                this.dataGrid2.instance.saveEditData();
+            } else {
+                this.dataGrid2.instance.cancelEditData();
+                this.childOuter.emit(true);
+            }
+            this.buttondisabled = true;
+            if (this.validate_before() === false) {
+                this.buttondisabled = false;
+                return;
+            }
+            if (!this.saveCheck) {
+                return;
+            }
+            this.dataGrid2.instance.saveEditData();
+            if (this.dataSourceDB.length === 0) {
+                notify({
+                    message: '製程內容不能為空!',
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'error', 3000);
+                return false;
+            }
+            this.postval = {
+                WorkOrderHead: {
+                    Id: this.formData.WorkOrderHeadId,
+                    WorkOrderNo: this.formData.WorkOrderNo,
+                    CreateTime: this.formData.CreateTime,
+                    // DataType: 2,
+                    DataId: this.formData.MaterialBasicId,
+                    Count: this.formData.Count,
+                    MachineNo: this.formData.MachineNo,
+                    DueStartTime: this.formData.DueStartTime,
+                    DueEndTime: this.formData.DueEndTime
+                },
+                WorkOrderDetail: this.dataSourceDB,
+                mod: this.modval
+            };
+
+            try {
+                if (this.modName === 'run') {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/toWorkOrder', 'POST', { values: this.postval });
+                    this.viewRefresh(e, sendRequest);
+                } else if (this.modName === 'new') {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
+                    this.viewRefresh(e, sendRequest);
+                } else if (this.modName === 'update') {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.formData.WorkOrderHeadId, values: this.postval });
+                    // this.viewRefresh(e, sendRequest);
+                    if (sendRequest) {
+                        this.dataGrid2.instance.refresh();
+                        e.preventDefault();
+                        notify({
+                            message: '更新完成',
+                            position: {
+                                my: 'center top',
+                                at: 'center top'
+                            }
+                        }, 'success', 3000);
+                    }
+                } else if (this.modName === 'delete') {
+                    Swal.fire({
+                        showCloseButton: true,
+                        allowEnterKey: false,
+                        allowOutsideClick: false,
+                        title: '確認刪除?',
+                        html: '刪除後將無法復原!',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#296293',
+                        cancelButtonColor: '#CE312C',
+                        confirmButtonText: '確認',
+                        cancelButtonText: '取消'
+                    }).then(async (result) => {
+                        if (result.value) {
+                            // tslint:disable-next-line: max-line-length
+                            const sendRequest = await SendService.sendRequest(this.http, '/Processes/DeleteWorkOrderList/' + this.formData.WorkOrderHeadId, 'DELETE');
+                            this.viewRefresh(e, sendRequest);
+                        }
+                    });
+                }
+            } catch (error) {
+
+            }
         }
         this.buttondisabled = false;
     };

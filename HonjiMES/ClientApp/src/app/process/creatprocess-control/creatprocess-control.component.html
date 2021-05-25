@@ -21,20 +21,15 @@
             <dxi-validation-rule type="required" message="訂單 必填"></dxi-validation-rule>
             <dxo-label text="訂單"></dxo-label>
         </dxi-item> -->
-        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox"
-            [editorOptions]="MaterialBasicSelectBoxOptions" [colSpan]="6" [disabled]="editVisible">
+        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="!newVisible"
+            [editorOptions]="MaterialBasicSelectBoxOptions" [colSpan]="6" [disabled]="!newVisible">
             <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
             <dxo-label text="成品項目"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"
             [colSpan]="3">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
-            <dxo-label text="訂單數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"
-            [colSpan]="3">
-            <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
-            <dxo-label text="工單數量"></dxo-label>
+            <dxo-label text="數量"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="MachineNo" [colSpan]="2" [disabled]="editVisible">
             <dxo-label text="機號"></dxo-label>
@@ -134,6 +129,7 @@
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
         </dxi-column>
 
         <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod" [visible]="processVisible">
@@ -141,6 +137,7 @@
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
         </dxi-column>
         <dxo-summary [recalculateWhileEditing]="true">
             <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分" valueFormat="###,##0">
@@ -187,7 +184,6 @@
         </div>
 
     </dx-data-grid>
-
     <div class="col-auto-12 mt-1">
         <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='新建存檔' type='success' icon='save'
             [useSubmitBehavior]="true" [disabled]="saveDisabled" [visible]="newVisible"></dx-button>
@@ -196,7 +192,9 @@
         <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除工單' type='danger' icon='trash' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="!modVisible"></dx-button>
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="runVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='重設製程' type='danger' icon='pulldown' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="ResetOnClick($event)" [visible]="runVisible"></dx-button>
         <!-- <dx-button horizontalAlignment="right" text='派工' type='default' icon='check' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="RunOnClick($event)" [visible]="runVisible"></dx-button> -->
     </div>

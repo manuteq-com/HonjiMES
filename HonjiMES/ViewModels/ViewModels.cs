@@ -739,12 +739,6 @@ namespace HonjiMES.Models
         public List<MBillOfMaterial> MBillOfMaterialList { get; set; }
     }
 
-    public class SurfaceData : PurchaseDetail
-    {
-        public List<WorkOrderHead> WorkOrderHead { get; set; }
-        public string[] nWorkOrderNo { get; set; }
-    }
-
     public class OrderData
     {
         public OrderHead OrderHead { get; set; }
@@ -757,13 +751,6 @@ namespace HonjiMES.Models
         public decimal OrderCount { get; set; }
         public decimal? Total { get; set; }
     }
-    public class WorkOrderHeadInfoBySurfacetreat : WorkOrderHead
-    {
-        public int? PurchaseDetailId { get; set; }
-        public string StockCount { get; set; }        
-        public decimal? Total { get; set; }
-    }
-
     public class OrderToWorkCheckData
     {
         public ToWorksOrderDetail OrderDetail { get; set; }
