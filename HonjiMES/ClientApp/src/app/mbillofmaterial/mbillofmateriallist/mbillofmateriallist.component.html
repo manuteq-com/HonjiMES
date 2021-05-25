@@ -17,16 +17,13 @@
 
     <div class="col-7">
 
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0"
-            [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
-            [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
-            [masterDetail]="{ enabled: true, template: 'detail' }">
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="false" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations" [masterDetail]="{ enabled: true, template: 'detail' }">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
             </dxo-paging>
-            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
-                [showNavigationButtons]="true" visible="true">
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true" visible="true">
             </dxo-pager>
             <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
             </dxo-remote-operations> -->
@@ -80,19 +77,15 @@
                 </div>
             </div>
             <div class="col-4">
-                <dx-button class="toolbtn" stylingMode="contained" text="更新" type="success" [width]="80"
-                    [disabled]="saveDisabled" (onClick)="savedata()">
+                <dx-button class="toolbtn" stylingMode="contained" text="更新" type="success" [width]="80" [disabled]="saveDisabled" (onClick)="savedata()">
                 </dx-button>
-                <dx-button class="toolbtn" stylingMode="contained" text="模型" type="default" [width]="80"
-                    [disabled]="saveDisabled" (onClick)="popup_model()">
+                <dx-button class="toolbtn" stylingMode="contained" text="模型" type="default" [width]="80" [disabled]="saveDisabled" (onClick)="popup_model()">
                 </dx-button>
             </div>
         </div>
 
-        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600"
-            (onInitNewRow)="onInitNewRow($event)" (onRowRemoved)="onRowRemoved($event)"
-            (onRowInserting)="onRowInserting($event)" (onRowUpdating)="onRowUpdating($event)"
-            (onEditorPreparing)="onEditorPreparing($event)">
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_Process" [showBorders]="true" height="600" (onInitNewRow)="onInitNewRow($event)" (onRowRemoved)="onRowRemoved($event)" (onRowInserting)="onRowInserting($event)" (onRowUpdating)="onRowUpdating($event)"
+            (onEditorPreparing)="onEditorPreparing($event)" [columnAutoWidth]="true" [allowColumnResizing]="true">
 
             <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder" [showDragIcons]="true">
             </dxo-row-dragging>
@@ -108,48 +101,39 @@
             </dxo-editing>
             <dxo-filter-row [visible]="false"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
-                [enterKeyDirection]="enterKeyDirection">
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
             </dxo-keyboard-navigation>
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             <dxo-summary [recalculateWhileEditing]="true">
                 <dxi-total-item displayFormat="{0}分" column="ProcessLeadTime" summaryType="sum">
                 </dxi-total-item>
-               <dxi-total-item i-total-item displayFormat="{0}分" column="ProcessTime" summaryType="sum">
+                <dxi-total-item i-total-item displayFormat="{0}分" column="ProcessTime" summaryType="sum">
                 </dxi-total-item>
-                <dxi-total-item column="ProcessCost" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)"
-                    displayFormat="{0}元">
+                <dxi-total-item column="ProcessCost" summaryType="sum" valueFormat="$ #,##0.##;($ #,##0.##)" displayFormat="{0}元">
                 </dxi-total-item>
             </dxo-summary>
 
-            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false">
+            <dxi-column dataField="SerialNumber" caption="No" dataType="number" [width]="40" [allowEditing]="false" [fixed]="true">
             </dxi-column>
-            <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="220">
+            <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [fixed]="true">
                 <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
                 <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
             </dxi-column>
 
-            <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number"
-                editCellTemplate="ProcessLeadTimeTemplate" cellTemplate="cProcessLeadTimeTemplate" [width]="80">
+            <dxi-column dataField="ProcessLeadTime" caption="前置(分)" dataType="number" editCellTemplate="ProcessLeadTimeTemplate" cellTemplate="cProcessLeadTimeTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" editCellTemplate="ProcessTimeTemplate"
-                cellTemplate="cProcessTimeTemplate" [width]="80">
+            <dxi-column dataField="ProcessTime" caption="標準(分)" dataType="number" editCellTemplate="ProcessTimeTemplate" cellTemplate="cProcessTimeTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate"
-                cellTemplate="cProcessCostTemplate" [width]="80">
+            <dxi-column dataField="ProcessCost" caption="成本" dataType="number" editCellTemplate="ProcessCostTemplate" cellTemplate="cProcessCostTemplate" [width]="80">
             </dxi-column>
-            <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
-                cellTemplate="cProducingMachineTemplate" [visible]="false">
+            <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" cellTemplate="cProducingMachineTemplate" [visible]="false">
             </dxi-column>
-            <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate"
-                cellTemplate="cRemarksTemplate" [width]="185">
+            <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate" cellTemplate="cRemarksTemplate" [width]="185">
             </dxi-column>
-            <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="150"
-                cellTemplate="cDrawNoTemplate" [visible]="false">
+            <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="150" cellTemplate="cDrawNoTemplate" [visible]="false">
             </dxi-column>
-            <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="80"
-                cellTemplate="cManpowerTemplate" [visible]="false">
+            <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="80" cellTemplate="cManpowerTemplate" [visible]="false">
             </dxi-column>
 
             <dxi-column type="buttons" [width]="40">
@@ -160,22 +144,17 @@
             </dxi-column>
 
             <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
-                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
-                    [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }"
-                    valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
             </div>
 
             <div *dxTemplate="let data of 'ProcessLeadTimeTemplate'">
-                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)"
-                    [showSpinButtons]="true"></dx-number-box>
+                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)" [showSpinButtons]="true"></dx-number-box>
             </div>
             <div *dxTemplate="let data of 'ProcessTimeTemplate'">
-                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)"
-                    [showSpinButtons]="true"></dx-number-box>
+                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)" [showSpinButtons]="true"></dx-number-box>
             </div>
             <div *dxTemplate="let data of 'ProcessCostTemplate'">
-                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)"
-                    [showSpinButtons]="true"></dx-number-box>
+                <dx-number-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)" [showSpinButtons]="true"></dx-number-box>
             </div>
             <div *dxTemplate="let data of 'ProducingMachineTemplate'">
                 <dx-text-box [value]="showcell(data)" (onValueChanged)="TemplatesetValue($event,data)">
@@ -194,9 +173,7 @@
             </div>
 
             <div *dxTemplate="let data of 'cProcessEditCellTemplate'">
-                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
-                    [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id'} }"
-                    valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+                <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)" [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id'} }" valueExpr="Id" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
             </div>
 
             <div *dxTemplate="let data of 'cProcessLeadTimeTemplate'">
@@ -222,8 +199,7 @@
             </div>
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="模型資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-            [width]="1000" [(visible)]="modelpopupVisible">
+        <dx-popup [showTitle]="true" title="模型資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1000" [(visible)]="modelpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-mbillofmaterial-model (childOuter)="modelpopup_result($event)" [itemkeyval]="itemkey">
                 </app-mbillofmaterial-model>
