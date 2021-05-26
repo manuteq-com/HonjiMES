@@ -6,3 +6,6 @@
     margin-left: 3px;
     border-radius: 2px;
 }
+::ng-deep .dx-form{
+    margin-bottom: 10px;
+}
