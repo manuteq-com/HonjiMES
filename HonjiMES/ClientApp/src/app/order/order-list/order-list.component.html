@@ -113,9 +113,9 @@
 <dx-popup [showTitle]="true" title="新增訂單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="'90%'" [height]="'90%'" [showCloseButton]="true" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <dx-scroll-view width="100%" height="100%">
-            <!-- <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder> -->
+            <app-creatorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [randomkeyval]="randomkey" [exceldata]="exceldata"></app-creatorder>
 
-            <app-creatorder></app-creatorder>
+            <!-- <app-creatorder></app-creatorder> -->
         </dx-scroll-view>
     </div>
 </dx-popup>

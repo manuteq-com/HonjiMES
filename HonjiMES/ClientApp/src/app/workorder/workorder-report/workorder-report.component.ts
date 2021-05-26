@@ -571,6 +571,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.dataSource = [];
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
+                debugger;
                 if (s.success) {
                     const result = s.data.find(x =>
                         x.DataType === this.formData.WorkOrderHead.DataType &&
@@ -578,7 +579,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                     );
                     debugger;
                     if (result) {
-                        debugger;
                         this.dataSource.push({
                             Serial: 1,
                             TempId: result.TempId,

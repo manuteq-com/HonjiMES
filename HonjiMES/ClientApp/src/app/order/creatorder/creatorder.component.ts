@@ -214,6 +214,7 @@ export class CreatorderComponent implements OnInit, OnChanges {
                     }
                 }
             });
+            debugger;
             this.formData = this.exceldata;
             this.formData.OrderNo = this.CreateNumberInfoVal.CreateNumber;
             this.formData.CreateTime = this.CreateNumberInfoVal.CreateTime;
