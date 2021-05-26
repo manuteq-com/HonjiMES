@@ -5,7 +5,7 @@
     margin-bottom: 6px;
 }
 
-.headerfont {
+/* .headerfont {
     width: 25%;
     height: 43px;
     color: white;
@@ -53,4 +53,27 @@
     background-color: #5C72B5;
     position: absolute;
     right: 0%;
+} */
+.headerfont {
+    height: 43px;
+    color: white;
+    padding-left: 18px;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 43px;
+    background-color: #314991;
+    border-radius: 3px 0px 0px 3px;
+}
+.font1 {
+    width: 15%;
+}
+.font2 {
+    width: 100%;
+    border-radius: 0px 4px 4px 0px;
+    background-color: #5C72B5;
+}
+@media(max-width: 1200px){
+    .font1{
+        width: 25%;
+    }
 }
