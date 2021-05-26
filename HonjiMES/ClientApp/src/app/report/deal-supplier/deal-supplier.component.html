@@ -2,17 +2,8 @@
     <app-headerfont></app-headerfont>
 </div>
 
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
-    >
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" hoverStateEnabled="true" [rowAlternationEnabled]="true"
+    [remoteOperations]="remoteOperations" [columnAutoWidth]="true" [allowColumnResizing]="true">
 
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
@@ -23,11 +14,10 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
-    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180"
-    [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime" [width]="180" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="SupplierId" caption="廠商名稱" [width]="220">
         <dxo-lookup [dataSource]="SupplierList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -38,11 +28,11 @@
 
     <dxi-column dataField="Quantity" caption="數量" [width]="50"></dxi-column>
     <dxi-column dataField="Price" caption="價格" [width]="50"></dxi-column>
-    <dxi-column dataField="DeliveryDate" caption="預交日"  dataType="date" [width]="100" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="DeliveryDate" caption="預交日" dataType="date" [width]="100" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">
         <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="Remark" caption="實際規格" ></dxi-column>
+    <dxi-column dataField="Remark" caption="實際規格"></dxi-column>
     <dxi-column dataField="DataType" caption="類別" [width]="70">
         <dxo-lookup [dataSource]="listStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
@@ -53,13 +43,12 @@
         <dxo-lookup [dataSource]="listPurchaseStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
-        <div *dxTemplate="let data of 'cellTemplate'">
-            <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
+    <div *dxTemplate="let data of 'cellTemplate'">
+        <dx-button icon="detailslayout" type="normal" (onClick)="readLog($event,data)"></dx-button>
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="廠商進貨明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700"
-            [height]="800" [(visible)]="logpopupVisible">
+<dx-popup [showTitle]="true" title="廠商進貨明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="800" [(visible)]="logpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-deal-supplier-log [itemkeyval]="itemkey"></app-deal-supplier-log>
     </div>
