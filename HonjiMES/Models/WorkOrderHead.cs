@@ -121,8 +121,8 @@ namespace HonjiMES.Models
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user", TypeName = "int(11) unsigned")]
-        public uint CreateUser { get; set; }
+        [Column("create_user", TypeName = "int(11)")]
+        public int CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
