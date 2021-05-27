@@ -23,6 +23,7 @@ namespace HonjiMES.Models
         public virtual DbSet<MachineMaintenance> MachineMaintenances { get; set; }
         public virtual DbSet<MachineWorkdate> MachineWorkdates { get; set; }
         public virtual DbSet<MaintenanceDetail> MaintenanceDetails { get; set; }
+        public virtual DbSet<MaintenanceLog> MaintenanceLogs { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<MaterialBasic> MaterialBasics { get; set; }
         public virtual DbSet<MaterialLog> MaterialLogs { get; set; }
@@ -973,6 +974,47 @@ namespace HonjiMES.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.MaintenanceId).HasComment("機台保養ID");
+
+                entity.Property(e => e.RecentTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("維護時間");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("更新時間");
+
+                entity.Property(e => e.UserId).HasComment("操作人員");
+            });
+
+            modelBuilder.Entity<MaintenanceLog>(entity =>
+            {
+                entity.HasComment("機台保養紀錄");
+
+                entity.HasIndex(e => e.MachineId)
+                    .HasName("machine_id");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("user_id");
+
+                entity.Property(e => e.Id).HasComment("唯一碼");
+
+                entity.Property(e => e.CreateTime)
+                    .HasDefaultValueSql("current_timestamp()")
+                    .HasComment("開始時間");
+
+                entity.Property(e => e.DeleteFlag).HasComment("刪除註記");
+
+                entity.Property(e => e.Item)
+                    .HasComment("保養項目")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.MachineId).HasComment("機台ID");
+
+                entity.Property(e => e.MachineName)
+                    .HasComment("機台名稱")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.RecentTime)
                     .HasDefaultValueSql("current_timestamp()")
@@ -3449,6 +3491,11 @@ namespace HonjiMES.Models
                 entity.Property(e => e.DataType).HasComment("料號種類(1原料 2成品 3 半成品)");
 
                 entity.Property(e => e.DispatchTime).HasComment("派工時間");
+
+                entity.Property(e => e.DrawNo)
+                    .HasComment("圖號")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.DueEndTime).HasComment("預計完工日");
 

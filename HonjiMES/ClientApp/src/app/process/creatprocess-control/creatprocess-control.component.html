@@ -36,7 +36,9 @@
         <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible">
             <dxo-label text="備註"></dxo-label>
         </dxi-item>
-
+        <dxi-item dataField="DrawNo">
+             <dxo-label text="圖號"></dxo-label>
+        </dxi-item>
         <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="editVisible">
             <dxo-label text="預計開工日"></dxo-label>
         </dxi-item>
@@ -101,8 +103,8 @@
         </dxi-column>
         <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
         </dxi-column>
-        <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="50">
-        </dxi-column>
+        <!-- <dxi-column dataField="DrawNo" caption="圖號" editCellTemplate="DrawNoTemplate" [width]="50">
+        </dxi-column> -->
         <dxi-column dataField="Manpower" caption="所需人力" editCellTemplate="ManpowerTemplate" [width]="75">
         </dxi-column>
         <dxi-column dataField="ExpectedlTotalTime" caption="預計工時(分)" dataType="number" [width]="110">
