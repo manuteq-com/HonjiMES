@@ -74,7 +74,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     MachineList: any;
     processVisible: boolean;
     countVal: number;
-    mod: any;
+
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -524,8 +524,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     DueStartTime: this.formData.DueStartTime,
                     DueEndTime: this.formData.DueEndTime
                 },
-                WorkOrderDetail: this.dataSourceDB,
-                mod: this.modval
+                WorkOrderDetail: this.dataSourceDB
             };
 
             try {
@@ -535,7 +534,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     this.viewRefresh(e, sendRequest);
                 } else if (this.modName === 'new') {
                     // tslint:disable-next-line: max-line-length
-                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval});
                     this.viewRefresh(e, sendRequest);
                 } else if (this.modName === 'update') {
                     // tslint:disable-next-line: max-line-length
