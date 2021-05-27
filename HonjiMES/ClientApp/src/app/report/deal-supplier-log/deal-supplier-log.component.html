@@ -1,18 +1,6 @@
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true"
-    [remoteOperations]="remoteOperations"  [columnAutoWidth]="true"
-    >
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true"
+    [allowColumnResizing]="true">
 
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="single"></dxo-selection>
@@ -23,7 +11,7 @@
     <dxo-paging [pageSize]="20"></dxo-paging>
     <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 100]" [showInfo]="true">
     </dxo-pager>
-    <dxo-editing mode="row"  [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
+    <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="false">
     </dxo-editing>
 
     <dxi-column dataField="BillofPurchase.BillofPurchaseNo" caption="進貨單號" [width]="150"></dxi-column>
@@ -33,8 +21,7 @@
     <dxi-column dataField="Quantity" caption="原始數量" [width]="80"></dxi-column>
     <dxi-column dataField="OriginPrice" caption="原單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="價格" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="BillofPurchase.BillofPurchaseDate" caption="進貨日期" dataType="date" [width]="120"
-    [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+    <dxi-column dataField="BillofPurchase.BillofPurchaseDate" caption="進貨日期" dataType="date" [width]="120" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
     <dxi-column dataField="Remarks" caption="備註"></dxi-column>
 
 </dx-data-grid>

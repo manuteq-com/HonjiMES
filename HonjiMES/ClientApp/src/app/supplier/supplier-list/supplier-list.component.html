@@ -1,30 +1,13 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button
-            class="insertbtn"
-            stylingMode="contained"
-            text="新增供應商"
-            type="success"
-            [width]="120"
-            (onClick)="creatdata()">
+        <dx-button class="insertbtn" stylingMode="contained" text="新增供應商" type="success" [width]="120" (onClick)="creatdata()">
         </dx-button>
     </div>
 </div>
 
-<dx-data-grid
-    [dataSource]="dataSourceDB"
-    showBorders="true"
-    keyExpr="id"
-    [focusedRowEnabled]="true"
-    (onDataErrorOccurred)="onDataErrorOccurred($event)"
-    [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
-    (onFocusedRowChanging)="onFocusedRowChanging($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="selectionChanged($event)"
-    hoverStateEnabled="true"
-    [rowAlternationEnabled]="true">
+<dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [columnAutoWidth]="true" [allowColumnResizing]="true">
 
     <dxo-selection mode="single"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -36,15 +19,15 @@
     </dxo-pager>
     <dxo-editing mode="row" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-form>
-            <dxi-item  dataField="Code"></dxi-item>
-            <dxi-item  dataField="Name"></dxi-item>
-            <dxi-item  dataField="ContactName"></dxi-item>
-            <dxi-item  dataField="Phone"></dxi-item>
-            <dxi-item  dataField="Fax"></dxi-item>
-            <dxi-item  dataField="Address"></dxi-item>
-            <dxi-item  dataField="Email"></dxi-item>
-            <dxi-item  dataField="UniformNo"></dxi-item>
-            <dxi-item  dataField="Remarks"></dxi-item>
+            <dxi-item dataField="Code"></dxi-item>
+            <dxi-item dataField="Name"></dxi-item>
+            <dxi-item dataField="ContactName"></dxi-item>
+            <dxi-item dataField="Phone"></dxi-item>
+            <dxi-item dataField="Fax"></dxi-item>
+            <dxi-item dataField="Address"></dxi-item>
+            <dxi-item dataField="Email"></dxi-item>
+            <dxi-item dataField="UniformNo"></dxi-item>
+            <dxi-item dataField="Remarks"></dxi-item>
         </dxo-form>
         <dxo-popup>
             <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{ type: 'success', text: '存檔', onClick: saveClickHandler }">
@@ -78,19 +61,14 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="供應商原料" [dragEnabled]="false" [closeOnOutsideClick]="false"
-    [(visible)]="verpopupVisible">
+<dx-popup [showTitle]="true" title="供應商原料" [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="verpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-supplier-material (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"></app-supplier-material>
     </div>
 </dx-popup>
 
-<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="650"
-    [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增供應商" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="700" [height]="650" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-creatsupplier (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-        [exceldata]="exceldata"></app-creatsupplier>
+        <app-creatsupplier (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod" [exceldata]="exceldata"></app-creatsupplier>
     </div>
 </dx-popup>
-
-
