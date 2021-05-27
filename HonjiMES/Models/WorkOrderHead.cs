@@ -37,6 +37,11 @@ namespace HonjiMES.Models
         [Column("machine_no", TypeName = "varchar(50)")]
         public string MachineNo { get; set; }
         /// <summary>
+        /// &#22294;&#34399;
+        /// </summary>
+        [Column("draw_no", TypeName = "varchar(50)")]
+        public string DrawNo { get; set; }
+        /// <summary>
         /// &#26009;&#34399;&#31278;&#39006;(1&#21407;&#26009; 2&#25104;&#21697; 3 &#21322;&#25104;&#21697;)
         /// </summary>
         [Column("data_type", TypeName = "int(11)")]
@@ -116,8 +121,8 @@ namespace HonjiMES.Models
         public int DeleteFlag { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
-        [Column("create_user", TypeName = "int(11)")]
-        public int CreateUser { get; set; }
+        [Column("create_user", TypeName = "int(11) unsigned")]
+        public uint CreateUser { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime UpdateTime { get; set; }
         [Column("update_user", TypeName = "int(11)")]
