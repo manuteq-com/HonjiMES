@@ -68,6 +68,11 @@ namespace HonjiMES.Models
         [Column("count", TypeName = "int(11)")]
         public int Count { get; set; }
         /// <summary>
+        /// &#35330;&#21934;&#25976;&#37327;
+        /// </summary>
+        [Column("order_count", TypeName = "int(11)")]
+        public int? OrderCount { get; set; }
+        /// <summary>
         /// &#23526;&#38555;&#23436;&#24037;&#25976;&#37327;
         /// </summary>
         [Column("re_count", TypeName = "int(11)")]

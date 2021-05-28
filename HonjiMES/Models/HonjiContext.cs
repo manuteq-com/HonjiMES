@@ -3510,6 +3510,8 @@ namespace HonjiMES.Models
 
                 entity.Property(e => e.MachineStartTime).HasComment("機台實際開工日");
 
+                entity.Property(e => e.OrderCount).HasComment("訂單數量");
+
                 entity.Property(e => e.OrderDetailId).HasComment("訂單明細關聯");
 
                 entity.Property(e => e.ReCount)
