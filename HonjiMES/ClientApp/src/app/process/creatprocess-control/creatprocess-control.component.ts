@@ -104,7 +104,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.modName = 'new';
         this.saveCheck = true;
         this.allowReordering = true;
-        this.editVisible2 = true;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -225,17 +224,26 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
-                        if(s.data.WorkOrderHead.Status === 4){
+                        if(s.data.WorkOrderHead.Status === 4){ // 工單為[轉單]
                             this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.OrderCount };
-                        }
-                        if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
                             this.runVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
+                            this.newVisible = true;
+                            this.editVisible2 = true;
+                        }
+                        if (s.data.WorkOrderHead.Status === 0) { // 工單為[新建]
+                            this.runVisible = true;
+                            this.processVisible = true;
+                            this.allowReordering = true;
+                            this.newVisible = true;
+                            this.editVisible2 = false;
                         }else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;
                         } else {
+                            this.newVisible = true;
+                            this.editVisible2 = true;
                             this.editVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
