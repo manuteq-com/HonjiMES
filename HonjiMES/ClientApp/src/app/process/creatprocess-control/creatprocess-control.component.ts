@@ -76,6 +76,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     MachineList: any;
     processVisible: boolean;
     countVal: number;
+    editVisible2: boolean;
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -103,6 +104,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.modName = 'new';
         this.saveCheck = true;
         this.allowReordering = true;
+        this.editVisible2 = true;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -180,12 +182,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.saveDisabled = false;
         this.processVisible = false;
         this.allowReordering = false;
+        this.editVisible2 = true;
         if (this.modval === 'new') {
             this.modName = 'new';
             this.newVisible = true;
             this.modVisible = true;
             this.processVisible = true;
             this.allowReordering = true;
+            this.editVisible2 = false;
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
@@ -205,7 +209,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
-                    debugger;
+                    //debugger;
                     if (s.success) {
                         debugger;
                         this.dataSourceDB = s.data.WorkOrderDetail;
@@ -228,7 +232,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                             this.runVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
-                        } else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
+                        }else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;
                         } else {
@@ -622,7 +626,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     }
     Countchange(e) {
-        debugger;
+        //debugger;
         this.dataGrid2.instance.saveEditData();
         this.dataSourceDB.forEach(item => {
             item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * e.value;
