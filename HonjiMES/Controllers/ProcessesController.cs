@@ -492,6 +492,8 @@ namespace HonjiMES.Controllers
                     DueStartTime = WorkOrderData.WorkOrderHead.DueStartTime,
                     DueEndTime = WorkOrderData.WorkOrderHead.DueEndTime,
                     Count = WorkOrderData.WorkOrderHead.Count,
+                    OrderCount = WorkOrderData.WorkOrderHead.OrderCount,
+                    DrawNo = WorkOrderData.WorkOrderHead.DrawNo,
                     CreateUser = MyFun.GetUserID(HttpContext)
                 };
 

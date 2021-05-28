@@ -153,10 +153,11 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
                 timer: 3000
             });
         } else {
+            debugger;
             const OrderData = new PostOrderMaster_Detail();
             OrderData.orderDetail = this.Oitemkeyval;
             OrderData.workOrderHead = this.topurchasekey;
-
+            debugger;
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/OrderToWorkOrder', 'POST', { values: OrderData });
             if (sendRequest) {

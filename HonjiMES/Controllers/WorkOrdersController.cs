@@ -1882,7 +1882,9 @@ namespace HonjiMES.Controllers
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
+                    DrawNo = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().DrawNo,
                     Count = OrderToWorkCheckData.OrderDetail.Quantity,
+                    OrderCount = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().OrderCount,
                     Status = 4, // 表示由訂單轉程的工單，需要再由人工確認該工單
                     CreateUser = MyFun.GetUserID(HttpContext)
                 };

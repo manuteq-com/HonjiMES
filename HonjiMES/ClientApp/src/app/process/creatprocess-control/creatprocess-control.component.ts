@@ -1,3 +1,4 @@
+import { OrderDetail, WorkOrderHead } from './../../model/viewmodels';
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
@@ -49,6 +50,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     MaterialBasicList: any;
     ProcessBasicList: any;
     NumberBoxOptions: any;
+    OrderNumberOptions: any;
     zNumberBoxOptions: any;
     SerialNo: any;
     saveDisabled: boolean;
@@ -113,6 +115,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1, onValueChanged: this.Countchange };
+        this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1, value: 1, onValueChanged: this.Countchange };
         this.zNumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 0, value: 0 };
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
@@ -168,7 +171,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         console.log('checkBoxarray', this.checkBoxarray);
-        // debugger;
+        debugger;
         this.dataSourceDB = [];
         this.newVisible = false;
         this.modVisible = false;
@@ -188,6 +191,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     if (s.success) {
                         this.formData = s.data;
                         this.formData.Count = 1;
+                        this.formData.OrderCount = 1;
                         this.formData.DueStartTime = new Date();
                         this.formData.DueEndTime = new Date();
                     }
@@ -201,18 +205,25 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
+                    debugger;
                     if (s.success) {
+                        debugger;
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
                         this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
                         this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
                         this.formData.Count = s.data.WorkOrderHead.Count;
+                        this.formData.OrderCount = s.data.WorkOrderHead.OrderCount;
+                        this.formData.DrawNo = s.data.WorkOrderHead.DrawNo;
                         this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
                         this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
                         this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
+                        if(s.data.WorkOrderHead.Status === 4){
+                            this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.OrderCount };
+                        }
                         if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) { // 工單為[新建][轉單]
                             this.runVisible = true;
                             this.processVisible = true;
@@ -520,6 +531,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     // DataType: 2,
                     DataId: this.formData.MaterialBasicId,
                     Count: this.formData.Count,
+                    OrderCount : this.formData.OrderCount,
+                    DrawNo: this.formData.DrawNo,
                     MachineNo: this.formData.MachineNo,
                     DueStartTime: this.formData.DueStartTime,
                     DueEndTime: this.formData.DueEndTime
@@ -534,7 +547,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     this.viewRefresh(e, sendRequest);
                 } else if (this.modName === 'new') {
                     // tslint:disable-next-line: max-line-length
-                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval});
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/PostWorkOrderList', 'POST', { values: this.postval });
                     this.viewRefresh(e, sendRequest);
                 } else if (this.modName === 'update') {
                     // tslint:disable-next-line: max-line-length

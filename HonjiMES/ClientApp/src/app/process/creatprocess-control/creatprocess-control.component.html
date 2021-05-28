@@ -16,19 +16,17 @@
         <!-- <dxi-item dataField="WorkOrderNo" [colSpan]="4" [disabled]="true" [visible]="!newVisible">
                     <dxo-label text="工單號"></dxo-label>
                 </dxi-item> -->
-        <dxi-item dataField="OrderDetailId" dataType="number" editorType="dxSelectBox"
-            [editorOptions]="MaterialBasicSelectBoxOptions">
-            <dxi-validation-rule type="required" message="訂單數量 必填"></dxi-validation-rule>
+        <dxi-item dataField="OrderCount" dataType="number" editorType="dxNumberBox" [editorOptions]="OrderNumberOptions">
             <dxo-label text="訂單數量"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="!newVisible"
-            [editorOptions]="MaterialBasicSelectBoxOptions" [disabled]="!newVisible">
-            <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
-            <dxo-label text="成品項目"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
             <dxi-validation-rule type="required" message="工單數量 必填"></dxi-validation-rule>
             <dxo-label text="工單數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="newVisible"
+            [editorOptions]="MaterialBasicSelectBoxOptions" [disabled]="!newVisible">
+            <dxi-validation-rule type="required" message="成品項目 必填"></dxi-validation-rule>
+            <dxo-label text="成品項目"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="MachineNo" [colSpan]="2" [disabled]="editVisible">
             <dxo-label text="機號"></dxo-label>
