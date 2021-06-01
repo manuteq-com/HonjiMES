@@ -181,7 +181,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.saveDisabled = false;
         this.processVisible = false;
         this.allowReordering = false;
-        this.editVisible2 = true;
+        this.editVisible2 = false;
         if (this.modval === 'new') {
             this.modName = 'new';
             this.newVisible = true;
