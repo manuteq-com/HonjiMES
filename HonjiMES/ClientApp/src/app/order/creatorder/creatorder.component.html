@@ -54,70 +54,69 @@
         <div class="long-title">
             <h5>訂單內容</h5>
         </div>
-        <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" height="450" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
+        <dx-data-grid [dataSource]="dataSourceDB" [showBorders]="true" keyExpr="RowIndex" [height]="500" (onFocusedCellChanging)="onFocusedCellChanging($event)" (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowValidating)="onRowValidating($event)">
 
             <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" startEditAction="click">
             </dxo-editing>
             <dxo-filter-row [visible]="false"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
-            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection">
-            </dxo-keyboard-navigation>
-            <dxo-paging [enabled]="false">
-            </dxo-paging>
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction" [enterKeyDirection]="enterKeyDirection"></dxo-keyboard-navigation>
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
 
 
         <dxi-column dataField="RowIndex" caption="" [visible]="false">
         </dxi-column>
-        <dxi-column dataField="CustomerNo" caption="客戶單號" width="200">
+        <dxi-column dataField="CustomerNo" caption="客戶單號" [width]="150">
             <dxi-validation-rule type="required" message="客戶單號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Serial" caption="序號" width="50">
+        <dxi-column dataField="Serial" caption="序號" [width]="50">
             <dxi-validation-rule type="required" message="序號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="MaterialBasicId" caption="品號" width="200"
+        <dxi-column dataField="MaterialBasicId" caption="品號" [width]="210"
             editCellTemplate="MaterialBasicIdEditCellTemplate">
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
             <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false"
+        <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" [width]="200"
             editCellTemplate="MaterialBasicIdEditCellTemplate">
             <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Specification" valueExpr="Id"></dxo-lookup>
         </dxi-column>
         <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantitysetCellValue"
-            editCellTemplate="QuantityEditCellTemplate" width="70">
+            editCellTemplate="QuantityEditCellTemplate" [width]="70">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Unit" caption="單位" width="50">
+        <dxi-column dataField="Unit" caption="單位" [width]="50">
             <dxi-validation-rule type="required" message="單位 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="DBOriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
-            [setCellValue]="DBOriginPricesetCellValue" editCellTemplate="DBOriginPriceEditCellTemplate" width="80">
+            [setCellValue]="DBOriginPricesetCellValue" editCellTemplate="DBOriginPriceEditCellTemplate" [width]="80">
         </dxi-column>
         <dxi-column dataField="OriginPrice" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
-            [setCellValue]="OriginPricesetCellValue" editCellTemplate="OriginPriceEditCellTemplate" width="80">
+            [setCellValue]="OriginPricesetCellValue" editCellTemplate="OriginPriceEditCellTemplate" [width]="80">
             <dxi-validation-rule type="required" message="單價 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="DBPrice" caption="原價格" dataType="number" format="$ #,##0.##;($ #,##0.##)"
-            editCellTemplate="DBPriceEditCellTemplate" width="80">
+            editCellTemplate="DBPriceEditCellTemplate" [width]="80">
         </dxi-column>
         <dxi-column dataField="Price" caption="價格" dataType="number" format="$ #,##0.##;($ #,##0.##)"
-            editCellTemplate="PriceEditCellTemplate" width="80">
+            editCellTemplate="PriceEditCellTemplate" [width]="80">
             <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="DueDate" caption="預交日" dataType="date" width="100">
+        <dxi-column dataField="DueDate" caption="預交日" dataType="date" [width]="105">
             <dxi-validation-rule type="required" message="預交日 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" width="100">
+        <dxi-column dataField="ReplyDate" caption="回覆交期" dataType="date" [width]="105">
             <dxi-validation-rule type="required" message="回覆交期 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="ReplyPrice" caption="回覆價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" width="80">
+        <dxi-column dataField="ReplyPrice" caption="回覆價格" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80">
         </dxi-column>
-        <dxi-column dataField="MachineNo" caption="機號">
+        <dxi-column dataField="MachineNo" caption="機號" [width]="100">
             <dxi-validation-rule type="required" message="機號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Remark" caption="備註"></dxi-column>
-        <dxi-column dataField="ReplyRemark" caption="回覆備註"></dxi-column>
-        <dxi-column type="buttons">
+        <dxi-column dataField="Remark" caption="備註" [width]="95"></dxi-column>
+        <dxi-column dataField="ReplyRemark" caption="回覆備註" [width]="95"></dxi-column>
+        <dxi-column type="buttons" [width]="35">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>

@@ -69,7 +69,7 @@
         <!-- <dxi-column dataField="DataType" caption="類別" editCellTemplate="DataTypeEditCellTemplate" [width]="100">
             <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column> -->
-        <dxi-column dataField="TempId" caption="品號" editCellTemplate="TempIdEditCellTemplate">
+        <dxi-column dataField="TempId" caption="品號" editCellTemplate="TempIdEditCellTemplate" [width]="230">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
@@ -115,7 +115,7 @@
         </dxi-column>
         <dxi-column dataField="Remark" caption="備註"></dxi-column>
 
-        <dxi-column type="buttons">
+        <dxi-column type="buttons" [width]="50">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>

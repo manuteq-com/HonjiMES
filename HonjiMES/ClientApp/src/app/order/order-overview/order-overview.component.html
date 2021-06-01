@@ -1,6 +1,6 @@
 <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id" [focusedRowEnabled]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" (onFocusedRowChanging)="onFocusedRowChanging($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)" (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true" [remoteOperations]="remoteOperations" [columnAutoWidth]="true"
-    [height]="600">
+    [height]="700">
     <dxo-scrolling mode="infinite" columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
     <dxo-filter-row [visible]="true"></dxo-filter-row>

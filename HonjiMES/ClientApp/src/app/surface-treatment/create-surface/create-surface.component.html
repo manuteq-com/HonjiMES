@@ -66,59 +66,59 @@
         </dxo-paging>
 
 
-        <dxi-column dataField="TempId" caption="品號/規格" editCellTemplate="TempIdEditCellTemplate" [minWidth]="150">
+        <dxi-column dataField="TempId" caption="品號/規格" editCellTemplate="TempIdEditCellTemplate" [width]="200">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseIdA" caption="轉出倉別" editCellTemplate="WarehouseAEditCellTemplate" [visible]="WarehouseIdAVisible" [minWidth]="100">
+        <dxi-column dataField="WarehouseIdA" caption="轉出倉別" editCellTemplate="WarehouseAEditCellTemplate" [visible]="WarehouseIdAVisible" [width]="130">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="custom" [validationCallback]="requiredfun" pattern="WarehouseIdA" message="轉出倉別 必填" pattern="WarehouseIdA">
             </dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="WarehouseIdB" caption="轉入倉別" editCellTemplate="WarehouseBEditCellTemplate" [visible]="WarehouseIdBVisible" [minWidth]="100">
+        <dxi-column dataField="WarehouseIdB" caption="轉入倉別" editCellTemplate="WarehouseBEditCellTemplate" [visible]="WarehouseIdBVisible" [width]="130">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="custom" [validationCallback]="requiredfun" pattern="WarehouseIdB" message="轉入倉別 必填" pattern="WarehouseIdB">
             </dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="TempId" caption="實際規格" [minWidth]="80">
+        <dxi-column dataField="TempId" caption="實際規格" [width]="80">
         </dxi-column>
-        <dxi-column dataField="TempId" caption="品名" editCellTemplate="TempIdEditCellTemplate" [minWidth]="100">
+        <dxi-column dataField="TempId" caption="品名" editCellTemplate="TempIdEditCellTemplate" [width]="150">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
         </dxi-column>
-        <!-- <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate" [minWidth]="100">
+        <!-- <dxi-column dataField="WarehouseId" caption="倉別" editCellTemplate="WarehouseEditCellTemplate" [width]="100">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="入庫倉別 必填"></dxi-validation-rule>
         </dxi-column> -->
         <dxi-column dataField="DeliveryTime" caption="預交日期" dataType="date" editCellTemplate="DeliveryTimeEditCellTemplate" [width]="100">
             <dxi-validation-rule type="required" message="預交日期 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Quantity" caption="表處數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="QuantityEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="Quantity" caption="表處數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="QuantityEditCellTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="Delivered" caption="已交數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="DeliveredEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="Delivered" caption="已交數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="DeliveredEditCellTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="Undelivered" caption="未交數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="UnDeliveredEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="Undelivered" caption="未交數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="UnDeliveredEditCellTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="Ok" caption="合格數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="OkEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="Ok" caption="合格數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="OkEditCellTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="NotOk" caption="不合格數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="NotOkEditCellTemplate" [minWidth]="100">
+        <dxi-column dataField="NotOk" caption="不合格數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="NotOkEditCellTemplate" [width]="100">
         </dxi-column>
-        <dxi-column dataField="Repair" caption="可修數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="RepairEditCellTemplate" [minWidth]="80">
+        <dxi-column dataField="Repair" caption="可修數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="RepairEditCellTemplate" [width]="80">
         </dxi-column>
-        <dxi-column dataField="Unrepair" caption="不可修數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="UnRepairEditCellTemplate" [minWidth]="100">
+        <dxi-column dataField="Unrepair" caption="不可修數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="UnRepairEditCellTemplate" [width]="100">
         </dxi-column>
-        <dxi-column dataField="InNg" caption="廠內NG數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="InNGEditCellTemplate" [minWidth]="110">
+        <dxi-column dataField="InNg" caption="廠內NG數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="InNGEditCellTemplate" [width]="110">
         </dxi-column>
-        <dxi-column dataField="OutNg" caption="廠外NG數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="OutNGEditCellTemplate" [minWidth]="110">
+        <dxi-column dataField="OutNg" caption="廠外NG數量" dataType="number" format="#,##0.##;($ #,##0.##)" editCellTemplate="OutNGEditCellTemplate" [width]="110">
         </dxi-column>
-        <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [minWidth]="80" editCellTemplate="OriginPriceEditCellTemplate">
+        <dxi-column dataField="OriginPrice" caption="原單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" editCellTemplate="OriginPriceEditCellTemplate">
             <!-- <dxi-validation-rule type="required" message="原單價 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [minWidth]="100" editCellTemplate="PriceEditCellTemplate">
+        <dxi-column dataField="Price" caption="金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="100" editCellTemplate="PriceEditCellTemplate">
             <!-- <dxi-validation-rule type="required" message="價格 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="Remark" caption="備註" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="Remark" caption="備註" [width]="100"></dxi-column>
 
-        <dxi-column type="buttons">
+        <dxi-column type="buttons" [fixed]="true" [fixedPosition]="'right'" [width]="70">
             <dxi-button name="save" text="存檔"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>

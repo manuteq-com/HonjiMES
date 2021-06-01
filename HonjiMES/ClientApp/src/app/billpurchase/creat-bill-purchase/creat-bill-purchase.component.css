@@ -1,3 +1,6 @@
 .dx-button {
     float: right;
 }
+.long-title h5{
+    margin: 10px 0px 0px 0px !important;
+}

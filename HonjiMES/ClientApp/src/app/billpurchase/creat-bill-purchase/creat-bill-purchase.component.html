@@ -37,7 +37,7 @@
         </dxo-paging>
         <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-        <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
                 <dxi-item dataField="SupplierId"></dxi-item>
                 <dxi-item dataField="PurchaseId"></dxi-item>
@@ -118,8 +118,8 @@
         </dxi-column>
 
         <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-
-        <dxi-column type="buttons" caption="新增" cssClass="addmod">
+        <!-- buttons 移除caption="新增" cssClass="addmod" -->
+        <dxi-column type="buttons">
             <dxi-button name="save" text="存檔" icon="save"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
