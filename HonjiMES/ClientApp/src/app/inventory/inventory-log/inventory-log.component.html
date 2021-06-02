@@ -79,12 +79,12 @@
     <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" format="shortDateShortTime"
         [(selectedFilterOperation)]="selectedOperation" [width]="200" sortOrder="desc"></dxi-column>
     <dxi-column dataField="Message" caption="種類" [width]="140"></dxi-column>
-    <dxi-column dataField="DataNo" caption="品號" [width]="220"></dxi-column>
-    <dxi-column dataField="DataName" caption="名稱" [width]="220"></dxi-column>
+    <dxi-column dataField="DataNo" caption="品號" [width]="250"></dxi-column>
+    <dxi-column dataField="DataName" caption="名稱" [width]="250"></dxi-column>
     <dxi-column dataField="DataType" caption="品號類別" [width]="80" alignment="center">
         <dxo-lookup [dataSource]="listAdjustStatus" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="WarehouseId" caption="倉別" [width]="130">
+    <dxi-column dataField="WarehouseId" caption="倉別" [width]="140">
         <dxo-lookup [dataSource]="WarehouseList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="No" caption="關聯單號/調整單號" [width]="240"></dxi-column>
@@ -92,11 +92,11 @@
     <dxi-column dataField="Increase" caption="增加數量" [width]="80"></dxi-column>
     <dxi-column dataField="Decrease" caption="減少數量" [width]="80"></dxi-column>
     <dxi-column dataField="Price" caption="單價" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="PriceAll" caption="總金額" format="$ #,##0.##;($ #,##0.##)" [width]="100"></dxi-column>
     <dxi-column dataField="UnitCount" caption="計價數量" [width]="80"></dxi-column>
     <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
     <dxi-column dataField="UnitPrice" caption="單位金額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
-    <dxi-column dataField="UnitPriceAll" caption="計價總額" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
+    <dxi-column dataField="UnitPriceAll" caption="計價總額" format="$ #,##0.##;($ #,##0.##)" [width]="100"></dxi-column>
     <dxi-column dataField="WorkPrice" caption="加工費用" format="$ #,##0.##;($ #,##0.##)" [width]="80"></dxi-column>
     <dxi-column dataField="Reason" caption="修改原因" [width]="160"></dxi-column>
     <dxi-column dataField="CreateUser" caption="建立人員" alignment="center" [width]="100">

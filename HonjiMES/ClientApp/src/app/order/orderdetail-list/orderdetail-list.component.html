@@ -68,10 +68,10 @@
 
     <dxi-column dataField="Serial" caption="序號" [width]="50"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號" [width]="180"></dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="180" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
+    <dxi-column dataField="MaterialBasicId" caption="品號" [width]="250" [allowEditing]="false" editCellTemplate="MaterialBasicIdEditCellTemplate">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
     </dxi-column>
-    <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="150">
+    <dxi-column dataField="MaterialBasicId" caption="品名" [allowEditing]="false" [width]="200">
         <dxo-lookup [dataSource]="MaterialBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="MaterialBasicId" caption="規格" [allowEditing]="false" [width]="200">
