@@ -25,8 +25,11 @@
     <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
         [enterKeyDirection]="enterKeyDirection">
     </dxo-keyboard-navigation>
-    <dxo-paging [enabled]="false">
+    <dxo-paging [enabled]="true" [pageSize]="15">
     </dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50 , 100]" [showInfo]="true"
+        [showNavigationButtons]="true" visible="true">
+    </dxo-pager>
 
 
     <dxi-column dataField="UserId" caption="操作人員" [width]="300">
