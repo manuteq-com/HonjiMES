@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from 'src/app/app.component';
-import CustomStore from 'devextreme/data/custom_store';
 import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
@@ -24,8 +23,6 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     labelLocation: string;
     readOnly: boolean;
     showColon: boolean;
-    minColWidth: number;
-    colCount: number;
     width: number;
     autoNavigateToFocusedRow = true;
     detailfilter = [];
@@ -53,8 +50,6 @@ export class CreateSaleComponent implements OnInit, OnChanges {
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
-        this.minColWidth = 300;
-        this.colCount = 2;
         this.remoteOperations = true;
         this.listStatus = myservice.getWorkOrderStatus();
         this.formData = {};
@@ -63,6 +58,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
         this.popupVisibleSale = false;
         this.allowEditing = false;
         this.loadOptions = {};
+        this.width = 300;
         this.SaleTimeDateBoxOptions = {
             onValueChanged: this.SaleTimeValueChange.bind(this)
         };

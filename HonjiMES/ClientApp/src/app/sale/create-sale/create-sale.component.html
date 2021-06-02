@@ -1,15 +1,13 @@
 <form action="" (submit)="onFormSubmit($event)">
 
-    <div class="row">
+    <div class="row row-title">
 
-        <div class="col-6">
             <div class="long-title">
                 <h5>銷貨內容</h5>
             </div>
-        </div>
-        <div class="col-6">
+
             <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                [labelLocation]="labelLocation" [width]="width">
 
                 <dxi-item dataField="SaleDate" editorType="dxDateBox" [editorOptions]="SaleTimeDateBoxOptions">
                     <dxi-validation-rule type="required" message="銷貨日期 必填"></dxi-validation-rule>
@@ -17,7 +15,6 @@
                 </dxi-item>
 
             </dx-form>
-        </div>
 
     </div>
 

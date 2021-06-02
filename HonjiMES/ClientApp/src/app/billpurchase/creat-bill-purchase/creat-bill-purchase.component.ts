@@ -174,8 +174,7 @@ export class CreatBillPurchaseComponent implements OnInit, OnChanges {
                         x.Name = x.Name.replace('有限公司', '');
                         this.SupplierListEdit.push({
                             Id: x.Id,
-                            Name: x.Code
-                            // Name: x.Code + '_' + x.Name
+                            Name: x.Code + '_' + x.Name
                         });
                     });
                 }

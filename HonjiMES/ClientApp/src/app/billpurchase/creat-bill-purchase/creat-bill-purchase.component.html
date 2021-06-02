@@ -68,7 +68,7 @@
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="PurchaseId" caption="採購單號" editCellTemplate="PurchaseEditCellTemplate"
-            [allowEditing]="!fromSupplier">
+            [allowEditing]="!fromSupplier" [width]="170">
             <dxo-lookup [dataSource]="PurchaseList" displayExpr="PurchaseNo" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
@@ -77,49 +77,49 @@
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="MaterialNo" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column> -->
-        <dxi-column dataField="TempId" caption="品號" editCellTemplate="BasicEditCellTemplate"
+        <dxi-column dataField="TempId" caption="品號" editCellTemplate="BasicEditCellTemplate" [width]="200"
             [allowEditing]="!fromSupplier">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="TempId" caption="規格" [allowEditing]="!fromSupplier">
+        <dxi-column dataField="TempId" caption="規格" [allowEditing]="!fromSupplier" [width]="200">
             <dxo-lookup [dataSource]="BasicDataList" displayExpr="Specification" valueExpr="TempId"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="true" editCellTemplate="WarehouseEditCellTemplate">
+        <dxi-column dataField="WarehouseId" caption="倉別" [visible]="true" editCellTemplate="WarehouseEditCellTemplate" [width]="150">
             <dxo-lookup [dataSource]="WarehouseListAll" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="倉別 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantityCellValue">
+        <dxi-column dataField="Quantity" caption="數量" dataType="number" [setCellValue]="QuantityCellValue" [width]="80">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="OriginPrice" caption="原單價" [visible]="false" dataType="number"
             format="$ #,##0.##;($ #,##0.##)" [setCellValue]="OriginPriceCellValue">
             <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80"
             [setCellValue]="PriceCellValue">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="100"
             [allowEditing]="false">
             <dxi-validation-rule type="required"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" [setCellValue]="UnitCountCellValue">
+        <dxi-column dataField="UnitCount" caption="計價數量" dataType="number" [setCellValue]="UnitCountCellValue" [width]="80">
         </dxi-column>
-        <dxi-column dataField="Unit" caption="單位"></dxi-column>
-        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        <dxi-column dataField="Unit" caption="單位" [width]="80"></dxi-column>
+        <dxi-column dataField="UnitPrice" caption="計價單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80"
             [setCellValue]="UnitPriceCellValue">
         </dxi-column>
-        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+        <dxi-column dataField="UnitPriceAll" caption="計價總額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="100"
             [allowEditing]="false">
         </dxi-column>
-        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)">
+        <dxi-column dataField="WorkPrice" caption="加工費用" dataType="number" format="$ #,##0.##;($ #,##0.##)"> [width]="100"
         </dxi-column>
 
-        <dxi-column dataField="Remarks" caption="備註"></dxi-column>
+        <dxi-column dataField="Remarks" caption="備註" [width]="100"></dxi-column>
         <!-- buttons 移除caption="新增" cssClass="addmod" -->
-        <dxi-column type="buttons">
+        <dxi-column type="buttons" [width]="50">
             <dxi-button name="save" text="存檔" icon="save"></dxi-button>
             <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>

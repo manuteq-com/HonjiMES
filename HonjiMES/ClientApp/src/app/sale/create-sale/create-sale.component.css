@@ -1,3 +1,15 @@
 .dx-button {
     float: right;
 }
+.row-title{
+    display: flex;
+    position: relative;
+    margin-bottom: 20px;
+}
+.long-title{
+    margin-left: 15px;
+}
+#form{
+    position: absolute;
+    right: 15px;
+}
