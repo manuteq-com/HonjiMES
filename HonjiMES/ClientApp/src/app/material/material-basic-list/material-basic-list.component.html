@@ -104,7 +104,7 @@
 
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="510" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="新增品號" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="500" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatmaterial-basic (childOuter)="creatpopup_result($event)" [itemkeyval]="creatItemkey" [modval]="creatMod" [randomkeyval]="randomkey" [btnVisibled]="true"
             [exceldata]="exceldata"></app-creatmaterial-basic>

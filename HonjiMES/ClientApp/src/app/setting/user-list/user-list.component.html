@@ -76,14 +76,14 @@
     </div>
 </dx-data-grid>
 
-<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false"
+<dx-popup [showTitle]="true" title="新增帳號" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="780"
     [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-creatuser (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
             [exceldata]="exceldata"></app-creatuser>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="730" [width]="800"
+<dx-popup [showTitle]="true" title="產出QrCode" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="750" [width]="800"
     [(visible)]="qrcodepopupVisible">
     <div *dxTemplate="let data of 'content'">
         <app-user-qrcode [itemkeyval]="randomkey"></app-user-qrcode>

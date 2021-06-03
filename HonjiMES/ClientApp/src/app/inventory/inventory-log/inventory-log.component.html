@@ -105,7 +105,7 @@
 
 </dx-data-grid>
 
-<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="品號紀錄查詢" [nzWidth]="1800" [nzStyle]="{ top: '10px' }" [nzFooter]="null"
+<nz-modal [(nzVisible)]="creatpopupVisible" nzTitle="品號紀錄查詢" [nzWidth]="1800" [nzFooter]="null"
     (nzOnCancel)="handleCancel()">
     <app-inventory-search (childOuter)="creatpopup_result($event)"></app-inventory-search>
 </nz-modal>
