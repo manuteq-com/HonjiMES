@@ -193,7 +193,7 @@
 </div>
 
 <dx-popup [showTitle]="true" title="工單資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="800"
-    [width]="1700" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
+    [width]="1800" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey"
             [itemkeyval]="itemkey" [modval]="mod">

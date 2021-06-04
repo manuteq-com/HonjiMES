@@ -31,7 +31,7 @@
     </dxo-paging>
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
-    <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="WorkOrderNo" caption="工單號" sortOrder="desc" [width]="150"></dxi-column>
     <dxi-column dataField="DataNo" caption="品號"></dxi-column>
     <dxi-column dataField="DataName" caption="名稱"></dxi-column>
     <dxi-column dataField="MachineNo" caption="機號"></dxi-column>
@@ -43,8 +43,8 @@
         [calculateFilterExpression]="calculateFilterExpression"
         [(selectedFilterOperation)]="selectedFilterOperation"
         [(filterValue)]="filterValue"
-        [width]="180">
+        [width]="150">
     </dxi-column>
-    <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="180"></dxi-column>
+    <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="150"></dxi-column>
 
 </dx-data-grid>
