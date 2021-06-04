@@ -229,20 +229,21 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                             this.runVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
-                            this.newVisible = true;
+                            this.newVisible = false;
                             this.editVisible2 = true;
                         }
                         if (s.data.WorkOrderHead.Status === 0) { // 工單為[新建]
                             this.runVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
-                            this.newVisible = true;
-                            this.editVisible2 = false;
+                            this.newVisible = false;
+                            this.editVisible2 = true;
                         }else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;
+                            this.editVisible2 = true;
                         } else {
-                            this.newVisible = true;
+                            this.newVisible = false;
                             this.editVisible2 = true;
                             this.editVisible = true;
                             this.processVisible = true;

@@ -23,7 +23,7 @@
             <dxi-validation-rule type="required" message="工單數量 必填"></dxi-validation-rule>
             <dxo-label text="工單數量"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox" [visible]="newVisible"
+        <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox"
             [editorOptions]="MaterialBasicSelectBoxOptions" [disabled]="editVisible2">
             <dxi-validation-rule type="required" message="圖號 必填"></dxi-validation-rule>
             <dxo-label text="圖號"></dxo-label>
@@ -95,7 +95,7 @@
             editCellTemplate="ProcessCostTemplate" [width]="75">
         </dxi-column>
         <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
-            [minWidth]="85">
+           [width]="75">
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
@@ -119,7 +119,7 @@
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime"
             [allowEditing]="false" [width]="190">
         </dxi-column>
-        <dxi-column dataField="Type" caption="委外" [width]="45">
+        <dxi-column dataField="Type" caption="委外" [width]="80">
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
