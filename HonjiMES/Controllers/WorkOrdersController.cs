@@ -1835,19 +1835,19 @@ namespace HonjiMES.Controllers
             if (OrderToWorkCheckData.OrderDetail.MaterialBasicId != 0)
             {
                 // 取得工單號
-                var key = "HJ";
-                var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
-                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
-                var NoCount = NoData.Count() + 1;
-                if (NoCount != 1)
-                {
-                    var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
-                    var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
-                    // if (NoCount <= NoLast) {
-                    NoCount = NoLast + 1;
-                    // }
-                }
-                var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
+                // var key = "HJ";
+                // var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
+                // var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                // var NoCount = NoData.Count() + 1;
+                // if (NoCount != 1)
+                // {
+                //     var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                //     var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                //     // if (NoCount <= NoLast) {
+                //     NoCount = NoLast + 1;
+                //     // }
+                // }
+                // var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
 
 
                 // var DataType = 0;
@@ -1875,7 +1875,7 @@ namespace HonjiMES.Controllers
                 // }
                 var nWorkOrderHead = new WorkOrderHead
                 {
-                    WorkOrderNo = workOrderNo,
+                    WorkOrderNo = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().WorkOrderNo,
                     OrderDetailId = OrderToWorkCheckData.OrderDetail.Id, // 
                     MachineNo = OrderToWorkCheckData.OrderDetail.MachineNo,
                     DataType = BasicData.MaterialType,
