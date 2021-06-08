@@ -172,7 +172,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         console.log('checkBoxarray', this.checkBoxarray);
-        debugger;
         this.dataSourceDB = [];
         this.newVisible = false;
         this.modVisible = false;
@@ -208,9 +207,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             }
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
-                    //debugger;
                     if (s.success) {
-                        debugger;
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
@@ -290,7 +287,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         });
     }
     onReorder(e) {
-        // debugger;
         this.dataGrid2.instance.saveEditData();
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
@@ -319,7 +315,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     };
     onMaterialBasicSelectionChanged(e) {
-        // debugger;
         if (this.modCheck) {
             this.modCheck = false;
         } else {
@@ -342,7 +337,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     }
     selectvalueChanged(e, data) {
-        // debugger;
         data.setValue(e.value);
         const today = new Date();
         this.ProcessBasicList.forEach(x => {
@@ -358,7 +352,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         });
     }
     selectMachineChanged(e, data) {
-        // debugger;
         data.setValue(e.value);
         // const today = new Date();
         // this.ProcessBasicList.forEach(x => {
@@ -388,7 +381,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         return true;
     }
     onInitNewRow(e) {
-        // debugger;
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
 
@@ -569,6 +561,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     if (sendRequest) {
                         this.dataGrid2.instance.refresh();
                         e.preventDefault();
+                        this.childOuter.emit(true);
                         notify({
                             message: '更新完成',
                             position: {
@@ -635,7 +628,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     }
     Countchange(e) {
-        //debugger;
         this.dataGrid2.instance.saveEditData();
         this.dataSourceDB.forEach(item => {
             item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * e.value;

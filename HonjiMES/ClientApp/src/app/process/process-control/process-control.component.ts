@@ -105,7 +105,6 @@ export class ProcessControlComponent implements OnInit {
         this.editVisible = false;
     }
     onReorder(e) {
-        debugger;
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB_Process.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB_Process.indexOf(e.itemData);
@@ -168,7 +167,6 @@ export class ProcessControlComponent implements OnInit {
             this.workOrderHeadId = dataId;
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + dataId).subscribe(
                 (s) => {
-                    debugger;
                     if (s.success) {
                         if (this.app.checkUpdateRoles()) {
                             this.editVisible = true;
@@ -247,7 +245,7 @@ export class ProcessControlComponent implements OnInit {
         }
     }
     creatpopup_result(e) {
-        this.creatpopupVisible = false;
+        debugger;
         this.itemkey = null;
         this.dataGrid1.instance.refresh();
         if (this.workOrderHeadId !== undefined) {
@@ -262,20 +260,22 @@ export class ProcessControlComponent implements OnInit {
             //     }
             // );
         }
+        this.creatpopupVisible = false;
     }
     closepopup_result(e) {
+        debugger;
         this.btnDisabled = true;
         // this.dataSourceDB_Process = [];
         // this.workOrderHeadNo = '';
         this.dataGrid1.instance.refresh();
         this.closepopupVisible = false;
-        notify({
-            message: '存檔完成',
-            position: {
-                my: 'center top',
-                at: 'center top'
-            }
-        }, 'success', 3000);
+        // notify({
+        //     message: '存檔完成',
+        //     position: {
+        //         my: 'center top',
+        //         at: 'center top'
+        //     }
+        // }, 'success', 3000);
     }
     handleCancel() {
         this.viewpopupVisible = false;
