@@ -39,7 +39,7 @@
             </dxo-remote-operations> -->
             <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
 
-            <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="140"></dxi-column>
+            <dxi-column dataField="WorkOrderNo" caption="工單號" [width]="140" sortOrder="desc"></dxi-column>
             <dxi-column dataField="DataNo" caption="品號"></dxi-column>
             <!-- <dxi-column dataField="DataName" caption="名稱" [width]="180"></dxi-column> -->
             <!-- <dxi-column dataField="MachineNo" caption="機號"></dxi-column> -->
@@ -53,7 +53,7 @@
             <dxi-column dataField="OrderCount" caption="訂單量" [width]="70"></dxi-column>
             <dxi-column dataField="Count" caption="工單量" [width]="70"></dxi-column>
             <dxi-column dataField="ReCount" caption="完工量" [width]="70"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [visible]="false"
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date"  [visible]="false"
                 [width]="150"></dxi-column>
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
