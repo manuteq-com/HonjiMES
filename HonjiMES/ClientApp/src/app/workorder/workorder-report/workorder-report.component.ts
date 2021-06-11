@@ -241,6 +241,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         //// 測試用暫時加入，可選人員
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
+                debugger;
                 if (s.success) {
                     this.buttondisabled = false;
                     this.UserList = [];
@@ -351,15 +352,16 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             );
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
+                    debugger;
                     if (s.success) {
                         this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
                         this.itemval19 = '　　　　訂單數量：　' + (s.data.WorkOrderHead.OrderDetail?.Quantity ?? '0');
                         // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
-                        this.itemval4 = '';
+                        this.itemval4 = '       已領料數量:  ';
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
-                        this.itemval5 = '　　';
+                        this.itemval5 = '　　    已退料數量:  ';
                         this.itemval6 = '';
 
                         let findProcess = false;
@@ -413,7 +415,6 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 }
                             }
                         });
-                        debugger;
                         if (s.data.WorkOrderHead.Status == 2) {
                             this.MachineEditorOptions.readOnly = true;
                         }
@@ -423,6 +424,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         }
     }
     SetUserEditorOptions(List, IdVal) {
+        debugger;
         this.UserEditorOptions = {
             items: List,
             displayExpr: 'Realname',
@@ -538,7 +540,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.modval = 'purchase';
     }
     onStockClick(e) {
-        debugger;
+        // debugger;
         this.modval = 'stock';
     }
     onNewPurchaseClick(e) {
@@ -571,13 +573,13 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.dataSource = [];
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
-                debugger;
+                // debugger;
                 if (s.success) {
                     const result = s.data.find(x =>
                         x.DataType === this.formData.WorkOrderHead.DataType &&
                         x.DataId === this.formData.WorkOrderHead.DataId
                     );
-                    debugger;
+                    // debugger;
                     if (result) {
                         this.dataSource.push({
                             Serial: 1,
@@ -605,13 +607,13 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
-                    debugger;
+                    // debugger;
                     const result = s.data.find(x =>
                         x.DataType === this.formData.WorkOrderHead.DataType &&
                         x.DataId === this.formData.WorkOrderHead.DataId
                     );
                     if (result) {
-                        debugger;
+                        // debugger;
                         this.itemkey = result.DataId;
                         this.workorderkey = this.formData.WorkOrderHead.Id;
                     }
