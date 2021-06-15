@@ -339,8 +339,10 @@ namespace HonjiMES.Controllers
         {
             var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
             var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0)
-            .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).OrderBy(x => x.SerialNumber).ToListAsync();
-
+            .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).Include(x => x.WorkOrderHead).ThenInclude(y => y.Requisitions)
+            .OrderBy(x => x.SerialNumber).ToListAsync();
+            var receive = _context.Receives.Include(x => x.RequisitionDetail).ThenInclude(x => x.Requisition).Where(x => x.DeleteFlag == 0 
+            && x.RequisitionDetail.Requisition.WorkOrderHeadId == id).Select(x=>x.Quantity);
             var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
             foreach (var item in WorkOrderDetails)
             {
@@ -387,6 +389,7 @@ namespace HonjiMES.Controllers
             var WorkOrderData = new WorkOrderData2
             {
                 WorkOrderHead = WorkOrderHeads,
+                ReceiveQuantity = receive.Sum(),
                 WorkOrderDetail = WorkOrderDetailDataList
             };
             // var WorkOrder = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).Where(x => x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)).FirstOrDefaultAsync();

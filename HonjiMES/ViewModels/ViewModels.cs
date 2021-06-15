@@ -770,6 +770,7 @@ namespace HonjiMES.Models
         /// 預計總工時
         /// </summary>
         public decimal? ExpectedlTotalTime { get; set; }
+        
     }
     public class WorkOrderData
     {
@@ -782,6 +783,11 @@ namespace HonjiMES.Models
     {
         public WorkOrderHead WorkOrderHead { get; set; }
         public List<WorkOrderDetailData> WorkOrderDetail { get; set; }
+        
+        /// <summary>
+        /// 領料數量
+        /// </summary>
+        public decimal ReceiveQuantity { get; set; }
     }
     public class ResourceProcessData
     {
