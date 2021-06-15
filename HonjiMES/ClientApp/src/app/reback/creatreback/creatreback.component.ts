@@ -187,7 +187,7 @@ export class CreatrebackComponent implements OnInit, OnChanges {
             dataSource: new CustomStore({
                 key: 'Id',
                 load: (loadOptions) => {
-                    loadOptions.take = 20;
+                    // loadOptions.take = 20;
                     loadOptions.sort = [{ selector: 'WorkOrderNo', desc: true }];
                     if (loadOptions.searchValue) {
                         loadOptions.filter = [loadOptions.searchExpr, loadOptions.searchOperation, loadOptions.searchValue];
