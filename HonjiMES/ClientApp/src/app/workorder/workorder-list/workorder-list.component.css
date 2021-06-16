@@ -45,3 +45,6 @@
 ::ng-deep .layout-wrapper.menu-layout-horizontal .layout-main{
     padding-bottom: 0px;
 }
+::ng-deep svg{
+    margin-bottom: 5px;
+}
