@@ -91,9 +91,7 @@ export class WorkorderListComponent implements OnInit {
 
     }
     ngOnInit() {
-        // debugger;
         this.titleService.setTitle('生產看板');
-
     }
     getWorkOrderData() {
         this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(

@@ -42,3 +42,6 @@
     color: #fff;
     background-color: #1e90ff;
 }
+::ng-deep .layout-wrapper.menu-layout-horizontal .layout-main{
+    padding-bottom: 0px;
+}
