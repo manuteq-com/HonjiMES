@@ -145,8 +145,9 @@ namespace HonjiMES.Controllers
                  [FromQuery(Name = "detailfilter")] string detailfilter)
         {
             _context.ChangeTracker.LazyLoadingEnabled = true;//加快查詢用，不抓關連的資料
-            // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5);
-            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 4 && x.Status != 5).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
+            // var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 5 && x.Status != 7);
+            //status:5(結案)、7(工序暫停)
+            var data = _context.WorkOrderHeads.Where(x => x.DeleteFlag == 0 && x.Status != 0 && x.Status != 5 && x.Status != 7).Include(x => x.OrderDetail).OrderByDescending(x => x.CreateTime).Select(x => new WorkOrderHeadInfo
             {
                 Id = x.Id,
                 WorkOrderNo = x.WorkOrderNo,
