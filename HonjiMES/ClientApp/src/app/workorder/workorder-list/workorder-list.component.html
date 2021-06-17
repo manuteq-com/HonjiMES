@@ -13,6 +13,18 @@
     </div>
 </dx-popup>
 
+<div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <form action="">
+            <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions">
+                    <dxo-label text="工單號查詢"></dxo-label>
+                </dxi-item>
+            </dx-form>
+        </form>
+    </div>
+</div>
+
 <nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="true" [nzShowPagination]="true" [nzPageSizeOptions]="[10, 20, 30, 40]" [nzPageIndex]="1" [nzTotal]="300" [nzPageSize]="20" nzShowSizeChanger [nzScroll]="{ x: '800px', y: '640px' }">
 
     <thead>

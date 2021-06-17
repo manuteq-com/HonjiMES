@@ -2,7 +2,7 @@ import { first } from 'rxjs/operators';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import notify from 'devextreme/ui/notify';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxFormComponent } from 'devextreme-angular';
 import Swal from 'sweetalert2';
 import { HubMessage, workOrderReportData } from 'src/app/model/viewmodels';
 import { SendService } from 'src/app/shared/mylib';
@@ -18,6 +18,7 @@ import { HubConnectionBuilder } from '@aspnet/signalr';
 })
 export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
+    @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     dataSourceDB: any = {};
     creatpopupVisible: any;
     itemtrkey: number;
@@ -32,6 +33,9 @@ export class WorkorderListComponent implements OnInit {
     randomkey: number;
     iteminfokey: any;
     infopopupVisible: boolean;
+    editorOptions: any;
+    formData: any;
+    detailfilter: any={};
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.editpopupVisible) {
             if (e.key === 'Enter') {
@@ -67,7 +71,7 @@ export class WorkorderListComponent implements OnInit {
                     });
                 }
                 this.keyup = '';
-                this.getWorkOrderData();
+                this.getWorkOrderData(this.detailfilter);
             } else if (e.key === 'Shift' || e.key === 'CapsLock') {
 
             } else {
@@ -79,9 +83,11 @@ export class WorkorderListComponent implements OnInit {
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title, private SignalRService: SignalRService) {
         this.loadingVisible = true;
         this.creatpopupVisible = false;
+        this.onValueChanged = this.onValueChanged.bind(this);
+        this.editorOptions = { onValueChanged: this.onValueChanged };
 
 
-        this.getWorkOrderData();
+
         // this.app.GetData('/Processes/GetProcessesStatus/1').subscribe(
         //     (s) => {
         //         debugger;
@@ -91,15 +97,32 @@ export class WorkorderListComponent implements OnInit {
 
     }
     ngOnInit() {
+        this.getWorkOrderData(this.detailfilter);
         this.titleService.setTitle('生產看板');
     }
-    getWorkOrderData() {
+    getWorkOrderData(qfilter) {
         this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(
             (s) => {
                 this.dataSourceDB = s.data;
+                var rawdata = this.dataSourceDB.ProcessesDataList;
+                var result = [];
+                console.log('this.dataSourceDB',this.dataSourceDB);
+                if(Object.keys(qfilter).length>0){
+                        Object.keys(qfilter).forEach(function(v,k){
+                            rawdata = rawdata.filter(function(x){
+                                return x[v].toLowerCase().includes(qfilter[v].toLowerCase())
+                            })
+                        })
+                        this.dataSourceDB.ProcessesDataList=rawdata;
+                }
                 this.loadingVisible = false;
             }
         );
+    }
+
+    onValueChanged(q) {
+        this.detailfilter = this.myform.instance.option('formData');
+        this.getWorkOrderData(this.detailfilter);
     }
     trclick(e) {
         if (!this.checkVisible) {
@@ -111,7 +134,7 @@ export class WorkorderListComponent implements OnInit {
         } else {
             this.checkVisible = false;
         }
-        this.getWorkOrderData();
+        this.getWorkOrderData(this.detailfilter);
     }
     tdclick(e, colData) {
         debugger;
@@ -172,7 +195,7 @@ export class WorkorderListComponent implements OnInit {
                 }
             }
         }
-        this.getWorkOrderData();
+        this.getWorkOrderData(this.detailfilter);
     }
     getBlueClass(data) {
         // if (data.Status === 1) {
@@ -234,7 +257,7 @@ export class WorkorderListComponent implements OnInit {
                 const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/ReportWorkOrderByPurchase', 'PUT', { key: workOrderHeadId, values: Data });
                 // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
                 if (sendRequest) {
-                    this.getWorkOrderData();
+                    this.getWorkOrderData(this.detailfilter);
                     notify({
                         message: '更新成功',
                         position: {
@@ -250,7 +273,7 @@ export class WorkorderListComponent implements OnInit {
         this.iteminfokey = null;
         this.infopopupVisible = true;
         this.randomkey = new Date().getTime();
-        this.getWorkOrderData();
+        this.getWorkOrderData(this.detailfilter);
     }
     creatdata() {
         // this.creatpopupVisible = true;
@@ -264,7 +287,7 @@ export class WorkorderListComponent implements OnInit {
         this.editpopupVisible = false;
         this.checkVisible = false;
         this.loadingVisible = true;
-        this.getWorkOrderData();
+        this.getWorkOrderData(this.detailfilter);
         this.showMessage('success', '更新完成', 3000);
 
     }
