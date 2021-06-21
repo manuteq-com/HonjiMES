@@ -114,7 +114,8 @@ namespace HonjiMES.Controllers
                 UpdateTime = x.UpdateTime,
                 UpdateUser = x.UpdateUser,
                 WorkOrderDetails = x.WorkOrderDetails,
-                OrderCount = x.OrderCount,
+                OrderCount = (decimal)x.OrderCount,
+
             });
 
             var qSearchValue = MyFun.JsonToData<SearchValue>(detailfilter);
