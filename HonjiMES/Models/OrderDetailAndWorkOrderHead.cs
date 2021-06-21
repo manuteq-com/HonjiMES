@@ -28,7 +28,7 @@ namespace HonjiMES.Models
         /// <summary>
         /// &#35330;&#21934;&#25976;&#37327;
         /// </summary>
-        [Column("orde_count", TypeName = "decimal(10,2)")]
+        [Column("order_count", TypeName = "decimal(10,2)")]
         public decimal OrdeCount { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
