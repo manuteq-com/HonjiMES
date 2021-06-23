@@ -1,3 +1,11 @@
 .dx-button {
     float: right;
 }
+
+.todo-btn{
+    margin-right: 10px;
+}
+
+#form{
+    margin-bottom: 10px;
+}
