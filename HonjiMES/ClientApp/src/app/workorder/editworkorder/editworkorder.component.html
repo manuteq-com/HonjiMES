@@ -67,25 +67,26 @@
         (onToolbarPreparing)="onToolbarPreparing($event)"
         (onEditorPreparing)="editorPreparing($event)"
         (onRowClick)="onRowClick($event)"
+        (onCellClick)="cellClick($event)"
         [showColumnLines]="true"
         [showRowLines]="true"
         hoverStateEnabled="true">
 
-        <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false">
+        <dxo-editing mode="batch" [allowAdding]="false" [allowUpdating]="false" [allowDeleting]="true">
             <dxo-form colCount=4>
-                <dxi-item dataField="SerialNumber"></dxi-item>
+                 <dxi-item dataField="SerialNumber"></dxi-item>
                 <dxi-item dataField="ProcessId"></dxi-item>
                 <dxi-item dataField="ProcessLeadTime"></dxi-item>
                 <dxi-item dataField="ProcessTime"></dxi-item>
                 <dxi-item dataField="ProcessCost"></dxi-item>
                 <dxi-item dataField="ProducingMachine"></dxi-item>
-            </dxo-form>
+             </dxo-form>
         </dxo-editing>
 
-        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="allMode"></dxo-selection>
 
-        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260" [allowEditing]="false">
+        <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260" [allowEditing]="true">
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
         </dxi-column>
@@ -113,9 +114,17 @@
         </dxi-column>
         <dxi-column dataField="CodeNo" caption="加工程式"></dxi-column>
         <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [allowEditing]="false" [width]="120"></dxi-column> -->
-        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [allowEditing]="false" [width]="120"></dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [allowEditing]="true" [width]="120"></dxi-column>
         <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="170" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="170" [allowEditing]="false"></dxi-column>
+
+        <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+        </dxi-column>
 
         <!-- <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
@@ -123,6 +132,12 @@
             <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
             <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
         </dxi-column> -->
+
+        <div *dxTemplate="let data of 'ProcessEditCellTemplate'">
+            <dx-select-box [value]="data.value" (onValueChanged)="selectvalueChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: ProcessBasicList, key:'Id' } }" valueExpr="Id"
+                displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+        </div>
 
         <div *dxTemplate="let data of 'ProducingMachineTemplate'">
             <dx-select-box [value]="data.value"

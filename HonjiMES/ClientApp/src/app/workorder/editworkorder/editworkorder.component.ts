@@ -348,7 +348,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
     }
     selectvalueChanged(e, data) {
-        // debugger;
+        debugger;
         data.setValue(e.value);
     }
 
@@ -672,6 +672,20 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 }
             }
             return saveok;
+        }
+    }
+    cellClick(e) {
+        if (e.rowType === 'header') {
+            if (e.column.type === 'buttons') {
+                if (e.column.cssClass === 'addmod') {
+                    this.dataGrid2.instance.saveEditData();
+                    // tslint:disable-next-line: deprecation
+                    this.dataGrid2.instance.insertRow();
+                }
+            }
+        } else if (e.rowType === 'header' && e.rowType === 'data') {
+            // // tslint:disable-next-line: deprecation
+            // this.dataGrid.instance.insertRow();
         }
     }
 }
