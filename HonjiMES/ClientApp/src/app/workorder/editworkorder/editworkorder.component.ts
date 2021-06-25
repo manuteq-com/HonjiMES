@@ -435,6 +435,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     }
     onToolbarPreparing(e) {
         const toolbarItems = e.toolbarOptions.items;
+        e.toolbarOptions.visible = false;
         toolbarItems.forEach(item => {
             if (item.name === 'saveButton') {
                 item.options.icon = '';
