@@ -57,6 +57,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     saveCheck: boolean;
     onCellPreparedLevel: any;
     Controller = '/WorkOrders';
+    Controller2 = '/Processes';
     WorkStatusList: any;
     listWorkOrderTypes: any;
     ReportHeight: number;
@@ -281,6 +282,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                         e.NgCount = e.NgCount !== 0 ? e.NgCount : null;
                     });
                     this.dataSourceDB = s.data;
+                    console.log('dataSourceDB',this.dataSourceDB);
                 }
             }
         );
@@ -357,6 +359,12 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.onCellPreparedLevel = 1;
     }
     onInitNewRow(e) {
+        this.saveCheck = false;
+        this.onCellPreparedLevel = 1;
+
+        this.SerialNo = this.dataSourceDB.length;
+        this.SerialNo++;
+        e.data.SerialNumber = this.SerialNo;
     }
     editorPreparing(e) {
         if (e.parentType === 'dataRow' && (e.dataField === 'ReportCount' || e.dataField === 'ReportNgCount')) {
@@ -480,6 +488,14 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     onReportClick(e) {
         this.SubmitVal = 'report';
     }
+    UpdateOnClick(e){
+        this.dataGrid2.instance.saveEditData();
+        this.SubmitVal = 'update';
+        this.saveCheck = true;
+    }
+    CancelOnClick(e){
+        this.SubmitVal = 'cancel';
+    }
     ReportByPurchaseNo(workOrderHeadId, serial) {
         Swal.fire({
             title: '請輸入採購單號!',
@@ -561,7 +577,41 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         let cansave = true;
         const saveEditData = this.dataGrid2.instance.saveEditData();
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
-        if (SelectedRows.length === 0) {
+        console.log('SelectedRows',SelectedRows);
+        this.postval = {
+            WorkOrderHead: {
+                Id: this.itemkeyval.Key,
+                WorkOrderNo: this.formData.WorkOrderNo,
+                CreateTime: this.formData.CreateTime,
+                // DataType: 2,
+                //DataId: this.formData.MaterialBasicId,
+                //Count: this.formData.Count,
+                //OrderCount : this.formData.OrderCount,
+                //DrawNo: this.formData.DrawNo,
+                MachineNo: this.formData.MachineNo,
+                DueStartTime: this.formData.DueStartTime,
+                DueEndTime: this.formData.DueEndTime
+            },
+            WorkOrderDetail: this.dataSourceDB
+        };
+        if(this.SubmitVal === 'update') {
+            // tslint:disable-next-line: max-line-length
+            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.itemkeyval.Key, values: this.postval });
+            // this.viewRefresh(e, sendRequest);
+            if (sendRequest) {
+                this.dataGrid2.instance.refresh();
+                e.preventDefault();
+                this.childOuter.emit(true);
+                notify({
+                    message: '更新完成',
+                    position: {
+                        my: 'center top',
+                        at: 'center top'
+                    }
+                }, 'success', 3000);
+            }
+        }
+        else if (SelectedRows.length === 0) {
             Swal.fire({
                 allowEnterKey: false,
                 allowOutsideClick: false,
@@ -681,7 +731,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 if (e.column.cssClass === 'addmod') {
                     this.dataGrid2.instance.saveEditData();
                     // tslint:disable-next-line: deprecation
-                    this.dataGrid2.instance.insertRow();
+                    this.dataGrid2.instance.addRow();
                 }
             }
         } else if (e.rowType === 'header' && e.rowType === 'data') {
