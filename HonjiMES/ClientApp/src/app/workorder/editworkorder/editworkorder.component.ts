@@ -596,7 +596,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         };
         if(this.SubmitVal === 'update') {
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.itemkeyval.Key, values: this.postval });
+            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderProcessList', 'PUT', { key: this.itemkeyval.Key, values: this.postval });
             // this.viewRefresh(e, sendRequest);
             if (sendRequest) {
                 this.dataGrid2.instance.refresh();
