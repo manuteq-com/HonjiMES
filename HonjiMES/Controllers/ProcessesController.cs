@@ -425,7 +425,9 @@ namespace HonjiMES.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderDetail(int id)
         {
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0).OrderBy(x => x.SerialNumber).ToListAsync();
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0)
+            .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).Include(x => x.WorkOrderHead).ThenInclude(y => y.Requisitions)
+            .OrderBy(x => x.SerialNumber).ToListAsync();
             if (WorkOrderDetails == null)
             {
                 return NotFound();
@@ -654,6 +656,126 @@ namespace HonjiMES.Controllers
             else
             {
                 return Ok(MyFun.APIResponseError("工單更新失敗!"));
+            }
+        }
+
+        /// <summary>
+        /// 更新工單報工資訊
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderData"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutWorkOrderProcessList(int id, WorkOrderData WorkOrderData)
+        {
+            if (id != 0)
+            {
+                if (string.IsNullOrWhiteSpace(WorkOrderData.WorkOrderHead.WorkOrderNo))
+                {
+                    return Ok(MyFun.APIResponseError("工單更新失敗! 工單號不可以為空"));
+                }
+                else
+                {
+                    if (_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderData.WorkOrderHead.WorkOrderNo && x.Id != id).Any())
+                    {
+                        return Ok(MyFun.APIResponseError("工單更新失敗! 工單號不可以重覆"));
+                    }
+                }
+
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                var updataCheck = new List<int>();
+                var OWorkOrderHeads = _context.WorkOrderHeads.Find(id);
+                foreach (var item in WorkOrderData.WorkOrderDetail) // 依照新的工序清單逐一更新(新建)
+                {
+                    var ProcessInfo = _context.Processes.Find(item.ProcessId);
+                    if (item.Id != 0)   // 如果ID不為0，則表示為既有工序，只進行更新
+                    {
+                        updataCheck.Add(item.Id);
+                        var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == item.Id).FirstOrDefault();
+                        OWorkOrderDetail.SerialNumber = item.SerialNumber;
+                        OWorkOrderDetail.ProcessId = item.ProcessId;
+                        OWorkOrderDetail.ProcessNo = ProcessInfo.Code;
+                        OWorkOrderDetail.ProcessName = ProcessInfo.Name;
+                        OWorkOrderDetail.ProcessLeadTime = item.ProcessLeadTime;
+                        OWorkOrderDetail.ProcessTime = item.ProcessTime;
+                        OWorkOrderDetail.ProcessCost = item.ProcessCost;
+                        OWorkOrderDetail.Count = WorkOrderData.WorkOrderHead.Count;
+                        // OWorkOrderDetail.PurchaseId
+                        OWorkOrderDetail.DrawNo = item.DrawNo;
+                        OWorkOrderDetail.Manpower = item.Manpower;
+                        OWorkOrderDetail.ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine;
+                        OWorkOrderDetail.Type = item.Type;
+                        OWorkOrderDetail.Remarks = item.Remarks;
+                        OWorkOrderDetail.DueStartTime = item.DueStartTime;
+                        OWorkOrderDetail.DueEndTime = item.DueEndTime;
+                        OWorkOrderDetail.ActualStartTime = item.ActualStartTime;
+                        OWorkOrderDetail.ActualEndTime = item.ActualEndTime;
+                        OWorkOrderDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+                    }
+                    else // 如ID為0，則表示該工序為新增
+                    {
+                        var nWorkOrderDetail = new WorkOrderDetail
+                        {
+                            SerialNumber = item.SerialNumber,
+                            ProcessId = item.ProcessId,
+                            ProcessNo = ProcessInfo.Code,
+                            ProcessName = ProcessInfo.Name,
+                            ProcessLeadTime = item.ProcessLeadTime,
+                            ProcessTime = item.ProcessTime,
+                            ProcessCost = item.ProcessCost,
+                            Count = WorkOrderData.WorkOrderHead.Count,
+                            // PurchaseId
+                            DrawNo = item.DrawNo,
+                            Manpower = item.Manpower,
+                            ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
+                            Status = OWorkOrderHeads.Status,
+                            Type = item.Type,
+                            Remarks = item.Remarks,
+                            DueStartTime = item.DueStartTime,
+                            DueEndTime = item.DueEndTime,
+                            ActualStartTime = item.ActualStartTime,
+                            ActualEndTime = item.ActualEndTime,
+                            CreateUser = MyFun.GetUserID(HttpContext),
+                            UpdateUser = MyFun.GetUserID(HttpContext)
+                        };
+                        OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
+                    }
+                }
+                foreach (var item in OWorkOrderHeads.WorkOrderDetails) // 檢查剩下未更新的工序，變更為[刪除]
+                {
+                    if (!updataCheck.Exists(x => x == item.Id) && item.Id != 0 && item.DeleteFlag == 0)
+                    {
+                        item.DeleteFlag = 1;
+                    }
+                }
+
+                var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
+                var MaterialBasic = await _context.MaterialBasics.FindAsync(OWorkOrderHeads.DataId);
+                OWorkOrderHeads.DataNo = MaterialBasic.MaterialNo;
+                OWorkOrderHeads.DataName = MaterialBasic.Name;
+                OWorkOrderHeads.UpdateTime = DateTime.Now;
+                OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    _context.ChangeTracker.LazyLoadingEnabled = false;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProcesseExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return Ok(MyFun.APIResponseOK(WorkOrderData));
+            }
+            else
+            {
+                return Ok(MyFun.APIResponseError("工單報工更新失敗!"));
             }
         }
 
