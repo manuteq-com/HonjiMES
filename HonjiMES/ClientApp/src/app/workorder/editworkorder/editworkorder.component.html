@@ -82,8 +82,12 @@
                 <dxi-item dataField="ProducingMachine"></dxi-item>
              </dxo-form>
         </dxo-editing>
-
-        <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="allMode"></dxo-selection>
+        <dxo-row-dragging
+            [allowReordering]="true"
+            [onReorder]="onReorder"
+            [showDragIcons]="true"
+        ></dxo-row-dragging>
+        <!-- <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="allMode"></dxo-selection> -->
 
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="true"></dxi-column>
         <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260" [allowEditing]="true">

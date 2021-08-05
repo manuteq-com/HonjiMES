@@ -365,13 +365,11 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         data.setValue(value);
     }
     onRowRemoved(e) {
-        
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
     }
     onReorder(e) {
- 
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
@@ -445,11 +443,12 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         // });
     }
 
+
     onEditingStart(e) {
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
 
-    
+
     }
     onInitNewRow(e) {
         this.saveCheck = false;
@@ -500,7 +499,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
     }
     onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
-        
+
         const disabledKeys = e.currentDeselectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
         if (disabledKeys.length > 0) {
             e.component.deselectRows(disabledKeys);
@@ -681,7 +680,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         //     this.keyupEnter = false;
         //     return;
         // }
-        
+
         this.formData = this.myform.instance.option('formData');
         let saveok = true;
         let cansave = true;
@@ -737,7 +736,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 this.buttondisabled = false;
                 return;
             }
-            
+
             if (this.SubmitVal === 'stop' || this.SubmitVal === 'start') { // 回報 [工序暫停]/[回復加工]
                 const reportResult = await this.ReportStopOrStart(SelectedRows);
                 this.dataGrid2.instance.refresh();
