@@ -546,7 +546,7 @@ namespace HonjiMES.Controllers
         /// <param name="WorkOrderData"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutWorkOrderList(int id, WorkOrderData WorkOrderData)
+        public async Task<ActionResult> PutWorkOrderList(int id, WorkOrderData3 WorkOrderData)
         {
             if (id != 0)
             {
@@ -568,10 +568,13 @@ namespace HonjiMES.Controllers
                 foreach (var item in WorkOrderData.WorkOrderDetail) // 依照新的工序清單逐一更新(新建)
                 {
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
-                    if (item.Id != 0)   // 如果ID不為0，則表示為既有工序，只進行更新
+                    int number = 0;
+                    bool tryConversionId = int.TryParse(item.Id, out number);
+                    if (tryConversionId)   // 如果ID不為0，則表示為既有工序，只進行更新
                     {
-                        updataCheck.Add(item.Id);
-                        var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == item.Id).FirstOrDefault();
+                        var conversionId = int.Parse(item.Id);
+                        updataCheck.Add(conversionId);
+                        var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == conversionId).FirstOrDefault();
                         OWorkOrderDetail.SerialNumber = item.SerialNumber;
                         OWorkOrderDetail.ProcessId = item.ProcessId;
                         OWorkOrderDetail.ProcessNo = ProcessInfo.Code;

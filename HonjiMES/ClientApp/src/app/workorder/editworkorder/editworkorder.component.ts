@@ -7,6 +7,7 @@ import { SendService } from 'src/app/shared/mylib';
 import notify from 'devextreme/ui/notify';
 import CheckBox from 'devextreme/ui/check_box';
 import Swal from 'sweetalert2';
+import { CreateNumberInfo } from 'src/app/model/viewmodels';
 import CustomStore from 'devextreme/data/custom_store';
 import { workOrderReportData } from 'src/app/model/viewmodels';
 import { APIResponse } from 'src/app/app.module';
@@ -47,6 +48,17 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     ProductBasicSelectBoxOptions: any;
     ProductBasicList: any;
     ProcessBasicList: any;
+    MaterialBasicList: any;
+    MaterialBasicSelectBoxOptions: any;
+    ProcessLeadTime: any;
+    ProcessTime: any;
+    ProcessCost: any;
+    ProducingMachine: any;
+    Remarks: any;
+    DrawNo: any;
+    Manpower: any;
+    DueStartTime: any;
+    DueEndTime: any;
     NumberBoxOptions: any;
     SerialNo: any;
     saveDisabled: boolean;
@@ -76,6 +88,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     SubmitVal: string;
     keyupEnter: boolean;
     HasPermission: boolean;
+    productBasicChange: boolean;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -170,6 +183,17 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
+
+        this.app.GetData('/Machines/GetMachines').subscribe(
+            (s) => {
+                if (s.success) {
+                    if (s.success) {
+                        s.data.unshift({ Id: null, Name: '' }); // 加入第一行
+                        this.MachineList = s.data;
+                    }
+                }
+            }
+        );
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
                 if (s.success) {
@@ -182,6 +206,24 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 }
             }
         );
+        // this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialBasicList = s.data;
+        //             this.MaterialBasicList.forEach(x => {
+        //                 x.Name = x.MaterialNo + '_' + x.Name;
+        //             });
+        //             this.MaterialBasicSelectBoxOptions = {
+        //                 dataSource: { paginate: true, store: { type: 'array', data: this.MaterialBasicList, key: 'Id' } },
+        //                 searchEnabled: true,
+        //                 displayExpr: 'Name',
+        //                 valueExpr: 'Id',
+        //                 onValueChanged: this.onMaterialBasicSelectionChanged.bind(this)
+        //             };
+
+        //         }
+        //     }
+        // );
         this.app.GetData('/ProductBasics/GetProductBasicsAsc').subscribe(
             (s) => {
                 if (s.success) {
@@ -210,15 +252,14 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 }
             }
         );
-        // this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
-        //     (s) => {
-        //         if (s.success) {
-        //             this.formData = s.data;
-        //             this.formData.Count = 1;
-        //         }
-        //     }
-        // );
-
+        this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.formData = s.data;
+                    this.formData.Count = 1;
+                }
+            }
+        );
     }
     ngOnInit() {
     }
@@ -230,13 +271,25 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.stopVisible = false;
         this.hasUser = false;
         this.disabledValues = [];
-        this.GetProcessInfo();
+        // this.GetProcessInfo();
         this.modVisible = false;
-        this.app.GetData('/Processes/GetProcessByWorkOrderHead/' + this.itemkeyval.Key).subscribe(
+        this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval.Key).subscribe(
             (s) => {
                 if (s.success) {
                     this.modCheck = true; // 避免製程資訊被刷新
-                    this.formData = s.data;
+                    this.dataSourceDB = s.data.WorkOrderDetail;
+                    this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
+                        this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
+                        this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
+                        this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
+                        this.formData.Count = s.data.WorkOrderHead.Count;
+                        this.formData.OrderCount = s.data.WorkOrderHead.OrderCount;
+                        this.formData.DrawNo = s.data.WorkOrderHead.DrawNo;
+                        this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
+                        this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
+                        this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
+                        this.formData.DataNo = s.data.WorkOrderHead.DataNo;
+                        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                 }
             }
         );
@@ -273,20 +326,20 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             this.keyupEnter = true;
         });
     }
-    GetProcessInfo() {
-        this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
-            (s) => {
-                if (s.success) {
-                    s.data.forEach(e => {
-                        e.ReportCount = null;
-                        e.NgCount = e.NgCount !== 0 ? e.NgCount : null;
-                    });
-                    this.dataSourceDB = s.data;
-                    console.log('dataSourceDB',this.dataSourceDB);
-                }
-            }
-        );
-    }
+    // GetProcessInfo() {
+    //     this.dataSourceDB = this.app.GetData('/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key).subscribe(
+    //         (s) => {
+    //             if (s.success) {
+    //                 s.data.forEach(e => {
+    //                     e.ReportCount = null;
+    //                     e.NgCount = e.NgCount !== 0 ? e.NgCount : null;
+    //                 });
+    //                 this.dataSourceDB = s.data;
+    //                 console.log('dataSourceDB',this.dataSourceDB);
+    //             }
+    //         }
+    //     );
+    // }
     SetUserEditorOptions(List, IdVal) {
         this.UserEditorOptions = {
             items: List,
@@ -298,8 +351,12 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         };
     }
     allowEdit(e) {
-        if (e.row.data.Status > 1) {
-            return false;
+        if (e.row.data.Status !== undefined && e.row.data.WorkOrderHead !== undefined && e.row.data.WorkOrderHead !== null) {
+            if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -308,11 +365,13 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         data.setValue(value);
     }
     onRowRemoved(e) {
+        
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
     }
     onReorder(e) {
+ 
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
@@ -326,8 +385,29 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     onFocusedCellChanging(e) {
     }
     async CreateTimeValueChange(e) {
-
-    }
+    };
+    // onMaterialBasicSelectionChanged(e) {
+    //     if (this.modCheck) {
+    //         this.modCheck = false;
+    //     } else {
+    //         this.saveDisabled = false;
+    //         if (e.value !== 0 && e.value !== null && e.value !== undefined) {
+    //             this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
+    //                 (s) => {
+    //                     if (s.success) {
+    //                         s.data.forEach(element => {
+    //                             element.Id = 0;
+    //                             element.DueStartTime = new Date();
+    //                             element.DueEndTime = new Date();
+    //                         });
+    //                         this.dataSourceDB = s.data;
+    //                         this.productBasicChange = true;
+    //                     }
+    //                 }
+    //             );
+    //         }
+    //     }
+    // }
     onProductBasicSelectionChanged(e) {
         // debugger;
         if (this.modCheck) {
@@ -350,13 +430,26 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
     }
     selectvalueChanged(e, data) {
-        debugger;
         data.setValue(e.value);
+        // const today = new Date();
+        // this.ProcessBasicList.forEach(x => {
+        //     if (x.Id === e.value) {
+        //         this.ProcessLeadTime = x?.LeadTime ?? 0;
+        //         this.ProcessTime = x?.WorkTime ?? 0;
+        //         this.ProcessCost = x?.Cost ?? 0;
+        //         this.ProducingMachine = x.ProducingMachine;
+        //         this.Remarks = x.Remark;
+        //         this.DrawNo = x.DrawNo;
+        //         this.Manpower = x?.Manpower ?? 1;
+        //     }
+        // });
     }
 
     onEditingStart(e) {
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
+
+    
     }
     onInitNewRow(e) {
         this.saveCheck = false;
@@ -365,6 +458,25 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.SerialNo = this.dataSourceDB.length;
         this.SerialNo++;
         e.data.SerialNumber = this.SerialNo;
+        e.data.ProcessLeadTime = 0;
+        e.data.ProcessTime = 0;
+        e.data.ProcessCost = 0;
+        e.data.ProducingMachine = '';
+        e.data.Remark = '';
+        e.data.DrawNo = '';
+        e.data.Manpower = 1;
+        e.data.DueStartTime = new Date();
+        e.data.DueEndTime = new Date();
+
+        this.ProcessLeadTime = 0;
+        this.ProcessTime = 0;
+        this.ProcessCost = 0;
+        this.ProducingMachine = '';
+        this.Remarks = '';
+        this.DrawNo = '';
+        this.Manpower = 0;
+        this.DueStartTime = new Date();
+        this.DueEndTime = new Date();
     }
     editorPreparing(e) {
         if (e.parentType === 'dataRow' && (e.dataField === 'ReportCount' || e.dataField === 'ReportNgCount')) {
@@ -388,7 +500,8 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
     }
     onSelectionChanged(e) {// CheckBox disabled還是會勾選，必須清掉，這是官方寫法
-        const disabledKeys = e.currentSelectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
+        
+        const disabledKeys = e.currentDeselectedRowKeys.filter(i => this.disabledValues.indexOf(i) > -1);
         if (disabledKeys.length > 0) {
             e.component.deselectRows(disabledKeys);
         }
@@ -568,10 +681,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         //     this.keyupEnter = false;
         //     return;
         // }
-        if (this.validate_before() === false) {
-            this.buttondisabled = false;
-            return;
-        }
+        
         this.formData = this.myform.instance.option('formData');
         let saveok = true;
         let cansave = true;
@@ -580,14 +690,15 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         console.log('SelectedRows',SelectedRows);
         this.postval = {
             WorkOrderHead: {
-                Id: this.itemkeyval.Key,
+                // Id: this.itemkeyval.Key,
+                Id: this.formData.WorkOrderHeadId,
                 WorkOrderNo: this.formData.WorkOrderNo,
                 CreateTime: this.formData.CreateTime,
                 // DataType: 2,
-                //DataId: this.formData.MaterialBasicId,
-                //Count: this.formData.Count,
-                //OrderCount : this.formData.OrderCount,
-                //DrawNo: this.formData.DrawNo,
+                DataId: this.formData.MaterialBasicId,
+                Count: this.formData.Count,
+                OrderCount : this.formData.OrderCount,
+                DrawNo: this.formData.DrawNo,
                 MachineNo: this.formData.MachineNo,
                 DueStartTime: this.formData.DueStartTime,
                 DueEndTime: this.formData.DueEndTime
@@ -596,7 +707,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         };
         if(this.SubmitVal === 'update') {
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.itemkeyval.Key, values: this.postval });
+            const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.formData.WorkOrderHeadId, values: this.postval });
             // this.viewRefresh(e, sendRequest);
             if (sendRequest) {
                 this.dataGrid2.instance.refresh();
@@ -616,11 +727,17 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 allowEnterKey: false,
                 allowOutsideClick: false,
                 title: '沒有勾選任何項目',
+
                 html: '請勾選要回報的項目',
                 icon: 'warning',
                 timer: 3000
             });
         } else {
+            if (this.validate_before() === false) {
+                this.buttondisabled = false;
+                return;
+            }
+            
             if (this.SubmitVal === 'stop' || this.SubmitVal === 'start') { // 回報 [工序暫停]/[回復加工]
                 const reportResult = await this.ReportStopOrStart(SelectedRows);
                 this.dataGrid2.instance.refresh();
@@ -671,7 +788,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.creatpopupVisible = false;
         // this.dataGrid2.instance.refresh();
         this.disabledValues = [];
-        this.GetProcessInfo();
+        // this.GetProcessInfo();
         notify({
             message: '更新完成',
             position: {
@@ -738,5 +855,12 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             // // tslint:disable-next-line: deprecation
             // this.dataGrid.instance.insertRow();
         }
+    }
+    Countchange(e) {
+        this.dataGrid2.instance.saveEditData();
+        this.dataSourceDB.forEach(item => {
+            item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * e.value;
+        });
+        this.dataGrid2.instance.refresh();
     }
 }

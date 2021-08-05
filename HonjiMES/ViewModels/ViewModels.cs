@@ -789,6 +789,13 @@ namespace HonjiMES.Models
         /// </summary>
         public decimal ReceiveQuantity { get; set; }
     }
+    public class WorkOrderData3
+    {
+        public WorkOrderHead WorkOrderHead { get; set; }
+        public List<WorkOrderDetail2> WorkOrderDetail { get; set; }
+        public List<WorkOrderDetailData> WorkOrderDetailData { get; set; }
+        public string mod { get; set; }
+    }
     public class ResourceProcessData
     {
         public WorkOrderHead WorkOrderHead { get; set; }
