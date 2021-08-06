@@ -40,7 +40,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     editOnkeyPress: boolean;
     enterKeyAction: string;
     enterKeyDirection: string;
-    buttondisabled = false;
+    buttondisabled = true;
 
     disabledValues: number[];
 
@@ -103,7 +103,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                                     this.app.GetData('/Users/GetUsers').subscribe(
                                         (s) => {
                                             if (s.success) {
-                                                this.buttondisabled = false;
+                                                // this.buttondisabled = false;
                                                 this.UserList = [];
                                                 // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
                                                 s.data.forEach(element => {
@@ -302,7 +302,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
-                    this.buttondisabled = false;
+                    // this.buttondisabled = false;
                     this.UserList = [];
                     // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
                     s.data.forEach(element => {
@@ -585,7 +585,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 return false;
             } else {
                 if (this.hasUser) {
-                    this.buttondisabled = false;
+                    // this.buttondisabled = false;
                 }
             }
         }
@@ -732,10 +732,10 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 timer: 3000
             });
         } else {
-            if (this.validate_before() === false) {
-                this.buttondisabled = false;
-                return;
-            }
+            // if (this.validate_before() === false) {
+            //     this.buttondisabled = false;
+            //     return;
+            // }
 
             if (this.SubmitVal === 'stop' || this.SubmitVal === 'start') { // 回報 [工序暫停]/[回復加工]
                 const reportResult = await this.ReportStopOrStart(SelectedRows);
