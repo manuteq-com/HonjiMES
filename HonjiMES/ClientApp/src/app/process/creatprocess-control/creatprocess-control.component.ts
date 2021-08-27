@@ -161,6 +161,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
+                    //console.log("Processes/GetWorkOrderNumber0",s.data);
                     this.formData = s.data;
                     this.formData.Count = 1;
                 }
@@ -171,7 +172,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        console.log('checkBoxarray', this.checkBoxarray);
+        // console.log('itemkeyval', this.itemkeyval);
+        // console.log('modval', this.modval);
+        // console.log('checkBoxarray', this.checkBoxarray);
+        // console.log('randomkeyval', this.randomkeyval);
+        // console.log('itemkeyTemp',this.itemkeyTemp);
         this.dataSourceDB = [];
         this.newVisible = false;
         this.modVisible = false;
@@ -191,6 +196,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
+                        //console.log("Processes/GetWorkOrderNumber1",s.data);
                         this.formData = s.data;
                         this.formData.Count = 1;
                         this.formData.OrderCount = 1;
@@ -200,14 +206,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             );
         } else if (this.itemkeyval != null && this.itemkeyval !== 0) {
-            if (this.itemkeyTemp !== this.itemkeyval || this.productBasicChange) {
-                this.modCheck = true; // 避免製程資訊被刷新
-                this.itemkeyTemp = this.itemkeyval;
-                this.productBasicChange = false;
-            }
+            // 按編輯工單時 讀取資料
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
+                        console.log("Processes/GetProcessByWorkOrderId",s.data);
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
@@ -269,7 +272,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 if (e.column.cssClass === 'addmod') {
                     this.dataGrid2.instance.saveEditData();
                     // tslint:disable-next-line: deprecation
-                    this.dataGrid2.instance.insertRow();
+                    this.dataGrid2.instance.addRow();
                 }
             }
         } else if (e.rowType === 'header' && e.rowType === 'data') {
@@ -315,20 +318,24 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     };
     onMaterialBasicSelectionChanged(e) {
+        //console.log("herechange",this.modCheck);
         if (this.modCheck) {
             this.modCheck = false;
         } else {
             this.saveDisabled = false;
             if (e.value !== 0 && e.value !== null && e.value !== undefined) {
+
                 this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
                     (s) => {
                         if (s.success) {
+                            //console.log("griddata0",s.data);
                             s.data.forEach(element => {
                                 element.Id = 0;
                                 element.DueStartTime = new Date();
                                 element.DueEndTime = new Date();
                             });
                             this.dataSourceDB = s.data;
+
                             this.productBasicChange = true;
                         }
                     }
@@ -544,6 +551,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 },
                 WorkOrderDetail: this.dataSourceDB
             };
+            //console.log("this.postvalpro",this.postval);
 
             try {
                 if (this.modName === 'run') {

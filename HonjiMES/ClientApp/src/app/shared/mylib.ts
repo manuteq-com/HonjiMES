@@ -107,7 +107,7 @@ export class SendService {
     //     return [];
     // }
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
-        debugger;
+        //console.log("sendrequest");
         const gurl = location.pathname;
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
