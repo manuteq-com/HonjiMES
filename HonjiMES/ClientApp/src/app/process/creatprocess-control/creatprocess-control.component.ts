@@ -325,21 +325,42 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.saveDisabled = false;
             if (e.value !== 0 && e.value !== null && e.value !== undefined) {
 
-                this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
-                    (s) => {
-                        if (s.success) {
-                            //console.log("griddata0",s.data);
-                            s.data.forEach(element => {
-                                element.Id = 0;
-                                element.DueStartTime = new Date();
-                                element.DueEndTime = new Date();
-                            });
-                            this.dataSourceDB = s.data;
+                Swal.fire({
+                    showCloseButton: true,
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                    title: '載入該圖號製程?',
+                    html: '製程將會讀取新選的圖號的製程!',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#296293',
+                    cancelButtonColor: '#CE312C',
+                    confirmButtonText: '確認',
+                    cancelButtonText: '取消'
+                }).then(async (result) => {
+                    if (result.value) {
+                        // tslint:disable-next-line: max-line-length
+                       this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
+                            (s) => {
+                                if (s.success) {
+                                    //console.log("griddata0",s.data);
+                                    s.data.forEach(element => {
+                                        element.Id = 0;
+                                        element.DueStartTime = new Date();
+                                        element.DueEndTime = new Date();
+                                    });
+                                    this.dataSourceDB = s.data;
 
-                            this.productBasicChange = true;
-                        }
+                                    this.productBasicChange = true;
+                                }
+                            }
+                        );
+                    } else {
+                        return false;
                     }
-                );
+                });
+
+
             }
         }
     }
