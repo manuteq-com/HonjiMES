@@ -570,7 +570,7 @@ namespace HonjiMES.Controllers
                     var ProcessInfo = _context.Processes.Find(item.ProcessId);
                     int number = 0;
                     bool tryConversionId = int.TryParse(item.Id, out number);
-                    if (tryConversionId)   // 如果ID不為0，則表示為既有工序，只進行更新
+                    if (number!=0)   // 如果ID不為0，則表示為既有工序，只進行更新
                     {
                         var conversionId = int.Parse(item.Id);
                         updataCheck.Add(conversionId);

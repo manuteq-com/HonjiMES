@@ -318,12 +318,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     };
     onMaterialBasicSelectionChanged(e) {
-        //console.log("herechange",this.modCheck);
+        console.log("herechange",this.modCheck,e,this.modval);
         if (this.modCheck) {
             this.modCheck = false;
         } else {
             this.saveDisabled = false;
-            if (e.value !== 0 && e.value !== null && e.value !== undefined) {
+            //第一次載入不需觸發
+            if (e.value !== 0 && e.value !== null && e.value !== undefined && e.event!== undefined) {
 
                 Swal.fire({
                     showCloseButton: true,
