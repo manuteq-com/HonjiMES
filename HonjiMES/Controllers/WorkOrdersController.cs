@@ -1884,6 +1884,7 @@ namespace HonjiMES.Controllers
                     DataId = BasicDataID,
                     DataNo = BasicDataNo,
                     DataName = BasicDataName,
+                    DueEndTime = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().DueEndTime,
                     DrawNo = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().DrawNo,
                     Count = OrderToWorkCheckData.OrderDetail.Quantity,
                     OrderCount = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().OrderCount,
@@ -1914,8 +1915,8 @@ namespace HonjiMES.Controllers
                         Manpower = item.Manpower,
                         ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
                         Remarks = item.Remarks,
-                        DueStartTime = DateTime.Now,
-                        DueEndTime = DateTime.Now,
+                        DueStartTime = null,
+                        DueEndTime = OrderToWorkCheckData.WorkOrderHead.FirstOrDefault().DueEndTime,
                         ActualStartTime = null,
                         ActualEndTime = null,
                         CreateUser = MyFun.GetUserID(HttpContext)
