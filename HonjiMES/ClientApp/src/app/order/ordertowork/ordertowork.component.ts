@@ -58,6 +58,7 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
                 element.DueEndTime = new Date();
             });
         }
+        console.log("this.itemkeyval",this.itemkeyval);
         this.dataSourceDB = this.itemkeyval;
     }
     onFocusedRowChanging(e) {

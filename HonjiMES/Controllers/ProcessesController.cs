@@ -159,7 +159,7 @@ namespace HonjiMES.Controllers
             var dt = DateTime.Now;
             var WorkOrderNo = dt.ToString("yyMMdd");
 
-            var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+            var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11).OrderByDescending(x => x.WorkOrderNo).ToListAsync();
             var NoCount = NoData.Count() + 1;
             if (NoCount != 1)
             {
@@ -190,7 +190,7 @@ namespace HonjiMES.Controllers
                 var key = "HJ";
                 var WorkOrderNo = CreateNoData.CreateTime.ToString("yyMMdd");
 
-                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11 && x.DeleteFlag == 0).OrderByDescending(x => x.Id).ToListAsync();
+                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11).OrderByDescending(x => x.WorkOrderNo).ToListAsync();
                 var NoCount = NoData.Count() + 1;
                 if (NoCount != 1)
                 {
@@ -445,6 +445,18 @@ namespace HonjiMES.Controllers
         {
             if (WorkOrderData.WorkOrderHead.DataId != 0)
             {
+                if (string.IsNullOrWhiteSpace(WorkOrderData.WorkOrderHead.WorkOrderNo))
+                {
+                    return Ok(MyFun.APIResponseError("工單新增失敗! 工單號不可以為空"));
+                }
+                else
+                {
+                    if (_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderData.WorkOrderHead.WorkOrderNo).Any())
+                    {
+                        return Ok(MyFun.APIResponseError("工單新增失敗! 工單號不可以重覆"));
+                    }
+                }
+                /*
                 //取得工單號
                 var key = "HJ";
                 var WorkOrderNo = WorkOrderData.WorkOrderHead.CreateTime.ToString("yyMMdd");
@@ -462,7 +474,7 @@ namespace HonjiMES.Controllers
                     // }
                 }
                 var workOrderNo = key + WorkOrderNo + NoCount.ToString("000");
-                
+                */
                 // var DataType = 0;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
@@ -488,7 +500,7 @@ namespace HonjiMES.Controllers
                 // }
                 var nWorkOrderHead = new WorkOrderHead
                 {
-                    WorkOrderNo = workOrderNo,
+                    WorkOrderNo = WorkOrderData.WorkOrderHead.WorkOrderNo,
                     MachineNo = WorkOrderData.WorkOrderHead.MachineNo,
                     DataType = BasicData.MaterialType,
                     DataId = BasicDataID,

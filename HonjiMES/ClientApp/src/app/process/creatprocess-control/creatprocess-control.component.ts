@@ -161,7 +161,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
-                    //console.log("Processes/GetWorkOrderNumber0",s.data);
+                    console.log("Processes/GetWorkOrderNumber0",s.data);
                     this.formData = s.data;
                     this.formData.Count = 1;
                 }
@@ -196,7 +196,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
-                        //console.log("Processes/GetWorkOrderNumber1",s.data);
+                        console.log("Processes/GetWorkOrderNumber1",s.data);
                         this.formData = s.data;
                         this.formData.Count = 1;
                         this.formData.OrderCount = 1;
