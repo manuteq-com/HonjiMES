@@ -27,7 +27,8 @@
         <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
             rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
             [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-            [remoteOperations]="remoteOperations">
+            [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="[]">
+            <dxo-selection mode="single"></dxo-selection>
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
@@ -58,7 +59,7 @@
             <dxi-column dataField="UpdateTime" caption="更新日期" dataType="date" [width]="120" [visible]="false">
             </dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50" [visible]="false"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
                 <!-- <dx-button class="runbtn" icon="runner" type="default" (onClick)="runProcess($event,data)"
                 [disabled]="!(data.data.Status === 0 || data.data.Status === 4)"></dx-button>
@@ -81,16 +82,19 @@
 
     <div class="col-6">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="input-group">
                     <label class="pt-3">
                         <h5>工單內容：{{workOrderHeadNo}}</h5>
                     </label>
                 </div>
             </div>
-            <div class="col-6 pt-2">
+            <div class="col-8 pt-2">
                 <dx-button class="pdfbtn" stylingMode="contained" text="下載" type="default" [width]="70"
                     [visible]="editVisible" (onClick)="downloadWorkOrder($event)">
+                </dx-button>
+                <dx-button class="deletebtn" stylingMode="contained" text="刪除工單" type="default" [width]="110"
+                    [visible]="editVisible" (onClick)="deleteWorkOrder($event)">
                 </dx-button>
                 <dx-button class="endbtn" stylingMode="contained" text="工單結案" type="danger" [width]="110"
                     [visible]="editVisible" [disabled]="btnDisabled" (onClick)="overdata()">

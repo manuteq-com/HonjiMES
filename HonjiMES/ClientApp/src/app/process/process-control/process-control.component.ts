@@ -162,10 +162,55 @@ export class ProcessControlComponent implements OnInit {
         this.randomkey = new Date().getTime();
     }
     readProcess(e, dataId) {
+        // console.log("dataId", dataId);
         if (!this.creatpopupVisible) {
             this.itemkey = 0;
             this.workOrderHeadId = dataId;
             this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + dataId).subscribe(
+                (s) => {
+                    if (s.success) {
+                        if (this.app.checkUpdateRoles()) {
+                            this.editVisible = true;
+                        }
+                        if (s.data.WorkOrderHead.Status === 0 || s.data.WorkOrderHead.Status === 4) {
+                            if (this.app.checkUpdateRoles()) {
+                                this.runVisible = true;
+                            }
+                        } else {
+                            this.runVisible = false;
+                        }
+
+                        // 是否結案
+                        if (s.data.WorkOrderHead.Status === 5) { // 已結案
+                            this.btnDisabled = true;
+                        } else {
+                            this.btnDisabled = false;
+                        }
+
+                        s.data.WorkOrderDetailData.forEach(element => {
+                            element.Count = (element?.ReCount ?? 0) + ' / ' + element.NgCount;
+                        });
+                        this.dataSourceDB_Process = s.data.WorkOrderDetailData;
+                        this.workOrderHeadNo = s.data.WorkOrderHead.WorkOrderNo;
+                        // this.workOrderHeadId = s.data.WorkOrderHead.Id;
+                        this.workOrderHeadDataNo = s.data.WorkOrderHead.DataNo;
+                        // this.workOrderHeadDataName = s.data.WorkOrderHead.DataName;
+                        // this.workOrderHeadStatus = this.listStatus.find(x => x.Id === s.data.WorkOrderHead.Status)?.Name ?? '';
+                        // this.workOrderHeadCount = (s.data.WorkOrderHead?.ReCount ?? '0') + ' / ' + s.data.WorkOrderHead.Count;
+
+                        this.workOrderHeadDataType = s.data.WorkOrderHead.DataType;
+                        this.workOrderHeadDataId = s.data.WorkOrderHead.DataId;
+                    }
+                }
+            );
+        }
+    }
+    onRowClick(e) {
+        // console.log("onRowClick", e);
+        if (!this.creatpopupVisible) {
+            this.itemkey = 0;
+            this.workOrderHeadId = e.data.Id;
+            this.app.GetData('/WorkOrders/GetWorkOrderDetailByWorkOrderHeadId/' + e.data.Id).subscribe(
                 (s) => {
                     if (s.success) {
                         if (this.app.checkUpdateRoles()) {
@@ -296,6 +341,55 @@ export class ProcessControlComponent implements OnInit {
             this.app.downloadfile('/Report/GetWorkOrderPDF/' + this.workOrderHeadId);
             // this.Url = '/Api/Report/GetWorkOrderPDF/' + this.workOrderHeadId;
             // window.open(this.Url, '_blank');
+        }
+    }
+    deleteWorkOrder(e) {
+        //console.log("deleteWorkOrder",e);
+        //console.log("this.workOrderHeadId",this.workOrderHeadId);
+        if (this.workOrderHeadId) {
+            Swal.fire({
+                showCloseButton: true,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: '確認刪除?',
+                html: '刪除後將無法復原!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#296293',
+                cancelButtonColor: '#CE312C',
+                confirmButtonText: '確認',
+                cancelButtonText: '取消'
+            }).then(async (result) => {
+                if (result.value) {
+                    // tslint:disable-next-line: max-line-length
+                    const sendRequest = await SendService.sendRequest(this.http, '/Processes/DeleteWorkOrderList/' + this.workOrderHeadId, 'DELETE');
+                    this.viewRefresh(e, sendRequest);
+                }
+            });
+        }
+
+    }
+    viewRefresh(e, result) {
+        if (result) {
+            this.editVisible = false;
+            this.runVisible = false;
+            this.btnDisabled = true;
+            this.dataSourceDB_Process = [];
+            this.dataGrid1.instance.refresh();
+            this.workOrderHeadNo = "";
+            this.workOrderHeadDataNo = "";
+            this.workOrderHeadDataType = "";
+            this.workOrderHeadDataId = "";
+            //this.dataGrid2.instance.refresh();
+            //this.dataSourceDB = [];
+            e.preventDefault();
+            notify({
+                message: '更新完成',
+                position: {
+                    my: 'center top',
+                    at: 'center top'
+                }
+            }, 'success', 3000);
         }
     }
     onProgress(e) {

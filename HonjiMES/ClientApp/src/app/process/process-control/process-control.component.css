@@ -77,6 +77,13 @@
     background-color: #ff831e;
 }
 
+.deletebtn {
+    float: right;
+    margin-right: 6px;
+    border-radius: 2px;
+    background-color: #ce2cab;
+}
+
 .endbtn {
     float: right;
     margin-right: 6px;
