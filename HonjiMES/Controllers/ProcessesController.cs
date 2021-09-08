@@ -646,8 +646,18 @@ namespace HonjiMES.Controllers
 
                 var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
                 var MaterialBasic = await _context.MaterialBasics.FindAsync(OWorkOrderHeads.DataId);
-                OWorkOrderHeads.DataNo = MaterialBasic.MaterialNo;
-                OWorkOrderHeads.DataName = MaterialBasic.Name;
+                if (OWorkOrderHeads.DataNo != MaterialBasic.MaterialNo || OWorkOrderHeads.DataName != MaterialBasic.Name) 
+                {
+                    OWorkOrderHeads.DataNo = MaterialBasic.MaterialNo;
+                    OWorkOrderHeads.DataName = MaterialBasic.Name;
+                    var OrderDetailWorkOredrHead = _context.OrderDetailAndWorkOrderHeads.Where(x => x.WorkHeadId == OWorkOrderHeads.Id);
+                    foreach (var item in OrderDetailWorkOredrHead) 
+                    {
+                        item.DeleteFlag = 1;
+                    }
+                }
+
+
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
                 OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try
