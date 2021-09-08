@@ -59,12 +59,6 @@ export class OrdertoworkComponent implements OnInit, OnChanges {
             });
         }
         console.log("this.itemkeyval",this.itemkeyval);
-        //若工單已建立 不需要預產生之工單號
-        this.itemkeyval.forEach((v)=>{
-            if(v.Status == 1) {
-                v.WorkOrderNo = "";
-            }
-        })
         this.dataSourceDB = this.itemkeyval;
     }
     onFocusedRowChanging(e) {

@@ -404,7 +404,8 @@ namespace HonjiMES.Controllers
                     {
                         WorkOrderHeadList.Add(item2);
                     }
-                    TempNo++;
+                    if (CheckResult.FirstOrDefault().Status ==0)
+                        TempNo++;
                     // }
                 }
                 _context.ChangeTracker.LazyLoadingEnabled = false;
@@ -1723,21 +1724,6 @@ namespace HonjiMES.Controllers
             var WorkOrderHeadList = new List<WorkOrderHead>();
             if (OrderDetail.MaterialBasicId != 0)
             {
-                //取得工單號
-                var key = "HJ";
-                var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
-                var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11).OrderByDescending(x => x.WorkOrderNo).ToListAsync();
-                var NoCount = NoData.Count() + 1;
-                if (NoCount != 1)
-                {
-                    var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
-                    var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
-                    // if (NoCount <= NoLast) {
-                    NoCount = NoLast + 1;
-                    // }
-                }
-                var workOrderNo = key + WorkOrderNo + (NoCount + TempNo).ToString("000");
-
                 // var DataType = 0;
                 var BasicDataID = 0;
                 var BasicDataNo = "";
@@ -1802,6 +1788,24 @@ namespace HonjiMES.Controllers
                 if (BillOfMaterials.Count() == 0)
                 {
                     status = 2;
+                }
+                //取得工單號
+                var workOrderNo = "";
+                if (status == 0)
+                {
+                    var key = "HJ";
+                    var WorkOrderNo = DateTime.Now.ToString("yyMMdd");
+                    var NoData = await _context.WorkOrderHeads.AsQueryable().Where(x => x.WorkOrderNo.Contains(key + WorkOrderNo) && x.WorkOrderNo.Length == 11).OrderByDescending(x => x.WorkOrderNo).ToListAsync();
+                    var NoCount = NoData.Count() + 1;
+                    if (NoCount != 1)
+                    {
+                        var LastWorkOrderNo = NoData.FirstOrDefault().WorkOrderNo;
+                        var NoLast = Int32.Parse(LastWorkOrderNo.Substring(LastWorkOrderNo.Length - 3, 3));
+                        // if (NoCount <= NoLast) {
+                        NoCount = NoLast + 1;
+                        // }
+                    }
+                    workOrderNo = key + WorkOrderNo + (NoCount + TempNo).ToString("000");
                 }
                 var nWorkOrderHead = new WorkOrderHeadInfo
                 {
