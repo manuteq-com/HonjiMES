@@ -495,8 +495,9 @@ namespace HonjiMES.Controllers
                     // {
                     var OrderToWorkCheckData = new OrderToWorkCheckData();
                     OrderToWorkCheckData.OrderDetail = item;
-                    OrderToWorkCheckData.WorkOrderHead = OrderData.WorkOrderHead;
-                    NewResultMessage += await this.NewWorkOrderByOrder(OrderToWorkCheckData);
+                    OrderToWorkCheckData.WorkOrderHead = OrderData.WorkOrderHead.Where(x=>x.DataId == item.MaterialBasicId).ToList();
+                    if(OrderToWorkCheckData.WorkOrderHead.Count!=0) 
+                        NewResultMessage += await this.NewWorkOrderByOrder(OrderToWorkCheckData);
                     // }
                 }
 
