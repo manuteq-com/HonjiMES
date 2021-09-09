@@ -58,6 +58,7 @@ export class ProcessControlComponent implements OnInit {
     uploadHeaders: { Authorization: string; routerLink: string; apitype: string; };
     islg = true;
     loadingVisible = false;
+    selectedRowKeys: any[];
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -100,6 +101,7 @@ export class ProcessControlComponent implements OnInit {
         );
     }
     ngOnInit() {
+        this.selectedRowKeys =[];
         this.titleService.setTitle('工單管理');
         this.runVisible = false;
         this.editVisible = false;
@@ -364,6 +366,7 @@ export class ProcessControlComponent implements OnInit {
                     // tslint:disable-next-line: max-line-length
                     const sendRequest = await SendService.sendRequest(this.http, '/Processes/DeleteWorkOrderList/' + this.workOrderHeadId, 'DELETE');
                     this.viewRefresh(e, sendRequest);
+
                 }
             });
         }
@@ -376,10 +379,12 @@ export class ProcessControlComponent implements OnInit {
             this.btnDisabled = true;
             this.dataSourceDB_Process = [];
             this.dataGrid1.instance.refresh();
+            //this.dataGrid1.instance.clearSelection();
             this.workOrderHeadNo = "";
             this.workOrderHeadDataNo = "";
             this.workOrderHeadDataType = "";
             this.workOrderHeadDataId = "";
+            this.selectedRowKeys =[];
             //this.dataGrid2.instance.refresh();
             //this.dataSourceDB = [];
             e.preventDefault();

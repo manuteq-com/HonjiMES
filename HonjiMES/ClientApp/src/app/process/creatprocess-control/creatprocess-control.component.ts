@@ -122,6 +122,15 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     if (s.success) {
+                        s.data.sort(function(a,b){
+                            if (a.Name < b.Name) {
+                                return -1;
+                              }
+                              if (a.Name > b.Name) {
+                                return 1;
+                              }
+                              return 0;
+                        })
                         s.data.unshift({ Id: null, Name: '' }); // 加入第一行
                         this.MachineList = s.data;
                     }

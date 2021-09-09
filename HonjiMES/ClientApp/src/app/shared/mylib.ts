@@ -108,6 +108,7 @@ export class SendService {
     // }
     public static sendRequest(http: HttpClient, url: string, method: string = 'GET', data: any = {}): any {
         //console.log("sendrequest");
+        //debugger;
         const gurl = location.pathname;
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;

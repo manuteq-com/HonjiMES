@@ -49,6 +49,8 @@ export class OrderListComponent {
     overRandomkey: number;
     selectedOperation: string = "between";
     saleunfinshedVisible = false;
+    clearOverviewSelection: boolean;
+    clearCondition: { cancel: any; toggle: boolean; };
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -432,6 +434,12 @@ export class OrderListComponent {
     unsalepopup_result(e) {
         this.saleunfinshedVisible = false;
         this.dataGrid.instance.refresh();
+    }
+
+    clearSelection(e){
+        //強制觸發onChange
+        this.clearOverviewSelection = !this.clearOverviewSelection;
+        this.clearCondition = {"cancel": e.cancel, "toggle":this.clearOverviewSelection }
     }
 
 }

@@ -98,7 +98,7 @@
     "dxDataGrid-groupPanelEmptyText": "拖動列標題至此以進行列分組",
     "dxDataGrid-noDataText": "無數據",
     "dxDataGrid-searchPanelPlaceholder": "搜索...",
-    "dxDataGrid-filterRowShowAllText": "(全部)",
+    "dxDataGrid-filterRowShowAllText": "",
     "dxDataGrid-filterRowResetOperationText": "重置",
     "dxDataGrid-filterRowOperationEquals": "等於",
     "dxDataGrid-filterRowOperationNotEquals": "不等於",

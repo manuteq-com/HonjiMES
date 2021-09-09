@@ -22,6 +22,7 @@ import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
 export class OrderOverviewComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() randomkeyval: any;
+    @Input() clearSel: boolean;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
@@ -44,6 +45,7 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     popupVisibleSale: boolean;
     Otoworkkey: any;
     selectedOperation: string = "between";
+    selectedRows: number[] = [];
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         this.remoteOperations = true;
@@ -52,34 +54,68 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
-
     }
     ngOnChanges() {
-        this.getdata();
-        // this.app.GetData('/Materials/GetMaterials').subscribe(
-        //     (s) => {
-        //         if (s.success) {
-        //             this.MaterialList = s.data;
-        //         }
-        //     }
-        // );
-        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
-            (s) => {
-                if (s.success) {
-                    // this.MaterialBasicList = s.data;
-                    this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
-                }
+        if (this.clearSel) {
+            if (this.clearSel["cancel"] === false) {
+                //關閉時只清空select
+                this.selectedRows = [];
+            } else {
+                //console.log("read");
+                this.getdata();
+                // this.app.GetData('/Materials/GetMaterials').subscribe(
+                //     (s) => {
+                //         if (s.success) {
+                //             this.MaterialList = s.data;
+                //         }
+                //     }
+                // );
+                this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+                    (s) => {
+                        if (s.success) {
+                            // this.MaterialBasicList = s.data;
+                            this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
+                        }
+                    }
+                );
+                this.app.GetData('/Customers/GetCustomers').subscribe(
+                    (s) => {
+                        if (s.success) {
+                            this.CustomerList = s.data;
+                        }
+                    }
+                );
             }
-        );
-        this.app.GetData('/Customers/GetCustomers').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.CustomerList = s.data;
+        } else {
+            //console.log("readB");
+            this.getdata();
+            // this.app.GetData('/Materials/GetMaterials').subscribe(
+            //     (s) => {
+            //         if (s.success) {
+            //             this.MaterialList = s.data;
+            //         }
+            //     }
+            // );
+            this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+                (s) => {
+                    if (s.success) {
+                        //console.log("this.MaterialBasicList" ,s.data);
+                        // this.MaterialBasicList = s.data;
+                        this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
+                    }
                 }
-            }
-        );
+            );
+            this.app.GetData('/Customers/GetCustomers').subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.CustomerList = s.data;
+                    }
+                }
+            );
+        }
     }
     getdata() {
+        //debugger;
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
