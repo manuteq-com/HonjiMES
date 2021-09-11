@@ -50,6 +50,7 @@ import { MachineLogsComponent } from './machine-logs/machine-logs-list/machine-l
 import { SurfaceTreatmentComponent } from './surface-treatment/surface-treatment.component';
 import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
 import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
+import { ReceiveInfoComponent } from './receive/receive-info/receive-info.component';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -101,6 +102,7 @@ export const routes: Routes = [
     { path: 'surfacetreat', component: SurfaceTreatmentComponent },
     { path: 'machineinformation', component: MachineInformationComponent },
     { path: 'machineprocesstime', component: MachineProcessTimeComponent },
+    { path: 'receiveInfo', component: ReceiveInfoComponent},
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
