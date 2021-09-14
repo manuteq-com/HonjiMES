@@ -240,7 +240,7 @@ namespace HonjiMES.Models
                         #endregion
 
                         OrderHeadlist.Add(nOrderHead);
-                        for (var i = 0; i < sheet.LastRowNum; i++)//筆數
+                        for (var i = 0; i <= sheet.LastRowNum; i++)//筆數
                         {
                             var grow = sheet.GetRow(i);
                             if (grow != null)

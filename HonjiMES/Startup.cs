@@ -132,8 +132,6 @@ namespace HonjiMES
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -150,6 +148,9 @@ namespace HonjiMES
             {
                 app.UseSpaStaticFiles();
             }
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseRouting();
             app.UseAuthentication();

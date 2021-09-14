@@ -207,6 +207,11 @@ export class WorkorderStockComponent implements OnInit, OnChanges {
         this.itemkey = data.data.Id;
         this.logpopupVisible = true;
     }
+    onRowClick(e) {
+        this.workOrderHeadNo = e.data.LinkOrder;
+        this.WorkOrderNoInputVal = e.data.LinkOrder;
+        this.searchdata();
+    }
     async searchdata() {
         this.dataSourceDB_Process = [];
         this.btnDisabled = true;

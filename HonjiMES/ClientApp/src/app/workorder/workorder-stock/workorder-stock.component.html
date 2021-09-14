@@ -18,7 +18,7 @@
     <div class="col-6">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true" rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [columnAutoWidth]="false" [showBorders]="true"
-            [remoteOperations]="remoteOperations">
+            [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)">
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="true" [pageSize]="20">
