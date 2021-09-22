@@ -200,7 +200,7 @@
     [width]="1800" [(visible)]="creatpopupVisible" (onHidden)="popup_hidden($event)">
     <div *dxTemplate="let data of 'content'">
         <app-creatprocess-control (childOuter)="creatpopup_result($event)" [randomkeyval]="randomkey"
-            [itemkeyval]="itemkey" [modval]="mod">
+            [itemkeyval]="itemkey" [modval]="mod" [popupClose]="popupClose">
         </app-creatprocess-control>
     </div>
 </dx-popup>

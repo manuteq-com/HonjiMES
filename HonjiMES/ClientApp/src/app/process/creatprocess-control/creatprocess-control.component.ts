@@ -1,6 +1,6 @@
 import { OrderDetail, WorkOrderHead } from './../../model/viewmodels';
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent, DxButtonComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -28,6 +28,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
+    @ViewChild('cm3Selectbox') selectBox : DxSelectBoxComponent;
+    @Input() popupClose: boolean;
 
     controller: string;
     formData: any;
@@ -77,6 +79,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     processVisible: boolean;
     countVal: number;
     editVisible2: boolean;
+    MachineSelectBoxOptions: any;
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -122,17 +125,27 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             (s) => {
                 if (s.success) {
                     if (s.success) {
-                        s.data.sort(function(a,b){
+                        s.data.sort(function (a, b) {
                             if (a.Name < b.Name) {
                                 return -1;
-                              }
-                              if (a.Name > b.Name) {
+                            }
+                            if (a.Name > b.Name) {
                                 return 1;
-                              }
-                              return 0;
+                            }
+                            return 0;
                         })
                         s.data.unshift({ Id: null, Name: '' }); // 加入第一行
                         this.MachineList = s.data;
+                        //console.log("MachineList", this.MachineList);
+
+                        this.MachineSelectBoxOptions = {
+                            dataSource: { paginate: true, store: { type: 'array', data: this.MachineList, key: 'Id' } },
+                            searchEnabled: true,
+                            displayExpr: 'Name',
+                            valueExpr: 'Id',
+                            onValueChanged: this.onMachineSelectionChanged.bind(this),
+
+                        };
                     }
                 }
             }
@@ -170,7 +183,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
             (s) => {
                 if (s.success) {
-                    // console.log("Processes/GetWorkOrderNumber0",s.data);
+                    // console.log("Processes/GetWorkOrderNumber0", s.data);
                     this.formData = s.data;
                     this.formData.Count = 1;
                 }
@@ -179,6 +192,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
+
     }
     ngOnChanges() {
         // console.log('itemkeyval', this.itemkeyval);
@@ -216,10 +230,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             );
         } else if (this.itemkeyval != null && this.itemkeyval !== 0) {
             // 按編輯工單時 讀取資料
+           //console.log("this.selectBox.instance.reset();",this.selectBox);
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        console.log("Processes/GetProcessByWorkOrderId",s.data);
+                        //console.log("Processes/GetProcessByWorkOrderId", s.data);
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
                         this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
@@ -233,7 +248,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                         // this.formData.Remarks = s.data[0].Remarks;
-                        if(s.data.WorkOrderHead.Status === 4){ // 工單為[轉單]
+                        if (s.data.WorkOrderHead.Status === 4) { // 工單為[轉單]
                             this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.OrderCount };
                             this.runVisible = true;
                             this.processVisible = true;
@@ -247,7 +262,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                             this.allowReordering = true;
                             this.newVisible = false;
                             this.editVisible2 = true;
-                        }else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
+                        } else if (s.data.WorkOrderHead.Status === 5) { // 工單為[結案]，不能編輯
                             this.editVisible = true;
                             this.modVisible = true;
                             this.editVisible2 = true;
@@ -327,13 +342,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     };
     onMaterialBasicSelectionChanged(e) {
-        console.log("herechange",this.modCheck,e,this.modval);
+        console.log("herechange", this.modCheck, e, this.modval);
         if (this.modCheck) {
             this.modCheck = false;
         } else {
             this.saveDisabled = false;
             //第一次載入不需觸發
-            if (e.value !== 0 && e.value !== null && e.value !== undefined && e.event!== undefined) {
+            if (e.value !== 0 && e.value !== null && e.value !== undefined && e.event !== undefined) {
 
                 Swal.fire({
                     showCloseButton: true,
@@ -350,7 +365,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }).then(async (result) => {
                     if (result.value) {
                         // tslint:disable-next-line: max-line-length
-                       this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
+                        this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
                             (s) => {
                                 if (s.success) {
                                     //console.log("griddata0",s.data);
@@ -574,7 +589,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     // DataType: 2,
                     DataId: this.formData.MaterialBasicId,
                     Count: this.formData.Count,
-                    OrderCount : this.formData.OrderCount,
+                    OrderCount: this.formData.OrderCount,
                     DrawNo: this.formData.DrawNo,
                     MachineNo: this.formData.MachineNo,
                     DueStartTime: this.formData.DueStartTime,
@@ -672,5 +687,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             item.ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * e.value;
         });
         this.dataGrid2.instance.refresh();
+    }
+
+    onMachineSelectionChanged(e) {
+        let newMachine = e.component.option('text');
+        this.dataSourceDB.forEach(function(v,k){
+            if(v.ProcessNo.slice(0,3)?.toUpperCase() == "CM3" ){
+                v.ProducingMachine = newMachine;
+            }
+        })
     }
 }

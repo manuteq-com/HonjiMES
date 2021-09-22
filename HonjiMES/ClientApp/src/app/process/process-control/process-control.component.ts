@@ -59,6 +59,7 @@ export class ProcessControlComponent implements OnInit {
     islg = true;
     loadingVisible = false;
     selectedRowKeys: any[];
+    popupClose: boolean;
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
@@ -290,6 +291,7 @@ export class ProcessControlComponent implements OnInit {
         if (this.workOrderHeadId !== undefined) {
             this.readProcess(null, this.workOrderHeadId);
         }
+        this.popupClose = !this.popupClose;
     }
     creatpopup_result(e) {
         debugger;

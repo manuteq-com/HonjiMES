@@ -43,6 +43,10 @@
         <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="editVisible">
             <dxo-label text="預計完工日"></dxo-label>
         </dxi-item>
+        <dxi-item  #cm3Selectbox editorType="dxSelectBox" [disabled]="editVisible" displayExpr="Name" [editorOptions]="MachineSelectBoxOptions">
+            <dxo-label text="CM3預設機台"></dxo-label>
+        </dxi-item>
+
 
     </dx-form>
 
