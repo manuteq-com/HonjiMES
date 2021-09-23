@@ -16,7 +16,8 @@
         <!-- <dxi-item dataField="WorkOrderNo" [colSpan]="4" [disabled]="true" [visible]="!newVisible">
                     <dxo-label text="工單號"></dxo-label>
                 </dxi-item> -->
-        <dxi-item dataField="OrderCount" dataType="number" editorType="dxNumberBox" [editorOptions]="OrderNumberOptions">
+        <dxi-item dataField="OrderCount" dataType="number" editorType="dxNumberBox"
+            [editorOptions]="OrderNumberOptions">
             <dxo-label text="訂單數量"></dxo-label>
         </dxi-item>
         <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions">
@@ -43,11 +44,13 @@
         <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="editVisible">
             <dxo-label text="預計完工日"></dxo-label>
         </dxi-item>
-        <dxi-item  #cm3Selectbox editorType="dxSelectBox" [disabled]="editVisible" displayExpr="Name" [editorOptions]="MachineSelectBoxOptions">
+        <dxi-item #cm3Selectbox>
             <dxo-label text="CM3預設機台"></dxo-label>
+            <div *dxTemplate>
+                <dx-select-box #selectBox [dataSource]="MachineList" displayExpr="Name" valueExpr="Id"
+                    [(value)]="cm3Machine" (onValueChanged)="onMachineSelectionChanged($event)"></dx-select-box>
+            </div>
         </dxi-item>
-
-
     </dx-form>
 
     <!-- <br> -->
@@ -98,8 +101,7 @@
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"
             editCellTemplate="ProcessCostTemplate" [width]="75">
         </dxi-column>
-        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate"
-           [width]="75">
+        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [width]="75">
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>

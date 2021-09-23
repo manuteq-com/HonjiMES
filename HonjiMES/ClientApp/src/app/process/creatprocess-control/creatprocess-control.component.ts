@@ -1,6 +1,6 @@
 import { OrderDetail, WorkOrderHead } from './../../model/viewmodels';
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter, ViewChild } from '@angular/core';
-import { DxFormComponent, DxDataGridComponent, DxButtonComponent, DxSelectBoxComponent } from 'devextreme-angular';
+import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../app.module';
 import { Observable } from 'rxjs';
@@ -28,7 +28,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid2') dataGrid2: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
-    @ViewChild('cm3Selectbox') selectBox : DxSelectBoxComponent;
     @Input() popupClose: boolean;
 
     controller: string;
@@ -79,7 +78,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     processVisible: boolean;
     countVal: number;
     editVisible2: boolean;
-    MachineSelectBoxOptions: any;
+    cm3Machine:any;
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -136,16 +135,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         })
                         s.data.unshift({ Id: null, Name: '' }); // 加入第一行
                         this.MachineList = s.data;
-                        //console.log("MachineList", this.MachineList);
-
-                        this.MachineSelectBoxOptions = {
-                            dataSource: { paginate: true, store: { type: 'array', data: this.MachineList, key: 'Id' } },
-                            searchEnabled: true,
-                            displayExpr: 'Name',
-                            valueExpr: 'Id',
-                            onValueChanged: this.onMachineSelectionChanged.bind(this),
-
-                        };
                     }
                 }
             }
@@ -192,9 +181,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
-
     }
     ngOnChanges() {
+        this.cm3Machine = undefined;
         // console.log('itemkeyval', this.itemkeyval);
         // console.log('modval', this.modval);
         // console.log('checkBoxarray', this.checkBoxarray);
@@ -230,7 +219,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             );
         } else if (this.itemkeyval != null && this.itemkeyval !== 0) {
             // 按編輯工單時 讀取資料
-           //console.log("this.selectBox.instance.reset();",this.selectBox);
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
