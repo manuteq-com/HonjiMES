@@ -17,6 +17,9 @@
     <div class="col-auto-12 mt-2 mb-1 ml-4">
         <form action="">
             <dx-form id="form" [formData]="formData" [colCount]="5">
+                <dxi-item dataField="WorkOrderNo" [editorOptions]="editorOptions">
+                    <dxo-label text="品號查詢"></dxo-label>
+                </dxi-item>
                 <dxi-item dataField="BasicDataNo" [editorOptions]="editorOptions">
                     <dxo-label text="品號查詢"></dxo-label>
                 </dxi-item>
@@ -25,7 +28,7 @@
     </div>
 </div>
 
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDB.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="true" [nzShowPagination]="true" [nzPageSizeOptions]="[10, 20, 30, 40]" [nzPageIndex]="1" [nzTotal]="300" [nzPageSize]="20" nzShowSizeChanger [nzScroll]="{ x: '800px', y: '600px' }">
+<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDBDisplay.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="true" [nzShowPagination]="true" [nzPageSizeOptions]="[10, 20, 30, 40]" [nzPageIndex]="1" [nzTotal]="300" [nzPageSize]="20" nzShowSizeChanger [nzScroll]="{ x: '800px', y: '600px' }">
 
     <thead>
 
@@ -36,7 +39,7 @@
             <th nzWidth="130px" nzLeft>預計完工</th>
             <th nzWidth="80px" nzLeft>訂單量</th>
             <th nzWidth="80px" nzLeft>工單量</th>
-            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+            <ng-container *ngFor="let col of dataSourceDBDisplay.ColumnOptionlist">
                 <th *ngIf="col.show" nzWidth="260px">{{ col.title }}</th>
             </ng-container>
         </tr>
@@ -52,7 +55,7 @@
                 {{data.DueEndTime}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.OrderCount}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
-            <ng-container *ngFor="let col of dataSourceDB.ColumnOptionlist">
+            <ng-container *ngFor="let col of dataSourceDBDisplay.ColumnOptionlist">
                 <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)" nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">

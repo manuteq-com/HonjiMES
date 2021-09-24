@@ -20,6 +20,7 @@ export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     dataSourceDB: any = {};
+    dataSourceDBDisplay: any = {};
     creatpopupVisible: any;
     itemtrkey: number;
     itemtdkey: any;
@@ -103,26 +104,39 @@ export class WorkorderListComponent implements OnInit {
     getWorkOrderData(qfilter) {
         this.app.GetData('/Processes/GetWorkOrderByMode/1').subscribe(
             (s) => {
-                this.dataSourceDB = s.data;
-                var rawdata = this.dataSourceDB.ProcessesDataList;
-                var result = [];
-                console.log('this.dataSourceDB',this.dataSourceDB);
-                if(Object.keys(qfilter).length>0){
-                        Object.keys(qfilter).forEach(function(v,k){
-                            rawdata = rawdata.filter(function(x){
-                                return x[v].toLowerCase().includes(qfilter[v].toLowerCase())
-                            })
-                        })
-                        this.dataSourceDB.ProcessesDataList=rawdata;
-                }
+                this.dataSourceDB = JSON.parse(JSON.stringify(s.data));
+                this.dataSourceDBDisplay = s.data;
+                // console.log("this.dataSourceDBDisplay",this.dataSourceDBDisplay);
+                // var rawdata = this.dataSourceDB.ProcessesDataList;
+                // console.log('this.dataSourceDB',this.dataSourceDB);
+                // if(Object.keys(qfilter).length>0){
+                //         Object.keys(qfilter).forEach(function(v,k){
+                //             rawdata = rawdata.filter(function(x){
+                //                 return x[v].toLowerCase().includes(qfilter[v].toLowerCase())
+                //             })
+                //         })
+                //         this.dataSourceDB.ProcessesDataList=rawdata;
+                // }
                 this.loadingVisible = false;
             }
         );
     }
 
+    filterdataSourceDB(qfilter) {
+        let rawdata = this.dataSourceDB.ProcessesDataList;
+        if (Object.keys(qfilter).length > 0) {
+            Object.keys(qfilter).forEach(function (v, k) {
+                rawdata = rawdata.filter(function (x) {
+                    return x[v].toLowerCase().includes(qfilter[v].toLowerCase())
+                })
+            })
+            this.dataSourceDBDisplay.ProcessesDataList = rawdata;
+        }
+    }
+
     onValueChanged(q) {
         this.detailfilter = this.myform.instance.option('formData');
-        this.getWorkOrderData(this.detailfilter);
+        this.filterdataSourceDB(this.detailfilter);
     }
     trclick(e) {
         if (!this.checkVisible) {
