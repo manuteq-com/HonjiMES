@@ -79,6 +79,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     countVal: number;
     editVisible2: boolean;
     cm3Machine:any;
+    StaffList: any;
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -175,6 +176,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     // console.log("Processes/GetWorkOrderNumber0", s.data);
                     this.formData = s.data;
                     this.formData.Count = 1;
+                }
+            }
+        );
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.StaffList = s.data;
+                    //console.log("this.StaffList",this.StaffList);
                 }
             }
         );
@@ -406,6 +415,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         //         this.Manpower = x?.Manpower ?? 1;
         //     }
         // });
+    }
+
+    selectUserChanged(e, data) {
+        //console.log("edata",e,data)
+        data.setValue(e.value);
     }
     validate_before(): boolean {
         // 表單驗證
@@ -683,6 +697,12 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             if(v.ProcessNo.slice(0,3)?.toUpperCase() == "CM3" ){
                 v.ProducingMachine = newMachine;
             }
+        })
+    }
+
+    onStaffSelectionChanged(e){
+        this.dataSourceDB.forEach(function(v,k){
+                v.UserId = e.value;
         })
     }
 }

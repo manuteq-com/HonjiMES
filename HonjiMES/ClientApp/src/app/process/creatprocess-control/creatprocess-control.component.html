@@ -51,6 +51,13 @@
                     [(value)]="cm3Machine" (onValueChanged)="onMachineSelectionChanged($event)"></dx-select-box>
             </div>
         </dxi-item>
+        <dxi-item #cm3Selectbox>
+            <dxo-label text="人員"></dxo-label>
+            <div *dxTemplate>
+                <dx-select-box #selectBox [dataSource]="StaffList" displayExpr="Realname" valueExpr="Id"
+                    [(value)]="userId" (onValueChanged)="onStaffSelectionChanged($event)"></dx-select-box>
+            </div>
+        </dxi-item>
     </dx-form>
 
     <!-- <br> -->
@@ -103,6 +110,13 @@
         </dxi-column>
         <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [width]="75">
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
+            <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
+        </dxi-column>
+        <dxi-column dataField="UserId" caption="人員"  editCellTemplate="UserTemplate">
+            <dxo-lookup
+            [dataSource]="StaffList"
+            displayExpr="Realname"
+            valueExpr="Id"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
         <dxi-column dataField="Remarks" caption="備註" editCellTemplate="RemarksTemplate">
@@ -170,6 +184,12 @@
             <dx-select-box [value]="data.value" (onValueChanged)="selectMachineChanged($event,data)"
                 [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }"
                 valueExpr="Name" displayExpr="Name" [searchEnabled]="true"></dx-select-box>
+            <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
+        </div>
+        <div *dxTemplate="let data of 'UserTemplate'">
+            <dx-select-box [(value)]="data.value" (onValueChanged)="selectUserChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: StaffList, key:'Id' } }"
+                valueExpr="Id" displayExpr="Realname" [searchEnabled]="false"></dx-select-box>
             <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
         </div>
         <div *dxTemplate="let data of 'RemarksTemplate'">
