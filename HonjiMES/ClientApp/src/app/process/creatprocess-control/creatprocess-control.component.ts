@@ -99,7 +99,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 4;
+        this.colCount = 12;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;

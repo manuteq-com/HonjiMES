@@ -63,3 +63,101 @@
             displayExpr="WorkOrderNo" [searchEnabled]="true"></dx-select-box>
     </div>
 </dx-data-grid>
+
+
+new version
+<div class="row">
+
+    <div class="col-2">
+
+        <dx-data-grid #dataGrid1 [dataSource]="dataSourceDB_new" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
+            rootValue="0" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+            [focusedRowEnabled]="false" [columnAutoWidth]="false" [showBorders]="true"
+            [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="selectedRowKeys" height="600">
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-paging [enabled]="true" [pageSize]="20">
+            </dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15, 20, 50, 100]" [showInfo]="true"
+                [showNavigationButtons]="true" visible="true">
+            </dxo-pager>
+            <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [grouping]="true" [paging]="true" [summary]="true">
+            </dxo-remote-operations> -->
+            <dxo-editing mode="row" [allowUpdating]="false"></dxo-editing>
+
+            <dxi-column dataField="UserId" caption="人員" [width]="140" sortOrder="desc"></dxi-column>
+            <dxi-column dataField="WorkTime" caption="工時"></dxi-column>
+
+
+            <!-- <dxi-column type="buttons" caption="新增" cssClass="addmod">
+                <dxi-button name="save" text="存檔" icon="save"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column> -->
+
+        </dx-data-grid>
+
+    </div>
+
+
+    <div class="col-10">
+        <div class="row">
+            <div class="col-4">
+                <div class="input-group">
+                    <label class="pt-3">
+                        <h5>人員：小明</h5>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <dx-data-grid #dataGrid2 [dataSource]="dataSourceDB_record" [showBorders]="true" height="600"
+            [showColumnLines]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+            [columnAutoWidth]="true" [showBorders]="true">
+
+
+
+            <dxo-filter-row [visible]="false"></dxo-filter-row>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+            <dxo-keyboard-navigation [editOnKeyPress]="editOnkeyPress" [enterKeyAction]="enterKeyAction"
+                [enterKeyDirection]="enterKeyDirection">
+            </dxo-keyboard-navigation>
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+
+            <dxi-column dataField="MachineId" caption="操作機台" [width]="150">
+                <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="WorkOrderId" caption="工單號"  editCellTemplate="WorkOrderNoCellTemplate">
+                <dxo-lookup [dataSource]="WorkOrderIdList" displayExpr="WorkOrderNo" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="ProcessId" caption="製程名稱">
+                <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="CreateTime" caption="預計開始時間" dataType="date" [(selectedFilterOperation)]="selectedOperation">
+            </dxi-column>
+            <dxi-column dataField="EndTime" caption="預計結束時間" dataType="date" [(selectedFilterOperation)]="selectedOperation">
+            </dxi-column>
+
+            <dxi-column dataField="ExpectedlTotalTime" caption="預計工時" dataType="number">
+            </dxi-column>
+
+            <dxi-column type="buttons" [visible]="false">
+                <dxi-button name="save" text="存檔"></dxi-button>
+                <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+                <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+                <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            </dxi-column>
+            <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="ExpectedlTotalTime" summaryType="sum" displayFormat="{0}分"
+                    valueFormat="###,##0">
+                </dxi-total-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+
+</div>
+

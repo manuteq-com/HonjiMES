@@ -45,6 +45,10 @@ export class StaffmanagementComponent implements OnInit {
     WorkOrderNo: any;
     CreateTime: any;
     EndTime: any;
+    remoteOperations = true;
+    selectedRowKeys: any[];
+    dataSourceDB_new: any;
+    dataSourceDB_record: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.onRowValidating = this.onRowValidating.bind(this);
@@ -189,5 +193,9 @@ export class StaffmanagementComponent implements OnInit {
     }
     selectWorkOrderNoValueChanged(e, data) {
         data.setValue(e.value);
+    }
+
+    onRowClick(e){
+
     }
 }
