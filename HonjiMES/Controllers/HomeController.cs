@@ -68,7 +68,7 @@ namespace HonjiMES.Controllers
             {
                 UserRoles = _context.UserRoles.AsEnumerable().Where(x => x.DeleteFlag == 0 && x.UsersId == Id && x.Roles.StartsWith('1')).Select(x => new Tuple<int, string>(x.MenuId, x.Roles)).ToList();//&& x.Roles.Contains("1") 要開權限時把這裡加回去
             }
-            foreach (var item in Allmenu.Where(x => !x.Pid.HasValue))
+            foreach (var item in Allmenu.Where(x => !x.Pid.HasValue).OrderBy(x => x.Order))
             {
                 var Menuitem = GetMenuitem(item.Id, Allmenu, UserRoles);
                 if (Menuitem.Any())

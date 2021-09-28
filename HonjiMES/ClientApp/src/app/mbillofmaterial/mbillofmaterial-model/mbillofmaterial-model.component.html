@@ -120,18 +120,18 @@
     <div class="col-auto-12 mt-1">
         <dx-button horizontalAlignment="right" text='取消' type='danger' icon='close' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="CancelOnClick($event)" [visible]="CancelVisible"></dx-button>
-        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='存檔' type='success' icon='save' [useSubmitBehavior]="true"
+        <dx-button #myButton horizontalAlignment="right" class="pl-3 pr-3 pb-1" text='儲存模型' type='success' icon='save' [useSubmitBehavior]="true"
             (onClick)="PostOnClick($event)" [disabled]="saveDisabled" [visible]="saveVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='刪除模型' type='danger' icon='trash' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="DeleteOnClick($event)" [visible]="DeleteVisible"></dx-button>
         <dx-button horizontalAlignment="right" text='更新模型' type='success' icon='save' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="UpdateOnClick($event)" [visible]="UpdateVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='複製模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
+        <dx-button horizontalAlignment="right" text='另存模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="CopyOnClick($event)" [visible]="CopyVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='新增模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
+        <dx-button horizontalAlignment="right" text='開新模型' type='default' icon='newfolder' [useSubmitBehavior]="true"
             class="editbtn pl-3 pr-3 pb-1" (onClick)="NewOnClick($event)" [visible]="NewVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='插入' type='default' icon='download' [useSubmitBehavior]="true"
-            class="editbtn pl-3 pr-3 pb-1" (onClick)="InsertOnClick($event)" [visible]="InsertVisible"></dx-button>
+        <dx-button horizontalAlignment="right" text='帶入至製程列表' type='default' icon='download' [useSubmitBehavior]="true"
+            class="editbtn pl-3 pr-3 pb-1" (onClick)="InsertOnClick($event)" [visible]="true"></dx-button>
     </div>
 
 </form>

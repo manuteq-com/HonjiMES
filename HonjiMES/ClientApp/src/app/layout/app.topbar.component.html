@@ -48,9 +48,13 @@
                         </a>
                     </li> -->
                     <li role="menuitem">
+                        <a [routerLink]="['/userpassword']">
+                            <i class="fa fa-fw fa fa-key"></i>
+                            <span>更改密碼</span>
+                        </a>
                         <a (click)="app.logout()">
                             <i class="fa fa-fw fa-sign-out"></i>
-                            <span>Logout</span>
+                            <span>登出</span>
                         </a>
                     </li>
                 </ul>

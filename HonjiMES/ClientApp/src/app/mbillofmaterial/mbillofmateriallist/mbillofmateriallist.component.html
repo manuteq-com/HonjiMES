@@ -201,7 +201,7 @@
 
         <dx-popup [showTitle]="true" title="模型資訊" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1000" [(visible)]="modelpopupVisible">
             <div *dxTemplate="let data of 'content'">
-                <app-mbillofmaterial-model (childOuter)="modelpopup_result($event)" [itemkeyval]="itemkey">
+                <app-mbillofmaterial-model (childOuter)="modelpopup_result($event)" [itemkeyval]="itemkey" [dataSourceDB]="dataSourceDB_Process">
                 </app-mbillofmaterial-model>
             </div>
         </dx-popup>

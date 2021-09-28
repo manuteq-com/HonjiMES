@@ -33,7 +33,8 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
     minColWidth: number;
     width: any;
     colCount: number;
-    dataSourceDB: any[];
+    @Input() dataSourceDB: any[];
+    dataSourceDBrestore: any[];
     labelLocation: string;
     editOnkeyPress: boolean;
     enterKeyAction: string;
@@ -77,7 +78,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.showColon = true;
         this.minColWidth = 300;
         this.colCount = 3;
-        this.dataSourceDB = [];
+        // this.dataSourceDB = [];
         this.MbomModelList = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
@@ -88,9 +89,9 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.NewVisible = true;
         this.UpdateVisible = false;
         this.DeleteVisible = false;
-        this.InsertVisible = false;
+        this.InsertVisible = true;
         this.CancelVisible = false;
-        this.CopyVisible = false;
+        this.CopyVisible = true;
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -117,15 +118,15 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
     ngOnChanges() {
         // debugger;
         this.formData = new MbomModelData();
-        this.dataSourceDB = [];
+        // this.dataSourceDB = [];
         this.GetMbomModelHeads();
         this.modeVisible = false;
         this.saveVisible = false;
         this.UpdateVisible = false;
         this.DeleteVisible = false;
-        this.InsertVisible = false;
+        this.InsertVisible = true;
         this.CancelVisible = false;
-        this.CopyVisible = false;
+        this.CopyVisible = true;
         this.NewVisible = true;
     }
     allowEdit(e) {
@@ -268,6 +269,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
         this.saveVisible = true;
         this.CancelVisible = true;
         this.CopyVisible = false;
+        this.dataSourceDBrestore = this.dataSourceDB;
         this.dataSourceDB = [];
         this.formData.MbomModelHeadId = 0;
         this.formData.ModelCode = null;
@@ -317,15 +319,18 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
     CancelOnClick(e) {
         this.modeVisible = false;
         this.NewVisible = true;
-        this.CopyVisible = false;
+        this.CopyVisible = true;
         this.CancelVisible = false;
         this.saveVisible = false;
         this.formData = this.myform.instance.option('formData');
-        this.dataSourceDB = [];
+        // this.dataSourceDB = [];
         this.dataGrid2.instance.refresh();
         this.formData.MbomModelHeadId = 0;
         this.formData.ModelCode = null;
         this.formData.ModelName = null;
+        if (this.modName ==='new'){
+            this.dataSourceDB = this.dataSourceDBrestore
+        }
     }
     GetMbomModelHeads() {
         this.app.GetData('/MbomModels/GetMbomModelHeads').subscribe(
@@ -422,6 +427,7 @@ export class MbillofmaterialModelComponent implements OnInit, OnChanges {
             this.modeVisible = false;
             this.saveVisible = false;
             this.NewVisible = true;
+            this.CopyVisible = true;
             this.UpdateVisible = false;
             this.DeleteVisible = false;
             this.InsertVisible = false;

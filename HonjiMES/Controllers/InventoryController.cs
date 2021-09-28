@@ -190,55 +190,7 @@ namespace HonjiMES.Controllers
             var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
             var warehousesA = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品廠內內定代號 201
             var warehousesB = Warehouses.Where(x => x.Code == "202").FirstOrDefault(); // 半成品廠外內定代號 202
-
-            // foreach (var item in ProductBasic)
-            // {
-            //     if (item.Products.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) {
-            //         WarehouseIdVal = warehousesP.Id;
-            //     } else {
-            //         WarehouseIdVal = 0;
-            //     }
-            //     var tempData = new BasicData
-            //     {
-            //         TempId = TempId++,
-            //         DataType = 2,
-            //         DataId = item.Id,
-            //         DataNo = item.ProductNo,
-            //         Name = item.Name,
-            //         Specification = item.Specification,
-            //         Property = item.Property,
-            //         Price = item.Price,
-            //         Quantity = item.Products.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
-            //         WarehouseId = WarehouseIdVal,
-            //         WarehouseIdA = warehousesA?.Id ?? 0,
-            //         WarehouseIdB = warehousesB?.Id ?? 0
-            //     };
-            //     AdjustData.Add(tempData);
-            // }
-            // foreach (var item in WiproductBasic)
-            // {
-            //     if (item.Wiproducts.Where(x => x.WarehouseId == warehousesW.Id && x.DeleteFlag == 0).Any()) {
-            //         WarehouseIdVal = warehousesW.Id;
-            //     } else {
-            //         WarehouseIdVal = 0;
-            //     }
-            //     var tempData = new BasicData
-            //     {
-            //         TempId = TempId++,
-            //         DataType = 3,
-            //         DataId = item.Id,
-            //         DataNo = item.WiproductNo,
-            //         Name = item.Name,
-            //         Specification = item.Specification,
-            //         Property = item.Property,
-            //         Price = item.Price,
-            //         Quantity = item.Wiproducts.Where(y => y.DeleteFlag == 0).Sum(x => x.Quantity),
-            //         WarehouseId = WarehouseIdVal,
-            //         WarehouseIdA = warehousesA?.Id ?? 0,
-            //         WarehouseIdB = warehousesB?.Id ?? 0
-            //     };
-            //     AdjustData.Add(tempData);
-            // }
+         
             foreach (var item in MaterialBasic)
             {
                 if (item.MaterialType == 1 && item.Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) { //如果是[原料]，則預設101倉
@@ -377,7 +329,7 @@ namespace HonjiMES.Controllers
             }
             else
             {
-                var tempId = 0;
+                var MaterialId = 0; //品號庫存資料ID
                 decimal tempOriginalQuantity = 0;
                 var AdjustDetails = new List<AdjustDetail>();
 
@@ -393,19 +345,55 @@ namespace HonjiMES.Controllers
 
                 foreach (var item in AdjustData.AdjustDetailData)
                 {
-                    //// 產生Log
-                    // if (item.DataType == 1)//material
-                    // {
-                        var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId).Include(x => x.Materials).FirstOrDefault();
-                        var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
-                        if (Material.Count() != 0)
+                //// 產生Log
+                // if (item.DataType == 1)//material
+                // {
+                    var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId).Include(x => x.Materials).FirstOrDefault();
+                    var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
+                    if (Material.Count() != 0)
+                    {
+                        Material.First().MaterialLogs.Add(new MaterialLog
                         {
-                            Material.First().MaterialLogs.Add(new MaterialLog
+                            AdjustNo = AdjustData.AdjustNo,
+                            LinkOrder = AdjustData.LinkOrder,
+                            MaterialId = Material.First().Id,
+                            Original = Material.First().Quantity,
+                            Quantity = item.Quantity,
+                            Price = item.Price,
+                            PriceAll = item.PriceAll,
+                            Unit = item.Unit,
+                            UnitCount = item.UnitCount,
+                            UnitPrice = item.UnitPrice,
+                            UnitPriceAll = item.UnitPriceAll,
+                            WorkPrice = item.WorkPrice,
+                            Reason = item.Remark,
+                            Message = "[庫存調整單]",
+                            CreateTime = dt,
+                            CreateUser = UserID
+                        });
+                        MaterialId = Material.First().Id;
+                        tempOriginalQuantity = Material.First().Quantity;
+                        Material.First().Quantity += item.Quantity;
+                    }
+                    else // 如無倉別資訊，則自動建立
+                    {
+                        MaterialBasic.Materials.Add(new Material
+                        {
+                            MaterialNo = MaterialBasic.MaterialNo,
+                            Name = MaterialBasic.Name,
+                            Quantity = item.Quantity,
+                            Specification = MaterialBasic.Specification,
+                            Property = MaterialBasic.Property,
+                            Price = MaterialBasic.Price,
+                            BaseQuantity = 2,
+                            CreateTime = dt,
+                            CreateUser = UserID,
+                            WarehouseId = item.WarehouseId,
+                            MaterialLogs = {new MaterialLog
                             {
                                 AdjustNo = AdjustData.AdjustNo,
                                 LinkOrder = AdjustData.LinkOrder,
-                                MaterialId = Material.First().Id,
-                                Original = Material.First().Quantity,
+                                Original = 0,
                                 Quantity = item.Quantity,
                                 Price = item.Price,
                                 PriceAll = item.PriceAll,
@@ -418,192 +406,17 @@ namespace HonjiMES.Controllers
                                 Message = "[庫存調整單]",
                                 CreateTime = dt,
                                 CreateUser = UserID
-                            });
-                            tempId = Material.First().Id;
-                            tempOriginalQuantity = Material.First().Quantity;
-                            Material.First().Quantity += item.Quantity;
-                        }
-                        else // 如無倉別資訊，則自動建立
-                        {
-                            MaterialBasic.Materials.Add(new Material
-                            {
-                                MaterialNo = MaterialBasic.MaterialNo,
-                                Name = MaterialBasic.Name,
-                                Quantity = item.Quantity,
-                                Specification = MaterialBasic.Specification,
-                                Property = MaterialBasic.Property,
-                                Price = MaterialBasic.Price,
-                                BaseQuantity = 2,
-                                CreateTime = dt,
-                                CreateUser = UserID,
-                                WarehouseId = item.WarehouseId,
-                                MaterialLogs = {new MaterialLog
-                                {
-                                    AdjustNo = AdjustData.AdjustNo,
-                                    LinkOrder = AdjustData.LinkOrder,
-                                    Original = 0,
-                                    Quantity = item.Quantity,
-                                    Price = item.Price,
-                                    PriceAll = item.PriceAll,
-                                    Unit = item.Unit,
-                                    UnitCount = item.UnitCount,
-                                    UnitPrice = item.UnitPrice,
-                                    UnitPriceAll = item.UnitPriceAll,
-                                    WorkPrice = item.WorkPrice,
-                                    Reason = item.Remark,
-                                    Message = "[庫存調整單]",
-                                    CreateTime = dt,
-                                    CreateUser = UserID
-                                }}
-                            });
-                            await _context.SaveChangesAsync();
-                            tempId = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
-                        }
-                    // }
-                    // else if (item.DataType == 2)//product
-                    // {
-                    //     var ProductBasic = _context.ProductBasics.Where(x => x.Id == item.DataId).Include(x => x.Products).FirstOrDefault();
-                    //     var Product = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
-                    //     if (Product.Count() != 0)
-                    //     {
-                    //         Product.First().ProductLogs.Add(new ProductLog
-                    //         {
-                    //             AdjustNo = AdjustData.AdjustNo,
-                    //             LinkOrder = AdjustData.LinkOrder,
-                    //             ProductId = Product.First().Id,
-                    //             Original = Product.First().Quantity,
-                    //             Quantity = item.Quantity,
-                    //             Price = item.Price,
-                    //             PriceAll = item.PriceAll,
-                    //             Unit = item.Unit,
-                    //             UnitCount = item.UnitCount,
-                    //             UnitPrice = item.UnitPrice,
-                    //             UnitPriceAll = item.UnitPriceAll,
-                    //             WorkPrice = item.WorkPrice,
-                    //             Reason = item.Remark,
-                    //             Message = "[庫存調整單]",
-                    //             CreateTime = dt,
-                    //             CreateUser = UserID
-                    //         });
-                    //         tempId = Product.First().Id;
-                    //         tempOriginalQuantity = Product.First().Quantity;
-                    //         Product.First().Quantity += item.Quantity;
-                    //     }
-                    //     else // 如無倉別資訊，則自動建立
-                    //     {
-                    //         ProductBasic.Products.Add(new Product
-                    //         {
-                    //             ProductNo = ProductBasic.ProductNo,
-                    //             ProductNumber = ProductBasic.ProductNumber,
-                    //             Name = ProductBasic.Name,
-                    //             Quantity = item.Quantity,
-                    //             Specification = ProductBasic.Specification,
-                    //             Property = ProductBasic.Property,
-                    //             Price = ProductBasic.Price,
-                    //             MaterialRequire = 1,
-                    //             CreateTime = dt,
-                    //             CreateUser = UserID,
-                    //             WarehouseId = item.WarehouseId,
-                    //             ProductLogs = {new ProductLog
-                    //             {
-                    //                 AdjustNo = AdjustData.AdjustNo,
-                    //                 LinkOrder = AdjustData.LinkOrder,
-                    //                 Original = 0,
-                    //                 Quantity = item.Quantity,
-                    //                 Price = item.Price,
-                    //                 PriceAll = item.PriceAll,
-                    //                 Unit = item.Unit,
-                    //                 UnitCount = item.UnitCount,
-                    //                 UnitPrice = item.UnitPrice,
-                    //                 UnitPriceAll = item.UnitPriceAll,
-                    //                 WorkPrice = item.WorkPrice,
-                    //                 Reason = item.Remark,
-                    //                 Message = "[庫存調整單]",
-                    //                 CreateTime = dt,
-                    //                 CreateUser = UserID
-                    //             }}
-                    //         });
-                    //         await _context.SaveChangesAsync();
-                    //         tempId = ProductBasic.Products.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
-                    //     }
-                    // }
-                    // else if (item.DataType == 3)//wiproduct
-                    // {
-                    //     var WiproductBasic = _context.WiproductBasics.Where(x => x.Id == item.DataId).Include(x => x.Wiproducts).FirstOrDefault();
-                    //     var Wiproduct = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
-                    //     if (Wiproduct.Count() != 0)
-                    //     {
-                    //         Wiproduct.First().WiproductLogs.Add(new WiproductLog
-                    //         {
-                    //             AdjustNo = AdjustData.AdjustNo,
-                    //             LinkOrder = AdjustData.LinkOrder,
-                    //             WiproductId = Wiproduct.First().Id,
-                    //             Original = Wiproduct.First().Quantity,
-                    //             Quantity = item.Quantity,
-                    //             Price = item.Price,
-                    //             PriceAll = item.PriceAll,
-                    //             Unit = item.Unit,
-                    //             UnitCount = item.UnitCount,
-                    //             UnitPrice = item.UnitPrice,
-                    //             UnitPriceAll = item.UnitPriceAll,
-                    //             WorkPrice = item.WorkPrice,
-                    //             Reason = item.Remark,
-                    //             Message = "[庫存調整單]",
-                    //             CreateTime = dt,
-                    //             CreateUser = UserID
-                    //         });
-                    //         tempId = Wiproduct.First().Id;
-                    //         tempOriginalQuantity = Wiproduct.First().Quantity;
-                    //         Wiproduct.First().Quantity += item.Quantity;
-                    //     }
-                    //     else // 如無倉別資訊，則自動建立
-                    //     {
-                    //         WiproductBasic.Wiproducts.Add(new Wiproduct
-                    //         {
-                    //             WiproductNo = WiproductBasic.WiproductNo,
-                    //             WiproductNumber = WiproductBasic.WiproductNumber,
-                    //             Name = WiproductBasic.Name,
-                    //             Quantity = item.Quantity,
-                    //             Specification = WiproductBasic.Specification,
-                    //             Property = WiproductBasic.Property,
-                    //             Price = WiproductBasic.Price,
-                    //             MaterialRequire = 1,
-                    //             CreateTime = dt,
-                    //             CreateUser = UserID,
-                    //             WarehouseId = item.WarehouseId,
-                    //             WiproductLogs = {new WiproductLog
-                    //             {
-                    //                 AdjustNo = AdjustData.AdjustNo,
-                    //                 LinkOrder = AdjustData.LinkOrder,
-                    //                 Original = 0,
-                    //                 Quantity = item.Quantity,
-                    //                 Price = item.Price,
-                    //                 PriceAll = item.PriceAll,
-                    //                 Unit = item.Unit,
-                    //                 UnitCount = item.UnitCount,
-                    //                 UnitPrice = item.UnitPrice,
-                    //                 UnitPriceAll = item.UnitPriceAll,
-                    //                 WorkPrice = item.WorkPrice,
-                    //                 Reason = item.Remark,
-                    //                 Message = "[庫存調整單]",
-                    //                 CreateTime = dt,
-                    //                 CreateUser = UserID
-                    //             }}
-                    //         });
-                    //         await _context.SaveChangesAsync();
-                    //         tempId = WiproductBasic.Wiproducts.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     return Ok(MyFun.APIResponseError("資訊錯誤!"));
-                    // }
+                            }}
+                        });
+                        await _context.SaveChangesAsync();
+                        MaterialId = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
+                    }                
 
                     //// 建立明細
                     AdjustHead.AdjustDetails.Add(new AdjustDetail
                     {
                         ItemType = item.DataType,
-                        ItemId = tempId,
+                        ItemId = MaterialId,
                         Original = tempOriginalQuantity,
                         Quantity = item.Quantity,
                         Price = item.Price,
@@ -619,13 +432,11 @@ namespace HonjiMES.Controllers
                         CreateUser = UserID
                     });
                 }
-                _context.AdjustHeads.Add(AdjustHead);
+            _context.AdjustHeads.Add(AdjustHead);
 
-                await _context.SaveChangesAsync();
-                return Ok(MyFun.APIResponseOK("OK"));
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK("OK"));
             }
         }
-
-
     }
 }
