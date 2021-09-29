@@ -511,7 +511,8 @@ namespace HonjiMES.Controllers
                     Count = WorkOrderData.WorkOrderHead.Count,
                     OrderCount = WorkOrderData.WorkOrderHead.OrderCount,
                     DrawNo = WorkOrderData.WorkOrderHead.DrawNo,
-                    CreateUser = MyFun.GetUserID(HttpContext)
+                    CreateUser = WorkOrderData.WorkOrderHead.CreateUser,
+                    UpdateUser = MyFun.GetUserID(HttpContext)
                 };
 
                 foreach (var item in WorkOrderData.WorkOrderDetail)
@@ -537,7 +538,8 @@ namespace HonjiMES.Controllers
                         DueEndTime = item.DueEndTime,
                         ActualStartTime = item.ActualStartTime,
                         ActualEndTime = item.ActualEndTime,
-                        CreateUser = MyFun.GetUserID(HttpContext)
+                        CreateUser = item.CreateUser,
+                        UpdateUser = MyFun.GetUserID(HttpContext)
                     };
                     nWorkOrderHead.WorkOrderDetails.Add(nWorkOrderDetail);
                 }
@@ -605,6 +607,7 @@ namespace HonjiMES.Controllers
                         OWorkOrderDetail.DueEndTime = item.DueEndTime;
                         OWorkOrderDetail.ActualStartTime = item.ActualStartTime;
                         OWorkOrderDetail.ActualEndTime = item.ActualEndTime;
+                        OWorkOrderDetail.CreateUser = item.CreateUser;
                         OWorkOrderDetail.UpdateUser = MyFun.GetUserID(HttpContext);
                     }
                     else // 如ID為0，則表示該工序為新增
@@ -630,7 +633,7 @@ namespace HonjiMES.Controllers
                             DueEndTime = item.DueEndTime,
                             ActualStartTime = item.ActualStartTime,
                             ActualEndTime = item.ActualEndTime,
-                            CreateUser = MyFun.GetUserID(HttpContext),
+                            CreateUser = item.CreateUser,
                             UpdateUser = MyFun.GetUserID(HttpContext)
                         };
                         OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
@@ -657,7 +660,7 @@ namespace HonjiMES.Controllers
                     }
                 }
 
-
+                OWorkOrderHeads.CreateUser = WorkOrderData.WorkOrderHead.CreateUser;
                 OWorkOrderHeads.UpdateTime = DateTime.Now;
                 OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
                 try
