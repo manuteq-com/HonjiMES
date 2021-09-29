@@ -80,7 +80,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     editVisible2: boolean;
     cm3Machine:any;
     StaffList: any;
-
+    
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -224,13 +224,13 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
-                        console.log("Processes/GetWorkOrderNumber1",s.data);
+                        //console.log("Processes/GetWorkOrderNumber1",s.data);
                         let rawData = s.data;
                         rawData.Count = 1;
                         rawData.OrderCount = 1;
                         rawData.DueStartTime = new Date();
                         rawData.DueEndTime = new Date();
-                        console.log("this.formDataNEW",this.formData, rawData);
+                        //console.log("this.formDataNEW",this.formData, rawData);
                         this.formData = rawData;
                     }
                 }
@@ -240,12 +240,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        console.log("Processes/GetProcessByWorkOrderIdEdit", s.data);
-
+                        //console.log("Processes/GetProcessByWorkOrderIdEdit", s.data);
                         let rawData0 = {};
                         this.dataSourceDB = s.data.WorkOrderDetail;
-
-
                         rawData0["WorkOrderHeadId"] = s.data.WorkOrderHead.Id;
                         rawData0["WorkOrderNo"] = s.data.WorkOrderHead.WorkOrderNo;
                         rawData0["CreateTime"] = s.data.WorkOrderHead.CreateTime;
@@ -259,10 +256,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         rawData0["CreateUser"] = s.data.WorkOrderHead.CreateUser;
 
                         this.formData = rawData0;
-                        console.log("rawData", rawData0);
-                        this.myform.instance.repaint();
-
-
+                        //console.log("rawData", rawData0);
+                        //this.myform.instance.repaint();
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 4) { // 工單為[轉單]
 
