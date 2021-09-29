@@ -80,7 +80,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     editVisible2: boolean;
     cm3Machine:any;
     StaffList: any;
-    
+
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
@@ -379,9 +379,10 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
                             (s) => {
                                 if (s.success) {
-                                    //console.log("griddata0",s.data);
+                                    console.log("griddata0",s.data);
                                     s.data.forEach(element => {
                                         element.Id = 0;
+                                        element.CreateUser = undefined;
                                         element.DueStartTime = new Date();
                                         element.DueEndTime = new Date();
                                     });
