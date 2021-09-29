@@ -91,7 +91,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.Countchange = this.Countchange.bind(this);
 
         // this.CustomerVal = null;
-        // this.formData = null;
+        this.formData = {};
         this.editOnkeyPress = true;
         this.enterKeyAction = 'moveFocus';
         this.enterKeyDirection = 'row';
@@ -107,6 +107,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.modName = 'new';
         this.saveCheck = true;
         this.allowReordering = true;
+        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1 };
+        this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1 };
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -170,15 +172,19 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                 }
             }
         );
-        this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
-            (s) => {
-                if (s.success) {
-                    // console.log("Processes/GetWorkOrderNumber0", s.data);
-                    this.formData = s.data;
-                    this.formData.Count = 1;
-                }
-            }
-        );
+        // this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             console.log("Processes/GetWorkOrderNumber0", s.data);
+        //             let rawData = s.data;
+        //                 //this.formData = s.data;
+        //                 rawData.Count = 1;
+        //                 console.log("this.formData",this.formData, rawData);
+        //                 this.formData = rawData;
+
+        //         }
+        //     }
+        // );
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
@@ -190,6 +196,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
+
     }
     ngOnChanges() {
         this.cm3Machine = undefined;
@@ -217,12 +224,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetWorkOrderNumber').subscribe(
                 (s) => {
                     if (s.success) {
-                        // console.log("Processes/GetWorkOrderNumber1",s.data);
-                        this.formData = s.data;
-                        this.formData.Count = 1;
-                        this.formData.OrderCount = 1;
-                        this.formData.DueStartTime = new Date();
-                        this.formData.DueEndTime = new Date();
+                        console.log("Processes/GetWorkOrderNumber1",s.data);
+                        let rawData = s.data;
+                        rawData.Count = 1;
+                        rawData.OrderCount = 1;
+                        rawData.DueStartTime = new Date();
+                        rawData.DueEndTime = new Date();
+                        console.log("this.formDataNEW",this.formData, rawData);
+                        this.formData = rawData;
                     }
                 }
             );
@@ -231,22 +240,32 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        //console.log("Processes/GetProcessByWorkOrderId", s.data);
+                        console.log("Processes/GetProcessByWorkOrderIdEdit", s.data);
+
+                        let rawData0 = {};
                         this.dataSourceDB = s.data.WorkOrderDetail;
-                        this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
-                        this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
-                        this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
-                        this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
-                        this.formData.Count = s.data.WorkOrderHead.Count;
-                        this.formData.OrderCount = s.data.WorkOrderHead.OrderCount;
-                        this.formData.DrawNo = s.data.WorkOrderHead.DrawNo;
-                        this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
-                        this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
-                        this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
-                        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
+
+
+                        rawData0["WorkOrderHeadId"] = s.data.WorkOrderHead.Id;
+                        rawData0["WorkOrderNo"] = s.data.WorkOrderHead.WorkOrderNo;
+                        rawData0["CreateTime"] = s.data.WorkOrderHead.CreateTime;
+                        rawData0["MaterialBasicId"] = s.data.WorkOrderHead.DataId;
+                        rawData0["Count"] = s.data.WorkOrderHead.Count;
+                        rawData0["OrderCount"] = s.data.WorkOrderHead.OrderCount;
+                        rawData0["DrawNo"] = s.data.WorkOrderHead.DrawNo;
+                        rawData0["MachineNo"] = s.data.WorkOrderHead.MachineNo;
+                        rawData0["DueStartTime"] = s.data.WorkOrderHead.DueStartTime;
+                        rawData0["DueEndTime"] = s.data.WorkOrderHead.DueEndTime;
+                        rawData0["CreateUser"] = s.data.WorkOrderHead.CreateUser;
+
+                        this.formData = rawData0;
+                        console.log("rawData", rawData0);
+                        this.myform.instance.repaint();
+
+
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 4) { // 工單為[轉單]
-                            this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.OrderCount };
+
                             this.runVisible = true;
                             this.processVisible = true;
                             this.allowReordering = true;
@@ -595,7 +614,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                     DrawNo: this.formData.DrawNo,
                     MachineNo: this.formData.MachineNo,
                     DueStartTime: this.formData.DueStartTime,
-                    DueEndTime: this.formData.DueEndTime
+                    DueEndTime: this.formData.DueEndTime,
+                    CreateUser: this.formData.CreateUser
                 },
                 WorkOrderDetail: this.dataSourceDB
             };
@@ -702,7 +722,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     onStaffSelectionChanged(e){
         this.dataSourceDB.forEach(function(v,k){
-                v.UserId = e.value;
+                v.CreateUser = e.value;
         })
     }
 }

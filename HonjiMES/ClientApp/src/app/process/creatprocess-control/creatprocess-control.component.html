@@ -51,13 +51,13 @@
                     [(value)]="cm3Machine" (onValueChanged)="onMachineSelectionChanged($event)"></dx-select-box>
             </div>
         </dxi-item>
-        <dxi-item #cm3Selectbox [colSpan]="2">
+        <dxi-item #cm3Selectbox [colSpan]="2" dataField="CreateUser" [template]="'CreateUserTemplate'">
             <dxo-label text="人員"></dxo-label>
-            <div *dxTemplate>
-                <dx-select-box #selectBox [dataSource]="StaffList" displayExpr="Realname" valueExpr="Id"
-                    [(value)]="userId" (onValueChanged)="onStaffSelectionChanged($event)"></dx-select-box>
-            </div>
         </dxi-item>
+        <div *dxTemplate="let data of 'CreateUserTemplate'">
+            <dx-select-box #selectBox [dataSource]="StaffList" displayExpr="Realname" valueExpr="Id"
+                [(value)]="formData.CreateUser" (onValueChanged)="onStaffSelectionChanged($event)"></dx-select-box>
+        </div>
     </dx-form>
 
     <!-- <br> -->
@@ -112,7 +112,7 @@
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="UserId" caption="人員"  editCellTemplate="UserTemplate">
+        <dxi-column dataField="CreateUser" caption="人員"  editCellTemplate="UserTemplate">
             <dxo-lookup
             [dataSource]="StaffList"
             displayExpr="Realname"
