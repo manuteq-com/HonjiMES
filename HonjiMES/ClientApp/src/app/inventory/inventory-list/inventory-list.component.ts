@@ -275,7 +275,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.dataGrid.instance.saveEditData();
         this.formData = this.myform.instance.option('formData');
         this.dataSourceDB.forEach(element => {
-            const basicData = this.BasicDataList.find(z => z.TempId === element.TempId);
+            const basicData = this.BasicDataList.find(z => z.DataId === element.MaterialBasicId);
             element.DataType = basicData.DataType;
             element.DataId = basicData.DataId;
         });
