@@ -9,3 +9,7 @@
 ::ng-deep .dx-form{
     margin-bottom: 10px;
 }
+
+::ng-deep .dx-texteditor-input-container > input{
+    padding: 6px 6px 6px;
+}

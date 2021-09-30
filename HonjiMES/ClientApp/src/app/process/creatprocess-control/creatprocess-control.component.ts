@@ -80,12 +80,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     editVisible2: boolean;
     cm3Machine:any;
     StaffList: any;
+    DateOptions: {};
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.listWorkOrderTypes = myservice.getWorkOrderTypes();
         this.onReorder = this.onReorder.bind(this);
         this.onRowRemoved = this.onRowRemoved.bind(this);
+        this.setDateTime = this.setDateTime.bind(this);
         this.ProcessLeadTimesetCellValue = this.ProcessLeadTimesetCellValue.bind(this);
         this.ProcessTimesetCellValue = this.ProcessTimesetCellValue.bind(this);
         this.Countchange = this.Countchange.bind(this);
@@ -99,7 +101,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.readOnly = false;
         this.showColon = true;
         this.minColWidth = 300;
-        this.colCount = 12;
+        this.colCount = 24;
         this.dataSourceDB = [];
         this.controller = '/OrderDetails';
         this.saveDisabled = true;
@@ -109,6 +111,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.allowReordering = true;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1 };
+        this.DateOptions = {type: "datetime", displayFormat: "yyyy/MM/dd HH:mm", onOpened: this.setDateTime };
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -257,7 +260,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
                         this.formData = rawData0;
                         //console.log("rawData", rawData0);
-                        //this.myform.instance.repaint();
+                        this.myform.instance.repaint(); //重新popup時舊資料要刷新
                         // this.formData.Remarks = s.data[0].Remarks;
                         if (s.data.WorkOrderHead.Status === 4) { // 工單為[轉單]
 
@@ -290,6 +293,19 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
         this.onCellPreparedLevel = 0;
     }
+
+    setDateTime(e){
+      //console.log("opentime",e.component.option("value"));
+    }
+
+    validateNumber(e){
+        var test = new Date(e.value);
+        console.log("validateNumber", new Date(e.value) , test instanceof Date ,isNaN(test.valueOf()) );
+        let isNull = false;
+        isNull = (e.value == null) || (e.value == undefined) || (e.value == '');
+        return (test instanceof Date && !isNaN(test.valueOf())) || isNull;
+    }
+
     allowEdit(e) {
         if (e.row.data.Status !== undefined && e.row.data.WorkOrderHead !== undefined && e.row.data.WorkOrderHead !== null) {
             if (e.row.data.Status === 2 || e.row.data.Status === 3 || e.row.data.WorkOrderHead.Status === 5) {
@@ -440,7 +456,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
             notify({
-                message: '請注意訂單內容必填的欄位',
+                message: '請注意訂單內容必填的欄位及時間格式',
                 position: {
                     my: 'center top',
                     at: 'center top'

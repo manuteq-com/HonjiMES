@@ -1,61 +1,66 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
         [labelLocation]="labelLocation" [colCount]="colCount">
-        <dxi-item itemType="group" caption="" [colSpan]="8" [colCount]="8">
+        <dxi-item itemType="group" caption="" [colSpan]="17" [colCount]="17">
             <dxi-item dataField="WorkOrderHeadId" [visible]="false">
                 <dxo-label text="工單主檔ID"></dxo-label>
             </dxi-item>
             <dxi-item dataField="CreateTime" editorType="dxDateBox" [editorOptions]="CreateTimeDateBoxOptions"
-                [visible]="newVisible" [colSpan]="2">
+                [visible]="newVisible" [colSpan]="4">
                 <dxi-validation-rule type="required" message="建立日期 必填"></dxi-validation-rule>
                 <dxo-label text="建立日期"></dxo-label>
             </dxi-item>
-            <dxi-item dataField="WorkOrderNo" [colSpan]="2">
+            <dxi-item dataField="WorkOrderNo" [colSpan]="5">
                 <dxo-label text="工單號"></dxo-label>
             </dxi-item>
             <!-- <dxi-item dataField="WorkOrderNo" [colSpan]="4" [disabled]="true" [visible]="!newVisible">
                         <dxo-label text="工單號"></dxo-label>
                     </dxi-item> -->
             <dxi-item dataField="OrderCount" dataType="number" editorType="dxNumberBox"
-                [editorOptions]="OrderNumberOptions" [colSpan]="2">
+                [editorOptions]="OrderNumberOptions" [colSpan]="4">
                 <dxo-label text="訂單數量"></dxo-label>
             </dxi-item>
             <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [editorOptions]="NumberBoxOptions"
-                [colSpan]="2">
+                [colSpan]="4">
                 <dxi-validation-rule type="required" message="工單數量 必填"></dxi-validation-rule>
                 <dxo-label text="工單數量"></dxo-label>
             </dxi-item>
             <!-- <dxi-item dataField="MachineNo" [colSpan]="2" [disabled]="editVisible">
             <dxo-label text="機號"></dxo-label>
         </dxi-item> -->
-            <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible" [colSpan]="2">
+            <dxi-item dataField="Remarks" [visible]="false" [disabled]="editVisible" [colSpan]="3">
                 <dxo-label text="備註"></dxo-label>
             </dxi-item>
             <!-- <dxi-item dataField="DrawNo">
              <dxo-label text="圖號"></dxo-label>
         </dxi-item> -->
-            <dxi-item dataField="DueStartTime" editorType="dxDateBox" [disabled]="editVisible" [colSpan]="2">
+            <dxi-item dataField="DueStartTime" editorType="dxDateBox" [editorOptions]="DateOptions"
+                [disabled]="editVisible" [colSpan]="4"  cssClass="dateboxcss">
                 <dxo-label text="預計開工日"></dxo-label>
+                <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
+                </dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="editVisible" [colSpan]="2">
+            <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="editVisible"
+                [editorOptions]="DateOptions" [colSpan]="5"  cssClass="dateboxcss">
                 <dxo-label text="預計完工日"></dxo-label>
+                <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
+                </dxi-validation-rule>
             </dxi-item>
-            <dxi-item #cm3Selectbox [colSpan]="2">
+            <dxi-item #cm3Selectbox [colSpan]="4">
                 <dxo-label text="CM3預設機台"></dxo-label>
                 <div *dxTemplate>
                     <dx-select-box #selectBox [dataSource]="MachineList" displayExpr="Name" valueExpr="Id"
                         [(value)]="cm3Machine" (onValueChanged)="onMachineSelectionChanged($event)"></dx-select-box>
                 </div>
             </dxi-item>
-            <dxi-item #cm3Selectbox [colSpan]="2" dataField="CreateUser" [template]="'CreateUserTemplate'">
+            <dxi-item #cm3Selectbox [colSpan]="4" dataField="CreateUser" [template]="'CreateUserTemplate'">
                 <dxo-label text="人員"></dxo-label>
             </dxi-item>
 
         </dxi-item>
-        <dxi-item itemType="group" caption="" [colSpan]="4">
+        <dxi-item itemType="group" caption="" [colSpan]="7">
             <dxi-item dataField="MaterialBasicId" dataType="number" editorType="dxSelectBox"
-                [editorOptions]="MaterialBasicSelectBoxOptions" [disabled]="editVisible2"
-                [colSpan]="4">
+                [editorOptions]="MaterialBasicSelectBoxOptions" [disabled]="editVisible2" [colSpan]="7">
                 <dxi-validation-rule type="required" message="圖號 必填"></dxi-validation-rule>
                 <dxo-label text="圖號"></dxo-label>
             </dxi-item>
