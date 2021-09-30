@@ -18,7 +18,8 @@ import { Title } from '@angular/platform-browser';
 export class AdjustListComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-
+    tabs;
+    selectTabKey: number =1;
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
@@ -41,8 +42,10 @@ export class AdjustListComponent implements OnInit {
     ItemTypeList: any;
     WarehouseList: any;
     selectedOperation: string = "between";
+    selectedRowKeys = [];
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
+        this.tabs = [{"key": 1 ,"text": "以調整單顯示"},{"key": 2 ,"text": "以總覽列表顯示"}]
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -166,6 +169,20 @@ export class AdjustListComponent implements OnInit {
             remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustDetail', 'DELETE')
         });
     }
+
+    onRowClick(e){
+        let selectRowId = e.key;
+        this.dataSourceDBDetail = new CustomStore({
+            key: 'TempId',
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetailByPId?PId=' + selectRowId),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetail', 'GET', { key }),
+            // tslint:disable-next-line: max-line-length
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustDetail?PId=' + selectRowId, 'POST', { values }),
+            // tslint:disable-next-line: max-line-length
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustDetail', 'PUT', { key, values }),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustDetail', 'DELETE')
+        });
+    }
     updatepopup_result(e) {
         this.dataGrid.instance.refresh();
     }
@@ -257,6 +274,11 @@ export class AdjustListComponent implements OnInit {
         //         }
         //     }, 'success', 2000);
         // }
+    }
+
+    selectTab(e){
+        //console.log("select",e);
+        this.selectTabKey = e.component.option("selectedItemKeys")[0]
     }
 
 }

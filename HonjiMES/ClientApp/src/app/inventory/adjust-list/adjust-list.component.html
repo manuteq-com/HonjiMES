@@ -1,12 +1,7 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button
-            class="adjustbtn"
-            stylingMode="contained"
-            text="庫存調整單"
-            type="normal"
-            [width]="120"
+        <dx-button class="adjustbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120"
             (onClick)="creatAdjust()">
         </dx-button>
         <!-- <dx-button
@@ -37,23 +32,14 @@
         </form>
     </div>
 </div> -->
-
-<div class="row">
-
+<dx-tabs #apiTabs [items]="tabs" keyExpr="key" [selectedItemKeys]="1" (onItemClick)="selectTab($event)" [width]="300"></dx-tabs>
+<div class="row" *ngIf="selectTabKey === 1">
     <div class="col-4">
 
-        <dx-data-grid
-            [dataSource]="dataSourceDB"
-            showBorders="true"
-            keyExpr="id"
-            dateSerializationFormat='yyyy/MM/dd HH:mm:ss'
-            hoverStateEnabled="true"
-            [showColumnLines]="true"
-            [showRowLines]="false"
-            [rowAlternationEnabled]="true"
-            [focusedRowEnabled]="true"
-            [height]="740"
-            [remoteOperations]="remoteOperations">
+        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+            dateSerializationFormat='yyyy/MM/dd HH:mm:ss' hoverStateEnabled="true" [showColumnLines]="true"
+            [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [height]="700"
+            [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="selectedRowKeys">
 
             <dxo-selection mode="single"></dxo-selection>
             <dxo-filter-row [visible]="true"></dxo-filter-row>
@@ -81,8 +67,8 @@
                 </dxo-lookup>
             </dxi-column> -->
             <dxi-column dataField="Remarks" caption="備註"></dxi-column>
-            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [allowEditing]="false" [width]="120"
-                [(selectedFilterOperation)]="selectedOperation"></dxi-column>
+            <dxi-column dataField="CreateTime" caption="建立日期" dataType="date" sortOrder="desc" [allowEditing]="false"
+                [width]="120" [(selectedFilterOperation)]="selectedOperation"></dxi-column>
             <!-- <dxi-column dataField="CreateUser" caption="建立人員" [allowEditing]="false" [width]="100"></dxi-column> -->
 
             <dxi-column type="buttons" [visible]="false">
@@ -93,15 +79,18 @@
                 <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
             </dxi-column>
 
-            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50"></dxi-column>
+            <dxi-column caption="" cellTemplate="cellTemplate" alignment="center" width="50" [visible]="false"></dxi-column>
             <div *dxTemplate="let data of 'cellTemplate'">
-                <dx-button class="" icon="trash" type="danger" (onClick)="deleteAdjust($event,data)" [visible]="false"></dx-button>
-                <dx-button class="ml-1" icon="chevrondoubleright" type="default" (onClick)="readAdjustDetail($event,data)"></dx-button>
+                <dx-button class="" icon="trash" type="danger" (onClick)="deleteAdjust($event,data)" [visible]="false">
+                </dx-button>
+                <dx-button class="ml-1" icon="chevrondoubleright" type="default"
+                    (onClick)="readAdjustDetail($event,data)"></dx-button>
             </div>
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="760" [(visible)]="adjustpopupVisible">
+        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+            [height]="760" [(visible)]="adjustpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
                     [exceldata]="exceldata"></app-inventory-list>
@@ -116,38 +105,27 @@
 
             <div class="col-5">
                 <div class="input-group">
-                  <label class="pt-2"><h5>調整單明細：</h5></label>
+                    <label class="pt-2">
+                        <h5>調整單明細：</h5>
+                    </label>
                 </div>
             </div>
             <div class="col-5">
                 <div class="input-group">
-                  <label class="pt-2"></label>
+                    <label class="pt-2"></label>
                 </div>
             </div>
             <div class="col-2">
-                <dx-button
-                    class="savebtn"
-                    stylingMode="contained"
-                    text="更新"
-                    type="success"
-                    [width]="80"
-                    [disabled]="true"
-                    [visible]="false"
-                    (onClick)="savedata()">
+                <dx-button class="savebtn" stylingMode="contained" text="更新" type="success" [width]="80"
+                    [disabled]="true" [visible]="false" (onClick)="savedata()">
                 </dx-button>
             </div>
 
         </div>
 
-        <dx-data-grid
-            [dataSource]="dataSourceDBDetail"
-            [showBorders]="true"
-            [columnAutoWidth]="true"
-            [showColumnLines]="true"
-            [showRowLines]="true"
-            (onDataErrorOccurred)="onDataErrorOccurred($event)"
-            [height]="700"
-            keyExpr="id">
+        <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true"
+            [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
+            [height]="660" keyExpr="id">
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 
@@ -178,7 +156,8 @@
             <dxi-column dataField="Price" caption="單價" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
-            <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="70">
+            <dxi-column dataField="PriceAll" caption="總金額" dataType="number" format="$ #,##0.##;($ #,##0.##)"
+                [width]="70">
                 <dxi-validation-rule type="required"></dxi-validation-rule>
             </dxi-column>
             <!-- <dxi-column dataField="Unit" caption="單位">
@@ -214,5 +193,6 @@
 
 </div>
 
-
-
+<div *ngIf="selectTabKey === 2">
+    <app-adjust-log></app-adjust-log>
+</div>
