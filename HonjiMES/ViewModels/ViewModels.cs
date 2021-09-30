@@ -147,6 +147,7 @@ namespace HonjiMES.Models
         public decimal UnitPriceAll { get; set; }
         public decimal WorkPrice { get; set; }
         public string Remark { get; set; }
+        public int MaterialBasicId { get; set; }
     }
 
     /// <summary>

@@ -28,7 +28,7 @@ namespace HonjiMES.Controllers
         /// <summary>
         /// 取得庫存調整單號
         /// </summary>
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<AdjustData>> GetAdjustNo()
         {
             var key = "AD";
@@ -190,14 +190,19 @@ namespace HonjiMES.Controllers
             var warehousesP = Warehouses.Where(x => x.Code == "301").FirstOrDefault(); // 成品內定代號 301
             var warehousesA = Warehouses.Where(x => x.Code == "201").FirstOrDefault(); // 半成品廠內內定代號 201
             var warehousesB = Warehouses.Where(x => x.Code == "202").FirstOrDefault(); // 半成品廠外內定代號 202
-         
+
             foreach (var item in MaterialBasic)
             {
-                if (item.MaterialType == 1 && item.Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any()) { //如果是[原料]，則預設101倉
+                if (item.MaterialType == 1 && item.Materials.Where(x => x.WarehouseId == warehousesM.Id && x.DeleteFlag == 0).Any())
+                { //如果是[原料]，則預設101倉
                     WarehouseIdVal = warehousesM.Id;
-                } else if (item.MaterialType == 2 && item.Materials.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any()) { //如果是[成品]，則預設301倉
+                }
+                else if (item.MaterialType == 2 && item.Materials.Where(x => x.WarehouseId == warehousesP.Id && x.DeleteFlag == 0).Any())
+                { //如果是[成品]，則預設301倉
                     WarehouseIdVal = warehousesP.Id;
-                } else {
+                }
+                else
+                {
                     WarehouseIdVal = 0;
                 }
                 var tempData = new BasicData
@@ -235,29 +240,29 @@ namespace HonjiMES.Controllers
             var dt = DateTime.Now;
             // if (inventorychange.mod == "material")
             // {
-                var Material = _context.Materials.Find(inventorychange.id);
-                // if (!(Material.MaterialLogs.Any()))//同步資料用，建立原始庫存數
-                // {
-                //     Material.MaterialLogs.Add(new MaterialLog { 
-                //         Quantity = Material.Quantity, 
-                //         Message = "原始數量", 
-                //         CreateTime = dt, 
-                //         CreateUser = UserID 
-                //     });
-                // }
-                if (inventorychange.MaterialLog.AdjustNo.Length == 0)
-                {
-                    inventorychange.MaterialLog.AdjustNo = null;
-                }
+            var Material = _context.Materials.Find(inventorychange.id);
+            // if (!(Material.MaterialLogs.Any()))//同步資料用，建立原始庫存數
+            // {
+            //     Material.MaterialLogs.Add(new MaterialLog { 
+            //         Quantity = Material.Quantity, 
+            //         Message = "原始數量", 
+            //         CreateTime = dt, 
+            //         CreateUser = UserID 
+            //     });
+            // }
+            if (inventorychange.MaterialLog.AdjustNo.Length == 0)
+            {
+                inventorychange.MaterialLog.AdjustNo = null;
+            }
 
-                inventorychange.MaterialLog.Original = Material.Quantity;
-                inventorychange.MaterialLog.CreateTime = dt;
-                inventorychange.MaterialLog.CreateUser = UserID;
-                inventorychange.MaterialLog.Message = "[庫存調整]";
-                Material.MaterialLogs.Add(inventorychange.MaterialLog);
-                Material.Quantity += inventorychange.MaterialLog.Quantity;
-                await _context.SaveChangesAsync();
-                return Ok(MyFun.APIResponseOK(Material));
+            inventorychange.MaterialLog.Original = Material.Quantity;
+            inventorychange.MaterialLog.CreateTime = dt;
+            inventorychange.MaterialLog.CreateUser = UserID;
+            inventorychange.MaterialLog.Message = "[庫存調整]";
+            Material.MaterialLogs.Add(inventorychange.MaterialLog);
+            Material.Quantity += inventorychange.MaterialLog.Quantity;
+            await _context.SaveChangesAsync();
+            return Ok(MyFun.APIResponseOK(Material));
             // }
             // else if (inventorychange.mod == "product")
             // {
@@ -345,9 +350,9 @@ namespace HonjiMES.Controllers
 
                 foreach (var item in AdjustData.AdjustDetailData)
                 {
-                //// 產生Log
-                // if (item.DataType == 1)//material
-                // {
+                    //// 產生Log
+                    // if (item.DataType == 1)//material
+                    // {
                     var MaterialBasic = _context.MaterialBasics.Where(x => x.Id == item.DataId).Include(x => x.Materials).FirstOrDefault();
                     var Material = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).ToList();
                     if (Material.Count() != 0)
@@ -410,7 +415,7 @@ namespace HonjiMES.Controllers
                         });
                         await _context.SaveChangesAsync();
                         MaterialId = MaterialBasic.Materials.Where(x => x.WarehouseId == item.WarehouseId && x.DeleteFlag == 0).First().Id;
-                    }                
+                    }
 
                     //// 建立明細
                     AdjustHead.AdjustDetails.Add(new AdjustDetail
@@ -432,11 +437,132 @@ namespace HonjiMES.Controllers
                         CreateUser = UserID
                     });
                 }
-            _context.AdjustHeads.Add(AdjustHead);
+                _context.AdjustHeads.Add(AdjustHead);
 
-            await _context.SaveChangesAsync();
-            return Ok(MyFun.APIResponseOK("OK"));
+                await _context.SaveChangesAsync();
+                return Ok(MyFun.APIResponseOK("OK"));
             }
         }
+        //[HttpPut]
+        //public async Task<ActionResult> PutInventoryListChange(AdjustData AdjustData)
+        //{
+        //    var UserID = MyFun.GetUserID(HttpContext);
+        //    var dt = DateTime.Now;
+        //    if (AdjustData.AdjustDetailData.Count() == 0)
+        //    {
+        //        return Ok(MyFun.APIResponseError("無庫存調整項目!"));
+        //    }
+        //    else
+        //    {
+        //        _context.ChangeTracker.LazyLoadingEnabled = true;
+        //        var updataCheck = new List<int>();
+        //        var AdjustHead_ori = _context.AdjustHeads.Find(AdjustData.AdjustNo);
+        //        foreach (var item in WorkOrderData.WorkOrderDetail) // 依照新的工序清單逐一更新(新建)
+        //        {
+        //            var ProcessInfo = _context.Processes.Find(item.ProcessId);
+        //            int number = 0;
+        //            bool tryConversionId = int.TryParse(item.Id, out number);
+        //            if (number != 0)   // 如果ID不為0，則表示為既有工序，只進行更新
+        //            {
+        //                var conversionId = int.Parse(item.Id);
+        //                updataCheck.Add(conversionId);
+        //                var OWorkOrderDetail = OWorkOrderHeads.WorkOrderDetails.Where(x => x.Id == conversionId).FirstOrDefault();
+        //                OWorkOrderDetail.SerialNumber = item.SerialNumber;
+        //                OWorkOrderDetail.ProcessId = item.ProcessId;
+        //                OWorkOrderDetail.ProcessNo = ProcessInfo.Code;
+        //                OWorkOrderDetail.ProcessName = ProcessInfo.Name;
+        //                OWorkOrderDetail.ProcessLeadTime = item.ProcessLeadTime;
+        //                OWorkOrderDetail.ProcessTime = item.ProcessTime;
+        //                OWorkOrderDetail.ProcessCost = item.ProcessCost;
+        //                OWorkOrderDetail.Count = WorkOrderData.WorkOrderHead.Count;
+        //                // OWorkOrderDetail.PurchaseId
+        //                OWorkOrderDetail.DrawNo = item.DrawNo;
+        //                OWorkOrderDetail.Manpower = item.Manpower;
+        //                OWorkOrderDetail.ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine;
+        //                OWorkOrderDetail.Type = item.Type;
+        //                OWorkOrderDetail.Remarks = item.Remarks;
+        //                OWorkOrderDetail.DueStartTime = item.DueStartTime;
+        //                OWorkOrderDetail.DueEndTime = item.DueEndTime;
+        //                OWorkOrderDetail.ActualStartTime = item.ActualStartTime;
+        //                OWorkOrderDetail.ActualEndTime = item.ActualEndTime;
+        //                OWorkOrderDetail.CreateUser = item.CreateUser;
+        //                OWorkOrderDetail.UpdateUser = MyFun.GetUserID(HttpContext);
+        //            }
+        //            else // 如ID為0，則表示該工序為新增
+        //            {
+        //                var nWorkOrderDetail = new WorkOrderDetail
+        //                {
+        //                    SerialNumber = item.SerialNumber,
+        //                    ProcessId = item.ProcessId,
+        //                    ProcessNo = ProcessInfo.Code,
+        //                    ProcessName = ProcessInfo.Name,
+        //                    ProcessLeadTime = item.ProcessLeadTime,
+        //                    ProcessTime = item.ProcessTime,
+        //                    ProcessCost = item.ProcessCost,
+        //                    Count = WorkOrderData.WorkOrderHead.Count,
+        //                    // PurchaseId
+        //                    DrawNo = item.DrawNo,
+        //                    Manpower = item.Manpower,
+        //                    ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
+        //                    Status = OWorkOrderHeads.Status,
+        //                    Type = item.Type,
+        //                    Remarks = item.Remarks,
+        //                    DueStartTime = item.DueStartTime,
+        //                    DueEndTime = item.DueEndTime,
+        //                    ActualStartTime = item.ActualStartTime,
+        //                    ActualEndTime = item.ActualEndTime,
+        //                    CreateUser = item.CreateUser,
+        //                    UpdateUser = MyFun.GetUserID(HttpContext)
+        //                };
+        //                OWorkOrderHeads.WorkOrderDetails.Add(nWorkOrderDetail);
+        //            }
+        //        }
+        //        foreach (var item in OWorkOrderHeads.WorkOrderDetails) // 檢查剩下未更新的工序，變更為[刪除]
+        //        {
+        //            if (!updataCheck.Exists(x => x == item.Id) && item.Id != 0 && item.DeleteFlag == 0)
+        //            {
+        //                item.DeleteFlag = 1;
+        //            }
+        //        }
+
+        //        var Msg = MyFun.MappingData(ref OWorkOrderHeads, WorkOrderData.WorkOrderHead);
+        //        var MaterialBasic = await _context.MaterialBasics.FindAsync(OWorkOrderHeads.DataId);
+        //        if (OWorkOrderHeads.DataNo != MaterialBasic.MaterialNo || OWorkOrderHeads.DataName != MaterialBasic.Name)
+        //        {
+        //            OWorkOrderHeads.DataNo = MaterialBasic.MaterialNo;
+        //            OWorkOrderHeads.DataName = MaterialBasic.Name;
+        //            var OrderDetailWorkOredrHead = _context.OrderDetailAndWorkOrderHeads.Where(x => x.WorkHeadId == OWorkOrderHeads.Id);
+        //            foreach (var item in OrderDetailWorkOredrHead)
+        //            {
+        //                item.DeleteFlag = 1;
+        //            }
+        //        }
+
+        //        OWorkOrderHeads.CreateUser = WorkOrderData.WorkOrderHead.CreateUser;
+        //        OWorkOrderHeads.UpdateTime = DateTime.Now;
+        //        OWorkOrderHeads.UpdateUser = MyFun.GetUserID(HttpContext);
+        //        try
+        //        {
+        //            await _context.SaveChangesAsync();
+        //            _context.ChangeTracker.LazyLoadingEnabled = false;
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ProcesseExists(id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return Ok(MyFun.APIResponseOK(WorkOrderData));
+        //    }
+        //    else
+        //    {
+        //        return Ok(MyFun.APIResponseError("工單更新失敗!"));
+        //    }            
+        //}
     }
 }

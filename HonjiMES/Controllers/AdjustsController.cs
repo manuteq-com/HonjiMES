@@ -97,6 +97,7 @@ namespace HonjiMES.Controllers
                     UnitPriceAll = item?.UnitPriceAll ?? 0,
                     WorkPrice = item?.WorkPrice ?? 0,
                     Remark = item.Reason,
+                    MaterialBasicId = tempInfo.MaterialBasicId
                 });
                 tempId++;
             }
