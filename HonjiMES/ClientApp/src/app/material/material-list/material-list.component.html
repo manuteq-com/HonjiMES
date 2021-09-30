@@ -67,7 +67,7 @@
         <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
         <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
         <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-        <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click"></dxi-button>
+        <dxi-button hint="庫存調整" text="庫存調整" [onClick]="Inventory_Change_Click" [visible]="false"></dxi-button>
     </dxi-column>
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增明細" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="800" [height]="360"
