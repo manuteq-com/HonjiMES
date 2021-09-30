@@ -1,6 +1,9 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
+        <dx-button class="adjustbtn mr-1" stylingMode="contained" text="編輯調整單" type="normal" [width]="120"
+            (onClick)="editAdjust()" [visible]="editVisible">
+        </dx-button>
         <dx-button class="adjustbtn" stylingMode="contained" text="庫存調整單" type="normal" [width]="120"
             (onClick)="creatAdjust()">
         </dx-button>
@@ -36,7 +39,7 @@
 <div class="row" *ngIf="selectTabKey === 1">
     <div class="col-4">
 
-        <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
+        <dx-data-grid #gridLeft [dataSource]="dataSourceDB" showBorders="true" keyExpr="id"
             dateSerializationFormat='yyyy/MM/dd HH:mm:ss' hoverStateEnabled="true" [showColumnLines]="true"
             [showRowLines]="false" [rowAlternationEnabled]="true" [focusedRowEnabled]="true" [height]="700"
             [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="selectedRowKeys">
@@ -89,11 +92,11 @@
 
         </dx-data-grid>
 
-        <dx-popup [showTitle]="true" title="新建庫存調整單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+        <dx-popup [showTitle]="true" [title]="popupName" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
             [height]="760" [(visible)]="adjustpopupVisible">
             <div *dxTemplate="let data of 'content'">
                 <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
-                    [exceldata]="exceldata"></app-inventory-list>
+                    [exceldata]="exceldata"  [headData]="headData"></app-inventory-list>
             </div>
         </dx-popup>
 
@@ -123,9 +126,9 @@
 
         </div>
 
-        <dx-data-grid [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true"
+        <dx-data-grid #gridRight [dataSource]="dataSourceDBDetail" [showBorders]="true" [columnAutoWidth]="true"
             [showColumnLines]="true" [showRowLines]="true" (onDataErrorOccurred)="onDataErrorOccurred($event)"
-            [height]="660" keyExpr="id">
+            [height]="660" keyExpr="TempId">
 
             <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
 

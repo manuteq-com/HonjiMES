@@ -21,7 +21,7 @@
     <dx-data-grid
         [dataSource]="dataSourceDB"
         [showBorders]="true"
-        keyExpr="Serial"
+
         height="500"
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
@@ -55,8 +55,8 @@
         <dxo-paging [enabled]="false">
         </dxo-paging>
 
-        <dxi-column dataField="TempId" caption="品號" [width]="260" editCellTemplate="TempIdEditCellTemplate">
-            <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="TempId"></dxo-lookup>
+        <dxi-column dataField="MaterialBasicId" caption="品號" [width]="260" editCellTemplate="TempIdEditCellTemplate">
+            <dxo-lookup [dataSource]="BasicDataList" displayExpr="DataNo" valueExpr="DataId"></dxo-lookup>
             <dxi-validation-rule type="required" message="品號 必填"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="WarehouseId" caption="倉別" [width]="260" editCellTemplate="WarehouseEditCellTemplate">

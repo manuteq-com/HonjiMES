@@ -16,10 +16,11 @@ import { Title } from '@angular/platform-browser';
     styleUrls: ['./adjust-list.component.css']
 })
 export class AdjustListComponent implements OnInit {
-    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild('gridLeft') dataGrid: DxDataGridComponent;
+    @ViewChild('gridRight') dataGrid2: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     tabs;
-    selectTabKey: number =1;
+    selectTabKey: number = 1;
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
@@ -43,9 +44,12 @@ export class AdjustListComponent implements OnInit {
     WarehouseList: any;
     selectedOperation: string = "between";
     selectedRowKeys = [];
+    popupName: string;
+    editVisible: boolean;
+    headData: any;
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
-        this.tabs = [{"key": 1 ,"text": "以調整單顯示"},{"key": 2 ,"text": "以總覽列表顯示"}]
+
         this.listBillofPurchaseOrderStatus = myservice.getBillofPurchaseOrderStatus();
         this.remoteOperations = true;
         this.DetailsDataSourceStorage = [];
@@ -93,14 +97,27 @@ export class AdjustListComponent implements OnInit {
         });
     }
     ngOnInit() {
+        this.editVisible = false;
+        this.tabs = [{ "key": 1, "text": "以調整單顯示" }, { "key": 2, "text": "以總覽列表顯示" }];
         this.titleService.setTitle('調整單管理');
     }
     creatdata() {
         this.creatpopupVisible = true;
     }
     creatAdjust() {
+        this.popupName = "新建庫存調整單";
+        this.mod = "new";
+        this.exceldata = [];
         this.adjustpopupVisible = true;
     }
+    editAdjust() {
+        this.popupName = "編輯庫存調整單";
+        this.headData = this.dataGrid.instance.getSelectedRowsData();
+        this.mod = "edit";
+        this.exceldata = this.dataGrid2.instance.getDataSource().items();
+        this.adjustpopupVisible = true;
+    }
+
     creatpopup_result(e) {
         this.creatpopupVisible = false;
         this.dataGrid.instance.refresh();
@@ -170,17 +187,37 @@ export class AdjustListComponent implements OnInit {
         });
     }
 
-    onRowClick(e){
+    onRowClick(e) {
         let selectRowId = e.key;
         this.dataSourceDBDetail = new CustomStore({
             key: 'TempId',
-            load: () => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetailByPId?PId=' + selectRowId),
-            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetail', 'GET', { key }),
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetailByPId?PId=' + selectRowId).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetail', 'GET', { key }).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
             // tslint:disable-next-line: max-line-length
-            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustDetail?PId=' + selectRowId, 'POST', { values }),
+            insert: (values) => SendService.sendRequest(this.http, this.Controller + '/PostAdjustDetail?PId=' + selectRowId, 'POST', { values }).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
             // tslint:disable-next-line: max-line-length
-            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustDetail', 'PUT', { key, values }),
-            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustDetail', 'DELETE')
+            update: (key, values) => SendService.sendRequest(this.http, this.Controller + '/PutAdjustDetail', 'PUT', { key, values }).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
+            remove: (key) => SendService.sendRequest(this.http, this.Controller + '/DeleteAdjustDetail', 'DELETE').then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            )
         });
     }
     updatepopup_result(e) {
@@ -276,7 +313,7 @@ export class AdjustListComponent implements OnInit {
         // }
     }
 
-    selectTab(e){
+    selectTab(e) {
         //console.log("select",e);
         this.selectTabKey = e.component.option("selectedItemKeys")[0]
     }

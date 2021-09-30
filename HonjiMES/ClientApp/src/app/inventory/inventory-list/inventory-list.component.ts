@@ -20,6 +20,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
+    @Input() headData: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
@@ -75,17 +76,29 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     ngOnChanges() {
         this.dataSourceDB = [];
-        this.app.GetData('/Inventory/GetAdjustNo').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.formData = s.data;
+        switch(this.modval){
+           case "edit":
+            //console.log("this.exceldata",this.exceldata, this.headData);
+            this.formData = this.headData[0];
+            this.dataSourceDB = this.exceldata;
+           break;
+           case "new":
+            this.app.GetData('/Inventory/GetAdjustNo').subscribe(
+                (s) => {
+                    if (s.success) {
+                        this.formData = s.data;
+                    }
                 }
-            }
-        );
+            );
+           break;
+           default:
+        }
+
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
             (s) => {
                 if (s.success) {
                     this.BasicDataList = s.data;
+
                 }
             }
         );
@@ -274,15 +287,28 @@ export class InventoryListComponent implements OnInit, OnChanges {
         };
         try {
             // tslint:disable-next-line: max-line-length
-            const sendRequest = await SendService.sendRequest(this.http, '/Inventory/inventoryListChange', 'POST', { values: this.postval });
-            if (sendRequest) {
-                this.dataSourceDB = [];
-                this.dataGrid.instance.refresh();
-                // this.myform.instance.resetValues();
-                e.preventDefault();
-                this.childOuter.emit(true);
-                this.refreshAdjustNo();
+            if(this.modval == "edit"){
+                const sendRequest = await SendService.sendRequest(this.http, '/Inventory/PutInventoryListChange', 'PUT', { values: this.postval });
+                if (sendRequest) {
+                    this.dataSourceDB = [];
+                    this.dataGrid.instance.refresh();
+                    // this.myform.instance.resetValues();
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                    this.refreshAdjustNo();
+                }
+            } else {
+                const sendRequest = await SendService.sendRequest(this.http, '/Inventory/inventoryListChange', 'POST', { values: this.postval });
+                if (sendRequest) {
+                    this.dataSourceDB = [];
+                    this.dataGrid.instance.refresh();
+                    // this.myform.instance.resetValues();
+                    e.preventDefault();
+                    this.childOuter.emit(true);
+                    this.refreshAdjustNo();
+                }
             }
+
         } catch (error) {
         }
         this.buttondisabled = false;
