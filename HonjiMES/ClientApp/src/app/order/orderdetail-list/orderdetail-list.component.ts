@@ -212,20 +212,22 @@ export class OrderdetailListComponent implements OnInit {
                         debugger;
                         this.Material ='';
                         s.data.forEach(element => {
-                            this.Material += element.MaterialNo + '/' + element.Name + ' ,'
+                            this.Material += element.MaterialNo + '/' + element.Name + ' <br/>'
                         });
-                        const shtml = '品號 / 品名庫存量不足!<br/>';
-                        Swal.fire({
-                            allowEnterKey: false,
-                            allowOutsideClick: false,
-                            width: 600,
-                            title: '警告',
-                            html: shtml + this.Material,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            cancelButtonText: '取消',
-                            confirmButtonText: '確認'
-                        });
+                        const shtml = '以下品號庫存量不足!<br/>';
+                        if (this.Material !==''){
+                            Swal.fire({
+                                allowEnterKey: false,
+                                allowOutsideClick: false,
+                                width: 600,
+                                title: '警告',
+                                html: shtml + this.Material,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                cancelButtonText: '取消',
+                                confirmButtonText: '確認'
+                            });
+                        }
                     }
                 }
             );

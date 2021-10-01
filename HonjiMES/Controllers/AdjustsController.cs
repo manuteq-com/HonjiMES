@@ -51,7 +51,7 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<AdjustDetailData>> GetAdjustDetailByPId(int Pid)
         {
             //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
-            var data = await _context.AdjustDetails.AsQueryable().Where(x => x.AdjustHeadId == Pid).ToListAsync();
+            var data = await _context.AdjustDetails.AsQueryable().Where(x => x.AdjustHeadId == Pid && x.DeleteFlag == 0).ToListAsync();
             var AdjustDetailData = new List<AdjustDetailData>();
             var tempId = 1;
             foreach (var item in data)
