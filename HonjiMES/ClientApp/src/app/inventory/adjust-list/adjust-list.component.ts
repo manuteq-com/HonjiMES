@@ -9,15 +9,18 @@ import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { InventoryListComponent } from '../inventory-list/inventory-list.component';
 
 @Component({
     selector: 'app-adjust-list',
     templateUrl: './adjust-list.component.html',
-    styleUrls: ['./adjust-list.component.css']
+    styleUrls: ['./adjust-list.component.css'],
+
 })
 export class AdjustListComponent implements OnInit {
     @ViewChild('gridLeft') dataGrid: DxDataGridComponent;
     @ViewChild('gridRight') dataGrid2: DxDataGridComponent;
+    @ViewChild(InventoryListComponent) inventory: InventoryListComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     tabs;
     selectTabKey: number = 1;
@@ -32,7 +35,6 @@ export class AdjustListComponent implements OnInit {
     topurchase: any[] & Promise<any> & JQueryPromise<any>;
     listBillofPurchaseOrderStatus: any;
     exceldata: any;
-
     remoteOperations: boolean;
     formData: any;
     editorOptions: any;
@@ -316,6 +318,10 @@ export class AdjustListComponent implements OnInit {
     selectTab(e) {
         //console.log("select",e);
         this.selectTabKey = e.component.option("selectedItemKeys")[0]
+    }
+
+    onHiding(e){
+        this.inventory.dataGridDetail.instance.cancelEditData();
     }
 
 }

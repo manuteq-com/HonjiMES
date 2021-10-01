@@ -93,7 +93,7 @@
         </dx-data-grid>
 
         <dx-popup [showTitle]="true" [title]="popupName" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
-            [height]="760" [(visible)]="adjustpopupVisible">
+            [height]="760" [(visible)]="adjustpopupVisible" (onHiding)="onHiding($event)">
             <div *dxTemplate="let data of 'content'">
                 <app-inventory-list (childOuter)="adjustpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod"
                     [exceldata]="exceldata"  [headData]="headData"></app-inventory-list>

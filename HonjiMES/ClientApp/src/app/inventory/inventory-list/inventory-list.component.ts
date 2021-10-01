@@ -15,14 +15,13 @@ import { AppComponent } from 'src/app/app.component';
     styleUrls: ['./inventory-list.component.css']
 })
 export class InventoryListComponent implements OnInit, OnChanges {
-
     @Output() childOuter = new EventEmitter();
     @Input() itemkeyval: any;
     @Input() exceldata: any;
     @Input() modval: any;
     @Input() headData: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+    @ViewChild("myGrid", { static: false }) dataGridDetail: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
     buttondisabled = false;
     CustomerVal: any;
@@ -73,14 +72,41 @@ export class InventoryListComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
+        this.app.GetData('/Inventory/GetBasicsData').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.BasicDataList = s.data;
+                }
+            }
+        );
+        // this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+        //     (s) => {
+        //         s.data.forEach(e => {
+        //             e.Name = e.Code + e.Name;
+        //         });
+        //         this.WarehouseListAll = s.data;
+        //     }
+        // );
+
     }
     ngOnChanges() {
         this.dataSourceDB = [];
         switch(this.modval){
            case "edit":
+            this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+                (s) => {
+                    s.data.forEach(e => {
+                        e.Name = e.Code + e.Name;
+                    });
+
+                    //this.WarehouseListAll = s.data;
+                    this.WarehouseList = s.data;
+                    //console.log("WarehouseListAll",this.WarehouseListAll);
+                    this.formData = this.headData[0];
+                    this.dataSourceDB = this.exceldata;
+                }
+            );
             //console.log("this.exceldata",this.exceldata, this.headData);
-            this.formData = this.headData[0];
-            this.dataSourceDB = this.exceldata;
            break;
            case "new":
             this.app.GetData('/Inventory/GetAdjustNo').subscribe(
@@ -93,23 +119,6 @@ export class InventoryListComponent implements OnInit, OnChanges {
            break;
            default:
         }
-
-        this.app.GetData('/Inventory/GetBasicsData').subscribe(
-            (s) => {
-                if (s.success) {
-                    this.BasicDataList = s.data;
-
-                }
-            }
-        );
-        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
-            (s) => {
-                s.data.forEach(e => {
-                    e.Name = e.Code + e.Name;
-                });
-                this.WarehouseListAll = s.data;
-            }
-        );
     }
     onInitialized(value, data) {
         data.setValue(value);
@@ -132,13 +141,14 @@ export class InventoryListComponent implements OnInit, OnChanges {
     }
     TempIdValueChanged(e, data) {
         data.setValue(e.value);
-        const basicData = this.BasicDataList.find(z => z.TempId === e.value);
+        const basicData = this.BasicDataList.find(z => z.DataId === e.value);
         const dataType = basicData.DataType;
         const dataId = basicData.DataId;
         // if (dataType === 1) {   // 查詢原料
         this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
             (s) => {
                 this.WarehouseList = s.data;
+                //console.log("WarehouseLis",this.WarehouseList);
                 this.UpdateVal(dataType);
             }
         );
