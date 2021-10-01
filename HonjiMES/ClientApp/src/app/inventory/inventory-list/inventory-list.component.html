@@ -94,8 +94,8 @@
 
         <div *dxTemplate="let data of 'TempIdEditCellTemplate'">
             <dx-select-box [value]="data.value" (onValueChanged)="TempIdValueChanged($event,data)"
-                [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'TempId' } }"
-                valueExpr="TempId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
+                [dataSource]="{ paginate: true, store: { type: 'array', data: BasicDataList, key:'DataId' } }"
+                valueExpr="DataId" displayExpr="DataNo" [searchEnabled]="true"></dx-select-box>
         </div>
         <div *dxTemplate="let data of 'WarehouseEditCellTemplate'">
             <dx-select-box [value]="Warehouseval" (onValueChanged)="WarehouseIdValueChanged($event,data)" (onInitialized)="onInitialized(Warehouseval,data)"
