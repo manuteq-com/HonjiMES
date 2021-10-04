@@ -321,7 +321,7 @@ export class AdjustListComponent implements OnInit {
     }
 
     onHiding(e){
-        this.inventory.dataGridDetail.instance.cancelEditData();
+        this.inventory.dataGrid.instance.cancelEditData();
     }
 
 }

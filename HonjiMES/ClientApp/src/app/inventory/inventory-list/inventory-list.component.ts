@@ -21,7 +21,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
     @Input() modval: any;
     @Input() headData: any;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
-    @ViewChild("myGrid", { static: false }) dataGridDetail: DxDataGridComponent;
+    @ViewChild("myGrid", { static: false }) dataGrid: DxDataGridComponent;
     @ViewChild('myButton') myButton: DxButtonComponent;
     buttondisabled = false;
     CustomerVal: any;
@@ -69,7 +69,6 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.colCount = 3;
         this.dataSourceDB = [];
         this.onRowValidating = this.onRowValidating.bind(this);
-
     }
     ngOnInit() {
         this.app.GetData('/Inventory/GetBasicsData').subscribe(
@@ -79,45 +78,34 @@ export class InventoryListComponent implements OnInit, OnChanges {
                 }
             }
         );
-        // this.app.GetData('/Warehouses/GetWarehouses').subscribe(
-        //     (s) => {
-        //         s.data.forEach(e => {
-        //             e.Name = e.Code + e.Name;
-        //         });
-        //         this.WarehouseListAll = s.data;
-        //     }
-        // );
-
     }
     ngOnChanges() {
         this.dataSourceDB = [];
-        switch(this.modval){
-           case "edit":
-            this.app.GetData('/Warehouses/GetWarehouses').subscribe(
-                (s) => {
-                    s.data.forEach(e => {
-                        e.Name = e.Code + e.Name;
-                    });
-
-                    //this.WarehouseListAll = s.data;
-                    this.WarehouseList = s.data;
-                    //console.log("WarehouseListAll",this.WarehouseListAll);
-                    this.formData = this.headData[0];
-                    this.dataSourceDB = this.exceldata;
-                }
-            );
-            //console.log("this.exceldata",this.exceldata, this.headData);
-           break;
-           case "new":
-            this.app.GetData('/Inventory/GetAdjustNo').subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.formData = s.data;
+        this.app.GetData('/Warehouses/GetWarehouses').subscribe(
+            (s) => {
+                s.data.forEach(e => {
+                    e.Name = e.Code + e.Name;
+                });
+                this.WarehouseListAll = s.data;
+                this.WarehouseList = s.data;
+            }
+        );
+        switch (this.modval) {
+            case "edit":
+                this.formData = this.headData[0];
+                this.dataSourceDB = this.exceldata;
+                //console.log("this.exceldata",this.exceldata, this.headData);
+                break;
+            case "new":
+                this.app.GetData('/Inventory/GetAdjustNo').subscribe(
+                    (s) => {
+                        if (s.success) {
+                            this.formData = s.data;
+                        }
                     }
-                }
-            );
-           break;
-           default:
+                );
+                break;
+            default:
         }
     }
     onInitialized(value, data) {
@@ -148,7 +136,8 @@ export class InventoryListComponent implements OnInit, OnChanges {
         this.app.GetData('/Warehouses/GetWarehouseListByMaterialBasic/' + dataId).subscribe(
             (s) => {
                 this.WarehouseList = s.data;
-                //console.log("WarehouseLis",this.WarehouseList);
+                // console.log("WarehouseListAll2",this.WarehouseListAll);
+                // console.log("WarehouseList2",this.WarehouseList);
                 this.UpdateVal(dataType);
             }
         );
@@ -278,7 +267,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
             this.buttondisabled = false;
             return;
         }
-        if (!this.saveCheck|| !this.gridsaveCheck) {
+        if (!this.saveCheck || !this.gridsaveCheck) {
             this.buttondisabled = false;
             return;
         }
@@ -297,7 +286,7 @@ export class InventoryListComponent implements OnInit, OnChanges {
         };
         try {
             // tslint:disable-next-line: max-line-length
-            if(this.modval == "edit"){
+            if (this.modval == "edit") {
                 const sendRequest = await SendService.sendRequest(this.http, '/Inventory/PutInventoryListChange', 'PUT', { values: this.postval });
                 if (sendRequest) {
                     this.dataSourceDB = [];
