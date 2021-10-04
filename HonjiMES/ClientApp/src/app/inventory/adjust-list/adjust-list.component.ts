@@ -49,6 +49,7 @@ export class AdjustListComponent implements OnInit {
     popupName: string;
     editVisible: boolean;
     headData: any;
+    currentSelect: any;
 
     constructor(private http: HttpClient, myservice: Myservice, private app: AppComponent, private titleService: Title) {
 
@@ -191,6 +192,7 @@ export class AdjustListComponent implements OnInit {
 
     onRowClick(e) {
         let selectRowId = e.key;
+        this.currentSelect = e.key;
         this.dataSourceDBDetail = new CustomStore({
             key: 'TempId',
             load: () => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetailByPId?PId=' + selectRowId).then(
@@ -222,6 +224,22 @@ export class AdjustListComponent implements OnInit {
             )
         });
     }
+    reLoaddata(){
+        this.dataSourceDBDetail = new CustomStore({
+            key: 'TempId',
+            load: () => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetailByPId?PId=' + this.currentSelect).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
+            byKey: (key) => SendService.sendRequest(this.http, this.Controller + '/GetAdjustDetail', 'GET', { key }).then(
+                (res) => {
+                    this.dataSourceDBDetail = res;
+                    this.editVisible = true; }
+            ),
+        });
+    }
+
     updatepopup_result(e) {
         this.dataGrid.instance.refresh();
     }
@@ -322,6 +340,7 @@ export class AdjustListComponent implements OnInit {
 
     onHiding(e){
         this.inventory.dataGrid.instance.cancelEditData();
+        this.reLoaddata();
     }
 
 }
