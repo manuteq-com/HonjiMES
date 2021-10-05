@@ -150,27 +150,29 @@ namespace HonjiMES.Controllers
             var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2);
 
             // var no = 0;
-            var machineKanbanList = new List<MachineKanban>();
+            var machineKanbanALL = new List<MachineKanban>();
             foreach (var machine in MachineName)
             {
                 var machineKanban = new MachineKanban();
-                machineKanbanList.Add(machineKanban);
+                var machineProcessList = new List<MachineProcess>();
                 machineKanban.MachineName = machine;
-                var machineProcess = new MachineProcess();
                 var workingProcess = _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2 && x.ProducingMachine == machine).OrderByDescending(x => x.DueEndTime).FirstOrDefault();
-                machineKanban.MachineProcessList.Add(new MachineProcess
+                if (workingProcess != null)
                 {
-                    Id = workingProcess.Id,
-                    SerialNumber = workingProcess.SerialNumber,
-                    Status = workingProcess.Status,
-                    Worker = workingProcess.CreateUser,
-                    MachineName = workingProcess.ProducingMachine,
-                    WorkOrderNo = workingProcess.WorkOrderHead.WorkOrderNo,
-                    Process = workingProcess.ProcessNo + "_" + workingProcess.ProcessName,
-                    PlanCount = workingProcess.Count,
-                    ProducedCount = workingProcess.ReCount,
-                    PlanEndTime = workingProcess.DueEndTime,
-                });
+                    machineProcessList.Add(new MachineProcess
+                    {
+                        Id = workingProcess.Id,
+                        SerialNumber = workingProcess.SerialNumber,
+                        Status = workingProcess.Status,
+                        Worker = workingProcess.CreateUser,
+                        MachineName = workingProcess.ProducingMachine,
+                        WorkOrderNo = workingProcess.WorkOrderHead.WorkOrderNo,
+                        Process = workingProcess.ProcessNo + "_" + workingProcess.ProcessName,
+                        PlanCount = workingProcess.Count,
+                        ProducedCount = workingProcess.ReCount,
+                        PlanEndTime = workingProcess.DueEndTime,
+                    });
+                }
                 //var ProcessListInOneMachine = ProcessListInAllMachines.Where(x => x.Key == machine);
                 foreach (var ProcessListInOneMachines in ProcessListInAllMachines)
                 {
@@ -178,15 +180,15 @@ namespace HonjiMES.Controllers
                     {
                         foreach (var item in ProcessListInOneMachines)
                         {
-                            machineKanban.MachineProcessList.Add(new MachineProcess
+                            machineProcessList.Add(new MachineProcess
                             {
                                 Id = item.Id,
                                 SerialNumber = item.SerialNumber,
-                                Status = workingProcess.Status,
+                                Status = item.Status,
                                 Worker = item.CreateUser,
                                 MachineName = item.ProducingMachine,
                                 WorkOrderNo = item.WorkOrderHead.WorkOrderNo,
-                                Process = item.ProcessNo + "_" + workingProcess.ProcessName,
+                                Process = item.ProcessNo + "_" + item.ProcessName,
                                 PlanCount = item.Count,
                                 ProducedCount = item.ReCount,
                                 PlanEndTime = item.DueEndTime,
@@ -194,9 +196,11 @@ namespace HonjiMES.Controllers
                         }
                     }
                 }
+                machineKanban.MachineProcessList = machineProcessList;
+                machineKanbanALL.Add(machineKanban);
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;
-            return Ok(MyFun.APIResponseOK(machineKanbanList));
+            return Ok(MyFun.APIResponseOK(machineKanbanALL));
         }
 
 
