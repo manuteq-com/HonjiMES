@@ -167,10 +167,15 @@ namespace HonjiMES.Controllers
                         Worker = workingProcess.CreateUser,
                         MachineName = workingProcess.ProducingMachine,
                         WorkOrderNo = workingProcess.WorkOrderHead.WorkOrderNo,
+                        DataNo = workingProcess.WorkOrderHead.DataNo,
                         Process = workingProcess.ProcessNo + "_" + workingProcess.ProcessName,
                         PlanCount = workingProcess.Count,
                         ProducedCount = workingProcess.ReCount,
+                        PlanStartTime = workingProcess.DueStartTime,
                         PlanEndTime = workingProcess.DueEndTime,
+                        ActualStartTime = workingProcess.ActualStartTime,
+                        ActualEndTime = workingProcess.ActualEndTime,
+                        CostTime = (workingProcess.ProcessLeadTime + workingProcess.ProcessTime) * workingProcess.Count
                     });
                 }
                 //var ProcessListInOneMachine = ProcessListInAllMachines.Where(x => x.Key == machine);
@@ -188,10 +193,15 @@ namespace HonjiMES.Controllers
                                 Worker = item.CreateUser,
                                 MachineName = item.ProducingMachine,
                                 WorkOrderNo = item.WorkOrderHead.WorkOrderNo,
+                                DataNo = item.WorkOrderHead.DataNo,
                                 Process = item.ProcessNo + "_" + item.ProcessName,
                                 PlanCount = item.Count,
                                 ProducedCount = item.ReCount,
+                                PlanStartTime = item.DueStartTime,
                                 PlanEndTime = item.DueEndTime,
+                                ActualStartTime = item.ActualStartTime,
+                                ActualEndTime = item.ActualEndTime,
+                                CostTime = (item.ProcessLeadTime + item.ProcessTime) * item.Count
                             });
                         }
                     }

@@ -1258,10 +1258,15 @@ namespace HonjiMES.Models
         public int Worker { get; set; }
         public string MachineName { get; set; }
         public string WorkOrderNo { get; set; }
+        public string DataNo { get; set; }
         public string Process { get; set; }        
         public int PlanCount { get; set; }
         public int? ProducedCount { get; set; }
+        public DateTime? PlanStartTime { get; set; }
         public DateTime? PlanEndTime { get; set; }
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+        public decimal CostTime { get; set; }
     }
 
 
