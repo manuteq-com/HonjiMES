@@ -1244,7 +1244,25 @@ namespace HonjiMES.Models
         public int SerialNumber { get; set; }
 
     }
+    public class MachineKanban
+    {        
+        public string MachineName { get; set; }        
+        public List<MachineProcess> MachineProcessList { get; set; }
+    }
 
+    public class MachineProcess
+    {
+        public int Id { get; set; }
+        public int SerialNumber { get; set; }
+        public int Status { get; set; }
+        public int Worker { get; set; }
+        public string MachineName { get; set; }
+        public string WorkOrderNo { get; set; }
+        public string Process { get; set; }        
+        public int PlanCount { get; set; }
+        public int? ProducedCount { get; set; }
+        public DateTime? PlanEndTime { get; set; }
+    }
 
 
 }

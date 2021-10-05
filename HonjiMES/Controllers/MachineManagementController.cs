@@ -131,6 +131,75 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(machineList));
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MachineKanban>>> GetMachineKanban(string StartTime, string EndTime)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var SearchStartTime = DateTime.Parse(StartTime);
+            var SearchEndTime = DateTime.Parse(EndTime);
+
+            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0).ToListAsync();
+            var MachineName = _context.MachineInformations.Where(x => x.EnableState == 1).OrderBy(X => X.Name).Select(x => x.Name).ToList();
+            var ProcessListInAllMachines = _context.WorkOrderDetails.AsEnumerable()
+            .Where(y => y.DeleteFlag == 0 && !string.IsNullOrWhiteSpace(y.ProducingMachine) && (y.Status == 1 && y.DueEndTime >= SearchStartTime && y.DueEndTime <= SearchEndTime))
+            .OrderByDescending(x => x.Status).ThenBy(x => x.WorkOrderHead.OrderDetail?.DueDate).GroupBy(x => x.ProducingMachine).OrderBy(x => x.Key).ToList();
+
+            // 工單Head為[已派工]
+            var dataAssign = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 1);
+            // 工單Head為[已開工]
+            var dataStart = WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2);
+
+            // var no = 0;
+            var machineKanbanList = new List<MachineKanban>();
+            foreach (var machine in MachineName)
+            {
+                var machineKanban = new MachineKanban();
+                machineKanbanList.Add(machineKanban);
+                machineKanban.MachineName = machine;
+                var machineProcess = new MachineProcess();
+                var workingProcess = _context.WorkOrderDetails.Where(x => x.DeleteFlag == 0 && x.Status == 2 && x.ProducingMachine == machine).OrderByDescending(x => x.DueEndTime).FirstOrDefault();
+                machineKanban.MachineProcessList.Add(new MachineProcess
+                {
+                    Id = workingProcess.Id,
+                    SerialNumber = workingProcess.SerialNumber,
+                    Status = workingProcess.Status,
+                    Worker = workingProcess.CreateUser,
+                    MachineName = workingProcess.ProducingMachine,
+                    WorkOrderNo = workingProcess.WorkOrderHead.WorkOrderNo,
+                    Process = workingProcess.ProcessNo + "_" + workingProcess.ProcessName,
+                    PlanCount = workingProcess.Count,
+                    ProducedCount = workingProcess.ReCount,
+                    PlanEndTime = workingProcess.DueEndTime,
+                });
+                //var ProcessListInOneMachine = ProcessListInAllMachines.Where(x => x.Key == machine);
+                foreach (var ProcessListInOneMachines in ProcessListInAllMachines)
+                {
+                    if (ProcessListInOneMachines.Key == machine)
+                    {
+                        foreach (var item in ProcessListInOneMachines)
+                        {
+                            machineKanban.MachineProcessList.Add(new MachineProcess
+                            {
+                                Id = item.Id,
+                                SerialNumber = item.SerialNumber,
+                                Status = workingProcess.Status,
+                                Worker = item.CreateUser,
+                                MachineName = item.ProducingMachine,
+                                WorkOrderNo = item.WorkOrderHead.WorkOrderNo,
+                                Process = item.ProcessNo + "_" + workingProcess.ProcessName,
+                                PlanCount = item.Count,
+                                ProducedCount = item.ReCount,
+                                PlanEndTime = item.DueEndTime,
+                            });
+                        }
+                    }
+                }
+            }
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return Ok(MyFun.APIResponseOK(machineKanbanList));
+        }
+
+
         public async Task<ActionResult<IEnumerable<machine>>> GetProcessDatas()
         {
             var Data = await _context.WorkOrderDetails.Include(x => x.WorkOrderHead).ToListAsync();
