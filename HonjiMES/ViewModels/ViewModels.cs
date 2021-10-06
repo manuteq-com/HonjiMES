@@ -1266,7 +1266,7 @@ namespace HonjiMES.Models
         public DateTime? PlanEndTime { get; set; }
         public DateTime? ActualStartTime { get; set; }
         public DateTime? ActualEndTime { get; set; }
-        public decimal CostTime { get; set; }
+        public DateTime? PredictTime { get; set; }
     }
 
 
