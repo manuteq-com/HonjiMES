@@ -158,6 +158,7 @@ import { SufacetoworkComponent } from './surface-treatment/sufacetowork/sufaceto
 import { MachineInformationComponent } from './machinemanagemate/machine-information/machine-information.component';
 import { CreatmachineComponent } from './machinemanagemate/creatmachine/creatmachine.component';
 import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
+import { WorkorderV2ListComponent } from './workorder/workorder-v2-list/workorder-v2-list.component';
 
 
 
@@ -339,6 +340,7 @@ export function tokenGetter() {
         MachineInformationComponent,
         CreatmachineComponent,
         MachineProcessTimeComponent,
+        WorkorderV2ListComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

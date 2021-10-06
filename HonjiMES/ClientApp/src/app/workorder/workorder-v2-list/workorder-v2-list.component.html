@@ -1,0 +1,84 @@
+<div class="headerblock">
+    <app-headerfont></app-headerfont>
+</div>
+
+<div id="form-container">
+    <div class="col-auto-12 mt-2 mb-1 ml-4">
+        <div class="row">
+            <div>
+                <dx-date-box [(value)]="stDate" type="date" (onValueChanged)="query()">
+                </dx-date-box>
+            </div>
+            <div>
+                <dx-date-box [(value)]="endDate" type="date" (onValueChanged)="query()">
+                </dx-date-box>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-auto-12 mt-2 mb-1 position-relative">
+
+    <div #tableframework class="position-relative">
+        <div style="overflow: auto;  height: 700px;">
+            <div class="d-flex">
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-nowrap position-sticky zindex5" style="top:0" >
+                        <div class="dataBorder width350 headerColor" [ngClass]="{'margin-r': !last}"
+                        style="text-align:center;font-size: 16px; font-weight:1000;" *ngFor="let machine of machines; let i=index; let last = last">
+                            {{machine}} </div>
+                    </div>
+                    <div>
+                        <div class="d-flex">
+                            <div *ngFor="let f of dataSourceDB; let i=index; let last = last"
+                                [ngClass]="{'margin-r': !last}">
+                                <div class="width350" [ngClass]="{'dataBorder': !isNull(e.Id)}"
+                                    *ngFor="let e of f.MachineProcessList; let j=index; let last = last">
+                                    <table class="w-100">
+                                        <!-- <tr>
+                                            <td>Id:</td>
+                                            <td>{{e.Id}}</td>
+                                        </tr> -->
+                                        <tr>
+                                            <td>工單號：</td>
+                                            <td (onClick)="showInfo(employee)">{{e.WorkOrderNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>品號：</td>
+                                            <td>{{e.DataNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 60px;">製程：</td>
+                                            <td>{{e.Process}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>負責人</td>
+                                            <td>{{toName(e.Worker)}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>預計完成日：</td>
+                                            <td>{{e.PlanEndTime | date:'yyyy/MM/dd'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>工單量：</td>
+                                            <td>{{e.PlanCount}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>生產量：</td>
+                                            <td>{{e.ProducedCount}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>剩餘時間：</td>
+                                            <td>{{e.PredictTime}}</td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

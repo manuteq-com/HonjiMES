@@ -1,0 +1,58 @@
+.dataBorder {
+    border: 1px black solid;
+}
+
+::ng-deep .height22 {
+    height: 22px;
+}
+
+::ng-deep .height44 {
+    height: 44px;
+}
+
+.width120 {
+    width: 120px;
+}
+
+.width240 {
+    width: 240px;
+}
+
+.width350 {
+    width: 350px;
+}
+
+.headerColor {
+    background-color: #ced3e4;
+}
+
+.zindex900 {
+    z-index: 900;
+}
+
+::ng-ddep .zindex5 {
+    z-index: 5;
+}
+
+.zindex1000 {
+    z-index: 1000;
+}
+
+.marginL120 {
+    margin-left: 120px;
+}
+
+.margin-r {
+    margin-right: 16px;
+}
+
+table,
+td {
+    border: 1px solid black;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+table tr>td:first-child {
+    width: 100px;
+}
