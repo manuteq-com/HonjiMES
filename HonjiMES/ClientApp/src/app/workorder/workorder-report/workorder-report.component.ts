@@ -241,7 +241,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         //// 測試用暫時加入，可選人員
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
-                debugger;
+                // debugger;
                 if (s.success) {
                     this.buttondisabled = false;
                     this.UserList = [];
@@ -352,7 +352,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             );
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
-                    debugger;
+                    // debugger;
                     if (s.success) {
                         this.itemval1 = '　　　　　工單號：　' + s.data.WorkOrderHead.WorkOrderNo;
                         this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
@@ -424,7 +424,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         }
     }
     SetUserEditorOptions(List, IdVal) {
-        debugger;
+        // debugger;
         this.UserEditorOptions = {
             items: List,
             displayExpr: 'Realname',
