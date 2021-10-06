@@ -129,7 +129,12 @@ namespace HonjiMES.Controllers
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(staffmanagement));
         }
-
+        /// <summary>
+        /// 讀取人員管理資訊
+        /// </summary>
+        /// <param name="StartTime"></param>
+        /// <param name="EndTime"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<WorkOrderDetailsByStaff>> GetStaffInformation(DateTime StartTime, DateTime EndTime)
         {

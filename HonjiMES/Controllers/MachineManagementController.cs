@@ -131,6 +131,12 @@ namespace HonjiMES.Controllers
             return Ok(MyFun.APIResponseOK(machineList));
         }
 
+        /// <summary>
+        /// 回傳機台看板資料
+        /// </summary>
+        /// <param name="StartTime"></param>
+        /// <param name="EndTime"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MachineKanban>>> GetMachineKanban(string StartTime, string EndTime)
         {
@@ -187,7 +193,7 @@ namespace HonjiMES.Controllers
                         {
                             machineProcessList.Add(new MachineProcess
                             {
-                                Id = item.Id,
+                                WorkHeadId = item.WorkOrderHead.Id,
                                 SerialNumber = item.SerialNumber,
                                 Status = item.Status,
                                 Worker = item.CreateUser,
