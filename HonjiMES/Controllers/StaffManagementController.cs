@@ -14,7 +14,7 @@ namespace HonjiMES.Controllers
     /// <summary>
     /// 人員管理列表
     /// </summary>
-    [JWTAuthorize]
+    //[JWTAuthorize]
     [Consumes("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -128,6 +128,39 @@ namespace HonjiMES.Controllers
             staffmanagement.DeleteFlag = 1;
             await _context.SaveChangesAsync();
             return Ok(MyFun.APIResponseOK(staffmanagement));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<WorkOrderDetailsByStaff>> GetStaffInformation(DateTime StartTime, DateTime EndTime)
+        {
+            StartTime = StartTime.Date;
+            EndTime = EndTime.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+            var users = _context.Users.Where(x => x.DeleteFlag == 0).OrderBy(y => y.Username).ToList();
+            var workOrderDetails = _context.WorkOrderDetails.AsEnumerable()
+            .Where(y => y.DeleteFlag == 0 && y.DueEndTime>=StartTime && y.DueEndTime<= EndTime)
+            .OrderBy(x => x.DueEndTime).ThenBy(x => x.SerialNumber).GroupBy(x => x.CreateUser).OrderBy(x => x.Key).ToList();
+            var workOrderDetailsByStaff = new List<WorkOrderDetailsByStaff>();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+            foreach (var user in users)
+            {
+                
+                var workOrderDetailsByOne = new WorkOrderDetailsByStaff
+                {
+                    StaffName = user.Username,                    
+                };
+                var workOrderDetail = workOrderDetails.Where(x => x.Key == user.Id);
+                if (workOrderDetail.Any())
+                {
+                    workOrderDetailsByOne.WorkOrderDetails = workOrderDetail.FirstOrDefault().ToList();
+                    workOrderDetailsByOne.WorkTIme = workOrderDetail.FirstOrDefault().ToList().Sum(y => y.Count * (y.ProcessLeadTime + y.ProcessTime));
+                }               
+                workOrderDetailsByStaff.Add(workOrderDetailsByOne);
+            }            
+            return Ok(MyFun.APIResponseOK(workOrderDetailsByStaff));
         }
 
         private bool StaffManagementExists(int id)

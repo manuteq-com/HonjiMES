@@ -1266,8 +1266,13 @@ namespace HonjiMES.Models
         public DateTime? PlanEndTime { get; set; }
         public DateTime? ActualStartTime { get; set; }
         public DateTime? ActualEndTime { get; set; }
-        public DateTime? PredictTime { get; set; }
+        public string? PredictTime { get; set; }
     }
-
+    public class WorkOrderDetailsByStaff
+    {
+        public string StaffName { get; set; }
+        public decimal WorkTIme { get; set; }
+        public List<WorkOrderDetail>? WorkOrderDetails { get; set; }
+    }
 
 }

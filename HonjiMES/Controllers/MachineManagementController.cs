@@ -175,7 +175,7 @@ namespace HonjiMES.Controllers
                         PlanEndTime = workingProcess.DueEndTime,
                         ActualStartTime = workingProcess.ActualStartTime,
                         ActualEndTime = workingProcess.ActualEndTime,
-                        PredictTime = workingProcess.ActualStartTime == null ? DateTime.MinValue : CalculatePredictedTime(workingProcess)
+                        PredictTime = workingProcess.ActualStartTime == null ? "null" : CalculatePredictedTime(workingProcess)
                     });
                 }
                 //var ProcessListInOneMachine = ProcessListInAllMachines.Where(x => x.Key == machine);
@@ -201,7 +201,7 @@ namespace HonjiMES.Controllers
                                 PlanEndTime = item.DueEndTime,
                                 ActualStartTime = item.ActualStartTime,
                                 ActualEndTime = item.ActualEndTime,
-                                PredictTime = item.ActualStartTime == null ? DateTime.MinValue : CalculatePredictedTime(item)
+                                PredictTime = item.ActualStartTime == null ? "null" : CalculatePredictedTime(item)
                             });
                         }
                     }
@@ -212,11 +212,12 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(machineKanbanALL));
         }
-        public DateTime CalculatePredictedTime(WorkOrderDetail item)
+        public String CalculatePredictedTime(WorkOrderDetail item)
         {
             var TotalTime = (item.ProcessLeadTime + item.ProcessTime) * item.Count;
             var PredictedTime = ((DateTime)item.ActualStartTime).AddMinutes((double)TotalTime);
-            return PredictedTime;
+            var TimeLeft = PredictedTime.Subtract(DateTime.Now);
+            return Convert.ToString(TimeLeft.Minutes);
         }
 
 
