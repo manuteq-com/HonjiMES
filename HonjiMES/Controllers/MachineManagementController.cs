@@ -216,8 +216,8 @@ namespace HonjiMES.Controllers
         {
             var TotalTime = (item.ProcessLeadTime + item.ProcessTime) * item.Count;
             var PredictedTime = ((DateTime)item.ActualStartTime).AddMinutes((double)TotalTime);
-            var TimeLeft = PredictedTime.Subtract(DateTime.Now);
-            return Convert.ToString(TimeLeft.Minutes);
+            var TimeLeft = Math.Round(PredictedTime.Subtract(DateTime.Now).TotalMinutes,0, MidpointRounding.AwayFromZero);
+            return Convert.ToString(TimeLeft);
         }
 
 
