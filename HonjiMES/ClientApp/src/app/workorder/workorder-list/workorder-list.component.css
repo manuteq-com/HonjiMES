@@ -17,6 +17,10 @@
     color: #FF9500;
     /* background-color: #eaeaf1; */
 }
+
+.process_nonAssign {
+    background-color:#b3b2b2;
+}
 .process_start {
     background-color:#f8f691;
 }
@@ -24,7 +28,7 @@
     background-color:#9afd97;
 }
 .process_stop {
-    background-color:#b3b2b2;
+    background-color:#47b5ff;
 }
 .process_alarm {
     background-color:#FFB5B5;
