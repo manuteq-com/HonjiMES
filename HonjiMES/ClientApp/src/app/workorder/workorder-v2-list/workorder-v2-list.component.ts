@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ITS_JUST_ANGULAR } from '@angular/core/src/r3_symbols';
 import { DxFormComponent } from 'devextreme-angular';
 import moment from 'moment';
 import { AppComponent } from 'src/app/app.component';
@@ -30,10 +29,9 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.ReportHeight = 710;
-        let now = new Date();
-        this.stDate = moment(now).startOf('isoWeek').toDate();
-        this.endDate = moment(now).endOf('isoWeek').toDate();
+        this.ReportHeight = 800;
+        this.stDate = moment().startOf('isoWeek').toDate();
+        this.endDate = moment().endOf('isoWeek').toDate();
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
@@ -94,14 +92,10 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
         }, 60000);
     }
 
-    test(e) {
-        console.log("mytest", e);
-    }
-
     tdclick(data) {
         console.log("mytest2", data);
 
-        this.itemtdkey = data.Id;
+        this.itemtdkey = data.WorkOrderHeadId;
         this.serialkey = data.SerialNumber;
         switch (data.Status) {
             case 1:
@@ -145,6 +139,10 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
             }
         })
         return num;
+    }
+
+    creatpopup_result(e){
+
     }
 
 }

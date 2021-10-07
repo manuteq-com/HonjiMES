@@ -1252,7 +1252,7 @@ namespace HonjiMES.Models
 
     public class MachineProcess
     {
-        public int WorkHeadId { get; set; }
+        public int WorkOrderHeadId { get; set; }
         public int SerialNumber { get; set; }
         public int Status { get; set; }
         public int Worker { get; set; }

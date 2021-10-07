@@ -167,7 +167,7 @@ namespace HonjiMES.Controllers
                 {
                     machineProcessList.Add(new MachineProcess
                     {
-                        Id = workingProcess.Id,
+                        WorkOrderHeadId = workingProcess.WorkOrderHeadId,
                         SerialNumber = workingProcess.SerialNumber,
                         Status = workingProcess.Status,
                         Worker = workingProcess.CreateUser,
@@ -193,7 +193,7 @@ namespace HonjiMES.Controllers
                         {
                             machineProcessList.Add(new MachineProcess
                             {
-                                WorkHeadId = item.WorkOrderHead.Id,
+                                WorkOrderHeadId = item.WorkOrderHeadId,
                                 SerialNumber = item.SerialNumber,
                                 Status = item.Status,
                                 Worker = item.CreateUser,
