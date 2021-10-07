@@ -12,6 +12,7 @@ import { CreateNumberInfo } from 'src/app/model/viewmodels';
 import Swal from 'sweetalert2';
 import Buttons from 'devextreme/ui/button';
 import { AppComponent } from 'src/app/app.component';
+import { promise } from 'selenium-webdriver';
 
 @Component({
     selector: 'app-creatprocess-control',
@@ -111,7 +112,8 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.allowReordering = true;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1 };
-        this.DateOptions = {type: "datetime", displayFormat: "yyyy/MM/dd HH:mm", onOpened: this.setDateTime };
+        this.DateOptions = {type: "datetime", displayFormat: "yyyy/MM/dd HH:mm", onOpened: this.setDateTime, 
+                            onEnterKey: this.onDueEndTimeChanged.bind(this), onFocusOut: this.onDueEndTimeChanged.bind(this), onClosed: this.onDueEndTimeChanged.bind(this)};
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -199,9 +201,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
-
     }
     ngOnChanges() {
+        this.modName = this.modval;
         this.cm3Machine = undefined;
         // console.log('itemkeyval', this.itemkeyval);
         // console.log('modval', this.modval);
@@ -218,7 +220,6 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.allowReordering = false;
         this.editVisible2 = false;
         if (this.modval === 'new') {
-            this.modName = 'new';
             this.newVisible = true;
             this.modVisible = true;
             this.processVisible = true;
@@ -293,7 +294,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
         this.onCellPreparedLevel = 0;
     }
-
+    
     setDateTime(e){
       //console.log("opentime",e.component.option("value"));
     }
@@ -736,5 +737,9 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.dataSourceDB.forEach(function(v,k){
                 v.CreateUser = e.value;
         })
+    }
+
+    onDueEndTimeChanged(e) {
+        //TODO
     }
 }

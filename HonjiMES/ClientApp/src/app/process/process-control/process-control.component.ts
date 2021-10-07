@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/service/auth.service';
 import { APIResponse } from 'src/app/app.module';
+import { CreatprocessControlComponent } from '../creatprocess-control/creatprocess-control.component';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class ProcessControlComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     @ViewChild('dataGrid1') dataGrid1: DxDataGridComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
+    @ViewChild(CreatprocessControlComponent) popUp: CreatprocessControlComponent;
     Controller = '/WorkOrders';
     dataSourceDB: any;
     dataSourceDB_Process: any[];
@@ -292,6 +294,7 @@ export class ProcessControlComponent implements OnInit {
             this.readProcess(null, this.workOrderHeadId);
         }
         this.popupClose = !this.popupClose;
+        this.popUp.dataGrid2.instance.cancelEditData();        
     }
     creatpopup_result(e) {
         debugger;
