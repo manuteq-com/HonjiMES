@@ -358,11 +358,10 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         this.itemval2 = '　　　　　　品號：　' + s.data.WorkOrderHead.DataNo;
                         this.itemval3 = '　　　　　　名稱：　' + s.data.WorkOrderHead.DataName;
                         this.itemval19 = '　　　　訂單數量：　' + (s.data.WorkOrderHead.OrderDetail?.Quantity ?? '0');
-                        this.itemval4 = '　 　 領料總數量：　' + s.data.ReceiveQuantity;
+                        this.itemval4 = '　　　領料總數量：　' + s.data.ReceiveQuantity;
                         // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
                         this.itemval5 = '';
-                        this.itemval6 = '';
 
                         let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
@@ -381,6 +380,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval17 = '　　　實際完工日：　' + (element?.ActualEndTime ?? '');
                                 this.itemval18 = '　　　　工單數量：　' + (element?.Count ?? '0');
                                 this.itemval20 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
+                                this.itemval6 = '';
 
                                 const reCount = (element?.Count ?? '0') - (element?.ReCount ?? '0');
                                 this.QuantityEditorOptions = {
@@ -411,6 +411,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 if (element.ProcessType === 20) { // QC檢驗
                                     this.ShowQCReportView(element.Status, element.Type);
                                 } else if (element.ProcessType === null || element.ProcessType === 10) {
+                                    debugger;
                                     this.ShowNCReportView(element.Status, element.Type);
                                 }
                             }
