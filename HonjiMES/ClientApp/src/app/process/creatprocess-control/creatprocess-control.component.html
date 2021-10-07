@@ -34,17 +34,18 @@
             <!-- <dxi-item dataField="DrawNo">
              <dxo-label text="圖號"></dxo-label>
         </dxi-item> -->
-            <dxi-item dataField="DueStartTime" editorType="dxDateBox" [editorOptions]="DateOptions"
+            <dxi-item dataField="DueStartTime" editorType="dxDateBox" [editorOptions]="DateOptionsDSt"
                 [disabled]="editVisible" [colSpan]="4"  cssClass="dateboxcss">
                 <dxo-label text="預計開工日"></dxo-label>
-                <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
-                </dxi-validation-rule>
+                <!-- <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
+                </dxi-validation-rule> -->
             </dxi-item>
             <dxi-item dataField="DueEndTime" editorType="dxDateBox" [disabled]="editVisible"
-                [editorOptions]="DateOptions" [colSpan]="5"  cssClass="dateboxcss">
+                [editorOptions]="DateOptionsDEnd" [colSpan]="5"  cssClass="dateboxcss">
                 <dxo-label text="預計完工日"></dxo-label>
-                <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
-                </dxi-validation-rule>
+                <dxi-validation-rule type="required" message="預計完工日 必填"></dxi-validation-rule>
+                <!-- <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="需要時間格式">
+                </dxi-validation-rule> -->
             </dxi-item>
             <dxi-item #cm3Selectbox [colSpan]="4">
                 <dxo-label text="CM3預設機台"></dxo-label>

@@ -79,9 +79,11 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     processVisible: boolean;
     countVal: number;
     editVisible2: boolean;
-    cm3Machine:any;
+    cm3Machine: any;
     StaffList: any;
     DateOptions: {};
+    DateOptionsDSt: { type: string; displayFormat: string; onOpened: (e: any) => void; onValueChanged: any; };
+    DateOptionsDEnd: { type: string; displayFormat: string; onOpened: (e: any) => void; onValueChanged: any; };
 
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
@@ -112,8 +114,15 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         this.allowReordering = true;
         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1 };
         this.OrderNumberOptions = { showSpinButtons: true, mode: 'number', min: 1 };
-        this.DateOptions = {type: "datetime", displayFormat: "yyyy/MM/dd HH:mm", onOpened: this.setDateTime, 
-                            onEnterKey: this.onDueEndTimeChanged.bind(this), onFocusOut: this.onDueEndTimeChanged.bind(this), onClosed: this.onDueEndTimeChanged.bind(this)};
+        //this.DateOptions = {type: "datetime", displayFormat: "yyyy/MM/dd HH:mm", onOpened: this.setDateTime};
+        this.DateOptionsDSt = {
+            type: "date", displayFormat: "yyyy/MM/dd", onOpened: this.setDateTime,
+            onValueChanged: this.setDueStDate.bind(this)
+        };
+        this.DateOptionsDEnd = {
+            type: "date", displayFormat: "yyyy/MM/dd", onOpened: this.setDateTime,
+            onValueChanged: this.setDueEndDate.bind(this)
+        };
 
         this.ProcessLeadTime = null;
         this.ProcessTime = null;
@@ -244,7 +253,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
             this.app.GetData('/Processes/GetProcessByWorkOrderId/' + this.itemkeyval).subscribe(
                 (s) => {
                     if (s.success) {
-                        //console.log("Processes/GetProcessByWorkOrderIdEdit", s.data);
+                        console.log("Processes/GetProcessByWorkOrderIdEdit", s.data);
                         let rawData0 = {};
                         this.dataSourceDB = s.data.WorkOrderDetail;
                         rawData0["WorkOrderHeadId"] = s.data.WorkOrderHead.Id;
@@ -294,14 +303,14 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
         this.onCellPreparedLevel = 0;
     }
-    
-    setDateTime(e){
-      //console.log("opentime",e.component.option("value"));
+
+    setDateTime(e) {
+        //console.log("opentime",e.component.option("value"));
     }
 
-    validateNumber(e){
+    validateNumber(e) {
         var test = new Date(e.value);
-        console.log("validateNumber", new Date(e.value) , test instanceof Date ,isNaN(test.valueOf()) );
+        console.log("validateNumber", new Date(e.value), test instanceof Date, isNaN(test.valueOf()));
         let isNull = false;
         isNull = (e.value == null) || (e.value == undefined) || (e.value == '');
         return (test instanceof Date && !isNaN(test.valueOf())) || isNull;
@@ -396,7 +405,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
                         this.app.GetData('/BillOfMaterials/GetProcessByMaterialBasicId/' + e.value).subscribe(
                             (s) => {
                                 if (s.success) {
-                                    console.log("griddata0",s.data);
+                                    // console.log("griddata0", s.data);
                                     s.data.forEach(element => {
                                         element.Id = 0;
                                         element.CreateUser = undefined;
@@ -726,20 +735,33 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
 
     onMachineSelectionChanged(e) {
         let newMachine = e.component.option('text');
-        this.dataSourceDB.forEach(function(v,k){
-            if(v.ProcessNo.slice(0,3)?.toUpperCase() == "CM3" ){
+        this.dataSourceDB.forEach(function (v, k) {
+            if (v.ProcessNo.slice(0, 3)?.toUpperCase() == "CM3") {
                 v.ProducingMachine = newMachine;
             }
         })
     }
 
-    onStaffSelectionChanged(e){
-        this.dataSourceDB.forEach(function(v,k){
-                v.CreateUser = e.value;
+    onStaffSelectionChanged(e) {
+        this.dataSourceDB.forEach(function (v, k) {
+            v.CreateUser = e.value;
         })
     }
 
-    onDueEndTimeChanged(e) {
-        //TODO
+    setDueStDate(e) {
+        if (e.previousValue) {
+            let newDate = e.component.option('text');
+            this.dataSourceDB.forEach(function (v, k) {
+                v.DueStartTime = new Date(newDate);
+            })
+        }
+    }
+    setDueEndDate(e) {
+        if (e.previousValue) {
+            let newDate = e.component.option('text');
+            this.dataSourceDB.forEach(function (v, k) {
+                v.DueEndTime = new Date(newDate);
+            })
+        }
     }
 }
