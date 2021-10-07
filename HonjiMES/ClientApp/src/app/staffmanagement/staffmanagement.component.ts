@@ -10,6 +10,8 @@ import { SendService } from 'src/app/shared/mylib';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
 import { CreateNumberInfo } from 'src/app/model/viewmodels';
+import moment from 'moment';
+moment.locale('zh-tw');
 
 @Component({
     selector: 'app-staffmanagement',
@@ -49,6 +51,9 @@ export class StaffmanagementComponent implements OnInit {
     selectedRowKeys: any[];
     dataSourceDB_new: any;
     dataSourceDB_record: any;
+    stDate: Date;
+    endDate: Date;
+    selectName: any;
 
     constructor(private http: HttpClient, public app: AppComponent, private titleService: Title) {
         this.onRowValidating = this.onRowValidating.bind(this);
@@ -62,15 +67,18 @@ export class StaffmanagementComponent implements OnInit {
         this.showColon = true;
         this.CreateTime = new Date();
         this.EndTime = new Date();
+        this.stDate = moment().startOf('isoWeek').toDate();
+        this.endDate = moment().endOf('isoWeek').toDate();
 
         this.CreateTimeDateBoxOptions = {
             onValueChanged: this.CreateTimeValueChange.bind(this)
         };
-        this.getData();
+        //this.getData();
+        this.getNewData();
         this.app.GetData('/Users/GetUsers').subscribe(
             (s) => {
                 if (s.success) {
-                    debugger;
+                    // debugger;
                     this.StaffList = s.data;
                 }
             }
@@ -115,6 +123,20 @@ export class StaffmanagementComponent implements OnInit {
     ngOnInit() {
         this.titleService.setTitle('人員管理');
     }
+
+    getNewData() {
+        let st = moment(this.stDate).format('YYYY-MM-DD');
+        let ed = moment(this.endDate).format('YYYY-MM-DD');
+        this.app.GetData('/StaffManagement/GetStaffInformation?StartTime=' + st + '&EndTime=' + ed).subscribe(
+            (s) => {
+                if (s.success) {
+                    //console.log("data", s.data);
+                    this.dataSourceDB_new = s.data;
+                }
+            }
+        );
+    }
+
     ngOnChanges() {
     }
     onInitialized(value, data) {
@@ -195,7 +217,17 @@ export class StaffmanagementComponent implements OnInit {
         data.setValue(e.value);
     }
 
-    onRowClick(e){
+    onRowClick(e) {
+        // console.log("e", e);
+        this.dataSourceDB_record = e.data.WorkOrderDetails;
+        this.selectName = e.data.StaffName;
+    }
 
+    calculatePredictTime(data) {
+        if (isNaN(data.ProcessTime) || isNaN(data.ProcessLeadTime) || isNaN(data.Count)) {
+            return 'NA';
+        } else {
+            return (data.ProcessTime + data.ProcessLeadTime) * data.Count;
+        }
     }
 }

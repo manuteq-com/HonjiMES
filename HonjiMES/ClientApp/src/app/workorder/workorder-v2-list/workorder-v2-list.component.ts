@@ -50,7 +50,7 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
         let ed = moment(this.endDate).format('YYYY-MM-DD');
         this.app.GetData('/MachineManagement/GetMachineKanban?StartTime=' + st + '&EndTime=' + ed).subscribe(
             (s) => {
-                console.log("data=>", s.data);
+                //console.log("data=>", s.data);
                 let rawData = s.data;
                 // rawData.forEach((v) => {
                 //     //空欄位需版面占位
@@ -93,7 +93,7 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
     }
 
     tdclick(data) {
-        console.log("mytest2", data);
+        //console.log("mytest2", data);
 
         this.itemtdkey = data.WorkOrderHeadId;
         this.serialkey = data.SerialNumber;
