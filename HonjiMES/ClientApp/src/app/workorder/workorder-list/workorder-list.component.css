@@ -35,6 +35,10 @@
     color: #000;
 }
 
+table#legend-table td{
+    width: 100px;
+}
+
 .infobtn {
     margin-top: 4px;
     margin-right: 2px;

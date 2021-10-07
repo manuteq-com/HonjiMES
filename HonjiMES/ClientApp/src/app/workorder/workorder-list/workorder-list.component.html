@@ -1,14 +1,17 @@
 <div class="headerblock">
     <app-headerfont></app-headerfont>
     <div class="buttongroup">
-        <dx-button class="infobtn" stylingMode="contained" text="領退料紀錄查詢" type="normal" [width]="150" (onClick)="infodata()">
+        <dx-button class="infobtn" stylingMode="contained" text="領退料紀錄查詢" type="normal" [width]="150"
+            (onClick)="infodata()">
         </dx-button>
     </div>
 </div>
 
-<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1700" [(visible)]="infopopupVisible">
+<dx-popup [showTitle]="true" title="領退料紀錄查詢" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1700" [(visible)]="infopopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey" [randomkeyval]="randomkey">
+        <app-receive-info (childOuter)="creatpopup_result($event)" [itemkeyval]="iteminfokey"
+            [randomkeyval]="randomkey">
         </app-receive-info>
     </div>
 </dx-popup>
@@ -23,12 +26,27 @@
                 <dxi-item dataField="BasicDataNo" [editorOptions]="editorOptions">
                     <dxo-label text="品號查詢"></dxo-label>
                 </dxi-item>
+                <dxi-item>
+                    <div class="mt-2">
+                        <table id="legend-table" style="width: 400px;">
+                            <tr>
+                                <td class="process_start text-center "><span  style="line-height: 0; font-weight: bold;" >開工</span></td>
+                                <td class="process_end text-center"><span style="line-height: 0; font-weight: bold;" >完工</span></td>
+                                <td class="process_stop text-center"><span  style="line-height: 0; font-weight: bold;" >工序暫停</span></td>
+                                <td class="process_alarm text-center"><span  style="line-height: 0; font-weight: bold;" >超時完工</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </dxi-item>
             </dx-form>
         </form>
     </div>
 </div>
 
-<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDBDisplay.ProcessesDataList" nzTableLayout="fixed" [nzFrontPagination]="true" [nzShowPagination]="true" [nzPageSizeOptions]="[10, 20, 30, 40]" [nzPageIndex]="1" [nzTotal]="300" [nzPageSize]="20" nzShowSizeChanger [nzScroll]="{ x: '800px', y: '600px' }">
+<nz-table class="table-hover" #basicTable nzBordered [nzData]="dataSourceDBDisplay.ProcessesDataList"
+    nzTableLayout="fixed" [nzFrontPagination]="true" [nzShowPagination]="true" [nzPageSizeOptions]="[10, 20, 30, 40]"
+    [nzPageIndex]="1" [nzTotal]="300" [nzPageSize]="20" nzShowSizeChanger [nzScroll]="{ x: '800px', y: '600px' }">
 
     <thead>
 
@@ -56,7 +74,8 @@
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.OrderCount}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDBDisplay.ColumnOptionlist">
-                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)" nzEllipsis>
+                <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)"
+                    nzEllipsis>
                     <div>
                         <ng-container *ngIf="data[col.key]?.value0">
                             <span title={{data[col.key]?.value0}}>
@@ -82,16 +101,22 @@
     </tbody>
 </nz-table>
 
-<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000" [height]="ReportHeight" [(visible)]="creatpopupVisible">
+<dx-popup [showTitle]="true" title="製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1000"
+    [height]="ReportHeight" [(visible)]="creatpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey" [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey"> </app-workorder-report>
+        <app-workorder-report (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtdkey"
+            [serialkeyval]="serialkey" [popupkeyval]="creatpopupVisible" [modval]="mod" [randomkey]="randomkey">
+        </app-workorder-report>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760" [width]="1600" [(visible)]="editpopupVisible">
+<dx-popup [showTitle]="true" title="批次製程報工" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
+    [width]="1600" [(visible)]="editpopupVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtrkey" [modval]="mod" [randomkeyval]="randomkey" [popupkeyval]="editpopupVisible">
+        <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtrkey" [modval]="mod"
+            [randomkeyval]="randomkey" [popupkeyval]="editpopupVisible">
         </app-editworkorder>
     </div>
 </dx-popup>
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>
