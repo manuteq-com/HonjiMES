@@ -155,7 +155,7 @@ namespace HonjiMES.Controllers
                 
                 var workOrderDetailsByOne = new WorkOrderDetailsByStaff
                 {
-                    StaffName = user.Username,                    
+                    StaffName = user.Realname,                    
                 };
                 var workOrderDetail = workOrderDetails.Where(x => x.Key == user.Id);
                 if (workOrderDetail.Any())
