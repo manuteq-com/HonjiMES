@@ -52,7 +52,7 @@
             <th nzWidth="170px" nzLeft>名稱</th>
             <th nzWidth="130px" nzLeft>預計完工</th>
             <th nzWidth="80px" nzLeft>訂單量</th>
-            <th nzWidth="80px" nzLeft>工單量</th>
+            <th nzWidth="80px" nzLeft style="border-right: 2px solid black;">工單量</th>
             <ng-container *ngFor="let col of dataSourceDBDisplay.ColumnOptionlist">
                 <th *ngIf="col.show" nzWidth="260px">{{ col.title }}</th>
             </ng-container>
@@ -68,7 +68,7 @@
             <td [ngClass]="['table_tit', getBlueClass(data)]" title={{data.DueEndTime}} nzLeft nzEllipsis>
                 {{data.DueEndTime}}</td>
             <td [ngClass]="getBlueClass(data)" nzLeft>{{data.OrderCount}}</td>
-            <td [ngClass]="getBlueClass(data)" nzLeft>{{data.Count}}</td>
+            <td [ngClass]="getBlueClass(data)" nzLeft style="border-right: 2px solid black;">{{data.Count}}</td>
             <ng-container *ngFor="let col of dataSourceDBDisplay.ColumnOptionlist">
                 <td [ngClass]="getBlue2Class(data[col.key]?.value3)" *ngIf="col.show" (click)="tdclick(data, col)" nzEllipsis>
                     <div>

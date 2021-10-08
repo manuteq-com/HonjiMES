@@ -151,7 +151,7 @@ export class WorkorderListComponent implements OnInit {
         this.getWorkOrderData(this.detailfilter);
     }
     tdclick(e, colData) {
-        // debugger;
+        debugger;
         this.checkVisible = true;
         if (e[colData.key] != null) {
             this.itemtdkey = e.Key;
