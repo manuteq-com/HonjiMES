@@ -294,7 +294,8 @@ export class ProcessControlComponent implements OnInit {
             this.readProcess(null, this.workOrderHeadId);
         }
         this.popupClose = !this.popupClose;
-        this.popUp.dataGrid2.instance.cancelEditData();        
+        this.popUp.dataGrid2.instance.cancelEditData();
+        this.popUp.myform.instance.resetValues();
     }
     creatpopup_result(e) {
         debugger;
