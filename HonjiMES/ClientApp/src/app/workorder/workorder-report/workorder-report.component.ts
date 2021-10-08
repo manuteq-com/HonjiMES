@@ -237,26 +237,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.PurchaseHeadList = [];
         this.NcCountVisible = false;
         this.UserList = [];
-        this.SetUserEditorOptions(this.UserList, null);
-        //// 測試用暫時加入，可選人員
-        this.app.GetData('/Users/GetUsers').subscribe(
-            (s) => {
-                // debugger;
-                if (s.success) {
-                    this.buttondisabled = false;
-                    this.UserList = [];
-                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
-                    s.data.forEach(element => {
-                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
-                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
-                            element.Permission === 80) {
-                            this.UserList.push(element);
-                        }
-                    });
-                    this.SetUserEditorOptions(this.UserList, null);
-                }
-            }
-        );
+
 
         this.app.GetData('/Processes/GetProcesses').subscribe(
             (s) => {
@@ -362,7 +343,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                         // this.itemval4 = '　　　　　　機號：　' + (s.data.WorkOrderHead?.MachineNo ?? '');
                         // this.itemval5 = '　　　　　預計／實際完工數量：　' + s.data.WorkOrderHead.Count + ' / ' + s.data.WorkOrderHead.ReCount;
                         this.itemval5 = '';
-
+                        console.log("s.data",s.data);
                         let findProcess = false;
                         s.data.WorkOrderDetail.forEach(element => {
                             if (element.SerialNumber === this.serialkeyval && findProcess === false) {
@@ -397,6 +378,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.NgCount = 0;
                                 this.formData.NcCount = 0;
                                 this.formData.MCount = element?.MCount ?? '0';
+                                this.setUserList(this.formData.CreateUser);
                                 findProcess = true;
                                 // this.ReCount = this.formData.ReCount;
                                 // this.NgCount = this.formData.NgCount;
@@ -416,6 +398,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 }
                             }
                         });
+
                         if (s.data.WorkOrderHead.Status == 2) {
                             this.MachineEditorOptions.readOnly = true;
                         }
@@ -424,6 +407,30 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             );
         }
     }
+
+    //人員清單
+    setUserList(id){
+        //// 測試用暫時加入，可選人員
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                // debugger;
+                if (s.success) {
+                    this.buttondisabled = false;
+                    this.UserList = [];
+                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
+                            this.UserList.push(element);
+                        }
+                    });
+                    this.SetUserEditorOptions(this.UserList, id);
+                }
+            }
+        );
+    }
+
     SetUserEditorOptions(List, IdVal) {
         // debugger;
         this.UserEditorOptions = {

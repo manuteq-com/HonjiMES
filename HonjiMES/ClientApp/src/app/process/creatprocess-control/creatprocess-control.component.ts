@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import Buttons from 'devextreme/ui/button';
 import { AppComponent } from 'src/app/app.component';
 import { promise } from 'selenium-webdriver';
+import moment from 'moment';
+moment.locale('zh-tw');
 
 @Component({
     selector: 'app-creatprocess-control',
@@ -379,7 +381,7 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
         }
     };
     onMaterialBasicSelectionChanged(e) {
-        console.log("herechange", this.modCheck, e, this.modval);
+        // console.log("herechange", this.modCheck, e, this.modval);
         if (this.modCheck) {
             this.modCheck = false;
         } else {
@@ -749,19 +751,24 @@ export class CreatprocessControlComponent implements OnInit, OnChanges {
     }
 
     setDueStDate(e) {
-        if (e.previousValue) {
+        // console.log("eeest=>",e);
+        if (e.previousValue || e.event) {
             let newDate = e.component.option('text');
-            this.dataSourceDB.forEach(function (v, k) {
-                v.DueStartTime = new Date(newDate);
-            })
+            if (moment(new Date(newDate)).isValid()) {
+                this.dataSourceDB.forEach(function (v, k) {
+                    v.DueStartTime = new Date(newDate);
+                })
+            }
         }
     }
     setDueEndDate(e) {
-        if (e.previousValue) {
+        if (e.previousValue || e.event) {
             let newDate = e.component.option('text');
-            this.dataSourceDB.forEach(function (v, k) {
-                v.DueEndTime = new Date(newDate);
-            })
+            if (moment(new Date(newDate)).isValid()) {
+                this.dataSourceDB.forEach(function (v, k) {
+                    v.DueEndTime = new Date(newDate);
+                })
+            }
         }
     }
 }
