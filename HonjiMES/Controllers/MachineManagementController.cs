@@ -157,6 +157,7 @@ namespace HonjiMES.Controllers
 
             // var no = 0;
             var machineKanbanALL = new List<MachineKanban>();
+            decimal totalTime = 0;
             foreach (var machine in MachineName)
             {
                 var machineKanban = new MachineKanban();
@@ -183,6 +184,7 @@ namespace HonjiMES.Controllers
                         ActualEndTime = workingProcess.ActualEndTime,
                         PredictTime = workingProcess.ActualStartTime == null ? "null" : CalculatePredictedTime(workingProcess)
                     });
+                    totalTime += (workingProcess.ProcessLeadTime + workingProcess.ProcessTime) * workingProcess.Count;
                 }
                 //var ProcessListInOneMachine = ProcessListInAllMachines.Where(x => x.Key == machine);
                 foreach (var ProcessListInOneMachines in ProcessListInAllMachines)
@@ -209,6 +211,7 @@ namespace HonjiMES.Controllers
                                 ActualEndTime = item.ActualEndTime,
                                 PredictTime = item.ActualStartTime == null ? "null" : CalculatePredictedTime(item)
                             });
+                            totalTime += (item.ProcessLeadTime + item.ProcessTime) * item.Count;
                         }
                     }
                 }

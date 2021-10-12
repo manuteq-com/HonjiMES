@@ -1248,6 +1248,7 @@ namespace HonjiMES.Models
     {        
         public string MachineName { get; set; }        
         public List<MachineProcess> MachineProcessList { get; set; }
+        public decimal TotalTime { get; set; }
     }
 
     public class MachineProcess
