@@ -123,7 +123,7 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
         let list = [];
         ary.forEach((v) => {
             if (v.MachineProcessList.length > 0) {
-                list.push(v.MachineName);
+                list.push({machineName:v.MachineName,totalTime:v.TotalTime});
             }
 
         })

@@ -25,8 +25,8 @@
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-nowrap position-sticky zindex5" style="top:0" >
                         <div class="dataBorder width350 headerColor" [ngClass]="{'margin-r': !last}"
-                        style="text-align:center;font-size: 16px; font-weight:1000;" *ngFor="let machine of machines; let i=index; let last = last">
-                            {{machine}} </div>
+                        style="font-size: 16px; font-weight:1000;" *ngFor="let machine of machines; let i=index; let last = last">
+                            <span style="margin-left: 40px;">{{machine.machineName}}</span><span style="color:blue; float:right; margin-right:6px">預估總時間：{{machine.totalTime}}分鐘</span> </div>
                     </div>
                     <div>
                         <div class="d-flex">
