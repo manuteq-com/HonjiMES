@@ -15,7 +15,7 @@
         (onFocusedRowChanging)="onFocusedRowChanging($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
         (onEditorPreparing)="onEditorPreparing($event)" (onSelectionChanged)="selectionChanged($event)"
         (onCellClick)="cellClick($event)" hoverStateEnabled="true" [rowAlternationEnabled]="true"
-        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)"
+        (onCellPrepared)="onCellPrepared($event)" (onRowPrepared)="onRowPrepared($event)" [allowColumnResizing]="true"
         (onEditingStart)="onEditingStart($event)" [showColumnLines]="true" [showRowLines]="false" [height]="570">
 
         <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>

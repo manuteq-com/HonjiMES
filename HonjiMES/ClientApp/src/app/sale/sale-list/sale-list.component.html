@@ -170,7 +170,7 @@
 
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增銷貨單" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="1700" [height]="850"
-    [(visible)]="creatpopupVisible">
+    [(visible)]="creatpopupVisible" (onHiding)="clearCreateSale($event)">
     <div *dxTemplate="let data of 'content'">
         <app-create-sale (childOuter)="creatpopup_result($event)" [MaterialBasicList]="MaterialBasicList" [itemkeyval]="itemkey" [randomkeyval]="randomkey"></app-create-sale>
     </div>

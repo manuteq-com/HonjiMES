@@ -315,7 +315,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         } else if (this.DataType === 1) {
             this.Warehouseval = this.WarehouseList.find(x => x.Code === '101')?.Id ?? null;
         } else {
-            this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+            //this.Warehouseval = this.WarehouseList.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+            this.Warehouseval = undefined;
         }
 
         if (this.formData.Type === 30) { // 表處採購
@@ -371,7 +372,8 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         } else if (this.DataType === 1) {
             e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '101')?.Id ?? null;
         } else {
-            e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+            //e.data.WarehouseId = this.WarehouseListAll.find(x => x.Code === '301')?.Id ?? null; // 預設成品倉301
+            e.data.WarehouseId = undefined;
         }
 
         if (this.formData.Type === 30) { // 表處採購

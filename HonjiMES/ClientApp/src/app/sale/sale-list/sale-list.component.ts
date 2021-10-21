@@ -14,6 +14,7 @@ import Select from 'devextreme/ui/check_box';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { CreateSaleComponent } from '../create-sale/create-sale.component';
 @Component({
     selector: 'app-sale-list',
     templateUrl: './sale-list.component.html',
@@ -24,6 +25,7 @@ export class SaleListComponent implements OnInit, OnChanges {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
+    @ViewChild(CreateSaleComponent) createSale: CreateSaleComponent;
 
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
@@ -405,5 +407,10 @@ export class SaleListComponent implements OnInit, OnChanges {
     downloadSaleOrder(e, data) {
         this.saleHeadId = data.key;
         this.Url = '/Api/Report/GetSaleOrderPDF/' + this.saleHeadId;
+    }
+
+    clearCreateSale(e){
+           this.createSale.dataGrid2.instance.clearSelection();
+           this.createSale.cleanDB1();
     }
 }

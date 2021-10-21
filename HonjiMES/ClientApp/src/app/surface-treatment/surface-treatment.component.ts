@@ -9,6 +9,7 @@ import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { CreateSurfaceComponent } from './create-surface/create-surface.component';
 
 @Component({
     selector: 'app-surface-treatment',
@@ -19,6 +20,7 @@ import { Title } from '@angular/platform-browser';
 export class SurfaceTreatmentComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(CreateSurfaceComponent) createSurface: CreateSurfaceComponent;
     @Output() status = true;
     creatpopupVisible: boolean;
     newpopupVisible: boolean;
@@ -217,5 +219,9 @@ export class SurfaceTreatmentComponent implements OnInit {
     downloadPurchaseOrder(e, data) {
         this.purchaseHeadId = data.key;
         this.Url = '/Api/Report/GetPurchaseOrderPDF/' + this.purchaseHeadId;
+    }
+
+    clearCreateSurface(e){
+        this.createSurface.dataGrid.instance.cancelEditData();
     }
 }

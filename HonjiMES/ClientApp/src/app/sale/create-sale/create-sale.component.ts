@@ -45,6 +45,7 @@ export class CreateSaleComponent implements OnInit, OnChanges {
     loadOptions: any;
     SaleTimeDateBoxOptions: any;
     selectedOperation: string = "between";
+    loadingVisible: boolean;
 
     constructor(private http: HttpClient, myservice: Myservice, public app: AppComponent) {
         this.labelLocation = 'left';
@@ -70,19 +71,26 @@ export class CreateSaleComponent implements OnInit, OnChanges {
         this.formData.SaleDate = new Date();
         this.formData.SaleDate = new Date();
         this.editorOptions = { showSpinButtons: true, mode: 'number', min: 1 };
+        if(this.dataSourceDB2.length == 0){
+             this.loadingVisible = true;
+        }
         this.app.GetData('/Sales/GetOrderList').subscribe(
             (s) => {
                 if (s.success) {
-                    this.dataGrid2.instance.clearSelection();
+                    //this.dataGrid2.instance.clearSelection();
                     s.data.forEach(element => {
                         element.UnSaleCount = element.Quantity - element.SaleCount;
                     });
-                    this.dataSourceDB1 = [];
+                    //this.dataSourceDB1 = [];
                     this.dataSourceDB2 = s.data;
                     // this.loadOptions = this.dataGrid2.instance.getDataSource().loadOptions();
                 }
+                this.loadingVisible = false;
             }
         );
+    }
+    cleanDB1(){
+        this.dataSourceDB1=[];
     }
     calculateFilterExpression(filterValue, selectedFilterOperation) {
         const column = this as any;

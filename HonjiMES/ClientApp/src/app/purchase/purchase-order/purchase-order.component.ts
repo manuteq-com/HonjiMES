@@ -12,6 +12,7 @@ import notify from 'devextreme/ui/notify';
 import { Myservice } from 'src/app/service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { CreatPurchaseComponent } from '../creat-purchase/creat-purchase.component';
 
 @Component({
     selector: 'app-purchase-order',
@@ -22,6 +23,7 @@ import { Title } from '@angular/platform-browser';
 export class PurchaseOrderComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(CreatPurchaseComponent) creatPurchase: CreatPurchaseComponent;
     @Output() status = true;
     creatpopupVisible: boolean;
     newpopupVisible: boolean;
@@ -221,5 +223,9 @@ export class PurchaseOrderComponent implements OnInit {
     downloadPurchaseOrder(e, data) {
         this.purchaseHeadId = data.key;
         this.Url = '/Api/Report/GetPurchaseOrderPDF/' + this.purchaseHeadId;
+    }
+
+    cleanCreatePurchase(e){
+        this.creatPurchase.dataGrid.instance.cancelEditData();
     }
 }

@@ -58,6 +58,7 @@ export class SaleOverviewComponent implements OnInit, OnChanges {
 
     }
     async ngOnChanges() {
+        console.log("mytest");
         this.disabledValues = [];
         // this.getdata();
         this.app.GetData('/Warehouses/GetWarehouses').subscribe(

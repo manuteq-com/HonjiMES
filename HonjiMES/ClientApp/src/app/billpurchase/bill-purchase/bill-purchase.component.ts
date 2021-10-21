@@ -9,6 +9,8 @@ import { APIResponse } from 'src/app/app.module';
 import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { Title } from '@angular/platform-browser';
+import { CreatBillPurchaseComponent } from '../creat-bill-purchase/creat-bill-purchase.component';
+import { BillPurchaseSupplierComponent } from '../bill-purchase-supplier/bill-purchase-supplier.component';
 
 @Component({
     selector: 'app-bill-purchase',
@@ -18,6 +20,8 @@ import { Title } from '@angular/platform-browser';
 export class BillPurchaseComponent implements OnInit {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(CreatBillPurchaseComponent) creatBillPurchase: CreatBillPurchaseComponent;
+    @ViewChild(BillPurchaseSupplierComponent) billPurchaseSupplier: BillPurchaseSupplierComponent;
 
     creatpopupVisible: boolean;
     autoNavigateToFocusedRow = true;
@@ -207,6 +211,13 @@ export class BillPurchaseComponent implements OnInit {
     onFocusedRowChanged(e) {
     }
     onCellPrepared(e) {
+
+    }
+    clearCreatBillPurchase(e) {
+        this.creatBillPurchase.dataGrid.instance.cancelEditData();
+    }
+    clearBillPurchaseSupplier(e) {
+        this.billPurchaseSupplier.dataGrid.instance.clearSelection();
 
     }
 }

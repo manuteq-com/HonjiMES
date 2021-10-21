@@ -22,7 +22,6 @@ import { PostOrderMaster_Detail } from 'src/app/model/viewmodels';
 export class OrderOverviewComponent implements OnInit, OnChanges {
     @Output() childOuter = new EventEmitter();
     @Input() randomkeyval: any;
-    @Input() clearSel: boolean;
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
     autoNavigateToFocusedRow = true;
@@ -56,64 +55,33 @@ export class OrderOverviewComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
     ngOnChanges() {
-        if (this.clearSel) {
-            if (this.clearSel["cancel"] === false) {
-                //關閉時只清空select
-                this.selectedRows = [];
-            } else {
-                //console.log("read");
-                this.getdata();
-                // this.app.GetData('/Materials/GetMaterials').subscribe(
-                //     (s) => {
-                //         if (s.success) {
-                //             this.MaterialList = s.data;
-                //         }
-                //     }
-                // );
-                this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
-                    (s) => {
-                        if (s.success) {
-                            // this.MaterialBasicList = s.data;
-                            this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
-                        }
-                    }
-                );
-                this.app.GetData('/Customers/GetCustomers').subscribe(
-                    (s) => {
-                        if (s.success) {
-                            this.CustomerList = s.data;
-                        }
-                    }
-                );
+        //console.log("read");
+        this.getdata();
+        // this.app.GetData('/Materials/GetMaterials').subscribe(
+        //     (s) => {
+        //         if (s.success) {
+        //             this.MaterialList = s.data;
+        //         }
+        //     }
+        // );
+        this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
+            (s) => {
+                if (s.success) {
+                    // this.MaterialBasicList = s.data;
+                    this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
+                }
             }
-        } else {
-            //console.log("readB");
-            this.getdata();
-            // this.app.GetData('/Materials/GetMaterials').subscribe(
-            //     (s) => {
-            //         if (s.success) {
-            //             this.MaterialList = s.data;
-            //         }
-            //     }
-            // );
-            this.app.GetData('/MaterialBasics/GetMaterialBasicsAsc').subscribe(
-                (s) => {
-                    if (s.success) {
-                        //console.log("this.MaterialBasicList" ,s.data);
-                        // this.MaterialBasicList = s.data;
-                        this.MaterialBasicList = { paginate: true, store: { type: 'array', data: s.data, key: 'Id' } };
-                    }
+        );
+        this.app.GetData('/Customers/GetCustomers').subscribe(
+            (s) => {
+                if (s.success) {
+                    this.CustomerList = s.data;
                 }
-            );
-            this.app.GetData('/Customers/GetCustomers').subscribe(
-                (s) => {
-                    if (s.success) {
-                        this.CustomerList = s.data;
-                    }
-                }
-            );
-        }
+            }
+        );
     }
+
+
     getdata() {
         //debugger;
         this.dataSourceDB = new CustomStore({

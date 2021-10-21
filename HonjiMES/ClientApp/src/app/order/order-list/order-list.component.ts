@@ -13,6 +13,9 @@ import { Myservice } from '../../service/myservice';
 import { AppComponent } from 'src/app/app.component';
 import { AuthService } from 'src/app/service/auth.service';
 import { Title } from '@angular/platform-browser';
+import { CreatorderComponent } from '../creatorder/creatorder.component';
+import { OrderOverviewComponent } from '../order-overview/order-overview.component';
+import { OrderSaleunfinishedComponent } from '../order-saleunfinished/order-saleunfinished.component';
 
 @Component({
     selector: 'app-order-list',
@@ -23,6 +26,9 @@ export class OrderListComponent {
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
     @ViewChild(DxFileUploaderComponent) uploader: DxFileUploaderComponent;
+    @ViewChild(CreatorderComponent) creatorder: CreatorderComponent;
+    @ViewChild(OrderOverviewComponent) orderOverview: OrderOverviewComponent;
+    @ViewChild(OrderSaleunfinishedComponent) orderSaleunfinished: OrderSaleunfinishedComponent;
     autoNavigateToFocusedRow = true;
     dataSourceDB: any;
     Customerlist: any;
@@ -436,10 +442,16 @@ export class OrderListComponent {
         this.dataGrid.instance.refresh();
     }
 
-    clearSelection(e){
-        //強制觸發onChange
-        this.clearOverviewSelection = !this.clearOverviewSelection;
-        this.clearCondition = {"cancel": e.cancel, "toggle":this.clearOverviewSelection }
+    clearOverview(e){
+        this.orderOverview.dataGrid.instance.clearSelection();
+    }
+
+    clearCreatorder(e){
+        this.creatorder.dataGrid.instance.cancelEditData();
+    }
+
+    clearSaleunfinished(e){
+        this.orderSaleunfinished.dataGrid.instance.clearSelection();
     }
 
 }

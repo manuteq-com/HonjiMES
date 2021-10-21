@@ -96,7 +96,7 @@
 
 </dx-data-grid>
 <dx-popup [showTitle]="true" title="新增採購單" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [(visible)]="creatpopupVisible">
+    [(visible)]="creatpopupVisible" (onHiding)="cleanCreatePurchase($event)">
     <div *dxTemplate="let data of 'content'">
         <app-creat-purchase (childOuter)="creatpopup_result($event)" [itemkeyval]="itemkey" [modval]="mod">
         </app-creat-purchase>
