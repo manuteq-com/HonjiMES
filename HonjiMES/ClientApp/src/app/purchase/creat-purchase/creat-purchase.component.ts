@@ -335,7 +335,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         this.Priceval = this.Quantityval * this.OriginPriceval;
     }
     OriginValueChanged(e, data) {
-        debugger;
+        //debugger;
         data.setValue(e.value);
         this.OriginPriceval = e.value;
         this.Priceval = this.Quantityval * this.OriginPriceval;
@@ -355,7 +355,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         return true;
     }
     onInitNewRow(e) {
-        debugger;
+        //debugger;
         this.saveCheck = false;
         // this.onCellPreparedLevel = 1;
         this.Quantityval = e.data.Quantity;
@@ -522,7 +522,7 @@ export class CreatPurchaseComponent implements OnInit, OnChanges {
         }
     }
     onRowValidating(e) {
-        debugger;
+        //debugger;
         if (!e.isValid) {
             this.gridsaveCheck = false;
         }
