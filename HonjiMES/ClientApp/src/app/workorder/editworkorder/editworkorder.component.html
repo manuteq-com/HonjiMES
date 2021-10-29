@@ -1,6 +1,6 @@
 <form action="" (submit)="onFormSubmit($event)">
     <dx-form id="form" [formData]="formData" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
-        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+        [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount">
 
         <dxi-item dataField="WorkOrderHeadId" [visible]="false">
             <dxo-label text="工單主檔ID"></dxo-label>
@@ -70,7 +70,10 @@
         (onCellClick)="cellClick($event)"
         [showColumnLines]="true"
         [showRowLines]="true"
+        [columnAutoWidth]="true"
+        [allowColumnResizing]="true"
         hoverStateEnabled="true">
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
         <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
             <dxo-form colCount=4>
@@ -94,34 +97,38 @@
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Status" caption="目前狀態" alignment="center" [allowEditing]="false" [width]="80">
+        <dxi-column dataField="Status" caption="目前狀態" alignment="center" [allowEditing]="false" >
             <dxo-lookup [dataSource]="WorkStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" [width]="80">
+        <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="ReCount" caption="完工" [allowEditing]="false" [width]="60"></dxi-column>
-        <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" [width]="60"></dxi-column>
-        <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions" [width]="60">
+        <dxi-column dataField="ReCount" caption="完工" [allowEditing]="false" ></dxi-column>
+        <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" ></dxi-column>
+        <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
             <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="良品數量 必須 >= 0">
             </dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="ReportNgCount" caption="回報NG" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions" [width]="60"></dxi-column>
+        <dxi-column dataField="ReportNgCount" caption="回報NG" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions"></dxi-column>
         <dxi-column dataField="Message" caption="回報說明"></dxi-column>
-        <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)" [width]="80" [allowEditing]="false" [visible]="false"></dxi-column>
+        <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"  [allowEditing]="false" [visible]="false"></dxi-column>
         <!-- <dxi-column dataField="ProducingMachine" caption="機台" [width]="80"></dxi-column> -->
-        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" [width]="60">
+        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" >
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
+            <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
+        </dxi-column>
+        <dxi-column dataField="CreateUser" caption="人員" editCellTemplate="UserTemplate">
+            <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
         <dxi-column dataField="CodeNo" caption="加工程式"></dxi-column>
         <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [allowEditing]="false" [width]="120"></dxi-column> -->
-        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [allowEditing]="true" [width]="120"></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="160" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="160" [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="Remarks" caption="備註" dataType="varchar" [width]="170" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [allowEditing]="true" ></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="180"  [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="Remarks" caption="備註" dataType="varchar"  [allowEditing]="true"></dxi-column>
 
         <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod">
             <dxi-button name="save" text="存檔"></dxi-button>
@@ -148,6 +155,13 @@
             <dx-select-box [value]="data.value"
                 [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }"
                 valueExpr="Name" displayExpr="Name" [searchEnabled]="true" (onValueChanged)="data.setValue($event.value)"></dx-select-box>
+            <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
+        </div>
+
+        <div *dxTemplate="let data of 'UserTemplate'">
+            <dx-select-box [(value)]="data.value" (onValueChanged)="selectUserChanged($event,data)"
+                [dataSource]="{ paginate: true, store: { type: 'array', data: UserList, key:'Id' } }" valueExpr="Id"
+                displayExpr="Realname" [searchEnabled]="false"></dx-select-box>
             <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
         </div>
 

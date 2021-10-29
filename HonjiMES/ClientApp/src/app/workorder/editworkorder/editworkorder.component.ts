@@ -33,7 +33,6 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     readOnly: boolean;
     showColon: boolean;
     minColWidth: number;
-    width: any;
     colCount: number;
     dataSourceDB: any;
     labelLocation: string;
@@ -264,6 +263,25 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     ngOnInit() {
     }
     ngOnChanges() {
+        //// 測試用暫時加入，可選人員
+        this.app.GetData('/Users/GetUsers').subscribe(
+            (s) => {
+                if (s.success) {
+                    //this.StaffList = s.data;
+                    // this.buttondisabled = false;
+                    this.UserList = [];
+                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
+                    s.data.forEach(element => {
+                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
+                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
+                            element.Permission === 80) {
+                            this.UserList.push(element);
+                        }
+                    });
+                    this.SetUserEditorOptions(this.UserList, null);
+                }
+            }
+        );
         // this.dataSourceDB = new CustomStore({
         //     key: 'Id',
         //     load: () => SendService.sendRequest(this.http, '/Processes/GetProcessByWorkOrderDetail/' + this.itemkeyval.Key),
@@ -289,6 +307,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                         this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
                         this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
                         this.formData.DataNo = s.data.WorkOrderHead.DataNo;
+                        this.formData.CreateUser = s.data.WorkOrderHead.CreateUser;
                         this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                 }
             }
@@ -297,25 +316,6 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         // this.buttondisabled = true;
         // this.UserList = [];
         // this.SetUserEditorOptions(this.UserList, null);
-
-        //// 測試用暫時加入，可選人員
-        this.app.GetData('/Users/GetUsers').subscribe(
-            (s) => {
-                if (s.success) {
-                    // this.buttondisabled = false;
-                    this.UserList = [];
-                    // 過濾帳戶身分。(因此畫面是使用共用帳戶，但登記人員必須是個人身分)
-                    s.data.forEach(element => {
-                        if (element.Permission === 20 || element.Permission === 30 || element.Permission === 40 ||
-                            element.Permission === 50 || element.Permission === 60 || element.Permission === 70 ||
-                            element.Permission === 80) {
-                            this.UserList.push(element);
-                        }
-                    });
-                    this.SetUserEditorOptions(this.UserList, null);
-                }
-            }
-        );
 
         this.HasPermission = false;
         this.onCellPreparedLevel = 0;
@@ -700,7 +700,8 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 DrawNo: this.formData.DrawNo,
                 MachineNo: this.formData.MachineNo,
                 DueStartTime: this.formData.DueStartTime,
-                DueEndTime: this.formData.DueEndTime
+                DueEndTime: this.formData.DueEndTime,
+                CreateUser: this.formData.CreateUser
             },
             WorkOrderDetail: this.dataSourceDB
         };
