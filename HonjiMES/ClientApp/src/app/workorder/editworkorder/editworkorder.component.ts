@@ -863,4 +863,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         });
         this.dataGrid2.instance.refresh();
     }
+    selectUserChanged(e,data){
+        data.setValue(e.value);
+    }
 }
