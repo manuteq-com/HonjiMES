@@ -151,7 +151,8 @@ export class WorkorderListComponent implements OnInit {
         this.getWorkOrderData(this.detailfilter);
     }
     tdclick(e, colData) {
-        debugger;
+        //console.log("tdclick-e",e);
+        //console.log("tdclick-coldata",colData);
         this.checkVisible = true;
         if (e[colData.key] != null) {
             this.itemtdkey = e.Key;
@@ -223,16 +224,16 @@ export class WorkorderListComponent implements OnInit {
     getBlue2Class(data) {
         if (data === 0) { // 未派工
             return 'process_nonAssign';
-        } 
+        }
         else if (data ===2) { // 開工
             return 'process_start';
         }
         else if (data === 3) { // 完工
             return 'process_end';
-        } 
+        }
         else if (data === 7) { // 工序暫停
             return 'process_stop';
-        } 
+        }
         else if (data === 6) { // 超時完工
             return 'process_alarm';
         }

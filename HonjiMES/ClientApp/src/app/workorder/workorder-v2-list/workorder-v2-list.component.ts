@@ -94,7 +94,6 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
 
     tdclick(data) {
         //console.log("mytest2", data);
-
         this.itemtdkey = data.WorkOrderHeadId;
         this.serialkey = data.SerialNumber;
         switch (data.Status) {
