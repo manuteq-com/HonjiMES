@@ -572,8 +572,14 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     }
     onRowPrepared(e) {
         if (e.data !== undefined) {
+            if (e.data.Status === 0) {
+                e.rowElement.style.backgroundColor = '#b3b2b2';
+            }
             if (e.data.Status === 2) {
                 e.rowElement.style.backgroundColor = '#f8f691';
+            }
+            if (e.data.Status === 3) {
+                e.rowElement.style.backgroundColor = '#9afd97';
             }
         }
     }
