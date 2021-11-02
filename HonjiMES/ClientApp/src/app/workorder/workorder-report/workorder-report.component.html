@@ -195,8 +195,8 @@
                 <dxi-validation-rule type="required" message="檢驗結果 必填"></dxi-validation-rule>
                 <dxo-label text="檢驗結果"></dxo-label>
             </dxi-item> -->
-            <dxi-item [colSpan]="1" [visible]="HasQCVisible"></dxi-item>
-            <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="3"
+            <dxi-item itemType="empty" [colSpan]="1" [visible]="HasQCVisible"></dxi-item>
+            <dxi-item dataField="Message" editorType="dxTextArea" [editorOptions]="{ height: 60 }" [colSpan]="4"
                 [visible]="HasQCVisible">
                 <dxo-label text="回報說明"></dxo-label>
             </dxi-item>

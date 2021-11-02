@@ -374,6 +374,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 };
 
                                 this.formData = element;
+                                //console.log("this.formData",this.formData);
                                 this.formData.ReCount = reCount > 0 ? reCount : 0;
                                 this.formData.NgCount = 0;
                                 this.formData.NcCount = 0;
@@ -393,7 +394,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 if (element.ProcessType === 20) { // QC檢驗
                                     this.ShowQCReportView(element.Status, element.Type);
                                 } else if (element.ProcessType === null || element.ProcessType === 10) {
-                                    debugger;
+                                    //debugger;
                                     this.ShowNCReportView(element.Status, element.Type);
                                 }
                             }
