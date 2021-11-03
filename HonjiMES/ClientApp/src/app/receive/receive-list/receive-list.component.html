@@ -32,12 +32,14 @@
     <div class="col-9">
 
         <dx-data-grid [dataSource]="dataSourceDB" showBorders="true" keyExpr="Id" hoverStateEnabled="true"
-            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [focusedRowEnabled]="false"
             [columnAutoWidth]="false" [showBorders]="true" [remoteOperations]="remoteOperations"
             (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
             (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
             (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)"
             [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="selectedRowKeys">
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
 
             <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-popup title="新增領料單" [showTitle]="true" [width]="700" [height]="275">
