@@ -53,6 +53,7 @@ export class ReceiveListComponent implements OnInit {
     keyup = '';
     UserList: any;
     selectedOperation: string = "between";
+    selectedRowKeys: any[] =[];
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.infopopupVisible) {
@@ -253,6 +254,14 @@ export class ReceiveListComponent implements OnInit {
         //     remove: (key) =>
         //         SendService.sendRequest(this.http, this.Controller + '/DeleteBomlist', 'DELETE')
         // });
+    }
+    onRowClick(e) {
+        this.requisitionId = e.data.Id;
+        this.dataSourceAllDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetRequisitionsDetailMaterialByAllShow/' + e.data.Id),
+        });
     }
     setWarehouse(values: any, WarehouseID: number) {
         values.WarehouseID = WarehouseID;

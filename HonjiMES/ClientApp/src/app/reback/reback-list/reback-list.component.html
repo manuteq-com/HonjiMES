@@ -36,7 +36,8 @@
             (onCellClick)="cellClick($event)" (onContentReady)="onContentReady($event)"
             (onDataErrorOccurred)="onDataErrorOccurred($event)" (onInitNewRow)="onInitNewRow($event)"
             (onRowInserting)="onRowInserting($event)" (onEditingStart)="onEditingStart($event)"
-            [remoteOperations]="remoteOperations">
+            [remoteOperations]="remoteOperations" (onRowClick)="onRowClick($event)" [selectedRowKeys]="selectedRowKeys">
+            <dxo-selection mode="single"></dxo-selection>
 
             <dxo-editing mode="popup" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true">
                 <dxo-popup title="新增退料單" [showTitle]="true" [width]="700" [height]="275">
@@ -85,8 +86,8 @@
             <div *dxTemplate="let data of 'cellTemplate'">
                 <!-- <dx-button class="" icon="trash" type="danger" (onClick)="deleteReceiveList($event,data)"></dx-button> -->
                 <dx-button class="" icon="search" type="normal" (onClick)="searchRequisitionData($event,data)"></dx-button>
-                <dx-button class="ml-1" icon="chevrondoubleright" type="default"
-                    (onClick)="readRequisitionData($event,data)"></dx-button>
+                <!-- <dx-button class="ml-1" icon="chevrondoubleright" type="default"
+                    (onClick)="readRequisitionData($event,data)"></dx-button> -->
             </div>
         </dx-data-grid>
     </div>

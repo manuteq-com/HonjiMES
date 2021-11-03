@@ -45,6 +45,7 @@ export class RebackListComponent implements OnInit {
     keyup = '';
     UserList: any;
     selectedOperation: string = "between";
+    selectedRowKeys: any[]=[];
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (!this.creatpopupVisible && !this.infopopupVisible) {
@@ -179,6 +180,14 @@ export class RebackListComponent implements OnInit {
             key: 'Id',
             load: (loadOptions) =>
                 SendService.sendRequest(this.http, this.Controller + '/GetRebacksDetailMaterialByAllShow/' + data.data.Id),
+        });
+    }
+    onRowClick(e) {
+        this.requisitionId = e.data.Id;
+        this.dataSourceAllDB = new CustomStore({
+            key: 'Id',
+            load: (loadOptions) =>
+                SendService.sendRequest(this.http, this.Controller + '/GetRebacksDetailMaterialByAllShow/' + e.data.Id),
         });
     }
     setWarehouse(values: any, WarehouseID: number) {
