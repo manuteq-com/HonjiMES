@@ -473,7 +473,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
             this.NcCountVisible = true;
 
             // 可重複報開工 2020/09/09
-            this.restartedBtnVisible = true;
+            this.restartedBtnVisible = false;//再開工回報定義不清，功能隱藏
 
             // 如工序為委外(無採購單)，則需填入供應商、金額
             if (Type === 2) {
@@ -485,7 +485,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                 this.ReCountVisible = true;
                 this.HasPurchaseVisible = true;
             } else {
-                this.restartedBtnVisible = true;
+                this.restartedBtnVisible = false;//再開工回報定義不清，功能隱藏
                 this.HasStockVisible = true;//新增入庫單按鈕
                 this.RemarkVisible = true;
 
