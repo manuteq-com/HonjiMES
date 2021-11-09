@@ -771,7 +771,11 @@ namespace HonjiMES.Models
         /// 預計總工時
         /// </summary>
         public decimal? ExpectedlTotalTime { get; set; }
-        
+        /// <summary>
+        /// 製程最大可生產數量
+        /// </summary>
+        public int? AvailableMCount { get; set; }
+
     }
     public class WorkOrderData
     {

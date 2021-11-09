@@ -945,6 +945,120 @@ namespace HonjiMES.Controllers
         }
 
         /// <summary>
+        /// 用品號取出可領的品號 一階
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailMaterialByProductBasicId(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var RequisitionDetailAllList = new List<RequisitionDetailAll>();
+            try
+            {
+                // 有開過單的要抓數量
+                var GRequisitionDetailAllList = _context.RequisitionDetails
+                   .Where(x => x.Requisition.MaterialBasicId == id && x.DeleteFlag == 0 && x.Lv == 1)
+                   .Select(x => new RequisitionDetailAll
+                   {
+                       Id = x.Id,
+                       Name = x.Name,
+                       ProductBasicId = x.ProductBasicId,
+                       ProductNo = x.ProductNo,
+                       MaterialBasicId = x.MaterialBasicId,
+                       MaterialNo = x.MaterialNo,
+                       Quantity = x.Quantity,
+                       ReceiveQty = x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity > 0).Sum(x => x.Quantity),
+                       RbackQty = x.Receives.Where(y => y.DeleteFlag == 0 && y.Quantity < 0).Sum(x => x.Quantity),
+                       NameNo = x.ProductBasicId.HasValue ? x.ProductNo : x.MaterialBasicId.HasValue ? x.MaterialNo : "",
+                       NameType = x.ProductBasicId.HasValue ? "成品" : x.MaterialBasicId.HasValue ? "元件" : "",
+                       // WarehouseList = GetWarehouse(x)
+                   }).ToList().GroupBy(x => x.NameNo);
+                foreach (var item in GRequisitionDetailAllList)
+                {
+                    RequisitionDetailAllList.Add(new RequisitionDetailAll
+                    {
+                        Id = item.FirstOrDefault().Id,
+                        Name = item.FirstOrDefault().Name,
+                        ProductBasicId = item.FirstOrDefault().ProductBasicId,
+                        ProductNo = item.FirstOrDefault().ProductNo,
+                        MaterialBasicId = item.FirstOrDefault().MaterialBasicId,
+                        MaterialNo = item.FirstOrDefault().MaterialNo,
+                        Quantity = item.FirstOrDefault().Quantity,
+                        ReceiveQty = item.Sum(x => x.ReceiveQty),
+                        RbackQty = Math.Abs(item.Sum(x => x.RbackQty)),
+                        NameNo = item.FirstOrDefault().NameNo,
+                        NameType = item.FirstOrDefault().NameType,
+                    });
+                }
+                _context.ChangeTracker.LazyLoadingEnabled = true;
+                // 2020/10/27 品號合併(ProductBasicId使用MaterialBasic資料表)
+                // var ProductBasics = _context.MaterialBasics.Find(WorkOrderHeads.DataId);
+                // BOM內容
+                var BillOfMaterials = await _context.BillOfMaterials.Where(x => x.ProductBasicId == id && x.DeleteFlag == 0 && !x.Pid.HasValue).ToListAsync();
+                var BomDataList = MyFun.GetBomList(BillOfMaterials, 0, 1);
+                if (!RequisitionDetailAllList.Any())//沒開過領料單的要從頭抓
+                {
+                    foreach (var item in BomDataList)
+                    {
+                        if (item.Lv == 1)// 只取一階
+                        {
+                            RequisitionDetailAllList.Add(new RequisitionDetailAll
+                            {
+                                Id = item.Id,
+                                Name = item.Name,
+                                Lv = item.Lv,
+                                // Name = item.Name,
+                                //原料
+                                MaterialBasicId = item.MaterialBasicId,
+                                MaterialNo = item.MaterialNo,
+                                MaterialName = item.MaterialName,
+                                MaterialSpecification = item.MaterialSpecification,
+                                //成品，半成品，組件
+                                ProductBasicId = item.ProductBasicId,
+                                ProductName = item.Name,
+                                ProductNo = item.ProductNo,
+                                ProductNumber = item.ProductNumber,
+                                ProductSpecification = item.ProductSpecification,
+                                Ismaterial = item.Ismaterial,
+                                Quantity = item.ReceiveQty,
+                                NameNo = item.ProductBasicId.HasValue ? item.ProductNo : item.MaterialBasicId.HasValue ? item.MaterialNo : "",
+                                NameType = item.ProductBasicId.HasValue ? "成品" : item.MaterialBasicId.HasValue ? "元件" : "",
+                                Master = item.Master
+                            });
+                        }
+                    }
+                }
+                else
+                { // 已經開過的，更新master
+                    foreach (var item in BomDataList)
+                    {
+                        if (item.Lv == 1)// 只取一階
+                        {
+                            foreach (var item2 in RequisitionDetailAllList)
+                            {
+                                if (item.MaterialBasicId == item2.MaterialBasicId && item.ProductBasicId == item2.ProductBasicId)
+                                    item2.Master = item.Master;
+                            }
+                        }
+                    }
+                }
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+
+                foreach (var item in RequisitionDetailAllList)
+                {
+                    item.WarehouseList = GetWarehouse(item);
+                }
+                return Ok(MyFun.APIResponseOK(RequisitionDetailAllList));
+            }
+            catch (System.Exception e)
+            {
+                return Ok(MyFun.APIResponseError(e.Message));
+                throw;
+            }
+        }
+
+        /// <summary>
         /// 用工單號尋找領退料明細
         /// </summary>
         /// <param name="id"></param>
@@ -958,6 +1072,44 @@ namespace HonjiMES.Controllers
             {
                 var ReceivesLog = await _context.Receives
                     .Where(x => x.RequisitionDetail.Requisition.WorkOrderHeadId == id && x.DeleteFlag == 0)
+                    .Select(x => new RequisitionDetailLog
+                    {
+                        Id = x.Id,
+                        RequisitionNo = x.RequisitionDetail.Requisition.RequisitionNo,
+                        ReceiveQty = x.Quantity > 0 ? x.Quantity : 0,
+                        RbackQty = x.Quantity < 0 ? Math.Abs(x.Quantity) : 0,
+                        NameNo = x.RequisitionDetail.ProductBasicId.HasValue ? x.RequisitionDetail.ProductNo : x.RequisitionDetail.MaterialBasicId.HasValue ? x.RequisitionDetail.MaterialNo : "",
+                        NameType = x.RequisitionDetail.ProductBasicId.HasValue ? "成品" : x.RequisitionDetail.MaterialBasicId.HasValue ? "元件" : "",
+                        WarehouseName = x.WarehouseId.HasValue ? (x.Warehouse.Code + x.Warehouse.Name) : "",
+                        CreateTime = x.CreateTime,
+                        CreateUser = x.RequisitionDetail.Requisition.CreateUser,
+                        ReceiveUser = x.RequisitionDetail.Requisition.ReceiveUser
+                    }).ToListAsync();
+
+                _context.ChangeTracker.LazyLoadingEnabled = false;
+                return Ok(MyFun.APIResponseOK(ReceivesLog));
+            }
+            catch (System.Exception e)
+            {
+                return Ok(MyFun.APIResponseError(e.Message));
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 用品號尋找領退料明細
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<RequisitionDetailAll>>> GetRequisitionsDetailByProductBasicId(int id)
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            var RequisitionDetailAllList = new List<RequisitionDetailAll>();
+            try
+            {
+                var ReceivesLog = await _context.Receives
+                    .Where(x => x.RequisitionDetail.Requisition.MaterialBasicId == id && x.DeleteFlag == 0)
                     .Select(x => new RequisitionDetailLog
                     {
                         Id = x.Id,
@@ -1062,45 +1214,50 @@ namespace HonjiMES.Controllers
                         }
 
                         //// 2020/10/19 領料完成自動回報(報工) 工單第一站工序(AMA)。
+                        //// 2021/11/09 領料完成自動回報(報工) 工單的領料工序(BBZ)，生管說上面這位理解錯誤。
                         var dt = DateTime.Now;
-                        var FirstWorkOrderDetails = WorkOrderHead.WorkOrderDetails.Where(x => x.SerialNumber == 1 && x.DeleteFlag == 0).FirstOrDefault();
-                        if (FirstWorkOrderDetails.ActualStartTime == null)
+                        var FirstWorkOrderDetails = WorkOrderHead.WorkOrderDetails.Where(x => x.ProcessNo == "BBZ" && x.DeleteFlag == 0).FirstOrDefault();
+                        if (FirstWorkOrderDetails != null)
                         {
-                            FirstWorkOrderDetails.ActualStartTime = dt;
-                        }
-                        FirstWorkOrderDetails.ActualEndTime = dt;
-                        FirstWorkOrderDetails.Status = 3; // 完工
+                            if (FirstWorkOrderDetails.ActualStartTime == null)
+                            {
+                                FirstWorkOrderDetails.ActualStartTime = dt;
+                            }
+                            FirstWorkOrderDetails.ActualEndTime = dt;
+                            FirstWorkOrderDetails.Status = 3; // 完工
 
-                        // 如果[工單Head]狀態為[已派工]，則改為[以開工]
-                        if (FirstWorkOrderDetails.WorkOrderHead.Status == 1) {
-                            FirstWorkOrderDetails.WorkOrderHead.Status = 2;
-                        }
+                            // 如果[工單Head]狀態為[已派工]，則改為[以開工]
+                            if (FirstWorkOrderDetails.WorkOrderHead.Status == 1)
+                            {
+                                FirstWorkOrderDetails.WorkOrderHead.Status = 2;
+                            }
 
-                        FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
-                        {
-                            // WorkOrderDetailId = FirstWorkOrderDetails.Id,
-                            ReportType = 2, // 完工回報
-                            // PurchaseId = FirstWorkOrderDetails.PurchaseId,
-                            // PurchaseNo = FirstWorkOrderDetails.,
-                            // SupplierId = FirstWorkOrderDetails.SupplierId,
-                            // DrawNo = FirstWorkOrderDetails.DrawNo,
-                            // CodeNo = WorkOrderReportData.CodeNo,
-                            // Manpower = FirstWorkOrderDetails.Manpower,
-                            // ProducingMachineId = FirstWorkOrderDetails.,
-                            // ProducingMachine = WorkOrderReportData.ProducingMachine,
-                            // ReCount = WorkOrderReportData.ReCount,
-                            // RePrice = WorkOrderReportData.RePrice,
-                            // NgCount = WorkOrderReportData.NgCount,
-                            // Message = WorkOrderReportData.Message,
-                            StatusO = 0,
-                            StatusN = 3,
-                            DueStartTime = FirstWorkOrderDetails.DueStartTime,
-                            DueEndTime = FirstWorkOrderDetails.DueEndTime,
-                            ActualStartTime = dt,
-                            ActualEndTime = dt,
-                            CreateTime = dt,
-                            CreateUser = PostRequisition.CreateUser,
-                        });
+                            FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                            {
+                                // WorkOrderDetailId = FirstWorkOrderDetails.Id,
+                                ReportType = 2, // 完工回報
+                                                // PurchaseId = FirstWorkOrderDetails.PurchaseId,
+                                                // PurchaseNo = FirstWorkOrderDetails.,
+                                                // SupplierId = FirstWorkOrderDetails.SupplierId,
+                                                // DrawNo = FirstWorkOrderDetails.DrawNo,
+                                                // CodeNo = WorkOrderReportData.CodeNo,
+                                                // Manpower = FirstWorkOrderDetails.Manpower,
+                                                // ProducingMachineId = FirstWorkOrderDetails.,
+                                                // ProducingMachine = WorkOrderReportData.ProducingMachine,
+                                                // ReCount = WorkOrderReportData.ReCount,
+                                                // RePrice = WorkOrderReportData.RePrice,
+                                                // NgCount = WorkOrderReportData.NgCount,
+                                                // Message = WorkOrderReportData.Message,
+                                StatusO = 0,
+                                StatusN = 3,
+                                DueStartTime = FirstWorkOrderDetails.DueStartTime,
+                                DueEndTime = FirstWorkOrderDetails.DueEndTime,
+                                ActualStartTime = dt,
+                                ActualEndTime = dt,
+                                CreateTime = dt,
+                                CreateUser = PostRequisition.CreateUser,
+                            });
+                        }
                         await _context.SaveChangesAsync();
                     }
                 }

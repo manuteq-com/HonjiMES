@@ -1289,6 +1289,7 @@ namespace HonjiMES.Controllers
                     if (checkLog.Count() == 0)
                     {
                         WorkOrderDetails.FirstOrDefault().Status = 2; // 開工
+                        WorkOrderDetails.FirstOrDefault().MCount = WorkOrderReportData.MCount;//把欲製造數量寫回Detail,前面的人只寫回Log,Log的MCount也沒被顯示到前端,不知道在幹嘛?
                         // WorkOrderDetails.FirstOrDefault().SupplierId = WorkOrderReportData.SupplierId;
                         // WorkOrderDetails.FirstOrDefault().RePrice = WorkOrderReportData.RePrice;
                         WorkOrderDetails.FirstOrDefault().CodeNo = WorkOrderReportData.CodeNo;
