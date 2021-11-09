@@ -159,6 +159,7 @@ import { MachineInformationComponent } from './machinemanagemate/machine-informa
 import { CreatmachineComponent } from './machinemanagemate/creatmachine/creatmachine.component';
 import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
 import { WorkorderV2ListComponent } from './workorder/workorder-v2-list/workorder-v2-list.component';
+import { ProcessBatchCloseComponent } from './process/process-batch-close/process-batch-close.component';
 
 
 
@@ -341,6 +342,7 @@ export function tokenGetter() {
         CreatmachineComponent,
         MachineProcessTimeComponent,
         WorkorderV2ListComponent,
+        ProcessBatchCloseComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },

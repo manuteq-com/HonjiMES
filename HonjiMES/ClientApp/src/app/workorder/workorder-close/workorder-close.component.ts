@@ -229,6 +229,7 @@ export class WorkorderCloseComponent implements OnInit, OnChanges {
         const Data = new workOrderReportData();
         Data.CreateUser = this. formData.CreateUser;
         // tslint:disable-next-line: max-line-length
+        debugger;
         const sendRequest = await SendService.sendRequest(this.http, '/WorkOrders/CloseWorkOrder', 'PUT', { key: this.workorderkeyval, values: Data });
         // let data = this.client.POST( this.url + '/OrderHeads/PostOrderMaster_Detail').toPromise();
         if (sendRequest) {

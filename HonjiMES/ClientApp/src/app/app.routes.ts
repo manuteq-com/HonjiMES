@@ -52,6 +52,7 @@ import { MachineInformationComponent } from './machinemanagemate/machine-informa
 import { MachineProcessTimeComponent } from './machine-process-time/machine-process-time.component';
 import { ReceiveInfoComponent } from './receive/receive-info/receive-info.component';
 import { WorkorderV2ListComponent } from './workorder/workorder-v2-list/workorder-v2-list.component';
+import { ProcessBatchCloseComponent } from './process/process-batch-close/process-batch-close.component';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -104,7 +105,9 @@ export const routes: Routes = [
     { path: 'machineinformation', component: MachineInformationComponent },
     { path: 'machineprocesstime', component: MachineProcessTimeComponent },
     { path: 'receiveInfo', component: ReceiveInfoComponent},
-    { path: 'machineorderv2', component:WorkorderV2ListComponent}
+    { path: 'machineorderv2', component:WorkorderV2ListComponent},
+    { path: 'processbatchclose', component:ProcessBatchCloseComponent}
+
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
