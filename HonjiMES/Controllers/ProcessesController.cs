@@ -338,14 +338,44 @@ namespace HonjiMES.Controllers
         public async Task<ActionResult<WorkOrderData>> GetProcessByWorkOrderId(int id)
         {
             var WorkOrderHeads = await _context.WorkOrderHeads.FindAsync(id);
-            var WorkOrderDetails = await _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0)
-            .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).Include(x => x.WorkOrderHead).ThenInclude(y => y.Requisitions)
-            .OrderBy(x => x.SerialNumber).ToListAsync();
-            var receive = _context.Receives.Include(x => x.RequisitionDetail).ThenInclude(x => x.Requisition).Where(x => x.DeleteFlag == 0 
-            && x.RequisitionDetail.Requisition.WorkOrderHeadId == id).Select(x=>x.Quantity);
+            var WorkOrderDetailsList = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == id && x.DeleteFlag == 0);
+            var WorkOrderDetails = await WorkOrderDetailsList
+                .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).Include(x => x.WorkOrderHead).ThenInclude(y => y.Requisitions)
+                .OrderBy(x => x.SerialNumber).ToListAsync();
+            var bbzIndex = WorkOrderDetailsList.Where(x => x.ProcessNo == "BBZ").FirstOrDefault().SerialNumber;
+            var firstIndex = WorkOrderDetailsList.OrderBy(x => x.SerialNumber).FirstOrDefault().SerialNumber;
+            firstIndex = bbzIndex == firstIndex ? firstIndex + 1 : firstIndex;
+            var receiveQuantity = _context.Receives.Include(x => x.RequisitionDetail).ThenInclude(x => x.Requisition).Where(x => x.DeleteFlag == 0 
+                && x.RequisitionDetail.Requisition.WorkOrderHeadId == id).Select(x=>x.Quantity).Sum();
+            var BillOfMaterial = _context.BillOfMaterials
+                .Where(x => x.DeleteFlag == 0 && x.ProductBasicId == WorkOrderHeads.DataId && x.Lv == 1 && x.Master == 1 && x.MaterialBasicId != null)
+                // .Include(x => x.Order)
+                // .Include(x => x.OrderDetail)
+                // .Include(x => x.Sale)
+                .OrderByDescending(x => x.MaterialBasic.MaterialNo).ThenBy(x => x.MaterialBasic.Name)
+                .Select(x => new BillOfMaterialData
+                {
+                    DataNo = x.MaterialBasic.MaterialNo,
+                    Quantity = x.Quantity
+                }).ToList();
+            var maxRequirment = BillOfMaterial.Max(x => x.Quantity);
             var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
+
             foreach (var item in WorkOrderDetails)
             {
+                var sameProcessRecount = WorkOrderDetailsList.Where(x => x.ProcessName == item.ProcessName && x.ProcessNo == item.ProcessNo
+                                                && x.Id != item.Id && x.DeleteFlag == 0).Select(x => x.ReCount).Sum();
+                int? availableMCount = 0;
+                if (item.SerialNumber == firstIndex)
+                {                    
+                    availableMCount = Convert.ToInt32(Math.Floor(receiveQuantity / maxRequirment) - sameProcessRecount);
+                }
+                else
+                {
+                    var prevProcessRecount = WorkOrderDetailsList.Where(x => x.SerialNumber == item.SerialNumber-1 
+                                                && x.DeleteFlag == 0).Select(x => x.ReCount).Sum();
+                    availableMCount = prevProcessRecount - sameProcessRecount;
+                }
                 WorkOrderDetailDataList.Add(new WorkOrderDetailData
                 {
                     Id = item.Id,
@@ -384,12 +414,14 @@ namespace HonjiMES.Controllers
                     ProcessType = item.Process.Type,
                     WorkOrderHead = item.WorkOrderHead,
                     ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * WorkOrderHeads.Count,
+                    AvailableMCount = availableMCount
                 });
             }
+
             var WorkOrderData = new WorkOrderData2
             {
                 WorkOrderHead = WorkOrderHeads,
-                ReceiveQuantity = receive.Sum(),
+                ReceiveQuantity = receiveQuantity,
                 WorkOrderDetail = WorkOrderDetailDataList
             };
             // var WorkOrder = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).Where(x => x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)).FirstOrDefaultAsync();
@@ -919,5 +951,44 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(data));
         }
+        private decimal CalculateAvailableMCount(int workOrderDetailID) 
+        {
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+
+            //取得DetailID
+            var workOrderDetails = _context.WorkOrderDetails.Where(x => x.Id == workOrderDetailID && x.DeleteFlag == 0).FirstOrDefault();            
+            var listByHead = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == workOrderDetails.WorkOrderHeadId && x.DeleteFlag == 0).ToList();
+            //取得bbzIndex
+            var bbzIndex = listByHead.Where(x => x.ProcessNo == "BBZ").FirstOrDefault().SerialNumber;
+            //取得firstProcessIndex
+            var firstIndex = listByHead.OrderBy(x => x.SerialNumber).FirstOrDefault().SerialNumber;
+            //比較bbz與firstProcess是否為相同工序,若是,則firstIndex+1
+            firstIndex = bbzIndex == firstIndex ? firstIndex +1 : firstIndex;
+            //取得BOM
+            var BillOfMaterial = _context.BillOfMaterials
+                .Where(x => x.DeleteFlag == 0 && x.ProductBasicId == workOrderDetails.WorkOrderHead.DataId && x.Lv == 1 && x.Master == 1 && x.MaterialBasicId != null)
+                // .Include(x => x.Order)
+                // .Include(x => x.OrderDetail)
+                // .Include(x => x.Sale)
+                .OrderByDescending(x => x.MaterialBasic.MaterialNo).ThenBy(x => x.MaterialBasic.Name)
+                .Select(x => new BillOfMaterialData
+                {
+                    DataNo = x.MaterialBasic.MaterialNo,
+                    Quantity = x.Quantity
+                }).ToList();
+            var maxRequirment = BillOfMaterial.Max(x => x.Quantity);
+
+            if (workOrderDetails.SerialNumber == firstIndex)
+            {
+
+            }
+            else
+            {
+            }
+
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            return 0.0m;
+        }
+
     }
 }

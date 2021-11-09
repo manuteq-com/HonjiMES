@@ -1062,45 +1062,50 @@ namespace HonjiMES.Controllers
                         }
 
                         //// 2020/10/19 領料完成自動回報(報工) 工單第一站工序(AMA)。
+                        //// 2021/11/09 領料完成自動回報(報工) 工單的領料工序(BBZ)，生管說上面這位理解錯誤。
                         var dt = DateTime.Now;
-                        var FirstWorkOrderDetails = WorkOrderHead.WorkOrderDetails.Where(x => x.SerialNumber == 1 && x.DeleteFlag == 0).FirstOrDefault();
-                        if (FirstWorkOrderDetails.ActualStartTime == null)
+                        var FirstWorkOrderDetails = WorkOrderHead.WorkOrderDetails.Where(x => x.ProcessNo == "BBZ" && x.DeleteFlag == 0).FirstOrDefault();
+                        if (FirstWorkOrderDetails != null)
                         {
-                            FirstWorkOrderDetails.ActualStartTime = dt;
-                        }
-                        FirstWorkOrderDetails.ActualEndTime = dt;
-                        FirstWorkOrderDetails.Status = 3; // 完工
+                            if (FirstWorkOrderDetails.ActualStartTime == null)
+                            {
+                                FirstWorkOrderDetails.ActualStartTime = dt;
+                            }
+                            FirstWorkOrderDetails.ActualEndTime = dt;
+                            FirstWorkOrderDetails.Status = 3; // 完工
 
-                        // 如果[工單Head]狀態為[已派工]，則改為[以開工]
-                        if (FirstWorkOrderDetails.WorkOrderHead.Status == 1) {
-                            FirstWorkOrderDetails.WorkOrderHead.Status = 2;
-                        }
+                            // 如果[工單Head]狀態為[已派工]，則改為[以開工]
+                            if (FirstWorkOrderDetails.WorkOrderHead.Status == 1)
+                            {
+                                FirstWorkOrderDetails.WorkOrderHead.Status = 2;
+                            }
 
-                        FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
-                        {
-                            // WorkOrderDetailId = FirstWorkOrderDetails.Id,
-                            ReportType = 2, // 完工回報
-                            // PurchaseId = FirstWorkOrderDetails.PurchaseId,
-                            // PurchaseNo = FirstWorkOrderDetails.,
-                            // SupplierId = FirstWorkOrderDetails.SupplierId,
-                            // DrawNo = FirstWorkOrderDetails.DrawNo,
-                            // CodeNo = WorkOrderReportData.CodeNo,
-                            // Manpower = FirstWorkOrderDetails.Manpower,
-                            // ProducingMachineId = FirstWorkOrderDetails.,
-                            // ProducingMachine = WorkOrderReportData.ProducingMachine,
-                            // ReCount = WorkOrderReportData.ReCount,
-                            // RePrice = WorkOrderReportData.RePrice,
-                            // NgCount = WorkOrderReportData.NgCount,
-                            // Message = WorkOrderReportData.Message,
-                            StatusO = 0,
-                            StatusN = 3,
-                            DueStartTime = FirstWorkOrderDetails.DueStartTime,
-                            DueEndTime = FirstWorkOrderDetails.DueEndTime,
-                            ActualStartTime = dt,
-                            ActualEndTime = dt,
-                            CreateTime = dt,
-                            CreateUser = PostRequisition.CreateUser,
-                        });
+                            FirstWorkOrderDetails.WorkOrderReportLogs.Add(new WorkOrderReportLog
+                            {
+                                // WorkOrderDetailId = FirstWorkOrderDetails.Id,
+                                ReportType = 2, // 完工回報
+                                                // PurchaseId = FirstWorkOrderDetails.PurchaseId,
+                                                // PurchaseNo = FirstWorkOrderDetails.,
+                                                // SupplierId = FirstWorkOrderDetails.SupplierId,
+                                                // DrawNo = FirstWorkOrderDetails.DrawNo,
+                                                // CodeNo = WorkOrderReportData.CodeNo,
+                                                // Manpower = FirstWorkOrderDetails.Manpower,
+                                                // ProducingMachineId = FirstWorkOrderDetails.,
+                                                // ProducingMachine = WorkOrderReportData.ProducingMachine,
+                                                // ReCount = WorkOrderReportData.ReCount,
+                                                // RePrice = WorkOrderReportData.RePrice,
+                                                // NgCount = WorkOrderReportData.NgCount,
+                                                // Message = WorkOrderReportData.Message,
+                                StatusO = 0,
+                                StatusN = 3,
+                                DueStartTime = FirstWorkOrderDetails.DueStartTime,
+                                DueEndTime = FirstWorkOrderDetails.DueEndTime,
+                                ActualStartTime = dt,
+                                ActualEndTime = dt,
+                                CreateTime = dt,
+                                CreateUser = PostRequisition.CreateUser,
+                            });
+                        }
                         await _context.SaveChangesAsync();
                     }
                 }
