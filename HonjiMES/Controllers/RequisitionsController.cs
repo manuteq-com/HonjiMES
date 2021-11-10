@@ -984,7 +984,7 @@ namespace HonjiMES.Controllers
                         ProductNo = item.FirstOrDefault().ProductNo,
                         MaterialBasicId = item.FirstOrDefault().MaterialBasicId,
                         MaterialNo = item.FirstOrDefault().MaterialNo,
-                        Quantity = item.FirstOrDefault().Quantity,
+                        Quantity = item.Sum(x => x.Quantity),
                         ReceiveQty = item.Sum(x => x.ReceiveQty),
                         RbackQty = Math.Abs(item.Sum(x => x.RbackQty)),
                         NameNo = item.FirstOrDefault().NameNo,
