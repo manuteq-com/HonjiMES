@@ -342,7 +342,8 @@ namespace HonjiMES.Controllers
             var WorkOrderDetails = await WorkOrderDetailsList
                 .Include(x => x.Process).Include(x => x.WorkOrderHead).ThenInclude(y => y.OrderDetail).Include(x => x.WorkOrderHead).ThenInclude(y => y.Requisitions)
                 .OrderBy(x => x.SerialNumber).ToListAsync();
-            var bbzIndex = WorkOrderDetailsList.Where(x => x.ProcessNo == "BBZ").FirstOrDefault().SerialNumber;
+            var bbzDetail = WorkOrderDetailsList.Where(x => x.ProcessNo == "BBZ").OrderBy(x=>x.SerialNumber).FirstOrDefault();
+            var bbzIndex = bbzDetail == null ? 0 : bbzDetail.SerialNumber;
             var firstIndex = WorkOrderDetailsList.OrderBy(x => x.SerialNumber).FirstOrDefault().SerialNumber;
             firstIndex = bbzIndex == firstIndex ? firstIndex + 1 : firstIndex;
             var receiveQuantity = _context.Receives.Include(x => x.RequisitionDetail).ThenInclude(x => x.Requisition).Where(x => x.DeleteFlag == 0 
@@ -366,7 +367,7 @@ namespace HonjiMES.Controllers
                 var sameProcessRecount = WorkOrderDetailsList.Where(x => x.ProcessName == item.ProcessName && x.ProcessNo == item.ProcessNo
                                                 && x.Id != item.Id && x.DeleteFlag == 0).Select(x => x.ReCount).Sum();
                 int? availableMCount = 0;
-                if (item.SerialNumber == firstIndex)
+                if (item.SerialNumber == firstIndex || item.SerialNumber == bbzIndex)
                 {                    
                     availableMCount = Convert.ToInt32(Math.Floor(receiveQuantity / maxRequirment) - sameProcessRecount);
                 }
