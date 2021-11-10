@@ -29,7 +29,7 @@ export class WorkorderV2ListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.ReportHeight = 800;
+        this.ReportHeight = 809;
         this.stDate = moment().startOf('isoWeek').toDate();
         this.endDate = moment().endOf('isoWeek').toDate();
         this.app.GetData('/Users/GetUsers').subscribe(

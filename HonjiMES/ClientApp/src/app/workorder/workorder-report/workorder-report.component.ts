@@ -65,6 +65,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     itemval18: string;
     itemval19: string;
     itemval20: string;
+    itemval21: string;
 
     value: any;
     ReCount: any;
@@ -106,6 +107,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     remoteOperations: boolean;
     NcCountVisible: boolean;
     workorderkey: any;
+    MCounteditorOptions: { max: any; min: number; };
+    maxMCount: any;
 
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
@@ -362,7 +365,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.itemval18 = '　　　　工單數量：　' + (element?.Count ?? '0');
                                 this.itemval20 = '　　　　完工數量：　' + (element?.ReCount ?? '0') + '　　( NG數量：' + element?.NgCount + ' )';
                                 this.itemval6 = '';
-
+                                this.itemval21 = '　　　可製造數量：　' + (element?.AvailableMCount ?? '0');
                                 const reCount = (element?.Count ?? '0') - (element?.ReCount ?? '0');
                                 this.QuantityEditorOptions = {
                                     showSpinButtons: true,
@@ -381,6 +384,8 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                 this.formData.MCount = element?.MCount ?? '0';
                                 this.setUserList(this.formData.CreateUser);
                                 findProcess = true;
+                                this.maxMCount = element?.AvailableMCount ?? 0;
+                                //this.MCounteditorOptions = { max: element?.AvailableMCount ?? 0 , min:0};
                                 // this.ReCount = this.formData.ReCount;
                                 // this.NgCount = this.formData.NgCount;
                                 // $('#numberBox').dxNumberBox('setValue', this.formData.ReCount);
@@ -635,7 +640,7 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
     validate_before(): boolean {
         // 表單驗證
         if (this.myform.instance.validate().isValid === false) {
-            this.showMessage('error', '請注意訂單內容必填的欄位', 3000);
+            this.showMessage('error', '請注意訂單內容必填的欄位或欲製造數量有誤', 3000);
             return false;
         }
         return true;
