@@ -137,20 +137,24 @@ export class ReceiveInfoComponent implements OnInit, OnChanges {
                         }
                     );
                 }
-               if(this.formData.WorkOrderNo){
-                  this.formData.MaterialBasicId = undefined;
-               }
+                if (this.formData.WorkOrderNo) {
+                    this.formData.MaterialBasicId = undefined;
+                }
             }
         );
     }
     async onValueChanged(e) {
+        console.log("清除品號", this.formData);
         // this.buttondisabled = false;
         this.GetRequisitionsDetail(e.value);
 
     }
 
     async onValueChangedDataNo(e) {
-        this.formData.WorkOrderNo = undefined;
+        console.log("清除工單", this.formData);
+        if (this.formData.MaterialBasicId) {
+            this.formData.WorkOrderNo = undefined;
+        }
         let key = e.value;
         this.app.GetData('/Users/GetUsers').subscribe(
             (s2) => {
