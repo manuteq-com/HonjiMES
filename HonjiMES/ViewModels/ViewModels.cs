@@ -812,7 +812,11 @@ namespace HonjiMES.Models
         public MbomModelHead MbomModelHead { get; set; }
         public List<MbomModelDetail> MbomModelDetail { get; set; }
     }
-
+    public class WorkOrderCloseBatch
+    {
+        public int CreateUser { get; set; }
+        public List<int> KeyList { get; set; }
+    }
     public class WorkOrderReportData
     {
         public int WorkOrderID { get; set; }
