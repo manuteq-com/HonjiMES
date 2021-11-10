@@ -1,1 +1,9 @@
 
+::ng-deep .dx-popup-bottom.dx-toolbar{
+    padding: 10px 20px;
+}
+
+::ng-deep .dx-popup-content{
+    padding: 5px 20px 10px 20px;
+}
+

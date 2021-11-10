@@ -55,11 +55,13 @@
 </dx-data-grid>
 
 <dx-popup [showTitle]="true" title="結案確認" [dragEnabled]="false" [closeOnOutsideClick]="false" [width]="600"
-    [height]="610" [(visible)]="closepopupVisible">
+    [height]="610" [(visible)]="closepopupVisible" container=".dx-viewport">
+    <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="confirmButtonOptions">
+    </dxi-toolbar-item>
     <div *dxTemplate="let data of 'content'">
         <dx-scroll-view width="100%" height="100%">
             <div style="width: 100%;">
-                <div style="position: fixed; top:60px; background-color: white; width: 550px;">
+                <div style="position: fixed; top:53px; background-color: white; width: 558px; padding-top:10px">
                     筆數：{{selectedData.length}}
                     <form action="" (submit)="onFormSubmit($event)">
                         <dx-form id="form" [formData]="formData" [showColonAfterLabel]="true" [labelLocation]="'left'"
@@ -72,33 +74,27 @@
                             </dxi-item>
 
                         </dx-form>
-
-
-                        <div class="col-auto-12 mt-1 mb-1">
-                            <dx-button horizontalAlignment="left" class="pl-3 pr-3 pb-1" text='確認結案' type='success'
-                                icon='save' [useSubmitBehavior]="true" [disabled]="buttondisabled"></dx-button>
-                        </div>
                     </form>
                 </div>
 
+                    <table style="border: 1px solid black; width: 99%; margin-top: 70px">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid black">工單號</th>
+                                <th style="border: 1px solid black">品號</th>
+                            </tr>
+                            <tr *ngFor="let dData of selectedData; let i=index; let odd=odd;">
+                                <td style="border: 1px solid black"> {{dData.WorkOrderNo}}</td>
+                                <td style="border: 1px solid black"> {{dData.DataNo}}</td>
+                            </tr>
+                        </thead>
+                    </table>
 
-                <table style="border: 1px solid black; width: 100%; margin-top: 100px;">
-                    <thead>
-                        <tr>
-                            <th style="border: 1px solid black">工單號</th>
-                            <th style="border: 1px solid black">品號</th>
-                        </tr>
-                        <tr *ngFor="let dData of selectedData; let i=index; let odd=odd;">
-                            <td style="border: 1px solid black"> {{dData.WorkOrderNo}}</td>
-                            <td style="border: 1px solid black"> {{dData.DataNo}}</td>
-                        </tr>
-                    </thead>
-                </table>
             </div>
         </dx-scroll-view>
     </div>
 </dx-popup>
 
-<div class="d-flex justify-content-end">
-    <dx-button text="建立工單" type="default" (onClick)="toSave()"></dx-button>
+<div class="d-flex justify-content-end mt-1">
+    <dx-button text="工單結案" type="default" (onClick)="toSave()"></dx-button>
 </div>

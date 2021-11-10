@@ -30,14 +30,29 @@ export class ProcessBatchCloseComponent implements OnInit {
     selectedKeys: any[] & Promise<any> & JQueryPromise<any>;
     UserList: any[];
     width: any;
+    buttondisabled: boolean = false;
     UserEditorOptions: { items: any; displayExpr: string; valueExpr: string; value: any; searchEnabled: boolean; disabled: boolean; };
+    confirmButtonOptions: any;
 
     constructor(public http: HttpClient, myservice: Myservice, public app: AppComponent, private titleService: Title) {
         const authenticationService = new AuthService(http);
         const currentUser = authenticationService.currentUserValue;
+        const that = this;
+        this.confirmButtonOptions = {
+            text: '確定結案',
+            type:'success',
+            icon:'save',
+            useSubmitBehavior:"true",
+            disabled: this.buttondisabled,
+            onClick(e) {
+                that.onFormSubmit(e);
+                that.closepopupVisible = false;
+            },
+          };
 
         this.listStatus = myservice.getWorkOrderStatus();
         this.uploadUrl = location.origin + '/api/WorkOrders/PostWorkOrdeByExcel';
+
         this.dataSourceDB = new CustomStore({
             key: 'Id',
             load: (loadOptions) => SendService.sendRequest(
@@ -64,6 +79,7 @@ export class ProcessBatchCloseComponent implements OnInit {
     ngOnInit() {
         this.selectedRowKeys = [];
         this.titleService.setTitle('工單管理');
+
 
     }
 
@@ -104,7 +120,7 @@ export class ProcessBatchCloseComponent implements OnInit {
     }
 
     onFormSubmit = async function (e) {
-        // this.buttondisabled = true;
+        this.buttondisabled = true;
         if (this.validate_before() === false) {
             this.buttondisabled = false;
             return;
@@ -119,8 +135,10 @@ export class ProcessBatchCloseComponent implements OnInit {
         debugger;
         const sendRequest = SendService.sendRequest(this.http, '/WorkOrders/BatchCloseWorkOrder', 'PUT', { key: 1 , values: Data });
         if (sendRequest) {
+            this.buttondisabled = false;
             this.closepopupVisible = false;
             this.dataGrid1.instance.refresh();
+            this.dataGrid1.instance.clearSelection();
             notify({
                 message: '更新完成',
                 position: {
@@ -128,7 +146,10 @@ export class ProcessBatchCloseComponent implements OnInit {
                     at: 'center top'
                 }
             }, 'success', 3000);
+        } else {
+            this.buttondisabled = false;
         }
+        this.formData.CreateUser= undefined;
     };
 
     showMessage(type, data, val) {
