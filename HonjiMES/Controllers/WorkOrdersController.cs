@@ -1225,7 +1225,7 @@ namespace HonjiMES.Controllers
         /// <param name="id"></param>
         /// <param name="WorkOrderReportData"></param>
         /// <returns></returns>
-        // PUT: api/BillofPurchaseHeads/5
+        // PUT: api/CloseWorkOrder/
         [HttpPut("{id}")]
         public async Task<IActionResult> CloseWorkOrder(int id, WorkOrderReportData WorkOrderReportData)
         {
@@ -1250,6 +1250,39 @@ namespace HonjiMES.Controllers
                 throw;
             }
             return Ok(MyFun.APIResponseOK(OWorkOrderHead));
+        }
+
+        /// <summary>
+        /// 批次工單結案
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="WorkOrderCloseBatch"></param>
+        /// <returns></returns>
+        // PUT: api/CloseWorkOrderBatch/
+        [HttpPut("{id}")]
+        public async Task<IActionResult> CloseWorkOrderBatch(int id, WorkOrderCloseBatch WorkOrderCloseBatch)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = false;//加快查詢用，不抓關連的資料
+            foreach(var item in WorkOrderCloseBatch.KeyList)
+            {
+                var OWorkOrderHead = _context.WorkOrderHeads.Find(id);
+                if (OWorkOrderHead.Status != 5)
+                {
+                    OWorkOrderHead.Status = 5;//結案
+                    OWorkOrderHead.UpdateTime = DateTime.Now;
+                    OWorkOrderHead.UpdateUser = WorkOrderCloseBatch.CreateUser;
+                }
+            }
+            
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(MyFun.APIResponseOK("OK"));
         }
 
         /// <summary>
