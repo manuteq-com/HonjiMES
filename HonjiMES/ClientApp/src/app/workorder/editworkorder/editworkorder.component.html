@@ -86,9 +86,9 @@
              </dxo-form>
         </dxo-editing>
         <dxo-row-dragging
-            [allowReordering]="true"
+            [allowReordering]="allowReordering"
             [onReorder]="onReorder"
-            [showDragIcons]="true"
+            [showDragIcons]="allowReordering"
         ></dxo-row-dragging>
         <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="page"></dxo-selection>
         <dxi-column type="selection" alignment="center" [width]="30"></dxi-column>
@@ -181,8 +181,8 @@
             [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStartClick($event)" (focusStateEnabledChange)="true"></dx-button>
         <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true"
             class="pl-3 pr-3 pb-1 mr-3" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
-        <!-- <dx-button horizontalAlignment="right" text='取消變更' type='warring' icon='close' [useSubmitBehavior]="true"
-            class="pl-3 pr-3 pb-1 mr-3" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button> -->
+        <dx-button horizontalAlignment="right" text='取消編輯' type='danger' icon='close' stylingMode="contained"
+            class="pl-3 py-1 pr-3 mr-3" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button>
     </div>
 </form>
 

@@ -88,6 +88,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     keyupEnter: boolean;
     HasPermission: boolean;
     productBasicChange: boolean;
+    allowReordering: boolean = true;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -451,6 +452,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
 
     }
     onInitNewRow(e) {
+        this.allowReordering = false;
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
 
@@ -612,7 +614,9 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.saveCheck = true;
     }
     CancelOnClick(e){
-        this.SubmitVal = 'cancel';
+        //this.SubmitVal = 'cancel';
+        this.dataGrid2.instance.cancelEditData();
+        this.allowReordering = true;
     }
     ReportByPurchaseNo(workOrderHeadId, serial) {
         Swal.fire({
