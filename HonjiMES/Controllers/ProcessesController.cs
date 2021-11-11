@@ -603,7 +603,7 @@ namespace HonjiMES.Controllers
                 }
                 else
                 {
-                    if (_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderData.WorkOrderHead.WorkOrderNo && x.Id != id).Any())
+                    if (_context.WorkOrderHeads.Where(x => x.WorkOrderNo == WorkOrderData.WorkOrderHead.WorkOrderNo && x.Id != id && x.DeleteFlag == 0).Any())
                     {
                         return Ok(MyFun.APIResponseError("工單更新失敗! 工單號不可以重覆"));
                     }
