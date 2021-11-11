@@ -371,16 +371,23 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         });
     }
     onReorder(e) {
-        this.dataGrid2.instance.saveEditData();
         const visibleRows = e.component.getVisibleRows();
-        const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
+        const appendLength = visibleRows.length - this.dataSourceDB.length;
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
-
+        //判斷是否為新增工序，若是因長度+1，所以拖動要+1
+        const toIndex = fromIndex == -1 ? 
+                        this.dataSourceDB.indexOf(visibleRows[e.toIndex].data) +appendLength : this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
+        this.dataGrid2.instance.saveEditData();        
         this.dataSourceDB.splice(fromIndex, 1);
         this.dataSourceDB.splice(toIndex, 0, e.itemData);
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
+    }
+    onDragStart(e){
+        if (!e.itemData.ProcessId){
+            e.cancel = true;
+        }
     }
     onFocusedCellChanging(e) {
     }
@@ -857,7 +864,9 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 if (e.column.cssClass === 'addmod') {
                     this.dataGrid2.instance.saveEditData();
                     // tslint:disable-next-line: deprecation
-                    this.dataGrid2.instance.addRow();
+                    if (!this.dataGrid2.instance.hasEditData()){
+                        this.dataGrid2.instance.addRow();
+                    }
                 }
             }
         } else if (e.rowType === 'header' && e.rowType === 'data') {

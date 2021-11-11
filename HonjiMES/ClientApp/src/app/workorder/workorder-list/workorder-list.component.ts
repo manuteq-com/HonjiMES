@@ -11,6 +11,7 @@ import { APIResponse } from 'src/app/app.module';
 import { Title } from '@angular/platform-browser';
 import { SignalRService } from 'src/app/service/signal-r.service';
 import { HubConnectionBuilder } from '@aspnet/signalr';
+import { EditworkorderComponent } from '../editworkorder/editworkorder.component';
 @Component({
     selector: 'app-workorder-list',
     templateUrl: './workorder-list.component.html',
@@ -19,6 +20,7 @@ import { HubConnectionBuilder } from '@aspnet/signalr';
 export class WorkorderListComponent implements OnInit {
     @ViewChild('basicTable') dataGrid: DxDataGridComponent;
     @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+    @ViewChild(EditworkorderComponent) editworkorder: EditworkorderComponent;
     dataSourceDB: any = {};
     dataSourceDBDisplay: any = {};
     creatpopupVisible: any;
@@ -320,5 +322,9 @@ export class WorkorderListComponent implements OnInit {
                 at: 'center top'
             }
         }, type, val);
+    }
+
+    onHiding(e){
+        this.editworkorder.dataGrid.instance.cancelEditData();
     }
 }

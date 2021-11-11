@@ -82,7 +82,11 @@
         (onCellClick)="cellClick($event)" (onCellPrepared)="onCellPrepared($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)" (onRowRemoved)="onRowRemoved($event)">
 
-        <dxo-row-dragging [allowReordering]="allowReordering" [onReorder]="onReorder" [showDragIcons]="allowReordering">
+        <dxo-row-dragging 
+            [allowReordering]="allowReordering" 
+            [onReorder]="onReorder" 
+            [showDragIcons]="allowReordering"
+            [onDragStart]="onDragStart">
         </dxo-row-dragging>
 
         <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="allowEdit" [allowDeleting]="allowEdit">

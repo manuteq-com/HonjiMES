@@ -87,11 +87,19 @@
         <dxo-row-dragging
             [allowReordering]="allowReordering"
             [onReorder]="onReorder"
+            [onDragStart]="onDragStart"
             [showDragIcons]="allowReordering"
         ></dxo-row-dragging>
         <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="page"></dxo-selection>
         <dxi-column type="selection" alignment="center" [width]="30"></dxi-column>
         <dxi-column dataField="SerialNumber" caption="No" dataType="number" alignment="center" [width]="50" [allowEditing]="false"></dxi-column>
+        <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod">
+            <dxi-button name="save" text="存檔"></dxi-button>
+            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
+            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
+            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
+            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
+        </dxi-column>
         <dxi-column dataField="ProcessId" caption="製程名稱" editCellTemplate="ProcessEditCellTemplate" [width]="260" [allowEditing]="true">
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
@@ -103,7 +111,7 @@
         <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-
+        <dxi-column dataField="MCount" caption="報工" [allowEditing]="false" ></dxi-column>
         <dxi-column dataField="ReCount" caption="完工" [allowEditing]="false" ></dxi-column>
         <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" ></dxi-column>
         <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
@@ -129,13 +137,7 @@
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" dataType="varchar"  [allowEditing]="true"></dxi-column>
 
-        <dxi-column type="buttons" [width]="50" caption="新增" cssClass="addmod">
-            <dxi-button name="save" text="存檔"></dxi-button>
-            <dxi-button name="cancel" text="取消" icon="redo"></dxi-button>
-            <dxi-button name="edit" text="修改" type="success" icon="edit"></dxi-button>
-            <dxi-button name="delete" text="刪除" icon="trash"></dxi-button>
-            <dxi-button name="undelete" text="取消刪除" icon="redo"></dxi-button>
-        </dxi-column>
+        
 
         <!-- <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>

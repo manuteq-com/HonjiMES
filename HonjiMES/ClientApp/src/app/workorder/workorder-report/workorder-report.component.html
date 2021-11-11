@@ -58,11 +58,11 @@
             [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
 
             <dxi-item dataField="MCount" dataType="number" editorType="dxNumberBox" [colSpan]="2">
-                <dxo-label text="欲製造數量"></dxo-label>
+                <dxo-label text="報工數量"></dxo-label>
                 <dxi-validation-rule
               type="range"
               [max]="maxMCount"
-              message="欲製造數量已超過可造數量"
+              message="報工數量已超過可製造數量"
             ></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="CodeNo" [colSpan]="2" [disabled]="false" [visible]="HasCodeNoVisible">
