@@ -55,7 +55,6 @@
     <dx-data-grid #dataGrid2
         [dataSource]="dataSourceDB"
         [showBorders]="true"
-        keyExpr="Id"
         height="580"
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
@@ -181,8 +180,8 @@
             [useSubmitBehavior]="true" [visible]="stopVisible" (onClick)="onStartClick($event)" (focusStateEnabledChange)="true"></dx-button>
         <dx-button horizontalAlignment="right" text='更新儲存' type='success' icon='save' [useSubmitBehavior]="true"
             class="pl-3 pr-3 pb-1 mr-3" (onClick)="UpdateOnClick($event)" [visible]="!modVisible"></dx-button>
-        <dx-button horizontalAlignment="right" text='取消編輯' type='danger' icon='close' stylingMode="contained"
-            class="pl-3 py-1 pr-3 mr-3" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button>
+        <!-- <dx-button horizontalAlignment="right" text='取消編輯' type='danger' icon='close' stylingMode="contained"
+            class="pl-3 py-1 pr-3 mr-3" (onClick)="CancelOnClick($event)" [visible]="!modVisible"></dx-button> -->
     </div>
 </form>
 

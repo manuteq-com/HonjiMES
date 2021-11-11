@@ -371,6 +371,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         });
     }
     onReorder(e) {
+        this.dataGrid2.instance.saveEditData();
         const visibleRows = e.component.getVisibleRows();
         const toIndex = this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
@@ -452,7 +453,6 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
 
     }
     onInitNewRow(e) {
-        this.allowReordering = false;
         this.saveCheck = false;
         this.onCellPreparedLevel = 1;
 
@@ -616,7 +616,6 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     CancelOnClick(e){
         //this.SubmitVal = 'cancel';
         this.dataGrid2.instance.cancelEditData();
-        this.allowReordering = true;
     }
     ReportByPurchaseNo(workOrderHeadId, serial) {
         Swal.fire({
