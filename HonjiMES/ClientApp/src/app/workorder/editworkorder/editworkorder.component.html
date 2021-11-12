@@ -67,6 +67,7 @@
         (onEditorPreparing)="editorPreparing($event)"
         (onRowClick)="onRowClick($event)"
         (onCellClick)="cellClick($event)"
+        (onEditorPreparing)="onEditorPreparing($event)"
         [showColumnLines]="true"
         [showRowLines]="true"
         [columnAutoWidth]="true"
@@ -111,8 +112,8 @@
         <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="MCount" caption="報工" [allowEditing]="false" ></dxi-column>
-        <dxi-column dataField="ReCount" caption="完工" [allowEditing]="false" ></dxi-column>
+        <dxi-column dataField="MCount" caption="報工" ></dxi-column>
+        <dxi-column dataField="ReCount" caption="完工" ></dxi-column>
         <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" ></dxi-column>
         <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
             <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="良品數量 必須 >= 0">
@@ -122,7 +123,7 @@
         <dxi-column dataField="Message" caption="回報說明"></dxi-column>
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"  [allowEditing]="false" [visible]="false"></dxi-column>
         <!-- <dxi-column dataField="ProducingMachine" caption="機台" [width]="80"></dxi-column> -->
-        <dxi-column dataField="ProducingMachine" caption="機台" editCellTemplate="ProducingMachineTemplate" >
+        <dxi-column dataField="ProducingMachine" caption="機台"  editCellTemplate="ProducingMachineTemplate" >
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
@@ -137,7 +138,7 @@
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" dataType="varchar"  [allowEditing]="true"></dxi-column>
 
-        
+
 
         <!-- <dxi-column type="buttons">
             <dxi-button name="save" text="存檔"></dxi-button>
@@ -153,14 +154,14 @@
         </div>
 
         <div *dxTemplate="let data of 'ProducingMachineTemplate'">
-            <dx-select-box [value]="data.value"
+            <dx-select-box [value]="data.value" [readOnly]="readOnlyProducingMachine(data)"
                 [dataSource]="{ paginate: true, store: { type: 'array', data: MachineList, key:'Name' } }"
-                valueExpr="Name" displayExpr="Name" [searchEnabled]="true" (onValueChanged)="data.setValue($event.value)"></dx-select-box>
+                valueExpr="Name" displayExpr="Name" [searchEnabled]="true" (onValueChanged)="data.setValue($event.value)" ></dx-select-box>
             <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->
         </div>
 
         <div *dxTemplate="let data of 'UserTemplate'">
-            <dx-select-box [(value)]="data.value" (onValueChanged)="selectUserChanged($event,data)"
+            <dx-select-box [(value)]="data.value" (onValueChanged)="selectUserChanged($event,data)" [readOnly]="readOnlyCreateUser(data)"
                 [dataSource]="{ paginate: true, store: { type: 'array', data: UserList, key:'Id' } }" valueExpr="Id"
                 displayExpr="Realname" [searchEnabled]="false"></dx-select-box>
             <!-- <dx-text-box [value]="ProducingMachine" (onValueChanged)="data.setValue($event.value)"></dx-text-box> -->

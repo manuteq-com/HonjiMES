@@ -246,7 +246,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             (s) => {
                 if (s.success) {
                     if (s.success) {
-                        s.data.unshift({Id: null, Name: '<無>'}); // 加入第一行
+                        s.data.unshift({ Id: null, Name: '<無>' }); // 加入第一行
                         this.MachineList = s.data;
                     }
                 }
@@ -298,18 +298,18 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                     this.modCheck = true; // 避免製程資訊被刷新
                     this.dataSourceDB = s.data.WorkOrderDetail;
                     this.formData.WorkOrderHeadId = s.data.WorkOrderHead.Id;
-                        this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
-                        this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
-                        this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
-                        this.formData.Count = s.data.WorkOrderHead.Count;
-                        this.formData.OrderCount = s.data.WorkOrderHead.OrderCount;
-                        this.formData.DrawNo = s.data.WorkOrderHead.DrawNo;
-                        this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
-                        this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
-                        this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
-                        this.formData.DataNo = s.data.WorkOrderHead.DataNo;
-                        this.formData.CreateUser = s.data.WorkOrderHead.CreateUser;
-                        this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
+                    this.formData.WorkOrderNo = s.data.WorkOrderHead.WorkOrderNo;
+                    this.formData.CreateTime = s.data.WorkOrderHead.CreateTime;
+                    this.formData.MaterialBasicId = s.data.WorkOrderHead.DataId;
+                    this.formData.Count = s.data.WorkOrderHead.Count;
+                    this.formData.OrderCount = s.data.WorkOrderHead.OrderCount;
+                    this.formData.DrawNo = s.data.WorkOrderHead.DrawNo;
+                    this.formData.MachineNo = s.data.WorkOrderHead.MachineNo;
+                    this.formData.DueStartTime = s.data.WorkOrderHead.DueStartTime;
+                    this.formData.DueEndTime = s.data.WorkOrderHead.DueEndTime;
+                    this.formData.DataNo = s.data.WorkOrderHead.DataNo;
+                    this.formData.CreateUser = s.data.WorkOrderHead.CreateUser;
+                    this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
                 }
             }
         );
@@ -322,7 +322,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.onCellPreparedLevel = 0;
     }
     ngAfterViewInit() {
-        this.button.instance.registerKeyHandler('enter', function(e) {
+        this.button.instance.registerKeyHandler('enter', function (e) {
             // console.log(this.keyupEnter);
             this.keyupEnter = true;
         });
@@ -375,17 +375,17 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         const appendLength = visibleRows.length - this.dataSourceDB.length;
         const fromIndex = this.dataSourceDB.indexOf(e.itemData);
         //判斷是否為新增工序，若是因長度+1，所以拖動要+1
-        const toIndex = fromIndex == -1 ? 
-                        this.dataSourceDB.indexOf(visibleRows[e.toIndex].data) +appendLength : this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
-        this.dataGrid2.instance.saveEditData();        
+        const toIndex = fromIndex == -1 ?
+            this.dataSourceDB.indexOf(visibleRows[e.toIndex].data) + appendLength : this.dataSourceDB.indexOf(visibleRows[e.toIndex].data);
+        this.dataGrid2.instance.saveEditData();
         this.dataSourceDB.splice(fromIndex, 1);
         this.dataSourceDB.splice(toIndex, 0, e.itemData);
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
     }
-    onDragStart(e){
-        if (!e.itemData.ProcessId){
+    onDragStart(e) {
+        if (!e.itemData.ProcessId) {
             e.cancel = true;
         }
     }
@@ -500,7 +500,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             if (e.data.Type === 1 || // 種類為委外
                 (e.data.Type === 2 && e.data.Status === 2) || // 種類為委外(工單委外) // 已暫停使用
                 (e.data.Status === 7 && !this.HasPermission) // 狀態為暫停
-                ) {
+            ) {
                 const instance = CheckBox.getInstance(e.cellElement.querySelector('.dx-select-checkbox'));
                 instance.option('disabled', true);
                 this.disabledValues.push(e.data.Id);
@@ -550,7 +550,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             this.creatpopupVisible = true;
             this.ReportHeight = 879;
         } else {
-            const arr =  this.dataGrid2.instance.getSelectedRowKeys();
+            const arr = this.dataGrid2.instance.getSelectedRowKeys();
             if (e.isSelected) {
                 const index = arr.indexOf(e.data.Id, 0);
                 if (index > -1) {
@@ -586,12 +586,90 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             }
             if (e.data.Status === 2) {
                 e.rowElement.style.backgroundColor = '#f8f691';
+                //不可報工 可完工
             }
             if (e.data.Status === 3) {
                 e.rowElement.style.backgroundColor = '#9afd97';
             }
         }
     }
+
+    onEditorPreparing(e) {
+        //預設 不可填報工 不可填完工
+        //status ==1    可報工， 不可完工
+        //status ==2  不可報工，   可完工
+        // Status =0:
+        // 不能編輯 ReportCount ReportNgCount Message ProducingMachine CreateUser CodeNo
+
+        // Status =1:
+        // 可編輯：機台ProducingMachine、人員 CreateUser 、加工程式 CodeNo Message
+
+        // Status =2:
+        // 可編輯：良品數量ReportCount、回報NG ReportNgCount、回報說明 Message
+
+        // Status =3:
+        // 都不能編輯 ReportCount ReportNgCount Message ProducingMachine CreateUser CodeNo
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'MCount')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 1) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'ReCount')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 2) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'ReportCount')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 2) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'ReportNgCount')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 2) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'Message')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 1 || e.row.data.Status === 2) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+        if (e.parentType === 'dataRow' && (e.dataField === 'CodeNo')) {
+            e.editorOptions.disabled = true;
+            if (e.row.data.Status === 1) {
+                e.editorOptions.disabled = false;
+            }
+        }
+
+    }
+
+    readOnlyProducingMachine(e){
+        let defaultval = true;
+        if (e.data.Status === 1) {
+            defaultval = false;
+        }
+        return defaultval;
+    }
+
+    readOnlyCreateUser(e){
+        let defaultval = true;
+        if (e.data.Status === 1) {
+            defaultval = false;
+        }
+        return defaultval;
+    }
+
     validateNumber(e) {
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData().find(x => x.Id === e.data.Id);
         if (SelectedRows) {
@@ -615,12 +693,12 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     onReportClick(e) {
         this.SubmitVal = 'report';
     }
-    UpdateOnClick(e){
+    UpdateOnClick(e) {
         this.dataGrid2.instance.saveEditData();
         this.SubmitVal = 'update';
         this.saveCheck = true;
     }
-    CancelOnClick(e){
+    CancelOnClick(e) {
         //this.SubmitVal = 'cancel';
         this.dataGrid2.instance.cancelEditData();
     }
@@ -639,18 +717,18 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             showLoaderOnConfirm: true,
             preConfirm: (purchaseNo) => {
                 return this.app.GetData('/PurchaseHeads/GetPurchasesByPurchaseNo?DataNo=' + purchaseNo).toPromise()
-                .then(response => {
-                    if (!response.success) {
-                        // throw new Error(response.message);
-                        Swal.showValidationMessage(response.message);
-                    }
-                    return {purchaseId: response.data, purchaseNo};
-                })
-                .catch(error => {
-                    Swal.showValidationMessage(
-                        `Request failed: ${error}`
-                    );
-                });
+                    .then(response => {
+                        if (!response.success) {
+                            // throw new Error(response.message);
+                            Swal.showValidationMessage(response.message);
+                        }
+                        return { purchaseId: response.data, purchaseNo };
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                        );
+                    });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then(async (result) => {
@@ -690,7 +768,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
         return true;
     }
-    onFormSubmit = async function(e) {
+    onFormSubmit = async function (e) {
         // console.log(this.keyupEnter);
         // if (this.keyupEnter) {
         //     this.keyupEnter = false;
@@ -702,7 +780,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         let cansave = true;
         const saveEditData = this.dataGrid2.instance.saveEditData();
         const SelectedRows = this.dataGrid2.instance.getSelectedRowsData();
-        console.log('SelectedRows',SelectedRows);
+        console.log('SelectedRows', SelectedRows);
         this.postval = {
             WorkOrderHead: {
                 // Id: this.itemkeyval.Key,
@@ -712,7 +790,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 // DataType: 2,
                 DataId: this.formData.MaterialBasicId,
                 Count: this.formData.Count,
-                OrderCount : this.formData.OrderCount,
+                OrderCount: this.formData.OrderCount,
                 DrawNo: this.formData.DrawNo,
                 MachineNo: this.formData.MachineNo,
                 DueStartTime: this.formData.DueStartTime,
@@ -721,7 +799,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             },
             WorkOrderDetail: this.dataSourceDB
         };
-        if(this.SubmitVal === 'update') {
+        if (this.SubmitVal === 'update') {
             // tslint:disable-next-line: max-line-length
             const sendRequest = await SendService.sendRequest(this.http, '/Processes/PutWorkOrderList', 'PUT', { key: this.formData.WorkOrderHeadId, values: this.postval });
             // this.viewRefresh(e, sendRequest);
@@ -864,7 +942,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 if (e.column.cssClass === 'addmod') {
                     this.dataGrid2.instance.saveEditData();
                     // tslint:disable-next-line: deprecation
-                    if (!this.dataGrid2.instance.hasEditData()){
+                    if (!this.dataGrid2.instance.hasEditData()) {
                         this.dataGrid2.instance.addRow();
                     }
                 }
@@ -881,7 +959,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         });
         this.dataGrid2.instance.refresh();
     }
-    selectUserChanged(e,data){
+    selectUserChanged(e, data) {
         data.setValue(e.value);
     }
 }
