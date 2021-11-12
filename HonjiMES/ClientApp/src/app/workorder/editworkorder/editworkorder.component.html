@@ -105,17 +105,17 @@
             <dxo-lookup [dataSource]="ProcessBasicList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
             <dxi-validation-rule type="required" message="製程名稱 必填"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column dataField="Status" caption="目前狀態" alignment="center" [allowEditing]="false" >
+        <dxi-column dataField="Status" caption="目前狀態" alignment="center" [width]="75" [allowEditing]="false" >
             <dxo-lookup [dataSource]="WorkStatusList" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
 
-        <dxi-column dataField="Type" caption="委外" alignment="center" [allowEditing]="false" >
+        <dxi-column dataField="Type" caption="委外" alignment="center" [width]="50" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="MCount" caption="報工" ></dxi-column>
-        <dxi-column dataField="ReCount" caption="完工" ></dxi-column>
-        <dxi-column dataField="NgCount" caption="NG" [allowEditing]="false" ></dxi-column>
-        <dxi-column dataField="ReportCount" caption="良品數量" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
+        <dxi-column dataField="MCount" caption="報工" [width]="60"></dxi-column>
+        <dxi-column dataField="ReCount" caption="完工" [width]="60"></dxi-column>
+        <dxi-column dataField="NgCount" caption="NG" [width]="60" [allowEditing]="false" ></dxi-column>
+        <dxi-column dataField="ReportCount" caption="良品" [width]="60" dataType="number" editorType="dxNumberBox" [editorOptions]="editorOptions">
             <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="良品數量 必須 >= 0">
             </dxi-validation-rule>
         </dxi-column>
@@ -123,17 +123,17 @@
         <dxi-column dataField="Message" caption="回報說明"></dxi-column>
         <dxi-column dataField="ProcessCost" caption="成本" dataType="number" format="$ #,##0.##;($ #,##0.##)"  [allowEditing]="false" [visible]="false"></dxi-column>
         <!-- <dxi-column dataField="ProducingMachine" caption="機台" [width]="80"></dxi-column> -->
-        <dxi-column dataField="ProducingMachine" caption="機台"  editCellTemplate="ProducingMachineTemplate" >
+        <dxi-column dataField="ProducingMachine" caption="機台" alignment="center" [width]="75" editCellTemplate="ProducingMachineTemplate" >
             <dxo-lookup [dataSource]="MachineList" displayExpr="Name" valueExpr="Name"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="CreateUser" caption="人員" editCellTemplate="UserTemplate">
+        <dxi-column dataField="CreateUser" caption="人員" alignment="center" [width]="75" editCellTemplate="UserTemplate">
             <dxo-lookup [dataSource]="UserList" displayExpr="Realname" valueExpr="Id"></dxo-lookup>
             <!-- <dxi-validation-rule type="required" message="機台 必填"></dxi-validation-rule> -->
         </dxi-column>
-        <dxi-column dataField="CodeNo" caption="加工程式"></dxi-column>
+        <dxi-column dataField="CodeNo" caption="加工程式" alignment="center" [width]="75"></dxi-column>
         <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [allowEditing]="false" [width]="120"></dxi-column> -->
-        <dxi-column dataField="DueEndTime" caption="預計完工日" dataType="date" [allowEditing]="true" ></dxi-column>
+        <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="100" dataType="date" [allowEditing]="true" ></dxi-column>
         <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="180"  [allowEditing]="false"></dxi-column>
         <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" dataType="varchar"  [allowEditing]="true"></dxi-column>

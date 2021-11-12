@@ -117,8 +117,8 @@
         </app-workorder-report>
     </div>
 </dx-popup>
-<dx-popup [showTitle]="true" title="工單製程總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="760"
-    [width]="1600" [(visible)]="editpopupVisible" (onHiding)="onHiding($event)">
+<dx-popup [showTitle]="true" title="工單製程總覽" [dragEnabled]="false" [closeOnOutsideClick]="false" [height]="840"
+    [width]="1860" [(visible)]="editpopupVisible" (onHiding)="onHiding($event)">
     <div *dxTemplate="let data of 'content'">
         <app-editworkorder (childOuter)="creatpopup_result($event)" [itemkeyval]="itemtrkey" [modval]="mod"
             [randomkeyval]="randomkey" [popupkeyval]="editpopupVisible">
