@@ -793,6 +793,7 @@ namespace HonjiMES.Models
         /// 領料數量
         /// </summary>
         public decimal ReceiveQuantity { get; set; }
+        public int? AvailableMCountByReceive { get; set; }
     }
     public class WorkOrderData3
     {

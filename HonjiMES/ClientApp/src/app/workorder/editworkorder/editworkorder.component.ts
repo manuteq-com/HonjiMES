@@ -169,8 +169,8 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
-        this.minColWidth = 300;
-        this.colCount = 5;
+        this.minColWidth = 200;
+        this.colCount = 7;
         this.dataSourceDB = [];
         this.saveDisabled = true;
         this.modCheck = false;
@@ -310,6 +310,8 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                     this.formData.DataNo = s.data.WorkOrderHead.DataNo;
                     this.formData.CreateUser = s.data.WorkOrderHead.CreateUser;
                     this.NumberBoxOptions = { showSpinButtons: true, mode: 'number', min: 1, value: s.data.WorkOrderHead.Count };
+                    this.formData.ReceiveQuantity = s.data.ReceiveQuantity;
+                    this.formData.AvailableMCountByReceive = s.data.AvailableMCountByReceive;
                 }
             }
         );
@@ -385,7 +387,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         });
     }
     onDragStart(e) {
-        if (!e.itemData.ProcessId) {
+        if (!e.itemData.ProcessId || e.itemData.Status > 1) {
             e.cancel = true;
         }
     }

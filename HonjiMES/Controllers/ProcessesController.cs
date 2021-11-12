@@ -361,21 +361,24 @@ namespace HonjiMES.Controllers
                 }).ToList();
             var maxRequirment = BillOfMaterial.Max(x => x.Quantity);
             var WorkOrderDetailDataList = new List<WorkOrderDetailData>();
+            var availableMCountByReceive = 0;
 
             foreach (var item in WorkOrderDetails)
             {
-                var sameProcessRecount = WorkOrderDetailsList.Where(x => x.ProcessName == item.ProcessName && x.ProcessNo == item.ProcessNo
-                                                && x.Id != item.Id && x.DeleteFlag == 0).Select(x => x.ReCount).Sum();
+                var sameProcessMCount = WorkOrderDetailsList.Where(x => x.ProcessName == item.ProcessName && x.ProcessNo == item.ProcessNo
+                                                && x.Id != item.Id && x.DeleteFlag == 0).Select(x => x.MCount).Sum();
                 int? availableMCount = 0;
                 if (item.SerialNumber == firstIndex || item.SerialNumber == bbzIndex)
                 {                    
-                    availableMCount = Convert.ToInt32(Math.Floor(receiveQuantity / maxRequirment) - sameProcessRecount);
+                    availableMCount = Convert.ToInt32(Math.Floor(receiveQuantity / maxRequirment) - sameProcessMCount);
+                    availableMCountByReceive = (int)availableMCount;
                 }
                 else
                 {
-                    var prevProcessRecount = WorkOrderDetailsList.Where(x => x.SerialNumber == item.SerialNumber-1 
-                                                && x.DeleteFlag == 0).Select(x => x.ReCount).Sum();
-                    availableMCount = prevProcessRecount - sameProcessRecount;
+                    var prevProcessRecount = WorkOrderDetailsList.Where(x => x.SerialNumber < item.SerialNumber 
+                                                && x.ProcessName != item.ProcessName && x.DeleteFlag == 0)
+                                                .OrderByDescending(x=>x.SerialNumber).Select(x => x.ReCount).Sum();
+                    availableMCount = prevProcessRecount - sameProcessMCount;
                 }
                 WorkOrderDetailDataList.Add(new WorkOrderDetailData
                 {
@@ -423,7 +426,8 @@ namespace HonjiMES.Controllers
             {
                 WorkOrderHead = WorkOrderHeads,
                 ReceiveQuantity = receiveQuantity,
-                WorkOrderDetail = WorkOrderDetailDataList
+                WorkOrderDetail = WorkOrderDetailDataList,
+                AvailableMCountByReceive = availableMCountByReceive
             };
             // var WorkOrder = await _context.WorkOrderHeads.Include(x => x.WorkOrderDetails).Where(x => x.Id == id).Where(x => x.WorkOrderDetails.Where(y => y.DeleteFlag == 0)).FirstOrDefaultAsync();
             if (WorkOrderHeads == null || WorkOrderDetails == null)

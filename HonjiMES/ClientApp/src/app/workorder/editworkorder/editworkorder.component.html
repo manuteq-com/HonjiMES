@@ -16,6 +16,12 @@
         <dxi-item dataField="DataNo" [disabled]="true">
             <dxo-label text="品號"></dxo-label>
         </dxi-item>
+        <dxi-item dataField="ReceiveQuantity" [disabled]="true">
+            <dxo-label text="領料數量"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="AvailableMCountByReceive" [disabled]="true">
+            <dxo-label text="領料可生產的數量"></dxo-label>
+        </dxi-item>
         <!-- <dxi-item dataField="DataName" [disabled]="true">
             <dxo-label text="品名"></dxo-label>
         </dxi-item> -->
@@ -31,7 +37,7 @@
         </dxi-item> -->
         <dxi-item dataField="Count" dataType="number" editorType="dxNumberBox" [disabled]="true">
             <dxi-validation-rule type="required" message="數量 必填"></dxi-validation-rule>
-            <dxo-label text="數量"></dxo-label>
+            <dxo-label text="工單量"></dxo-label>
         </dxi-item>
         <!-- <dxi-item dataField="MachineNo" [disabled]="true">
             <dxo-label text="機號"></dxo-label>
@@ -112,6 +118,7 @@
         <dxi-column dataField="Type" caption="委外" alignment="center" [width]="50" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
+        <dxi-column dataField="AvailableMCount" caption="可製" [width]="60"></dxi-column>
         <dxi-column dataField="MCount" caption="報工" [width]="60"></dxi-column>
         <dxi-column dataField="ReCount" caption="完工" [width]="60"></dxi-column>
         <dxi-column dataField="NgCount" caption="NG" [width]="60" [allowEditing]="false" ></dxi-column>
