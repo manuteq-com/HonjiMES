@@ -22,6 +22,10 @@
     height: 28px;
     line-height: 18px;
 }
+.dx-data-row.dx-row-lines.dx-column-lines.dx-row-removed
+{
+    background-color: red !important;
+}
 
 // .dx-data-row同.dx-state-hover 同時都有的組合
 .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row)

@@ -589,7 +589,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
                 //不可報工 可完工
             }
             if (e.data.Status === 3) {
-                e.rowElement.style.backgroundColor = '#9afd97';
+                e.rowElement.style.backgroundColor = '#66cf66';
             }
         }
     }
