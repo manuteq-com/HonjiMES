@@ -663,7 +663,7 @@ namespace HonjiMES.Controllers
                             DrawNo = item.DrawNo,
                             Manpower = item.Manpower,
                             ProducingMachine = item.ProducingMachine == "" ? null : item.ProducingMachine,
-                            Status = OWorkOrderHeads.Status,
+                            Status = item.Status,
                             Type = item.Type,
                             Remarks = item.Remarks,
                             DueStartTime = item.DueStartTime,
