@@ -597,22 +597,19 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     }
 
     onEditorPreparing(e) {
-        //預設 不可填報工 不可填完工
-        //status ==1    可報工， 不可完工
-        //status ==2  不可報工，   可完工
-        // Status =0:
-        // 不能編輯 ReportCount ReportNgCount Message ProducingMachine CreateUser CodeNo
-
-        // Status =1:
-        // 可編輯：機台ProducingMachine、人員 CreateUser 、加工程式 CodeNo Message
-
-        // Status =2:
-        // 可編輯：良品數量ReportCount、回報NG ReportNgCount、回報說明 Message
-
-        // Status =3:
-        // 都不能編輯 ReportCount ReportNgCount Message ProducingMachine CreateUser CodeNo
+        // 可編輯如下條件
+        //”製程名稱” ProcessId ：狀態1
+        // “報工” MCount ：狀態1
+        // “完工” ReCount ：都鎖住
+        // “良品” ReportCount ：狀態2
+        // “回報NG” ReportNgCount：狀態2
+        // “回報說明” Message ：狀態1 2
+        // “機台” ProducingMachine ：狀態1
+        // “人員” CreateUser ：狀態1
+        // “加工程式” CodeNo ：狀態1
 
         if (e.parentType === 'dataRow' && (e.dataField === 'MCount')) {
+            console.log("MCount Status",e.row.data.Status);
             e.editorOptions.disabled = true;
             if (e.row.data.Status === 1) {
                 e.editorOptions.disabled = false;
@@ -621,9 +618,6 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
 
         if (e.parentType === 'dataRow' && (e.dataField === 'ReCount')) {
             e.editorOptions.disabled = true;
-            if (e.row.data.Status === 2) {
-                e.editorOptions.disabled = false;
-            }
         }
 
         if (e.parentType === 'dataRow' && (e.dataField === 'ReportCount')) {
@@ -654,6 +648,14 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
             }
         }
 
+    }
+
+    readOnlyProcessId(e){
+        let defaultval = true;
+        if (e.data.Status === 1) {
+            defaultval = false;
+        }
+        return defaultval;
     }
 
     readOnlyProducingMachine(e){
