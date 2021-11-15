@@ -1,3 +1,4 @@
+import { DataSource } from 'devextreme/data/data_source';
 import { Component, OnInit, OnChanges, Output, Input, ViewChild, EventEmitter, HostListener, AfterViewInit } from '@angular/core';
 import { DxFormComponent, DxDataGridComponent, DxButtonComponent } from 'devextreme-angular';
 import { HttpClient } from '@angular/common/http';
@@ -89,6 +90,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
     HasPermission: boolean;
     productBasicChange: boolean;
     allowReordering: boolean = true;
+    maxval: any;
 
     @HostListener('window:keyup', ['$event']) keyUp(e: KeyboardEvent) {
         if (this.popupkeyval && !this.creatpopupVisible) {
@@ -385,6 +387,8 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         this.dataSourceDB.forEach((element, index) => {
             element.SerialNumber = index + 1;
         });
+
+
     }
     onDragStart(e) {
         if (!e.itemData.ProcessId || e.itemData.Status > 1) {
@@ -597,6 +601,70 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         }
     }
 
+    getArrayObjKey(sourcedb,rowindex, availabecout,e){
+        this.maxval = availabecout;
+        var lastGroup = [];
+        var last2ndGroup = [];
+        var effectSource = sourcedb.slice(0, rowindex + 1);
+        var effectSource2 = [];
+        var last2ndProcessName = "";
+        var last2ndProcessNameIndex = -1;
+
+        //找最後一個
+        let lastProcessName = effectSource[effectSource.length - 1]["ProcessName"];
+
+        //找最後一個連續群組 lastGroup
+        for(let j = 2; j < effectSource.length + 1; j++){
+            if(effectSource[effectSource.length - j]["ProcessName"] === lastProcessName){
+                lastGroup.push(effectSource[effectSource.length - j]);
+            } else {
+                //決定上一個群組
+                last2ndProcessNameIndex = effectSource.length - j;
+                last2ndProcessName = effectSource[effectSource.length - j]["ProcessName"];
+                break;
+            }
+        }
+
+        //上一個群組區間
+        effectSource2 = sourcedb.slice(0,last2ndProcessNameIndex+1);
+
+        //決定上一個群組 last2ndGroup
+        for(let k = 1; k < effectSource2.length + 1; k++){
+            if(effectSource2[effectSource2.length - k]["ProcessName"] === last2ndProcessName){
+                last2ndGroup.push(effectSource2[effectSource2.length - k]);
+            } else {
+                break;
+            }
+        }
+
+        //上一個群組完工數總和
+        var sumall2nd = 0;
+        if(last2ndGroup.length > 0){
+            sumall2nd = last2ndGroup.map(item => item.ReCount ? item.ReCount : 0).reduce((prev, curr) => prev + curr, 0);
+        }
+
+        //最後一個群組報工數總和
+        var sumall = 0;
+        if(lastGroup.length > 0){
+            sumall = lastGroup.map(item => item.MCount ? item.MCount : 0).reduce((prev, curr) => prev + curr, 0);
+        }
+        console.log("rowindex",rowindex);
+
+        console.log("lastGroup", lastGroup, sumall );
+        console.log("last2ndGroup", last2ndGroup, sumall2nd);
+
+        //決定最大值
+        if(rowindex){
+            e.editorOptions.max = (sumall2nd - sumall) ? (sumall2nd - sumall) : 0;
+            console.log("maxval",e.editorOptions.max);
+        } else {
+            e.editorOptions.max = availabecout ? availabecout : 0;
+            console.log("maxval",e.editorOptions.max);
+        }
+
+
+    }
+
     onEditorPreparing(e) {
         // 可編輯如下條件
         //”製程名稱” ProcessId ：狀態1
@@ -609,16 +677,18 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
         // “人員” CreateUser ：狀態1
         // “加工程式” CodeNo ：狀態1
 
+
         if (e.parentType === 'dataRow' && (e.dataField === 'MCount')) {
-            console.log("MCount Status",e.row.data.Status);
             e.editorOptions.disabled = true;
             if (e.row.data.Status === 1) {
                 e.editorOptions.disabled = false;
+                this.getArrayObjKey(this.dataSourceDB,e.row.rowIndex, e.row.data.AvailableMCount , e);
             }
         }
 
         if (e.parentType === 'dataRow' && (e.dataField === 'ReCount')) {
             e.editorOptions.disabled = true;
+
         }
 
         if (e.parentType === 'dataRow' && (e.dataField === 'ReportCount')) {
