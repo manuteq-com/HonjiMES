@@ -467,6 +467,7 @@ export class EditworkorderComponent implements OnInit, OnChanges, AfterViewInit 
 
         this.SerialNo = this.dataSourceDB.length;
         this.SerialNo++;
+        e.data.Status = 1;
         e.data.SerialNumber = this.SerialNo;
         e.data.ProcessLeadTime = 0;
         e.data.ProcessTime = 0;

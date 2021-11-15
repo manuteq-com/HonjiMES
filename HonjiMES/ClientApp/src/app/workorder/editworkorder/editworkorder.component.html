@@ -78,6 +78,7 @@
         [columnAutoWidth]="true"
         [allowColumnResizing]="true"
         hoverStateEnabled="true">
+        <dxo-paging [enabled]="false"></dxo-paging>
         <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
 
         <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
@@ -117,7 +118,7 @@
         <dxi-column dataField="Type" caption="委外" alignment="center" [width]="50" [allowEditing]="false" >
             <dxo-lookup [dataSource]="listWorkOrderTypes" displayExpr="Name" valueExpr="Id"></dxo-lookup>
         </dxi-column>
-        <dxi-column dataField="AvailableMCount" caption="可製" [width]="60"></dxi-column>
+        <dxi-column dataField="AvailableMCount" caption="可製" [width]="60" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="MCount" caption="報工" [width]="60"></dxi-column>
         <dxi-column dataField="ReCount" caption="完工" [width]="60"></dxi-column>
         <dxi-column dataField="NgCount" caption="NG" [width]="60" [allowEditing]="false" ></dxi-column>
