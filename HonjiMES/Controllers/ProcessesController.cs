@@ -429,7 +429,11 @@ namespace HonjiMES.Controllers
             {
                 var sameProcessMCount = SameProcessMCount(WorkOrderDetailsList, item);
                 int? availableMCount = 0;
-                if (item.SerialNumber == firstIndex || item.SerialNumber == bbzIndex)
+                var prevProcess = WorkOrderDetailsList.Where(x => x.ProcessName != item.ProcessName && x.ProcessNo != item.ProcessNo
+                                                            && x.SerialNumber< item.SerialNumber && x.DeleteFlag == 0)
+                                                            .OrderByDescending(x => x.SerialNumber)
+                                                            .Select(x=>x.SerialNumber).FirstOrDefault();
+                if (prevProcess == bbzIndex || item.SerialNumber == bbzIndex)
                 {                    
                     availableMCount = Convert.ToInt32(Math.Floor(receiveQuantity / maxRequirment) - sameProcessMCount);
                     availableMCountByReceive = (int)availableMCount;
@@ -459,7 +463,7 @@ namespace HonjiMES.Controllers
                     Status = item.Status,
                     Type = item.Type,
                     Remarks = item.Remarks,
-                    ReCount = item.SerialNumber==bbzIndex? (int)receiveQuantity:item.ReCount,
+                    ReCount = item.SerialNumber == bbzIndex? (int)receiveQuantity : item.ReCount,
                     RePrice = item.RePrice,
                     NgCount = item.NgCount,
                     TotalTime = item.TotalTime,
@@ -472,7 +476,7 @@ namespace HonjiMES.Controllers
                     CreateUser = item.CreateUser,
                     UpdateTime = item.UpdateTime,
                     UpdateUser = item.UpdateUser,
-                    MCount = item.MCount,
+                    MCount = item.MCount ?? 0,
                     ProcessType = item.Process.Type,
                     WorkOrderHead = item.WorkOrderHead,
                     ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * WorkOrderHeads.Count,
