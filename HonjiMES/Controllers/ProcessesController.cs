@@ -327,6 +327,68 @@ namespace HonjiMES.Controllers
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(ProcessesStatus));
         }
+        /// <summary>
+        /// 計算某工序的前一道工序的產量
+        /// </summary>
+        /// <param name="WorkOrderDetailsList"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        private int PrevReCount(IQueryable<WorkOrderDetail> WorkOrderDetailsList, WorkOrderDetail query)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = true;
+            //_context.ChangeTracker.LazyLoadingEnabled = false;
+
+            var sumRecount = 0;
+            var prevProcessList = WorkOrderDetailsList.Where(x => x.SerialNumber < query.SerialNumber
+                                                && x.ProcessName != query.ProcessName && x.DeleteFlag == 0 && x.ProcessNo != "BBZ")
+                                                .OrderByDescending(x => x.SerialNumber).Select(x => new { x.ProcessName, x.ReCount});
+            if (prevProcessList == null)
+                return sumRecount;
+
+            var prevProvessName = prevProcessList.Select(x => x.ProcessName).FirstOrDefault();
+
+            foreach (var item in prevProcessList)
+            {
+                if (prevProvessName != item.ProcessName)
+                    break;                        
+                sumRecount += item.ReCount?? 0;
+            }
+            return sumRecount;
+        }
+
+        /// <summary>
+        /// 計算某工序的相同工序的報工數量
+        /// </summary>
+        /// <param name="workOrderDetailID"></param>
+        /// <returns></returns>
+        private int SameProcessMCount(IQueryable<WorkOrderDetail> WorkOrderDetailsList, WorkOrderDetail query)
+        {
+            //_context.ChangeTracker.LazyLoadingEnabled = true;
+            //_context.ChangeTracker.LazyLoadingEnabled = false;
+
+            var sumMcount = 0;
+            var sameProcessList = WorkOrderDetailsList.Where(x => x.ProcessName == query.ProcessName && x.ProcessNo == query.ProcessNo
+                                                             && x.DeleteFlag == 0).OrderBy(x=>x.SerialNumber).ToList();
+            if (sameProcessList == null)
+                return sumMcount;
+
+            var queryIndex = sameProcessList.IndexOf(query);
+
+            for(int i = queryIndex+1 ; i < sameProcessList.Count ; i++)
+            {
+                if (sameProcessList[i].ProcessName != query.ProcessName || sameProcessList[i].ProcessNo != query.ProcessNo)
+                    break;
+                sumMcount += sameProcessList[i].MCount?? 0;
+            }
+
+            for (int i = queryIndex-1; i > 0; i--)
+            {
+                if (sameProcessList[i].ProcessName != query.ProcessName || sameProcessList[i].ProcessNo != query.ProcessNo)
+                    break;
+                sumMcount += sameProcessList[i].MCount ?? 0;
+            }
+            return sumMcount;
+        }
 
         /// <summary>
         /// 用WorkOrderID取得製程資料 Head + Detail 
@@ -365,8 +427,7 @@ namespace HonjiMES.Controllers
 
             foreach (var item in WorkOrderDetails)
             {
-                var sameProcessMCount = WorkOrderDetailsList.Where(x => x.ProcessName == item.ProcessName && x.ProcessNo == item.ProcessNo
-                                                && x.Id != item.Id && x.DeleteFlag == 0).Select(x => x.MCount).Sum();
+                var sameProcessMCount = SameProcessMCount(WorkOrderDetailsList, item);
                 int? availableMCount = 0;
                 if (item.SerialNumber == firstIndex || item.SerialNumber == bbzIndex)
                 {                    
@@ -375,10 +436,7 @@ namespace HonjiMES.Controllers
                 }
                 else
                 {
-                    var prevProcessRecount = WorkOrderDetailsList.Where(x => x.SerialNumber < item.SerialNumber 
-                                                && x.ProcessName != item.ProcessName && x.DeleteFlag == 0)
-                                                .OrderByDescending(x=>x.SerialNumber).Select(x => x.ReCount).Sum();
-                    availableMCount = prevProcessRecount - sameProcessMCount;
+                    availableMCount = PrevReCount(WorkOrderDetailsList, item) - sameProcessMCount;
                 }
                 WorkOrderDetailDataList.Add(new WorkOrderDetailData
                 {
@@ -401,7 +459,7 @@ namespace HonjiMES.Controllers
                     Status = item.Status,
                     Type = item.Type,
                     Remarks = item.Remarks,
-                    ReCount = item.ReCount,
+                    ReCount = item.SerialNumber==bbzIndex? (int)receiveQuantity:item.ReCount,
                     RePrice = item.RePrice,
                     NgCount = item.NgCount,
                     TotalTime = item.TotalTime,
@@ -418,8 +476,8 @@ namespace HonjiMES.Controllers
                     ProcessType = item.Process.Type,
                     WorkOrderHead = item.WorkOrderHead,
                     ExpectedlTotalTime = (item.ProcessLeadTime + item.ProcessTime) * WorkOrderHeads.Count,
-                    AvailableMCount = availableMCount
-                });
+                    AvailableMCount = item.Status == 1 ? availableMCount : null
+                }) ;
             }
 
             var WorkOrderData = new WorkOrderData2
@@ -955,45 +1013,6 @@ namespace HonjiMES.Controllers
             }
             _context.ChangeTracker.LazyLoadingEnabled = false;
             return Ok(MyFun.APIResponseOK(data));
-        }
-        private decimal CalculateAvailableMCount(int workOrderDetailID) 
-        {
-            _context.ChangeTracker.LazyLoadingEnabled = true;
-
-            //取得DetailID
-            var workOrderDetails = _context.WorkOrderDetails.Where(x => x.Id == workOrderDetailID && x.DeleteFlag == 0).FirstOrDefault();            
-            var listByHead = _context.WorkOrderDetails.Where(x => x.WorkOrderHeadId == workOrderDetails.WorkOrderHeadId && x.DeleteFlag == 0).ToList();
-            //取得bbzIndex
-            var bbzIndex = listByHead.Where(x => x.ProcessNo == "BBZ").FirstOrDefault().SerialNumber;
-            //取得firstProcessIndex
-            var firstIndex = listByHead.OrderBy(x => x.SerialNumber).FirstOrDefault().SerialNumber;
-            //比較bbz與firstProcess是否為相同工序,若是,則firstIndex+1
-            firstIndex = bbzIndex == firstIndex ? firstIndex +1 : firstIndex;
-            //取得BOM
-            var BillOfMaterial = _context.BillOfMaterials
-                .Where(x => x.DeleteFlag == 0 && x.ProductBasicId == workOrderDetails.WorkOrderHead.DataId && x.Lv == 1 && x.Master == 1 && x.MaterialBasicId != null)
-                // .Include(x => x.Order)
-                // .Include(x => x.OrderDetail)
-                // .Include(x => x.Sale)
-                .OrderByDescending(x => x.MaterialBasic.MaterialNo).ThenBy(x => x.MaterialBasic.Name)
-                .Select(x => new BillOfMaterialData
-                {
-                    DataNo = x.MaterialBasic.MaterialNo,
-                    Quantity = x.Quantity
-                }).ToList();
-            var maxRequirment = BillOfMaterial.Max(x => x.Quantity);
-
-            if (workOrderDetails.SerialNumber == firstIndex)
-            {
-
-            }
-            else
-            {
-            }
-
-            _context.ChangeTracker.LazyLoadingEnabled = false;
-            return 0.0m;
-        }
-
+        }        
     }
 }
