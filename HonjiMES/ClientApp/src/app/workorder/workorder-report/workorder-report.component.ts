@@ -279,13 +279,22 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
         this.app.GetData('/Machines/GetMachines').subscribe(
             (s) => {
                 if (s.success) {
+                    s.data.sort(function (a, b) {
+                        if (a.Name < b.Name) {
+                            return -1;
+                        }
+                        if (a.Name > b.Name) {
+                            return 1;
+                        }
+                        return 0;
+                    })
                     s.data.unshift({ Id: null, Name: '<無>' }); // 加入第一行
                     this.MachineEditorOptions = {
                         items: s.data,
                         displayExpr: 'Name',
                         valueExpr: 'Name',
                         searchEnabled: true,
-                        readOnly: false,
+                        readOnly: true,
                     };
                 }
             }
@@ -402,12 +411,14 @@ export class WorkorderReportComponent implements OnInit, OnChanges {
                                     //debugger;
                                     this.ShowNCReportView(element.Status, element.Type);
                                 }
+
+                                //status =1 可填寫機台
+                                if (element.Status == 1) {
+                                    this.MachineEditorOptions.readOnly = false;
+                                }
                             }
                         });
 
-                        if (s.data.WorkOrderHead.Status == 2) {
-                            this.MachineEditorOptions.readOnly = true;
-                        }
                     }
                 }
             );
