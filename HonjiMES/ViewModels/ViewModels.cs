@@ -1242,6 +1242,12 @@ namespace HonjiMES.Models
         public int Id { get; set; }
         public string WorkOrderNo { get; set; }
         public int DetailSerialNumber { get; set; }
+        public string ProcessNo { get; set; }
+        public string ProcessName { get; set; }
+        public string DueEndTime { get; set; }
+        public int Count { get; set; }
+        public string DataNo { get; set; }
+
     }
 
 

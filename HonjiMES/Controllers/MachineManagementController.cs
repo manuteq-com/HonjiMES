@@ -118,8 +118,13 @@ namespace HonjiMES.Controllers
                             machineData.machineOrderList.Add(new machineOrder
                             {
                                 Id = itemdata.WorkOrderHead.Id,
-                                WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo + " / " + itemdata.ProcessNo + "_" + itemdata.ProcessName,
-                                DetailSerialNumber = itemdata.SerialNumber
+                                WorkOrderNo = itemdata.WorkOrderHead.WorkOrderNo,
+                                DataNo = itemdata.WorkOrderHead.DataNo,
+                                ProcessNo = itemdata.ProcessNo, 
+                                ProcessName = itemdata.ProcessName,
+                                DetailSerialNumber = itemdata.SerialNumber,
+                                DueEndTime = itemdata.DueEndTime!=null?((DateTime)itemdata.DueEndTime).ToString("yyyy-MM-dd"):"",
+                                Count = itemdata.Count
                             });
                         }
 

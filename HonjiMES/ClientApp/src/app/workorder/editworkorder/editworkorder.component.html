@@ -61,7 +61,7 @@
     <dx-data-grid #dataGrid2
         [dataSource]="dataSourceDB"
         [showBorders]="true"
-        height="580"
+        height="680"
         (onFocusedCellChanging)="onFocusedCellChanging($event)"
         (onInitNewRow)="onInitNewRow($event)"
         (onEditingStart)="onEditingStart($event)"
@@ -142,8 +142,8 @@
         <dxi-column dataField="CodeNo" caption="加工程式" alignment="center" [width]="75"></dxi-column>
         <!-- <dxi-column dataField="DueStartTime" caption="預計開工日" dataType="date" [allowEditing]="false" [width]="120"></dxi-column> -->
         <dxi-column dataField="DueEndTime" caption="預計完工日" [width]="100" dataType="date" [allowEditing]="true" ></dxi-column>
-        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="shortDateShortTime" [width]="180"  [allowEditing]="false"></dxi-column>
-        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="shortDateShortTime" [width]="180" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualStartTime" caption="實際開工日" dataType="date" format="yyyy/MM/dd HH:mm" [width]="150"  [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="ActualEndTime" caption="實際完工日" dataType="date" format="yyyy/MM/dd HH:mm" [width]="150" [allowEditing]="false"></dxi-column>
         <dxi-column dataField="Remarks" caption="備註" dataType="varchar"  [allowEditing]="true"></dxi-column>
 
 

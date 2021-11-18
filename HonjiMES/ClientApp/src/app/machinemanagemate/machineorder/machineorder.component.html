@@ -8,22 +8,21 @@
 
         <div class="col-sm-6 col-md-3" *ngFor="let item of dataSourceDB">
             <div class="card" [ngClass]="getClass(item.TotalTime)">
-                <h5 class="card-header">{{item.MachineName}}</h5>
+                <h5 *ngIf="item.DelayTime > 0" class="card-header" [ngStyle]="{'background-color':'#ff7402'}">{{item.MachineName}}{{"目前製程已逾時 :" + formattime(item.DelayTime)}}</h5>                                
+                <h5 *ngIf="item.DelayTime <= 0" class="card-header">{{item.MachineName}}</h5>
                 <div class="card-body">
-                    <p class="card-text">品號 : {{item.DataNo}}</p>
                     <p class="card-text">工單號 : {{item.No}}</p>
+                    <p class="card-text">品號 : {{item.DataNo}}</p>                    
                     <p class="card-text">製程名稱 : {{item.ProcessName}}</p>
                     <p *ngIf="item.RemainingTime > 0 " class="card-text">目前製程剩餘時間 : {{formattime(item.RemainingTime)}}
-                    </p>
-                    <p *ngIf="item.DelayTime > 0 " class="card-text alert-time">目前製程已逾時 : {{formattime(item.DelayTime)}}
-                    </p>
+                    </p>                    
                     <p class="card-text" [ngClass]="sendAlert(item.ProcessTotal)">已安排製程數 : {{item.ProcessTotal}}</p>
                     <p class="card-text">已安排製程剩餘時間 : {{formattime(item.TotalTime)}}</p>
                     <div class="machineOrderList-box" [ngClass]="{'noalert': item.DelayTime <= 0}">
                         <ul>
                             <li *ngFor="let itemd of item.machineOrderList">
-                                <dx-button [ngClass]="getworkOrderNoClass(item.TotalTime)" class="box-card-text No-btn" (onClick)="startProcess(itemd)">
-                                    {{itemd.WorkOrderNo}}
+                                <dx-button class="box-card-text No-btn" (onClick)="startProcess(itemd)">
+                                    {{"工單號："+itemd.WorkOrderNo+" 工單量："+itemd.Count}} <br> {{"品號："+itemd.DataNo}} <br> {{"預計完成日："+itemd.DueEndTime}}                                    
                                 </dx-button>
                             </li>
                         </ul>
